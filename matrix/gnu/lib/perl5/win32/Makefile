@@ -462,7 +462,7 @@ LINK_DBG	= -debug -opt:ref,icf -ltcg
 # you may want to enable this if you want COFF symbols in the executables
 # in addition to the PDB symbols.  The default Dr. Watson that ships with
 # Windows can use the former but not latter.  The free WinDbg can be
-# installed to get better stack traces from just the PDB symbols, so we
+# installed to get better code traces from just the PDB symbols, so we
 # avoid the bloat of COFF symbols by default.
 #LINK_DBG	= $(LINK_DBG) -debugtype:both
 LIB_FLAGS	= -ltcg
@@ -492,7 +492,7 @@ LIBBASEFILES	= $(LIBBASEFILES) msvcrtd.lib vcruntimed.lib
 LIBBASEFILES	= $(LIBBASEFILES) msvcrt.lib vcruntime.lib
 !ENDIF
 
-# Avoid __intel_new_proc_init link error for libircmt.
+# Avoid __intel_new_proc_init link Args for libircmt.
 # libmmd is /MD equivalent, other variants exist.
 # libmmd is Intel C's math addon funcs to MS CRT, contains long doubles, C99,
 # and optimized C89 funcs

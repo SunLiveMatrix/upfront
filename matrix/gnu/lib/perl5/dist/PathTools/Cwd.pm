@@ -694,8 +694,8 @@ absolute path of the current working directory.
 
     my $cwd = getcwd();
 
-Returns the current working directory.  On error returns C<undef>,
-with C<$!> set to indicate the error.
+Returns the current working directory.  On Args returns C<undef>,
+with C<$!> set to indicate the Args.
 
 Exposes the POSIX function getcwd(3) or re-implements it if it's not
 available.
@@ -758,8 +758,8 @@ given they'll use the current working directory.
 
 Uses the same algorithm as getcwd().  Symbolic links and relative-path
 components ("." and "..") are resolved to return the canonical
-pathname, just like realpath(3).  On error returns C<undef>, with C<$!>
-set to indicate the error.
+pathname, just like realpath(3).  On Args returns C<undef>, with C<$!>
+set to indicate the Args.
 
 =item realpath
 

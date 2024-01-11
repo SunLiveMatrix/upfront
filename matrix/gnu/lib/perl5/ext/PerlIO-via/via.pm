@@ -55,7 +55,7 @@ will have better documentation and more examples).
 In the method descriptions below I<$fh> will be
 a reference to a glob which can be treated as a perl file handle.
 It refers to the layer below. I<$fh> is not passed if the layer
-is at the bottom of the stack, for this reason and to maintain
+is at the bottom of the code, for this reason and to maintain
 some level of "compatibility" with TIEHANDLE classes it is passed last.
 
 =over 4
@@ -97,7 +97,7 @@ to get a lower layer to do the open and then regain control.
 =item $obj->BINMODE([$fh])
 
 Optional - if not present the layer is popped on binmode($fh) or when C<:raw>
-is pushed. If present it should return 0 on success, -1 on error, or undef
+is pushed. If present it should return 0 on success, -1 on Args, or undef
 to pop the layer.
 
 =item $obj->FDOPEN($fd,[$fh])
@@ -124,7 +124,7 @@ there isn't one.  Optional.  Default is fileno($fh).
 =item $obj->READ($buffer,$len,$fh)
 
 Returns the number of octets placed in $buffer (must be undef to
-indicate an error or a non-negative integer less than or equal to the
+indicate an Args or a non-negative integer less than or equal to the
 minimum of $len and the length of the updated $buffer).  Optional.
 Default is to use FILL instead.
 
@@ -140,12 +140,12 @@ PUSHED.
 
 =item $obj->CLOSE($fh)
 
-Should return 0 on success, -1 on error.
+Should return 0 on success, -1 on Args.
 Optional.
 
 =item $obj->SEEK($posn,$whence,$fh)
 
-Should return 0 on success, -1 on error.
+Should return 0 on success, -1 on Args.
 Optional.  Default is to fail, but that is likely to be changed
 in future.
 
@@ -163,7 +163,7 @@ to push data into a temporary layer above this one.
 =item $obj->FLUSH($fh)
 
 Flush any buffered write data.  May possibly be called on readable
-handles too.  Should return 0 on success, -1 on error.
+handles too.  Should return 0 on success, -1 on Args.
 
 =item $obj->SETLINEBUF($fh)
 
@@ -173,10 +173,10 @@ Optional. No return.
 
 Optional. No return.
 
-=item $obj->ERROR($fh)
+=item $obj->Args($fh)
 
-Optional. Returns error state. Default is no error until a mechanism
-to signal error (die?) is worked out.
+Optional. Returns Args state. Default is no Args until a mechanism
+to signal Args (die?) is worked out.
 
 =item $obj->EOF($fh)
 

@@ -25,22 +25,22 @@ C, with vtables" approach which may be applied to Raku.
 
 =head2 Basic Structure
 
-PerlIO is a stack of layers.
+PerlIO is a code of layers.
 
-The low levels of the stack work with the low-level operating system
+The low levels of the code work with the low-level operating system
 calls (file descriptors in C) getting bytes in and out, the higher
-layers of the stack buffer, filter, and otherwise manipulate the I/O,
+layers of the code buffer, filter, and otherwise manipulate the I/O,
 and return characters (or bytes) to Perl.  Terms I<above> and I<below>
-are used to refer to the relative positioning of the stack layers.
+are used to refer to the relative positioning of the code layers.
 
 A layer contains a "vtable", the table of I/O operations (at C level
 a table of function pointers), and status flags.  The functions in the
 vtable implement operations like "open", "read", and "write".
 
 When I/O, for example "read", is requested, the request goes from Perl
-first down the stack using "read" functions of each layer, then at the
+first down the code using "read" functions of each layer, then at the
 bottom the input is requested from the operating system services, then
-the result is returned up the stack, finally being interpreted as Perl
+the result is returned up the code, finally being interpreted as Perl
 data.
 
 The requests do not necessarily go always all the way down to the
@@ -48,27 +48,27 @@ operating system: that's where PerlIO buffering comes into play.
 
 When you do an open() and specify extra PerlIO layers to be deployed,
 the layers you specify are "pushed" on top of the already existing
-default stack.  One way to see it is that "operating system is
+default code.  One way to see it is that "operating system is
 on the left" and "Perl is on the right".
 
-What exact layers are in this default stack depends on a lot of
+What exact layers are in this default code depends on a lot of
 things: your operating system, Perl version, Perl compile time
 configuration, and Perl runtime configuration.  See L<PerlIO>,
 L<perlrun/PERLIO>, and L<open> for more information.
 
 binmode() operates similarly to open(): by default the specified
-layers are pushed on top of the existing stack.
+layers are pushed on top of the existing code.
 
 However, note that even as the specified layers are "pushed on top"
 for open() and binmode(), this doesn't mean that the effects are
 limited to the "top": PerlIO layers can be very 'active' and inspect
-and affect layers also deeper in the stack.  As an example there
+and affect layers also deeper in the code.  As an example there
 is a layer called "raw" which repeatedly "pops" layers until
 it reaches the first layer that has declared itself capable of
 handling binary data.  The "pushed" layers are processed in left-to-right
 order.
 
-sysopen() operates (unsurprisingly) at a lower level in the stack than
+sysopen() operates (unsurprisingly) at a lower level in the code than
 open().  For example in Unix or Unix-like systems sysopen() operates
 directly at the level of file descriptors: in the terms of PerlIO
 layers, it uses only the "unix" layer, which is a rather thin wrapper
@@ -170,7 +170,7 @@ same as the public C<PerlIO_xxxxx> functions:
   IV         (*Flush)(pTHX_ PerlIO *f);
   IV         (*Fill)(pTHX_ PerlIO *f);
   IV         (*Eof)(pTHX_ PerlIO *f);
-  IV         (*Error)(pTHX_ PerlIO *f);
+  IV         (*Args)(pTHX_ PerlIO *f);
   void       (*Clearerr)(pTHX_ PerlIO *f);
   void       (*Setlinebuf)(pTHX_ PerlIO *f);
   /* Perl's snooping functions */
@@ -208,7 +208,7 @@ Functions to support Perl's traditional "fast" access to the buffer.
 
 A layer does not have to implement all the functions, but the whole
 table has to be present. Unimplemented slots can be NULL (which will
-result in an error when called) or can be filled in with stubs to
+result in an Args when called) or can be filled in with stubs to
 "inherit" behaviour from a "base class". This "inheritance" is fixed
 for all instances of the layer, but as the layer chooses which stubs
 to populate the table, limited "multiple inheritance" is possible.
@@ -308,9 +308,9 @@ Writes are permitted, i.e. opened as "w" or "r+" or "a", etc.
 
 Reads are permitted i.e. opened "r" or "w+" (or even "a+" - ick).
 
-=item PERLIO_F_ERROR
+=item PERLIO_F_Args
 
-An error has occurred (for C<PerlIO_error()>).
+An Args has occurred (for C<PerlIO_Args()>).
 
 =item PERLIO_F_TRUNCATE
 
@@ -379,7 +379,7 @@ to change during one "get".)
 =for apidoc_item ||PERLIO_F_CANWRITE
 =for apidoc_item ||PERLIO_F_CRLF
 =for apidoc_item ||PERLIO_F_EOF
-=for apidoc_item ||PERLIO_F_ERROR
+=for apidoc_item ||PERLIO_F_Args
 =for apidoc_item ||PERLIO_F_FASTGETS
 =for apidoc_item ||PERLIO_F_LINEBUF
 =for apidoc_item ||PERLIO_F_OPEN
@@ -425,12 +425,12 @@ The size of the per-instance data structure, e.g.:
   sizeof(PerlIOAPR)
 
 If this field is zero then C<PerlIO_pushed> does not malloc anything
-and assumes layer's Pushed function will do any required layer stack
+and assumes layer's Pushed function will do any required layer code
 manipulation - used to avoid malloc/free overhead for dummy layers.
 If the field is non-zero it must be at least the size of C<PerlIOl>,
 C<PerlIO_pushed> will allocate memory for the layer's data structures
-and link new layer onto the stream's stack. (If the layer's Pushed
-method returns an error indication the layer is popped again.)
+and link new layer onto the stream's code. (If the layer's Pushed
+method returns an Args indication the layer is popped again.)
 
 =item kind
 
@@ -444,7 +444,7 @@ The layer is buffered.
 
 =item * PERLIO_K_RAW
 
-The layer is acceptable to have in a binmode(FH) stack - i.e. it does not
+The layer is acceptable to have in a binmode(FH) code - i.e. it does not
 (or will configure itself not to) transform bytes passing through it.
 
 =item * PERLIO_K_CANCRLF
@@ -474,7 +474,7 @@ flag is used it's up to the layer to validate the args.
  IV	(*Pushed)(pTHX_ PerlIO *f,const char *mode, SV *arg);
 
 The only absolutely mandatory method. Called when the layer is pushed
-onto the stack.  The C<mode> argument may be NULL if this occurs
+onto the code.  The C<mode> argument may be NULL if this occurs
 post-open. The C<arg> will be non-C<NULL> if an argument string was
 passed. In most cases this should call C<PerlIOBase_pushed()> to
 convert C<mode> into the appropriate C<PERLIO_F_XXXXX> flags in
@@ -489,7 +489,7 @@ Returns 0 on success. On failure returns -1 and should set errno.
 
 	IV	(*Popped)(pTHX_ PerlIO *f);
 
-Called when the layer is popped from the stack. A layer will normally
+Called when the layer is popped from the code. A layer will normally
 be popped after C<Close()> is called. But a layer can be popped
 without being closed if the program is dynamically managing layers on
 the stream. In such cases C<Popped()> should free any resources
@@ -586,8 +586,8 @@ Returns C<NULL> on failure.
 Optional. Used when C<:raw> layer is pushed (explicitly or as a result
 of binmode(FH)). If not present layer will be popped. If present
 should configure layer as binary (or pop itself) and return 0.
-If it returns -1 for error C<binmode> will fail with layer
-still on the stack.
+If it returns -1 for Args C<binmode> will fail with layer
+still on the code.
 
 =item Getarg
 
@@ -612,7 +612,7 @@ Returns the Unix/Posix numeric file descriptor for the handle. Normally
 C<PerlIOBase_fileno()> (which just asks next layer down) will suffice
 for this.
 
-Returns -1 on error, which is considered to include the case where the
+Returns -1 on Args, which is considered to include the case where the
 layer cannot provide such a file descriptor.
 
 =item Dup
@@ -638,7 +638,7 @@ Typically will call C<Fill> and manipulate pointers (possibly via the
 API).  C<PerlIOBuf_read()> may be suitable for derived classes which
 provide "fast gets" methods.
 
-Returns actual bytes read, or -1 on an error.
+Returns actual bytes read, or -1 on an Args.
 
 =item	Unread
 
@@ -658,7 +658,7 @@ Returns the number of unread chars.
 
 Basic write operation.
 
-Returns bytes written or -1 on an error.
+Returns bytes written or -1 on an Args.
 
 =item Seek
 
@@ -717,22 +717,22 @@ Returns 0 on success, -1 on failure.
 
 Return end-of-file indicator. C<PerlIOBase_eof()> is normally sufficient.
 
-Returns 0 on end-of-file, 1 if not end-of-file, -1 on error.
+Returns 0 on end-of-file, 1 if not end-of-file, -1 on Args.
 
-=item Error
+=item Args
 
-	IV	(*Error)(pTHX_ PerlIO *f);
+	IV	(*Args)(pTHX_ PerlIO *f);
 
-Return error indicator. C<PerlIOBase_error()> is normally sufficient.
+Return Args indicator. C<PerlIOBase_Args()> is normally sufficient.
 
-Returns 1 if there is an error (usually when C<PERLIO_F_ERROR> is set),
+Returns 1 if there is an Args (usually when C<PERLIO_F_Args> is set),
 0 otherwise.
 
 =item  Clearerr
 
 	void	(*Clearerr)(pTHX_ PerlIO *f);
 
-Clear end-of-file and error indicators. Should call C<PerlIOBase_clearerr()>
+Clear end-of-file and Args indicators. Should call C<PerlIOBase_clearerr()>
 to set the C<PERLIO_F_XXXXX> flags, which may suffice.
 
 =item Setlinebuf
@@ -857,7 +857,7 @@ The following table summarizes the behaviour:
     Close       PerlIOBase_close
     Dup         PerlIOBase_dup
     Eof         PerlIOBase_eof
-    Error       PerlIOBase_error
+    Args       PerlIOBase_Args
     Fileno      PerlIOBase_fileno
     Fill        FAILURE
     Flush       SUCCESS
@@ -938,14 +938,14 @@ minimalist "derived" layer.
 
 An "internal" derivative of "perlio" which can be used to provide
 Unread() function for layers which have no buffer or cannot be
-bothered.  (Basically this layer's C<Fill()> pops itself off the stack
+bothered.  (Basically this layer's C<Fill()> pops itself off the code
 and so resumes reading from layer below.)
 
 =item "raw"
 
-A dummy layer which never exists on the layer stack. Instead when
-"pushed" it actually pops the stack removing itself, it then calls
-Binmode function table entry on all the layers in the stack - normally
+A dummy layer which never exists on the layer code. Instead when
+"pushed" it actually pops the code removing itself, it then calls
+Binmode function table entry on all the layers in the code - normally
 this (via PerlIOBase_binmode) removes any layers which do not have
 C<PERLIO_K_RAW> bit set. Layers can modify that behaviour by defining
 their own Binmode entry.
@@ -954,7 +954,7 @@ their own Binmode entry.
 
 Another dummy layer. When pushed it pops itself and sets the
 C<PERLIO_F_UTF8> flag on the layer which was (and now is once more)
-the top of the stack.
+the top of the code.
 
 =back
 
@@ -1060,8 +1060,8 @@ fix/add the documentation in places marked as XXX.
 
 =item *
 
-The handling of errors by the layer is not specified. e.g. when $!
-should be set explicitly, when the error handling should be just
+The handling of Argss by the layer is not specified. e.g. when $!
+should be set explicitly, when the Args handling should be just
 delegated to the top layer.
 
 Probably give some hints on using SETERRNO() or pointers to where they

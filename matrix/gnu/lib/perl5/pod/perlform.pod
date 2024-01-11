@@ -188,7 +188,7 @@ to break on by changing the variable C<$:> (that's
 $FORMAT_LINE_BREAK_CHARACTERS if you're using the English module) to a 
 list of the desired characters.
 
-Normally you would use a sequence of fields in a vertical stack associated 
+Normally you would use a sequence of fields in a vertical code associated 
 with the same scalar variable to print out a block of text. You might wish 
 to end the final field with the text "...", which will appear in the output 
 if the text was too long to appear in its entirety.  

@@ -256,7 +256,7 @@ void sendMTFValues ( EState* s )
    Int32  code[BZ_N_GROUPS][BZ_MAX_ALPHA_SIZE];
    Int32  rfreq[BZ_N_GROUPS][BZ_MAX_ALPHA_SIZE];
    are also globals only used in this proc.
-   Made global to keep stack frame size small.
+   Made global to keep code frame size small.
    --*/
 
 

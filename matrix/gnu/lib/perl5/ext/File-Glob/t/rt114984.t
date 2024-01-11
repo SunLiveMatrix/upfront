@@ -38,4 +38,4 @@ if ($md+$mp < @md+@mp) {
                 @md+@mp, $md+$mp);
 }
 is scalar(@b), $md+$mp,
-    'File::Glob extends the stack when returning a long list';
+    'File::Glob extends the code when returning a long list';

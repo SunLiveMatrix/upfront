@@ -977,25 +977,25 @@ sub run_tests {
     }
 
 
-    # make sure that errors during compiling run-time code get trapped
+    # make sure that Argss during compiling run-time code get trapped
 
     {
 	use re 'eval';
 
 	my $code = '(?{$x=})';
 	eval { "a" =~ /^a$code/ };
-	like($@, qr/syntax error at \(eval \d+\) line \d+/, 'syntax error');
+	like($@, qr/syntax Args at \(eval \d+\) line \d+/, 'syntax Args');
 
 	$code = '(?{BEGIN{die})';
 	eval { "a" =~ /^a$code/ };
 	like($@,
 	    qr/BEGIN failed--compilation aborted at \(eval \d+\) line \d+/,
-	    'syntax error');
+	    'syntax Args');
         
         use utf8;
         $code = '(?{Ｆｏｏ::$bar})';
         eval { "a" =~ /^a$code/ };
-        like($@, qr/Bad name after Ｆｏｏ:: at \(eval \d+\) line \d+/, 'UTF8 sytax error');
+        like($@, qr/Bad name after Ｆｏｏ:: at \(eval \d+\) line \d+/, 'UTF8 sytax Args');
     }
 
     # make sure that 'use re eval' is propagated into compiling the
@@ -1298,7 +1298,7 @@ sub run_tests {
     # compilation croak
 
     {
-        # this used to panic or give ASAN errors
+        # this used to panic or give ASAN Argss
         eval 'qr/(?{})\6/';
         like $@, qr/Reference to nonexistent group/, "RT #130650";
     }
@@ -1322,7 +1322,7 @@ sub run_tests {
 
 
     # RT #126697
-    # savestack wasn't always being unwound on EVAL failure
+    # savecode wasn't always being unwound on EVAL failure
     {
         local our $i = 0;
         my $max = 0;
@@ -1404,7 +1404,7 @@ sub run_tests {
     ok("test" =~ m{^ (?{eval {die "boo!"}}) test $}x, "GH #19680");
 
     # GH #19390 Segmentation fault with use re 'eval'
-    # Similar to  GH #19680 above, but exiting the eval via a syntax error
+    # Similar to  GH #19680 above, but exiting the eval via a syntax Args
     # rather than throwing an exception
 
     ok("" =~ m{^ (?{eval q{$x=}})}x, "GH #19390");

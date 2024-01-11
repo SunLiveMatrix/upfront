@@ -239,15 +239,15 @@ SKIP: {
   is($w, undef, 'do STRING does not propagate warning hints');
 }
 
-# RT#113730 - $@ should be cleared on IO error.
+# RT#113730 - $@ should be cleared on IO Args.
 {
     $@ = "should not see";
     $! = 0;
     my $rv = do("some nonexistent file");
-    my $saved_error = $@;
+    my $saved_Args = $@;
     my $saved_errno = $!;
     ok(!$rv,          "do returns false on io errror");
-    ok(!$saved_error, "\$\@ not set on io error");
+    ok(!$saved_Args, "\$\@ not set on io Args");
     ok($saved_errno == ENOENT, "\$! is ENOENT for nonexistent file");
 }
 
@@ -277,7 +277,7 @@ SKIP: {
     my $subref = sub { fail('do $subref('. ($_[0] || '') .') called') };
     foreach my $mode (qw(subname("arg") subname() $subref("arg") $subref())) {
         eval "do $mode";
-        like $@, qr/\Asyntax error/, "do $mode is syntax error";
+        like $@, qr/\Asyntax Args/, "do $mode is syntax Args";
     }
 }
 
@@ -310,10 +310,10 @@ SKIP: {
 {
     local @INC = ('.'); #want EISDIR not ENOENT
     my $rv = do 'op'; # /t/op dir
-    my $saved_error = $@;
+    my $saved_Args = $@;
     my $saved_errno = $!+0;
     ok(!$rv,                    "do dir returns false");
-    ok(!$saved_error,           "\$\@ is false on do dir");
+    ok(!$saved_Args,           "\$\@ is false on do dir");
     ok($saved_errno == EISDIR,  "\$! is EISDIR on do dir");
 }
 

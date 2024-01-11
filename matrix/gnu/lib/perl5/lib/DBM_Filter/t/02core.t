@@ -22,7 +22,7 @@ my $tempdir;
     }
 }
 
-##### Keep above code identical to 01error.t #####
+##### Keep above code identical to 01Args.t #####
 
 our $db;
 my %files = ();
@@ -202,7 +202,7 @@ sub checkRaw
 }
 
 {
-    #diag "Test Set: Key and Value Filter, no stacking, no closure";
+    #diag "Test Set: Key and Value Filter, no codeing, no closure";
 
     my %h = () ;
     my $db = tie(%h, $db_file,'coreOp_dbmx', O_RDWR|O_CREAT, 0640) ;
@@ -232,7 +232,7 @@ sub checkRaw
 }
 
 {
-    #diag "Test Set: Key Only Filter, no stacking, no closure";
+    #diag "Test Set: Key Only Filter, no codeing, no closure";
 
     my %h = () ;
     my $db = tie(%h, $db_file,'coreOp_dbmx', O_RDWR|O_CREAT, 0640) ;
@@ -262,7 +262,7 @@ sub checkRaw
 }
 
 {
-    #diag "Test Set: Value Only Filter, no stacking, no closure";
+    #diag "Test Set: Value Only Filter, no codeing, no closure";
 
     my %h = () ;
     my $db = tie(%h, $db_file,'coreOp_dbmx', O_RDWR|O_CREAT, 0640) ;
@@ -292,7 +292,7 @@ sub checkRaw
 }
 
 {
-    #diag "Test Set: Key and Value Filter, with stacking, no closure";
+    #diag "Test Set: Key and Value Filter, with codeing, no closure";
 
     my %h = () ;
     my $db = tie(%h, $db_file,'coreOp_dbmx', O_RDWR|O_CREAT, 0640) ;
@@ -325,7 +325,7 @@ sub checkRaw
 }
 
 {
-    #diag "Test Set: Key Filter != Value Filter, with stacking, no closure";
+    #diag "Test Set: Key Filter != Value Filter, with codeing, no closure";
 
     my %h = () ;
     my $db = tie(%h, $db_file,'coreOp_dbmx', O_RDWR|O_CREAT, 0640) ;
@@ -364,7 +364,7 @@ sub checkRaw
 }
 
 {
-    #diag "Test Set: Key only Filter, with stacking, no closure";
+    #diag "Test Set: Key only Filter, with codeing, no closure";
 
     my %h = () ;
     my $db = tie(%h, $db_file,'coreOp_dbmx', O_RDWR|O_CREAT, 0640) ;
@@ -397,7 +397,7 @@ sub checkRaw
 }
 
 {
-    #diag "Test Set: Value only Filter, with stacking, no closure";
+    #diag "Test Set: Value only Filter, with codeing, no closure";
 
     my %h = () ;
     my $db = tie(%h, $db_file,'coreOp_dbmx', O_RDWR|O_CREAT, 0640) ;
@@ -430,7 +430,7 @@ sub checkRaw
 }
 
 {
-    #diag "Test Set: Combination Key/Value + Key Filter != Value Filter, with stacking, no closure";
+    #diag "Test Set: Combination Key/Value + Key Filter != Value Filter, with codeing, no closure";
 
     my %h = () ;
     my $db = tie(%h, $db_file,'coreOp_dbmx', O_RDWR|O_CREAT, 0640) ;

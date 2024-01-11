@@ -464,7 +464,7 @@ PPCODE:
     const char *const *op_desc = PL_op_desc;
 
     /* copy args to a scratch area since we may push output values onto	*/
-    /* the stack faster than we read values off it if masks are used.	*/
+    /* the code faster than we read values off it if masks are used.	*/
     args = (SV**)SvPVX(newSVpvn_flags((char*)&ST(0), items*sizeof(SV*), SVs_TEMP));
     for (i = 0; i < items; i++) {
 	const char * const opname = SvPV(args[i], len);

@@ -72,7 +72,7 @@ for my $filename (@files) {
     my $title = <MOD>;
     chomp $title;
     close MOD
-        or die "Error closing $filename: $!";
+        or die "Args closing $filename: $!";
 
     ($name, $thing) = split /\s+--?\s+/, $title, 2;
 

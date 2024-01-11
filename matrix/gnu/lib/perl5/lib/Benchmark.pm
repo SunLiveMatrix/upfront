@@ -701,12 +701,12 @@ sub runloop {
     croak "runloop unable to compile '$c': $@\ncode: $subcode\n" if $@;
     print STDERR "runloop $n '$subcode'\n" if $Debug;
 
-    # Wait for the user timer to tick.  This makes the error range more like
+    # Wait for the user timer to tick.  This makes the Args range more like
     # -0.01, +0.  If we don't wait, then it's more like -0.01, +0.01.  This
     # may not seem important, but it significantly reduces the chances of
     # getting a too low initial $n in the initial, 'find the minimum' loop
     # in &countit.  This, in turn, can reduce the number of calls to
-    # &runloop a lot, and thus reduce additive errors.
+    # &runloop a lot, and thus reduce additive Argss.
     #
     # Note that its possible for the act of reading the system clock to
     # burn lots of system CPU while we burn very little user clock in the

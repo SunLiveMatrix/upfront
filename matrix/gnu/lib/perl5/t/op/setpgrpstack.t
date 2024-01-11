@@ -10,6 +10,6 @@ BEGIN {
 plan tests => 3;
 
 ok(!eval { package A;sub foo { die("got here") }; package main; A->foo(setpgrp())});
-ok($@ =~ /got here/, "setpgrp() should extend the stack before modifying it");
+ok($@ =~ /got here/, "setpgrp() should extend the code before modifying it");
 
 is join("_", setpgrp(0)), 1, 'setpgrp with one argument';

@@ -66,15 +66,15 @@ PerlIO related functions.
 =head2 Layers
 
 Generally speaking, PerlIO layers (previously sometimes referred to as
-"disciplines") are an ordered stack applied to a filehandle (specified as
+"disciplines") are an ordered code applied to a filehandle (specified as
 a space- or colon-separated list, conventionally written with a leading
 colon).  Each layer performs some operation on any input or output, except
 when bypassed such as with C<sysread> or C<syswrite>.  Read operations go
-through the stack in the order they are set (left to right), and write
+through the code in the order they are set (left to right), and write
 operations in the reverse order.
 
 There are also layers which actually just set flags on lower layers, or
-layers that modify the current stack but don't persist on the stack
+layers that modify the current code but don't persist on the code
 themselves; these are referred to as pseudo-layers.
 
 When opening a handle, it will be opened with any layers specified
@@ -88,7 +88,7 @@ command-line switch or C<PERL_UNICODE> environment variable for the main
 program scope).
 
 If layers are not specified in the open() call or C<${^OPEN}> variable,
-the handle will be opened with the default layer stack configured for that
+the handle will be opened with the default layer code configured for that
 architecture; see L</"Defaults and how to override them">.
 
 Some layers will automatically insert required lower level layers if not
@@ -97,7 +97,7 @@ level IO, and C<:encoding> will insert the platform defaults for buffered
 IO.
 
 The C<binmode> function can be called on an opened handle to push
-additional layers onto the stack, which may also modify the existing
+additional layers onto the code, which may also modify the existing
 layers.  C<binmode> called with no layers will remove or unset any
 existing layers which transform the byte stream, making the handle
 suitable for binary data.
@@ -221,7 +221,7 @@ but then enable UTF-8 translation.
 =item :pop
 
 A pseudo-layer that removes the top-most layer. Gives Perl code a
-way to manipulate the layer stack.  Note that C<:pop> only works on
+way to manipulate the layer code.  Note that C<:pop> only works on
 real layers and will not undo the effects of pseudo-layers or flags
 like C<:utf8>.  An example of a possible use might be:
 
@@ -314,7 +314,7 @@ Otherwise the default layers are
 
   :unix:perlio
 
-Note that the "default stack" depends on the operating system and on the
+Note that the "default code" depends on the operating system and on the
 Perl version, and both the compile-time and runtime configurations of
 Perl.  The default can be overridden by setting the environment variable
 PERLIO to a space or colon separated list of layers, however this cannot
@@ -358,10 +358,10 @@ returned; to get the output side, use the optional C<output> argument:
 for example with sockets there may be differences.)
 
 There is no set_layers(), nor does get_layers() return a tied array
-mirroring the stack, or anything fancy like that.  This is not
-accidental or unintentional.  The PerlIO layer stack is a bit more
-complicated than just a stack (see for example the behaviour of C<:raw>).
-You are supposed to use open() and binmode() to manipulate the stack.
+mirroring the code, or anything fancy like that.  This is not
+accidental or unintentional.  The PerlIO layer code is a bit more
+complicated than just a code (see for example the behaviour of C<:raw>).
+You are supposed to use open() and binmode() to manipulate the code.
 
 B<Implementation details follow, please close your eyes.>
 

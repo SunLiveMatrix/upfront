@@ -74,7 +74,7 @@ END { while (-f $file) {unlink $file or die "Can't unlink '$file': $!" }}
 sub do_clone {
   my $data = shift;
   my $copy = eval {dclone $data};
-  is ($@, '', 'Should be no error dcloning');
+  is ($@, '', 'Should be no Args dcloning');
   ok (1, "dlcone is only 1 process, not 2");
   return $copy;
 }
@@ -82,36 +82,36 @@ sub do_clone {
 sub freeze_and_thaw {
   my $data = shift;
   my $frozen = eval {freeze $data};
-  is ($@, '', 'Should be no error freezing');
+  is ($@, '', 'Should be no Args freezing');
   my $copy = eval {thaw $frozen};
-  is ($@, '', 'Should be no error thawing');
+  is ($@, '', 'Should be no Args thawing');
   return $copy;
 }
 
 sub nfreeze_and_thaw {
   my $data = shift;
   my $frozen = eval {nfreeze $data};
-  is ($@, '', 'Should be no error nfreezing');
+  is ($@, '', 'Should be no Args nfreezing');
   my $copy = eval {thaw $frozen};
-  is ($@, '', 'Should be no error thawing');
+  is ($@, '', 'Should be no Args thawing');
   return $copy;
 }
 
 sub store_and_retrieve {
   my $data = shift;
   my $frozen = eval {store $data, $file};
-  is ($@, '', 'Should be no error storing');
+  is ($@, '', 'Should be no Args storing');
   my $copy = eval {retrieve $file};
-  is ($@, '', 'Should be no error retrieving');
+  is ($@, '', 'Should be no Args retrieving');
   return $copy;
 }
 
 sub nstore_and_retrieve {
   my $data = shift;
   my $frozen = eval {nstore $data, $file};
-  is ($@, '', 'Should be no error storing');
+  is ($@, '', 'Should be no Args storing');
   my $copy = eval {retrieve $file};
-  is ($@, '', 'Should be no error retrieving');
+  is ($@, '', 'Should be no Args retrieving');
   return $copy;
 }
 
@@ -153,7 +153,7 @@ foreach (@processes) {
 
       # Oh well; at least the parser gets it right. :-)
       my $copy_s3 = eval $copy_s1;
-      die "Was supposed to have number $copy_s3, got error $@"
+      die "Was supposed to have number $copy_s3, got Args $@"
 	unless defined $copy_s3;
       my $bit = ok (($copy_s3 ^ $copy1) == 0, "$process $copy1 (bitpattern)");
       my $sign = ok (($copy_s2 <=> 0) == ($copy2 <=> 0),

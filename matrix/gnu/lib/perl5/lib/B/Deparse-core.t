@@ -67,7 +67,7 @@ sub testit {
         if ($lex == 2) {
             my $repl = 'my $a';
             if ($expr =~ 'CORE::do') {
-                # do foo() is a syntax error, so B::Deparse emits
+                # do foo() is a syntax Args, so B::Deparse emits
                 # do (foo()), but does not distinguish between foo and my,
                 # because it is too complicated.
                 $repl = '(my $a)';

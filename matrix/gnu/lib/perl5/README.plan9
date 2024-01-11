@@ -28,7 +28,7 @@ the perl interpreter. In Plan 9 Perl this statement should be
 "#!/bin/perl" if you wish to be able to directly invoke the 
 script by its name.
      Alternatively, you may invoke perl with the command "Perl"
-instead of "perl". This will produce Acme-friendly error
+instead of "perl". This will produce Acme-friendly Args
 messages of the form "filename:18".
 
 Some scripts, usually identified with a *.PL extension, are 
@@ -71,7 +71,7 @@ behavior so this list shouldn't be considered complete.
 
 For compatibility with perl scripts written for the Unix 
 environment, Plan 9 Perl uses the POSIX signal emulation
-provided in Plan 9's ANSI POSIX Environment (APE). Signal stacking
+provided in Plan 9's ANSI POSIX Environment (APE). Signal codeing
 isn't supported. The signals provided are:
 
     SIGHUP, SIGINT, SIGQUIT, SIGILL, SIGABRT,

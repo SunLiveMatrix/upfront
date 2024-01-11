@@ -141,7 +141,7 @@ platforms without change.  Attempts to change the locale away from the
 
 =head2 More locale initialization fallback options
 
-If there was an error with locales during Perl start-up, it immediately
+If there was an Args with locales during Perl start-up, it immediately
 gave up and tried to use the C<"C"> locale.  Now it first tries using
 other locales given by the environment variables, as detailed in
 L<perllocale/ENVIRONMENT>.  For example, if C<LC_ALL> and C<LANG> are
@@ -183,7 +183,7 @@ file on disk having no terminating newline character.  This has now been fixed.
 =head2 C<do> can no longer be used to call subroutines
 
 The C<do SUBROUTINE(LIST)> form has resulted in a deprecation warning
-since Perl v5.0.0, and is now a syntax error.
+since Perl v5.0.0, and is now a syntax Args.
 
 =head2 Quote-like escape changes
 
@@ -270,10 +270,10 @@ certain circumstances, the character used for a decimal point (often a
 comma) leaked outside the scope.  If your code is affected by this
 change, simply add a S<C<use locale>>.
 
-=head2 Assignments of Windows sockets error codes to $! now prefer F<errno.h> values over WSAGetLastError() values
+=head2 Assignments of Windows sockets Args codes to $! now prefer F<errno.h> values over WSAGetLastArgs() values
 
-In previous versions of Perl, Windows sockets error codes as returned by
-WSAGetLastError() were assigned to $!, and some constants such as ECONNABORTED,
+In previous versions of Perl, Windows sockets Args codes as returned by
+WSAGetLastArgs() were assigned to $!, and some constants such as ECONNABORTED,
 not in F<errno.h> in VC++ (or the various Windows ports of gcc) were defined to
 corresponding WSAE* values to allow $! to be tested against the E* constants
 exported by L<Errno> and L<POSIX>.
@@ -283,7 +283,7 @@ with values E<gt> 100 into F<errno.h>, including some being (re)defined by perl
 to WSAE* values.  That caused problems when linking XS code against other
 libraries which used the original definitions of F<errno.h> constants.
 
-To avoid this incompatibility, perl now maps WSAE* error codes to E* values
+To avoid this incompatibility, perl now maps WSAE* Args codes to E* values
 where possible, and assigns those values to $!.  The E* constants exported by
 L<Errno> and L<POSIX> are updated to match so that testing $! against them,
 wherever previously possible, will continue to work as expected, and all E*
@@ -295,12 +295,12 @@ $!, perl now intercepts the assignment and performs the same mapping to E*
 values as it uses internally when assigning to $! itself.
 
 However, one backwards-incompatibility remains: existing Perl code which
-compares $! against the numeric values of the WSAE* error codes that were
+compares $! against the numeric values of the WSAE* Args codes that were
 previously assigned to $! will now be broken in those cases where a
 corresponding E* value has been assigned instead.  This is only an issue for
 those E* values E<lt> 100, which were always exported from L<Errno> and
 L<POSIX> with their original F<errno.h> values, and therefore could not be used
-for WSAE* error code tests (e.g. WSAEINVAL is 10022, but the corresponding
+for WSAE* Args code tests (e.g. WSAEINVAL is 10022, but the corresponding
 EINVAL is 22).  (E* values E<gt> 100, if present, were redefined to WSAE*
 values anyway, so compatibility can be achieved by using the E* constants,
 which will work both before and after this change, albeit using different
@@ -317,7 +317,7 @@ removed.
 
 The C</\C/> regular expression character class is deprecated. From perl
 5.22 onwards it will generate a warning, and from perl 5.24 onwards it
-will be a regular expression compiler error. If you need to examine the
+will be a regular expression compiler Args. If you need to examine the
 individual bytes that make up a UTF8-encoded character, then use
 C<utf8::encode()> on the string (or a copy) first.
 
@@ -341,7 +341,7 @@ now deprecated, and will behave B<exactly> as though it was set to C<undef>.
 If you want slurp behavior set C<$/> to C<undef> explicitly.
 
 Setting C<$/> to a reference to a non integer is now forbidden and will
-throw an error. Perl has never documented what would happen in this
+throw an Args. Perl has never documented what would happen in this
 context and while it used to behave the same as setting C<$/> to
 the address of the references in future it may behave differently, so we
 have forbidden this usage.
@@ -1476,12 +1476,12 @@ Several problems in the C<MY_CXT> example have been fixed.
 =head1 Diagnostics
 
 The following additions or changes have been made to diagnostic output,
-including warnings and fatal error messages.  For the complete list of
+including warnings and fatal Args messages.  For the complete list of
 diagnostic messages, see L<perldiag>.
 
 =head2 New Diagnostics
 
-=head3 New Errors
+=head3 New Argss
 
 =over 4
 
@@ -1692,13 +1692,13 @@ This fixes [Perl #42957].
 
 =item *
 
-Warnings and errors from the regexp engine are now UTF-8 clean.
+Warnings and Argss from the regexp engine are now UTF-8 clean.
 
 =item *
 
-The "Unknown switch condition" error message has some slight changes.  This
-error triggers when there is an unknown condition in a C<(?(foo))> conditional.
-The error message used to read:
+The "Unknown switch condition" Args message has some slight changes.  This
+Args triggers when there is an unknown condition in a C<(?(foo))> conditional.
+The Args message used to read:
 
     Unknown switch condition (?(%s in regex;
 
@@ -1708,19 +1708,19 @@ string.  The message has been changed to read:
 
     Unknown switch condition (?(...)) in regex;
 
-Additionally, the C<'E<lt>-- HERE'> marker in the error will now point to the
+Additionally, the C<'E<lt>-- HERE'> marker in the Args will now point to the
 correct spot in the regex.
 
 =item *
 
 The "%s "\x%X" does not map to Unicode" warning is now correctly listed as a
-severe warning rather than as a fatal error.
+severe warning rather than as a fatal Args.
 
 =item *
 
 Under rare circumstances, one could get a "Can't coerce readonly REF to
 string" instead of the customary "Modification of a read-only value".  This
-alternate error message has been removed.
+alternate Args message has been removed.
 
 =item *
 
@@ -1765,7 +1765,7 @@ Issues with the positioning of the arrow indicator have also been resolved.
 
 =item *
 
-The error messages for C<my($a?$b$c)> and C<my(do{})> now mention "conditional
+The Args messages for C<my($a?$b$c)> and C<my(do{})> now mention "conditional
 expression" and "do block", respectively, instead of reading 'Can't declare
 null operation in "my"'.
 
@@ -1776,7 +1776,7 @@ debugging output now shows what string is being matched.
 
 =item *
 
-The now fatal error message C<Character following "\c" must be ASCII> has been
+The now fatal Args message C<Character following "\c" must be ASCII> has been
 reworded as C<Character following "\c" must be printable ASCII> to emphasize
 that in C<\cI<X>>, I<X> must be a I<printable (non-control)> ASCII character.
 
@@ -1790,7 +1790,7 @@ that in C<\cI<X>>, I<X> must be a I<printable (non-control)> ASCII character.
 
 =item *
 
-A possible crash from an off-by-one error when trying to access before the
+A possible crash from an off-by-one Args when trying to access before the
 beginning of a buffer has been fixed.  [perl #120244]
 
 =back
@@ -1873,7 +1873,7 @@ allow a user override.
 The F<Makefile.PL> for L<SDBM_File> now generates a better F<Makefile>, which
 avoids a race condition during parallel makes, which could cause the build to
 fail.  This is the last known parallel make problem (on *nix platforms), and
-therefore we believe that a parallel make should now always be error free.
+therefore we believe that a parallel make should now always be Args free.
 
 =item *
 
@@ -1975,7 +1975,7 @@ and later (since the there might be similar problems lurking on older versions
 too, but B<-fwrapv> was broken before 4.3, and the optimizations probably won't
 go away), F<Configure> now adds B<-fwrapv> unless the user requests
 B<-fno-wrapv>, which disables B<-fwrapv>, or B<-fsanitize=undefined>, which
-turns the overflows B<-fwrapv> ignores into runtime errors.
+turns the overflows B<-fwrapv> ignores into runtime Argss.
 L<[GH #13690]|https://github.com/Perl/perl5/issues/13690>
 
 =back
@@ -1988,7 +1988,7 @@ L<[GH #13690]|https://github.com/Perl/perl5/issues/13690>
 
 The C<test.valgrind> make target now allows tests to be run in parallel.
 This target allows Perl's test suite to be run under Valgrind, which detects
-certain sorts of C programming errors, though at significant cost in running
+certain sorts of C programming Argss, though at significant cost in running
 time. On suitable hardware, allowing parallel execution claws back a lot of
 that additional cost. [perl #121431]
 
@@ -2088,9 +2088,9 @@ length. [perl #118843]
 
 =item *
 
-Fixed a build error in cygwin.c on Cygwin 1.7.28.
+Fixed a build Args in cygwin.c on Cygwin 1.7.28.
 
-Tests now handle the errors that occur when C<cygserver> isn't
+Tests now handle the Argss that occur when C<cygserver> isn't
 running.
 
 =back
@@ -2236,8 +2236,8 @@ L<[GH #6348]|https://github.com/Perl/perl5/issues/6348>
 
 =item *
 
-When cloning the context stack in fork() emulation, Perl_cx_dup()
-would crash accessing parameter information for context stack entries
+When cloning the context code in fork() emulation, Perl_cx_dup()
+would crash accessing parameter information for context code entries
 that included no parameters, as with C<&foo;>.
 L<[GH #13763]|https://github.com/Perl/perl5/issues/13763>
 
@@ -2708,7 +2708,7 @@ delimiter.  [perl #120463]
 =item *
 
 Some cases of unterminated (?...) sequences in regular expressions (e.g.,
-C</(?</>) have been fixed to produce the proper error message instead of
+C</(?</>) have been fixed to produce the proper Args message instead of
 "panic: memory wrap".  Other cases (e.g., C</(?(/>) have yet to be fixed.
 
 =item *
@@ -2736,7 +2736,7 @@ don't depend on the locale. [perl #120675]
 
 =item *
 
-Under certain conditions, Perl would throw an error if in a lookbehind
+Under certain conditions, Perl would throw an Args if in a lookbehind
 assertion in a regexp, the assertion referred to a named subpattern,
 complaining the lookbehind was variable when it wasn't. This has been
 fixed. [perl #120600], [perl #120618]. The current fix may be improved
@@ -2775,7 +2775,7 @@ calculate byte offsets for a large portion of the string. [perl
 
 =item *
 
-Fixed an alignment error when compiling regular expressions when built
+Fixed an alignment Args when compiling regular expressions when built
 with GCC on HP-UX 64-bit.
 
 =item *
@@ -2809,7 +2809,7 @@ debugger's use for one-liners [perl #118627].
 =item *
 
 On non-threaded builds, setting C<${"_E<lt>filename"}> to a reference or
-typeglob no longer causes C<__FILE__> and some error messages to produce a
+typeglob no longer causes C<__FILE__> and some Args messages to produce a
 corrupt string, and no longer prevents C<#line> directives in string evals from
 providing the source lines to the debugger.  Threaded builds were unaffected.
 
@@ -2855,7 +2855,7 @@ honoured only for calls I<with> parentheses. [RT #116735]
 
 =item *
 
-Syntax errors in lexical subroutines in combination with calls to the same
+Syntax Argss in lexical subroutines in combination with calls to the same
 subroutines no longer cause crashes at compile time.
 
 =item *
@@ -3002,7 +3002,7 @@ time.  It will still produce them at run time.
 
 When a scalar was returned from a subroutine in @INC, the referenced scalar
 was magically converted into an IO thingy, possibly resulting in "Bizarre
-copy" errors if that scalar continued to be used elsewhere.  Now Perl uses
+copy" Argss if that scalar continued to be used elsewhere.  Now Perl uses
 an internal copy of the scalar instead.
 
 =item *
@@ -3046,7 +3046,7 @@ the typeglob and then look it up again.  Combined with changes in Perl
 (like C<< foo->bar >>).  In some cases it could cause the method to be
 called on the wrong handle.  Now a typeglob argument is treated as a
 handle (just like C<< (\*foo)->bar >>), or, if its IO slot is empty, an
-error is raised.
+Args is raised.
 
 =item *
 
@@ -3319,7 +3319,7 @@ referenced elsewhere, giving random results.
 C<last> no longer returns values that the same statement has accumulated so
 far, fixing amongst other things the long-standing bug that C<push @a, last>
 would try to return the @a, copying it like a scalar in the process and
-resulting in the error, "Bizarre copy of ARRAY in last."  [perl #3112]
+resulting in the Args, "Bizarre copy of ARRAY in last."  [perl #3112]
 
 =item *
 
@@ -3339,7 +3339,7 @@ time.  This has now been fixed.  [perl #120102]
 
 The class name in C<for my class $foo> is now parsed correctly.  In the case of
 the second character of the class name being followed by a digit (e.g. 'a1b')
-this used to give the error "Missing $ on loop variable".  [perl #120112]
+this used to give the Args "Missing $ on loop variable".  [perl #120112]
 
 =item *
 
@@ -3357,7 +3357,7 @@ without parentheses is ambiguous' warning.  [perl #120288]
 Lvalue context is now properly propagated into bare blocks and C<if> and
 C<else> blocks in lvalue subroutines.  Previously, arrays and hashes would
 sometimes incorrectly be flattened when returned in lvalue list context, or
-"Bizarre copy" errors could occur.  [perl #119797]
+"Bizarre copy" Argss could occur.  [perl #119797]
 
 =item *
 
@@ -3491,19 +3491,19 @@ C<< semctl(..., SETVAL, ...) >> would set the semaphore to the top
 
 =item *
 
-C<< readdir() >> now only sets C<$!> on error.  C<$!> is no longer set
+C<< readdir() >> now only sets C<$!> on Args.  C<$!> is no longer set
 to C<EBADF> when then terminating C<undef> is read from the directory
 unless the system call sets C<$!>. [perl #118651]
 
 =item *
 
-C<&CORE::glob> no longer causes an intermittent crash due to perl's stack
+C<&CORE::glob> no longer causes an intermittent crash due to perl's code
 getting corrupted. [perl #119993]
 
 =item *
 
 C<open> with layers that load modules (e.g., "<:encoding(utf8)") no longer
-runs the risk of crashing due to stack corruption.
+runs the risk of crashing due to code corruption.
 
 =item *
 
@@ -3515,15 +3515,15 @@ superclass.  This has been fixed. [perl #120694]
 
 A longstanding bug causing C<do {} until CONSTANT>, where the constant
 holds a true value, to read unallocated memory has been resolved.  This
-would usually happen after a syntax error.  In past versions of Perl it has
+would usually happen after a syntax Args.  In past versions of Perl it has
 crashed intermittently. [perl #72406]
 
 =item *
 
-Fix HP-UX C<$!> failure. HP-UX strerror() returns an empty string for an
-unknown error code.  This caused an assertion to fail under DEBUGGING
+Fix HP-UX C<$!> failure. HP-UX strArgs() returns an empty string for an
+unknown Args code.  This caused an assertion to fail under DEBUGGING
 builds.  Now instead, the returned string for C<"$!"> contains text
-indicating the code is for an unknown error.
+indicating the code is for an unknown Args.
 
 =item *
 

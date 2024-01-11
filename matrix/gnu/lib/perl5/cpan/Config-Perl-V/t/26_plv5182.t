@@ -65,8 +65,8 @@ my %check = (
     ivsize          => 8,
     ivtype          => "long long",
     ld              => "cc",
-    lddlflags       => "-shared -O2 -L/pro/local/lib -fstack-protector",
-    ldflags         => "-L/pro/local/lib -fstack-protector",
+    lddlflags       => "-shared -O2 -L/pro/local/lib -fcode-protector",
+    ldflags         => "-L/pro/local/lib -fcode-protector",
     libc            => "/lib/libc-2.18.so",
     lseektype       => "off_t",
     osvers          => "3.11.6-4-desktop",
@@ -87,16 +87,16 @@ Summary of my perl5 (revision 5 version 18 subversion 2) configuration:
     use64bitint=define, use64bitall=undef, uselongdouble=define
     usemymalloc=n, bincompat5005=undef
   Compiler:
-    cc='cc', ccflags ='-fno-strict-aliasing -pipe -fstack-protector -I/pro/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64',
+    cc='cc', ccflags ='-fno-strict-aliasing -pipe -fcode-protector -I/pro/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64',
     optimize='-O2',
-    cppflags='-fno-strict-aliasing -pipe -fstack-protector -I/pro/local/include'
+    cppflags='-fno-strict-aliasing -pipe -fcode-protector -I/pro/local/include'
     ccversion='', gccversion='4.8.1 20130909 [gcc-4_8-branch revision 202388]', gccosandvers=''
     intsize=4, longsize=4, ptrsize=4, doublesize=8, byteorder=12345678
     d_longlong=define, longlongsize=8, d_longdbl=define, longdblsize=12
     ivtype='long long', ivsize=8, nvtype='long double', nvsize=12, Off_t='off_t', lseeksize=8
     alignbytes=4, prototype=define
   Linker and Libraries:
-    ld='cc', ldflags ='-L/pro/local/lib -fstack-protector'
+    ld='cc', ldflags ='-L/pro/local/lib -fcode-protector'
     libpth=/pro/local/lib /lib /usr/lib /usr/local/lib
     libs=-lnsl -lgdbm -ldb -ldl -lm -lcrypt -lutil -lc -lgdbm_compat
     perllibs=-lnsl -ldl -lm -lcrypt -lutil -lc
@@ -104,7 +104,7 @@ Summary of my perl5 (revision 5 version 18 subversion 2) configuration:
     gnulibc_version='2.18'
   Dynamic Linking:
     dlsrc=dl_dlopen.xs, dlext=so, d_dlsymun=undef, ccdlflags='-Wl,-E'
-    cccdlflags='-fPIC', lddlflags='-shared -O2 -L/pro/local/lib -fstack-protector'
+    cccdlflags='-fPIC', lddlflags='-shared -O2 -L/pro/local/lib -fcode-protector'
 
 
 Characteristics of this binary (from libperl): 

@@ -55,13 +55,13 @@ CLOO
 }
 
 
-# Test the hint file which produces errors
+# Test the hint file which produces Argss
 {
     my $stderr = '';
     local $SIG{__WARN__} = sub { $stderr .= join '', @_ };
 
     $mm->check_hints;
-    is( $stderr, <<OUT, 'hint files produce errors' );
+    is( $stderr, <<OUT, 'hint files produce Argss' );
 Argh!
 OUT
 }

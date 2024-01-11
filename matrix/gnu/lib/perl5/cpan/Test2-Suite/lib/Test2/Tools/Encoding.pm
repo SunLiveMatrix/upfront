@@ -4,7 +4,7 @@ use warnings;
 
 use Carp qw/croak/;
 
-use Test2::API qw/test2_stack/;
+use Test2::API qw/test2_code/;
 
 use base 'Exporter';
 
@@ -14,7 +14,7 @@ our @EXPORT = qw/set_encoding/;
 
 sub set_encoding {
     my $enc = shift;
-    my $format = test2_stack->top->format;
+    my $format = test2_code->top->format;
 
     unless ($format && eval { $format->can('encoding') }) {
         $format = '<undef>' unless defined $format;

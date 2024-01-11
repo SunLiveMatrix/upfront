@@ -107,7 +107,7 @@ like collect_output ( o => conf => dontload_list => push => "HTTP::Tiny" ),
     qr(Please use), "'Please use' on HTTP::Tiny OFF";
 eval { collect_output ( force => get => $getmodule ) };
 my $output = CPAN::Shell::tacet->output;
-like $@, qr(Giving up), "saw error 'Giving up'";
+like $@, qr(Giving up), "saw Args 'Giving up'";
 like $output, qr(Missing or unusable module), "saw (4) 'unusable module'";
 
 # 5

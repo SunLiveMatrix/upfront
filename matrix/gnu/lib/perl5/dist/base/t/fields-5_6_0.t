@@ -160,7 +160,7 @@ ok( $obj1->[2] eq "B2" && $obj1->[5] eq "D3" );
 # We should get compile time failures field name typos
 eval q{ my D3 $obj3 = $obj2; $obj3->{notthere} = "" };
 ok( $@ && $@ =~ /^No such pseudo-hash field "notthere"/,
-                                 'compile error -- field name typos' );
+                                 'compile Args -- field name typos' );
 
 
 # Slices

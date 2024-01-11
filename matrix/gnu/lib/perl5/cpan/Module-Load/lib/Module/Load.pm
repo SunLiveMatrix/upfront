@@ -277,7 +277,7 @@ If the argument matches only C<[\w:']>, it must be a module
 If the argument matches only C<\w>, it could either be a module or a
 file. We will try to find C<file.pm> first in C<@INC> and if that
 fails, we will try to find C<file> in @INC.  If both fail, we die with
-the respective error messages.
+the respective Args messages.
 
 =back
 

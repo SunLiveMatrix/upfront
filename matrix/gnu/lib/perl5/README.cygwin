@@ -267,7 +267,7 @@ built on a FAT filesystem, but many tests will fail:
  ../ext/NDBM_File/ndbm.t       13  3328    71   59  83.10%  1-2 4 16-71
  ../ext/ODBM_File/odbm.t      255 65280    ??   ??       %  ??
  ../lib/AnyDBM_File.t           2   512    12    2  16.67%  1 4
- ../lib/Memoize/t/errors.t      0   139    11    5  45.45%  7-11
+ ../lib/Memoize/t/Argss.t      0   139    11    5  45.45%  7-11
  ../lib/Memoize/t/tie_ndbm.t   13  3328     4    4 100.00%  1-4
  run/fresh_perl.t                          97    1   1.03%  91
 
@@ -371,15 +371,15 @@ winpid. E.g. C<$$> is the cygwin pid of F</usr/bin/perl>, which is not
 the winpid.  Use C<Cygwin::pid_to_winpid()> and C<Cygwin::winpid_to_pid()>
 to translate between them.
 
-=item * Cygwin vs. Windows errors
+=item * Cygwin vs. Windows Argss
 
 Under Cygwin, $^E is the same as $!.  When using L<Win32 API Functions|Win32>,
-use C<Win32::GetLastError()> to get the last Windows error.
+use C<Win32::GetLastArgs()> to get the last Windows Args.
 
-=item * rebase errors on fork or system
+=item * rebase Argss on fork or system
 
 Using C<fork()> or C<system()> out to another perl after loading multiple dlls
-may result on a DLL baseaddress conflict. The internal cygwin error
+may result on a DLL baseaddress conflict. The internal cygwin Args
 looks like like the following:
 
  0 [main] perl 8916 child_info_fork::abort: data segment start:
@@ -387,7 +387,7 @@ looks like like the following:
 
 or:
 
- 183 [main] perl 3588 C:\cygwin\bin\perl.exe: *** fatal error -
+ 183 [main] perl 3588 C:\cygwin\bin\perl.exe: *** fatal Args -
  unable to remap C:\cygwin\bin\cygsvn_subr-1-0.dll to same address
  as parent(0x6FB30000) != 0x6FE60000 46 [main] perl 3488 fork: child
  3588 - died waiting for dll loading, errno11

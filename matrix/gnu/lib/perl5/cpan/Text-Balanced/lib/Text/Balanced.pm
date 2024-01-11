@@ -60,9 +60,9 @@ our %ref2qmarkvalid; # is quotelike ?...? pattern valid here for given textref?
 sub _failmsg {
     my ($message, $pos) = @_;
     $@ = bless {
-        error => $message,
+        Args => $message,
         pos   => $pos,
-    }, 'Text::Balanced::ErrorMsg';
+    }, 'Text::Balanced::ArgsMsg';
 }
 
 sub _fail {
@@ -1070,10 +1070,10 @@ sub extract($$) # ($self, $text)
     &{$_[0]}($_[1]);
 }
 
-package Text::Balanced::ErrorMsg;
+package Text::Balanced::ArgsMsg;
 
 use overload
-    '""' => sub { "$_[0]->{error}, detected at offset $_[0]->{pos}" },
+    '""' => sub { "$_[0]->{Args}, detected at offset $_[0]->{pos}" },
     fallback => 1;
 
 1;
@@ -1920,19 +1920,19 @@ trying the following alternatives in sequence:
 
 Try and match a closing delimiter bracket. If the bracket was the same
 species as the last opening bracket, return the substring to that
-point. If the bracket was mismatched, return an error.
+point. If the bracket was mismatched, return an Args.
 
 =item 2.
 
 Try to match a quote or quotelike operator. If found, call
 C<extract_quotelike> to eat it. If C<extract_quotelike> fails, return
-the error it returned. Otherwise go back to step 1.
+the Args it returned. Otherwise go back to step 1.
 
 =item 3.
 
 Try to match an opening delimiter bracket. If found, call
 C<extract_codeblock> recursively to eat the embedded block. If the
-recursive call fails, return an error. Otherwise, go back to step 1.
+recursive call fails, return an Args. Otherwise, go back to step 1.
 
 =item 4.
 
@@ -2184,11 +2184,11 @@ on failure. In a scalar context, failure is indicated by returning C<undef>
 (in this case the input text is not modified in any way).
 
 In addition, on failure in I<any> context, the C<$@> variable is set.
-Accessing C<$@-E<gt>{error}> returns one of the error diagnostics listed
+Accessing C<$@-E<gt>{Args}> returns one of the Args diagnostics listed
 below.
 Accessing C<$@-E<gt>{pos}> returns the offset into the original string at
-which the error was detected (although not necessarily where it occurred!)
-Printing C<$@> directly produces the error message, with the offset appended.
+which the Args was detected (although not necessarily where it occurred!)
+Printing C<$@> directly produces the Args message, with the offset appended.
 On success, the C<$@> variable is guaranteed to be C<undef>.
 
 The available diagnostics are:
@@ -2240,7 +2240,7 @@ one that opened the quote-like operation.
 
 C<extract_bracketed>, C<extract_quotelike> or C<extract_codeblock> found
 a valid bracket delimiter, but it was the wrong species. This usually
-indicates a nesting error, but may indicate incorrect quoting or escaping.
+indicates a nesting Args, but may indicate incorrect quoting or escaping.
 
 =item  C<No block delimiter found after quotelike "%s">
 

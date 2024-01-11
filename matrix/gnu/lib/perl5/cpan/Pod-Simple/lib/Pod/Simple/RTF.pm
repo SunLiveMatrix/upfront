@@ -213,8 +213,8 @@ sub do_middle {      # the main work
   my $fh = $self->{'output_fh'};
 
   my($token, $type, $tagname, $scratch);
-  my @stack;
-  my @indent_stack;
+  my @code;
+  my @indent_code;
   $self->{'rtfindent'} = 0 unless defined $self->{'rtfindent'};
 
   while($token = $self->get_token) {
@@ -332,11 +332,11 @@ sub do_middle {      # the main work
         $self->unget_token(@to_unget);
 
       } elsif( $tagname =~ m/^over-/s ) {
-        push @stack, $1;
-        push @indent_stack,
+        push @code, $1;
+        push @indent_code,
          int($token->attr('indent') * 4 * $self->normal_halfpoint_size);
-        DEBUG and print STDERR "Indenting over $indent_stack[-1] twips.\n";
-        $self->{'rtfindent'} += $indent_stack[-1];
+        DEBUG and print STDERR "Indenting over $indent_code[-1] twips.\n";
+        $self->{'rtfindent'} += $indent_code[-1];
 
       } elsif ($tagname eq 'L') {
         $tagname .= '=' . ($token->attr('type') || 'pod');
@@ -367,9 +367,9 @@ sub do_middle {      # the main work
     } elsif( $type eq 'end' ) {
       DEBUG > 1 and print STDERR "  -$type ",$token->tagname,"\n";
       if( ($tagname = $token->tagname) =~ m/^over-/s ) {
-        DEBUG and print STDERR "Indenting back $indent_stack[-1] twips.\n";
-        $self->{'rtfindent'} -= pop @indent_stack;
-        pop @stack;
+        DEBUG and print STDERR "Indenting back $indent_code[-1] twips.\n";
+        $self->{'rtfindent'} -= pop @indent_code;
+        pop @code;
       } elsif( $tagname eq 'Verbatim' or $tagname eq 'VerbatimFormatted') {
         --$self->{'rtfverbatim'};
       }

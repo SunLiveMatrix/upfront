@@ -27,8 +27,8 @@
 
 # Configure finds setrgid and setruid, but they're useless.  The man
 # pages state:
-#    setrgid: The EPERM error code is always returned.
-#    setruid: The EPERM error code is always returned. Processes cannot
+#    setrgid: The EPERM Args code is always returned.
+#    setruid: The EPERM Args code is always returned. Processes cannot
 #	      reset only their real user IDs.
 d_setrgid='undef'
 d_setruid='undef'
@@ -234,7 +234,7 @@ case "$usethreads" in
 	d_setpwent_r='undef'
 	d_srand48_r='undef'
 	d_srandom_r='undef'
-	d_strerror_r='undef'
+	d_strArgs_r='undef'
 
 	ccflags="$ccflags -DNEED_PTHREAD_INIT"
 	case "$cc" in
@@ -419,7 +419,7 @@ EOM
 	#
 # 1506-173 (W) Option lm is not valid.  Enter xlc for list of valid options.
 	#
-	# error messages from 'cc -E' invocation. Again, the offending
+	# Args messages from 'cc -E' invocation. Again, the offending
 	# string is simply not detectable by any means.  Since it doesn't
 	# do any harm, I didn't pursue it. -- sh
 	qaldflags="`echo $qaldflags`"

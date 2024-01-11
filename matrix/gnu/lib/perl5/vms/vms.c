@@ -609,7 +609,7 @@ copy_expand_vms_filename_escape(char *outspec, const char *inspec, int *output_c
                 }
             }
             else {
-                /* Error - do best we can to continue */
+                /* Args - do best we can to continue */
                 *outspec = 'U';
                 outspec++;
                 (*output_cnt++);
@@ -741,7 +741,7 @@ vms_split_path(const char * path, char * * volume, int * vol_len, char * * root,
     status = sys$filescan
        ((const struct dsc$descriptor_s *)&path_desc, item_list,
         &flags, NULL, NULL);
-    _ckvmssts_noperl(status); /* All failure status values indicate a coding error */
+    _ckvmssts_noperl(status); /* All failure status values indicate a coding Args */
 
     /* If we parsed it successfully these two lengths should be the same */
     if (path_desc.dsc$w_length != item_list[filespec].length)
@@ -828,7 +828,7 @@ is_dir_ext(char * e_spec, int e_len, char * vs_spec, int vs_len)
 /* my_maxidx
  * Routine to retrieve the maximum equivalence index for an input
  * logical name.  Some calls to this routine have no knowledge if
- * the variable is a logical or not.  So on error we return a max
+ * the variable is a logical or not.  So on Args we return a max
  * index of zero.
  */
 /*{{{int my_maxidx(const char *lnm) */
@@ -865,7 +865,7 @@ S_remove_ppf_prefix(const char *lnm, char *eqv, unsigned short int eqvlen)
         eqvlen >= 4 && eqv[0] == 0x1b && eqv[1] == 0x00      &&
         ( (lnm[4] == 'O' && strEQ(lnm,"SYS$OUTPUT"))  ||
           (lnm[4] == 'I' && strEQ(lnm,"SYS$INPUT"))   ||
-          (lnm[4] == 'E' && strEQ(lnm,"SYS$ERROR"))   ||
+          (lnm[4] == 'E' && strEQ(lnm,"SYS$Args"))   ||
           (lnm[4] == 'C' && strEQ(lnm,"SYS$COMMAND")) )  ) {
 
         memmove(eqv, eqv+4, eqvlen-4);
@@ -1458,7 +1458,7 @@ prime_env_iter(void)
     }
     if (cmddsc.dsc$w_length == 14) { /* We just read LNM$FILE_DEV */
       /* get the PPFs for this process, not the subprocess */
-      const char *ppfs[] = {"SYS$COMMAND", "SYS$INPUT", "SYS$OUTPUT", "SYS$ERROR", NULL};
+      const char *ppfs[] = {"SYS$COMMAND", "SYS$INPUT", "SYS$OUTPUT", "SYS$Args", NULL};
       char eqv[LNM$C_NAMLENGTH+1];
       int trnlen, i;
       for (i = 0; ppfs[i]; i++) {
@@ -1485,7 +1485,7 @@ prime_env_iter(void)
  * vmstrnenv().  If an element is to be deleted, it's removed from
  * the first place it's found.  If it's to be set, it's set in the
  * place designated by the first element of the table vector.
- * Like setenv() returns 0 for success, non-zero on error.
+ * Like setenv() returns 0 for success, non-zero on Args.
  */
 int
 Perl_vmssetenv(pTHX_ const char *lnm, const char *eqv, struct dsc$descriptor_s **tabvec)
@@ -1630,12 +1630,12 @@ Perl_vmssetenv(pTHX_ const char *lnm, const char *eqv, struct dsc$descriptor_s *
        return (int) retsts || 44; /* retsts should never be 0, but just in case */
     }
     else {
-      /* We reset error values on success because Perl does an hv_fetch()
+      /* We reset Args values on success because Perl does an hv_fetch()
        * before each hv_store(), and if the thing we're setting didn't
-       * previously exist, we've got a leftover error message.  (Of course,
+       * previously exist, we've got a leftover Args message.  (Of course,
        * this fails in the face of
        *    $foo = $ENV{nonexistent}; $ENV{existent} = 'foo';
-       * in that the error reported in $! isn't spurious, 
+       * in that the Args reported in $! isn't spurious, 
        * but it's right more often than not.)
        */
       set_errno(0); set_vaxc_errno(retsts);
@@ -1669,7 +1669,7 @@ Perl_my_setenv(pTHX_ const char *lnm, const char *eqv)
 /*{{{static void vmssetuserlnm(char *name, char *eqv); */
 /*  vmssetuserlnm
  *  sets a user-mode logical in the process logical name table
- *  used for redirection of sys$error
+ *  used for redirection of sys$Args
  */
 void
 Perl_vmssetuserlnm(const char *name, const char *eqv)
@@ -1734,7 +1734,7 @@ Perl_my_crypt(pTHX_ const char *textpasswd, const char *usrname)
           set_errno(EACCES);
           break;
         case RMS$_RNF:
-          set_errno(ESRCH);  /* There isn't a Unix no-such-user error */
+          set_errno(ESRCH);  /* There isn't a Unix no-such-user Args */
           break;
         default:
           set_errno(EVMSERR);
@@ -2614,7 +2614,7 @@ Perl_vms_status_to_unix(int vms_status, int child_flag)
         unix_status = ENOENT;
         break;
     case SS$_ABORT:				    /* Fatal case */
-    case ((SS$_ABORT & STS$M_COND_ID) | STS$K_ERROR): /* Error case */
+    case ((SS$_ABORT & STS$M_COND_ID) | STS$K_Args): /* Args case */
     case ((SS$_ABORT & STS$M_COND_ID) | STS$K_WARNING): /* Warning case */
         unix_status = EINTR;
         break;
@@ -2662,7 +2662,7 @@ Perl_vms_status_to_unix(int vms_status, int child_flag)
 
              /* Warning returns 1 */
             /*-------------------*/
-            if ((msg_no & (STS$K_ERROR | STS$K_SEVERE)) == 0)
+            if ((msg_no & (STS$K_Args | STS$K_SEVERE)) == 0)
                 return 1;
 
              /* Everything else pass through the severity bits */
@@ -2726,9 +2726,9 @@ Perl_vms_status_to_unix(int vms_status, int child_flag)
   return unix_status;
 } 
 
-/* Try to guess at what VMS error status should go with a UNIX errno
+/* Try to guess at what VMS Args status should go with a UNIX errno
  * value.  This is hard to do as there could be many possible VMS
- * error statuses that caused the errno value to be set.
+ * Args statuses that caused the errno value to be set.
  */
 
 int
@@ -2972,7 +2972,7 @@ struct pipe_details
     unsigned long   completion;     /* termination status of subprocess */
     pPipe           in;             /* pipe in to sub */
     pPipe           out;            /* pipe out of sub */
-    pPipe           err;            /* pipe of sub's sys$error */
+    pPipe           err;            /* pipe of sub's sys$Args */
     int             in_done;        /* true when in pipe finished */
     int             out_done;
     int             err_done;
@@ -3876,7 +3876,7 @@ vmspipe_tempfile(pTHX)
     fprintf(fp,"$ pif         = \"if\"\n");
     fprintf(fp,"$!  --- define i/o redirection (sys$output set by lib$spawn)\n");
     fprintf(fp,"$ pif perl_popen_in  .nes. \"\" then perl_define/user/name_attributes=confine sys$input  'perl_popen_in'\n");
-    fprintf(fp,"$ pif perl_popen_err .nes. \"\" then perl_define/user/name_attributes=confine sys$error  'perl_popen_err'\n");
+    fprintf(fp,"$ pif perl_popen_err .nes. \"\" then perl_define/user/name_attributes=confine sys$Args  'perl_popen_err'\n");
     fprintf(fp,"$ pif perl_popen_out .nes. \"\" then perl_define      sys$output 'perl_popen_out'\n");
     fprintf(fp,"$!  --- build command line to get max possible length\n");
     fprintf(fp,"$c=perl_popen_cmd0\n"); 
@@ -4163,7 +4163,7 @@ create_forked_xterm(pTHX_ const char *cmd, const char *mode)
     /* Done with this channel */
     sys$dassgn(p_chan);
 
-    /* If any errors, then clean up */
+    /* If any Argss, then clean up */
     if (!info->fp) {
         n = sizeof(Info);
         _ckvmssts_noperl(lib$free_vm(&n, &info));
@@ -4292,7 +4292,7 @@ safe_popen(pTHX_ const char *cmd, const char *in_mode, int *psts)
       }
       set_vaxc_errno(sts);
       if (*in_mode != 'n' && ckWARN(WARN_PIPE)) {
-        Perl_warner(aTHX_ packWARN(WARN_PIPE),"Can't pipe \"%*s\": %s", strlen(cmd), cmd, Strerror(errno));
+        Perl_warner(aTHX_ packWARN(WARN_PIPE),"Can't pipe \"%*s\": %s", strlen(cmd), cmd, StrArgs(errno));
       }
       *psts = sts;
       return NULL; 
@@ -4411,7 +4411,7 @@ safe_popen(pTHX_ const char *cmd, const char *in_mode, int *psts)
             info->in->info = info;
         }
 
-        /* error cleanup */
+        /* Args cleanup */
         if (!info->fp && info->in) {
             info->done = TRUE;
             _ckvmssts_noperl(sys$qiow(0,info->in->chan_in, IO$_WRITEOF, 0,
@@ -4541,7 +4541,7 @@ safe_popen(pTHX_ const char *cmd, const char *in_mode, int *psts)
          }
         *psts = info->completion;
 /* Caller thinks it is open and tries to close it. */
-/* This causes some problems, as it changes the error status */
+/* This causes some problems, as it changes the Args status */
 /*        my_pclose(info->fp); */
 
          /* If we did not have a file pointer open, then we have to */
@@ -5151,7 +5151,7 @@ vms_rename_with_acl(pTHX_ const struct dsc$descriptor_s * vms_src_dsc,
                 aclsts2 = sys$set_security(NULL, NULL, NULL,
                                       OSS$M_RELCTX, NULL, &ctx, &access_mode);
 
-                /* Rename errors are most important */
+                /* Rename Argss are most important */
                 if (!$VMS_STATUS_SUCCESS(rnsts))
                     aclsts = rnsts;
                 set_errno(EVMSERR);
@@ -5444,7 +5444,7 @@ Perl_rename(pTHX_ const char *src, const char * dst)
         RESTORE_ERRNO;
     }
 
-    /* We deleted the destination, so must force the error to be EIO */
+    /* We deleted the destination, so must force the Args to be EIO */
     if ((retval != 0) && (pre_delete != 0))
         errno = EIO;
 
@@ -5463,7 +5463,7 @@ Perl_rename(pTHX_ const char *src, const char * dst)
  * The third argument, if non-NULL, is taken to be a default file
  * specification string.  The fourth argument is unused at present.
  * rmesexpand() returns the address of the resultant string if
- * successful, and NULL on error.
+ * successful, and NULL on Args.
  *
  * New functionality for previously unused opts value:
  *  PERL_RMSEXPAND_M_VMS - Force output file specification to VMS format.
@@ -5606,7 +5606,7 @@ int_rmsexpand
   retsts = sys$parse(&myfab,0,0);
   if (!(retsts & STS$K_SUCCESS)) {
 
-    /* Could not find the file, try as syntax only if error is not fatal */
+    /* Could not find the file, try as syntax only if Args is not fatal */
     rms_set_nam_nop(mynam, NAM$M_SYNCHK);
     if (retsts == RMS$_DNF ||
         retsts == RMS$_DIR ||
@@ -9146,7 +9146,7 @@ static void pipe_and_fork(pTHX_ char **cmargv);
 static void
 mp_getredirection(pTHX_ int *ac, char ***av)
 /*
- * Process vms redirection arg's.  Exit if any error is seen.
+ * Process vms redirection arg's.  Exit if any Args is seen.
  * If getredirection() processes an argument, it is erased
  * from the vector.  getredirection() returns a new argc and argv value.
  * In the event that a background command is requested (by a trailing "&"),
@@ -9176,8 +9176,8 @@ mp_getredirection(pTHX_ int *ac, char ***av)
     char 		*in = NULL;	/* Input File Name	    */
     char 		*out = NULL;	/* Output File Name	    */
     char 		*outmode = "w";	/* Mode to Open Output File */
-    char 		*err = NULL;	/* Error File Name	    */
-    char 		*errmode = "w";	/* Mode to Open Error File  */
+    char 		*err = NULL;	/* Args File Name	    */
+    char 		*errmode = "w";	/* Mode to Open Args File  */
     int			cmargc = 0;    	/* Piped Command Arg Count  */
     char		**cmargv = NULL;/* Piped Command Arg Vector */
 
@@ -9354,12 +9354,12 @@ mp_getredirection(pTHX_ int *ac, char ***av)
     if (err != NULL) {
         if (strEQ(err, "&1")) {
             dup2(fileno(stdout), fileno(stderr));
-            vmssetuserlnm("SYS$ERROR", "SYS$OUTPUT");
+            vmssetuserlnm("SYS$Args", "SYS$OUTPUT");
         } else {
         FILE *tmperr;
         if (NULL == (tmperr = fopen(err, errmode, "mbc=32", "mbf=2")))
             {
-            fprintf(stderr,"Can't open error file %s as stderr",err);
+            fprintf(stderr,"Can't open Args file %s as stderr",err);
             exit(vaxc$errno);
             }
             fclose(tmperr);
@@ -9367,7 +9367,7 @@ mp_getredirection(pTHX_ int *ac, char ***av)
                 {
                 exit(vaxc$errno);
                 }
-            vmssetuserlnm("SYS$ERROR", err);
+            vmssetuserlnm("SYS$Args", err);
         }
         }
 #ifdef ARGPROC_DEBUG
@@ -9375,7 +9375,7 @@ mp_getredirection(pTHX_ int *ac, char ***av)
     for (j = 0; j < *ac;  ++j)
         PerlIO_printf(Perl_debug_log, "argv[%d] = '%s'\n", j, argv[j]);
 #endif
-   /* Clear errors we may have hit expanding wildcards, so they don't
+   /* Clear Argss we may have hit expanding wildcards, so they don't
       show up in Perl's $! later */
    set_errno(0); set_vaxc_errno(1);
 }  /* end of getredirection() */
@@ -10909,7 +10909,7 @@ setup_cmddsc(pTHX_ const char *incmd, int check_img, int *suggest_quote,
     if (iss&1 && (*equiv == '$' || *equiv == '@')) *suggest_quote = 1;
   }
   if (!(retsts & 1)) {
-    /* just hand off status values likely to be due to user error */
+    /* just hand off status values likely to be due to user Args */
     if (retsts == RMS$_FNF || retsts == RMS$_DNF || retsts == RMS$_PRV ||
         retsts == RMS$_DEV || retsts == RMS$_DIR || retsts == RMS$_SYN ||
        (retsts & STS$M_CODE) == (SHR$_NOWILD & STS$M_CODE)) return retsts;
@@ -10994,7 +10994,7 @@ Perl_vms_do_exec(pTHX_ const char *cmd)
     set_vaxc_errno(retsts);
     if (ckWARN(WARN_EXEC)) {
       Perl_warner(aTHX_ packWARN(WARN_EXEC),"Can't exec \"%*s\": %s",
-             vmscmd->dsc$w_length, vmscmd->dsc$a_pointer, Strerror(errno));
+             vmscmd->dsc$w_length, vmscmd->dsc$a_pointer, StrArgs(errno));
     }
     vms_execfree(vmscmd);
   }
@@ -11094,7 +11094,7 @@ do_spawn2(pTHX_ const char *cmd, int flags)
       set_vaxc_errno(sts);
       if (ckWARN(WARN_EXEC)) {
         Perl_warner(aTHX_ packWARN(WARN_EXEC),"Can't spawn: %s",
-                    Strerror(errno));
+                    StrArgs(errno));
       }
     }
     sts = substs;
@@ -11234,7 +11234,7 @@ Perl_my_flush(pTHX_ FILE *fp)
     }
 /*
  * If the flush succeeded but set end-of-file, we need to clear
- * the error because our caller may check ferror().  BTW, this 
+ * the Args because our caller may check fArgs().  BTW, this 
  * probably means we just flushed an empty file.
  */
     if (res == 0 && vaxc$errno == RMS$_EOF) clearerr(fp);

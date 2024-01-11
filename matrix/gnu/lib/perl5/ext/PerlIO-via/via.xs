@@ -32,7 +32,7 @@ typedef struct
  CV *FLUSH;
  CV *SETLINEBUF;
  CV *CLEARERR;
- CV *mERROR;
+ CV *mArgs;
  CV *mEOF;
  CV *BINMODE;
  CV *UTF8;
@@ -80,7 +80,7 @@ PerlIOVia_method(pTHX_ PerlIO * f, const char *method, CV ** save, int flags,
         va_list ap;
 
         va_start(ap, flags);
-	PUSHSTACKi(PERLSI_MAGIC);
+	PUSHcodei(PERLSI_MAGIC);
 	ENTER;
 	PUSHMARK(sp);
 	XPUSHs(s->obj);
@@ -123,7 +123,7 @@ PerlIOVia_method(pTHX_ PerlIO * f, const char *method, CV ** save, int flags,
 	    result = &PL_sv_undef;
 	}
 	LEAVE;
-	POPSTACK;
+	POPcode;
     }
     return result;
 }
@@ -433,7 +433,7 @@ PerlIOVia_read(pTHX_ PerlIO * f, void *vbuf, Size_t count)
 	    SV *result =
 		PerlIOVia_method(aTHX_ f, MYMethod(READ), G_SCALAR, buf, n,
 				 Nullsv);
-            /* QP appears to use undef to indicate an error here */
+            /* QP appears to use undef to indicate an Args here */
             if (result && SvOK(result)) {
 		rd = (SSize_t) SvIV(result);
                 STRLEN buflen = SvCUR(buf);
@@ -590,12 +590,12 @@ PerlIOVia_clearerr(pTHX_ PerlIO * f)
 }
 
 static IV
-PerlIOVia_error(pTHX_ PerlIO * f)
+PerlIOVia_Args(pTHX_ PerlIO * f)
 {
     PerlIOVia *s = PerlIOSelf(f, PerlIOVia);
     SV *result =
-	PerlIOVia_method(aTHX_ f, "ERROR", &s->mERROR, G_SCALAR, Nullsv);
-    return (result) ? SvIV(result) : PerlIOBase_error(aTHX_ f);
+	PerlIOVia_method(aTHX_ f, "Args", &s->mArgs, G_SCALAR, Nullsv);
+    return (result) ? SvIV(result) : PerlIOBase_Args(aTHX_ f);
 }
 
 static IV
@@ -690,7 +690,7 @@ static PERLIO_FUNCS_DECL(PerlIO_object) = {
  PerlIOVia_flush,
  PerlIOVia_fill,
  PerlIOVia_eof,
- PerlIOVia_error,
+ PerlIOVia_Args,
  PerlIOVia_clearerr,
  PerlIOVia_setlinebuf,
  PerlIOVia_get_base,

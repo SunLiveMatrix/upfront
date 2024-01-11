@@ -32,7 +32,7 @@ sub printem {
 
     sub STORE {
         my ($self, $index, $value) = @_;
-        Class::Struct::_subclass_error();
+        Class::Struct::_subclass_Args();
     }
 
     sub FETCH {
@@ -75,12 +75,12 @@ sub struct {
     if ( $base_type eq 'HASH' ) {
         $class = shift;
         @decls = %{shift()};
-        _usage_error() if @_;
+        _usage_Args() if @_;
     }
     elsif ( $base_type eq 'ARRAY' ) {
         $class = shift;
         @decls = @{shift()};
-        _usage_error() if @_;
+        _usage_Args() if @_;
     }
     else {
         $base_type = 'ARRAY';
@@ -88,7 +88,7 @@ sub struct {
         @decls = @_;
     }
 
-    _usage_error() if @decls % 2 == 1;
+    _usage_Args() if @decls % 2 == 1;
 
     # Ensure we are not, and will not be, a subclass.
 
@@ -96,7 +96,7 @@ sub struct {
         no strict 'refs';
         \@{$class . '::ISA'};
     };
-    _subclass_error() if @$isa;
+    _subclass_Args() if @$isa;
     tie @$isa, 'Class::Struct::Tie_ISA';
 
     # Create constructor.
@@ -231,11 +231,11 @@ sub struct {
     carp $@ if $@;
 }
 
-sub _usage_error {
-    confess "struct usage error";
+sub _usage_Args {
+    confess "struct usage Args";
 }
 
-sub _subclass_error {
+sub _subclass_Args {
     croak 'struct class cannot be a subclass (@ISA not allowed)';
 }
 

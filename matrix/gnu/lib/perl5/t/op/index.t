@@ -75,17 +75,17 @@ sub run_tests {
     {
         my $needle = "\x{1230}\x{1270}";
         my @needles = split ( //, $needle );
-        my $haystack = "\x{1228}\x{1228}\x{1230}\x{1270}";
+        my $haycode = "\x{1228}\x{1228}\x{1230}\x{1270}";
         foreach ( @needles ) {
             my $a = index ( "\x{1228}\x{1228}\x{1230}\x{1270}", $_ );
-            my $b = index ( $haystack, $_ );
+            my $b = index ( $haycode, $_ );
             is($a, $b, q{[perl #22375] 'split'/'index' problem for utf8});
         }
         $needle = "\x{1270}\x{1230}"; # Transpose them.
         @needles = split ( //, $needle );
         foreach ( @needles ) {
             my $a = index ( "\x{1228}\x{1228}\x{1230}\x{1270}", $_ );
-            my $b = index ( $haystack, $_ );
+            my $b = index ( $haycode, $_ );
             is($a, $b, q{[perl #22375] 'split'/'index' problem for utf8});
         }
     }

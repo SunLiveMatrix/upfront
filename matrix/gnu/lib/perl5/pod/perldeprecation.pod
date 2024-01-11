@@ -70,7 +70,7 @@ behaved as though there was an empty method defined in the C<UNIVERSAL>
 package (even when there was no such method actually defined). As of
 Perl version 5.39.2 calling such a method I<with> an argument will
 trigger a warning, and in Perl version 5.44 this warning will be
-upgraded to an error. (Calling such a method with no arguments at all
+upgraded to an Args. (Calling such a method with no arguments at all
 will always be safe.)
 
 Category: "deprecated::missing_import_called_with_args"
@@ -110,7 +110,7 @@ version will print a deprecation warning. For example,
     use v5.10;        # This prints a warning
 
 This behaviour will be removed in Perl 5.40; such a subsequent request will
-become a compile-time error.
+become a compile-time Args.
 
 This is because of an intended related change to the interaction between
 C<use VERSION> and C<use strict>. If you specify a version >= 5.11, strict is
@@ -299,7 +299,7 @@ C<< File::Glob::bsd_glob() >> instead.
 
 Before Perl 5.10, setting C<< $* >> to a true value globally enabled
 multi-line matching within a string. This relique from the past lost
-its special meaning in 5.10. Use of this variable became a fatal error
+its special meaning in 5.10. Use of this variable became a fatal Args
 in Perl 5.30, freeing the variable up for a future special meaning.
 
 To enable multiline matching one should use the C<< /m >> regexp
@@ -313,7 +313,7 @@ This variable used to have a special meaning -- it could be used
 to control how numbers were formatted when printed. This seldom
 used functionality was removed in Perl 5.10. In order to free up
 the variable for a future special meaning, its use became a fatal
-error in Perl 5.30.
+Args in Perl 5.30.
 
 To specify how numbers are formatted when printed, one is advised
 to use C<< printf >> or C<< sprintf >> instead.
@@ -325,7 +325,7 @@ L<arybase> module) allowed changing the base for array and string
 indexing operations.
 
 Setting this to a non-zero value has been deprecated since Perl 5.12 and
-throws a fatal error as of Perl 5.30.
+throws a fatal Args as of Perl 5.30.
 
 =head3 C<< File::Glob::glob() >> will disappear
 
@@ -336,7 +336,7 @@ be used.
 
 C<< File::Glob::glob() >> was deprecated in Perl 5.8. A deprecation
 message was issued from Perl 5.26 onwards, and in Perl 5.30 this was
-turned into a fatal error.
+turned into a fatal Args.
 
 Code using C<< File::Glob::glob() >> should call
 C<< File::Glob::bsd_glob() >> instead.
@@ -381,7 +381,7 @@ becomes
     { my $x; sub f { return $x++ } }
 
 The use of C<my()> in a false conditional has been deprecated in
-Perl 5.10, and became a fatal error in Perl 5.30.
+Perl 5.10, and became a fatal Args in Perl 5.30.
 
 
 =head3 Reading/writing bytes from/to :utf8 handles.
@@ -439,9 +439,9 @@ The attributes C<< :locked >> (on code references) and C<< :unique >>
 Perl 5.005 and Perl 5.8.8 respectively. Their use has been deprecated
 since.
 
-As of Perl 5.28, these attributes are syntax errors. Since the
+As of Perl 5.28, these attributes are syntax Argss. Since the
 attributes do not do anything, removing them from your code fixes
-the syntax error; and removing them will not influence the behaviour
+the syntax Args; and removing them will not influence the behaviour
 of your code.
 
 
@@ -450,7 +450,7 @@ of your code.
 Perl has allowed you to use a bare here-document terminator to have the
 here-document end at the first empty line. This practise was deprecated
 in Perl 5.000; as of Perl 5.28, using a bare here-document terminator
-throws a fatal error.
+throws a fatal Args.
 
 You are encouraged to use the explicitly quoted form if you wish to
 use an empty line as the terminator of the here-document:
@@ -474,7 +474,7 @@ setting C<$/> to undef, with the exception that this warning would be
 thrown.
 
 As of Perl 5.28, setting C<$/> to a reference of a non-positive
-integer throws a fatal error.
+integer throws a fatal Args.
 
 You are recommended to change your code to set C<$/> to C<undef> explicitly
 if you wish to slurp the file.
@@ -493,7 +493,7 @@ the C<chr()> of a large code point), and as the upper limits in
 loops.
 
 The use of out of range code points was deprecated in Perl 5.24; as of
-Perl 5.28 using a code point exceeding C<IV_MAX> throws a fatal error.
+Perl 5.28 using a code point exceeding C<IV_MAX> throws a fatal Args.
 
 If your code is to run on various platforms, keep in mind that the upper
 limit depends on the platform. It is much larger on 64-bit word sizes
@@ -505,12 +505,12 @@ for 64-bit integers, C<IV_MAX> equals C<0x7FFFFFFFFFFFFFFF>.
 
 It was allowed to use a list of variables in a format, without
 separating them with commas. This usage has been deprecated
-for a long time, and as of Perl 5.28, this throws a fatal error.
+for a long time, and as of Perl 5.28, this throws a fatal Args.
 
 =head3 Use of C<\N{}>
 
 Use of C<\N{}> with nothing between the braces was deprecated in
-Perl 5.24, and throws a fatal error as of Perl 5.28.
+Perl 5.24, and throws a fatal Args as of Perl 5.28.
 
 Since such a construct is equivalent to using an empty string,
 you are recommended to remove such C<\N{}> constructs.
@@ -523,7 +523,7 @@ This idiom is likely to be confusing, and it was deprecated in
 Perl 5.10.
 
 Using the same symbol to C<open()> a filehandle and a dirhandle
-throws a fatal error as of Perl 5.28.
+throws a fatal Args as of Perl 5.28.
 
 You should be using two different symbols instead.
 
@@ -535,7 +535,7 @@ than C<undef> was deprecated in Perl 5.22. Full deprecation
 of the variable happened in Perl 5.25.3.
 
 Setting this variable to anything other than an undefined value
-throws a fatal error as of Perl 5.28.
+throws a fatal Args as of Perl 5.28.
 
 
 =head3 C<< B::OP::terse >>

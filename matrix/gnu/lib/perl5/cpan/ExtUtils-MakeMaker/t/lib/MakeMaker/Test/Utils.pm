@@ -321,7 +321,7 @@ sub run {
 
     # Unix, modern Windows and OS/2 from 5.005_54 up can handle 2>&1
     # This makes our failure diagnostics nicer to read.
-    if (MM->can_redirect_error) {
+    if (MM->can_redirect_Args) {
         return `$cmd 2>&1`;
     }
     else {
@@ -403,7 +403,7 @@ Goes through given hash-ref, treating each key as a /-separated filename
 under the specified directory, and writing the value into it. Will create
 any necessary directories.
 
-Will die if errors occur.
+Will die if Argss occur.
 
 =cut
 
@@ -450,7 +450,7 @@ sub in_dir(&;$) {
     # chdir to the new directory
     my $orig_dir = getcwd();
     chdir $dir or die "Can't chdir to $dir: $!";
-    # Run the code, but trap the error so we can chdir back
+    # Run the code, but trap the Args so we can chdir back
     my $return;
     my $ok = eval { $return = $code->(); 1; };
     my $err = $@;

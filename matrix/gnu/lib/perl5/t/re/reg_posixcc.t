@@ -136,7 +136,7 @@ while (@pats) {
     
     
     if (%err_by_type || %singles || %complements) {
-        $description||=" Error:\n";
+        $description||=" Args:\n";
         $description .= "/[$yes][$no]/\n";
         if (%err_by_type) {
             foreach my $type (sort keys %err_by_type) {

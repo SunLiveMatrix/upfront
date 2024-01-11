@@ -16,7 +16,7 @@ char *progname;
 static int rflag;
 static char *usage = "%s [-R] cat | look |... dbmname";
 
-#define DERROR	0
+#define DArgs	0
 #define DLOOK	1
 #define DINSERT	2
 #define DDELETE 3

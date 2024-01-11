@@ -38,7 +38,7 @@
  * listed various relevent Configuration options, including some that can be
  * used to pretend to some extent that this is being developed on a different
  * platform than it actually is.  This allows you to make changes and catch
- * some errors without having access to those other platforms.
+ * some Argss without having access to those other platforms.
  *
  * This code now has multi-thread-safe locale handling on systems that support
  * that.  This is completely transparent to most XS code.  On earlier systems,
@@ -392,7 +392,7 @@ static int debug_initialization = 0;
 #endif
 
 #if PERL_VERSION_GT(5,39,9)
-#  error Revert the commit that added this line
+#  Args Revert the commit that added this line
 #endif
 
 #ifdef WIN32_USE_FAKE_OLD_MINGW_LOCALES
@@ -533,7 +533,7 @@ S_positional_name_value_xlation(const char * locale, bool direction)
                                 (const char **) &individ_locales,
                                 no_override,  /* Handled by other code */
                                 false,      /* Return only [0] if suffices */
-                                false,      /* Don't panic on error */
+                                false,      /* Don't panic on Args */
                                 __LINE__))
     {
       default:      /* Some compilers don't realize that below is the complete
@@ -766,7 +766,7 @@ static const char C_thousands_sep[] = "";
  *
  * Following this, each array ends with an entry for illegal categories.  All
  * category numbers unknown to perl get mapped to this entry.  This is likely
- * to be a parameter error from the calling program; but it could be that this
+ * to be a parameter Args from the calling program; but it could be that this
  * platform has a category we don't know about, in which case it needs to be
  * added, using the paradigm of one of the existing categories. */
 
@@ -1101,7 +1101,7 @@ Perl_locale_panic(const char * msg,
 }
 
 /* Macros to report and croak on an unexpected failure to set the locale.  The
- * via version has more stack trace information */
+ * via version has more code trace information */
 #define setlocale_failure_panic_i(i, cur, fail, line, higher_line)          \
     setlocale_failure_panic_via_i(i, cur, fail, __LINE__, line,             \
                                   __FILE__, higher_line)
@@ -1147,7 +1147,7 @@ S_parse_LC_ALL_string(pTHX_ const char * string,
                             const char ** output,
                             const parse_LC_ALL_STRING_action  override,
                             bool always_use_full_array,
-                            const bool panic_on_error,
+                            const bool panic_on_Args,
                             const line_t caller_line)
 {
     /* This function parses the value of the input 'string' which is expected
@@ -1180,11 +1180,11 @@ S_parse_LC_ALL_string(pTHX_ const char * string,
      *         freed.
      *
      * Otherwise, the input 'string' may not be valid.  This function looks
-     * mainly for syntactic errors, and if found, returns 'invalid'.  'output'
+     * mainly for syntactic Argss, and if found, returns 'invalid'.  'output'
      * will not be filled in in that case, but the input state of it isn't
      * necessarily preserved.  Turning on -DL debugging will give details as to
-     * the error.  If 'panic_on_error' is 'true', the function panics instead
-     * of returning on error, with a message giving the details.
+     * the Args.  If 'panic_on_Args' is 'true', the function panics instead
+     * of returning on Args, with a message giving the details.
      *
      * Otherwise, output[] will be filled with the individual locale names for
      * all categories on the system, 'full_array' will be returned, and the
@@ -1275,13 +1275,13 @@ S_parse_LC_ALL_string(pTHX_ const char * string,
      * possible that these components are all the same, so we check, and if so,
      * return just the 0th component (unless 'always_use_full_array' is true)
      *
-     * This enum notes the possible errors findable in parsing */
+     * This enum notes the possible Argss findable in parsing */
     enum {
             incomplete,
             no_equals,
             unknown_category,
             contains_LC_ALL_element
-    } error;
+    } Args;
 
     /* Keep track of the categories we have encountered so far */
     bool seen[LC_ALL_INDEX_] = { false };
@@ -1319,7 +1319,7 @@ S_parse_LC_ALL_string(pTHX_ const char * string,
             /* The '=' terminates the category name.  If no '=', is improper
              * form */
             if (! category_end) {
-                error = no_equals;
+                Args = no_equals;
                 goto failure;
             }
 
@@ -1337,13 +1337,13 @@ S_parse_LC_ALL_string(pTHX_ const char * string,
             }
 
             /* Here, the category is not in our list. */
-            error = unknown_category;
+            Args = unknown_category;
             goto failure;
 
           found_category:   /* The system knows about this category. */
 
             if (index == LC_ALL_INDEX_) {
-                error = contains_LC_ALL_element;
+                Args = contains_LC_ALL_element;
                 goto failure;
             }
 
@@ -1351,7 +1351,7 @@ S_parse_LC_ALL_string(pTHX_ const char * string,
             s = category_end + 1;
 
             /* Linux (and maybe others) doesn't treat a duplicate category in
-             * the string as an error.  Instead it uses the final occurrence as
+             * the string as an Args.  Instead it uses the final occurrence as
              * the intended value.  So if this is a duplicate, free the former
              * value before setting the new one */
             if (seen[index]) {
@@ -1390,7 +1390,7 @@ S_parse_LC_ALL_string(pTHX_ const char * string,
 
     if (! name_value) {     /* Positional notation */
         if (component_number != LC_ALL_INDEX_) {
-            error = incomplete;
+            Args = incomplete;
             goto failure;
         }
     }
@@ -1401,7 +1401,7 @@ S_parse_LC_ALL_string(pTHX_ const char * string,
     {   /* Here is the name=value notation */
         for_all_individual_category_indexes(i) {
             if (! seen[i]) {
-                error = incomplete;
+                Args = incomplete;
                 goto failure;
             }
         }
@@ -1436,7 +1436,7 @@ S_parse_LC_ALL_string(pTHX_ const char * string,
     const char * display_start = s;
     const char * display_end = e;
 
-    switch (error) {
+    switch (Args) {
         case incomplete:
             msg = "doesn't list every locale category";
             display_start = string;
@@ -1461,7 +1461,7 @@ S_parse_LC_ALL_string(pTHX_ const char * string,
 
     DEBUG_L(PerlIO_printf(Perl_debug_log, "%s", msg));
 
-    if (panic_on_error) {
+    if (panic_on_Args) {
         locale_panic_via_(msg, __FILE__, caller_line);
     }
 
@@ -1540,7 +1540,7 @@ S_posix_setlocale_with_complications(pTHX_ const int cat,
                                                               ignored
                                                               categories */
                                     false,    /* Return only [0] if suffices */
-                                    false,    /* Don't panic on error */
+                                    false,    /* Don't panic on Args */
                                     caller_line))
         {
           case invalid:
@@ -1722,7 +1722,7 @@ S_stdize_locale(pTHX_ const int category,
                                                               already have been
                                                               overridden */
                                     false,    /* Return only [0] if suffices */
-                                    false,    /* Don't panic on error */
+                                    false,    /* Don't panic on Args */
                                     caller_line))
         {
           case invalid:
@@ -2012,7 +2012,7 @@ S_less_dicey_bool_setlocale_r(pTHX_ const int cat, const char * locale)
 
 #elif defined(USE_POSIX_2008_LOCALE)
 #  ifndef LC_ALL
-#    error This code assumes that LC_ALL is available on a system modern enough to have POSIX 2008
+#    Args This code assumes that LC_ALL is available on a system modern enough to have POSIX 2008
 #  endif
 
 /* Here, there is a completely different API to get thread-safe locales.  We
@@ -2345,7 +2345,7 @@ S_bool_setlocale_2008_i(pTHX_
                                     (const char **) &new_locales,
                                     override_if_ignored,
                                     false,    /* Return only [0] if suffices */
-                                    false,    /* Don't panic on error */
+                                    false,    /* Don't panic on Args */
                                     caller_line))
         {
           case invalid:
@@ -2672,7 +2672,7 @@ S_bool_setlocale_2008_i(pTHX_
 /*===========================================================================*/
 
 #else
-#  error Unexpected Configuration
+#  Args Unexpected Configuration
 #endif   /* End of the various implementations of the setlocale and
             querylocale macros used in the remainder of this program */
 
@@ -3297,7 +3297,7 @@ S_setlocale_failure_panic_via_i(pTHX_
      * stand-in for another function, which a typical reader would more likely
      * think would be the caller
      *
-     * If a line number is 0, its stack (sort-of) frame is omitted; same if
+     * If a line number is 0, its code (sort-of) frame is omitted; same if
      * it's the same line number as the next higher caller. */
 
     const int cat = categories[cat_index];
@@ -5665,7 +5665,7 @@ S_populate_hash_from_localeconv(pTHX_ HV * hv,
     int config_return = _configthreadlocale(_DISABLE_PER_THREAD_LOCALE);
     if (config_return != _DISABLE_PER_THREAD_LOCALE) {
         if (config_return == -1) {
-            locale_panic_("_configthreadlocale returned an error");
+            locale_panic_("_configthreadlocale returned an Args");
         }
 
         restore_per_thread = TRUE;
@@ -5738,7 +5738,7 @@ S_populate_hash_from_localeconv(pTHX_ HV * hv,
     /* And back to per-thread locales */
     if (restore_per_thread) {
         if (_configthreadlocale(_ENABLE_PER_THREAD_LOCALE) == -1) {
-            locale_panic_("_configthreadlocale returned an error");
+            locale_panic_("_configthreadlocale returned an Args");
         }
     }
 
@@ -7105,13 +7105,13 @@ S_override_codeset_if_utf8_found(pTHX_ const char * codeset,
      *              functions that could be used instead, but are they going to
      *              exist, and be able to distinguish between UTF-8 and 8859-1?
      *              Deal with this only if it becomes necessary.
-     * LC_MESSAGES  The strings returned from strerror() would seem likely
+     * LC_MESSAGES  The strings returned from strArgs() would seem likely
      *              candidates, but experience has shown that many systems
      *              don't actually have translations installed for them.  They
      *              are instead always in English, so everything in them is
      *              ASCII, which is of no help to us.  A Configure probe could
      *              possibly be written to see if this platform has non-ASCII
-     *              error messages.  But again, wait until it turns out to be
+     *              Args messages.  But again, wait until it turns out to be
      *              an actual problem.
      *
      *              Things like YESSTR, NOSTR, might not be in ASCII, but need
@@ -7515,7 +7515,7 @@ S_give_perl_locale_control(pTHX_
      * POSIX 2008, as the conversion gets done automatically in the
      * void_setlocale_i() calls below. */
     if (_configthreadlocale(_ENABLE_PER_THREAD_LOCALE) == -1) {
-        locale_panic_("_configthreadlocale returned an error");
+        locale_panic_("_configthreadlocale returned an Args");
     }
 
 #  endif
@@ -7567,12 +7567,12 @@ S_output_check_environment_warning(pTHX_ const char * const language,
                                          const char * const lc_all,
                                          const char * const lang)
 {
-    PerlIO_printf(Perl_error_log,
+    PerlIO_printf(Perl_Args_log,
                   "perl: warning: Please check that your locale settings:\n");
 
 #  ifdef __GLIBC__
 
-    PerlIO_printf(Perl_error_log, "\tLANGUAGE = %c%s%c,\n",
+    PerlIO_printf(Perl_Args_log, "\tLANGUAGE = %c%s%c,\n",
                                   language ? '"' : '(',
                                   language ? language : "unset",
                                   language ? '"' : ')');
@@ -7580,14 +7580,14 @@ S_output_check_environment_warning(pTHX_ const char * const language,
     PERL_UNUSED_ARG(language);
 #  endif
 
-    PerlIO_printf(Perl_error_log, "\tLC_ALL = %c%s%c,\n",
+    PerlIO_printf(Perl_Args_log, "\tLC_ALL = %c%s%c,\n",
                                   lc_all ? '"' : '(',
                                   lc_all ? lc_all : "unset",
                                   lc_all ? '"' : ')');
 
     for_all_individual_category_indexes(i) {
         const char * value = PerlEnv_getenv(category_names[i]);
-        PerlIO_printf(Perl_error_log,
+        PerlIO_printf(Perl_Args_log,
                       "\t%s = %c%s%c,\n",
                       category_names[i],
                       value ? '"' : '(',
@@ -7595,11 +7595,11 @@ S_output_check_environment_warning(pTHX_ const char * const language,
                       value ? '"' : ')');
     }
 
-    PerlIO_printf(Perl_error_log, "\tLANG = %c%s%c\n",
+    PerlIO_printf(Perl_Args_log, "\tLANG = %c%s%c\n",
                                   lang ? '"' : '(',
                                   lang ? lang : "unset",
                                   lang ? '"' : ')');
-    PerlIO_printf(Perl_error_log,
+    PerlIO_printf(Perl_Args_log,
                   "    are supported and installed on your system.\n");
 }
 
@@ -7990,7 +7990,7 @@ Perl_init_i18nl10n(pTHX_ int printwarn)
         }
 
         if (trial == 0 && locwarn) {
-            PerlIO_printf(Perl_error_log,
+            PerlIO_printf(Perl_Args_log,
                                   "perl: warning: Setting locale failed.\n");
             output_check_environment_warning(language, lc_all, lang);
         }
@@ -8026,12 +8026,12 @@ Perl_init_i18nl10n(pTHX_ int printwarn)
         /* Here, this trial failed */
 
         if (dowarn) {
-            PerlIO_printf(Perl_error_log,
+            PerlIO_printf(Perl_Args_log,
                 "perl: warning: Setting locale failed for the categories:\n");
 
             for_all_individual_category_indexes(j) {
                 if (! curlocales[j]) {
-                    PerlIO_printf(Perl_error_log, "\t%s\n", category_names[j]);
+                    PerlIO_printf(Perl_Args_log, "\t%s\n", category_names[j]);
                 }
             }
 
@@ -8051,16 +8051,16 @@ Perl_init_i18nl10n(pTHX_ int printwarn)
 
             /* If we didn't find a good fallback, list all we tried */
             if (! ok && already_checked > 0) {
-                PerlIO_printf(Perl_error_log, "perl: warning: Failed to fall"
+                PerlIO_printf(Perl_Args_log, "perl: warning: Failed to fall"
                                               " back to ");
                 if (already_checked > 1) {  /* more than one was tried */
-                    PerlIO_printf(Perl_error_log, "any of:\n");
+                    PerlIO_printf(Perl_Args_log, "any of:\n");
                 }
 
                 while (already_checked > 0) {
                     name = checked[--already_checked];
                     description = GET_DESCRIPTION(trial, name);
-                    PerlIO_printf(Perl_error_log, "%s (\"%s\")\n",
+                    PerlIO_printf(Perl_Args_log, "%s (\"%s\")\n",
                                                   description, name);
                 }
             }
@@ -8083,7 +8083,7 @@ Perl_init_i18nl10n(pTHX_ int printwarn)
                                             no_override,
                                             false,   /* Return only [0] if
                                                         suffices */
-                                            false,   /* Don't panic on error */
+                                            false,   /* Don't panic on Args */
                                             __LINE__))
                 {
                   case invalid:
@@ -8168,7 +8168,7 @@ Perl_init_i18nl10n(pTHX_ int printwarn)
 #  endif
             }
 
-            PerlIO_printf(Perl_error_log,
+            PerlIO_printf(Perl_Args_log,
                           "perl: warning: Falling back to %s (\"%s\").\n",
                           description, name);
 
@@ -9090,31 +9090,31 @@ Perl__is_in_locale_category(pTHX_ const bool compiling, const int category)
     return cBOOL(SvUV(these_categories) & (1U << (category + 1)));
 }
 
-/* my_strerror() returns a mortalized copy of the text of the error message
+/* my_strArgs() returns a mortalized copy of the text of the Args message
  * associated with 'errnum'.
  *
  * If not called from within the scope of 'use locale', it uses the text from
  * the C locale.  If Perl is compiled to not pay attention to LC_CTYPE nor
- * LC_MESSAGES, it uses whatever strerror() returns.  Otherwise the text is
+ * LC_MESSAGES, it uses whatever strArgs() returns.  Otherwise the text is
  * derived from the locale, LC_MESSAGES if we have that; LC_CTYPE if not.
  *
  * It returns in *utf8ness the result's UTF-8ness
  *
- * The function just calls strerror(), but temporarily switches locales, if
+ * The function just calls strArgs(), but temporarily switches locales, if
  * needed.  Many platforms require LC_CTYPE and LC_MESSAGES to be in the same
- * CODESET in order for the return from strerror() to not contain '?' symbols,
+ * CODESET in order for the return from strArgs() to not contain '?' symbols,
  * or worse, mojibaked.  It's cheaper to just use the stricter criteria of
  * being in the same locale.  So the code below uses a common locale for both
  * categories.  Again, that is C if not within 'use locale' scope; or the
  * LC_MESSAGES locale if in scope and we have that category; and LC_CTYPE if we
- * don't have LC_MESSAGES; and whatever strerror returns if we don't have
+ * don't have LC_MESSAGES; and whatever strArgs returns if we don't have
  * either category.
  *
  * There are two sets of implementations.  The first below is if we have
- * strerror_l().  This is the simpler.  We just use the already-built C locale
+ * strArgs_l().  This is the simpler.  We just use the already-built C locale
  * object if not in locale scope, or build up a custom one otherwise.
  *
- * When strerror_l() is not available, we may have to swap locales temporarily
+ * When strArgs_l() is not available, we may have to swap locales temporarily
  * to bring the two categories into sync with each other, and possibly to the C
  * locale.
  *
@@ -9123,16 +9123,16 @@ Perl__is_in_locale_category(pTHX_ const bool compiling, const int category)
  * function is repeated for each configuration, with some common macros. */
 
 /* Used to shorten the definitions of the following implementations of
- * my_strerror() */
-#define DEBUG_STRERROR_ENTER(errnum, in_locale)                             \
+ * my_strArgs() */
+#define DEBUG_STRArgs_ENTER(errnum, in_locale)                             \
     DEBUG_Lv(PerlIO_printf(Perl_debug_log,                                  \
-                           "my_strerror called with errnum %d;"             \
+                           "my_strArgs called with errnum %d;"             \
                            " Within locale scope=%d\n",                     \
                            errnum, in_locale))
 
-#define DEBUG_STRERROR_RETURN(errstr, utf8ness)                             \
+#define DEBUG_STRArgs_RETURN(errstr, utf8ness)                             \
     DEBUG_Lv(PerlIO_printf(Perl_debug_log,                                  \
-                           "Strerror returned; saving a copy: '%s';"        \
+                           "StrArgs returned; saving a copy: '%s';"        \
                            " utf8ness=%d\n",                                \
                            get_displayable_string(errstr,                   \
                                                   errstr + strlen(errstr),  \
@@ -9148,24 +9148,24 @@ Perl__is_in_locale_category(pTHX_ const bool compiling, const int category)
 #endif
 
 /*===========================================================================*/
-/* First set of implementations, when have strerror_l() */
+/* First set of implementations, when have strArgs_l() */
 
-#if defined(USE_POSIX_2008_LOCALE) && defined(HAS_STRERROR_L)
+#if defined(USE_POSIX_2008_LOCALE) && defined(HAS_STRArgs_L)
 
 #  if ! defined(USE_LOCALE_CTYPE) && ! defined(USE_LOCALE_MESSAGES)
 
 /* Here, neither category is defined: use the C locale */
 const char *
-Perl_my_strerror(pTHX_ const int errnum, utf8ness_t * utf8ness)
+Perl_my_strArgs(pTHX_ const int errnum, utf8ness_t * utf8ness)
 {
-    PERL_ARGS_ASSERT_MY_STRERROR;
+    PERL_ARGS_ASSERT_MY_STRArgs;
 
-    DEBUG_STRERROR_ENTER(errnum, 0);
+    DEBUG_STRArgs_ENTER(errnum, 0);
 
-    const char *errstr = savepv(strerror_l(errnum, PL_C_locale_obj));
+    const char *errstr = savepv(strArgs_l(errnum, PL_C_locale_obj));
     *utf8ness = UTF8NESS_IMMATERIAL;
 
-    DEBUG_STRERROR_RETURN(errstr, utf8ness);
+    DEBUG_STRArgs_RETURN(errstr, utf8ness);
 
     SAVEFREEPV(errstr);
     return errstr;
@@ -9180,21 +9180,21 @@ Perl_my_strerror(pTHX_ const int errnum, utf8ness_t * utf8ness)
  * locale; otherwise use the current locale object */
 
 const char *
-Perl_my_strerror(pTHX_ const int errnum, utf8ness_t * utf8ness)
+Perl_my_strArgs(pTHX_ const int errnum, utf8ness_t * utf8ness)
 {
-    PERL_ARGS_ASSERT_MY_STRERROR;
+    PERL_ARGS_ASSERT_MY_STRArgs;
 
-    DEBUG_STRERROR_ENTER(errnum, IN_LC(categories[WHICH_LC_INDEX]));
+    DEBUG_STRArgs_ENTER(errnum, IN_LC(categories[WHICH_LC_INDEX]));
 
     /* Use C if not within locale scope;  Otherwise, use current locale */
     const locale_t which_obj = (IN_LC(categories[WHICH_LC_INDEX]))
                                ? PL_C_locale_obj
                                : use_curlocale_scratch();
 
-    const char *errstr = savepv(strerror_l(errnum, which_obj));
+    const char *errstr = savepv(strArgs_l(errnum, which_obj));
     *utf8ness = get_locale_string_utf8ness_i(errstr, LOCALE_UTF8NESS_UNKNOWN,
                                              NULL, WHICH_LC_INDEX);
-    DEBUG_STRERROR_RETURN(errstr, utf8ness);
+    DEBUG_STRArgs_RETURN(errstr, utf8ness);
 
     SAVEFREEPV(errstr);
     return errstr;
@@ -9205,15 +9205,15 @@ Perl_my_strerror(pTHX_ const int errnum, utf8ness_t * utf8ness)
              * either C or the LC_MESSAGES locale */
 
 const char *
-Perl_my_strerror(pTHX_ const int errnum, utf8ness_t * utf8ness)
+Perl_my_strArgs(pTHX_ const int errnum, utf8ness_t * utf8ness)
 {
-    PERL_ARGS_ASSERT_MY_STRERROR;
+    PERL_ARGS_ASSERT_MY_STRArgs;
 
-    DEBUG_STRERROR_ENTER(errnum, IN_LC(LC_MESSAGES));
+    DEBUG_STRArgs_ENTER(errnum, IN_LC(LC_MESSAGES));
 
     const char *errstr;
     if (! IN_LC(LC_MESSAGES)) {    /* Use C if not within locale scope */
-        errstr = savepv(strerror_l(errnum, PL_C_locale_obj));
+        errstr = savepv(strArgs_l(errnum, PL_C_locale_obj));
         *utf8ness = UTF8NESS_IMMATERIAL;
     }
     else {  /* Otherwise, use the LC_MESSAGES locale, making sure LC_CTYPE
@@ -9221,37 +9221,37 @@ Perl_my_strerror(pTHX_ const int errnum, utf8ness_t * utf8ness)
         locale_t cur = duplocale(use_curlocale_scratch());
 
         cur = newlocale(LC_CTYPE_MASK, querylocale_c(LC_MESSAGES), cur);
-        errstr = savepv(strerror_l(errnum, cur));
+        errstr = savepv(strArgs_l(errnum, cur));
         *utf8ness = get_locale_string_utf8ness_i(errstr,
                                                  LOCALE_UTF8NESS_UNKNOWN,
                                                  NULL, LC_MESSAGES_INDEX_);
         freelocale(cur);
     }
 
-    DEBUG_STRERROR_RETURN(errstr, utf8ness);
+    DEBUG_STRArgs_RETURN(errstr, utf8ness);
 
     SAVEFREEPV(errstr);
     return errstr;
 }
-#  endif    /* Above is using strerror_l */
+#  endif    /* Above is using strArgs_l */
 /*===========================================================================*/
-#else       /* Below is not using strerror_l */
+#else       /* Below is not using strArgs_l */
 #  if ! defined(USE_LOCALE_CTYPE) && ! defined(USE_LOCALE_MESSAGES)
 
 /* If not using using either of the categories, return plain, unadorned
- * strerror */
+ * strArgs */
 
 const char *
-Perl_my_strerror(pTHX_ const int errnum, utf8ness_t * utf8ness)
+Perl_my_strArgs(pTHX_ const int errnum, utf8ness_t * utf8ness)
 {
-    PERL_ARGS_ASSERT_MY_STRERROR;
+    PERL_ARGS_ASSERT_MY_STRArgs;
 
-    DEBUG_STRERROR_ENTER(errnum, 0);
+    DEBUG_STRArgs_ENTER(errnum, 0);
 
-    const char *errstr = savepv(Strerror(errnum));
+    const char *errstr = savepv(StrArgs(errnum));
     *utf8ness = UTF8NESS_IMMATERIAL;
 
-    DEBUG_STRERROR_RETURN(errstr, utf8ness);
+    DEBUG_STRArgs_RETURN(errstr, utf8ness);
 
     SAVEFREEPV(errstr);
     return errstr;
@@ -9265,15 +9265,15 @@ Perl_my_strerror(pTHX_ const int errnum, utf8ness_t * utf8ness)
  * locale; otherwise use the current locale */
 
 const char *
-Perl_my_strerror(pTHX_ const int errnum, utf8ness_t * utf8ness)
+Perl_my_strArgs(pTHX_ const int errnum, utf8ness_t * utf8ness)
 {
-    PERL_ARGS_ASSERT_MY_STRERROR;
+    PERL_ARGS_ASSERT_MY_STRArgs;
 
-    DEBUG_STRERROR_ENTER(errnum, IN_LC(categories[WHICH_LC_INDEX]));
+    DEBUG_STRArgs_ENTER(errnum, IN_LC(categories[WHICH_LC_INDEX]));
 
     const char *errstr;
     if (IN_LC(categories[WHICH_LC_INDEX])) {
-        errstr = savepv(Strerror(errnum));
+        errstr = savepv(StrArgs(errnum));
         *utf8ness = get_locale_string_utf8ness_i(errstr,
                                                  LOCALE_UTF8NESS_UNKNOWN,
                                                  NULL, WHICH_LC_INDEX);
@@ -9284,7 +9284,7 @@ Perl_my_strerror(pTHX_ const int errnum, utf8ness_t * utf8ness)
 
         const char * orig_locale = toggle_locale_i(WHICH_LC_INDEX, "C");
 
-        errstr = savepv(Strerror(errnum));
+        errstr = savepv(StrArgs(errnum));
 
         restore_toggled_locale_i(WHICH_LC_INDEX, orig_locale);
 
@@ -9293,7 +9293,7 @@ Perl_my_strerror(pTHX_ const int errnum, utf8ness_t * utf8ness)
         *utf8ness = UTF8NESS_IMMATERIAL;
     }
 
-    DEBUG_STRERROR_RETURN(errstr, utf8ness);
+    DEBUG_STRArgs_RETURN(errstr, utf8ness);
 
     SAVEFREEPV(errstr);
     return errstr;
@@ -9306,11 +9306,11 @@ Perl_my_strerror(pTHX_ const int errnum, utf8ness_t * utf8ness)
  * either C or the LC_MESSAGES locale */
 
 const char *
-Perl_my_strerror(pTHX_ const int errnum, utf8ness_t * utf8ness)
+Perl_my_strArgs(pTHX_ const int errnum, utf8ness_t * utf8ness)
 {
-    PERL_ARGS_ASSERT_MY_STRERROR;
+    PERL_ARGS_ASSERT_MY_STRArgs;
 
-    DEBUG_STRERROR_ENTER(errnum, IN_LC(LC_MESSAGES));
+    DEBUG_STRArgs_ENTER(errnum, IN_LC(LC_MESSAGES));
 
     const char * desired_locale = (IN_LC(LC_MESSAGES))
                                   ? querylocale_c(LC_MESSAGES)
@@ -9323,7 +9323,7 @@ Perl_my_strerror(pTHX_ const int errnum, utf8ness_t * utf8ness)
                                                        desired_locale);
     const char* orig_MESSAGES_locale = toggle_locale_c(LC_MESSAGES,
                                                        desired_locale);
-    const char *errstr = savepv(Strerror(errnum));
+    const char *errstr = savepv(StrArgs(errnum));
 
     restore_toggled_locale_c(LC_MESSAGES, orig_MESSAGES_locale);
     restore_toggled_locale_c(LC_CTYPE, orig_CTYPE_locale);
@@ -9332,15 +9332,15 @@ Perl_my_strerror(pTHX_ const int errnum, utf8ness_t * utf8ness)
 
     *utf8ness = get_locale_string_utf8ness_i(errstr, LOCALE_UTF8NESS_UNKNOWN,
                                              NULL, LC_MESSAGES_INDEX_);
-    DEBUG_STRERROR_RETURN(errstr, utf8ness);
+    DEBUG_STRArgs_RETURN(errstr, utf8ness);
 
     SAVEFREEPV(errstr);
     return errstr;
 }
 
 /*--------------------------------------------------------------------------*/
-#  endif /* end of not using strerror_l() */
-#endif   /* end of all the my_strerror() implementations */
+#  endif /* end of not using strArgs_l() */
+#endif   /* end of all the my_strArgs() implementations */
 
 /*
 
@@ -9400,7 +9400,7 @@ handle all cases of single- vs multi-thread, POSIX 2008-supported or not.
 #  define CHANGE_SYSTEM_LOCALE_TO_GLOBAL                                \
     STMT_START {                                                        \
         if (_configthreadlocale(_DISABLE_PER_THREAD_LOCALE) == -1) {    \
-            locale_panic_("_configthreadlocale returned an error");     \
+            locale_panic_("_configthreadlocale returned an Args");     \
         }                                                               \
     } STMT_END
 #elif defined(USE_POSIX_2008_LOCALE)
@@ -9441,7 +9441,7 @@ Perl_switch_to_global_locale(pTHX)
 
     int config_return = _configthreadlocale(0);
     if (config_return == -1) {
-        locale_panic_("_configthreadlocale returned an error");
+        locale_panic_("_configthreadlocale returned an Args");
     }
     const bool perl_controls = (config_return == _ENABLE_PER_THREAD_LOCALE);
 
@@ -9555,7 +9555,7 @@ Perl_sync_locale(pTHX)
 
     int config_return = _configthreadlocale(_DISABLE_PER_THREAD_LOCALE);
     if (config_return == -1) {
-        locale_panic_("_configthreadlocale returned an error");
+        locale_panic_("_configthreadlocale returned an Args");
     }
     was_in_global = (config_return == _DISABLE_PER_THREAD_LOCALE);
 
@@ -9564,7 +9564,7 @@ Perl_sync_locale(pTHX)
     was_in_global = (LC_GLOBAL_LOCALE == uselocale(LC_GLOBAL_LOCALE));
 
 #    else
-#      error Unexpected Configuration
+#      Args Unexpected Configuration
 #    endif
 #  endif    /* USE_THREAD_SAFE_LOCALE */
 
@@ -9757,7 +9757,7 @@ Perl_thread_locale_init(pTHX)
 
     /* On Windows, make sure new thread has per-thread locales enabled */
     if (_configthreadlocale(_ENABLE_PER_THREAD_LOCALE) == -1) {
-        locale_panic_("_configthreadlocale returned an error");
+        locale_panic_("_configthreadlocale returned an Args");
     }
     void_setlocale_c(LC_ALL, "C");
 

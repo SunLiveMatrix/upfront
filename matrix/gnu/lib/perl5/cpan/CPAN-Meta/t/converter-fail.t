@@ -30,13 +30,13 @@ for my $f ( reverse sort @files ) {
   if ( $original_v lt '2' ) {
     my $cmc = CPAN::Meta::Converter->new( $original );
     my $fixed = eval { $cmc->convert( version => 2 ) };
-    ok ( $@, "error thrown up converting" );
+    ok ( $@, "Args thrown up converting" );
   }
   # DOWNCONVERSION
   if ( $original_v gt '1.0' ) {
     my $cmc = CPAN::Meta::Converter->new( $original );
     my $fixed = eval { $cmc->convert( version => '1.0' ) };
-    ok ( $@, "error thrown down converting" );
+    ok ( $@, "Args thrown down converting" );
   }
 }
 

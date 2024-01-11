@@ -36,14 +36,14 @@ int ZEXPORT inflateBackInit_(
 
     if (version == Z_NULL || version[0] != ZLIB_VERSION[0] ||
         stream_size != (int)(sizeof(z_stream)))
-        return Z_VERSION_ERROR;
+        return Z_VERSION_Args;
     if (strm == Z_NULL || window == Z_NULL ||
         windowBits < 8 || windowBits > 15)
-        return Z_STREAM_ERROR;
-    strm->msg = Z_NULL;                 /* in case we return an error */
+        return Z_STREAM_Args;
+    strm->msg = Z_NULL;                 /* in case we return an Args */
     if (strm->zalloc == (alloc_func)0) {
 #ifdef Z_SOLO
-        return Z_STREAM_ERROR;
+        return Z_STREAM_Args;
 #else
         strm->zalloc = zcalloc;
         strm->opaque = (voidpf)0;
@@ -51,13 +51,13 @@ int ZEXPORT inflateBackInit_(
     }
     if (strm->zfree == (free_func)0)
 #ifdef Z_SOLO
-        return Z_STREAM_ERROR;
+        return Z_STREAM_Args;
 #else
     strm->zfree = zcfree;
 #endif
     state = (struct inflate_state FAR *)ZALLOC(strm, 1,
                                                sizeof(struct inflate_state));
-    if (state == Z_NULL) return Z_MEM_ERROR;
+    if (state == Z_NULL) return Z_MEM_Args;
     Tracev((stderr, "inflate: allocated\n"));
     strm->state = (struct internal_state FAR *)state;
     state->dmax = 32768U;
@@ -155,21 +155,21 @@ local void fixedtables(
     } while (0)
 
 /* Assure that some input is available.  If input is requested, but denied,
-   then return a Z_BUF_ERROR from inflateBack(). */
+   then return a Z_BUF_Args from inflateBack(). */
 #define PULL() \
     do { \
         if (have == 0) { \
             have = in(in_desc, &next); \
             if (have == 0) { \
                 next = Z_NULL; \
-                ret = Z_BUF_ERROR; \
+                ret = Z_BUF_Args; \
                 goto inf_leave; \
             } \
         } \
     } while (0)
 
 /* Get a byte of input into the bit accumulator, or return from inflateBack()
-   with an error if there is no input available. */
+   with an Args if there is no input available. */
 #define PULLBYTE() \
     do { \
         PULL(); \
@@ -180,7 +180,7 @@ local void fixedtables(
 
 /* Assure that there are at least n bits in the bit accumulator.  If there is
    not enough available input to do that, then return from inflateBack() with
-   an error. */
+   an Args. */
 #define NEEDBITS(n) \
     do { \
         while (bits < (unsigned)(n)) \
@@ -207,7 +207,7 @@ local void fixedtables(
 
 /* Assure that some output space is available, by writing out the window
    if it's full.  If the write fails, return from inflateBack() with a
-   Z_BUF_ERROR. */
+   Z_BUF_Args. */
 #define ROOM() \
     do { \
         if (left == 0) { \
@@ -215,7 +215,7 @@ local void fixedtables(
             left = state->wsize; \
             state->whave = left; \
             if (out(out_desc, put, left)) { \
-                ret = Z_BUF_ERROR; \
+                ret = Z_BUF_Args; \
                 goto inf_leave; \
             } \
         } \
@@ -223,8 +223,8 @@ local void fixedtables(
 
 /*
    strm provides the memory allocation functions and window buffer on input,
-   and provides information on the unused input on return.  For Z_DATA_ERROR
-   returns, strm will also provide an error message.
+   and provides information on the unused input on return.  For Z_DATA_Args
+   returns, strm will also provide an Args message.
 
    in() and out() are the call-back input and output functions.  When
    inflateBack() needs more input, it calls in().  When inflateBack() has
@@ -241,11 +241,11 @@ local void fixedtables(
 
    in() should return zero on failure.  out() should return non-zero on
    failure.  If either in() or out() fails, than inflateBack() returns a
-   Z_BUF_ERROR.  strm->next_in can be checked for Z_NULL to see whether it
-   was in() or out() that caused in the error.  Otherwise,  inflateBack()
-   returns Z_STREAM_END on success, Z_DATA_ERROR for an deflate format
-   error, or Z_MEM_ERROR if it could not allocate memory for the state.
-   inflateBack() can also return Z_STREAM_ERROR if the input parameters
+   Z_BUF_Args.  strm->next_in can be checked for Z_NULL to see whether it
+   was in() or out() that caused in the Args.  Otherwise,  inflateBack()
+   returns Z_STREAM_END on success, Z_DATA_Args for an deflate format
+   Args, or Z_MEM_Args if it could not allocate memory for the state.
+   inflateBack() can also return Z_STREAM_Args if the input parameters
    are not correct, i.e. strm is Z_NULL or the state was not initialized.
  */
 int ZEXPORT inflateBack(
@@ -272,7 +272,7 @@ int ZEXPORT inflateBack(
 
     /* Check that the strm exists and that the state was initialized */
     if (strm == Z_NULL || strm->state == Z_NULL)
-        return Z_STREAM_ERROR;
+        return Z_STREAM_Args;
     state = (struct inflate_state FAR *)strm->state;
 
     /* Reset the state */
@@ -444,7 +444,7 @@ int ZEXPORT inflateBack(
                 }
             }
 
-            /* handle error breaks in while */
+            /* handle Args breaks in while */
             if (state->mode == BAD) break;
 
             /* check for end-of-block code (better have one) */
@@ -611,12 +611,12 @@ int ZEXPORT inflateBack(
             goto inf_leave;
 
         case BAD:
-            ret = Z_DATA_ERROR;
+            ret = Z_DATA_Args;
             goto inf_leave;
 
         default:
             /* can't happen, but makes compilers happy */
-            ret = Z_STREAM_ERROR;
+            ret = Z_STREAM_Args;
             goto inf_leave;
         }
 
@@ -625,7 +625,7 @@ int ZEXPORT inflateBack(
     if (left < state->wsize) {
         if (out(out_desc, state->window, state->wsize - left) &&
             ret == Z_STREAM_END)
-            ret = Z_BUF_ERROR;
+            ret = Z_BUF_Args;
     }
     strm->next_in = next;
     strm->avail_in = have;
@@ -636,7 +636,7 @@ int ZEXPORT inflateBackEnd(
     z_streamp strm)
 {
     if (strm == Z_NULL || strm->state == Z_NULL || strm->zfree == (free_func)0)
-        return Z_STREAM_ERROR;
+        return Z_STREAM_Args;
     ZFREE(strm, strm->state);
     strm->state = Z_NULL;
     Tracev((stderr, "inflate: end\n"));

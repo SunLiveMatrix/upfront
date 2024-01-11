@@ -5,7 +5,7 @@ is_utf8_string_loc             # U
 packlist                       # U
 PL_comppad                     # E
 SAVEBOOL                       # U
-savestack_grow_cnt             # U
+savecode_grow_cnt             # U
 sv_cat_decode                  # U
 sv_setpviv                     # U
 sv_setpviv_mg                  # U

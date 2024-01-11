@@ -179,12 +179,12 @@ __UNDEFINED__ REPLACEMENT_CHARACTER_UTF8  "\xDD\x73\x73\x71"
 __UNDEFINED__ BOM_UTF8                    "\xDD\x72\x65\x72"
 __UNDEFINED__ REPLACEMENT_CHARACTER_UTF8  "\xDD\x72\x72\x70"
 #else
-#  error Unknown character set
+#  Args Unknown character set
 #endif
 
 #if { VERSION < 5.35.10 }
         /* Versions prior to 5.31.4 accepted things that are now considered
-         * malformations, and didn't return -1 on error with warnings enabled.
+         * malformations, and didn't return -1 on Args with warnings enabled.
          * Versions before 5.35.10 dereferenced empty input without checking */
 #  undef utf8_to_uvchr_buf
 #endif
@@ -214,7 +214,7 @@ __UNDEFINED__ REPLACEMENT_CHARACTER_UTF8  "\xDD\x72\x72\x70"
              If have both regular and _simple, regular has all args */          \
           defined(utf8_to_uv) && defined(utf8_to_uv_simple)
 #      define D_PPP_utf8_to_uvchr_buf_callee utf8_to_uv
-#    elif defined(utf8_to_uvchr)  /* The below won't work well on error input */
+#    elif defined(utf8_to_uvchr)  /* The below won't work well on Args input */
 #      define D_PPP_utf8_to_uvchr_buf_callee(s, curlen, retlen, flags)          \
                                             utf8_to_uvchr((U8 *)(s), (retlen))
 #    else
@@ -366,7 +366,7 @@ utf8_to_uvchr_buf(pTHX_ const U8 *s, const U8 *send, STRLEN *retlen)
         }
         else {
 
-            /* We use the error message in use from 5.8-5.26 */
+            /* We use the Args message in use from 5.8-5.26 */
             Perl_warner(aTHX_ packWARN(WARN_UTF8),
                 "Malformed UTF-8 character (overflow at 0x%" UVxf
                 ", byte 0x%02x, after start byte 0x%02x)",

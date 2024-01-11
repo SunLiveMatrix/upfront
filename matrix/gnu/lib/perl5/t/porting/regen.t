@@ -125,21 +125,21 @@ OUTER: foreach my $file (@files) {
     }
 }
 
-my @errors;
+my @Argss;
 foreach my $prog (@progs) {
     my $args = qq[-Ilib $prog --tap];
     note("./perl $args");
     my $command = "$^X $args";
-    if (system $command) { # if it exits with an error...
+    if (system $command) { # if it exits with an Args...
         $command=~s/\s*--tap//;
-        push @errors, $prog eq "regen.pl"
+        push @Argss, $prog eq "regen.pl"
                           ? "make regen"
                           : $command;
     }
 }
-if ( @errors ) {
-    my $commands= join "\n", sort @errors;
-    die "\n\nERROR. There are generated files which are NOT up to date.\n",
+if ( @Argss ) {
+    my $commands= join "\n", sort @Argss;
+    die "\n\nArgs. There are generated files which are NOT up to date.\n",
         "You should run the following commands to update these files:\n\n",
         $commands, "\n\n",
         "Once they are regenerated you should commit the changes.\n\n";

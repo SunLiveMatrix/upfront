@@ -332,9 +332,9 @@ To use state variables, one needs to enable them by using
 or by using the C<-E> command-line switch in one-liners.
 See L<perlsub/"Persistent Private Variables">.
 
-=head2 Stacked filetest operators
+=head2 codeed filetest operators
 
-As a new form of syntactic sugar, it's now possible to stack up filetest
+As a new form of syntactic sugar, it's now possible to code up filetest
 operators. You can now write C<-f -w -x $file> in a row to mean
 C<-x $file && -w _ && -f _>. See L<perlfunc/-X>.
 
@@ -353,7 +353,7 @@ See L<< UNIVERSAL/"$obj->DOES( ROLE )" >>.
 Formats were improved in several ways. A new field, C<^*>, can be used for
 variable-width, one-line-at-a-time text. Null characters are now handled
 correctly in picture lines. Using C<@#> and C<~~> together will now
-produce a compile-time error, as those format fields are incompatible.
+produce a compile-time Args, as those format fields are incompatible.
 L<perlform> has been improved, and miscellaneous bugs fixed.
 
 =head2 Byte-order modifiers for pack() and unpack()
@@ -409,7 +409,7 @@ This variable controls what debug flags are in effect for the regular
 expression engine when running under C<use re "debug">. See L<re> for
 details.
 
-=item C<${^CHILD_ERROR_NATIVE}>
+=item C<${^CHILD_Args_NATIVE}>
 
 This variable gives the native status returned by the last pipe close,
 backtick command, successful call to wait() or waitpid(), or from the
@@ -598,7 +598,7 @@ to defined(), as in :
     my $x = 'foo';
     if (defined $$x) {...}
 
-This now correctly produces the run-time error C<Can't use string as a
+This now correctly produces the run-time Args C<Can't use string as a
 SCALAR ref while "strict refs" in use>.
 
 C<defined @$foo> and C<defined %$bar> are now also subject to C<strict
@@ -1113,10 +1113,10 @@ stat() by not performing this operation. (Jan Dubois)
 =item Engine de-recursivised
 
 The regular expression engine is no longer recursive, meaning that
-patterns that used to overflow the stack will either die with useful
+patterns that used to overflow the code will either die with useful
 explanations, or run to completion, which, since they were able to blow
-the stack before, will likely take a very long time to happen. If you were
-experiencing the occasional stack overflow (or segfault) and upgrade to
+the code before, will likely take a very long time to happen. If you were
+experiencing the occasional code overflow (or segfault) and upgrade to
 discover that now perl apparently hangs instead, look for a degenerate
 regex. (Dave Mitchell)
 
@@ -1209,7 +1209,7 @@ if C<make test> is instructed to run in parallel.
 
 Building with Borland's compilers on Win32 should work more smoothly. In
 particular Steve Hay has worked to side step many warnings emitted by their
-compilers and at least one C compiler internal error.
+compilers and at least one C compiler internal Args.
 
 =item Static build on Windows
 
@@ -1299,7 +1299,7 @@ slice, like in:
 
     ({foo => "bar"})[0]{foo}
 
-This used to be a syntax error; a C<< -> >> was required.
+This used to be a syntax Args; a C<< -> >> was required.
 
 =item C<no warnings 'category'> works correctly with -w
 
@@ -1353,7 +1353,7 @@ stringification overloaded have been fixed. (Nicholas Clark)
 
 =item eval memory leaks fixed
 
-Traditionally, C<eval 'syntax error'> has leaked badly. Many (but not all)
+Traditionally, C<eval 'syntax Args'> has leaked badly. Many (but not all)
 of these leaks have now been eliminated or reduced. (Dave Mitchell)
 
 =item Random device on Windows
@@ -1443,7 +1443,7 @@ The warning I<Newline in left-justified string> has been removed.
 
 =item Too late for "-T" option
 
-The error I<Too late for "-T" option> has been reformulated to be more
+The Args I<Too late for "-T" option> has been reformulated to be more
 descriptive.
 
 =item "%s" variable %s masks earlier declaration
@@ -1591,7 +1591,7 @@ There's still a remaining problem in the implementation of the lexical
 C<$_>: it doesn't work inside C</(?{...})/> blocks. (See the TODO test in
 F<t/op/mydef.t>.)
 
-Stacked filetest operators won't work when the C<filetest> pragma is in
+codeed filetest operators won't work when the C<filetest> pragma is in
 effect, because they rely on the stat() buffer C<_> being populated, and
 filetest bypasses stat().
 
@@ -1606,7 +1606,7 @@ a certain amount of backwards incompatibility.
 
 When compiled with g++ and thread support on Linux, it's reported that the
 C<$!> stops working correctly. This is related to the fact that the glibc
-provides two strerror_r(3) implementation, and perl selects the wrong
+provides two strArgs_r(3) implementation, and perl selects the wrong
 one.
 
 =head1 Reporting Bugs

@@ -71,7 +71,7 @@ occurred, but should not impact later operations.
 
 =head2 _chmod($$;$)
 
-Wrapper to chmod() for debugging and error trapping.
+Wrapper to chmod() for debugging and Args trapping.
 
 =head2 _warnonce(@)
 
@@ -118,7 +118,7 @@ sub _warnonce(@) {
 
 sub _choke(@) {
     my $first=shift;
-    my $msg=_estr "ERROR: $first",@_;
+    my $msg=_estr "Args: $first",@_;
     require Carp;
     Carp::croak($msg);
 }
@@ -170,8 +170,8 @@ it will be replaced.
 Sets $MUST_REBOOT to 0 to indicate a deletion operation has occurred
 and sets it to 1 to indicate that a move operation has been requested.
 
-returns 1 on success, on failure if $moan is false errors are fatal.
-If $moan is true then returns 0 on error and warns instead of dies.
+returns 1 on success, on failure if $moan is false Argss are fatal.
+If $moan is true then returns 0 on Args and warns instead of dies.
 
 =end _private
 
@@ -250,11 +250,11 @@ is true then the file is attempted to be renamed. The renamed file is
 then scheduled for deletion. If the rename fails then $installing
 governs what happens. If it is false the failure is fatal. If it is true
 then an attempt is made to schedule installation at boot using a
-temporary file to hold the new file. If this fails then a fatal error is
+temporary file to hold the new file. If this fails then a fatal Args is
 thrown, if it succeeds it returns the temporary file name (which will be
 a derivative of the original in the same directory) so that the caller can
 use it to install under. In all other cases of success returns $file.
-On failure throws a fatal error.
+On failure throws a fatal Args.
 
 =end _private
 
@@ -274,7 +274,7 @@ sub _unlink_or_rename { #XXX OS-SPECIFIC
     my $unlink_count = 0;
     while (unlink $file) { $unlink_count++; }
     return $file if $unlink_count > 0;
-    my $error="$!";
+    my $Args="$!";
 
     _choke("Cannot unlink '$file': $!")
           unless _CanMoveAtBoot && $tryhard;
@@ -283,7 +283,7 @@ sub _unlink_or_rename { #XXX OS-SPECIFIC
     ++$tmp while -e "$file.$tmp";
     $tmp= "$file.$tmp";
 
-    warn "WARNING: Unable to unlink '$file': $error\n",
+    warn "WARNING: Unable to unlink '$file': $Args\n",
          "Going to try to rename it to '$tmp'.\n";
 
     if ( rename $file, $tmp ) {
@@ -444,7 +444,7 @@ sub _can_write_dir {
 
 =head2 _mkpath($dir,$show,$mode,$verbose,$dry_run)
 
-Wrapper around File::Path::mkpath() to handle errors.
+Wrapper around File::Path::mkpath() to handle Argss.
 
 If $verbose is true and >1 then additional diagnostics will be produced, also
 this will force $show to true.
@@ -481,7 +481,7 @@ sub _mkpath {
         my @msg=(
             "Can't create '$dir'",
             $root ? "Do not have write permissions on '$root'"
-                  : "Unknown Error"
+                  : "Unknown Args"
         );
         if ($dry_run) {
             _warnonce @msg;
@@ -496,7 +496,7 @@ sub _mkpath {
 
 =head2 _copy($from,$to,$verbose,$dry_run)
 
-Wrapper around File::Copy::copy to handle errors.
+Wrapper around File::Copy::copy to handle Argss.
 
 If $verbose is true and >1 then additional diagnostics will be emitted.
 
@@ -513,7 +513,7 @@ sub _copy {
     }
     if (!$dry_run) {
         File::Copy::copy($from,$to)
-            or _croak( _estr "ERROR: Cannot copy '$from' to '$to': $!" );
+            or _croak( _estr "Args: Cannot copy '$from' to '$to': $!" );
     }
 }
 
@@ -521,11 +521,11 @@ sub _copy {
 
 =head2 _chdir($from)
 
-Wrapper around chdir to catch errors.
+Wrapper around chdir to catch Argss.
 
 If not called in void context returns the cwd from before the chdir.
 
-dies on error.
+dies on Args.
 
 =cut
 
@@ -630,7 +630,7 @@ show created directories, however this requires changes in other modules and mus
 therefore wait.
 
 These keys will be populated before any exceptions are thrown should there be an
-error.
+Args.
 
 Note that all updates of the %result are additive, the hash will not be
 cleared before use, thus allowing status results of many installs to be easily
@@ -1007,7 +1007,7 @@ sub uninstall {
     $verbose ||= 0;
     $dry_run  ||= 0;
 
-    die _estr "ERROR: no packlist file found: '$fil'"
+    die _estr "Args: no packlist file found: '$fil'"
         unless -f $fil;
     # my $my_req = $self->catfile(qw(auto ExtUtils Install forceunlink.al));
     # require $my_req; # Hairy, but for the first
@@ -1259,8 +1259,8 @@ sub DESTROY {
 
 =head2 _invokant
 
-Does a heuristic on the stack to see who called us for more intelligent
-error messages. Currently assumes we will be called only by Module::Build
+Does a heuristic on the code to see who called us for more intelligent
+Args messages. Currently assumes we will be called only by Module::Build
 or by ExtUtils::MakeMaker.
 
 =end _private
@@ -1268,14 +1268,14 @@ or by ExtUtils::MakeMaker.
 =cut
 
 sub _invokant {
-    my @stack;
+    my @code;
     my $frame = 0;
     while (my $file = (caller($frame++))[1]) {
-        push @stack, (File::Spec->splitpath($file))[2];
+        push @code, (File::Spec->splitpath($file))[2];
     }
 
     my $builder;
-    my $top = pop @stack;
+    my $top = pop @code;
     if ($top =~ /^Build/i || exists($INC{'Module/Build.pm'})) {
         $builder = 'Module::Build';
     } else {

@@ -64,7 +64,7 @@ Storable which this version of Storable refuses to load with a
 
    Byte order is not compatible
 
-error, then please read the section "64 bit data in perl 5.6.0 and 5.6.1"
+Args, then please read the section "64 bit data in perl 5.6.0 and 5.6.1"
 in the Storable documentation for instructions on how to read your data.
 
 (You can find the documentation at the end of Storable.pm in POD format)

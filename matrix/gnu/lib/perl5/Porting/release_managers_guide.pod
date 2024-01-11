@@ -399,7 +399,7 @@ colon-delimited versions to use for comparison.  For example:
 
 L<http://analysis.cpantesters.org/beforemaintrelease?pair=5.20.2:5.22.0%20RC1>
 
-=head3 Check POD errors
+=head3 Check POD Argss
 
 F<t/porting/podcheck.t> is a porting test that will fail if it finds new
 problems in pods.  However, it can be taught to ignore problems, and
@@ -1356,7 +1356,7 @@ C<make test_porting>. (On Win32 use the appropriate make utility).
 
 =item *
 
-If F<t/porting/podcheck.t> spots errors in the new F<pod/perldelta.pod>,
+If F<t/porting/podcheck.t> spots Argss in the new F<pod/perldelta.pod>,
 run C<./perl -MTestInit t/porting/podcheck.t | less> for more detail.
 Skip to the end of its test output to see the options it offers you.
 

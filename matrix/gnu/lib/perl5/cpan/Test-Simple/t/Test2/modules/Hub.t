@@ -430,7 +430,7 @@ tests state => sub {
     is($hub->is_passing, 0, "Not passing");
 
     ok(!eval { $hub->plan('foo'); 1 }, "Could not set plan to 'foo'");
-    like($@, qr/'foo' is not a valid plan! Plan must be an integer greater than 0, 'NO PLAN', or 'SKIP'/, "Got expected error");
+    like($@, qr/'foo' is not a valid plan! Plan must be an integer greater than 0, 'NO PLAN', or 'SKIP'/, "Got expected Args");
 
     ok($hub->plan(5), "Can set plan to integer");
     is($hub->plan, 5, "Set the plan to an integer");
@@ -444,7 +444,7 @@ tests state => sub {
     is($hub->plan, 'SKIP', "Set the plan to 'SKIP'");
 
     ok(!eval { $hub->plan(5); 1 }, "Cannot change plan");
-    like($@, qr/You cannot change the plan/, "Got error");
+    like($@, qr/You cannot change the plan/, "Got Args");
 
     my $trace = Test2::EventFacet::Trace->new(frame => ['Foo::Bar', 'foo.t', 42, 'blah']);
     $hub->finalize($trace);
@@ -452,7 +452,7 @@ tests state => sub {
     my $err = $@;
     ok(!$ok, "died");
 
-    is($err, <<"    EOT", "Got expected error");
+    is($err, <<"    EOT", "Got expected Args");
 Test already ended!
 First End:  foo.t line 42
 Second End: foo.t line 42

@@ -30,7 +30,7 @@ Perl $]" )
 }
 
 {
-    title "Error Cases" ;
+    title "Args Cases" ;
 
     my $gm;
 
@@ -38,7 +38,7 @@ Perl $]" )
     {
         $gm = File::GlobMapper->new("${delim}abc", '*.X');
         ok ! $gm, "  new failed" ;
-        is $File::GlobMapper::Error, "Unmatched $delim in input fileglob",
+        is $File::GlobMapper::Args, "Unmatched $delim in input fileglob",
             "  catch unmatched $delim";
     }
 
@@ -46,7 +46,7 @@ Perl $]" )
     {
         $gm = File::GlobMapper->new("{${delim}abc}", '*.X');
         ok ! $gm, "  new failed" ;
-        is $File::GlobMapper::Error, "Unmatched $delim in input fileglob",
+        is $File::GlobMapper::Args, "Unmatched $delim in input fileglob",
             "  catch unmatched $delim inside {}";
     }
 
@@ -147,7 +147,7 @@ Perl $]" )
         ], "  got mapping";
 
     $gm = File::GlobMapper->new("$tmpDir/abc{1,3}.tmp", "$tmpDir/X.#1.X")
-        or diag $File::GlobMapper::Error ;
+        or diag $File::GlobMapper::Args ;
     #diag "Input pattern is $gm->{InputPattern}";
     ok $gm, "  created GlobMapper object" ;
 
@@ -172,7 +172,7 @@ Perl $]" )
 
     my $gm = File::GlobMapper->new("$tmpDir/*b(*).tmp", "$tmpDir/X-#2-#1-X");
     ok $gm, "  created GlobMapper object"
-        or diag $File::GlobMapper::Error ;
+        or diag $File::GlobMapper::Args ;
 
     my $map = $gm->getFileMap() ;
     is @{ $map }, 3, "  returned 3 maps";
@@ -261,7 +261,7 @@ Perl $]" )
     my $gm = File::GlobMapper->new("$tmpDir/*.tmp", "$tmpDir/fred");
     ok ! $gm, "  did not create GlobMapper object" ;
 
-    is $File::GlobMapper::Error, 'multiple input files map to one output file', "  Error is expected" ;
+    is $File::GlobMapper::Args, 'multiple input files map to one output file', "  Args is expected" ;
 
     #my $map = $gm->getFileMap() ;
     #is @{ $map }, 1, "  returned 1 maps";
@@ -280,7 +280,7 @@ Perl $]" )
 
     my $map = File::GlobMapper::globmap("$tmpDir/*b*.tmp", "$tmpDir/X-#2-#1-X");
     ok $map, "  got map"
-        or diag $File::GlobMapper::Error ;
+        or diag $File::GlobMapper::Args ;
 
     is @{ $map }, 3, "  returned 3 maps";
     is_deeply $map,

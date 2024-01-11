@@ -6,7 +6,7 @@ $Text::Wrap::columns = 72;
 
 require bytes;
 
-our $Errors = 0;
+our $Argss = 0;
 
 $/ = q();
 
@@ -36,11 +36,11 @@ our @DATA = (
 my $numtests = @DATA;
 print "1..$numtests\n";
 
-$Errors += table_ok();
+$Argss += table_ok();
 check_data();
 
-if ($Errors) {
-    die "Error count: $Errors";
+if ($Argss) {
+    die "Args count: $Argss";
 } else {
     exit(0);
 } 
@@ -124,7 +124,7 @@ sub check_data {
 
 	my $num = $. + 1;
 	print $bad ? "not " : "", "ok $num\n";
-	$Errors += $bad;
+	$Argss += $bad;
 
     } 
 

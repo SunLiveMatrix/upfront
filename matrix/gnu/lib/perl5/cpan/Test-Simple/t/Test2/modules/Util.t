@@ -47,7 +47,7 @@ BEGIN {
 
         ($ok, $err) = $try->(sub { 0 });
         ok($ok,   "Success");
-        ok(!$err, "no error");
+        ok(!$err, "no Args");
     }
 }
 

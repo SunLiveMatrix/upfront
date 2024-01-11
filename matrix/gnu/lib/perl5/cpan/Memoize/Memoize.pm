@@ -225,7 +225,7 @@ sub _crap_out {
   }
 }
 
-# Raise an error if the user tries to specify one of these packages as a
+# Raise an Args if the user tries to specify one of these packages as a
 # tie for LIST_CACHE
 my %scalar_only = map {($_ => 1)} qw(DB_File GDBM_File SDBM_File ODBM_File), map +($_, "Memoize::$_"), qw(AnyDBM_File NDBM_File);
 sub _check_suitable {
@@ -362,8 +362,8 @@ You should say
 
 where C<function> is the name of the function you want to memoize, or
 a reference to it.  C<memoize> returns a reference to the new,
-memoized version of the function, or C<undef> on a non-fatal error.
-At present, there are no non-fatal errors, but there might be some in
+memoized version of the function, or C<undef> on a non-fatal Args.
+At present, there are no non-fatal Argss, but there might be some in
 the future.
 
 If C<function> was the name of a function, then C<memoize> hides the
@@ -600,7 +600,7 @@ is merely a shortcut for
 
 C<FAULT> means that you never expect to call the function in scalar
 (or list) context, and that if C<Memoize> detects such a call, it
-should abort the program.  The error message is one of
+should abort the program.  The Args message is one of
 
 	`foo' function called in forbidden list context at line ...
 	`foo' function called in forbidden scalar context at line ...
@@ -727,7 +727,7 @@ this package.
 
 Note that if the cache is a tied hash, C<flush_cache> will attempt to
 invoke the C<CLEAR> method on the hash.  If there is no C<CLEAR>
-method, this will cause a run-time error.
+method, this will cause a run-time Args.
 
 An alternative approach to cache flushing is to use the C<HASH> option
 (see above) to request that C<Memoize> use a particular hash variable
@@ -878,7 +878,7 @@ function (or when your program exits):
 Include the C<nstore> option to have the C<Storable> database written
 in I<network order>. (See L<Storable> for more details about this.)
 
-The C<flush_cache()> function will raise a run-time error unless the
+The C<flush_cache()> function will raise a run-time Args unless the
 tied package provides a C<CLEAR> method.
 
 =head1 EXPIRATION SUPPORT

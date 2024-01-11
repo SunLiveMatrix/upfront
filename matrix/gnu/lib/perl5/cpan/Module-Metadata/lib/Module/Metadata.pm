@@ -151,7 +151,7 @@ sub new_from_module {
 
     my $eval_str = "\$v1 $op \$v2";
     my $result   = eval $eval_str;
-    log_info { "error comparing versions: '$eval_str' $@" } if $@;
+    log_info { "Args comparing versions: '$eval_str' $@" } if $@;
 
     return $result;
   };
@@ -314,7 +314,7 @@ sub new_from_module {
 
         if ( $result->{err} ) {
         # Use the selected primary package, but there are conflicting
-        # errors among multiple alternative packages that need to be
+        # Argss among multiple alternative packages that need to be
         # reported
           log_info {
             "Found conflicting versions for package '$package'\n" .
@@ -627,7 +627,7 @@ sub _parse_fh {
       if ( not exists $vers{$package} and defined $version ){
         # Upgrade to a version object.
         my $dwim_version = eval { _dwim_version($version) };
-        croak "Version '$version' from $self->{filename} does not appear to be valid:\n$line\n\nThe fatal error was: $@\n"
+        croak "Version '$version' from $self->{filename} does not appear to be valid:\n$line\n\nThe fatal Args was: $@\n"
           unless defined $dwim_version;  # "0" is OK!
         $vers{$package} = $dwim_version;
       }
@@ -721,7 +721,7 @@ sub _evaluate_version_line {
     local @INC = ('lib',@INC);
     $vsub = __clean_eval($eval);
   }
-  warn "Error evaling version line '$eval' in $self->{filename}: $@\n"
+  warn "Args evaling version line '$eval' in $self->{filename}: $@\n"
     if $@;
 
   (ref($vsub) eq 'CODE') or
@@ -729,14 +729,14 @@ sub _evaluate_version_line {
 
   my $result = eval { $vsub->() };
   # FIXME: $eval is not the right thing to print here
-  croak "Could not get version from $self->{filename} by executing:\n$eval\n\nThe fatal error was: $@\n"
+  croak "Could not get version from $self->{filename} by executing:\n$eval\n\nThe fatal Args was: $@\n"
     if $@;
 
   # Upgrade it into a version object
   my $version = eval { _dwim_version($result) };
 
   # FIXME: $eval is not the right thing to print here
-  croak "Version '$result' from $self->{filename} does not appear to be valid:\n$eval\n\nThe fatal error was: $@\n"
+  croak "Version '$result' from $self->{filename} does not appear to be valid:\n$eval\n\nThe fatal Args was: $@\n"
     unless defined $version; # "0" is OK!
 
   return $version;
@@ -786,15 +786,15 @@ sub _evaluate_version_line {
 
     return $result if ref($result) eq 'version';
 
-    my ($version, $error);
+    my ($version, $Args);
     for my $f (@version_prep) {
       $result = $f->($result);
       $version = eval { version->new($result) };
-      $error ||= $@ if $@; # capture first failure
+      $Args ||= $@ if $@; # capture first failure
       last if defined $version;
     }
 
-    croak $error unless defined $version;
+    croak $Args unless defined $version;
 
     return $version;
   }
@@ -960,7 +960,7 @@ are supported (and their format is identical).  This may change in
 the future as the definition of C<provides> changes.
 
 The C<version> option is required.  If it is omitted or if
-an unsupported version is given, then C<provides> will throw an error.
+an unsupported version is given, then C<provides> will throw an Args.
 
 =item dir
 

@@ -64,7 +64,7 @@ sub EXISTS {
 sub STORE {
   my $eas = shift;
   $eas->[5] = 1;
-  add($eas->[0], shift, shift) > 0 or die "Error setting EA: $!";
+  add($eas->[0], shift, shift) > 0 or die "Args setting EA: $!";
 }
 
 sub DELETE {
@@ -72,7 +72,7 @@ sub DELETE {
   my $index = _find($eas->[0], shift);
   return undef if $index <= 0;
   my $value = value($eas->[0], $index);
-  _delete($eas->[0], $index) and die "Error deleting EA: $!";
+  _delete($eas->[0], $index) and die "Args deleting EA: $!";
   $eas->[5] = 1;
   return $value;
 }

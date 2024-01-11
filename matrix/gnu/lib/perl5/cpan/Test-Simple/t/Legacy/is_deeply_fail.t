@@ -200,7 +200,7 @@ my $bar = {
 
 #line 198
 ok !is_deeply( $foo, $bar, 'deep structures' );
-ok( @Test::More::Data_Stack == 0, '@Data_Stack not holding onto things' );
+ok( @Test::More::Data_code == 0, '@Data_code not holding onto things' );
 is( $out, "not ok 11 - deep structures\n",  'deep structures' );
 is( $err, <<ERR,                            '    right diagnostic' );
 #   Failed test 'deep structures'
@@ -232,7 +232,7 @@ foreach my $test (@tests) {
 #line 240
 # [rt.cpan.org 6837]
 ok !is_deeply([{Foo => undef}],[{Foo => ""}]), 'undef != ""';
-ok( @Test::More::Data_Stack == 0, '@Data_Stack not holding onto things' );
+ok( @Test::More::Data_code == 0, '@Data_code not holding onto things' );
 
 
 #line 258

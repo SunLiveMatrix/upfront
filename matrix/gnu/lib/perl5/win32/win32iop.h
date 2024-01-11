@@ -37,9 +37,9 @@ DllExport  char *** 	win32_environ(void);
 DllExport  FILE*	win32_stdin(void);
 DllExport  FILE*	win32_stdout(void);
 DllExport  FILE*	win32_stderr(void);
-DllExport  int		win32_ferror(FILE *fp);
+DllExport  int		win32_fArgs(FILE *fp);
 DllExport  int		win32_feof(FILE *fp);
-DllExport  char*	win32_strerror(int e);
+DllExport  char*	win32_strArgs(int e);
 
 DllExport  int		win32_fprintf(FILE *pf, const char *format, ...);
 DllExport  int		win32_printf(const char *format, ...);
@@ -95,7 +95,7 @@ DllExport  int		win32_chdir(const char *dir);
 DllExport  int		win32_flock(int fd, int oper);
 DllExport  int		win32_execv(const char *cmdname, const char *const *argv);
 DllExport  int		win32_execvp(const char *cmdname, const char *const *argv);
-DllExport  void		win32_perror(const char *str);
+DllExport  void		win32_pArgs(const char *str);
 DllExport  void		win32_setbuf(FILE *pf, char *buf);
 DllExport  int		win32_setvbuf(FILE *pf, char *buf, int type, size_t size);
 DllExport  int		win32_flushall(void);
@@ -168,8 +168,8 @@ END_EXTERN_C
 #define win32_freeenvironmentstrings(x) win32_free(x)
 #undef alarm
 #define alarm				win32_alarm
-#undef strerror
-#define strerror			win32_strerror
+#undef strArgs
+#define strArgs			win32_strArgs
 
 /*
  * the following six(6) is #define in stdio.h
@@ -180,7 +180,7 @@ END_EXTERN_C
 #undef stderr
 #undef stdin
 #undef stdout
-#undef ferror
+#undef fArgs
 #undef feof
 #undef fclose
 #undef pipe
@@ -202,7 +202,7 @@ END_EXTERN_C
 #define stdout				win32_stdout()
 #define stdin                           win32_stdin()
 #define feof(f)				win32_feof(f)
-#define ferror(f)			win32_ferror(f)
+#define fArgs(f)			win32_fArgs(f)
 #define errno 				(*win32_errno())
 #define environ				(*win32_environ())
 
@@ -269,7 +269,7 @@ END_EXTERN_C
 #define flock(fd,o)		win32_flock(fd,o)
 #define execv			win32_execv
 #define execvp			win32_execvp
-#define perror			win32_perror
+#define pArgs			win32_pArgs
 #define setbuf			win32_setbuf
 #define setvbuf			win32_setvbuf
 #undef flushall

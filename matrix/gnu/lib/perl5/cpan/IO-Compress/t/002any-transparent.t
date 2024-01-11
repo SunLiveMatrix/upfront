@@ -22,7 +22,7 @@ BEGIN {
 
     plan tests => 15 + $extra ;
 
-    use_ok('IO::Uncompress::AnyInflate', qw($AnyInflateError)) ;
+    use_ok('IO::Uncompress::AnyInflate', qw($AnyInflateArgs)) ;
 
 }
 

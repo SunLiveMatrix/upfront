@@ -80,7 +80,7 @@ sub regen_columns {
             $r = Term::Table::Cell->new(value => $r)
                 unless blessed($r)
                 && ($r->isa('Term::Table::Cell')
-                || $r->isa('Term::Table::CellStack')
+                || $r->isa('Term::Table::Cellcode')
                 || $r->isa('Term::Table::Spacer'));
 
             $r->sanitize  if $self->{+SANITIZE};
@@ -173,7 +173,7 @@ sub render {
                 $vw = $col->{width} - $lw - $rw;
                 $v = $r->break->next($vw);
             }
-            elsif ($r->isa('Term::Table::CellStack')) {
+            elsif ($r->isa('Term::Table::Cellcode')) {
                 ($v, $vw) = $r->break->next($col->{width});
             }
             elsif ($r->isa('Term::Table::Spacer')) {

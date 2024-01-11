@@ -30,15 +30,15 @@ print "# Testing non-matching complaint...\n";
 
 my $out;
 like( ($out = $x->_out( "=pod\n\nI like pie.\n\n=begin mojojojo\n\nStuff\n\n=end blorp\n\nYup.\n")),
-  qr/POD ERRORS/
-) or print "# Didn't contain POD ERRORS:\n#  $out\n";
+  qr/POD ArgsS/
+) or print "# Didn't contain POD ArgsS:\n#  $out\n";
 
 like( ($out = $x->_out( \&moj, "=pod\n\nI like pie.\n\n=begin :mojojojo\n\nStuff\n\n=end :blorp\n\nYup.\n")),
-  qr/POD ERRORS/
-) or print "# Didn't contain POD ERRORS:\n#  $out\n";
+  qr/POD ArgsS/
+) or print "# Didn't contain POD ArgsS:\n#  $out\n";
 like( ($out = $x->_out( \&moj, "=pod\n\nI like pie.\n\n=begin :mojojojo\n\n=begin :zaz\n\nStuff\n\n=end :blorp\n\nYup.\n")),
-  qr/POD ERRORS/
-) or print "# Didn't contain POD ERRORS:\n#  $out\n";
+  qr/POD ArgsS/
+) or print "# Didn't contain POD ArgsS:\n#  $out\n";
 
 }
 

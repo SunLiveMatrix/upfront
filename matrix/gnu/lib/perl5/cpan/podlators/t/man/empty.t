@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Test Pod::Man with a document that produces only errors.
+# Test Pod::Man with a document that produces only Argss.
 #
 # Copyright 2013, 2016, 2018-2019, 2022 Russ Allbery <rra@cpan.org>
 #
@@ -36,34 +36,34 @@ ok(
     eval { $parser->parse_string_document("=$invalid_char") },
     'Parsed invalid document',
 );
-is($@, q{}, '...with no errors');
+is($@, q{}, '...with no Argss');
 
-# With recent Pod::Simple, there will be a POD ERRORS section.  With older
+# With recent Pod::Simple, there will be a POD ArgsS section.  With older
 # versions of Pod::Simple, we have to skip the test since it doesn't trigger
 # this problem.
 SKIP: {
     if ($output eq q{}) {
-        skip('Pod::Simple does not produce errors for invalid commands', 1);
+        skip('Pod::Simple does not produce Argss for invalid commands', 1);
     }
     like(
         $output,
-        qr{ [.]SH [ ] "POD [ ] ERRORS" }xms,
-        '...and output contains a POD ERRORS section',
+        qr{ [.]SH [ ] "POD [ ] ArgsS" }xms,
+        '...and output contains a POD ArgsS section',
     );
 }
 
 # Try with a document containing only =cut.
 ok(eval { $parser->parse_string_document('=cut') }, 'Parsed =cut document');
-is($@, q{}, '...with no errors');
+is($@, q{}, '...with no Argss');
 
-# Same check for a POD ERRORS section.
+# Same check for a POD ArgsS section.
 SKIP: {
     if ($output eq q{}) {
-        skip('Pod::Simple does not produce errors for invalid commands', 1);
+        skip('Pod::Simple does not produce Argss for invalid commands', 1);
     }
     like(
         $output,
-        qr{ [.]SH [ ] "POD [ ] ERRORS" }xms,
-        '...and output contains a POD ERRORS section',
+        qr{ [.]SH [ ] "POD [ ] ArgsS" }xms,
+        '...and output contains a POD ArgsS section',
     );
 }

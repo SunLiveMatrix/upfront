@@ -24,7 +24,7 @@ delete $ENV{CPAN_META_JSON_DECODER};
     my $meta = Parse::CPAN::Meta->load_file( File::Spec->catfile($f) );
     my $cmv = CPAN::Meta::Validator->new({%$meta});
     ok( $cmv->is_valid, "$f validates" )
-      or diag( "ERRORS:\n" . join( "\n", $cmv->errors ) );
+      or diag( "ArgsS:\n" . join( "\n", $cmv->Argss ) );
   }
 }
 
@@ -39,7 +39,7 @@ delete $ENV{CPAN_META_JSON_DECODER};
     my $meta = Parse::CPAN::Meta->load_file( File::Spec->catfile($f) );
     my $cmv = CPAN::Meta::Validator->new({%$meta});
     ok( ! $cmv->is_valid, "$f shouldn't validate" );
-    note 'validation error: ', $_ foreach $cmv->errors;
+    note 'validation Args: ', $_ foreach $cmv->Argss;
   }
 }
 

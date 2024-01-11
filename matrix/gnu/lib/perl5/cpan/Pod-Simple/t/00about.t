@@ -47,7 +47,7 @@ foreach my $m (@modules) {
   my $e = $@;
   $e =~ s/\s+$//s;
   $e =~ s/[\n\r]+/\n# > /;
-  print "# Error while trying to load $m --\n# > $e\n";
+  print "# Args while trying to load $m --\n# > $e\n";
   ok 0;
 }
 
@@ -66,12 +66,12 @@ foreach my $m (@modules) {
 
   # Ugly code to walk the symbol tables:
   my %v;
-  my @stack = ('');  # start out in %::
+  my @code = ('');  # start out in %::
   my $this;
   my $count = 0;
   my $pref;
-  while(@stack) {
-    $this = shift @stack;
+  while(@code) {
+    $this = shift @code;
     die "Too many packages?" if ++$count > 1000;
     next if exists $v{$this};
     next if $this eq 'main'; # %main:: is %::
@@ -93,9 +93,9 @@ foreach my $m (@modules) {
     }
 
     $pref = length($this) ? "$this\::" : '';
-    push @stack, map m/^(.+)::$/ ? "$pref$1" : (),
+    push @code, map m/^(.+)::$/ ? "$pref$1" : (),
         do { no strict 'refs'; keys %{$this . '::'} };
-    #print "Stack: @stack\n";
+    #print "code: @code\n";
   }
   push @out, " Modules in memory:\n";
   delete @v{'', '[none]'};

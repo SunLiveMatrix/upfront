@@ -9,10 +9,10 @@ use lib 't/compress';
 use strict;
 use warnings;
 
-use IO::Uncompress::AnyUncompress qw($AnyUncompressError) ;
+use IO::Uncompress::AnyUncompress qw($AnyUncompressArgs) ;
 
-use IO::Compress::Zip     qw($ZipError) ;
-use IO::Uncompress::Unzip qw($UnzipError) ;
+use IO::Compress::Zip     qw($ZipArgs) ;
+use IO::Uncompress::Unzip qw($UnzipArgs) ;
 
 sub getClass
 {

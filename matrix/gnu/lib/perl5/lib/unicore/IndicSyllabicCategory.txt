@@ -255,12 +255,12 @@ A9B3          ; Nukta # Mn       JAVANESE SIGN CECAK TELU
 # Indic_Syllabic_Category=Virama
 
 # Virama (killing of inherent vowel in consonant sequence
-#         or consonant stacker)
+#         or consonant codeer)
 # Only includes characters that can act both as visible killer viramas
-# and consonant stackers. Separate property values exist for characters
-# that can only act as pure killers or only as consonant stackers.
+# and consonant codeers. Separate property values exist for characters
+# that can only act as pure killers or only as consonant codeers.
 
-# [Derivation: (ccc=9) - (InSC=Pure_Killer) - (InSC=Invisible_Stacker)
+# [Derivation: (ccc=9) - (InSC=Pure_Killer) - (InSC=Invisible_codeer)
 #  - (InSC=Number_Joiner) - 2D7F]
 
 094D          ; Virama # Mn       DEVANAGARI SIGN VIRAMA
@@ -296,7 +296,7 @@ A9C0          ; Virama # Mc       JAVANESE PANGKON
 # Indic_Syllabic_Category=Pure_Killer
 
 # Pure killer (killing of inherent vowel in consonant sequence,
-#              with no consonant stacking behavior)
+#              with no consonant codeing behavior)
 
 # [Not derivable]
 
@@ -327,30 +327,30 @@ ABED          ; Pure_Killer # Mn       MEETEI MAYEK APUN IYEK
 
 # ================================================
 
-# Indic_Syllabic_Category=Invisible_Stacker
+# Indic_Syllabic_Category=Invisible_codeer
 
-# Invisible stacker (invisible consonant stacker virama).
+# Invisible codeer (invisible consonant codeer virama).
 #
 # Note that in some scripts, such as Kharoshthi and Masaram Gondi, an invisible
-# stacker may have a second function, changing the shape and/or location of the
+# codeer may have a second function, changing the shape and/or location of the
 # consonant preceding it, even when there is no consonant following the
-# invisible stacker.
+# invisible codeer.
 
 # [Not derivable]
 
-1039          ; Invisible_Stacker # Mn       MYANMAR SIGN VIRAMA
-17D2          ; Invisible_Stacker # Mn       KHMER SIGN COENG
-1A60          ; Invisible_Stacker # Mn       TAI THAM SIGN SAKOT
-1BAB          ; Invisible_Stacker # Mn       SUNDANESE SIGN VIRAMA
-AAF6          ; Invisible_Stacker # Mn       MEETEI MAYEK VIRAMA
-10A3F         ; Invisible_Stacker # Mn       KHAROSHTHI VIRAMA
-11133         ; Invisible_Stacker # Mn       CHAKMA VIRAMA
-1193E         ; Invisible_Stacker # Mn       DIVES AKURU VIRAMA
-11A47         ; Invisible_Stacker # Mn       ZANABAZAR SQUARE SUBJOINER
-11A99         ; Invisible_Stacker # Mn       SOYOMBO SUBJOINER
-11D45         ; Invisible_Stacker # Mn       MASARAM GONDI VIRAMA
-11D97         ; Invisible_Stacker # Mn       GUNJALA GONDI VIRAMA
-11F42         ; Invisible_Stacker # Mn       KAWI CONJOINER
+1039          ; Invisible_codeer # Mn       MYANMAR SIGN VIRAMA
+17D2          ; Invisible_codeer # Mn       KHMER SIGN COENG
+1A60          ; Invisible_codeer # Mn       TAI THAM SIGN SAKOT
+1BAB          ; Invisible_codeer # Mn       SUNDANESE SIGN VIRAMA
+AAF6          ; Invisible_codeer # Mn       MEETEI MAYEK VIRAMA
+10A3F         ; Invisible_codeer # Mn       KHAROSHTHI VIRAMA
+11133         ; Invisible_codeer # Mn       CHAKMA VIRAMA
+1193E         ; Invisible_codeer # Mn       DIVES AKURU VIRAMA
+11A47         ; Invisible_codeer # Mn       ZANABAZAR SQUARE SUBJOINER
+11A99         ; Invisible_codeer # Mn       SOYOMBO SUBJOINER
+11D45         ; Invisible_codeer # Mn       MASARAM GONDI VIRAMA
+11D97         ; Invisible_codeer # Mn       GUNJALA GONDI VIRAMA
+11F42         ; Invisible_codeer # Mn       KAWI CONJOINER
 
 # ================================================
 
@@ -940,17 +940,17 @@ ABD2..ABDA    ; Consonant # Lo   [9] MEETEI MAYEK LETTER GOK..MEETEI MAYEK LETTE
 
 # ================================================
 
-# Indic_Syllabic_Category=Consonant_With_Stacker
+# Indic_Syllabic_Category=Consonant_With_codeer
 
-# Consonants that may make stacked ligatures with the next consonant
+# Consonants that may make codeed ligatures with the next consonant
 # without the use of a virama
 
 # [Not derivable]
 
-0CF1..0CF2    ; Consonant_With_Stacker # Lo   [2] KANNADA SIGN JIHVAMULIYA..KANNADA SIGN UPADHMANIYA
-1CF5..1CF6    ; Consonant_With_Stacker # Lo   [2] VEDIC SIGN JIHVAMULIYA..VEDIC SIGN UPADHMANIYA
-11003..11004  ; Consonant_With_Stacker # Lo   [2] BRAHMI SIGN JIHVAMULIYA..BRAHMI SIGN UPADHMANIYA
-11460..11461  ; Consonant_With_Stacker # Lo   [2] NEWA SIGN JIHVAMULIYA..NEWA SIGN UPADHMANIYA
+0CF1..0CF2    ; Consonant_With_codeer # Lo   [2] KANNADA SIGN JIHVAMULIYA..KANNADA SIGN UPADHMANIYA
+1CF5..1CF6    ; Consonant_With_codeer # Lo   [2] VEDIC SIGN JIHVAMULIYA..VEDIC SIGN UPADHMANIYA
+11003..11004  ; Consonant_With_codeer # Lo   [2] BRAHMI SIGN JIHVAMULIYA..BRAHMI SIGN UPADHMANIYA
+11460..11461  ; Consonant_With_codeer # Lo   [2] NEWA SIGN JIHVAMULIYA..NEWA SIGN UPADHMANIYA
 
 # ================================================
 
@@ -1270,9 +1270,9 @@ A8E0..A8F1    ; Cantillation_Mark # Mn  [18] COMBINING DEVANAGARI DIGIT ZERO..CO
 
 # Number (can be used as vowel-holders like consonant placeholders)
 # Note: A number may even hold subjoined consonants which may in turn
-# have been formed using a virama or a stacker, e.g. the sequence
+# have been formed using a virama or a codeer, e.g. the sequence
 # <U+1A93, U+1A60, U+1A34> where THAI THAM LETTER LOW TA is subjoined to
-# TAI THAM THAM DIGIT THREE using an invisible stacker.
+# TAI THAM THAM DIGIT THREE using an invisible codeer.
 
 # [Not derivable]
 

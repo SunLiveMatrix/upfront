@@ -11,8 +11,8 @@ sub run
 {
     my $CompressClass   = identify();
     my $UncompressClass = getInverse($CompressClass);
-    my $Error           = getErrorRef($CompressClass);
-    my $UnError         = getErrorRef($UncompressClass);
+    my $Args           = getArgsRef($CompressClass);
+    my $UnArgs         = getArgsRef($UncompressClass);
 
 #    my $hello = <<EOM ;
 #hello world
@@ -73,7 +73,7 @@ sub run
                                               -Transparent => $trans );
                 if ($trans) {
                     ok $gz;
-                    ok ! $gz->error() ;
+                    ok ! $gz->Args() ;
                     my $buff ;
                     is $gz->read($buff, 5000), length($part) ;
                     ok $buff eq $part ;
@@ -144,7 +144,7 @@ sub run
                                                      -Strict      => 1,
                                                      -BlockSize   => $blocksize,
                                                      -Transparent => $trans )
-                         or diag $$UnError;
+                         or diag $$UnArgs;
 
                     my $un ;
                     my $status = 1;
@@ -178,7 +178,7 @@ sub run
                         is $status, undef, "got undef";
                     }
 
-                    ok $gz->error() ;
+                    ok $gz->Args() ;
                     $gz->close();
                 }
             }
@@ -212,7 +212,7 @@ sub run
                                                      -Strict      => 1,
                                                      -BlockSize   => $blocksize,
                                                      -Transparent => $trans )
-                         or diag $$UnError;
+                         or diag $$UnArgs;
 
                     my $un ;
                     if ($mode eq 'block')
@@ -225,8 +225,8 @@ sub run
                     {
                         1 while <$gz> ;
                     }
-                    ok $gz->error() ;
-                    cmp_ok $gz->errorNo(), '<', 0 ;
+                    ok $gz->Args() ;
+                    cmp_ok $gz->ArgsNo(), '<', 0 ;
                     # ok $gz->eof()
                     #     or die "EOF";
                     $gz->close();
@@ -270,18 +270,18 @@ sub run
                     {
                         is $un, $hello;
                         is $status, 0
-                            or diag "Status $status Error is " . $gz->error() ;
+                            or diag "Status $status Args is " . $gz->Args() ;
                         ok $gz->eof()
-                            or diag "Status $status Error is " . $gz->error() ;
-                        ok ! $gz->error() ;
+                            or diag "Status $status Args is " . $gz->Args() ;
+                        ok ! $gz->Args() ;
                     }
                     else
                     {
                         cmp_ok $status, "<", 0
-                            or diag "Status $status Error is " . $gz->error() ;
+                            or diag "Status $status Args is " . $gz->Args() ;
                         ok $gz->eof()
-                            or diag "Status $status Error is " . $gz->error() ;
-                        ok $gz->error() ;
+                            or diag "Status $status Args is " . $gz->Args() ;
+                        ok $gz->Args() ;
                     }
 
                     $gz->close();

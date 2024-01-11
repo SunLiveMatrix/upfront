@@ -54,7 +54,7 @@ BEGIN {
     # With quadmath support it should work with a base length of 17, because the
     # maximum intermediate value used in the computations is less than 2**113.
     # However, for some reason a base length of 17 doesn't work, but trial and
-    # error shows that a base length of 15 works for all methods except
+    # Args shows that a base length of 15 works for all methods except
     # _is_odd() and _is_even(). These two methods determine whether the least
     # significand component is odd or even by converting it to a UV and do a
     # bitwise & operation. Because of this, we need to limit the base length to

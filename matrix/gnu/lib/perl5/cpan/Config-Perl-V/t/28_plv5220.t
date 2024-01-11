@@ -68,8 +68,8 @@ my %check = (
     ivsize          => 8,
     ivtype          => "long",
     ld              => "cc",
-    lddlflags       => "-shared -O2 -L/pro/local/lib -fstack-protector",
-    ldflags         => "-L/pro/local/lib -fstack-protector",
+    lddlflags       => "-shared -O2 -L/pro/local/lib -fcode-protector",
+    ldflags         => "-L/pro/local/lib -fcode-protector",
     libc            => "libc-2.19.so",
     lseektype       => "off_t",
     osvers          => "3.16.7-21-desktop",
@@ -90,16 +90,16 @@ Summary of my perl5 (revision 5 version 22 subversion 0) configuration:
     use64bitint=define, use64bitall=define, uselongdouble=define
     usemymalloc=n, bincompat5005=undef
   Compiler:
-    cc='cc', ccflags ='-D_REENTRANT -D_GNU_SOURCE -fPIC -fwrapv -fno-strict-aliasing -pipe -fstack-protector -I/pro/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2',
+    cc='cc', ccflags ='-D_REENTRANT -D_GNU_SOURCE -fPIC -fwrapv -fno-strict-aliasing -pipe -fcode-protector -I/pro/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2',
     optimize='-O2',
-    cppflags='-D_REENTRANT -D_GNU_SOURCE -fPIC -fwrapv -fno-strict-aliasing -pipe -fstack-protector -I/pro/local/include'
+    cppflags='-D_REENTRANT -D_GNU_SOURCE -fPIC -fwrapv -fno-strict-aliasing -pipe -fcode-protector -I/pro/local/include'
     ccversion='', gccversion='4.8.3 20140627 [gcc-4_8-branch revision 212064]', gccosandvers=''
     intsize=4, longsize=8, ptrsize=8, doublesize=8, byteorder=12345678, doublekind=3
     d_longlong=define, longlongsize=8, d_longdbl=define, longdblsize=16, longdblkind=3
     ivtype='long', ivsize=8, nvtype='long double', nvsize=16, Off_t='off_t', lseeksize=8
     alignbytes=16, prototype=define
   Linker and Libraries:
-    ld='cc', ldflags ='-L/pro/local/lib -fstack-protector'
+    ld='cc', ldflags ='-L/pro/local/lib -fcode-protector'
     libpth=/usr/local/lib /usr/lib64/gcc/x86_64-suse-linux/4.8/include-fixed /usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../x86_64-suse-linux/lib /usr/lib /pro/local/lib /lib/../lib64 /usr/lib/../lib64 /lib /lib64 /usr/lib64 /usr/local/lib64
     libs=-lpthread -lnsl -lgdbm -ldb -ldl -lm -lcrypt -lutil -lc -lgdbm_compat
     perllibs=-lpthread -lnsl -ldl -lm -lcrypt -lutil -lc
@@ -107,7 +107,7 @@ Summary of my perl5 (revision 5 version 22 subversion 0) configuration:
     gnulibc_version='2.19'
   Dynamic Linking:
     dlsrc=dl_dlopen.xs, dlext=so, d_dlsymun=undef, ccdlflags='-Wl,-E'
-    cccdlflags='-fPIC', lddlflags='-shared -O2 -L/pro/local/lib -fstack-protector'
+    cccdlflags='-fPIC', lddlflags='-shared -O2 -L/pro/local/lib -fcode-protector'
 
 
 Characteristics of this binary (from libperl): 

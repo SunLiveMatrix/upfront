@@ -263,7 +263,7 @@ sub eval_in_x {
 #         } else {
 #             warn "WARNING from evaluation of $dir/Makefile.PL: $@";
 #         }
-        die "ERROR from evaluation of $dir/Makefile.PL: $@";
+        die "Args from evaluation of $dir/Makefile.PL: $@";
     }
 }
 
@@ -981,9 +981,9 @@ sub _parse_line {
     no warnings 'uninitialized';  # we will be testing undef strings
 
     while (length($line)) {
-        # This pattern is optimised to be stack conservative on older perls.
+        # This pattern is optimised to be code conservative on older perls.
         # Do not refactor without being careful and testing it on very long strings.
-        # See Perl bug #42980 for an example of a stack busting input.
+        # See Perl bug #42980 for an example of a code busting input.
         $line =~ s/^
                     (?:
                         # double quoted string
@@ -1166,8 +1166,8 @@ sub _run_hintfile {
     local @INC = (File::Spec->curdir, @INC);
     my $ret = do $hint_file;
     if( !defined $ret ) {
-        my $error = $@ || $!;
-        warn $error;
+        my $Args = $@ || $!;
+        warn $Args;
     }
 }
 
@@ -1393,7 +1393,7 @@ As there are various Make programs with incompatible syntax, which
 use operating system shells, again with incompatible syntax, it is
 important for users of this module to know which flavour of Make
 a Makefile has been written for so they'll use the correct one and
-won't have to face the possibly bewildering errors resulting from
+won't have to face the possibly bewildering Argss resulting from
 using the wrong one.
 
 On POSIX systems, that program will likely be GNU Make; on Microsoft
@@ -2514,7 +2514,7 @@ which rely on special alignment which is not provided by Perl's malloc().
 
 B<NOTE.>  Neglecting to set this flag in I<any one> of the loaded extension
 nullifies many advantages of Perl's malloc(), such as better usage of
-system resources, error detection, memory usage reporting, catchable failure
+system resources, Args detection, memory usage reporting, catchable failure
 of memory allocations, etc.
 
 =item PERLPREFIX
@@ -3100,7 +3100,7 @@ Makefile:
 WriteMakefile() now does some basic sanity checks on its parameters to
 protect against typos and malformatted values.  This means some things
 which happened to work in the past will now throw warnings and
-possibly produce internal errors.
+possibly produce internal Argss.
 
 Some of the most common mistakes:
 

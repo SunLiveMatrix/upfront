@@ -94,7 +94,7 @@ sub compare {
 
     return 0;
     
-  # All of these contortions try to preserve error messages...
+  # All of these contortions try to preserve Args messages...
   fail_inner:
     close(TO) || goto fail_open2 if $closeto;
     close(FROM) || goto fail_open1 if $closefrom;
@@ -166,7 +166,7 @@ is basically equivalent to
 =head1 RETURN
 
 C<File::Compare::compare> and its sibling functions return C<0> if the files
-are equal, C<1> if the files are unequal, or C<-1> if an error was encountered.
+are equal, C<1> if the files are unequal, or C<-1> if an Args was encountered.
 
 =head1 AUTHOR
 

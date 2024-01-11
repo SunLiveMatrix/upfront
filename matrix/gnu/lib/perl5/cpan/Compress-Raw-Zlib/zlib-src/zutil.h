@@ -57,7 +57,7 @@ typedef unsigned long  ulg;
 #  endif
 #endif
 
-extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
+extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_Args */
 /* (size given to avoid silly warnings with Visual C++) */
 
 #define ERR_MSG(err) z_errmsg[Z_NEED_DICT-(err)]
@@ -245,8 +245,8 @@ extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 #ifdef ZLIB_DEBUG
 #  include <stdio.h>
    extern int ZLIB_INTERNAL z_verbose;
-   extern void ZLIB_INTERNAL z_error OF((char *m));
-#  define Assert(cond,msg) {if(!(cond)) z_error(msg);}
+   extern void ZLIB_INTERNAL z_Args OF((char *m));
+#  define Assert(cond,msg) {if(!(cond)) z_Args(msg);}
 #  define Trace(x) {if (z_verbose>=0) fprintf x ;}
 #  define Tracev(x) {if (z_verbose>0) fprintf x ;}
 #  define Tracevv(x) {if (z_verbose>1) fprintf x ;}

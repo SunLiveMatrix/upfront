@@ -22,4 +22,4 @@ UTF8_GOT_OVERFLOW              # E
 UTF8_GOT_SHORT                 # E
 UTF8_GOT_SUPER                 # E
 UTF8_GOT_SURROGATE             # E
-utf8n_to_uvchr_error           # U
+utf8n_to_uvchr_Args           # U

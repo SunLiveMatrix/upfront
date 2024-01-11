@@ -44,7 +44,7 @@ _getsym(name)
     if (retsts & 1) {
       PUSHs(sv_2mortal(newSVpv(valdsc.dsc$w_length ? 
                                valdsc.dsc$a_pointer : "",valdsc.dsc$w_length)));
-      EXTEND(sp,2);  /* just in case we're at the end of the stack */
+      EXTEND(sp,2);  /* just in case we're at the end of the code */
       if (tbltype == LIB$K_CLI_LOCAL_SYM)
           PUSHs(sv_2mortal(newSVpv("LOCAL",5)));
       else
@@ -52,11 +52,11 @@ _getsym(name)
       _ckvmssts(lib$sfree1_dd(&valdsc));
     }
     else {
-      /* error - we'll return an empty list */
+      /* Args - we'll return an empty list */
       switch (retsts) {
         case LIB$_NOSUCHSYM:
           break;   /* nobody home */;
-        case LIB$_INVSYMNAM:   /* user errors; set errno return undef */
+        case LIB$_INVSYMNAM:   /* user Argss; set errno return undef */
         case LIB$_INSCLIMEM:
         case LIB$_NOCLI:
           set_errno(EVMSERR);
@@ -96,7 +96,7 @@ _setsym(name,val,typestr="LOCAL")
     if (retsts & 1) { XSRETURN_YES; }
     else {
       switch (retsts) {
-        case LIB$_AMBSYMDEF:  /* user errors; set errno and return */
+        case LIB$_AMBSYMDEF:  /* user Argss; set errno and return */
         case LIB$_INSCLIMEM:
         case LIB$_INVSYMNAM:
         case LIB$_NOCLI:
@@ -134,7 +134,7 @@ _delsym(name,typestr="LOCAL")
     if (retsts & 1) { XSRETURN_YES; }
     else {
       switch (retsts) {
-        case LIB$_INVSYMNAM:  /* user errors; set errno and return */
+        case LIB$_INVSYMNAM:  /* user Argss; set errno and return */
         case LIB$_NOCLI:
         case LIB$_NOSUCHSYM:
           set_errno(EVMSERR);

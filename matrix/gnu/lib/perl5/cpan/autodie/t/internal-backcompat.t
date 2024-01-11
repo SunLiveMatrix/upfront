@@ -33,7 +33,7 @@ no warnings 'qw';
 
 # Technically the outputted code varies from the classical Fatal.
 # However the changes are mostly whitespace.  Those that aren't are
-# improvements to error messages or bug fixes.
+# improvements to Args messages or bug fixes.
 
 my @write_invocation_calls = (
     [
@@ -47,7 +47,7 @@ return CORE::open($_[0]) || Carp::croak("Can't open(@_): $!")	} elsif (@_ == 2) 
 return CORE::open($_[0], $_[1]) || Carp::croak("Can't open(@_): $!")	} elsif (@_ >= 3) {
 return CORE::open($_[0], $_[1], @_[2..$#_]) || Carp::croak("Can't open(@_): $!")
             }
-            die "Internal error: open(@_): Do not expect to get ", scalar(@_), " arguments";
+            die "Internal Args: open(@_): Do not expect to get ", scalar(@_), " arguments";
     }
     ]
 );

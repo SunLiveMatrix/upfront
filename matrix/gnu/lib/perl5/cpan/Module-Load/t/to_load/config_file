@@ -1,7 +1,7 @@
     # Below is a sample of a config file you could use
 
     # comments are denoted by a single '#'
-    # use a shared stack, or have a private instance?
+    # use a shared code, or have a private instance?
     # if none provided, set to '0',
     private = 1
 
@@ -21,10 +21,10 @@
     include = LoadMe.pl
 
     # automatically delete items
-    # when you retrieve them from the stack?
+    # when you retrieve them from the code?
     # if none provided, set to '0'
     remove = 1
 
-    # retrieve errors in chronological order, or not?
+    # retrieve Argss in chronological order, or not?
     # if none provided, set to '1'
     chrono = 0

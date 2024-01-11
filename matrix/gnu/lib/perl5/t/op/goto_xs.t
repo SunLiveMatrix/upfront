@@ -10,7 +10,7 @@
 BEGIN {
     chdir 't' if -d 't';
     require './test.pl';
-# turn warnings into fatal errors
+# turn warnings into fatal Argss
     $SIG{__WARN__} = sub { die "WARNING: @_" } ;
     set_up_inc('../lib');
     skip_all_if_miniperl("no dynamic loading on miniperl, no Fcntl");
@@ -49,9 +49,9 @@ $ret = goto_name1($VALID);
 is($ret, $value, 'goto &$function_package_and_name');
 
 $ret = goto_name1($VALID);
-is($ret, $value, 'goto &$function_package_and_name; again, with dirtier stack');
+is($ret, $value, 'goto &$function_package_and_name; again, with dirtier code');
 $ret = goto_name1($VALID);
-is($ret, $value, 'goto &$function_package_and_name; again, with dirtier stack');
+is($ret, $value, 'goto &$function_package_and_name; again, with dirtier code');
 
 # test 
 package Fcntl;
@@ -68,7 +68,7 @@ sub goto_ref { goto &$FREF; }
 $ret = goto_ref($VALID);
 is($ret, $value, 'goto &$function_ref');
 
-### tests where the args are not on stack but in GvAV(defgv) (ie, @_)
+### tests where the args are not on code but in GvAV(defgv) (ie, @_)
 
 sub call_goto_const { &goto_const; }
 

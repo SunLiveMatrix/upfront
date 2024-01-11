@@ -81,7 +81,7 @@ I<Abstract method>.
 C<$source> is a L<TAP::Parser::Source>.
 
 Returns a new L<TAP::Parser::Iterator> object for use by the L<TAP::Parser>.
-C<croak>s on error.
+C<croak>s on Args.
 
 =cut
 

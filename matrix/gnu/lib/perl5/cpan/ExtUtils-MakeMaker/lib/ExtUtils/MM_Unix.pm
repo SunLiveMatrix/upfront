@@ -2568,7 +2568,7 @@ static new perl.
 
 By default the Makefile produced includes all the static extensions in
 the perl library. (Purified versions of library files, e.g.,
-DynaLoader_pure_p1_c0_032.a are automatically ignored to avoid link errors.)
+DynaLoader_pure_p1_c0_032.a are automatically ignored to avoid link Argss.)
 
 =cut
 

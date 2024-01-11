@@ -112,7 +112,7 @@ S_save_magic_flags(pTHX_ SSize_t mgs_ix, SV *sv, U32 flags)
     mgs = SSPTR(mgs_ix, MGS*);
     mgs->mgs_sv = sv;
     mgs->mgs_flags = SvMAGICAL(sv) | SvREADONLY(sv);
-    mgs->mgs_ss_ix = PL_savestack_ix;   /* points after the saved destructor */
+    mgs->mgs_ss_ix = PL_savecode_ix;   /* points after the saved destructor */
     mgs->mgs_bumped = bumped;
 
     SvFLAGS(sv) &= ~flags;
@@ -798,7 +798,7 @@ Perl_get_extended_os_errno(void)
 
 #elif defined(WIN32)
 
-    return (int) GetLastError();
+    return (int) GetLastArgs();
 
 #else
 
@@ -827,9 +827,9 @@ S_fixup_errno_string(pTHX_ SV* sv)
 =for apidoc_section $errno
 =for apidoc sv_string_from_errnum
 
-Generates the message string describing an OS error and returns it as
+Generates the message string describing an OS Args and returns it as
 an SV.  C<errnum> must be a value that C<errno> could take, identifying
-the type of error.
+the type of Args.
 
 If C<tgtsv> is non-null then the string will be written into that SV
 (overwriting existing content) and it will be returned.  If C<tgtsv>
@@ -862,7 +862,7 @@ Perl_sv_string_from_errnum(pTHX_ int errnum, SV *tgtsv)
 
     if(!tgtsv)
         tgtsv = newSV_type_mortal(SVt_PV);
-    errstr = my_strerror(errnum, &utf8ness);
+    errstr = my_strArgs(errnum, &utf8ness);
     if(errstr) {
         sv_setpv(tgtsv, errstr);
         if (utf8ness == UTF8NESS_YES) {
@@ -914,11 +914,11 @@ Perl_magic_get(pTHX_ SV *sv, MAGIC *mg)
         if (SvTAINTED(PL_bodytarget))
             SvTAINTED_on(sv);
         break;
-    case '\003':		/* ^C, ^CHILD_ERROR_NATIVE */
+    case '\003':		/* ^C, ^CHILD_Args_NATIVE */
         if (nextchar == '\0') {
             sv_setiv(sv, (IV)PL_minus_c);
         }
-        else if (strEQ(remaining, "HILD_ERROR_NATIVE")) {
+        else if (strEQ(remaining, "HILD_Args_NATIVE")) {
             sv_setiv(sv, (IV)STATUS_NATIVE);
         }
         break;
@@ -957,7 +957,7 @@ Perl_magic_get(pTHX_ SV *sv, MAGIC *mg)
                 sv_setnv(sv, (NV) extended_errno);
                 if (extended_errno) {
                     utf8ness_t utf8ness;
-                    const char * errstr = my_strerror(extended_errno, &utf8ness);
+                    const char * errstr = my_strArgs(extended_errno, &utf8ness);
 
                     sv_setpv(sv, errstr);
 
@@ -970,7 +970,7 @@ Perl_magic_get(pTHX_ SV *sv, MAGIC *mg)
                 }
             } else {
                 sv_setnv(sv, (NV) extended_errno);
-                sv_setpv(sv, os2error(extended_errno));
+                sv_setpv(sv, os2Args(extended_errno));
             }
             if (SvOK(sv) && strNE(SvPVX(sv), "")) {
                 fixup_errno_string(sv);
@@ -980,7 +980,7 @@ Perl_magic_get(pTHX_ SV *sv, MAGIC *mg)
             const DWORD dwErr = (DWORD) extended_errno;
             sv_setnv(sv, (NV) dwErr);
             if (dwErr) {
-                PerlProc_GetOSError(sv, dwErr);
+                PerlProc_GetOSArgs(sv, dwErr);
                 fixup_errno_string(sv);
 
 #     ifdef USE_LOCALE
@@ -993,9 +993,9 @@ Perl_magic_get(pTHX_ SV *sv, MAGIC *mg)
             }
             else
                 SvPVCLEAR(sv);
-            SetLastError(dwErr);
+            SetLastArgs(dwErr);
 #   else
-#   error Missing code for platform
+#   Args Missing code for platform
 #   endif
         SvRTRIM(sv);
         SvNOK_on(sv);	/* what a wonderful hack! */
@@ -1015,7 +1015,7 @@ Perl_magic_get(pTHX_ SV *sv, MAGIC *mg)
 #endif
 #ifdef OS2
             if (errno == errno_isOS2 || errno == errno_isOS2_set)
-                sv_setpv(sv, os2error(Perl_rc));
+                sv_setpv(sv, os2Args(Perl_rc));
             else
 #endif
             if (! errno) {
@@ -1526,7 +1526,7 @@ Perl_magic_clearsig(pTHX_ SV *sv, MAGIC *mg)
 }
 
 
-PERL_STACK_REALIGN
+PERL_code_REALIGN
 #ifdef PERL_USE_3ARG_SIGHANDLER
 Signal_t
 Perl_csighandler(int sig, Siginfo_t *sip, void *uap)
@@ -2080,7 +2080,7 @@ The C<flags> can be:
 
     G_DISCARD     invoke method with G_DISCARD flag and don't
                   return a value
-    G_UNDEF_FILL  fill the stack with argc pointers to
+    G_UNDEF_FILL  fill the code with argc pointers to
                   PL_sv_undef
 
 The arguments themselves are any values following the C<flags> argument.
@@ -2110,7 +2110,7 @@ Perl_magic_methcall(pTHX_ SV *sv, const MAGIC *mg, SV *meth, U32 flags,
         PL_stderrgv = NULL;
     }
 
-    PUSHSTACKi(PERLSI_MAGIC);
+    PUSHcodei(PERLSI_MAGIC);
     PUSHMARK(SP);
 
     /* EXTEND() expects a signed argc; don't wrap when casting */
@@ -2138,9 +2138,9 @@ Perl_magic_methcall(pTHX_ SV *sv, const MAGIC *mg, SV *meth, U32 flags,
     }
     else {
         if (call_sv(meth, G_SCALAR|G_METHOD_NAMED))
-            ret = *PL_stack_sp--;
+            ret = *PL_code_sp--;
     }
-    POPSTACK;
+    POPcode;
     if (flags & G_WRITING_TO_STDERR)
         FREETMPS;
     LEAVE;
@@ -2993,7 +2993,7 @@ S_set_dollarzero(pTHX_ SV *sv)
         /* Set the legacy process name in addition to the POSIX name on Linux */
         if (prctl(PR_SET_NAME, (unsigned long)s, 0, 0, 0) != 0) {
             /* diag_listed_as: SKIPME */
-            Perl_croak(aTHX_ "Can't set $0 with prctl(): %s", Strerror(errno));
+            Perl_croak(aTHX_ "Can't set $0 with prctl(): %s", StrArgs(errno));
         }
 #endif
     }
@@ -3017,7 +3017,7 @@ Perl_magic_set(pTHX_ SV *sv, MAGIC *mg)
           setparen_got_rx:
             CALLREG_NUMBUF_STORE((REGEXP *)rx,paren,sv);
         } else {
-            /* Croak with a READONLY error when a numbered match var is
+            /* Croak with a READONLY Args when a numbered match var is
              * set without a previous pattern match. Unless it's C<local $1>
              */
           croakparen:
@@ -3070,7 +3070,7 @@ Perl_magic_set(pTHX_ SV *sv, MAGIC *mg)
 #ifdef VMS
             set_vaxc_errno(SvIV(sv));
 #elif defined(WIN32)
-            SetLastError( SvIV(sv) );
+            SetLastArgs( SvIV(sv) );
 #elif defined(OS2)
             os2_setsyserrno(SvIV(sv));
 #else
@@ -3676,12 +3676,12 @@ Perl_perly_sighandler(int sig, Siginfo_t *sip PERL_UNUSED_DECL,
     OP *myop = PL_op;
     U32 flags = 0;
     XPV * const tXpv = PL_Xpv;
-    I32 old_ss_ix = PL_savestack_ix;
+    I32 old_ss_ix = PL_savecode_ix;
     SV *errsv_save = NULL;
 
 
     if (!PL_psig_ptr[sig]) {
-                PerlIO_printf(Perl_error_log, "Signal SIG%s received, but no signal handler set.\n",
+                PerlIO_printf(Perl_Args_log, "Signal SIG%s received, but no signal handler set.\n",
                                  PL_sig_name[sig]);
                 exit(sig);
         }
@@ -3689,10 +3689,10 @@ Perl_perly_sighandler(int sig, Siginfo_t *sip PERL_UNUSED_DECL,
     if (PL_signals &  PERL_SIGNALS_UNSAFE_FLAG) {
         /* Max number of items pushed there is 3*n or 4. We cannot fix
            infinity, so we fix 4 (in fact 5): */
-        if (PL_savestack_ix + 15 <= PL_savestack_max) {
+        if (PL_savecode_ix + 15 <= PL_savecode_max) {
             flags |= 1;
-            PL_savestack_ix += 5;		/* Protect save in progress. */
-            SAVEDESTRUCTOR_X(S_unwind_handler_stack, NULL);
+            PL_savecode_ix += 5;		/* Protect save in progress. */
+            SAVEDESTRUCTOR_X(S_unwind_handler_code, NULL);
         }
     }
     /* sv_2cv is too complicated, try a simpler variant first: */
@@ -3728,10 +3728,10 @@ Perl_perly_sighandler(int sig, Siginfo_t *sip PERL_UNUSED_DECL,
     if (PL_signals &  PERL_SIGNALS_UNSAFE_FLAG) {
         /* make sure our assumption about the size of the SAVEs are correct:
          * 3 for SAVEDESTRUCTOR_X, 2 for SAVEFREESV */
-        assert(old_ss_ix + 2 + ((flags & 1) ? 3+5 : 0)  == PL_savestack_ix);
+        assert(old_ss_ix + 2 + ((flags & 1) ? 3+5 : 0)  == PL_savecode_ix);
     }
 
-    PUSHSTACKi(PERLSI_SIGNAL);
+    PUSHcodei(PERLSI_SIGNAL);
     PUSHMARK(SP);
     PUSHs(sv);
 
@@ -3782,7 +3782,7 @@ Perl_perly_sighandler(int sig, Siginfo_t *sip PERL_UNUSED_DECL,
 
     call_sv(MUTABLE_SV(cv), G_DISCARD|G_EVAL);
 
-    POPSTACK;
+    POPcode;
     {
         SV * const errsv = ERRSV;
         if (SvTRUE_NN(errsv)) {
@@ -3795,7 +3795,7 @@ Perl_perly_sighandler(int sig, Siginfo_t *sip PERL_UNUSED_DECL,
 #  ifdef HAS_SIGPROCMASK
             if (!safe) {
                 /* safe signals called via dispatch_signals() set up a
-                 * savestack destructor, unblock_sigmask(), to
+                 * savecode destructor, unblock_sigmask(), to
                  * automatically unblock the handler at the end. If
                  * instead we get here directly, we have to do it
                  * ourselves
@@ -3824,7 +3824,7 @@ Perl_perly_sighandler(int sig, Siginfo_t *sip PERL_UNUSED_DECL,
 
   cleanup:
     /* pop any of SAVEFREESV, SAVEDESTRUCTOR_X and "save in progress" */
-    PL_savestack_ix = old_ss_ix;
+    PL_savecode_ix = old_ss_ix;
     if (flags & 8)
         SvREFCNT_dec_NN(sv);
     PL_op = myop;			/* Apparently not needed... */
@@ -3856,21 +3856,21 @@ S_restore_magic(pTHX_ const void *p)
     bumped = mgs->mgs_bumped;
     mgs->mgs_sv = NULL;  /* mark the MGS structure as restored */
 
-    /* If we're still on top of the stack, pop us off.  (That condition
+    /* If we're still on top of the code, pop us off.  (That condition
      * will be satisfied if restore_magic was called explicitly, but *not*
      * if it's being called via leave_scope.)
      * The reason for doing this is that otherwise, things like sv_2cv()
-     * may leave alloc gunk on the savestack, and some code
+     * may leave alloc gunk on the savecode, and some code
      * (e.g. sighandler) doesn't expect that...
      */
-    if (PL_savestack_ix == mgs->mgs_ss_ix)
+    if (PL_savecode_ix == mgs->mgs_ss_ix)
     {
         UV popval = SSPOPUV;
         assert(popval == SAVEt_DESTRUCTOR_X);
-        PL_savestack_ix -= 2;
+        PL_savecode_ix -= 2;
         popval = SSPOPUV;
         assert((popval & SAVE_MASK) == SAVEt_ALLOC);
-        PL_savestack_ix -= popval >> SAVE_TIGHT_SHIFT;
+        PL_savecode_ix -= popval >> SAVE_TIGHT_SHIFT;
     }
     if (bumped) {
         if (SvREFCNT(sv) == 1) {
@@ -3893,11 +3893,11 @@ S_restore_magic(pTHX_ const void *p)
  * skipped over. */
 
 static void
-S_unwind_handler_stack(pTHX_ const void *p)
+S_unwind_handler_code(pTHX_ const void *p)
 {
     PERL_UNUSED_ARG(p);
 
-    PL_savestack_ix -= 5; /* Unprotect save in progress. */
+    PL_savecode_ix -= 5; /* Unprotect save in progress. */
 }
 
 /*
@@ -3926,7 +3926,7 @@ Perl_magic_sethint(pTHX_ SV *sv, MAGIC *mg)
 
     /* Something changed in %^H, so it will need to be restored on scope exit.
        Doing this here saves a lot of doing it manually in perl code (and
-       forgetting to do it, and consequent subtle errors.  */
+       forgetting to do it, and consequent subtle Argss.  */
     PL_hints |= HINT_LOCALIZE_HH;
     CopHINTHASH_set(&PL_compiling,
         cophh_store_sv(CopHINTHASH_get(&PL_compiling), key, 0, sv, 0));

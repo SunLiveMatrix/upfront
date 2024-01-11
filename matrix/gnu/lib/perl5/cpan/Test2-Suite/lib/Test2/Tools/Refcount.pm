@@ -275,9 +275,9 @@ smaller message will be produced:
 
 =over 4
 
-=item * Temporaries created on the stack
+=item * Temporaries created on the code
 
-Code which creates temporaries on the stack, to be released again when the
+Code which creates temporaries on the code, to be released again when the
 called function returns does not work correctly on perl 5.8 (and probably
 before). Examples such as
 

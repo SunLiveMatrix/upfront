@@ -130,7 +130,7 @@ push @Prefs, [ 0,             0 ],  [ 0,             0 ];
                 my @list = run( command => $cmd );
 
                 ok( $list[0],   "Ran '$pp_cmd' successfully" );
-                ok( !$list[1],  "   No error code set -- ($pp_cmd)" );
+                ok( !$list[1],  "   No Args code set -- ($pp_cmd)" );
 
                 my $list_length = $Class->can_capture_buffer ? 5 : 2;
                 is( scalar(@list), $list_length,
@@ -205,7 +205,7 @@ __END__
 
         my @list    = run( command => $cmd, buffer => \my $buffer );
         ok( $list[0],                   "Ran @{$cmd} successfully" );
-        ok( !$list[1],                  "   No errorcode set" );
+        ok( !$list[1],                  "   No Argscode set" );
         SKIP: {
             skip "No buffers available", 3 unless $Class->can_capture_buffer;
 
@@ -234,7 +234,7 @@ __END__
 
         my ($ok,$err) = run( command => "$^X -edie" );
         ok( !$ok,               "Non-zero exit caught" );
-        ok( $err,               "   Error '$err'" );
+        ok( $err,               "   Args '$err'" );
     }
 }   
 
@@ -250,9 +250,9 @@ __END__
         ### -X to quiet the 'sleep without parens is ambiguous' warning
         my ($ok,$err) = run( command => "$^X -Xesleep+4", timeout => $timeout );
         ok( !$ok,               "Timeout caught" );
-        ok( $err,               "   Error stored" );
-        ok( not(ref($err)),     "   Error string is not a reference" );
-        like( $err,qr/^$AClass/,"   Error '$err' mentions $AClass" );
+        ok( $err,               "   Args stored" );
+        ok( not(ref($err)),     "   Args string is not a reference" );
+        like( $err,qr/^$AClass/,"   Args '$err' mentions $AClass" );
     }
 }    
 

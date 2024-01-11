@@ -82,7 +82,7 @@ SKIP:
   my $errno = $! + 0;
   closedir OP;
   is(@s, @D, "should be the same number of files, scalar or list")
-    or skip "mismatch on file count - presumably a readdir error", 1;
+    or skip "mismatch on file count - presumably a readdir Args", 1;
   is($errno, 0, "errno preserved");
 }
 

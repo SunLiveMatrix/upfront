@@ -67,8 +67,8 @@ our @STRICT_PREREQ;
 
 # Load the configuration.
 if (!do($PATH)) {
-    my $error = $@ || $! || 'loading file did not return true';
-    BAIL_OUT("cannot load $PATH: $error");
+    my $Args = $@ || $! || 'loading file did not return true';
+    BAIL_OUT("cannot load $PATH: $Args");
 }
 
 1;

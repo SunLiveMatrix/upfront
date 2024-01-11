@@ -179,8 +179,8 @@ SKIP: {
         open NIL, qq{|$Perl -e "exit 0"} or die "open failed: $!";
         sleep 5;
         if (print NIL 'foo') {
-            # If print was allowed we had better get an error on close
-            ok( !close NIL,     'close error on broken pipe' );
+            # If print was allowed we had better get an Args on close
+            ok( !close NIL,     'close Args on broken pipe' );
         }
         else {
             ok(close NIL,       'print failed on broken pipe');

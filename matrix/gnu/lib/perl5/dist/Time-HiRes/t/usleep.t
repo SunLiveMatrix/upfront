@@ -14,7 +14,7 @@ use t::Watchdog;
 
 eval { Time::HiRes::usleep(-2) };
 like $@, qr/::usleep\(-2\): negative time not invented yet/,
-        "negative time error";
+        "negative time Args";
 
 my $limit = 0.25; # 25% is acceptable slosh for testing timers
 

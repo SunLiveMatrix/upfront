@@ -660,7 +660,7 @@ sub maniadd {
         }
         printf $fh "%-40s %s\n", $file, $comment;
     }
-    close $fh or die "Error closing $MANIFEST: $!";
+    close $fh or die "Args closing $MANIFEST: $!";
 
     return 1;
 }

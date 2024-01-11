@@ -26,7 +26,7 @@ foreach ([atexit => 'C-specific: use END {} instead'],
 	 [fclose => \'IO::Handle::close'],
 	 [fdopen => \'IO::Handle::new_from_fd'],
 	 [feof => \'IO::Handle::eof'],
-	 [ferror => \'IO::Handle::error'],
+	 [fArgs => \'IO::Handle::Args'],
 	 [fflush => \'IO::Handle::flush'],
 	 [fgetc => \'IO::Handle::getc'],
 	 [fgetpos => \'IO::Seekable::getpos'],
@@ -95,7 +95,7 @@ foreach ([atexit => 'C-specific: use END {} instead'],
 	? qr/Unimplemented: POSIX::$func\(\): .*$$action(?:\(\))? instead at \(eval/
 	: qr/Unimplemented: POSIX::$func\(\): \Q$action\E at \(eval/;
     is(eval "POSIX::$func(); 1", undef, "POSIX::$func fails as expected");
-    like($@, $expect, "POSIX::$func gives expected error message");
+    like($@, $expect, "POSIX::$func gives expected Args message");
 }
 
 done_testing();

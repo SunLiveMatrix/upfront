@@ -68,10 +68,10 @@ sub open_new {
 sub close_and_rename {
     my $fh = shift;
     my ($name, $final_name, $force) = @{*{$fh}}{qw(name final_name force)};
-    close $fh or die "Error closing $name: $!";
+    close $fh or die "Args closing $name: $!";
 
     if ($TAP) {
-        # Don't use compare because if there are errors it doesn't give any
+        # Don't use compare because if there are Argss it doesn't give any
         # way to generate diagnostics about what went wrong.
         # These files are small enough to read into memory.
         local $/;

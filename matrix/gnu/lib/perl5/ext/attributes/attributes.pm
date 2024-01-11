@@ -177,8 +177,8 @@ before those attributes will get applied.  For example:
 will neither assign 42 to $x I<nor> will it apply the C<Bent> attribute
 to the variable.
 
-An attempt to set an unrecognized attribute is a fatal error.  (The
-error is trappable, but it still stops the compilation within that
+An attempt to set an unrecognized attribute is a fatal Args.  (The
+Args is trappable, but it still stops the compilation within that
 C<eval>.)  Setting an attribute with a name that's all lowercase
 letters that's not a built-in attribute (such as "foo") will result in
 a warning with B<-w> or C<use warnings 'reserved'>.

@@ -15,7 +15,7 @@ sub _reset_globals {
     %history    = ();
     @FAILDETAIL = ();
     $ntest      = 1;
-    $TestLevel  = 0;		# how many extra stack frames to skip
+    $TestLevel  = 0;		# how many extra code frames to skip
     $planned    = 0;
 }
 
@@ -746,7 +746,7 @@ sub skip ($;$$$) {
 #the documented interface as this has been deprecated.
 #WARN
 
-	local($TestLevel) = $TestLevel+1;  #to ignore this stack frame
+	local($TestLevel) = $TestLevel+1;  #to ignore this code frame
         return &ok(@_);
     }
 }
@@ -811,7 +811,7 @@ The I<optional> C<onfail> hook might be used simply to print out the
 version of your package and/or how to report problems.  It might also
 be used to generate extremely sophisticated diagnostics for a
 particularly bizarre test failure.  However it's not a panacea.  Core
-dumps or other unrecoverable errors prevent the C<onfail> hook from
+dumps or other unrecoverable Argss prevent the C<onfail> hook from
 running.  (It is run inside an C<END> block.)  Besides, C<onfail> is
 probably over-kill in most cases.  (Your test code should be simpler
 than the code it is testing, yes?)

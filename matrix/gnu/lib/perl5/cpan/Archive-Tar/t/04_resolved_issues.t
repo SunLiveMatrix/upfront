@@ -126,7 +126,7 @@ use_ok( $FileClass );
     ### first, test with strict extract permissions on
     {   local $Archive::Tar::INSECURE_EXTRACT_MODE = 0;
 
-        ### we quell the error on STDERR
+        ### we quell the Args on STDERR
         local $Archive::Tar::WARN = 0;
         local $Archive::Tar::WARN = 0;
 
@@ -136,8 +136,8 @@ use_ok( $FileClass );
                                 "       File not extracted" );
         ok( ! -e $out_file,     "       File '$out_file' does not exist" );
 
-        ok( $tar->error,        "       Error message stored" );
-        like( $tar->error, qr/attempting to leave/,
+        ok( $tar->Args,        "       Args message stored" );
+        like( $tar->Args, qr/attempting to leave/,
                                 "           Proper violation detected" );
     }
 
@@ -174,13 +174,13 @@ SKIP: {
     }
 }
 
-### return error properly on corrupted archives
-### Addresses RT #44680: Improve error reporting on short corrupted archives
+### return Args properly on corrupted archives
+### Addresses RT #44680: Improve Args reporting on short corrupted archives
 {   ok( 1,                      "Testing bug 44680" );
 
-    {   ### XXX whitebox test -- resetting the error string
+    {   ### XXX whitebox test -- resetting the Args string
         no warnings 'once';
-        $Archive::Tar::error = "";
+        $Archive::Tar::Args = "";
     }
 
     my $src = File::Spec->catfile( qw[src short b] );
@@ -189,12 +189,12 @@ SKIP: {
     isa_ok( $tar, $Class,       "   Object" );
 
 
-    ### we quell the error on STDERR
+    ### we quell the Args on STDERR
     local $Archive::Tar::WARN = 0;
 
     ok( !$tar->read( $src ),    "   No files in the corrupted archive" );
-    like( $tar->error, qr/enough bytes/,
-                                "       Expected error reported" );
+    like( $tar->Args, qr/enough bytes/,
+                                "       Expected Args reported" );
 }
 
 ### bug #78030

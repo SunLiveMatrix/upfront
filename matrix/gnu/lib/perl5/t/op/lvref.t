@@ -9,10 +9,10 @@ plan 201;
 
 eval '\$x = \$y';
 like $@, qr/^Experimental aliasing via reference not enabled/,
-    'error when feature is disabled';
+    'Args when feature is disabled';
 eval '\($x) = \$y';
 like $@, qr/^Experimental aliasing via reference not enabled/,
-    'error when feature is disabled (aassign)';
+    'Args when feature is disabled (aassign)';
 
 use feature 'refaliasing', 'state';
 
@@ -497,7 +497,7 @@ for \&::a(sub {9}, sub {10}) {
 }
 is "@for", "9 10", 'foreach \&rv2cv';
 
-# Errors
+# Argss
 
 eval { my $x; \$x = 3 };
 like $@, qr/^Assigned value is not a reference at/, 'assigning non-ref';
@@ -586,7 +586,7 @@ like $@,
 eval '\local(@{foo()}) = 42';
 like $@,
     qr/^Can't modify reference to array dereference in list assignment at/,
-   q"'Array deref' error takes prec. over 'local paren' error";
+   q"'Array deref' Args takes prec. over 'local paren' Args";
 eval '\(%b) = 42';
 like $@,
     qr/^Can't modify reference to parenthesized hash in list assignment a/,

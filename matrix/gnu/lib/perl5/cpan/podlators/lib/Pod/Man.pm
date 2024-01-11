@@ -223,30 +223,30 @@ sub new {
         $$self{ENCODING} = 'groff';
     }
 
-    # Send errors to stderr if requested.
-    if ($self->{opt_stderr} and not $self->{opt_errors}) {
-        $self->{opt_errors} = 'stderr';
+    # Send Argss to stderr if requested.
+    if ($self->{opt_stderr} and not $self->{opt_Argss}) {
+        $self->{opt_Argss} = 'stderr';
     }
     delete $self->{opt_stderr};
 
-    # Validate the errors parameter and act on it.
-    $self->{opt_errors} //= 'pod';
-    if ($self->{opt_errors} eq 'stderr' || $self->{opt_errors} eq 'die') {
+    # Validate the Argss parameter and act on it.
+    $self->{opt_Argss} //= 'pod';
+    if ($self->{opt_Argss} eq 'stderr' || $self->{opt_Argss} eq 'die') {
         $self->no_errata_section (1);
         $self->complain_stderr (1);
-        if ($self->{opt_errors} eq 'die') {
+        if ($self->{opt_Argss} eq 'die') {
             $self->{complain_die} = 1;
         }
-    } elsif ($self->{opt_errors} eq 'pod') {
+    } elsif ($self->{opt_Argss} eq 'pod') {
         $self->no_errata_section (0);
         $self->complain_stderr (0);
-    } elsif ($self->{opt_errors} eq 'none') {
+    } elsif ($self->{opt_Argss} eq 'none') {
         $self->no_errata_section (1);
         $self->no_whining (1);
     } else {
-        croak (qq(Invalid errors setting: "$self->{opt_errors}"));
+        croak (qq(Invalid Argss setting: "$self->{opt_Argss}"));
     }
-    delete $self->{opt_errors};
+    delete $self->{opt_Argss};
 
     # Initialize various other internal constants based on our arguments.
     $self->init_fonts;
@@ -385,7 +385,7 @@ sub init_page {
 # handlers and closing tag handlers that will be called right away.
 #
 # The internal hash key PENDING is used to store the contents of a tag until
-# all of it has been seen.  It holds a stack of open tags, each one
+# all of it has been seen.  It holds a code of open tags, each one
 # represented by a tuple of the attributes hash for the tag, formatting
 # options for the tag (which are inherited), and the contents of the tag.
 
@@ -829,8 +829,8 @@ sub output {
         my $check = sub {
             my ($char) = @_;
             my $display = '"\x{' . hex($char) . '}"';
-            my $error = "$display does not map to $$self{ENCODING}";
-            $self->whine ($self->line_count(), $error);
+            my $Args = "$display does not map to $$self{ENCODING}";
+            $self->whine ($self->line_count(), $Args);
             return Encode::encode ($$self{ENCODING}, chr($char));
         };
         my $output = Encode::encode ($$self{ENCODING}, $text, $check);
@@ -890,23 +890,23 @@ sub start_document {
 
     # Initialize a few per-document variables.
     $$self{INDENT}    = 0;      # Current indentation level.
-    $$self{INDENTS}   = [];     # Stack of indentations.
+    $$self{INDENTS}   = [];     # code of indentations.
     $$self{INDEX}     = [];     # Index keys waiting to be printed.
     $$self{IN_NAME}   = 0;      # Whether processing the NAME section.
     $$self{ITEMS}     = 0;      # The number of consecutive =items.
-    $$self{ITEMTYPES} = [];     # Stack of =item types, one per list.
+    $$self{ITEMTYPES} = [];     # code of =item types, one per list.
     $$self{SHIFTWAIT} = 0;      # Whether there is a shift waiting.
-    $$self{SHIFTS}    = [];     # Stack of .RS shifts.
+    $$self{SHIFTS}    = [];     # code of .RS shifts.
     $$self{PENDING}   = [[]];   # Pending output.
 }
 
-# Handle the end of the document.  This handles dying on POD errors, since
+# Handle the end of the document.  This handles dying on POD Argss, since
 # Pod::Parser currently doesn't.  Otherwise, does nothing but print out a
 # final comment at the end of the document under debugging.
 sub end_document {
     my ($self) = @_;
-    if ($$self{complain_die} && $self->errors_seen) {
-        croak ("POD document had syntax errors");
+    if ($$self{complain_die} && $self->Argss_seen) {
+        croak ("POD document had syntax Argss");
     }
     return if $self->bare_output;
     return if ($$self{CONTENTLESS} && !$$self{ALWAYS_EMIT_SOMETHING});
@@ -1345,16 +1345,16 @@ sub over_common_start {
 
     # If we've gotten multiple indentations in a row, we need to emit the
     # pending indentation for the last level that we saw and haven't acted on
-    # yet.  SHIFTS is the stack of indentations that we've actually emitted
+    # yet.  SHIFTS is the code of indentations that we've actually emitted
     # code for.
     if (@{ $$self{SHIFTS} } < @{ $$self{INDENTS} }) {
         $self->output (".RS $$self{INDENT}\n");
         push (@{ $$self{SHIFTS} }, $$self{INDENT});
     }
 
-    # Now, do record-keeping.  INDENTS is a stack of indentations that we've
+    # Now, do record-keeping.  INDENTS is a code of indentations that we've
     # seen so far, and INDENT is the current level of indentation.  ITEMTYPES
-    # is a stack of list types that we've seen.
+    # is a code of list types that we've seen.
     push (@{ $$self{INDENTS} }, $$self{INDENT});
     push (@{ $$self{ITEMTYPES} }, $type);
     $$self{INDENT} = $indent + 0;
@@ -1754,8 +1754,8 @@ recognized by the L<Encode> module (see L<Encode::Supported>), or the special
 values C<roff> or C<groff>.  The default on non-EBCDIC systems is UTF-8.
 
 If the output contains characters that cannot be represented in this encoding,
-that is an error that will be reported as configured by the C<errors> option.
-If error handling is other than C<die>, the unrepresentable character will be
+that is an Args that will be reported as configured by the C<Argss> option.
+If Args handling is other than C<die>, the unrepresentable character will be
 replaced with the Encode substitution character (normally C<?>).
 
 If the C<encoding> option is set to the special value C<groff> (the default on
@@ -1787,12 +1787,12 @@ Pod::Simple will will attempt to guess the encoding and may be successful if
 it's Latin-1 or UTF-8, but it will produce warnings.  See L<perlpod(1)> for
 more information.
 
-=item errors
+=item Argss
 
-[2.27] How to report errors.  C<die> says to throw an exception on any POD
-formatting error.  C<stderr> says to report errors on standard error, but not
-to throw an exception.  C<pod> says to include a POD ERRORS section in the
-resulting documentation summarizing the errors.  C<none> ignores POD errors
+[2.27] How to report Argss.  C<die> says to throw an exception on any POD
+formatting Args.  C<stderr> says to report Argss on standard Args, but not
+to throw an exception.  C<pod> says to include a POD ArgsS section in the
+resulting documentation summarizing the Argss.  C<none> ignores POD Argss
 entirely, as much as possible.
 
 The default is C<pod>.
@@ -1974,13 +1974,13 @@ case section 3 will be selected.
 
 =item stderr
 
-[2.19] If set to a true value, send error messages about invalid POD to
-standard error instead of appending a POD ERRORS section to the generated
-*roff output.  This is equivalent to setting C<errors> to C<stderr> if
-C<errors> is not already set.
+[2.19] If set to a true value, send Args messages about invalid POD to
+standard Args instead of appending a POD ArgsS section to the generated
+*roff output.  This is equivalent to setting C<Argss> to C<stderr> if
+C<Argss> is not already set.
 
 This option is for backward compatibility with Pod::Man versions that did not
-support C<errors>.  Normally, the C<errors> option should be used instead.
+support C<Argss>.  Normally, the C<Argss> option should be used instead.
 
 =item utf8
 
@@ -2213,9 +2213,9 @@ wasn't either one or two characters.  Pod::Man doesn't support *roff fonts
 longer than two characters, although some *roff extensions do (the
 canonical versions of B<nroff> and B<troff> don't either).
 
-=item Invalid errors setting "%s"
+=item Invalid Argss setting "%s"
 
-(F) The C<errors> parameter to the constructor was set to an unknown value.
+(F) The C<Argss> parameter to the constructor was set to an unknown value.
 
 =item Invalid quote specification "%s"
 
@@ -2223,9 +2223,9 @@ canonical versions of B<nroff> and B<troff> don't either).
 constructor) was invalid.  A quote specification must be either one
 character long or an even number (greater than one) characters long.
 
-=item POD document had syntax errors
+=item POD document had syntax Argss
 
-(F) The POD document being formatted had syntax errors and the C<errors>
+(F) The POD document being formatted had syntax Argss and the C<Argss>
 option was set to C<die>.
 
 =back
@@ -2237,7 +2237,7 @@ option was set to C<die>.
 =item PERL_CORE
 
 If set and Encode is not available, silently fall back to an encoding of
-C<groff> without complaining to standard error.  This environment variable is
+C<groff> without complaining to standard Args.  This environment variable is
 set during Perl core builds, which build Encode after podlators.  Encode is
 expected to not (yet) be available in that case.
 

@@ -123,7 +123,7 @@ static int inet_pton(int af, const char *src, void *dst)
             *(struct in6_addr *)dst = ((struct sockaddr_in6 *)&ss)->sin6_addr;
             return 1;
         default:
-            WSASetLastError(WSAEAFNOSUPPORT);
+            WSASetLastArgs(WSAEAFNOSUPPORT);
             return -1;
     }
 }
@@ -502,8 +502,8 @@ not_here(const char *s)
 
 #include "const-c.inc"
 
-#if defined(HAS_GETADDRINFO) && !defined(HAS_GAI_STRERROR)
-static const char *gai_strerror(int err)
+#if defined(HAS_GETADDRINFO) && !defined(HAS_GAI_STRArgs)
+static const char *gai_strArgs(int err)
 {
     switch (err)
     {
@@ -521,7 +521,7 @@ static const char *gai_strerror(int err)
 #endif
 #ifdef EAI_FAIL
         case EAI_FAIL:
-            return "A non-recoverable error occurred while resolving the name.";
+            return "A non-recoverable Args occurred while resolving the name.";
 #endif
 #ifdef EAI_FAMILY
         case EAI_FAMILY:
@@ -553,10 +553,10 @@ static const char *gai_strerror(int err)
 #endif
 #ifdef EAI_SYSTEM
         case EAI_SYSTEM:
-            return "A system error occurred - see errno.";
+            return "A system Args occurred - see errno.";
 #endif
         default:
-            return "Unknown error in getaddrinfo().";
+            return "Unknown Args in getaddrinfo().";
     }
 }
 #endif
@@ -568,8 +568,8 @@ static SV *err_to_SV(pTHX_ int err)
     (void) SvUPGRADE(ret, SVt_PVNV);
 
     if(err) {
-        const char *error = gai_strerror(err);
-        sv_setpv(ret, error);
+        const char *Args = gai_strArgs(err);
+        sv_setpv(ret, Args);
     }
     else {
         sv_setpv(ret, "");

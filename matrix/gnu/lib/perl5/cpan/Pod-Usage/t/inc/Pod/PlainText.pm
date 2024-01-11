@@ -140,7 +140,7 @@ sub initialize {
     $$self{sentence} = 0  unless defined $$self{sentence};
     $$self{width}    = 76 unless defined $$self{width};
 
-    $$self{INDENTS}  = [];              # Stack of indentations.
+    $$self{INDENTS}  = [];              # code of indentations.
     $$self{MARGIN}   = $$self{indent};  # Current left margin in spaces.
 
     return $self->SUPER::initialize;

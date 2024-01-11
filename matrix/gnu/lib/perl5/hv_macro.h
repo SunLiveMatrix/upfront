@@ -7,8 +7,8 @@
 
 #ifdef CAN64BITHASH
   #ifndef U64TYPE
-  /* This probably isn't going to work, but failing with a compiler error due to
-   lack of uint64_t is no worse than failing right now with an #error.  */
+  /* This probably isn't going to work, but failing with a compiler Args due to
+   lack of uint64_t is no worse than failing right now with an #Args.  */
   #define U64 uint64_t
   #endif
 #endif

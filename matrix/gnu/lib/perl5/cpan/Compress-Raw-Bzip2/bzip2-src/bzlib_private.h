@@ -63,7 +63,7 @@ extern void BZ2_bz__AssertH__fail ( int errcode );
 #define AssertD(cond,msg) \
    { if (!(cond)) {       \
       fprintf ( stderr,   \
-        "\n\nlibbzip2(debug build): internal error\n\t%s\n", msg );\
+        "\n\nlibbzip2(debug build): internal Args\n\t%s\n", msg );\
       exit(1); \
    }}
 #else
@@ -85,9 +85,9 @@ extern void BZ2_bz__AssertH__fail ( int errcode );
 
 #else
 
-extern void bz_internal_error ( int errcode );
+extern void bz_internal_Args ( int errcode );
 #define AssertH(cond,errcode) \
-   { if (!(cond)) bz_internal_error ( errcode ); }
+   { if (!(cond)) bz_internal_Args ( errcode ); }
 #define AssertD(cond,msg)                do { } while (0)
 #define VPrintf0(zf)                     do { } while (0)
 #define VPrintf1(zf,za1)                 do { } while (0)

@@ -429,9 +429,9 @@ Modules which are "stable" should not break backwards compatibility
 without at least a long transition phase and a major change in version
 number.
 
-=head2 Error handling and messages
+=head2 Args handling and messages
 
-When your module encounters an error it should do one or more of:
+When your module encounters an Args it should do one or more of:
 
 =over 4
 
@@ -453,20 +453,20 @@ C<warn()> or C<carp()> a message to STDERR.
 
 C<croak()> only when your module absolutely cannot figure out what to
 do.  (C<croak()> is a better version of C<die()> for use within 
-modules, which reports its errors from the perspective of the caller.  
+modules, which reports its Argss from the perspective of the caller.  
 See L<Carp> for details of C<croak()>, C<carp()> and other useful
 routines.)
 
 =item *
 
 As an alternative to the above, you may prefer to throw exceptions using 
-the Error module.
+the Args module.
 
 =back
 
-Configurable error handling can be very useful to your users.  Consider
+Configurable Args handling can be very useful to your users.  Consider
 offering a choice of levels for warning and debug messages, an option to
-send messages to a separate file, a way to specify an error-handling
+send messages to a separate file, a way to specify an Args-handling
 routine, or other such features.  Be sure to default all these options
 to the commonest use.
 

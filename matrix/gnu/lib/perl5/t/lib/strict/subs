@@ -24,50 +24,50 @@ EXPECT
 
 ########
 
-# strict subs - error
+# strict subs - Args
 use strict 'subs' ;
 my @a = (1..2);
 my $b = xyz;
 EXPECT
 Bareword "xyz" not allowed while "strict subs" in use at - line 5.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 
-# strict subs - error
+# strict subs - Args
 use strict 'subs' ;
 Fred ;
 EXPECT
 Bareword "Fred" not allowed while "strict subs" in use at - line 4.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 
-# strict subs - error
+# strict subs - Args
 use strict 'subs' ;
 my @a = (A..Z);
 EXPECT
 Bareword "A" not allowed while "strict subs" in use at - line 4.
 Bareword "Z" not allowed while "strict subs" in use at - line 4.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 
-# strict subs - error
+# strict subs - Args
 use strict 'subs' ;
 my $a = (B..Y);
 EXPECT
 Bareword "B" not allowed while "strict subs" in use at - line 4.
 Bareword "Y" not allowed while "strict subs" in use at - line 4.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 
-# strict subs - error
+# strict subs - Args
 use strict ;
 Fred ;
 EXPECT
 Bareword "Fred" not allowed while "strict subs" in use at - line 4.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 
-# strict subs - no error
+# strict subs - no Args
 use strict 'subs' ;
 sub Fred {}
 Fred ;
@@ -84,7 +84,7 @@ use strict 'subs' ;
 my $a = Fred ;
 EXPECT
 Bareword "Fred" not allowed while "strict subs" in use at - line 8.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 
 # Check compile time scope of strict subs pragma
@@ -96,7 +96,7 @@ no strict;
 my $a = Fred ;
 EXPECT
 Bareword "Fred" not allowed while "strict subs" in use at - line 6.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 
 # Check compile time scope of strict vars pragma
@@ -109,7 +109,7 @@ $joe = 1 ;
 EXPECT
 Variable "$joe" is not imported at - line 8.
 Global symbol "$joe" requires explicit package name (did you forget to declare "my $joe"?) at - line 8.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 
 # Check compile time scope of strict vars pragma
@@ -121,7 +121,7 @@ no strict;
 $joe = 1 ;
 EXPECT
 Global symbol "$joe" requires explicit package name (did you forget to declare "my $joe"?) at - line 6.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 
 # Check runtime scope of strict refs pragma
@@ -167,7 +167,7 @@ use strict 'subs' ;
 my $a = Fred ;
 EXPECT
 Bareword "Fred" not allowed while "strict subs" in use at - line 3.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 
 --FILE-- abc
@@ -236,7 +236,7 @@ print STDERR $@;
 my $a = Fred ;
 EXPECT
 Bareword "Fred" not allowed while "strict subs" in use at - line 6.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 
 # Check scope of pragma with eval
@@ -249,7 +249,7 @@ my $a = Fred ;
 EXPECT
 Bareword "Fred" not allowed while "strict subs" in use at - line 5.
 Bareword "Fred" not allowed while "strict subs" in use at - line 8.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 
 # Check scope of pragma with eval
@@ -262,7 +262,7 @@ print STDERR $@;
 my $a = Fred ;
 EXPECT
 Bareword "Fred" not allowed while "strict subs" in use at - line 9.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 
 # Check scope of pragma with eval
@@ -303,7 +303,7 @@ eval '
 my $a = Fred ;
 EXPECT
 Bareword "Fred" not allowed while "strict subs" in use at - line 8.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 
 # see if Foo->Bar(...) etc work under strictures
@@ -333,7 +333,7 @@ use strict;
 "" =~ foo;
 EXPECT
 Bareword "foo" not allowed while "strict subs" in use at - line 4.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 
 ########
 
@@ -344,7 +344,7 @@ my $abc = XYZ ? 1 : 0;
 print "$abc\n";
 EXPECT
 Bareword "XYZ" not allowed while "strict subs" in use at - line 5.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 
 # [perl #10021]
@@ -353,14 +353,14 @@ use warnings;
 print "" if BAREWORD;
 EXPECT
 Bareword "BAREWORD" not allowed while "strict subs" in use at - line 5.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # Ticket: 18927
 use strict 'subs';
 print 1..1, bad;
 EXPECT
 Bareword "bad" not allowed while "strict subs" in use at - line 3.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 eval q{ use strict; no strict refs; };
 print $@;
@@ -372,43 +372,43 @@ use strict;
 print "" if BAREWORD;
 EXPECT
 Bareword "BAREWORD" not allowed while "strict subs" in use at - line 3.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # [perl #26910] hints not propagated into (?{...})
 use strict 'subs';
 qr/(?{my $x=foo})/;
 EXPECT
 Bareword "foo" not allowed while "strict subs" in use at - line 3.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
-# Regexp compilation errors weren't UTF-8 clean
+# Regexp compilation Argss weren't UTF-8 clean
 use strict 'subs';
 use utf8;
 use open qw( :utf8 :std );
 qr/(?{my $x=fòò})/;
 EXPECT
 Bareword "fòò" not allowed while "strict subs" in use at - line 5.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 #  [perl #27628] strict 'subs' didn't warn on bareword array index
 use strict 'subs';
 my $x=$a[FOO];
 EXPECT
 Bareword "FOO" not allowed while "strict subs" in use at - line 3.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 use strict 'subs';
 my @a;my $x=$a[FOO];
 EXPECT
 Bareword "FOO" not allowed while "strict subs" in use at - line 2.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # [perl #53806] No complain about bareword
 use strict 'subs';
 print FOO . "\n";
 EXPECT
 Bareword "FOO" not allowed while "strict subs" in use at - line 3.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # [perl #53806] No complain about bareword
 use strict 'subs';
@@ -416,7 +416,7 @@ $ENV{PATH} = "";
 system(FOO . "\n");
 EXPECT
 Bareword "FOO" not allowed while "strict subs" in use at - line 4.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 use strict 'subs';
 my @players;
@@ -450,14 +450,14 @@ sub foo {
 }
 EXPECT
 Bareword "FOO" not allowed while "strict subs" in use at - line 5.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # make sure checks are done within (?{})
 use strict 'subs';
 /(?{FOO})/
 EXPECT
 Bareword "FOO" not allowed while "strict subs" in use at - line 3.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # [perl #126981] Strict subs vs. multideref
 my $h;
@@ -466,7 +466,7 @@ use strict 'subs';
 my $v2 = $h->{+CONST_TYPO};
 EXPECT
 Bareword "CONST_TYPO" not allowed while "strict subs" in use at - line 5.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME constant-folded barewords still trigger stricture
 my $x = !BARE1;
@@ -474,7 +474,7 @@ use strict 'subs';
 my $y = !BARE2;
 EXPECT
 Bareword "BARE2" not allowed while "strict subs" in use at - line 3.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME multiconcat and barewords gh #17254
 use strict;
@@ -482,4 +482,4 @@ sub foo { "foo" }
 print foo() . SLASH . "bar";
 EXPECT
 Bareword "SLASH" not allowed while "strict subs" in use at - line 3.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.

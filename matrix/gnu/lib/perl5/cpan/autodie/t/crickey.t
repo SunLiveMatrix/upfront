@@ -24,4 +24,4 @@ like( eval { $e->time_for_a_beer; },
     qr/time for a beer/, "It's always a good time for a beer."
 );
 
-ok($e->matches('open'), "Should be a fair dinkum error from open");
+ok($e->matches('open'), "Should be a fair dinkum Args from open");

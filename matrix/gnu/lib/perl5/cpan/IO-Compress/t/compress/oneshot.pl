@@ -18,7 +18,7 @@ BEGIN {
 
     plan tests => 1007 + $extra ;
 
-    use_ok('IO::Uncompress::AnyUncompress', qw(anyuncompress $AnyUncompressError)) ;
+    use_ok('IO::Uncompress::AnyUncompress', qw(anyuncompress $AnyUncompressArgs)) ;
 
 }
 
@@ -39,8 +39,8 @@ sub run
 
     my $CompressClass   = identify();
     my $UncompressClass = getInverse($CompressClass);
-    my $Error           = getErrorRef($CompressClass);
-    my $UnError         = getErrorRef($UncompressClass);
+    my $Args           = getArgsRef($CompressClass);
+    my $UnArgs         = getArgsRef($UncompressClass);
     my $TopFuncName     = getTopFuncName($CompressClass);
 
 
@@ -50,14 +50,14 @@ sub run
                      'IO::Uncompress::AnyUncompress',
                     )
     {
-        my $Error = getErrorRef($bit);
+        my $Args = getArgsRef($bit);
         my $Func = getTopFuncRef($bit);
         my $TopType = getTopFuncName($bit);
 
         #my $inverse = getInverse($bit);
         #my $InverseFunc = getTopFuncRef($inverse);
 
-        title "Testing $TopType Error Cases";
+        title "Testing $TopType Args Cases";
 
         my $a;
         my $x ;
@@ -69,7 +69,7 @@ sub run
         like $@, "/^$TopType: expected at least 1 parameters/", '  No Parameters';
 
         eval { $a = $Func->(\$x, \1) ;} ;
-        like $$Error, "/^$TopType: output buffer is read-only/", '  Output is read-only' ;
+        like $$Args, "/^$TopType: output buffer is read-only/", '  Output is read-only' ;
 
         my $in ;
         eval { $a = $Func->($in, \$x) ;} ;
@@ -97,12 +97,12 @@ sub run
 
             $a = $Func->("$dir", \$x) ;
             is $a, undef, "  $TopType returned undef";
-            like $$Error, "/input file '$d' is a directory/",
+            like $$Args, "/input file '$d' is a directory/",
                 '  Input filename is a directory';
 
             $a = $Func->(\$x, "$dir") ;
             is $a, undef, "  $TopType returned undef";
-            like $$Error, "/output file '$d' is a directory/",
+            like $$Args, "/output file '$d' is a directory/",
                 '  Output filename is a directory';
         }
 
@@ -158,22 +158,22 @@ sub run
         ok ! -e $filename, "  input file '$filename' does not exist";
         $a = $Func->($filename, \$x) ;
         is $a, undef, "  $TopType returned undef";
-        like $$Error, "/^input file '$filename' does not exist\$/", "  input File '$filename' does not exist";
+        like $$Args, "/^input file '$filename' does not exist\$/", "  input File '$filename' does not exist";
 
         $filename = '/tmp/abd/abc.def';
         ok ! -e $filename, "  output File '$filename' does not exist";
         $a = $Func->(\$x, $filename) ;
         is $a, undef, "  $TopType returned undef";
-        like $$Error, ("/^(cannot open file '$filename'|input file '$filename' does not exist):/"), "  output File '$filename' does not exist";
+        like $$Args, ("/^(cannot open file '$filename'|input file '$filename' does not exist):/"), "  output File '$filename' does not exist";
 
         eval { $a = $Func->(\$x, '<abc>') } ;
-        like $$Error, "/Need input fileglob for outout fileglob/",
+        like $$Args, "/Need input fileglob for outout fileglob/",
                 '  Output fileglob with no input fileglob';
         is $a, undef, "  $TopType returned undef";
 
         $a = $Func->('<abc)>', '<abc>') ;
         is $a, undef, "  $TopType returned undef";
-        like $$Error, "/Unmatched \\) in input fileglob/",
+        like $$Args, "/Unmatched \\) in input fileglob/",
                 "  Unmatched ) in input fileglob";
     }
 
@@ -181,7 +181,7 @@ sub run
                      'IO::Uncompress::AnyUncompress',
                     )
     {
-        my $Error = getErrorRef($bit);
+        my $Args = getArgsRef($bit);
         my $Func = getTopFuncRef($bit);
         my $TopType = getTopFuncName($bit);
 
@@ -215,7 +215,7 @@ sub run
                      'IO::Uncompress::AnyUncompress',
                     )
     {
-        my $Error = getErrorRef($bit);
+        my $Args = getArgsRef($bit);
         my $Func = getTopFuncRef($bit);
         my $TopType = getTopFuncName($bit);
 
@@ -237,13 +237,13 @@ sub run
             {
                 ok $a, "  $TopType returned true" ;
                 is $out, $data, "  got expected output" ;
-                ok ! $$Error, "  no error [$$Error]" ;
+                ok ! $$Args, "  no Args [$$Args]" ;
             }
             else
             {
                 ok ! $a, "  $TopType returned false" ;
-                #like $$Error, '/xxx/', "  error" ;
-                ok $$Error, "  error is '$$Error'" ;
+                #like $$Args, '/xxx/', "  Args" ;
+                ok $$Args, "  Args is '$$Args'" ;
             }
         }
     }
@@ -251,12 +251,12 @@ sub run
     foreach my $bit ($CompressClass
                     )
     {
-        my $Error = getErrorRef($bit);
+        my $Args = getArgsRef($bit);
         my $Func = getTopFuncRef($bit);
         my $TopType = getTopFuncName($bit);
         my $TopTypeInverse = getInverse($bit);
         my $FuncInverse = getTopFuncRef($TopTypeInverse);
-        my $ErrorInverse = getErrorRef($TopTypeInverse);
+        my $ArgsInverse = getArgsRef($TopTypeInverse);
 
         title "$TopTypeInverse - corrupt data";
 
@@ -271,19 +271,19 @@ sub run
 
         my $result;
         ok ! $FuncInverse->(\$out => \$result, Transparent => 0), "  $TopTypeInverse ok";
-        ok $$ErrorInverse, "  Got error '$$ErrorInverse'" ;
+        ok $$ArgsInverse, "  Got Args '$$ArgsInverse'" ;
 
         #is $result, $data, "  data ok";
 
         ok ! anyuncompress(\$out => \$result, Transparent => 0), "anyuncompress ok";
-        ok $AnyUncompressError, "  Got error '$AnyUncompressError'" ;
+        ok $AnyUncompressArgs, "  Got Args '$AnyUncompressArgs'" ;
     }
 
 
     foreach my $bit ($CompressClass
                     )
     {
-        my $Error = getErrorRef($bit);
+        my $Args = getArgsRef($bit);
         my $Func = getTopFuncRef($bit);
         my $TopType = getTopFuncName($bit);
         my $TopTypeInverse = getInverse($bit);
@@ -315,7 +315,7 @@ sub run
                     is $keep, $buffer, "  Input buffer not changed" ;
                     my $got = anyUncompress(\$output, $already);
                     $got = undef if ! defined $buffer && $got eq '' ;
-                    ok ! $$Error, "  no error [$$Error]" ;
+                    ok ! $$Args, "  no Args [$$Args]" ;
                     is $got, $buffer, "  Uncompressed matches original";
                 }
 
@@ -445,7 +445,7 @@ sub run
                     writeFile($out_file, $already);
 
                     ok &$Func($in, $out_file, Append => $append), '  Compressed ok'
-                        or diag "error is $$Error" ;
+                        or diag "Args is $$Args" ;
 
                     ok -e $out_file, "  Created output file";
                     my $got = anyUncompress($out_file, $already);
@@ -510,7 +510,7 @@ sub run
                     my $out = $already;
 
                     ok &$Func('-', \$out, Append => $append), '  Compressed ok'
-                        or diag $$Error ;
+                        or diag $$Args ;
 
                     open(STDIN, "<&SAVEIN");
 
@@ -526,13 +526,13 @@ sub run
 
     foreach my $bit ($CompressClass)
     {
-        my $Error = getErrorRef($bit);
+        my $Args = getArgsRef($bit);
         my $Func = getTopFuncRef($bit);
         my $TopType = getTopFuncName($bit);
 
         my $TopTypeInverse = getInverse($bit);
         my $FuncInverse = getTopFuncRef($TopTypeInverse);
-        my $ErrorInverse = getErrorRef($TopTypeInverse);
+        my $ArgsInverse = getArgsRef($TopTypeInverse);
 
         my $lex = LexFile->new( my $file1, my $file2) ;
 
@@ -581,7 +581,7 @@ sub run
 
                 my $output  ;
                 ok &$Func(\@input, \$output, MultiStream => $ms, AutoClose => 0), '  Compressed ok'
-                    or diag $$Error;
+                    or diag $$Args;
 
                 my $got = anyUncompress([ \$output, MultiStream => $ms ]);
 
@@ -645,7 +645,7 @@ sub run
 
                 for (@in) {
                   ok &$Func(\$_ , \$out, Append => 1 ), '  Compressed ok'
-                    or diag $$Error;
+                    or diag $$Args;
                 }
                 #ok &$Func(\@in, \$out, MultiStream => 1 ), '  Compressed ok'
                 substr($out, -179) = '';
@@ -655,7 +655,7 @@ sub run
                 ok $status = &$FuncInverse(\$out => \$got, MultiStream => 0), "  Uncompressed stream 1 ok";
                 is $got, "abcde" x 10 ;
                 ok ! &$FuncInverse(\$out => \$got, MultiStream => 1), "  Didn't uncompress";
-                is $$ErrorInverse, "unexpected end of file", "  Got unexpected eof";
+                is $$ArgsInverse, "unexpected end of file", "  Got unexpected eof";
             }
         }
     }
@@ -663,13 +663,13 @@ sub run
     foreach my $bit ($CompressClass)
     {
 
-        my $Error = getErrorRef($bit);
+        my $Args = getArgsRef($bit);
         my $Func = getTopFuncRef($bit);
         my $TopType = getTopFuncName($bit);
 
         my $TopTypeInverse = getInverse($bit);
         my $FuncInverse = getTopFuncRef($TopTypeInverse);
-        my $ErrorInverse = getErrorRef($TopTypeInverse);
+        my $ArgsInverse = getArgsRef($TopTypeInverse);
 
         title 'Round trip binary data that happens to include \r\n' ;
 
@@ -691,7 +691,7 @@ sub run
                     #'IO::Uncompress::AnyUncompress',
                     )
     {
-        my $Error = getErrorRef($bit);
+        my $Args = getArgsRef($bit);
         my $Func = getTopFuncRef($bit);
         my $TopType = getTopFuncName($bit);
         my $CompressClass = getInverse($bit);
@@ -748,7 +748,7 @@ sub run
 
 #    foreach my $bit ($CompressClass)
 #    {
-#        my $Error = getErrorRef($bit);
+#        my $Args = getArgsRef($bit);
 #        my $Func = getTopFuncRef($bit);
 #        my $TopType = getTopFuncName($bit);
 #
@@ -842,7 +842,7 @@ sub run
 
 #    foreach my $bit ($CompressClass)
 #    {
-#        my $Error = getErrorRef($bit);
+#        my $Args = getArgsRef($bit);
 #        my $Func = getTopFuncRef($bit);
 #        my $TopType = getTopFuncName($bit);
 #
@@ -933,7 +933,7 @@ sub run
     foreach my $bit ($CompressClass
                     )
     {
-        my $Error = getErrorRef($bit);
+        my $Args = getArgsRef($bit);
         my $Func = getTopFuncRef($bit);
         my $TopType = getTopFuncName($bit);
 
@@ -958,7 +958,7 @@ sub run
                 title "$TopType - From FileGlob to FileGlob files [@$files]" ;
 
                 ok &$Func("<$tmpDir1/a*.tmp>" => "<$tmpDir2/a#1.tmp>"), '  Compressed ok'
-                    or diag $$Error ;
+                    or diag $$Args ;
 
                 my @copy = @expected;
                 for my $file (@outFiles)
@@ -974,7 +974,7 @@ sub run
 
                 my @buffer = ('first') ;
                 ok &$Func("<$tmpDir1/a*.tmp>" => \@buffer), '  Compressed ok'
-                    or diag $$Error ;
+                    or diag $$Args ;
 
                 is shift @buffer, 'first';
 
@@ -995,7 +995,7 @@ sub run
                     my $buffer ;
                     ok &$Func("<$tmpDir1/a*.tmp>" => \$buffer,
                                MultiStream => $ms), '  Compressed ok'
-                        or diag $$Error ;
+                        or diag $$Args ;
 
                     #hexDump(\$buffer);
 
@@ -1013,7 +1013,7 @@ sub run
 
                     ok &$Func("<$tmpDir1/a*.tmp>" => $filename,
                               MultiStream => $ms), '  Compressed ok'
-                        or diag $$Error ;
+                        or diag $$Args ;
 
                     #hexDump(\$buffer);
 
@@ -1032,7 +1032,7 @@ sub run
 
                     ok &$Func("<$tmpDir1/a*.tmp>" => $fh,
                               MultiStream => $ms, AutoClose => 1), '  Compressed ok'
-                        or diag $$Error ;
+                        or diag $$Args ;
 
                     #hexDump(\$buffer);
 
@@ -1051,7 +1051,7 @@ sub run
                      'IO::Uncompress::AnyUncompress',
                     )
     {
-        my $Error = getErrorRef($bit);
+        my $Args = getArgsRef($bit);
         my $Func = getTopFuncRef($bit);
         my $TopType = getTopFuncName($bit);
 
@@ -1286,7 +1286,7 @@ sub run
                 $output = $incumbent if $append ;
 
                 ok &$Func('-', \$output, Append => $append, @opts), '  Uncompressed ok'
-                    or diag $$Error ;
+                    or diag $$Args ;
 
                 open(STDIN, "<&SAVEIN");
 
@@ -1351,7 +1351,7 @@ sub run
                 my $output ;
 
                 ok &$Func($stdin, \$output, Transparent => 0, InputLength => length $comp, @opts), '  Uncompressed ok'
-                    or diag $$Error ;
+                    or diag $$Args ;
 
                 my $buff ;
                 is read(STDIN, $buff, $len_appended), $len_appended, "  Length of Appended data ok";
@@ -1370,7 +1370,7 @@ sub run
     {
         # TODO -- Add Append mode tests
 
-        my $Error = getErrorRef($bit);
+        my $Args = getArgsRef($bit);
         my $Func = getTopFuncRef($bit);
         my $TopType = getTopFuncName($bit);
 
@@ -1457,7 +1457,7 @@ sub run
     {
         # TODO -- Add Append mode tests
 
-        my $Error = getErrorRef($bit);
+        my $Args = getArgsRef($bit);
         my $Func = getTopFuncRef($bit);
         my $TopType = getTopFuncName($bit);
 
@@ -1483,7 +1483,7 @@ sub run
             title "$TopType - From FileGlob to FileGlob" ;
 
             ok &$Func("<$tmpDir1/a*.tmp>" => "<$tmpDir2/a#1.tmp>", @opts), '  UnCompressed ok'
-                or diag $$Error ;
+                or diag $$Args ;
 
             my @copy = @expected;
             for my $file (@outFiles)
@@ -1499,7 +1499,7 @@ sub run
 
             my @output = (\'first');
             ok &$Func("<$tmpDir1/a*.tmp>" => \@output, @opts), '  UnCompressed ok'
-                or diag $$Error ;
+                or diag $$Args ;
 
             my @copy = ('first', @expected);
             for my $data (@output)
@@ -1515,7 +1515,7 @@ sub run
 
             my $output ;
             ok &$Func("<$tmpDir1/a*.tmp>" => \$output, @opts), '  UnCompressed ok'
-                or diag $$Error ;
+                or diag $$Args ;
 
             is $output, join('', @expected), "  got expected uncompressed data";
         }
@@ -1526,7 +1526,7 @@ sub run
             my $lex = LexFile->new( my $output );
             ok ! -e $output, "  $output does not exist" ;
             ok &$Func("<$tmpDir1/a*.tmp>" => $output, @opts), '  UnCompressed ok'
-                or diag $$Error ;
+                or diag $$Args ;
 
             ok -e $output, "  $output does exist" ;
             is readFile($output), join('', @expected), "  got expected uncompressed data";
@@ -1538,7 +1538,7 @@ sub run
             my $lex = LexFile->new( my $output );
             my $fh = IO::File->new( ">$output" );
             ok &$Func("<$tmpDir1/a*.tmp>" => $fh, AutoClose => 1, @opts), '  UnCompressed ok'
-                or diag $$Error ;
+                or diag $$Args ;
 
             ok -e $output, "  $output does exist" ;
             is readFile($output), join('', @expected), "  got expected uncompressed data";
@@ -1550,7 +1550,7 @@ sub run
                          # TODO -- add the inflate classes
                         )
     {
-        my $Error = getErrorRef($TopType);
+        my $Args = getArgsRef($TopType);
         my $Func = getTopFuncRef($TopType);
         my $Name = getTopFuncName($TopType);
 
@@ -1585,12 +1585,12 @@ sub run
 #
 #            my $got = anyUncompress(\$Answer);
 #            is $got, $get, "  got expected output" ;
-#            ok ! $$Error,  "  no error"
-#                or diag "Error is $$Error";
+#            ok ! $$Args,  "  no Args"
+#                or diag "Args is $$Args";
 #
 #        }
 
-        title "Array Input Error tests" ;
+        title "Array Input Args tests" ;
 
         my @data = (
                    [ '[]',    "empty array reference"],
@@ -1621,7 +1621,7 @@ sub run
             eval { $a = &$Func($copy, \$Answer) };
             ok ! $a, "  $Name fails";
 
-            is $$Error, $get, "  got error message";
+            is $$Args, $get, "  got Args message";
 
         }
 
@@ -1639,7 +1639,7 @@ sub run
             my $Answer ;
             eval { &$Func($copy, \$Answer) } ;
             like $@, mkErr("^$TopFuncName: input filename is undef or null string"),
-                "  got error message";
+                "  got Args message";
 
         }
     }
@@ -1690,6 +1690,6 @@ sub run
 
 }
 
-# TODO add more error cases
+# TODO add more Args cases
 
 1;

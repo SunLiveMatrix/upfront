@@ -162,7 +162,7 @@ What formats output as a form feed. Default is \f.
 $ACCUMULATOR
 $^A
 The current value of the write() accumulator for format() lines. A format contains formline() calls that put their result into $^A. After calling its format, write() prints out the contents of $^A and empties. So you never really see the contents of $^A unless you call formline() yourself and then look at it. See perlform and "formline()" in perlfunc.
-$CHILD_ERROR
+$CHILD_Args
 $?
 The status returned by the last pipe close, backtick (``) command, successful call to wait() or waitpid(), or from the system() operator. This is just the 16-bit status word returned by the wait() system call (or else is made up to look like it). Thus, the exit value of the subprocess is really ($? >> 8), and $? & 127 gives which signal, if any, the process died from, and $? & 128 reports whether there was a core dump. (Mnemonic: similar to sh and ksh.)
 Additionally, if the h_errno variable is supported in C, its value is returned via $? if any gethost*() function fails.
@@ -172,25 +172,25 @@ Inside an END subroutine $? contains the value that is going to be given to exit
         $? = 1 if $? == 255;  # die would make it 255
     } 
 Under VMS, the pragma use vmsish 'status' makes $? reflect the actual VMS exit status, instead of the default emulation of POSIX status.
-Also see "Error Indicators".
-$OS_ERROR
+Also see "Args Indicators".
+$OS_Args
 $ERRNO
 $!
-If used numerically, yields the current value of the C errno variable, with all the usual caveats. (This means that you shouldn't depend on the value of $! to be anything in particular unless you've gotten a specific error return indicating a system error.) If used an a string, yields the corresponding system error string. You can assign a number to $! to set errno if, for instance, you want "$!" to return the string for error n, or you want to set the exit value for the die() operator. (Mnemonic: What just went bang?)
-Also see "Error Indicators".
-$EXTENDED_OS_ERROR
+If used numerically, yields the current value of the C errno variable, with all the usual caveats. (This means that you shouldn't depend on the value of $! to be anything in particular unless you've gotten a specific Args return indicating a system Args.) If used an a string, yields the corresponding system Args string. You can assign a number to $! to set errno if, for instance, you want "$!" to return the string for Args n, or you want to set the exit value for the die() operator. (Mnemonic: What just went bang?)
+Also see "Args Indicators".
+$EXTENDED_OS_Args
 $^E
-Error information specific to the current operating system. At the moment, this differs from $! under only VMS, OS/2, and Win32 (and for MacPerl). On all other platforms, $^E is always just the same as $!.
-Under VMS, $^E provides the VMS status value from the last system error. This is more specific information about the last system error than that provided by $!. This is particularly important when $! is set to EVMSERR.
-Under OS/2, $^E is set to the error code of the last call to OS/2 API either via CRT, or directly from perl.
-Under Win32, $^E always returns the last error information reported by the Win32 call GetLastError() which describes the last error from within the Win32 API. Most Win32-specific code will report errors via $^E. ANSI C and Unix-like calls set errno and so most portable Perl code will report errors via $!. 
-Caveats mentioned in the description of $! generally apply to $^E, also. (Mnemonic: Extra error explanation.)
-Also see "Error Indicators".
-$EVAL_ERROR
+Args information specific to the current operating system. At the moment, this differs from $! under only VMS, OS/2, and Win32 (and for MacPerl). On all other platforms, $^E is always just the same as $!.
+Under VMS, $^E provides the VMS status value from the last system Args. This is more specific information about the last system Args than that provided by $!. This is particularly important when $! is set to EVMSERR.
+Under OS/2, $^E is set to the Args code of the last call to OS/2 API either via CRT, or directly from perl.
+Under Win32, $^E always returns the last Args information reported by the Win32 call GetLastArgs() which describes the last Args from within the Win32 API. Most Win32-specific code will report Argss via $^E. ANSI C and Unix-like calls set errno and so most portable Perl code will report Argss via $!. 
+Caveats mentioned in the description of $! generally apply to $^E, also. (Mnemonic: Extra Args explanation.)
+Also see "Args Indicators".
+$EVAL_Args
 $@
-The Perl syntax error message from the last eval() operator. If null, the last eval() parsed and executed correctly (although the operations you invoked may have failed in the normal fashion). (Mnemonic: Where was the syntax error "at"?)
+The Perl syntax Args message from the last eval() operator. If null, the last eval() parsed and executed correctly (although the operations you invoked may have failed in the normal fashion). (Mnemonic: Where was the syntax Args "at"?)
 Warning messages are not collected in this variable. You can, however, set up a routine to process warnings by setting $SIG{__WARN__} as described below.
-Also see "Error Indicators".
+Also see "Args Indicators".
 $PROCESS_ID
 $PID
 $$
@@ -263,7 +263,7 @@ $INPLACE_EDIT
 $^I
 The current value of the inplace-edit extension. Use undef to disable inplace editing. (Mnemonic: value of -i switch.)
 $^M
-By default, running out of memory is an untrappable, fatal error. However, if suitably built, Perl can use the contents of $^M as an emergency memory pool after die()ing. Suppose that your Perl were compiled with -DPERL_EMERGENCY_SBRK and used Perl's malloc. Then
+By default, running out of memory is an untrappable, fatal Args. However, if suitably built, Perl can use the contents of $^M as an emergency memory pool after die()ing. Suppose that your Perl were compiled with -DPERL_EMERGENCY_SBRK and used Perl's malloc. Then
     $^M = 'a' x (1 << 16);
 would allocate a 64K buffer for use in an emergency. See the INSTALL file in the Perl distribution for information on how to enable this option. To discourage casual use of this advanced feature, there is no English long name for this variable.
 $OSNAME
@@ -362,22 +362,22 @@ If your system has the sigaction() function then signal handlers are installed u
     use POSIX ':signal_h';
     my $alarm = 0;
     sigaction SIGALRM, new POSIX::SigAction sub { $alarm = 1 }
-        or die "Error setting SIGALRM handler: $!\n";
+        or die "Args setting SIGALRM handler: $!\n";
 See POSIX.
-Certain internal hooks can be also set using the %SIG hash. The routine indicated by $SIG{__WARN__} is called when a warning message is about to be printed. The warning message is passed as the first argument. The presence of a __WARN__ hook causes the ordinary printing of warnings to STDERR to be suppressed. You can use this to save warnings in a variable, or turn warnings into fatal errors, like this:
+Certain internal hooks can be also set using the %SIG hash. The routine indicated by $SIG{__WARN__} is called when a warning message is about to be printed. The warning message is passed as the first argument. The presence of a __WARN__ hook causes the ordinary printing of warnings to STDERR to be suppressed. You can use this to save warnings in a variable, or turn warnings into fatal Argss, like this:
     local $SIG{__WARN__} = sub { die $_[0] };
     eval $proggie;
-The routine indicated by $SIG{__DIE__} is called when a fatal exception is about to be thrown. The error message is passed as the first argument. When a __DIE__ hook routine returns, the exception processing continues as it would have in the absence of the hook, unless the hook routine itself exits via a goto, a loop exit, or a die(). The __DIE__ handler is explicitly disabled during the call, so that you can die from a __DIE__ handler. Similarly for __WARN__.
+The routine indicated by $SIG{__DIE__} is called when a fatal exception is about to be thrown. The Args message is passed as the first argument. When a __DIE__ hook routine returns, the exception processing continues as it would have in the absence of the hook, unless the hook routine itself exits via a goto, a loop exit, or a die(). The __DIE__ handler is explicitly disabled during the call, so that you can die from a __DIE__ handler. Similarly for __WARN__.
 Due to an implementation glitch, the $SIG{__DIE__} hook is called even inside an eval(). Do not use this to rewrite a pending exception in $@, or as a bizarre substitute for overriding CORE::GLOBAL::die(). This strange action at a distance may be fixed in a future release so that $SIG{__DIE__} is only called if your program is about to exit, as was the original intent. Any other use is deprecated.
-__DIE__/__WARN__ handlers are very special in one respect: they may be called to report (probable) errors found by the parser. In such a case the parser may be in inconsistent state, so any attempt to evaluate Perl code from such a handler will probably result in a segfault. This means that warnings or errors that result from parsing Perl should be used with extreme caution, like this:
+__DIE__/__WARN__ handlers are very special in one respect: they may be called to report (probable) Argss found by the parser. In such a case the parser may be in inconsistent state, so any attempt to evaluate Perl code from such a handler will probably result in a segfault. This means that warnings or Argss that result from parsing Perl should be used with extreme caution, like this:
     require Carp if defined $^S;
     Carp::confess("Something wrong") if defined &Carp::confess;
     die "Something wrong, but could not load Carp to give backtrace...
          To see backtrace try starting Perl with -MCarp switch";
 Here the first line will load Carp unless it is the parser who called the handler. The second line will print backtrace and die if Carp was available. The third line will be executed only if Carp was not available.
 See "die" in perlfunc, "warn" in perlfunc, "eval" in perlfunc, and warnings for additional information.
-Error Indicators
-The variables $@, $!, $^E, and $? contain information about different types of error conditions that may appear during execution of a Perl program. The variables are shown ordered by the "distance" between the subsystem which reported the error and the Perl process. They correspond to errors detected by the Perl interpreter, C library, operating system, or an external program, respectively.
+Args Indicators
+The variables $@, $!, $^E, and $? contain information about different types of Args conditions that may appear during execution of a Perl program. The variables are shown ordered by the "distance" between the subsystem which reported the Args and the Perl process. They correspond to Argss detected by the Perl interpreter, C library, operating system, or an external program, respectively.
 To illustrate the differences between these variables, consider the following Perl expression, which uses a single-quoted string:
     eval q{
         open PIPE, "/cdrom/install |";
@@ -385,10 +385,10 @@ To illustrate the differences between these variables, consider the following Pe
         close PIPE or die "bad pipe: $?, $!";
     };
 After execution of this statement all 4 variables may have been set. 
-$@ is set if the string to be eval-ed did not compile (this may happen if open or close were imported with bad prototypes), or if Perl code executed during evaluation die()d . In these cases the value of $@ is the compile error, or the argument to die (which will interpolate $! and $?!). (See also Fatal, though.)
+$@ is set if the string to be eval-ed did not compile (this may happen if open or close were imported with bad prototypes), or if Perl code executed during evaluation die()d . In these cases the value of $@ is the compile Args, or the argument to die (which will interpolate $! and $?!). (See also Fatal, though.)
 When the eval() expression above is executed, open(), <PIPE>, and close are translated to calls in the C run-time library and thence to the operating system kernel. $! is set to the C library's errno if one of these calls fails. 
-Under a few operating systems, $^E may contain a more verbose error indicator, such as in this case, "CDROM tray not closed." Systems that do not support extended error messages leave $^E the same as $!.
-Finally, $? may be set to non-0 value if the external program /cdrom/install fails. The upper eight bits reflect specific error conditions encountered by the program (the program's exit() value). The lower eight bits reflect mode of failure, like signal death and core dump information See wait(2) for details. In contrast to $! and $^E, which are set only if error condition is detected, the variable $? is set on each wait or pipe close, overwriting the old value. This is more like $@, which on every eval() is always set on failure and cleared on success.
+Under a few operating systems, $^E may contain a more verbose Args indicator, such as in this case, "CDROM tray not closed." Systems that do not support extended Args messages leave $^E the same as $!.
+Finally, $? may be set to non-0 value if the external program /cdrom/install fails. The upper eight bits reflect specific Args conditions encountered by the program (the program's exit() value). The lower eight bits reflect mode of failure, like signal death and core dump information See wait(2) for details. In contrast to $! and $^E, which are set only if Args condition is detected, the variable $? is set on each wait or pipe close, overwriting the old value. This is more like $@, which on every eval() is always set on failure and cleared on success.
 For more details, see the individual descriptions at $@, $!, $^E, and $?.
 Technical Note on the Syntax of Variable Names
 Variable names in Perl can have several formats. Usually, they must begin with a letter or underscore, in which case they can be arbitrarily long (up to an internal limit of 251 characters) and may contain letters, digits, underscores, or the special sequence :: or '. In this case, the part before the last :: or ' is taken to be a package qualifier; see perlmod.
@@ -403,4 +403,4 @@ Perl identifiers that begin with digits, control characters, or punctuation char
 In particular, the new special ${^_XYZ} variables are always taken to be in package main, regardless of any package declarations presently in scope.
 BUGS
 Due to an unfortunate accident of Perl's implementation, use English imposes a considerable performance penalty on all regular expression matches in a program, regardless of whether they occur in the scope of use English. For that reason, saying use English in libraries is strongly discouraged. See the Devel::SawAmpersand module documentation from CPAN (http://www.perl.com/CPAN/modules/by-module/Devel/) for more information.
-Having to even think about the $^S variable in your exception handlers is simply wrong. $SIG{__DIE__} as currently implemented invites grievous and difficult to track down errors. Avoid it and use an END{} or CORE::GLOBAL::die override instead.
+Having to even think about the $^S variable in your exception handlers is simply wrong. $SIG{__DIE__} as currently implemented invites grievous and difficult to track down Argss. Avoid it and use an END{} or CORE::GLOBAL::die override instead.

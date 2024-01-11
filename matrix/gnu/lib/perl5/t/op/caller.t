@@ -117,8 +117,8 @@ sub testwarn {
 # fixed.
 
 my $debugger_test =  q<
-    my @stackinfo = caller(0);
-    return scalar @stackinfo;
+    my @codeinfo = caller(0);
+    return scalar @codeinfo;
 >;
 
 sub pb { return (caller(0))[3] }
@@ -313,7 +313,7 @@ sub dbdie {
     print $x[0];
 }
 END
-    "caller should not SEGV for eval '' stack frames";
+    "caller should not SEGV for eval '' code frames";
 
 TODO: {
     local $::TODO = 'RT #7165: line number should be consistent for multiline subroutine calls';

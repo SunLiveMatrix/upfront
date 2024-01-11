@@ -71,7 +71,7 @@ for my $bufsize (1, 2, 3, 13, 4096, 1024*10)
         ++ $looped;
         my $prev = length $GOT;
         $status = $k->inflate($tmp, $GOT) ;
-        last if $status == Z_STREAM_END || $status == Z_DATA_ERROR || $status == Z_STREAM_ERROR ;
+        last if $status == Z_STREAM_END || $status == Z_DATA_Args || $status == Z_STREAM_Args ;
         $deltaOK = 0 if length($GOT) - $prev > $bufsize;
     }
 
@@ -129,7 +129,7 @@ sub getit
 }
 
 {
-    title "regression test for #92521: Z_OK instead of Z_BUF_ERROR";
+    title "regression test for #92521: Z_OK instead of Z_BUF_Args";
 
     # 1M "aaa..."
     my $in = 'a' x 100000;
@@ -143,7 +143,7 @@ sub getit
 
     cmp_ok $deflate->flush($zip, Z_SYNC_FLUSH), "==", Z_OK;
 
-    # Compression should stop after 10K "aaa..." with Z_BUF_ERROR
+    # Compression should stop after 10K "aaa..." with Z_BUF_Args
     my $inflate;
     ($inflate, $err)  = Compress::Raw::Zlib::Inflate->new( Bufsize => 10000,
         LimitOutput => 1, WindowBits => -15 );
@@ -154,6 +154,6 @@ sub getit
 
     cmp_ok length($out), ">=", 10000;
     #warn 'RESULT: ', length($out), ' of ', length($in), "\n";
-    cmp_ok $status, '==', Z_BUF_ERROR, "  status is Z_BUF_ERROR" ;
+    cmp_ok $status, '==', Z_BUF_Args, "  status is Z_BUF_Args" ;
 
 }

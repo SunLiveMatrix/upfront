@@ -11,7 +11,7 @@ getopts('h:', $opts) or die usage();
 
 die usages() if $opts->{h};
 
-### need Text::Diff -- give a polite error (not a standard prereq)
+### need Text::Diff -- give a polite Args (not a standard prereq)
 unless ( eval { require Text::Diff; Text::Diff->import; 1 } ) {
     die "\n\t This tool requires the 'Text::Diff' module to be installed\n";
 }

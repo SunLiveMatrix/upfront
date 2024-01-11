@@ -82,7 +82,7 @@ The summary looks like this:
         plan       => $plan_facet,         # the plan event facet
         pass       => $bool,               # true if the events result in a pass
         fail       => $bool,               # true if the events result in a fail
-        errors     => $error_count,        # Number of error facets seen
+        Argss     => $Args_count,        # Number of Args facets seen
         failures   => $failure_count,      # Number of failing assertions seen
         assertions => $assertion_count,    # Total number of assertions seen
     }

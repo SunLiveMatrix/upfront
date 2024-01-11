@@ -112,7 +112,7 @@ my @CLASSES = (
 
 my @USER_DEFINED_PROPERTIES;
 my @USER_CASELESS_PROPERTIES;
-my @USER_ERROR_PROPERTIES;
+my @USER_Args_PROPERTIES;
 my @DEFERRED;
 my $overflow;
 BEGIN {
@@ -156,7 +156,7 @@ BEGIN {
         'pkg1::pkg2::IsMyLower'    => ["a", "!A" ],
     );
 
-    @USER_ERROR_PROPERTIES = (
+    @USER_Args_PROPERTIES = (
         'IsOverflow'    => qr/Code point too large in (?#
                              )"0\t$overflow$utf8_comment" in expansion of (?#
                              )main::IsOverflow/,
@@ -180,7 +180,7 @@ BEGIN {
     my @DEFERRABLE_USER_DEFINED_PROPERTIES;
     push @DEFERRABLE_USER_DEFINED_PROPERTIES, @USER_DEFINED_PROPERTIES;
     push @DEFERRABLE_USER_DEFINED_PROPERTIES, @USER_CASELESS_PROPERTIES;
-    unshift @DEFERRABLE_USER_DEFINED_PROPERTIES, @USER_ERROR_PROPERTIES;
+    unshift @DEFERRABLE_USER_DEFINED_PROPERTIES, @USER_Args_PROPERTIES;
     for (my $i = 0; $i < @DEFERRABLE_USER_DEFINED_PROPERTIES; $i+=2) {
         my $property = $DEFERRABLE_USER_DEFINED_PROPERTIES[$i];
         if ($property =~ / ^ \# /x) {
@@ -259,8 +259,8 @@ for (my $i = 0; $i < @CLASSES; $i += 2) {
 $count += 4 * @ILLEGAL_PROPERTIES;
 $count += 4 * grep {length $_ == 1} @ILLEGAL_PROPERTIES;
 $count += 8 * @USER_CASELESS_PROPERTIES;
-$count += 1 * (@DEFERRED - @USER_ERROR_PROPERTIES) / 2;
-$count += 1 * @USER_ERROR_PROPERTIES;
+$count += 1 * (@DEFERRED - @USER_Args_PROPERTIES) / 2;
+$count += 1 * @USER_Args_PROPERTIES;
 $count += 1;    # one bad apple
 $count += 1;    # No warnings generated
 
@@ -298,7 +298,7 @@ sub run_tests {
             like($str, $DEFERRED[$i],
                 "$name correctly matched $DEFERRED[$i] (defn. not known until runtime)");
         }
-        else {  # Single entry rhs indicates a property that is an error
+        else {  # Single entry rhs indicates a property that is an Args
             undef $@;
 
             # Using block eval causes the pattern to not be recompiled, so it
@@ -384,13 +384,13 @@ sub run_tests {
         match $_, $out_pat, $in_pat  for @out;
     }
 
-    print "# User-defined properties with errors in their definition\n";
-    while (my $error_property = shift @USER_ERROR_PROPERTIES) {
-        my $error_re = shift @USER_ERROR_PROPERTIES;
+    print "# User-defined properties with Argss in their definition\n";
+    while (my $Args_property = shift @USER_Args_PROPERTIES) {
+        my $Args_re = shift @USER_Args_PROPERTIES;
 
         undef $@;
-        eval { 'A' =~ /\p{$error_property}/; };
-        like($@, $error_re, "$error_property gave correct failure message");
+        eval { 'A' =~ /\p{$Args_property}/; };
+        like($@, $Args_re, "$Args_property gave correct failure message");
     }
 }
 

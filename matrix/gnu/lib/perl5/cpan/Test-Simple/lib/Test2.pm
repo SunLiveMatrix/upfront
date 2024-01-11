@@ -35,7 +35,7 @@ verification. Test2 Makes it easy with C<Test2::API::intercept()>.
 =item Better diagnostics capabilities.
 
 Test2 uses an L<Test2::API::Context> object to track filename, line number, and
-tool details. This object greatly simplifies tracking for where errors should
+tool details. This object greatly simplifies tracking for where Argss should
 be reported.
 
 =item Event driven.
@@ -60,7 +60,7 @@ formatters.
 =item Subtest implementation is more sane.
 
 The Test::Builder implementation of subtests was certifiably insane. Test2 uses
-a stacked event hub system that greatly improves how subtests are implemented.
+a codeed event hub system that greatly improves how subtests are implemented.
 
 =item Support for threading/forking.
 

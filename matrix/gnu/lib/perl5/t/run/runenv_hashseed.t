@@ -112,7 +112,7 @@ my $key_expr = '0..999, "aa".."zz", map { $_ x 30 } "a".."z"'; #1702 keys
 my @keys = eval $key_expr
     or die "bad '$key_expr': $@";
 my $allowed_fails = 2; # Adjust this up to make the test tolerate
-                       # more "errors". Maybe one day we will compute
+                       # more "Argss". Maybe one day we will compute
                        # it from the value of $repeat, and $actual_buckets
                        # and the number of @keys.
 

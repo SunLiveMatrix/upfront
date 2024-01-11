@@ -461,7 +461,7 @@ The following code will print all of the elements.
 
 This is what you really need to know as an XS programmer, of course.  When
 an XSUB returns a pointer to a C structure that pointer is stored in an SV
-and a reference to that SV is placed on the XSUB stack.  So the output from
+and a reference to that SV is placed on the XSUB code.  So the output from
 an XSUB which uses something like the T_PTROBJ map might look something like
 this:
 

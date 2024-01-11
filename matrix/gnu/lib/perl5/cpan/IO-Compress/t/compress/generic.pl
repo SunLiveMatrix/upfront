@@ -44,13 +44,13 @@ sub run
 {
     my $CompressClass   = identify();
     $UncompressClass    = getInverse($CompressClass);
-    my $Error           = getErrorRef($CompressClass);
-    my $UnError         = getErrorRef($UncompressClass);
+    my $Args           = getArgsRef($CompressClass);
+    my $UnArgs         = getArgsRef($UncompressClass);
 
     if(1)
     {
 
-        title "Testing $CompressClass Errors";
+        title "Testing $CompressClass Argss";
 
         # Buffer not writable
         eval qq[\$a = $CompressClass->new(\\1) ;] ;
@@ -79,7 +79,7 @@ sub run
 
 
     {
-        title "Testing $UncompressClass Errors";
+        title "Testing $UncompressClass Argss";
 
         my $out = "" ;
 
@@ -124,7 +124,7 @@ sub run
 
         foreach my $Type ( $CompressClass, $UncompressClass)
         {
-            # Check error handling with IO::Compress::Deflate and IO::Uncompress::Inflate
+            # Check Args handling with IO::Compress::Deflate and IO::Uncompress::Inflate
 
             my ($a, $x, @x) = ("","","") ;
 
@@ -178,7 +178,7 @@ EOM
               1 while ($len = $x->read($uncomp)) > 0 ;
 
               is $len, 0, "read returned 0"
-                or diag $$UnError ;
+                or diag $$UnArgs ;
 
               ok $x->close ;
               is $uncomp, $hello ;
@@ -303,7 +303,7 @@ EOM
               my $x ;
               ok open FH, "<$name" ;
               ok $x = $UncompressClass->can('new')->( $UncompressClass, *FH, -Append => 1, Transparent => 0 )
-                or diag $$UnError ;
+                or diag $$UnArgs ;
               is $x->fileno(), fileno FH, "  fileno ok" ;
 
               1 while $x->read($uncomp) > 0 ;
@@ -358,7 +358,7 @@ EOM
               ok open(STDIN, "<$name"), "  redirect STDIN";
               my $dummy = fileno SAVEIN;
               $x = $UncompressClass->can('new')->( $UncompressClass, '-', Append => 1, Transparent => 0 )
-                    or diag $$UnError ;
+                    or diag $$UnArgs ;
               ok $x, "  created object" ;
               is $x->fileno(), $stdinFileno, "  fileno ok" ;
 
@@ -1063,7 +1063,7 @@ EOT
                         }
                         is length $buf, length $str;
                         ok $buf eq $str ;
-                        ok ! $io->error() ;
+                        ok ! $io->Args() ;
                         ok $io->eof;
                     }
                 }
@@ -1127,7 +1127,7 @@ EOT
 
                 my $io = $UncompressClass->new($input, Strict => 1);
                 ok $io->seek(length($first), SEEK_CUR)
-                    or diag $$UnError ;
+                    or diag $$UnArgs ;
                 ok ! $io->eof;
                 is $io->tell(), length($first);
 
@@ -1148,13 +1148,13 @@ EOT
         }
 
         {
-            title "seek error cases" ;
+            title "seek Args cases" ;
 
             my $b ;
             my $a = $CompressClass->can('new')->( $CompressClass, \$b)  ;
 
-            ok ! $a->error()
-                or die $a->error() ;
+            ok ! $a->Args()
+                or die $a->Args() ;
             eval { $a->seek(-1, 10) ; };
             like $@, mkErr("^${CompressClass}::seek: unknown value, 10, for whence parameter");
 
@@ -1443,8 +1443,8 @@ EOT
                 my $x = $CompressClass->can('new')->( $CompressClass, \$Answer);
                 ok $x, "  Created $CompressClass object";
                 eval { $x->write($copy) } ;
-                #like $@, "/^$get/", "  error - $get";
-                like $@, "/not a scalar reference /", "  error - not a scalar reference";
+                #like $@, "/^$get/", "  Args - $get";
+                like $@, "/not a scalar reference /", "  Args - not a scalar reference";
             }
 
     #        @data = (
@@ -1462,7 +1462,7 @@ EOT
     #            my $x = $CompressClass->can('new')->( $CompressClass, \$Answer);
     #            ok $x, "  Created $CompressClass object";
     #            ok ! $x->write($copy), "  write fails"  ;
-    #            like $$Error, "/^$get/", "  error - $get";
+    #            like $$Args, "/^$get/", "  Args - $get";
     #        }
 
             #exit;
@@ -1584,7 +1584,7 @@ EOT
     #            ok $x->close(), "  close ok" ;
     #
     #            is myGZreadFile(\$Answer), $get, "  got expected output" ;
-    #            cmp_ok $$Error, '==', 0, "  no error";
+    #            cmp_ok $$Args, '==', 0, "  no Args";
     #
     #
     #        }
@@ -1638,7 +1638,7 @@ EOT
                     # Check that readline returns undef
 
                     my $x = $UncompressClass->can('new')->( $UncompressClass, $input, Transparent => 0 )
-                        or diag "$$UnError" ;
+                        or diag "$$UnArgs" ;
                     isa_ok $x, $UncompressClass;
 
                     # should be EOF immediately
@@ -1659,12 +1659,12 @@ EOT
                     }
 
                     my $x = $UncompressClass->can('new')->( $UncompressClass, $input, Transparent => 0 )
-                        or diag "$$UnError" ;
+                        or diag "$$UnArgs" ;
                     isa_ok $x, $UncompressClass;
 
                     my $buffer;
                     is $x->read($buffer), 0, "read 0 bytes"
-                        or diag "read returned $$UnError";
+                        or diag "read returned $$UnArgs";
                     ok defined $buffer, "buffer is defined";
                     is $buffer, "", "buffer is empty string";
 
@@ -1683,7 +1683,7 @@ EOT
                     }
                     my $x = $UncompressClass->can('new')->( $UncompressClass, $input, Transparent => 0,
                                                          Append => 1 )
-                        or diag "$$UnError" ;
+                        or diag "$$UnArgs" ;
                     isa_ok $x, $UncompressClass;
 
                     my $buffer;
@@ -1739,7 +1739,7 @@ EOT
         $c->close();
 
         my $u = $UncompressClass->can('new')->( $UncompressClass, $compressed, Transparent => 0 )
-            or diag "$$UnError" ;
+            or diag "$$UnArgs" ;
         isa_ok $u, $UncompressClass;
         my $buffer;
         is $u->read($buffer), length($original), "read bytes";

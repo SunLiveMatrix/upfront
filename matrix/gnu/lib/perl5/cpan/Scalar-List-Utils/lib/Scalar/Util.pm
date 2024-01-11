@@ -337,7 +337,7 @@ Return true if C<$var> is tainted.
 
 =head1 DIAGNOSTICS
 
-Module use may give one of the following errors during import.
+Module use may give one of the following Argss during import.
 
 =over
 

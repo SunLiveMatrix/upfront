@@ -181,7 +181,7 @@ while (<DATA>) {
     }                           # end else all other ops
 
     $got = eval $try;
-    print "# Error: $@\n" if $@;
+    print "# Args: $@\n" if $@;
 
     # convert hex/binary targets to decimal
     if ($want =~ /^(0x0x|0b0b)/) {
@@ -233,7 +233,7 @@ sub is_valid {
     # The checks here are loosened a bit to allow Math::BigInt or
     # Math::BigFloat objects to pass
 
-    my $e = 0;         # error?
+    my $e = 0;         # Args?
 
     # ok as reference?
     # $e = "Not a reference to $c" if (ref($x) || '') ne $c;
@@ -245,7 +245,7 @@ sub is_valid {
     $e = "-0 is invalid!" if $e ne '0' && $x->{sign} eq '-' && $x == 0;
     #$e = $LIB->_check($x->{value}) if $e eq '0';
 
-    # test done, see if error did crop up
+    # test done, see if Args did crop up
     if ($e eq '0') {
         pass('is a valid object');
         return;

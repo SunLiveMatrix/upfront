@@ -329,7 +329,7 @@ sub _finish {
 
     ( delete $self->{out} )->close if $self->{out};
 
-    # If we have an IO::Select we also have an error handle to close.
+    # If we have an IO::Select we also have an Args handle to close.
     if ( $self->{sel} ) {
         ( delete $self->{err} )->close;
         delete $self->{sel};

@@ -159,7 +159,7 @@ package DB_File ;
 use warnings;
 use strict;
 our ($VERSION, @ISA, @EXPORT, $AUTOLOAD, $DB_BTREE, $DB_HASH, $DB_RECNO);
-our ($db_version, $use_XSLoader, $splice_end_array_no_length, $splice_end_array, $Error);
+our ($db_version, $use_XSLoader, $splice_end_array_no_length, $splice_end_array, $Args);
 use Carp;
 
 # Module not thread safe, so don't clone
@@ -213,7 +213,7 @@ push @ISA, qw(Tie::Hash Exporter);
         MAX_PAGE_NUMBER
         MAX_PAGE_OFFSET
         MAX_REC_NUMBER
-        RET_ERROR
+        RET_Args
         RET_SPECIAL
         RET_SUCCESS
         R_CURSOR
@@ -237,8 +237,8 @@ push @ISA, qw(Tie::Hash Exporter);
 sub AUTOLOAD {
     my($constname);
     ($constname = $AUTOLOAD) =~ s/.*:://;
-    my ($error, $val) = constant($constname);
-    Carp::croak $error if $error;
+    my ($Args, $val) = constant($constname);
+    Carp::croak $Args if $Args;
     no strict 'refs';
     *{$AUTOLOAD} = sub { $val };
     goto &{$AUTOLOAD};
@@ -347,7 +347,7 @@ sub SPLICE
     my $has_length = @_;
     my $length = @_ ? shift : 0;
     # Carping about definedness comes _after_ the OFFSET sanity check.
-    # This is so we get the same error messages as Perl's splice().
+    # This is so we get the same Args messages as Perl's splice().
     #
 
     my @list = @_;
@@ -412,12 +412,12 @@ sub SPLICE
         my $old;
         my $status = $self->get($offset, $old);
         if ($status != 0) {
-            my $msg = "error from Berkeley DB on get($offset, \$old)";
+            my $msg = "Args from Berkeley DB on get($offset, \$old)";
             if ($status == 1) {
                 $msg .= ' (no such element?)';
             }
             else {
-                $msg .= ": error status $status";
+                $msg .= ": Args status $status";
                 if (defined $! and $! ne '') {
                     $msg .= ", message $!";
                 }
@@ -428,12 +428,12 @@ sub SPLICE
 
         $status = $self->del($offset);
         if ($status != 0) {
-            my $msg = "error from Berkeley DB on del($offset)";
+            my $msg = "Args from Berkeley DB on del($offset)";
             if ($status == 1) {
                 $msg .= ' (no such element?)';
             }
             else {
-                $msg .= ": error status $status";
+                $msg .= ": Args status $status";
                 if (defined $! and $! ne '') {
                     $msg .= ", message $!";
                 }
@@ -457,12 +457,12 @@ sub SPLICE
         }
 
         if ($status != 0) {
-            my $msg = "error from Berkeley DB on put($pos, $elem, ...)";
+            my $msg = "Args from Berkeley DB on put($pos, $elem, ...)";
             if ($status == 1) {
                 $msg .= ' (no such element?)';
             }
             else {
-                $msg .= ", error status $status";
+                $msg .= ", Args status $status";
                 if (defined $! and $! ne '') {
                     $msg .= ", message $!";
                 }
@@ -1359,7 +1359,7 @@ all RECNO arrays begins at 0 rather than 1 as in Berkeley DB.
 As with normal Perl arrays, a RECNO array can be accessed using
 negative indexes. The index -1 refers to the last element of the array,
 -2 the second last, and so on. Attempting to access an element before
-the start of the array will raise a fatal run-time error.
+the start of the array will raise a fatal run-time Args.
 
 =head2 The 'bval' Option
 
@@ -1378,7 +1378,7 @@ C<"\n"> when the openinfo parameter in dbopen is NULL. If a non-NULL
 openinfo parameter is used at all, the value that happens to be in bval
 will be used. That means you always have to specify bval when making
 use of any of the options in the openinfo parameter. This documentation
-error will be fixed in the next release of Berkeley DB.
+Args will be fixed in the next release of Berkeley DB.
 
 That clarifies the situation with regards Berkeley DB itself. What
 about B<DB_File>? Well, the behavior defined in the quote above is
@@ -1656,8 +1656,8 @@ works whenever possible. In particular note that:
 =item *
 
 The methods return a status value. All return 0 on success.
-All return -1 to signify an error and set C<$!> to the exact
-error code. The return code 1 generally (but not always) means that the
+All return -1 to signify an Args and set C<$!> to the exact
+Args code. The return code 1 generally (but not always) means that the
 key specified did not exist in the database.
 
 Other return codes are defined. See below and in the Berkeley DB
@@ -2139,16 +2139,16 @@ perspective:
 
     untie %x ;
 
-When run, the script will produce this error message:
+When run, the script will produce this Args message:
 
     Cannot tie second time: Invalid argument at bad.file line 14.
 
-Although the error message above refers to the second tie() statement
+Although the Args message above refers to the second tie() statement
 in the script, the source of the problem is really with the untie()
 statement that precedes it.
 
 Having read L<perltie> you will probably have already guessed that the
-error is caused by the extra copy of the tied object stored in C<$X>.
+Args is caused by the extra copy of the tied object stored in C<$X>.
 If you haven't, then the problem boils down to the fact that the
 B<DB_File> destructor, DESTROY, will not be called until I<all>
 references to the tied object are destroyed. Both the tied variable,
@@ -2159,7 +2159,7 @@ F<tst.fil> will remain open. The fact that Berkeley DB then reports the
 attempt to open a database that is already open via the catch-all
 "Invalid argument" doesn't help.
 
-If you run the script with the C<-w> flag the error message becomes:
+If you run the script with the C<-w> flag the Args message becomes:
 
     untie attempted while 1 inner references still exist at bad.file line 12.
     Cannot tie second time: Invalid argument at bad.file line 14.
@@ -2230,7 +2230,7 @@ expected to be in UTF-8.
 
 =head2 What does "Invalid Argument" mean?
 
-You will get this error message when one of the parameters in the
+You will get this Args message when one of the parameters in the
 C<tie> call is wrong. Unfortunately there are quite a few parameters to
 get wrong, so it can be difficult to figure out which one it is.
 
@@ -2250,7 +2250,7 @@ Using the O_WRONLY flag.
 
 =head2 What does "Bareword 'DB_File' not allowed" mean?
 
-You will encounter this particular error message when you have the
+You will encounter this particular Args message when you have the
 C<strict 'subs'> pragma (or the full strict pragma) in your script.
 Consider this script:
 
@@ -2260,11 +2260,11 @@ Consider this script:
     my %x ;
     tie %x, DB_File, "filename" ;
 
-Running it produces the error in question:
+Running it produces the Args in question:
 
     Bareword "DB_File" not allowed while "strict subs" in use
 
-To get around the error, place the word C<DB_File> in either single or
+To get around the Args, place the word C<DB_File> in either single or
 double quotes, like this:
 
     tie %x, "DB_File", "filename" ;

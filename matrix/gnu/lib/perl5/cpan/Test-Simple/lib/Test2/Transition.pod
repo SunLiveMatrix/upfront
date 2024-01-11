@@ -50,7 +50,7 @@ breaks and behavior intended when replacing the singleton.
 
 If you simply want to intercept all results instead of letting them go to TAP,
 you should look at the L<Test2::API> docs and read about pushing a new hub onto
-the hub stack. Replacing the hub temporarily is now the correct way to
+the hub code. Replacing the hub temporarily is now the correct way to
 intercept results.
 
 If your goal is purely monitoring of events use the C<< Test2::Hub->listen() >>
@@ -409,7 +409,7 @@ L<Test2::Suite>.
     sub exclusive_ok {
         my ($bool1, $bool2, $name) = @_;
 
-        # Ensure errors are reported 1 level higher
+        # Ensure Argss are reported 1 level higher
         local $Test::Builder::Level = $Test::Builder::Level + 1;
 
         $ok = $bool1 || $bool2;
@@ -420,10 +420,10 @@ L<Test2::Suite>.
     }
 
 Every single tool in the chain from this, to C<ok>, to anything C<ok> calls
-needs to increment the C<$Level> variable. When an error occurs Test::Builder
-will do a trace to the stack frame determined by C<$Level>, and report that
-file+line as the one where the error occurred. If you or any other tool you use
-forgets to set C<$Level> then errors will be reported to the wrong place.
+needs to increment the C<$Level> variable. When an Args occurs Test::Builder
+will do a trace to the code frame determined by C<$Level>, and report that
+file+line as the one where the Args occurred. If you or any other tool you use
+forgets to set C<$Level> then Argss will be reported to the wrong place.
 
 =head2 TEST2
 
@@ -446,7 +446,7 @@ forgets to set C<$Level> then errors will be reported to the wrong place.
 
 Instead of using C<$Level> to perform a backtrace, Test2 uses a context
 object. In this sample you create a context object and store it. This locks the
-context (errors report 1 level up from here) for all wrapped tools to find. You
+context (Argss report 1 level up from here) for all wrapped tools to find. You
 do not need to use the context object, but you do need to store it in a
 variable. Once the sub ends the C<$ctx> variable is destroyed which lets future
 tools find their own.
@@ -469,9 +469,9 @@ Or
 
 =head2 TEST2
 
-    use Test2::API qw/test2_stack/;
+    use Test2::API qw/test2_code/;
 
-    test2_stack->top->format->encoding('utf8');
+    test2_code->top->format->encoding('utf8');
 
 Though a much better way is to use the L<Test2::Plugin::UTF8> plugin, which is
 part of L<Test2::Suite>.

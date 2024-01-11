@@ -8,7 +8,7 @@ my $CLASS = 'Test2::EventFacet::Trace';
 like(
     exception { $CLASS->new() },
     qr/The 'frame' attribute is required/,
-    "got error"
+    "got Args"
 );
 
 my $one = $CLASS->new(frame => ['Foo::Bar', 'foo.t', 5, 'Foo::Bar::foo']);

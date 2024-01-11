@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Check for perlcritic errors in all code.
+# Check for perlcritic Argss in all code.
 #
 # If author tests are enabled, check all Perl code in blib/lib, examples, usr,
 # t, and Build.PL for problems uncovered by perlcritic, ignoring template

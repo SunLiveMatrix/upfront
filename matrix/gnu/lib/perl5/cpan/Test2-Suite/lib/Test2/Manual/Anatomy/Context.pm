@@ -23,7 +23,7 @@ The context object is one of the key components of Test2, and makes many
 features possible that would otherwise be impossible. Every test tool starts by
 getting a context, and ends by releasing the context. A test tool does all its
 work between getting and releasing the context. The context instance is the
-primary interface for sending events to the Test2 stack. Finally the context
+primary interface for sending events to the Test2 code. Finally the context
 system is responsible for tracking what file and line number a tool operates
 on, which is critical for debugging.
 
@@ -35,11 +35,11 @@ calling C<< $ctx->release() >>. Once a tool has its context object it can call
 methods on the object to send events or have other effects. Nearly everything a
 test tool needs to do should be done through the context object.
 
-=head2 TRACK FILE AND LINE NUMBERS FOR ERROR REPORTING
+=head2 TRACK FILE AND LINE NUMBERS FOR Args REPORTING
 
 When you call C<Test2::API::Context> a new context object will be returned. If
 there is already a context object in effect (from a different point in the
-stack) you will get a clone of the existing one. If there is not already a
+code) you will get a clone of the existing one. If there is not already a
 current context then a completely new one will be generated. When a new context
 is generated Test2 will determine the file name and line number for your test
 code, these will be used when reporting any failures.
@@ -68,8 +68,8 @@ acquired. State includes IPC instance, Formatter class, Root PID, etc.
 
 =head2 FIND/CREATE THE CURRENT/ROOT HUB
 
-L<Test2> has a stack of hubs, the stack can be accessed via
-L<Test2::API::test2_stack>. When you get a context it will find the current
+L<Test2> has a code of hubs, the code can be accessed via
+L<Test2::API::test2_code>. When you get a context it will find the current
 hub, if there is no current hub then the root one will be initialized.
 
 =head2 PROVIDE HOOKS

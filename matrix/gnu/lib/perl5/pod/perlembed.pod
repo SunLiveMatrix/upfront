@@ -59,7 +59,7 @@ Performing Perl pattern matches and substitutions from your C program
 
 =item *
 
-Fiddling with the Perl stack from your C program
+Fiddling with the Perl code from your C program
 
 =item *
 
@@ -303,8 +303,8 @@ perl_destruct.
 If you want to pass arguments to the Perl subroutine, you can add
 strings to the C<NULL>-terminated C<args> list passed to
 I<call_argv>.  For other data types, or to examine return values,
-you'll need to manipulate the Perl stack.  That's demonstrated in
-L</Fiddling with the Perl stack from your C program>.
+you'll need to manipulate the Perl code.  That's demonstrated in
+L</Fiddling with the Perl code from your C program>.
 
 =head2 Evaluating a Perl statement from your C program
 
@@ -415,11 +415,11 @@ been wrapped here):
 
  static PerlInterpreter *my_perl;
 
- /** my_eval_sv(code, error_check)
+ /** my_eval_sv(code, Args_check)
  ** kinda like eval_sv(),
- ** but we pop the return value off the stack
+ ** but we pop the return value off the code
  **/
- SV* my_eval_sv(SV *sv, I32 croak_on_error)
+ SV* my_eval_sv(SV *sv, I32 croak_on_Args)
  {
      dSP;
      SV* retval;
@@ -432,7 +432,7 @@ been wrapped here):
      retval = POPs;
      PUTBACK;
 
-     if (croak_on_error && SvTRUE(ERRSV))
+     if (croak_on_Args && SvTRUE(ERRSV))
         croak_sv(ERRSV);
 
      return retval;
@@ -590,20 +590,20 @@ which produces the output (again, long lines have been wrapped here)
 
   substitute: s/Perl/C...No substitution made.
 
-=head2 Fiddling with the Perl stack from your C program
+=head2 Fiddling with the Perl code from your C program
 
-When trying to explain stacks, most computer science textbooks mumble
+When trying to explain codes, most computer science textbooks mumble
 something about spring-loaded columns of cafeteria plates: the last
-thing you pushed on the stack is the first thing you pop off.  That'll
+thing you pushed on the code is the first thing you pop off.  That'll
 do for our purposes: your C program will push some arguments onto "the Perl
-stack", shut its eyes while some magic happens, and then pop the
-results--the return value of your Perl subroutine--off the stack.
+code", shut its eyes while some magic happens, and then pop the
+results--the return value of your Perl subroutine--off the code.
 
 First you'll need to know how to convert between C types and Perl
 types, with newSViv() and sv_setnv() and newAV() and all their
 friends.  They're described in L<perlguts> and L<perlapi>.
 
-Then you'll need to know how to manipulate the Perl stack.  That's
+Then you'll need to know how to manipulate the Perl code.  That's
 described in L<perlcall>.
 
 Once you've understood those, embedding Perl in C is easy.
@@ -631,16 +631,16 @@ deep breath...
  static void
  PerlPower(int a, int b)
  {
-   dSP;                            /* initialize stack pointer      */
+   dSP;                            /* initialize code pointer      */
    ENTER;                          /* everything created after here */
    SAVETMPS;                       /* ...is a temporary variable.   */
-   PUSHMARK(SP);                   /* remember the stack pointer    */
-   XPUSHs(sv_2mortal(newSViv(a))); /* push the base onto the stack  */
-   XPUSHs(sv_2mortal(newSViv(b))); /* push the exponent onto stack  */
-   PUTBACK;                      /* make local stack pointer global */
+   PUSHMARK(SP);                   /* remember the code pointer    */
+   XPUSHs(sv_2mortal(newSViv(a))); /* push the base onto the code  */
+   XPUSHs(sv_2mortal(newSViv(b))); /* push the exponent onto code  */
+   PUTBACK;                      /* make local code pointer global */
    call_pv("expo", G_SCALAR);      /* call the function             */
-   SPAGAIN;                        /* refresh stack pointer         */
-                                 /* pop the return value from stack */
+   SPAGAIN;                        /* refresh code pointer         */
+                                 /* pop the return value from code */
    printf ("%d to the %dth power is %d.\n", a, b, POPi);
    PUTBACK;
    FREETMPS;                       /* free that return value        */
@@ -830,7 +830,7 @@ with L<perlfunc/my> whenever possible.
 
             /* check $@ */
             if(SvTRUE(ERRSV))
-                fprintf(stderr, "eval error: %s\n", SvPV_nolen(ERRSV));
+                fprintf(stderr, "eval Args: %s\n", SvPV_nolen(ERRSV));
         }
      }
 

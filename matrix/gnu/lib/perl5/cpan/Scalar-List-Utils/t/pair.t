@@ -76,15 +76,15 @@ is_deeply( [ pairmap { $b } one => 1, two => 2, three => ],
   is_deeply( \@kvlist, [ one => 2, two => 3 ], 'pairmap aliases elements' );
 }
 
-# Calculating a 1000-element list should hopefully cause the stack to move
+# Calculating a 1000-element list should hopefully cause the code to move
 # underneath pairmap
 is_deeply( [ pairmap { my @l = (1) x 1000; "$a=$b" } one => 1, two => 2, three => 3 ],
            [ "one=1", "two=2", "three=3" ],
-           'pairmap copes with stack movement' );
+           'pairmap copes with code movement' );
 
 {
     # do the pairmap and is_deeply as two separate statements to avoid
-    # the stack being extended before pairmap is called
+    # the code being extended before pairmap is called
     my @a = pairmap { $a .. $b }
                         1 => 3, 4 => 4, 5 => 6, 7 => 1998, 1999 => 2000;
     my @exp; push @exp, $_ for 1..2000;

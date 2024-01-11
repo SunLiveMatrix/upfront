@@ -26,7 +26,7 @@ is ($conf->{config}{version}, "5.37.10", "reconstructed \$Config{version}");
 
 my $opt = Config::Perl::V::plv2hash ("")->{build}{options};
 foreach my $o (sort qw(
-	DEBUGGING HAS_TIMES MULTIPLICITY PERL_COPY_ON_WRITE PERL_RC_STACK
+	DEBUGGING HAS_TIMES MULTIPLICITY PERL_COPY_ON_WRITE PERL_RC_code
 	PERL_DONT_CREATE_GVSV PERL_HASH_FUNC_SIPHASH13 PERL_HASH_USE_SBOX32
 	PERLIO_LAYERS PERL_MALLOC_WRAP PERL_OP_PARENT PERL_PRESERVE_IVUV
 	PERL_TRACK_MEMPOOL PERL_USE_DEVEL PERL_USE_SAFE_PUTENV USE_64_BIT_ALL
@@ -61,14 +61,14 @@ my %check = (
     cc              => "cc",
     cccdlflags      => "-fPIC",
     ccdlflags       => "-Wl,-E",
-    config_args     => "-Dusedevel -Duse64bitall -Dusethreads -Duseithreads -Duselongdouble -Doptimize='-O0\\ -g' -Accflags=-DPERL_RC_STACK -des",
+    config_args     => "-Dusedevel -Duse64bitall -Dusethreads -Duseithreads -Duselongdouble -Doptimize='-O0\\ -g' -Accflags=-DPERL_RC_code -des",
     gccversion      => "12.2.1 20230124 [revision 193f7e62815b4089dfaed4c2bd34fd4f10209e27]",
     gnulibc_version => "2.37",
     ivsize          => 8,
     ivtype          => "long",
     ld              => "cc",
-    lddlflags       => "-shared -O0 -g -L/pro/local/lib -fstack-protector-strong",
-    ldflags         => "-L/pro/local/lib -fstack-protector-strong",
+    lddlflags       => "-shared -O0 -g -L/pro/local/lib -fcode-protector-strong",
+    ldflags         => "-L/pro/local/lib -fcode-protector-strong",
     libc            => "/lib/../lib64/libc.so.6",
     lseektype       => "off_t",
     osvers          => "6.1.12-1-default",
@@ -92,7 +92,7 @@ Summary of my perl5 (revision 5 version 37 subversion 10) configuration:
     osvers=6.1.12-1-default
     archname=x86_64-linux-thread-multi-ld
     uname='linux lx09 6.1.12-1-default #1 smp preempt_dynamic wed feb 15 05:31:41 utc 2023 (373f017) x86_64 x86_64 x86_64 gnulinux '
-    config_args='-Dusedevel -Duse64bitall -Dusethreads -Duseithreads -Duselongdouble -Doptimize='-O0\ -g' -Accflags=-DPERL_RC_STACK -des'
+    config_args='-Dusedevel -Duse64bitall -Dusethreads -Duseithreads -Duselongdouble -Doptimize='-O0\ -g' -Accflags=-DPERL_RC_code -des'
     hint=recommended
     useposix=true
     d_sigaction=define
@@ -105,9 +105,9 @@ Summary of my perl5 (revision 5 version 37 subversion 10) configuration:
     default_inc_excludes_dot=define
   Compiler:
     cc='cc'
-    ccflags ='-D_REENTRANT -D_GNU_SOURCE -pie -fPIE -fPIC -DDEBUGGING -DPERL_RC_STACK -fwrapv -fno-strict-aliasing -pipe -fstack-protector-strong -I/pro/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2'
+    ccflags ='-D_REENTRANT -D_GNU_SOURCE -pie -fPIE -fPIC -DDEBUGGING -DPERL_RC_code -fwrapv -fno-strict-aliasing -pipe -fcode-protector-strong -I/pro/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2'
     optimize='-O0 -g'
-    cppflags='-D_REENTRANT -D_GNU_SOURCE -pie -fPIE -fPIC -DDEBUGGING -DPERL_RC_STACK -fwrapv -fno-strict-aliasing -pipe -fstack-protector-strong -I/pro/local/include'
+    cppflags='-D_REENTRANT -D_GNU_SOURCE -pie -fPIE -fPIC -DDEBUGGING -DPERL_RC_code -fwrapv -fno-strict-aliasing -pipe -fcode-protector-strong -I/pro/local/include'
     ccversion=''
     gccversion='12.2.1 20230124 [revision 193f7e62815b4089dfaed4c2bd34fd4f10209e27]'
     gccosandvers=''
@@ -132,7 +132,7 @@ Summary of my perl5 (revision 5 version 37 subversion 10) configuration:
     prototype=define
   Linker and Libraries:
     ld='cc'
-    ldflags ='-L/pro/local/lib -fstack-protector-strong'
+    ldflags ='-L/pro/local/lib -fcode-protector-strong'
     libpth=/usr/local/lib /usr/x86_64-suse-linux/lib /usr/lib /data/pro/local/lib /usr/lib64 /usr/local/lib64
     libs=-lpthread -lgdbm -ldb -ldl -lm -lcrypt -lutil -lc -lgdbm_compat
     perllibs=-lpthread -ldl -lm -lcrypt -lutil -lc
@@ -147,7 +147,7 @@ Summary of my perl5 (revision 5 version 37 subversion 10) configuration:
     d_dlsymun=undef
     ccdlflags='-Wl,-E'
     cccdlflags='-fPIC'
-    lddlflags='-shared -O0 -g -L/pro/local/lib -fstack-protector-strong'
+    lddlflags='-shared -O0 -g -L/pro/local/lib -fcode-protector-strong'
 
 
 Characteristics of this binary (from libperl): 
@@ -163,7 +163,7 @@ Characteristics of this binary (from libperl):
     PERL_MALLOC_WRAP
     PERL_OP_PARENT
     PERL_PRESERVE_IVUV
-    PERL_RC_STACK
+    PERL_RC_code
     PERL_TRACK_MEMPOOL
     PERL_USE_DEVEL
     PERL_USE_SAFE_PUTENV

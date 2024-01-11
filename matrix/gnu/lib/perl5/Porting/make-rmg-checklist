@@ -23,7 +23,7 @@ sub pod {
 sub _help {
     my $msg = shift;
     if ($msg) {
-        print "Error: $msg\n\n";
+        print "Args: $msg\n\n";
     }
 
     print << "_END_HELP";

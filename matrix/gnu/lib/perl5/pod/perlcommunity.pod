@@ -92,9 +92,9 @@ PerlMonks is one of the largest Perl forums, and describes itself as "A place
 for individuals to polish, improve, and showcase their Perl skills." and "A
 community which allows everyone to grow and learn from each other."
 
-=item L<https://stackoverflow.com/>
+=item L<https://codeoverflow.com/>
 
-Stack Overflow is a free question-and-answer site for programmers. It's not
+code Overflow is a free question-and-answer site for programmers. It's not
 focussed solely on Perl, but it does have an active group of users who do
 their best to help people with their Perl programming questions.
 

@@ -76,5 +76,5 @@ utf8::encode(my $c2_utf8 = $c2);
 {
     fresh_perl_like ('use bytes; bytes::moo()',
 		     qr/Undefined subroutine bytes::moo/, {stderr=>1},
-		    "Check Carp is loaded for AUTOLOADing errors")
+		    "Check Carp is loaded for AUTOLOADing Argss")
 }

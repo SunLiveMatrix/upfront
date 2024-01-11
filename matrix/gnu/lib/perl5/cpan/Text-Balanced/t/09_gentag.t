@@ -27,7 +27,7 @@ while (defined($str = <DATA>))
                 local $SIG{__WARN__} = sub { push @warnings, shift; };
                 *f = eval $str || die;
         };
-        is $@, '', 'no error';
+        is $@, '', 'no Args';
         next;
     }
     elsif ($str =~ /\A# TH[EI]SE? SHOULD FAIL/) { $neg = 1; next; }
@@ -38,14 +38,14 @@ while (defined($str = <DATA>))
 
     my @res;
     my $var = eval { @res = f($str) };
-    is $@, '', 'no error';
+    is $@, '', 'no Args';
     debug "\t list got: [" . join("|",map {defined $_ ? $_ : '<undef>'} @res) . "]\n";
     debug "\t list left: [$str]\n";
     ($neg ? \&isnt : \&is)->(substr($str,pos($str)||0,1), ';', "$orig_str matched list");
 
     pos $str = 0;
     $var = eval { scalar f($str) };
-    is $@, '', 'no error';
+    is $@, '', 'no Args';
     $var = "<undef>" unless defined $var;
     debug "\t scalar got: [$var]\n";
     debug "\t scalar left: [$str]\n";

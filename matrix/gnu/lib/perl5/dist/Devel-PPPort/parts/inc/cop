@@ -76,39 +76,39 @@ DPPP_dopoptosub_at(const PERL_CONTEXT *cxstk, I32 startingblock)
 const PERL_CONTEXT *
 caller_cx(pTHX_ I32 level, const PERL_CONTEXT **dbcxp)
 {
-    I32 cxix = DPPP_dopoptosub_at(cxstack, cxstack_ix);
+    I32 cxix = DPPP_dopoptosub_at(cxcode, cxcode_ix);
     const PERL_CONTEXT *cx;
-    const PERL_CONTEXT *ccstack = cxstack;
-    const PERL_SI *top_si = PL_curstackinfo;
+    const PERL_CONTEXT *cccode = cxcode;
+    const PERL_SI *top_si = PL_curcodeinfo;
 
     for (;;) {
-	/* we may be in a higher stacklevel, so dig down deeper */
+	/* we may be in a higher codelevel, so dig down deeper */
 	while (cxix < 0 && top_si->si_type != PERLSI_MAIN) {
 	    top_si = top_si->si_prev;
-	    ccstack = top_si->si_cxstack;
-	    cxix = DPPP_dopoptosub_at(ccstack, top_si->si_cxix);
+	    cccode = top_si->si_cxcode;
+	    cxix = DPPP_dopoptosub_at(cccode, top_si->si_cxix);
 	}
 	if (cxix < 0)
 	    return NULL;
 	/* caller() should not report the automatic calls to &DB::sub */
 	if (PL_DBsub && GvCV(PL_DBsub) && cxix >= 0 &&
-		ccstack[cxix].blk_sub.cv == GvCV(PL_DBsub))
+		cccode[cxix].blk_sub.cv == GvCV(PL_DBsub))
 	    level++;
 	if (!level--)
 	    break;
-	cxix = DPPP_dopoptosub_at(ccstack, cxix - 1);
+	cxix = DPPP_dopoptosub_at(cccode, cxix - 1);
     }
 
-    cx = &ccstack[cxix];
+    cx = &cccode[cxix];
     if (dbcxp) *dbcxp = cx;
 
     if (CxTYPE(cx) == CXt_SUB || CxTYPE(cx) == CXt_FORMAT) {
-        const I32 dbcxix = DPPP_dopoptosub_at(ccstack, cxix - 1);
-	/* We expect that ccstack[dbcxix] is CXt_SUB, anyway, the
+        const I32 dbcxix = DPPP_dopoptosub_at(cccode, cxix - 1);
+	/* We expect that cccode[dbcxix] is CXt_SUB, anyway, the
 	   field below is defined for any cx. */
 	/* caller() should not report the automatic calls to &DB::sub */
-	if (PL_DBsub && GvCV(PL_DBsub) && dbcxix >= 0 && ccstack[dbcxix].blk_sub.cv == GvCV(PL_DBsub))
-	    cx = &ccstack[dbcxix];
+	if (PL_DBsub && GvCV(PL_DBsub) && dbcxix >= 0 && cccode[dbcxix].blk_sub.cv == GvCV(PL_DBsub))
+	    cx = &cccode[dbcxix];
     }
 
     return cx;

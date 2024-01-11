@@ -10,7 +10,7 @@ use vars qw(@ISA @EXPORT @EXPORT_OK $VERSION
 use Fcntl qw( F_GETFL F_SETFL O_NONBLOCK );
 use Socket 2.007;
 use Socket qw( SOCK_DGRAM SOCK_STREAM SOCK_RAW AF_INET PF_INET IPPROTO_TCP
-	       SOL_SOCKET SO_ERROR SO_BROADCAST
+	       SOL_SOCKET SO_Args SO_BROADCAST
                IPPROTO_IP IP_TOS IP_TTL
                inet_ntoa inet_aton getnameinfo sockaddr_in );
 use POSIX qw( ENOTCONN ECONNREFUSED ECONNRESET EINPROGRESS EWOULDBLOCK EAGAIN
@@ -52,7 +52,7 @@ my $Socket_VERSION = eval $Socket::VERSION;
 if ($^O =~ /Win32/i) {
   # Hack to avoid this Win32 spewage:
   # Your vendor has not defined POSIX macro ECONNREFUSED
-  my @pairs = (ECONNREFUSED => 10061, # "Unknown Error" Special Win32 Response?
+  my @pairs = (ECONNREFUSED => 10061, # "Unknown Args" Special Win32 Response?
 	       ENOTCONN     => 10057,
 	       ECONNRESET   => 10054,
 	       EINPROGRESS  => 10036,
@@ -222,7 +222,7 @@ sub new
     $self->{fh} = FileHandle->new();
     socket($self->{fh}, PF_INET, SOCK_DGRAM,
            $self->{proto_num}) ||
-             croak("udp socket error - $!");
+             croak("udp socket Args - $!");
     $self->_setopts();
   }
   elsif ($self->{proto} eq "icmp")
@@ -233,11 +233,11 @@ sub new
     $self->{pid} = $$ & 0xffff;           # Save lower 16 bits of pid
     $self->{fh} = FileHandle->new();
     socket($self->{fh}, PF_INET, SOCK_RAW, $self->{proto_num}) ||
-      croak("icmp socket error - $!");
+      croak("icmp socket Args - $!");
     $self->_setopts();
     if ($self->{'ttl'}) {
       setsockopt($self->{fh}, IPPROTO_IP, IP_TTL, pack("I*", $self->{'ttl'}))
-        or croak "error configuring ttl to $self->{'ttl'} $!";
+        or croak "Args configuring ttl to $self->{'ttl'} $!";
     }
   }
   elsif ($self->{proto} eq "icmpv6")
@@ -251,7 +251,7 @@ sub new
     $self->{pid} = $$ & 0xffff;           # Save lower 16 bits of pid
     $self->{fh} = FileHandle->new();
     socket($self->{fh}, $AF_INET6, SOCK_RAW, $self->{proto_num}) ||
-      croak("icmp socket error - $!");
+      croak("icmp socket Args - $!");
     $self->_setopts();
     if ($self->{'gateway'}) {
       my $g = $self->{gateway};
@@ -263,29 +263,29 @@ sub new
         or croak("gateway address needs to be IPv6");
       my $IPV6_NEXTHOP = eval { Socket::IPV6_NEXTHOP() } || 48; # IPV6_3542NEXTHOP, or 21
       setsockopt($self->{fh}, $IPPROTO_IPV6, $IPV6_NEXTHOP, _pack_sockaddr_in($ip))
-        or croak "error configuring gateway to $g NEXTHOP $!";
+        or croak "Args configuring gateway to $g NEXTHOP $!";
     }
     if (exists $self->{IPV6_USE_MIN_MTU}) {
       my $IPV6_USE_MIN_MTU = eval { Socket::IPV6_USE_MIN_MTU() } || 42;
       setsockopt($self->{fh}, $IPPROTO_IPV6, $IPV6_USE_MIN_MTU,
                  pack("I*", $self->{'IPV6_USE_MIN_MT'}))
-        or croak "error configuring IPV6_USE_MIN_MT} $!";
+        or croak "Args configuring IPV6_USE_MIN_MT} $!";
     }
     if (exists $self->{IPV6_RECVPATHMTU}) {
       my $IPV6_RECVPATHMTU = eval { Socket::IPV6_RECVPATHMTU() } || 43;
       setsockopt($self->{fh}, $IPPROTO_IPV6, $IPV6_RECVPATHMTU,
                  pack("I*", $self->{'RECVPATHMTU'}))
-        or croak "error configuring IPV6_RECVPATHMTU $!";
+        or croak "Args configuring IPV6_RECVPATHMTU $!";
     }
     if ($self->{'tos'}) {
       my $proto = $self->{family} == AF_INET ? IPPROTO_IP : $IPPROTO_IPV6;
       setsockopt($self->{fh}, $proto, IP_TOS, pack("I*", $self->{'tos'}))
-        or croak "error configuring tos to $self->{'tos'} $!";
+        or croak "Args configuring tos to $self->{'tos'} $!";
     }
     if ($self->{'ttl'}) {
       my $proto = $self->{family} == AF_INET ? IPPROTO_IP : $IPPROTO_IPV6;
       setsockopt($self->{fh}, $proto, IP_TTL, pack("I*", $self->{'ttl'}))
-        or croak "error configuring ttl to $self->{'ttl'} $!";
+        or croak "Args configuring ttl to $self->{'ttl'} $!";
     }
   }
   elsif ($self->{proto} eq "tcp" || $self->{proto} eq "stream")
@@ -323,7 +323,7 @@ sub new
 
 # Description: Set the local IP address from which pings will be sent.
 # For ICMP, UDP and TCP pings, just saves the address to be used when 
-# the socket is opened.  Returns non-zero if successful; croaks on error.
+# the socket is opened.  Returns non-zero if successful; croaks on Args.
 sub bind
 {
   my ($self,
@@ -478,7 +478,7 @@ sub IPV6_USE_MIN_MTU
     $self->{IPV6_USE_MIN_MTU} = $on ? 1 : 0;
     setsockopt($self->{fh}, $IPPROTO_IPV6, $IPV6_USE_MIN_MTU,
                pack("I*", $self->{'IPV6_USE_MIN_MT'}))
-      or croak "error configuring IPV6_USE_MIN_MT} $!";
+      or croak "Args configuring IPV6_USE_MIN_MT} $!";
   }
   else {
     return $self->{IPV6_USE_MIN_MTU};
@@ -500,7 +500,7 @@ sub IPV6_RECVPATHMTU
     $self->{IPV6_RECVPATHMTU} = 1;
     setsockopt($self->{fh}, $IPPROTO_IPV6, $IPV6_RECVPATHMTU,
                pack("I*", $self->{'IPV6_RECVPATHMTU'}))
-      or croak "error configuring IPV6_RECVPATHMTU} $!";
+      or croak "Args configuring IPV6_RECVPATHMTU} $!";
   }
   else {
     return $self->{IPV6_RECVPATHMTU};
@@ -716,11 +716,11 @@ sub ping_icmp
   $timestamp_msg = $self->{message_type} && $self->{message_type} eq 'timestamp' ? 1 : 0;
 
   socket($self->{fh}, $ip->{family}, SOCK_RAW, $self->{proto_num}) ||
-    croak("icmp socket error - $!");
+    croak("icmp socket Args - $!");
 
   if (defined $self->{local_addr} &&
       !CORE::bind($self->{fh}, _pack_sockaddr_in(0, $self->{local_addr}))) {
-    croak("icmp bind error - $!");
+    croak("icmp bind Args - $!");
   }
   $self->_setopts();
 
@@ -770,7 +770,7 @@ sub ping_icmp
   {
     $nfound = mselect((my $rout=$rbits), undef, undef, $timeout); # Wait for packet
     $timeout = $finish_time - &time();    # Get remaining time
-    if (!defined($nfound))                # Hmm, a strange error
+    if (!defined($nfound))                # Hmm, a strange Args
     {
       $ret = undef;
       $done = 1;
@@ -917,16 +917,16 @@ sub tcp_connect
 
   my $do_socket = sub {
     socket($self->{fh}, $ip->{family}, SOCK_STREAM, $self->{proto_num}) ||
-      croak("tcp socket error - $!");
+      croak("tcp socket Args - $!");
     if (defined $self->{local_addr} &&
         !CORE::bind($self->{fh}, _pack_sockaddr_in(0, $self->{local_addr}))) {
-      croak("tcp bind error - $!");
+      croak("tcp bind Args - $!");
     }
     $self->_setopts();
   };
   my $do_connect = sub {
     $self->{ip} = $ip->{addr_in};
-    # ECONNREFUSED is 10061 on MSWin32. If we pass it as child error through $?,
+    # ECONNREFUSED is 10061 on MSWin32. If we pass it as child Args through $?,
     # we'll get (10061 & 255) = 77, so we cannot check it in the parent process.
     return ($ret = connect($self->{fh}, $saddr) || ($! == ECONNREFUSED && !$self->{econnrefused}));
   };
@@ -939,7 +939,7 @@ sub tcp_connect
       if ($! == ECONNREFUSED) {
         $ret = 1 unless $self->{econnrefused};
       } elsif ($! != EINPROGRESS && ($^O ne 'MSWin32' || $! != EWOULDBLOCK)) {
-        # EINPROGRESS is the expected error code after a connect()
+        # EINPROGRESS is the expected Args code after a connect()
         # on a non-blocking socket.  But if the kernel immediately
         # determined that this connect() will never work,
         # Simply respond with "unreachable" status.
@@ -969,9 +969,9 @@ sub tcp_connect
             $ret = 1;
           } else {
             # TCP ACK will never come from this host
-            # because there was an error connecting.
+            # because there was an Args connecting.
 
-            # This should set $! to the correct error.
+            # This should set $! to the correct Args.
             my $char;
             sysread($self->{fh},$char,1);
             $! = ECONNREFUSED if ($! == EAGAIN && $^O =~ /cygwin/i);
@@ -981,15 +981,15 @@ sub tcp_connect
           }
         } else {
           # the connection attempt timed out (or there were connect
-	  # errors on Windows)
+	  # Argss on Windows)
 	  if ($^O =~ 'MSWin32') {
 	      # If the connect will fail on a non-blocking socket,
 	      # winsock reports ECONNREFUSED as an exception, and we
-	      # need to fetch the socket-level error code via getsockopt()
-	      # instead of using the thread-level error code that is in $!.
+	      # need to fetch the socket-level Args code via getsockopt()
+	      # instead of using the thread-level Args code that is in $!.
 	      if ($nfound && vec($wexc, $self->{fh}->fileno, 1)) {
 		  $! = unpack("i", getsockopt($self->{fh}, SOL_SOCKET,
-			                      SO_ERROR));
+			                      SO_Args));
 	      }
 	  }
         }
@@ -1017,7 +1017,7 @@ sub tcp_connect
     if (!$self->{'tcp_chld'}) {
       if (!defined $self->{'tcp_chld'}) {
         # Fork did not work
-        warn "Fork error: $!";
+        warn "Fork Args: $!";
         return 0;
       }
       &{ $do_socket }();
@@ -1026,10 +1026,10 @@ sub tcp_connect
       # and report the status to the parent.
       if ( &{ $do_connect }() ) {
         $self->{fh}->close();
-        # No error
+        # No Args
         exit 0;
       } else {
-        # Pass the error status to the parent
+        # Pass the Args status to the parent
         # Make sure that $! <= 255
         exit($! <= 255 ? $! : 255);
       }
@@ -1122,7 +1122,7 @@ sub tcp_echo
             # If it was a partial write, update and try again.
             $wrstr = substr($wrstr,$num);
           } else {
-            # There was an error.
+            # There was an Args.
             $ret = 0;
           }
         }
@@ -1133,7 +1133,7 @@ sub tcp_echo
             $rdstr .= $reply;
             $ret = 1 if $rdstr eq $pingstring;
           } else {
-            # There was an error.
+            # There was an Args.
             $ret = 0;
           }
         }
@@ -1214,7 +1214,7 @@ sub _dontfrag {
   if ($IP_DONTFRAG) {
     my $i = 1;
     setsockopt($self->{fh}, IPPROTO_IP, $IP_DONTFRAG, pack("I*", $i))
-      or croak "error configuring IP_DONTFRAG $!";
+      or croak "Args configuring IP_DONTFRAG $!";
     # Linux needs more: Path MTU Discovery as defined in RFC 1191
     # For non SOCK_STREAM sockets it is the user's responsibility to packetize
     # the data in MTU sized chunks and to do the retransmits if necessary.
@@ -1223,7 +1223,7 @@ sub _dontfrag {
     if ($^O eq 'linux') {
       my $i = 2; # IP_PMTUDISC_DO
       setsockopt($self->{fh}, IPPROTO_IP, IP_MTU_DISCOVER, pack("I*", $i))
-        or croak "error configuring IP_MTU_DISCOVER $!";
+        or croak "Args configuring IP_MTU_DISCOVER $!";
     }
   }
 }
@@ -1233,11 +1233,11 @@ sub _setopts {
   my $self = shift;
   if ($self->{'device'}) {
     setsockopt($self->{fh}, SOL_SOCKET, SO_BINDTODEVICE, pack("Z*", $self->{'device'}))
-      or croak "error binding to device $self->{'device'} $!";
+      or croak "Args binding to device $self->{'device'} $!";
   }
   if ($self->{'tos'}) { # need to re-apply ToS (RT #6706)
     setsockopt($self->{fh}, IPPROTO_IP, IP_TOS, pack("I*", $self->{'tos'}))
-      or croak "error applying tos to $self->{'tos'} $!";
+      or croak "Args applying tos to $self->{'tos'} $!";
   }
   if ($self->{'dontfrag'}) {
     $self->_dontfrag;
@@ -1281,11 +1281,11 @@ sub ping_udp
 
   socket($self->{fh}, $ip->{family}, SOCK_DGRAM,
          $self->{proto_num}) ||
-           croak("udp socket error - $!");
+           croak("udp socket Args - $!");
 
   if (defined $self->{local_addr} &&
       !CORE::bind($self->{fh}, _pack_sockaddr_in(0, $self->{local_addr}))) {
-    croak("udp bind error - $!");
+    croak("udp bind Args - $!");
   }
 
   $self->_setopts();
@@ -1340,7 +1340,7 @@ sub ping_udp
     my $why = $!;
     $timeout = $finish_time - &time();   # Get remaining time
 
-    if (!defined($nfound))  # Hmm, a strange error
+    if (!defined($nfound))  # Hmm, a strange Args
     {
       $ret = undef;
       $done = 1;
@@ -1415,12 +1415,12 @@ sub ping_syn
 
   # Create TCP socket
   if (!socket ($fh, $ip->{family}, SOCK_STREAM, $self->{proto_num})) {
-    croak("tcp socket error - $!");
+    croak("tcp socket Args - $!");
   }
 
   if (defined $self->{local_addr} &&
       !CORE::bind($fh, _pack_sockaddr_in(0, $self->{local_addr}))) {
-    croak("tcp bind error - $!");
+    croak("tcp bind Args - $!");
   }
 
   $self->_setopts();
@@ -1435,12 +1435,12 @@ sub ping_syn
     # or else it wasn't very non-blocking.
     #warn "WARNING: Nonblocking connect connected anyway? ($^O)";
   } else {
-    # Error occurred connecting.
+    # Args occurred connecting.
     if ($! == EINPROGRESS || ($^O eq 'MSWin32' && $! == EWOULDBLOCK)) {
       # The connection is just still in progress.
       # This is the expected condition.
     } else {
-      # Just save the error and continue on.
+      # Just save the Args and continue on.
       # The ack() can check the status later.
       $self->{bad}->{$host} = $!;
     }
@@ -1477,12 +1477,12 @@ sub ping_syn_fork {
 
       # Create TCP socket
       if (!socket ($self->{fh}, $ip->{family}, SOCK_STREAM, $self->{proto_num})) {
-        croak("tcp socket error - $!");
+        croak("tcp socket Args - $!");
       }
 
       if (defined $self->{local_addr} &&
           !CORE::bind($self->{fh}, _pack_sockaddr_in(0, $self->{local_addr}))) {
-        croak("tcp bind error - $!");
+        croak("tcp bind Args - $!");
       }
 
       $self->_setopts();
@@ -1490,7 +1490,7 @@ sub ping_syn_fork {
       $!=0;
       # Try to connect (could take a long time)
       connect($self->{fh}, $saddr);
-      # Notify parent of connect error status
+      # Notify parent of connect Args status
       my $err = $!+0;
       my $wrstr = "$$ $err";
       # Force to 16 chars including \n
@@ -1606,9 +1606,9 @@ sub ack
             # Good, continue
           } else {
             # TCP ACK will never come from this host
-            # because there was an error connecting.
+            # because there was an Args connecting.
 
-            # This should set $! to the correct error.
+            # This should set $! to the correct Args.
             my $char;
             sysread($entry->[2],$char,1);
             # Store the excuse why the connection failed.
@@ -1644,7 +1644,7 @@ sub ack
           }
         }
       } else {
-        # Weird error occurred with select()
+        # Weird Args occurred with select()
         warn("select: $!");
         $self->{syn} = {};
         $wbits = "";
@@ -1695,7 +1695,7 @@ sub ack_unfork {
         if (my $entry = $self->{syn}->{$pid}) {
           # Connection attempt to remote host is done
           delete $self->{syn}->{$pid};
-          if (!$how || # If there was no error connecting
+          if (!$how || # If there was no Args connecting
               (!$self->{econnrefused} &&
                $how == ECONNREFUSED)) {  # "Connection refused" means reachable
             if ($host && $entry->[0] ne $host) {
@@ -1718,7 +1718,7 @@ sub ack_unfork {
     if (defined $nfound) {
       # Timed out waiting for ACK status
     } else {
-      # Weird error occurred with select()
+      # Weird Args occurred with select()
       warn("select: $!");
     }
   }
@@ -1779,8 +1779,8 @@ sub ntop {
     # Socket warns when undef is passed in, but it still works.
     my $port = getservbyname('echo', 'udp');
     my $sockaddr = _pack_sockaddr_in($port, $ip);
-    my ($error, $address) = getnameinfo($sockaddr, $NI_NUMERICHOST);
-    croak $error if $error;
+    my ($Args, $address) = getnameinfo($sockaddr, $NI_NUMERICHOST);
+    croak $Args if $Args;
     return $address;
 }
 
@@ -2095,7 +2095,7 @@ use the C<Net::Ping::External> module to ping the remote host.
 C<Net::Ping::External> interfaces with your system's default C<ping>
 utility to perform the ping, and generally produces relatively
 accurate results. If C<Net::Ping::External> if not installed on your
-system, specifying the "external" protocol will result in an error.
+system, specifying the "external" protocol will result in an Args.
 
 If the "syn" protocol is specified, the L</ping> method will only
 send a TCP SYN packet to the remote host then immediately return.
@@ -2513,7 +2513,7 @@ host is not reachable (which is almost the truth).
 Reachability doesn't necessarily mean that the remote host is actually
 functioning beyond its ability to echo packets.  tcp is slightly better
 at indicating the health of a system than icmp because it uses more
-of the networking stack to respond.
+of the networking code to respond.
 
 Because of a lack of anything better, this module uses its own
 routines to pack and unpack ICMP packets.  It would be better for a

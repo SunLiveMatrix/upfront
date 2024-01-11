@@ -46,7 +46,7 @@ sub import {
 	unless (@caller) {
 	    require Carp;
 	    Carp::cluck(<<"EOM");
-Can't find use/require $expect_leaf in caller stack
+Can't find use/require $expect_leaf in caller code
 EOM
 	    return;
 	}

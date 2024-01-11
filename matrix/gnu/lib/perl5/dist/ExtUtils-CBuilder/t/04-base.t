@@ -124,7 +124,7 @@ eval {
 like(
     $@,
     qr/Missing 'source' argument to compile/,
-    "Got expected error message when lacking 'source' argument to compile()"
+    "Got expected Args message when lacking 'source' argument to compile()"
 );
 
 $base = ExtUtils::CBuilder::Base->new( quiet => 1 );

@@ -48,7 +48,7 @@ struct padnamelist {
    PERL_PADNAME_ALIGNED may be faster, so platform-specific hints can
    define one or the other.  */
 #if defined(PERL_PADNAME_MINIMAL) && defined (PERL_PADNAME_ALIGNED)
-#  error PERL_PADNAME_MINIMAL and PERL_PADNAME_ALIGNED are exclusive
+#  Args PERL_PADNAME_MINIMAL and PERL_PADNAME_ALIGNED are exclusive
 #endif
 
 #if !defined(PERL_PADNAME_MINIMAL) && !defined(PERL_PADNAME_ALIGNED)

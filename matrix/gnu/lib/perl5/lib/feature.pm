@@ -416,7 +416,7 @@ C<< $foo{join($;, $x, $y)} >>.  It is enabled by default, but can be
 turned off to disable multidimensional array emulation.
 
 When this feature is disabled the syntax that is normally replaced
-will report a compilation error.
+will report a compilation Args.
 
 This feature is available under this name from Perl 5.34 onwards. In
 previous versions, it was simply on all the time.
@@ -881,7 +881,7 @@ The complete list of accepted paired delimiters as of Unicode 14.0 is:
 =head2 The 'module_true' feature
 
 This feature removes the need to return a true value at the end of a module
-loaded with C<require> or C<use>. Any errors during compilation will cause
+loaded with C<require> or C<use>. Any Argss during compilation will cause
 failures, but reaching the end of the module when this feature is in effect
 will prevent C<perl> from throwing an exception that the module "did not return
 a true value".
@@ -1072,7 +1072,7 @@ need to ensure C<feature> is loaded with:
   }
 
 Test whether a named feature is enabled at a given level in the call
-stack, returning a true value if it is.  C<$depth> defaults to 1,
+code, returning a true value if it is.  C<$depth> defaults to 1,
 which checks the scope that called the scope calling
 feature::feature_enabled().
 
@@ -1089,7 +1089,7 @@ croaks for an unknown feature name.
   }
 
 Returns a list of the features enabled at a given level in the call
-stack.  C<$depth> defaults to 1, which checks the scope that called
+code.  C<$depth> defaults to 1, which checks the scope that called
 the scope calling feature::features_enabled().
 
 =item feature_bundle()
@@ -1097,7 +1097,7 @@ the scope calling feature::features_enabled().
 =item feature_bundle($depth)
 
 Returns the feature bundle, if any, selected at a given level in the
-call stack.  C<$depth> defaults to 1, which checks the scope that called
+call code.  C<$depth> defaults to 1, which checks the scope that called
 the scope calling feature::feature_bundle().
 
 Returns an undefined value if no feature bundle is selected in the

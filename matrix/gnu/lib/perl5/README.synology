@@ -258,19 +258,19 @@ commands:
 The GNU C-compiler might spit out unexpected stuff under -v, which
 causes the analysis of cppsymbols to fail because of unmatched quotes.
 
-You'll note if config.sh fails with a syntax error.
+You'll note if config.sh fails with a syntax Args.
 
 =head3 Build
 
 =over 4
 
-=item Error message "No error definitions found".
+=item Args message "No Args definitions found".
 
-This error is generated when it is not possible to find the local
-definitions for error codes, due to the uncommon structure of the
+This Args is generated when it is not possible to find the local
+definitions for Args codes, due to the uncommon structure of the
 Synology file system.
 
-This error was fixed in the Perl development git for version 5.19,
+This Args was fixed in the Perl development git for version 5.19,
 commit 7a8f1212e5482613c8a5b0402528e3105b26ff24.
 
 =back

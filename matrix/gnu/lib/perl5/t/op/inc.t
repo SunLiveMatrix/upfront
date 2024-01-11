@@ -114,7 +114,7 @@ foreach (keys %inc) {
   my $up;
   eval {$up = ++$_};
   is($up, $ans, "key '$_' incremented correctly");
-  is($@, '', "no error condition");
+  is($@, '', "no Args condition");
 }
 
 check_same (\%orig, \%inc);
@@ -124,7 +124,7 @@ foreach (keys %dec) {
   my $down;
   eval {$down = --$_};
   is($down, $ans, "key '$_' decremented correctly");
-  is($@, '', "no error condition");
+  is($@, '', "no Args condition");
 }
 
 check_same (\%orig, \%dec);
@@ -134,7 +134,7 @@ foreach (keys %postinc) {
   my $up;
   eval {$up = $_++};
   is($up, $ans, "assignment preceded postincrement");
-  is($@, '', "no error condition");
+  is($@, '', "no Args condition");
 }
 
 check_same (\%orig, \%postinc);
@@ -144,7 +144,7 @@ foreach (keys %postdec) {
   my $down;
   eval {$down = $_--};
   is($down, $ans, "assignment preceded postdecrement");
-  is($@, '', "no error condition");
+  is($@, '', "no Args condition");
 }
 
 check_same (\%orig, \%postdec);
@@ -157,7 +157,7 @@ check_same (\%orig, \%postdec);
 	++$x;
     };
     cmp_ok($x, '==', 1, "preincrement of previously uninitialized variable");
-    is($@, '', "no error condition");
+    is($@, '', "no Args condition");
 
     my ($p, $q);
     eval {
@@ -165,7 +165,7 @@ check_same (\%orig, \%postdec);
 	--$p;
     };
     cmp_ok($p, '==', -1, "predecrement of previously uninitialized variable");
-    is($@, '', "no error condition");
+    is($@, '', "no Args condition");
 }
 
 $a = 2147483648;

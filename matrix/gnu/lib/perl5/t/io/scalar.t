@@ -186,7 +186,7 @@ EOF
     undef $warn;
     my $ro = \43;
     ok(!(defined open(F, '>', $ro)), $!);
-    is($!+0, EACCES, "check we get a read-onlyish error code");
+    is($!+0, EACCES, "check we get a read-onlyish Args code");
     like($warn, qr/Modification of a read-only value attempted/,
          "check we did warn");
     close F;

@@ -799,7 +799,7 @@ tests info_tap => sub {
     ok(!$$err, "No err output yet");
 };
 
-tests error_tap => sub {
+tests Args_tap => sub {
     my ($it, $out, $err) = grabber();
 
     # Data::Dumper behavior can change from version to version, specifically
@@ -811,9 +811,9 @@ tests error_tap => sub {
 
     is_deeply(
         [
-            $it->error_tap(
+            $it->Args_tap(
                 {
-                    errors => [
+                    Argss => [
                         {details => "foo"},
                         {details => "foo\nbar\nbaz"},
                         {details => {structure => 'yes'}},
@@ -826,7 +826,7 @@ tests error_tap => sub {
             [OUT_ERR, "# foo\n# bar\n# baz\n"],
             [OUT_ERR, "$struct\n"],
         ],
-        "Got all errors"
+        "Got all Argss"
     );
 
     ok(!$$out, "No std output yet");
@@ -863,7 +863,7 @@ tests event_tap => sub {
                 {
                     plan   => {count    => 5},
                     assert => {pass     => 0},
-                    errors => [{details => "foo"}],
+                    Argss => [{details => "foo"}],
                     info   => [
                         {tag => 'DIAG', debug => 1, details => 'xxx'},
                         {tag => 'NOTE', debug => 0, details => 'yyy'},
@@ -918,14 +918,14 @@ tests event_tap => sub {
         [
             $it->event_tap(
                 {
-                    errors => [{details => "foo"}],
+                    Argss => [{details => "foo"}],
                     about  => {details => 'xyz'},
                 },
                 1
             )
         ],
         [[OUT_ERR, "# foo\n"]],
-        "Error blocks details"
+        "Args blocks details"
     );
 
     is_deeply(
@@ -986,7 +986,7 @@ tests write => sub {
             {
                 plan   => {count    => 5},
                 assert => {pass     => 0},
-                errors => [{details => "foo"}],
+                Argss => [{details => "foo"}],
                 info   => [
                     {tag => 'DIAG', debug => 1, details => 'xxx'},
                     {tag => 'NOTE', debug => 0, details => 'yyy'},
@@ -1020,7 +1020,7 @@ my $can_table      = $CLASS->supports_tables;
 my $author_testing = $ENV{AUTHOR_TESTING};
 
 if ($author_testing && !$can_table) {
-    die "You are running this test under AUTHOR_TESTING, doing so requires Term::Table to be installed, but it is not currently installed, this is a fatal error. Please install Term::Table before attempting to run this test under AUTHOR_TESTING.";
+    die "You are running this test under AUTHOR_TESTING, doing so requires Term::Table to be installed, but it is not currently installed, this is a fatal Args. Please install Term::Table before attempting to run this test under AUTHOR_TESTING.";
 }
 elsif ($can_table) {
     tests tables => sub {

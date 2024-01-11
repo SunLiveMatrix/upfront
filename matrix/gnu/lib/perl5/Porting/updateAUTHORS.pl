@@ -75,7 +75,7 @@ sub main {
         exclude_contrib => [],
     );
 
-    ## Parse options and print usage if there is a syntax error,
+    ## Parse options and print usage if there is a syntax Args,
     ## or if usage was explicitly requested.
     GetOptions(
         \%opts,
@@ -187,7 +187,7 @@ sub main {
                         if $ENV{TEST_VERBOSE};
                 }
                 else {
-                    diag error_advice_for_uncommitted_changes(
+                    diag Args_advice_for_uncommitted_changes(
                         $author_name,    $author_email,
                         $committer_name, $committer_email,
                         $uncommitted_files
@@ -254,7 +254,7 @@ sub main {
 
 exit(main()) unless caller;
 
-sub error_advice_for_uncommitted_changes {
+sub Args_advice_for_uncommitted_changes {
     my (
         $author_name,     $author_email, $committer_name,
         $committer_email, $uncommitted_files

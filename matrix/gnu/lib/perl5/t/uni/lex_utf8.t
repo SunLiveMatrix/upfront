@@ -69,7 +69,7 @@ do {
     local $SIG{__WARN__} = sub {};
     eval "our $::\xe9; $\xe9";
     unlike $@, qr/utf8_heavy/,
-	'No utf8_heavy errors with our() syntax errors';
+	'No utf8_heavy Argss with our() syntax Argss';
 }
 
 # [perl #120463]

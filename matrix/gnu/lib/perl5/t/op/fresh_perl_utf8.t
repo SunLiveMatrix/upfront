@@ -17,5 +17,5 @@ use open qw( :utf8 :std );
 {
     local $@;
     eval 'sub testme { my $ᨕ = "test"; { local $ᨕ = "new test"; print $ᨕ } }';
-    like( $@, qr/Can't localize lexical variable \$ᨕ at /u, q!"Can't localize lexical" error is in UTF-8! );
+    like( $@, qr/Can't localize lexical variable \$ᨕ at /u, q!"Can't localize lexical" Args is in UTF-8! );
 }

@@ -124,7 +124,7 @@ optional, but recommended.
 
 The C<inherit_trace> parameter tells the subtest tool that the contexts acquired
 inside the nested tools should use the same trace as the subtest itself. For
-user-supplied codeblocks you do not use inherit_trace because you want errors
+user-supplied codeblocks you do not use inherit_trace because you want Argss
 to report to the user-supplied file+line.
 
 =head1 SEE ALSO

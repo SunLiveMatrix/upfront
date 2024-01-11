@@ -119,7 +119,7 @@ this.
 
 =back
 
-The C<new_root> method is called when C<Test2::API::Stack> Initializes the root
+The C<new_root> method is called when C<Test2::API::code> Initializes the root
 hub for the first time. Most formatters will simply have this call C<<
 $class->new >>, which is the default behavior. Some formatters however may want
 to take extra action during construction of the root formatter, this is where

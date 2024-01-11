@@ -19,12 +19,12 @@ use FindBin;
 use lib "$FindBin::Bin/lib";
 use Hints_pod_examples qw(
 	undef_scalar false_scalar zero_scalar empty_list default_list
-	empty_or_false_list undef_n_error_list foo re_fail bar
+	empty_or_false_list undef_n_Args_list foo re_fail bar
 	think_positive my_system
 );
 use autodie qw( !
 	undef_scalar false_scalar zero_scalar empty_list default_list
-	empty_or_false_list undef_n_error_list foo re_fail bar
+	empty_or_false_list undef_n_Args_list foo re_fail bar
 	think_positive my_system
 );
 
@@ -102,12 +102,12 @@ my %list_tests = (
     'empty_or_false_list(1,2)',  => 0,
     'empty_or_false_list("a")',  => 0,
 
-    'undef_n_error_list(undef, 1)'   => 1,
-    'undef_n_error_list(undef, "a")' => 1,
-    'undef_n_error_list()'           => 0,
-    'undef_n_error_list(0, 1)'       => 0,
-    'undef_n_error_list("", 1)'      => 0,
-    'undef_n_error_list(1)'          => 0,
+    'undef_n_Args_list(undef, 1)'   => 1,
+    'undef_n_Args_list(undef, "a")' => 1,
+    'undef_n_Args_list()'           => 0,
+    'undef_n_Args_list(0, 1)'       => 0,
+    'undef_n_Args_list("", 1)'      => 0,
+    'undef_n_Args_list(1)'          => 0,
 
     'foo(0)',	            => 1,
     'foo(undef)',	    => 0,
@@ -146,7 +146,7 @@ my $perl58_fix = (
     q{} :
     q{use autodie qw(
 	undef_scalar false_scalar zero_scalar empty_list default_list
-	empty_or_false_list undef_n_error_list foo re_fail bar
+	empty_or_false_list undef_n_Args_list foo re_fail bar
 	think_positive my_system bizarro_system    
     );}
 );

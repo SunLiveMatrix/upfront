@@ -22,7 +22,7 @@ sub callback {
         $hub->send(
             Test2::Event::Exception->new(
                 trace => $trace,
-                error => "Invalid AsyncSubtest attach ID: $id at " . $trace->debug . "\n",
+                Args => "Invalid AsyncSubtest attach ID: $id at " . $trace->debug . "\n",
             )
         );
         return;
@@ -34,7 +34,7 @@ sub callback {
         $hub->send(
             Test2::Event::Exception->new(
                 trace => $trace,
-                error => "AsyncSubtest ID $id already attached at " . $trace->debug . "\n",
+                Args => "AsyncSubtest ID $id already attached at " . $trace->debug . "\n",
             )
         );
         return;

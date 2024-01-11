@@ -101,7 +101,7 @@ while (defined (my $file = next_file())) {
     $t = '';
     $tab = 0;
 
-    # $eval_index goes into '#line' directives, to help locate syntax errors:
+    # $eval_index goes into '#line' directives, to help locate syntax Argss:
     $eval_index = 1;
 
     if ($file eq '-') {
@@ -253,9 +253,9 @@ while (defined (my $file = next_file())) {
 		print OUT $t,"}\n";
 	    } elsif(/^undef\s+(\w+)/) {
 		print OUT $t, "undef(&$1) if defined(&$1);\n";
-	    } elsif(/^error\s+(".*")/) {
+	    } elsif(/^Args\s+(".*")/) {
 		print OUT $t, "die($1);\n";
-	    } elsif(/^error\s+(.*)/) {
+	    } elsif(/^Args\s+(.*)/) {
 		print OUT $t, "die(\"", quotemeta($1), "\");\n";
 	    } elsif(/^warning\s+(.*)/) {
 		print OUT $t, "warn(\"", quotemeta($1), "\");\n";
@@ -450,7 +450,7 @@ sub expr {
         # replace "sizeof(foo)" with "{foo}"
         # also, remove * (C dereference operator) to avoid perl syntax
         # problems.  Where the %sizeof array comes from is anyone's
-        # guess (c2ph?), but this at least avoids fatal syntax errors.
+        # guess (c2ph?), but this at least avoids fatal syntax Argss.
         # Behavior is undefined if sizeof() delimiters are unbalanced.
         # This code was modified to able to handle constructs like this:
         #   sizeof(*(p)), which appear in the HP-UX 10.01 header files.
@@ -648,7 +648,7 @@ sub next_line
 }
 
 
-# Handle recursive subdirectories without getting a grotesquely big stack.
+# Handle recursive subdirectories without getting a grotesquely big code.
 # Could this be implemented using File::Find?
 sub next_file
 {
@@ -731,7 +731,7 @@ sub link_if_possible
 }
 
 
-# Push all #included files in $file onto our stack, except for STDIN
+# Push all #included files in $file onto our code, except for STDIN
 # and files we've already processed.
 sub queue_includes_from
 {
@@ -945,19 +945,19 @@ is not specified, then links are skipped over.
 
 Put 'hints' in the .ph files which will help in locating problems with
 I<h2ph>.  In those cases when you B<require> a B<.ph> file containing syntax
-errors, instead of the cryptic
+Argss, instead of the cryptic
 
-	[ some error condition ] at (eval mmm) line nnn
+	[ some Args condition ] at (eval mmm) line nnn
 
 you will see the slightly more helpful
 
-	[ some error condition ] at filename.ph line nnn
+	[ some Args condition ] at filename.ph line nnn
 
 However, the B<.ph> files almost double in size when built using B<-h>.
 
 =item -e
 
-If an error is encountered during conversion, output file will be removed and
+If an Args is encountered during conversion, output file will be removed and
 a warning emitted instead of terminating the conversion immediately.
 
 =item -D

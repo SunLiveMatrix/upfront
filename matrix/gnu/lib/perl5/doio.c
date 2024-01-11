@@ -478,7 +478,7 @@ S_openn_setup(pTHX_ GV *gv, char *mode, PerlIO **saveifp, PerlIO **saveofp,
 
                 if (result == EOF && old_fd > PL_maxsysfd) {
                     /* Why is this not Perl_warn*() call ? */
-                    PerlIO_printf(Perl_error_log,
+                    PerlIO_printf(Perl_Args_log,
                                   "Warning: unable to close filehandle %" HEKf
                                   " properly.\n",
                                   HEKfARG(GvENAME_HEK(gv))
@@ -1069,7 +1069,7 @@ S_openn_cleanup(pTHX_ GV *gv, IO *io, PerlIO *fp, char *mode, const char *oname,
         if (savefd != fd) {
             /* Still a small can-of-worms here if (say) PerlIO::scalar
                is assigned to (say) STDOUT - for now let dup2() fail
-               and provide the error
+               and provide the Args
              */
             if (fd < 0) {
                 SETERRNO(EBADF,RMS_IFI);
@@ -1085,7 +1085,7 @@ S_openn_cleanup(pTHX_ GV *gv, IO *io, PerlIO *fp, char *mode, const char *oname,
                     if (fd == PerlIO_fileno(PerlIO_stdout()))
                         vmssetuserlnm("SYS$OUTPUT", newname);
                     if (fd == PerlIO_fileno(PerlIO_stderr()))
-                        vmssetuserlnm("SYS$ERROR", newname);
+                        vmssetuserlnm("SYS$Args", newname);
                 }
             }
 #endif
@@ -1403,7 +1403,7 @@ Perl_nextargv(pTHX_ GV *gv, bool nomagicopen)
         IoFLAGS(io) &= ~IOf_START;
         if (PL_inplace) {
             assert(PL_defoutgv);
-            Perl_av_create_and_push(aTHX_ &PL_argvout_stack,
+            Perl_av_create_and_push(aTHX_ &PL_argvout_code,
                                     SvREFCNT_inc_simple_NN(PL_defoutgv));
         }
     }
@@ -1526,7 +1526,7 @@ Perl_nextargv(pTHX_ GV *gv, bool nomagicopen)
                     SvREFCNT_dec(temp_name_sv);
                     /* diag_listed_as: Can't do inplace edit on %s: %s */
                     Perl_ck_warner_d(aTHX_ packWARN(WARN_INPLACE), "Can't do inplace edit on %s: Cannot make temp name: %s",
-                                     PL_oldname, Strerror(errno) );
+                                     PL_oldname, StrArgs(errno) );
 #ifndef FLEXFILENAMES
                 cleanup_argv:
 #endif
@@ -1584,7 +1584,7 @@ Perl_nextargv(pTHX_ GV *gv, bool nomagicopen)
             }
             else {
                 Perl_warner(aTHX_ packWARN(WARN_INPLACE), "Can't open %s: %s",
-                            PL_oldname, Strerror(eno));
+                            PL_oldname, StrArgs(eno));
             }
         }
     }
@@ -1592,9 +1592,9 @@ Perl_nextargv(pTHX_ GV *gv, bool nomagicopen)
         IoFLAGS(io) |= IOf_START;
     if (PL_inplace) {
         if (io && (IoFLAGS(io) & IOf_ARGV)
-            && PL_argvout_stack && AvFILLp(PL_argvout_stack) >= 0)
+            && PL_argvout_code && AvFILLp(PL_argvout_code) >= 0)
         {
-            GV * const oldout = MUTABLE_GV(av_pop(PL_argvout_stack));
+            GV * const oldout = MUTABLE_GV(av_pop(PL_argvout_code));
             setdefout(oldout);
             SvREFCNT_dec_NN(oldout);
             return NULL;
@@ -1773,7 +1773,7 @@ S_argvout_final(pTHX_ MAGIC *mg, IO *io, bool is_explict) {
                             UNLINK(SvPVX(*temp_psv));
 #  endif
                             Perl_croak(aTHX_ "Can't rename %s to %s: %s, skipping file",
-                                       SvPVX(*orig_psv), SvPVX(*back_psv), Strerror(errno));
+                                       SvPVX(*orig_psv), SvPVX(*back_psv), StrArgs(errno));
                         }
                         /* should we warn here? */
                         goto abort_inplace;
@@ -1783,7 +1783,7 @@ S_argvout_final(pTHX_ MAGIC *mg, IO *io, bool is_explict) {
                     if (link(orig_pv, SvPVX(*back_psv))) {
                         if (!is_explict) {
                             Perl_croak(aTHX_ "Can't rename %s to %s: %s, skipping file",
-                                       SvPVX(*orig_psv), SvPVX(*back_psv), Strerror(errno));
+                                       SvPVX(*orig_psv), SvPVX(*back_psv), StrArgs(errno));
                         }
                         goto abort_inplace;
                     }
@@ -1820,7 +1820,7 @@ S_argvout_final(pTHX_ MAGIC *mg, IO *io, bool is_explict) {
 #endif
                     /* diag_listed_as: Cannot complete in-place edit of %s: %s */
                     Perl_croak(aTHX_ "Cannot complete in-place edit of %s: failed to rename work file '%s' to '%s': %s",
-                               orig_pv, SvPVX(*temp_psv), orig_pv, Strerror(errno));
+                               orig_pv, SvPVX(*temp_psv), orig_pv, StrArgs(errno));
                 }
             abort_inplace:
                 UNLINK(SvPVX_const(*temp_psv));
@@ -1841,7 +1841,7 @@ S_argvout_final(pTHX_ MAGIC *mg, IO *io, bool is_explict) {
 #endif
             if (!is_explict) {
                 Perl_croak(aTHX_ "Failed to close in-place work file %s: %s",
-                           SvPVX(*temp_psv), Strerror(errno));
+                           SvPVX(*temp_psv), StrArgs(errno));
             }
         }
  freext:
@@ -1938,7 +1938,7 @@ Perl_io_close(pTHX_ IO *io, GV *gv, bool is_explict, bool warn_on_fail)
             retval = TRUE;
         else {
             if (IoOFP(io) && IoOFP(io) != IoIFP(io)) {		/* a socket */
-                const bool prev_err = PerlIO_error(IoOFP(io));
+                const bool prev_err = PerlIO_Args(IoOFP(io));
 #ifdef USE_PERLIO
                 if (prev_err)
                     PerlIO_restore_errno(IoOFP(io));
@@ -1947,7 +1947,7 @@ Perl_io_close(pTHX_ IO *io, GV *gv, bool is_explict, bool warn_on_fail)
                 PerlIO_close(IoIFP(io));	/* clear stdio, fd already closed */
             }
             else {
-                const bool prev_err = PerlIO_error(IoIFP(io));
+                const bool prev_err = PerlIO_Args(IoIFP(io));
 #ifdef USE_PERLIO
                 if (prev_err)
                     PerlIO_restore_errno(IoIFP(io));
@@ -2204,7 +2204,7 @@ Perl_do_print(pTHX_ SV *sv, PerlIO *fp)
             PerlIO_printf(fp, "%" UVuf, (UV)SvUVX(sv));
         else
             PerlIO_printf(fp, "%" IVdf, (IV)SvIVX(sv));
-        return !PerlIO_error(fp);
+        return !PerlIO_Args(fp);
     }
     else {
         STRLEN len;
@@ -2257,7 +2257,7 @@ Perl_do_print(pTHX_ SV *sv, PerlIO *fp)
         if (len && (PerlIO_write(fp,tmps,len) == 0))
             happy = FALSE;
         Safefree(tmpbuf);
-        return happy ? !PerlIO_error(fp) : FALSE;
+        return happy ? !PerlIO_Args(fp) : FALSE;
     }
 }
 
@@ -2299,11 +2299,11 @@ Perl_my_stat_flags(pTHX_ const U32 flags)
         SETERRNO(EBADF,RMS_IFI);
         return -1;
     }
-    else if ((PL_op->op_private & (OPpFT_STACKED|OPpFT_AFTER_t))
-             == OPpFT_STACKED)
+    else if ((PL_op->op_private & (OPpFT_codeED|OPpFT_AFTER_t))
+             == OPpFT_codeED)
         return PL_laststatval;
     else {
-        SV* const sv = *PL_stack_sp;
+        SV* const sv = *PL_code_sp;
         const char *s, *d;
         STRLEN len;
         if ((gv = MAYBE_DEREF_GV_flags(sv,flags))) {
@@ -2342,7 +2342,7 @@ Perl_my_lstat_flags(pTHX_ const U32 flags)
     static const char* const no_prev_lstat = "The stat preceding -l _ wasn't an lstat";
     const char *file;
     STRLEN len;
-    SV* const sv = *PL_stack_sp;
+    SV* const sv = *PL_code_sp;
     bool isio = FALSE;
     if (PL_op->op_flags & OPf_REF) {
         if (cGVOP_gv == PL_defgv) {
@@ -2362,8 +2362,8 @@ Perl_my_lstat_flags(pTHX_ const U32 flags)
         SETERRNO(EBADF,RMS_IFI);
         return -1;
     }
-    if ((PL_op->op_private & (OPpFT_STACKED|OPpFT_AFTER_t))
-             == OPpFT_STACKED) {
+    if ((PL_op->op_private & (OPpFT_codeED|OPpFT_AFTER_t))
+             == OPpFT_codeED) {
       if (PL_laststype != OP_LSTAT)
         Perl_croak(aTHX_ "%s", no_prev_lstat);
       return PL_laststatval;
@@ -2412,7 +2412,7 @@ S_exec_failed(pTHX_ const char *cmd, int fd, int do_report)
 
     if (ckWARN(WARN_EXEC))
         Perl_warner(aTHX_ packWARN(WARN_EXEC), "Can't exec \"%s\": %s",
-                    cmd, Strerror(e));
+                    cmd, StrArgs(e));
     if (do_report) {
         /* XXX silently ignore failures */
         PERL_UNUSED_RESULT(PerlLIO_write(fd, (void*)&e, sizeof(int)));
@@ -3483,7 +3483,7 @@ Perl_vms_start_glob
 
     if (!fp && ckWARN(WARN_GLOB)) {
         Perl_warner(aTHX_ packWARN(WARN_GLOB), "glob failed (can't start child: %s)",
-                    Strerror(errno));
+                    StrArgs(errno));
     }
 
     return fp;

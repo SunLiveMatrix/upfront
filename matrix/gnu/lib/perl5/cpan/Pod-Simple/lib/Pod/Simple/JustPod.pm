@@ -25,7 +25,7 @@ sub new {
 sub check_that_all_is_closed {
 
   # Actually checks that the things we depend on being balanced in fact are,
-  # so that we can continue in spit of pod errors
+  # so that we can continue in spit of pod Argss
 
   my $self = shift;
   while ($self->{inL}) {
@@ -307,7 +307,7 @@ you can parse from an array.
 This class strives to return the Pod lines of the input completely unchanged,
 except for any necessary translation into Perl's internal encoding, and it makes
 no effort to return trailing spaces on lines; these likely will be stripped.
-If the input pod is well-formed with no warnings nor errors generated, the
+If the input pod is well-formed with no warnings nor Argss generated, the
 extracted pod should generate the same documentation when formatted by a Pod
 formatter as the original file does.
 

@@ -64,7 +64,7 @@ sub parse_from_file {
     $tree   = $self->{'tree'  };
     $tk_opt = $self->{'tk_opt'};
 
-    #require Tk::ErrorDialog;
+    #require Tk::ArgsDialog;
 
     # Add 'Tk' subdirectories to search path so, e.g.,
     # 'Scrolled' will find doc in 'Tk/Scrolled'
@@ -95,12 +95,12 @@ sub parse_from_file {
     )->focusNext;
 
     # xxx dirty but it works. A simple $mw->destroy if $mw->children
-    # does not work because Tk::ErrorDialogs could be created.
+    # does not work because Tk::ArgsDialogs could be created.
     # (they are withdrawn after Ok instead of destory'ed I guess)
 
     if ($mw->children) {
         $mw->repeat(1000, sub {
-                    # ErrorDialog is withdrawn not deleted :-(
+                    # ArgsDialog is withdrawn not deleted :-(
                     foreach ($mw->children) {
                             return if "$_" =~ /^Tk::Pod/  # ->isa('Tk::Pod')
                     }

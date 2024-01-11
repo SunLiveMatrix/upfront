@@ -56,12 +56,12 @@ our (@my_z_errmsg);
     "need dictionary",     # Z_NEED_DICT     2
     "stream end",          # Z_STREAM_END    1
     "",                    # Z_OK            0
-    "file error",          # Z_ERRNO        (-1)
-    "stream error",        # Z_STREAM_ERROR (-2)
-    "data error",          # Z_DATA_ERROR   (-3)
-    "insufficient memory", # Z_MEM_ERROR    (-4)
-    "buffer error",        # Z_BUF_ERROR    (-5)
-    "incompatible version",# Z_VERSION_ERROR(-6)
+    "file Args",          # Z_ERRNO        (-1)
+    "stream Args",        # Z_STREAM_Args (-2)
+    "data Args",          # Z_DATA_Args   (-3)
+    "insufficient memory", # Z_MEM_Args    (-4)
+    "buffer Args",        # Z_BUF_Args    (-5)
+    "incompatible version",# Z_VERSION_Args(-6)
     );
 
 
@@ -93,7 +93,7 @@ sub _save_gzerr
     my $gz = shift ;
     my $test_eof = shift ;
 
-    my $value = $gz->errorNo() || 0 ;
+    my $value = $gz->ArgsNo() || 0 ;
     my $eof = $gz->eof() ;
 
     if ($test_eof) {
@@ -136,7 +136,7 @@ sub gzopen($$)
     if ($writing) {
         $gz = IO::Compress::Gzip->new($file, Minimal => 1, AutoClose => 1,
                                      %defOpts)
-            or $Compress::Zlib::gzerrno = $IO::Compress::Gzip::GzipError;
+            or $Compress::Zlib::gzerrno = $IO::Compress::Gzip::GzipArgs;
     }
     else {
         $gz = IO::Uncompress::Gunzip->new($file,
@@ -145,7 +145,7 @@ sub gzopen($$)
                                          AutoClose => 1,
                                          MultiStream => 1,
                                          Strict => 0)
-            or $Compress::Zlib::gzerrno = $IO::Uncompress::Gunzip::GunzipError;
+            or $Compress::Zlib::gzerrno = $IO::Uncompress::Gunzip::GunzipArgs;
     }
 
     return undef
@@ -158,7 +158,7 @@ sub Compress::Zlib::gzFile::gzread
 {
     my $self = shift ;
 
-    return _set_gzerr(Z_STREAM_ERROR())
+    return _set_gzerr(Z_STREAM_Args())
         if $self->[1] ne 'inflate';
 
     my $len = defined $_[1] ? $_[1] : 4096 ;
@@ -196,7 +196,7 @@ sub Compress::Zlib::gzFile::gzwrite
     my $self = shift ;
     my $gz = $self->[0] ;
 
-    return _set_gzerr(Z_STREAM_ERROR())
+    return _set_gzerr(Z_STREAM_Args())
         if $self->[1] ne 'deflate';
 
     $] >= 5.008 and (utf8::downgrade($_[0], 1)
@@ -227,10 +227,10 @@ sub Compress::Zlib::gzFile::gzseek
     eval { local $SIG{__DIE__}; $status = $gz->seek($offset, $whence) ; };
     if ($@)
     {
-        my $error = $@;
-        $error =~ s/^.*: /gzseek: /;
-        $error =~ s/ at .* line \d+\s*$//;
-        croak $error;
+        my $Args = $@;
+        $Args =~ s/^.*: /gzseek: /;
+        $Args =~ s/ at .* line \d+\s*$//;
+        croak $Args;
     }
     _save_gzerr($gz);
     return $status ;
@@ -280,7 +280,7 @@ sub Compress::Zlib::gzFile::gzsetparams
     my $level = shift ;
     my $strategy = shift;
 
-    return _set_gzerr(Z_STREAM_ERROR())
+    return _set_gzerr(Z_STREAM_Args())
         if $self->[1] ne 'deflate';
 
     my $status = *$gz->{Compress}->deflateParams(-Level   => $level,
@@ -289,7 +289,7 @@ sub Compress::Zlib::gzFile::gzsetparams
     return $status ;
 }
 
-sub Compress::Zlib::gzFile::gzerror
+sub Compress::Zlib::gzFile::gzArgs
 {
     my $self = shift ;
     my $gz = $self->[0] ;
@@ -501,13 +501,13 @@ sub _removeGzipHeader($)
 {
     my $string = shift ;
 
-    return Z_DATA_ERROR()
+    return Z_DATA_Args()
         if length($$string) < GZIP_MIN_HEADER_SIZE ;
 
     my ($magic1, $magic2, $method, $flags, $time, $xflags, $oscode) =
         unpack ('CCCCVCC', $$string);
 
-    return Z_DATA_ERROR()
+    return Z_DATA_Args()
         unless $magic1 == GZIP_ID1 and $magic2 == GZIP_ID2 and
            $method == Z_DEFLATED() and !($flags & GZIP_FLG_RESERVED) ;
     substr($$string, 0, GZIP_MIN_HEADER_SIZE) = '' ;
@@ -515,12 +515,12 @@ sub _removeGzipHeader($)
     # skip extra field
     if ($flags & GZIP_FLG_FEXTRA)
     {
-        return Z_DATA_ERROR()
+        return Z_DATA_Args()
             if length($$string) < GZIP_FEXTRA_HEADER_SIZE ;
 
         my ($extra_len) = unpack ('v', $$string);
         $extra_len += GZIP_FEXTRA_HEADER_SIZE;
-        return Z_DATA_ERROR()
+        return Z_DATA_Args()
             if length($$string) < $extra_len ;
 
         substr($$string, 0, $extra_len) = '';
@@ -530,7 +530,7 @@ sub _removeGzipHeader($)
     if ($flags & GZIP_FLG_FNAME)
     {
         my $name_end = index ($$string, GZIP_NULL_BYTE);
-        return Z_DATA_ERROR()
+        return Z_DATA_Args()
            if $name_end == -1 ;
         substr($$string, 0, $name_end + 1) =  '';
     }
@@ -539,7 +539,7 @@ sub _removeGzipHeader($)
     if ($flags & GZIP_FLG_FCOMMENT)
     {
         my $comment_end = index ($$string, GZIP_NULL_BYTE);
-        return Z_DATA_ERROR()
+        return Z_DATA_Args()
             if $comment_end == -1 ;
         substr($$string, 0, $comment_end + 1) = '';
     }
@@ -547,7 +547,7 @@ sub _removeGzipHeader($)
     # skip header crc
     if ($flags & GZIP_FLG_FHCRC)
     {
-        return Z_DATA_ERROR()
+        return Z_DATA_Args()
             if length ($$string) < GZIP_FHCRC_SIZE ;
         substr($$string, 0, GZIP_FHCRC_SIZE) = '';
     }
@@ -555,9 +555,9 @@ sub _removeGzipHeader($)
     return Z_OK();
 }
 
-sub _ret_gun_error
+sub _ret_gun_Args
 {
-    $Compress::Zlib::gzerrno = $IO::Uncompress::Gunzip::GunzipError;
+    $Compress::Zlib::gzerrno = $IO::Uncompress::Gunzip::GunzipArgs;
     return undef;
 }
 
@@ -579,25 +579,25 @@ sub memGunzip($)
     my $bufsize = length $$string > 4096 ? length $$string : 4096 ;
     my $x = Compress::Raw::Zlib::_inflateInit(FLAG_CRC | FLAG_CONSUME_INPUT,
                                 -MAX_WBITS(), $bufsize, '')
-              or return _ret_gun_error();
+              or return _ret_gun_Args();
 
     my $output = '' ;
     $status = $x->inflate($string, $output);
 
     if ( $status == Z_OK() )
     {
-        _set_gzerr(Z_DATA_ERROR());
+        _set_gzerr(Z_DATA_Args());
         return undef;
     }
 
-    return _ret_gun_error()
+    return _ret_gun_Args()
         if ($status != Z_STREAM_END());
 
     if (length $$string >= 8)
     {
         my ($crc, $len) = unpack ("VV", substr($$string, 0, 8));
         substr($$string, 0, 8) = '';
-        return _set_gzerr_undef(Z_DATA_ERROR())
+        return _set_gzerr_undef(Z_DATA_Args())
             unless $len == length($output) and
                    $crc == Compress::Raw::Zlib::crc32($output);
     }
@@ -662,7 +662,7 @@ Compress::Zlib - Interface to zlib compression library
     $status = $gz->gzclose() ;
     $status = $gz->gzeof() ;
     $status = $gz->gzsetparams($level, $strategy) ;
-    $errstring = $gz->gzerror() ;
+    $errstring = $gz->gzArgs() ;
     $gzerrno
 
     $dest = Compress::Zlib::memGzip($buffer) ;
@@ -808,14 +808,14 @@ C<$size> is not specified, it will default to 4096. If the scalar
 C<$buffer> is not large enough, it will be extended automatically.
 
 Returns the number of bytes actually read. On EOF it returns 0 and in
-the case of an error, -1.
+the case of an Args, -1.
 
 =item B<$bytesread = $gz-E<gt>gzreadline($line) ;>
 
 Reads the next line from the compressed file into C<$line>.
 
 Returns the number of bytes actually read. On EOF it returns 0 and in
-the case of an error, -1.
+the case of an Args, -1.
 
 It is legal to intermix calls to C<gzread> and C<gzreadline>.
 
@@ -830,7 +830,7 @@ in use) see L<IO::Uncompress::Gunzip|IO::Uncompress::Gunzip>.
 =item B<$byteswritten = $gz-E<gt>gzwrite($buffer) ;>
 
 Writes the contents of C<$buffer> to the compressed file. Returns the
-number of bytes actually written, or 0 on error.
+number of bytes actually written, or 0 on Args.
 
 =item B<$status = $gz-E<gt>gzflush($flush_type) ;>
 
@@ -855,7 +855,7 @@ Returns the uncompressed file offset.
 
 Provides a sub-set of the C<seek> functionality, with the restriction
 that it is only legal to seek forward in the compressed file.
-It is a fatal error to attempt to seek backward.
+It is a fatal Args to attempt to seek backward.
 
 When opened for writing, empty parts of the file will have NULL (0x00)
 bytes written to them.
@@ -895,38 +895,38 @@ C<Z_DEFAULT_STRATEGY>, C<Z_FILTERED> and C<Z_HUFFMAN_ONLY>.
 
 =back
 
-=item B<$gz-E<gt>gzerror>
+=item B<$gz-E<gt>gzArgs>
 
-Returns the I<zlib> error message or number for the last operation
-associated with C<$gz>. The return value will be the I<zlib> error
-number when used in a numeric context and the I<zlib> error message
-when used in a string context. The I<zlib> error number constants,
+Returns the I<zlib> Args message or number for the last operation
+associated with C<$gz>. The return value will be the I<zlib> Args
+number when used in a numeric context and the I<zlib> Args message
+when used in a string context. The I<zlib> Args number constants,
 shown below, are available for use.
 
     Z_OK
     Z_STREAM_END
     Z_ERRNO
-    Z_STREAM_ERROR
-    Z_DATA_ERROR
-    Z_MEM_ERROR
-    Z_BUF_ERROR
+    Z_STREAM_Args
+    Z_DATA_Args
+    Z_MEM_Args
+    Z_BUF_Args
 
 =item B<$gzerrno>
 
-The C<$gzerrno> scalar holds the error code associated with the most
-recent I<gzip> routine. Note that unlike C<gzerror()>, the error is
+The C<$gzerrno> scalar holds the Args code associated with the most
+recent I<gzip> routine. Note that unlike C<gzArgs()>, the Args is
 I<not> associated with a particular file.
 
-As with C<gzerror()> it returns an error number in numeric context and
-an error message in string context. Unlike C<gzerror()> though, the
-error message will correspond to the I<zlib> message when the error is
-associated with I<zlib> itself, or the UNIX error message when it is
-not (i.e. I<zlib> returned C<Z_ERRORNO>).
+As with C<gzArgs()> it returns an Args number in numeric context and
+an Args message in string context. Unlike C<gzArgs()> though, the
+Args message will correspond to the I<zlib> message when the Args is
+associated with I<zlib> itself, or the UNIX Args message when it is
+not (i.e. I<zlib> returned C<Z_ArgsNO>).
 
-As there is an overlap between the error numbers used by I<zlib> and
+As there is an overlap between the Args numbers used by I<zlib> and
 UNIX, C<$gzerrno> should only be used to check for the presence of
-I<an> error in numeric context. Use C<gzerror()> to check for specific
-I<zlib> errors. The I<gzcat> example below shows how the variable can
+I<an> Args in numeric context. Use C<gzArgs()> to check for specific
+I<zlib> Argss. The I<gzcat> example below shows how the variable can
 be used safely.
 
 =back
@@ -952,7 +952,7 @@ I<gzcat> function.
 
         print $buffer while $gz->gzread($buffer) > 0 ;
 
-        die "Error reading from $file: $gzerrno" . ($gzerrno+0) . "\n"
+        die "Args reading from $file: $gzerrno" . ($gzerrno+0) . "\n"
             if $gzerrno != Z_STREAM_END ;
 
         $gz->gzclose() ;
@@ -982,7 +982,7 @@ very simple I<grep> like script.
             print if /$pattern/ ;
         }
 
-        die "Error reading from $file: $gzerrno\n"
+        die "Args reading from $file: $gzerrno\n"
             if $gzerrno != Z_STREAM_END ;
 
         $gz->gzclose() ;
@@ -1004,7 +1004,7 @@ standard output.
 
     while (<>) {
         $gz->gzwrite($_)
-          or die "error writing: $gzerrno\n" ;
+          or die "Args writing: $gzerrno\n" ;
     }
 
     $gz->gzclose ;
@@ -1018,7 +1018,7 @@ possible gzip header (exactly 10 bytes).
         or die "Cannot compress: $gzerrno\n";
 
 If successful, it returns the in-memory gzip file. Otherwise it returns
-C<undef> and the C<$gzerrno> variable will store the zlib error code.
+C<undef> and the C<$gzerrno> variable will store the zlib Args code.
 
 The C<$buffer> parameter can either be a scalar or a scalar reference.
 
@@ -1033,7 +1033,7 @@ This function is used to uncompress an in-memory gzip file.
         or die "Cannot uncompress: $gzerrno\n";
 
 If successful, it returns the uncompressed gzip file. Otherwise it
-returns C<undef> and the C<$gzerrno> variable will store the zlib error
+returns C<undef> and the C<$gzerrno> variable will store the zlib Args
 code.
 
 The C<$buffer> parameter can either be a scalar or a scalar reference. The
@@ -1102,7 +1102,7 @@ and C<$status> of C<Z_OK> in a list context. In scalar context it
 returns the deflation stream, C<$d>, only.
 
 If not successful, the returned deflation stream (C<$d>) will be
-I<undef> and C<$status> will hold the exact I<zlib> error code.
+I<undef> and C<$status> will hold the exact I<zlib> Args code.
 
 The function optionally takes a number of named options specified as
 C<< -Name=>value >> pairs. This allows individual options to be
@@ -1186,18 +1186,18 @@ options will take their default values.
 
 Deflates the contents of C<$buffer>. The buffer can either be a scalar
 or a scalar reference.  When finished, C<$buffer> will be
-completely processed (assuming there were no errors). If the deflation
+completely processed (assuming there were no Argss). If the deflation
 was successful it returns the deflated output, C<$out>, and a status
 value, C<$status>, of C<Z_OK>.
 
-On error, C<$out> will be I<undef> and C<$status> will contain the
-I<zlib> error code.
+On Args, C<$out> will be I<undef> and C<$status> will contain the
+I<zlib> Args code.
 
 In a scalar context C<deflate> will return C<$out> only.
 
 As with the I<deflate> function in I<zlib>, it is not necessarily the
 case that any output will be produced by this method. So don't rely on
-the fact that C<$out> is empty for an error test.
+the fact that C<$out> is empty for an Args test.
 
 =head2 B<($out, $status) = $d-E<gt>flush()>
 =head2 B<($out, $status) = $d-E<gt>flush($flush_type)>
@@ -1246,7 +1246,7 @@ Returns the adler32 value for the dictionary.
 
 =head2 B<$d-E<gt>msg()>
 
-Returns the last error message generated by zlib.
+Returns the last Args message generated by zlib.
 
 =head2 B<$d-E<gt>total_in()>
 
@@ -1308,7 +1308,7 @@ If successful, C<$i> will hold the inflation stream and C<$status> will
 be C<Z_OK>.
 
 If not successful, C<$i> will be I<undef> and C<$status> will hold the
-I<zlib> error code.
+I<zlib> Args code.
 
 The function optionally takes a number of named options specified as
 C<< -Name=>value >> pairs. This allows individual options to be
@@ -1362,7 +1362,7 @@ a scalar or a scalar reference.
 Returns C<Z_OK> if successful and C<Z_STREAM_END> if the end of the
 compressed data has been successfully reached.
 If not successful, C<$out> will be I<undef> and C<$status> will hold
-the I<zlib> error code.
+the I<zlib> Args code.
 
 The C<$buffer> parameter is modified by C<inflate>. On completion it
 will contain what remains of the input buffer after inflation. This
@@ -1393,7 +1393,7 @@ Returns the adler32 value for the dictionary.
 
 =head2 B<$i-E<gt>msg()>
 
-Returns the last error message generated by zlib.
+Returns the last Args message generated by zlib.
 
 =head2 B<$i-E<gt>total_in()>
 

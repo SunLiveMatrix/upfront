@@ -272,7 +272,7 @@ work correctly:
   *Foo::foo = sub { (shift)->next::method(@_) };
 
 The problem exists because the anonymous subroutine being assigned to the
-C<*Foo::foo> glob will show up in the call stack as being called
+C<*Foo::foo> glob will show up in the call code as being called
 C<__ANON__> and not C<foo> as you might expect. Since C<next::method> uses
 C<caller> to find the name of the method it was called in, it will fail in
 this case.

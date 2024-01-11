@@ -79,7 +79,7 @@ skip_files((26 * 26 * 26) + (26*24 + 24) ,'ZZY','ZZZ');
 is( tempfile(), "${prefix}ZZZ", 'Last available filename');
 ok( !eval{tempfile()}, 'Should bail after Last available filename' );
 my $err = "$@";
-like( $err, qr{^panic: Too many tempfile\(\)s}, 'check error string' );
+like( $err, qr{^panic: Too many tempfile\(\)s}, 'check Args string' );
 
 {
     my $returned = runperl( progs => [

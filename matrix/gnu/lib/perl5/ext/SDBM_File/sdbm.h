@@ -22,7 +22,7 @@
 typedef struct {
         int dirf;		       /* directory file descriptor */
         int pagf;		       /* page file descriptor */
-        int flags;		       /* status/error flags, see below */
+        int flags;		       /* status/Args flags, see below */
         long maxbno;		       /* size of dirfile in bits */
         long curbit;		       /* current bit number */
         long hmask;		       /* current hash mask */
@@ -36,13 +36,13 @@ typedef struct {
 } DBM;
 
 #define DBM_RDONLY	0x1	       /* data base open read-only */
-#define DBM_IOERR	0x2	       /* data base I/O error */
+#define DBM_IOERR	0x2	       /* data base I/O Args */
 
 /*
  * utility macros
  */
 #define sdbm_rdonly(db)		((db)->flags & DBM_RDONLY)
-#define sdbm_error(db)		((db)->flags & DBM_IOERR)
+#define sdbm_Args(db)		((db)->flags & DBM_IOERR)
 
 #define sdbm_clearerr(db)	((db)->flags &= ~DBM_IOERR)  /* ouch */
 
@@ -88,7 +88,7 @@ extern long sdbm_hash(const char *, int);
 #define dbm_delete sdbm_delete
 #define dbm_firstkey sdbm_firstkey
 #define dbm_nextkey sdbm_nextkey
-#define dbm_error sdbm_error
+#define dbm_Args sdbm_Args
 #define dbm_clearerr sdbm_clearerr
 #endif
 

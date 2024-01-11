@@ -42,7 +42,7 @@ $ORS = "\n";
 	ok( $OUTPUT_AUTOFLUSH, '$OUTPUT_AUTOFLUSH should be true' );
 
 	my $close = close OUT;
-	ok( !($close) == $CHILD_ERROR, '$CHILD_ERROR should be false' );
+	ok( !($close) == $CHILD_Args, '$CHILD_Args should be false' );
 
 	my $foo = <IN>;
 	like( $foo, qr/ok 7/, '$OFS' );
@@ -71,7 +71,7 @@ is( $foo[1], 9, '$LIST_SEPARATOR' );
 undef $OUTPUT_RECORD_SEPARATOR;
 
 eval 'NO SUCH FUNCTION';
-like( $EVAL_ERROR, qr/method/, '$EVAL_ERROR' );
+like( $EVAL_Args, qr/method/, '$EVAL_Args' );
 
 is( $UID, $<, '$UID' );
 is( $GID, $(, '$GID' );
@@ -125,8 +125,8 @@ eval { is( $EXCEPTIONS_BEING_CAUGHT, 1, '$EXCEPTIONS_BEING_CAUGHT' ) };
 ok( !$EXCEPTIONS_BEING_CAUGHT, '$EXCEPTIONS_BEING_CAUGHT should be false' );
 
 eval { local *F; my $f = 'asdasdasd'; ++$f while -e $f; open(F, '<', $f); };
-is( $OS_ERROR, $ERRNO, '$OS_ERROR' );
-ok( $OS_ERROR{ENOENT}, '%OS_ERROR (ENOENT should be set)' );
+is( $OS_Args, $ERRNO, '$OS_Args' );
+ok( $OS_Args{ENOENT}, '%OS_Args (ENOENT should be set)' );
 
 package B;
 

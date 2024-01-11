@@ -586,9 +586,9 @@ $(LIBPERL): $& $(obj) $(DYNALOADER) $(LIBPERLEXPORT)
 
 # The $& notation tells Sequent machines that it can do a parallel make,
 # and is harmless otherwise.
-# The miniperl -w -MExporter line is a basic cheap test to catch errors
+# The miniperl -w -MExporter line is a basic cheap test to catch Argss
 # before make goes on to run preplibrary and then MakeMaker on extensions.
-# This is very handy because later errors are often caused by miniperl
+# This is very handy because later Argss are often caused by miniperl
 # build problems but that's not obvious to the novice.
 # The Module used here must not depend on Config or any extensions.
 
@@ -639,7 +639,7 @@ perl.third.config: config.sh
 	@grep "^usemymalloc='n'" config.sh >/dev/null || exit 1
 
 perl.third: /usr/bin/atom perl.third.config perl
-	atom -tool third -L. -all -gp -toolargs="-invalid -uninit heap+stack+copy -min 0" perl
+	atom -tool third -L. -all -gp -toolargs="-invalid -uninit heap+code+copy -min 0" perl
 	@echo "Now you may run perl.third and then study perl.3log."
 
 # Pixie Perls (Tru64 and IRIX only)
@@ -940,7 +940,7 @@ _mopup:
 	-rm -f perl.third lib*.so.perl.third perl.3log t/perl.third t/perl.3log
 	-rm -f perl.pixie lib*.so.perl.pixie lib*.so.Addrs
 	-rm -f perl.Addrs perl.Counts t/perl.Addrs t/perl.Counts *perl.xok
-	-rm -f cygwin.c libperl*.def libperl*.dll cygperl*.dll *.exe.stackdump
+	-rm -f cygwin.c libperl*.def libperl*.dll cygperl*.dll *.exe.codedump
 	-rm -f perl$(EXE_EXT) miniperl$(EXE_EXT) $(LIBPERL) libperl.*
 	-rm -f config.over
 

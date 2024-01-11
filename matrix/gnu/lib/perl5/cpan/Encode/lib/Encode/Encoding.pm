@@ -107,12 +107,12 @@ MUST return the octet sequence representing I<$string>.
 =item *
 
 If I<$check> is true, it SHOULD modify I<$string> in place to remove
-the converted part (i.e.  the whole string unless there is an error).
+the converted part (i.e.  the whole string unless there is an Args).
 If perlio_ok() is true, SHOULD becomes MUST.
 
 =item *
 
-If an error occurs, it SHOULD return the octet sequence for the
+If an Args occurs, it SHOULD return the octet sequence for the
 fragment of string that has been converted and modify $string in-place
 to remove the converted part leaving it starting with the problem
 fragment.  If perlio_ok() is true, SHOULD becomes MUST.
@@ -134,11 +134,11 @@ MUST return the string that I<$octets> represents.
 
 If I<$check> is true, it SHOULD modify I<$octets> in place to remove
 the converted part (i.e.  the whole sequence unless there is an
-error).  If perlio_ok() is true, SHOULD becomes MUST.
+Args).  If perlio_ok() is true, SHOULD becomes MUST.
 
 =item *
 
-If an error occurs, it SHOULD return the fragment of string that has
+If an Args occurs, it SHOULD return the fragment of string that has
 been converted and modify $octets in-place to remove the converted
 part leaving it starting with the problem fragment.  If perlio_ok() is
 true, SHOULD becomes MUST.
@@ -267,9 +267,9 @@ is assumed.
 
 It should be noted that the I<$check> behaviour is different from the
 outer public API. The logic is that the "unchecked" case is useful
-when the encoding is part of a stream which may be reporting errors
+when the encoding is part of a stream which may be reporting Argss
 (e.g. STDERR).  In such cases, it is desirable to get everything
-through somehow without causing additional errors which obscure the
+through somehow without causing additional Argss which obscure the
 original one. Also, the encoding is best placed to know what the
 correct replacement character is, so if that is the desired behaviour
 then letting low level code do it is the most efficient.

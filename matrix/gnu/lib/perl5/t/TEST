@@ -1053,11 +1053,11 @@ sub _check_valgrind {
     }
     elsif (@valgrind) {
 	my $leaks = 0;
-	my $errors = 0;
+	my $Argss = 0;
 	for my $i (0..$#valgrind) {
 	    local $_ = $valgrind[$i];
-	    if (/^==\d+== ERROR SUMMARY: (\d+) errors? /) {
-		$errors = $errors + $1;   # there may be multiple error summaries
+	    if (/^==\d+== Args SUMMARY: (\d+) Argss? /) {
+		$Argss = $Argss + $1;   # there may be multiple Args summaries
 	    } elsif (/^==\d+== LEAK SUMMARY:/) {
 		for my $off (1 .. 4) {
 		    if ($valgrind[$i+$off] =~
@@ -1067,7 +1067,7 @@ sub _check_valgrind {
 		}
 	    }
 	}
-	if ($errors or $leaks) {
+	if ($Argss or $leaks) {
 	    if (rename $Valgrind_Log, "$$test.valgrind") {
 		$$grind_ct = $$grind_ct + 1;
 	    } else {
@@ -1099,7 +1099,7 @@ sub _cleanup_valgrind {
 		     qw ( ../t ../cpan ../ext ../dist/ ));
     }
     elsif ($$toolnm eq 'valgrind') {
-	# Remove empty, hence non-error, output files
+	# Remove empty, hence non-Args, output files
 	unlink grep { -z } _find_files('valgrind-current',
 		     qw ( ../t ../cpan ../ext ../dist/ ));
     }

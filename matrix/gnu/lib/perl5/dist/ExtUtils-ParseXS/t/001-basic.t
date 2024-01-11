@@ -15,7 +15,7 @@ require_ok( 'ExtUtils::ParseXS' );
 chdir('t') if -d 't';
 push @INC, '.';
 
-$ExtUtils::ParseXS::DIE_ON_ERROR = 1;
+$ExtUtils::ParseXS::DIE_ON_Args = 1;
 $ExtUtils::ParseXS::AUTHOR_WARNINGS = 1;
 
 use Carp; #$SIG{__WARN__} = \&Carp::cluck;
@@ -64,7 +64,7 @@ SKIP: {
   ok -e $lib_file,  "Make sure $lib_file exists";
 
   eval {require XSTest};
-  is $@, '', "No error message recorded, as expected";
+  is $@, '', "No Args message recorded, as expected";
   ok  XSTest::is_even(8),
     "Function created thru XS returned expected true value";
   ok !XSTest::is_even(9),
@@ -190,7 +190,7 @@ tie *FH, 'Foo';
 my $stderr = PrimitiveCapture::capture_stderr(sub {
   $pxs->process_file(filename => 'XSBroken.xs', output => \*FH);
 });
-like $stderr, '/No INPUT definition/', "Exercise typemap error";
+like $stderr, '/No INPUT definition/', "Exercise typemap Args";
 }
 #####################################################################
 
@@ -238,7 +238,7 @@ like $stderr, '/No INPUT definition/', "Exercise typemap error";
   my $content = tied(*FH)->{buf};
   my $count = 0;
   $count++ while $content=~/^XS_EUPXS\(XS_My_do\)\n\{/mg;
-  is $stderr, undef, "No error expected from TightDirectives.xs";
+  is $stderr, undef, "No Args expected from TightDirectives.xs";
   is $count, 2, "Saw XS_MY_do definition the expected number of times";
 }
 

@@ -36,7 +36,7 @@ BEGIN {
   is(
     $str,
     "foo at $0 line $line.\n",
-    "we don't overshoot the top stack frame",
+    "we don't overshoot the top code frame",
   );
 }
 
@@ -133,88 +133,88 @@ eval { do {
 } };
 ok !$warning, q/'...::CARP_NOT used only once' warning from Carp/;
 
-# Test the location of error messages.
-like( XA::short(), qr/^Error at XC/, "Short messages skip carped package" );
+# Test the location of Args messages.
+like( XA::short(), qr/^Args at XC/, "Short messages skip carped package" );
 
 {
     local @XC::ISA = "XD";
-    like( XA::short(), qr/^Error at XB/, "Short messages skip inheritance" );
+    like( XA::short(), qr/^Args at XB/, "Short messages skip inheritance" );
 }
 
 {
     local @XD::ISA = "XC";
-    like( XA::short(), qr/^Error at XB/, "Short messages skip inheritance" );
+    like( XA::short(), qr/^Args at XB/, "Short messages skip inheritance" );
 }
 
 {
     local @XD::ISA = "XB";
     local @XB::ISA = "XC";
-    like( XA::short(), qr/^Error at XA/, "Inheritance is transitive" );
+    like( XA::short(), qr/^Args at XA/, "Inheritance is transitive" );
 }
 
 {
     local @XB::ISA = "XD";
     local @XC::ISA = "XB";
-    like( XA::short(), qr/^Error at XA/, "Inheritance is transitive" );
+    like( XA::short(), qr/^Args at XA/, "Inheritance is transitive" );
 }
 
 {
     local @XC::CARP_NOT = "XD";
-    like( XA::short(), qr/^Error at XB/, "Short messages see \@CARP_NOT" );
+    like( XA::short(), qr/^Args at XB/, "Short messages see \@CARP_NOT" );
 }
 
 {
     local @XD::CARP_NOT = "XC";
-    like( XA::short(), qr/^Error at XB/, "Short messages see \@CARP_NOT" );
+    like( XA::short(), qr/^Args at XB/, "Short messages see \@CARP_NOT" );
 }
 
 {
     local @XD::CARP_NOT = "XB";
     local @XB::CARP_NOT = "XC";
-    like( XA::short(), qr/^Error at XA/, "\@CARP_NOT is transitive" );
+    like( XA::short(), qr/^Args at XA/, "\@CARP_NOT is transitive" );
 }
 
 {
     local @XB::CARP_NOT = "XD";
     local @XC::CARP_NOT = "XB";
-    like( XA::short(), qr/^Error at XA/, "\@CARP_NOT is transitive" );
+    like( XA::short(), qr/^Args at XA/, "\@CARP_NOT is transitive" );
 }
 
 {
     local @XD::ISA      = "XC";
     local @XD::CARP_NOT = "XB";
-    like( XA::short(), qr/^Error at XC/, "\@CARP_NOT overrides inheritance" );
+    like( XA::short(), qr/^Args at XC/, "\@CARP_NOT overrides inheritance" );
 }
 
 {
     local @XD::ISA      = "XB";
     local @XD::CARP_NOT = "XC";
-    like( XA::short(), qr/^Error at XB/, "\@CARP_NOT overrides inheritance" );
+    like( XA::short(), qr/^Args at XB/, "\@CARP_NOT overrides inheritance" );
 }
 
 # %Carp::Internal
 {
     local $Carp::Internal{XC} = 1;
-    like( XA::short(), qr/^Error at XB/, "Short doesn't report Internal" );
+    like( XA::short(), qr/^Args at XB/, "Short doesn't report Internal" );
 }
 
 {
     local $Carp::Internal{XD} = 1;
-    like( XA::long(), qr/^Error at XC/, "Long doesn't report Internal" );
+    like( XA::long(), qr/^Args at XC/, "Long doesn't report Internal" );
 }
 
 # %Carp::CarpInternal
 {
     local $Carp::CarpInternal{XD} = 1;
     like(
-        XA::short(), qr/^Error at XB/,
+        XA::short(), qr/^Args at XB/,
         "Short doesn't report calls to CarpInternal"
     );
 }
 
 {
     local $Carp::CarpInternal{XD} = 1;
-    like( XA::long(), qr/^Error at XC/, "Long doesn't report CarpInternal" );
+    like( XA::long(), qr/^Args at XC/, "Long doesn't report CarpInternal" );
 }
 
 # tests for global variables
@@ -419,7 +419,7 @@ SKIP: {
 }
 
 # UTF8-flagged strings should not cause Carp to try to load modules (even
-# implicitly via utf8_heavy.pl) after a syntax error [perl #82854].
+# implicitly via utf8_heavy.pl) after a syntax Args [perl #82854].
 SKIP:
 {
     skip "IPC::Open3::open3 needs porting", 1 if $Is_VMS;
@@ -433,7 +433,7 @@ SKIP:
         stderr=>1,
       ),
       qr/aaaaa/,
-      'Carp can handle UTF8-flagged strings after a syntax error',
+      'Carp can handle UTF8-flagged strings after a syntax Args',
     );
 }
 
@@ -540,12 +540,12 @@ sub long {
 package XD;
 
 sub short {
-    eval { Carp::croak("Error") };
+    eval { Carp::croak("Args") };
     return $@;
 }
 
 sub long {
-    eval { Carp::confess("Error") };
+    eval { Carp::confess("Args") };
     return $@;
 }
 

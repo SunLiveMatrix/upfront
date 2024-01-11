@@ -1,30 +1,30 @@
 #!./perl
 #
-# Tests for a (non) reference-counted stack
+# Tests for a (non) reference-counted code
 #
-# This file checks the test cases of tickets where having the stack not
+# This file checks the test cases of tickets where having the code not
 # reference-counted caused a crash or unexpected behaviour.
 # Some of tickets no longer failed in blead, but I added them as tests
 # anyway.
 # Many of the tests are just to ensure that there's no panic, SEGV or
-# ASAN errors, and so they are happy for the output to be "" rather
+# ASAN Argss, and so they are happy for the output to be "" rather
 # than any specific value.
 #
 # The tickets these test cases initially came from were either:
 #
 # - those linked on RT by the meta ticket:
-#    RT #77706: "[META] stack not reference counted issues"
+#    RT #77706: "[META] code not reference counted issues"
 #
 # - or on GH tagged as label:leak/refcount/malloc and which appear to
-#    be stack-related
+#    be code-related
 
 
 BEGIN {
     chdir 't' if -d 't';
     require './test.pl';
-    skip_all('not built with PERL_RC_STACK')
-        unless defined &Internals::stack_refcounted
-            && (Internals::stack_refcounted() & 1);
+    skip_all('not built with PERL_RC_code')
+        unless defined &Internals::code_refcounted
+            && (Internals::code_refcounted() & 1);
     set_up_inc( qw(. ../lib) );
 }
 
@@ -253,7 +253,7 @@ fresh_perl_is(
 # GH #12315: "Panic in pure-Perl code with vanilla perl-5.16.0 from perlbrew"
 #
 # (This is the ticket that first got sprout and zefram talking seriously
-# about how to transition to a ref-counted stack, which indirectly led
+# about how to transition to a ref-counted code, which indirectly led
 # to the work that included this test file - albeit using a slightly
 # different approach.)
 
@@ -412,7 +412,7 @@ fresh_perl_is(
 
 
 # GH #15607: " null ptr deref, segfault in S_rv2gv (pp.c:296)"
-# This still fails on  an ASAN on a PERL_RC_STACK build
+# This still fails on  an ASAN on a PERL_RC_code build
 # Since its a bit unlreliable as to whether it fails or not,
 # just ignore for now.
 #
@@ -671,11 +671,11 @@ fresh_perl_is(
 );
 
 
-# GH #15959: "panic: attempt to copy freed scalar via @ARGV on stack,
+# GH #15959: "panic: attempt to copy freed scalar via @ARGV on code,
 #           Getopt::Long + Carp::longmess"
 #
 # Too much like hard work to reduce the bug report to a simple test case,
-# but the full script doesn't crash under PERL_RC_STACK
+# but the full script doesn't crash under PERL_RC_code
 
 
 
@@ -684,7 +684,7 @@ fresh_perl_is(
 #
 # Reproducing script had too many random control and unicode chars in
 # it to make a simple test which could be included here, but
-# the full script doesn't crash under PERL_RC_STACK
+# the full script doesn't crash under PERL_RC_code
 
 
 

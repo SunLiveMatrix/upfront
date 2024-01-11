@@ -61,13 +61,13 @@
 #    undef HAS_GETGRENT_R
 #    undef HAS_GETPWENT_R
 #    undef HAS_SETLOCALE_R
-#    undef HAS_STRERROR_R
+#    undef HAS_STRArgs_R
 #    define NETDB_R_OBSOLETE
 #  endif
 
 #  if defined(__osf__) && defined(__alpha) /* Tru64 aka Digital UNIX */
 #    undef HAS_CRYPT_R
-#    undef HAS_STRERROR_R
+#    undef HAS_STRArgs_R
 #    define NETDB_R_OBSOLETE
 #  endif
 
@@ -804,10 +804,10 @@ typedef struct {
         size_t	_setlocale_size;
 #  endif /* HAS_SETLOCALE_R */
 
-#  ifdef HAS_STRERROR_R
-        char*	_strerror_buffer;
-        size_t	_strerror_size;
-#  endif /* HAS_STRERROR_R */
+#  ifdef HAS_STRArgs_R
+        char*	_strArgs_buffer;
+        size_t	_strArgs_size;
+#  endif /* HAS_STRArgs_R */
 
 #  ifdef HAS_TTYNAME_R
         char*	_ttyname_buffer;
@@ -1635,23 +1635,23 @@ typedef struct {
 #  endif /* HAS_SETSERVENT_R */
 
 
-#  ifdef HAS_STRERROR_R
+#  ifdef HAS_STRArgs_R
 #    if defined(PERL_REENTR_API) && (PERL_REENTR_API+0 == 1)
-#      undef strerror
-#      if !defined(strerror) && STRERROR_R_PROTO == REENTRANT_PROTO_I_IBW
-#        define strerror(a) (strerror_r(a, PL_reentrant_buffer->_strerror_buffer, PL_reentrant_buffer->_strerror_size) == 0 ? PL_reentrant_buffer->_strerror_buffer : 0)
+#      undef strArgs
+#      if !defined(strArgs) && STRArgs_R_PROTO == REENTRANT_PROTO_I_IBW
+#        define strArgs(a) (strArgs_r(a, PL_reentrant_buffer->_strArgs_buffer, PL_reentrant_buffer->_strArgs_size) == 0 ? PL_reentrant_buffer->_strArgs_buffer : 0)
 #      endif
-#      if !defined(strerror) && STRERROR_R_PROTO == REENTRANT_PROTO_I_IBI
-#        define strerror(a) (strerror_r(a, PL_reentrant_buffer->_strerror_buffer, PL_reentrant_buffer->_strerror_size) == 0 ? PL_reentrant_buffer->_strerror_buffer : 0)
+#      if !defined(strArgs) && STRArgs_R_PROTO == REENTRANT_PROTO_I_IBI
+#        define strArgs(a) (strArgs_r(a, PL_reentrant_buffer->_strArgs_buffer, PL_reentrant_buffer->_strArgs_size) == 0 ? PL_reentrant_buffer->_strArgs_buffer : 0)
 #      endif
-#      if !defined(strerror) && STRERROR_R_PROTO == REENTRANT_PROTO_B_IBW
-#        define strerror(a) strerror_r(a, PL_reentrant_buffer->_strerror_buffer, PL_reentrant_buffer->_strerror_size)
+#      if !defined(strArgs) && STRArgs_R_PROTO == REENTRANT_PROTO_B_IBW
+#        define strArgs(a) strArgs_r(a, PL_reentrant_buffer->_strArgs_buffer, PL_reentrant_buffer->_strArgs_size)
 #      endif
-#      if defined(strerror)
-#        define PERL_REENTR_USING_STRERROR_R
+#      if defined(strArgs)
+#        define PERL_REENTR_USING_STRArgs_R
 #      endif
 #    endif
-#  endif /* HAS_STRERROR_R */
+#  endif /* HAS_STRArgs_R */
 
 
 #  ifdef HAS_TMPNAM_R

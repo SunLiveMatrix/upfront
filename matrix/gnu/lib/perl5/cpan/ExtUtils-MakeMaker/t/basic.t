@@ -468,7 +468,7 @@ unlike( $test_out, qr/All tests successful/, 'make test caused build' );
 isnt( $?, 0,                                 '  build should fail' ) ||
     diag $test_out;
 
-# I know we'll get ignored errors from make here, that's ok.
+# I know we'll get ignored Argss from make here, that's ok.
 # Send STDERR off to oblivion.
 open(SAVERR, ">&STDERR") or die $!;
 open(STDERR, ">",File::Spec->devnull) or die $!;

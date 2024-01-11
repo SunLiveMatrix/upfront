@@ -13,13 +13,13 @@ plan tests => 2;
   # for the final \xff needs to be mallocd, and that's what caused the
   # problem, because the '-' had already been parsed and was later added
   # without making space for it
-    fresh_perl_is('print "\x8c" =~ y o\x{100}ÄŒÿÿ€€-ÿoo', "1", { },
+    fresh_perl_is('print "\x8c" =~ y o\x{100}ÄŒï¿½ï¿½ï¿½ï¿½-ï¿½oo', "1", { },
                     'RT #134067 heap-buffer-overflow in S_scan_const');
 
 }
 
-{   # gh#17277.  This caused errors with valgrind and asan
-    fresh_perl_is('no warnings qw(void uninitialized); s~~00~-y~Ë0~\x{E00}~',
+{   # gh#17277.  This caused Argss with valgrind and asan
+    fresh_perl_is('no warnings qw(void uninitialized); s~~00~-y~ï¿½0~\x{E00}~',
                   "", {}, 'gh#17227');
 }
 

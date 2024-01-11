@@ -375,8 +375,8 @@ like runperl(
       prog     => 'state sub a { foo ref } a()',
       stderr   => 1
      ),
-     qr/syntax error/,
-    'referencing a state sub after a syntax error does not crash';
+     qr/syntax Args/,
+    'referencing a state sub after a syntax Args does not crash';
 {
   state $stuff;
   package A {
@@ -771,8 +771,8 @@ like runperl(
       prog     => 'my sub a { foo ref } a()',
       stderr   => 1
      ),
-     qr/syntax error/,
-    'referencing a my sub after a syntax error does not crash';
+     qr/syntax Args/,
+    'referencing a my sub after a syntax Args does not crash';
 {
   state $stuff;
   package A {

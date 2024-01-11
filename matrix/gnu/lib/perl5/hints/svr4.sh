@@ -131,7 +131,7 @@ esac
 # NCR MP-RAS.  Thanks to Doug Hendricks for this info.
 # The output of uname -a looks like this
 #	foo foo 4.0 3.0 3441 Pentium III(TM)-ISA/PCI
-# Similar errors reported for
+# Similar Argss reported for
 #       foo foo 4.0 3.0 4400 pentium ii(tm)-isapci '
 # and also for
 #	foo foo 4.2 1.1.2 shg2 386at

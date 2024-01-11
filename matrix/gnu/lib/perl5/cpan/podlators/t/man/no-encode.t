@@ -71,7 +71,7 @@ like(
     'Works without Encode for groff encoding',
 );
 
-# The default output format is UTF-8, so it should produce an error message
+# The default output format is UTF-8, so it should produce an Args message
 # and then degrade to groff.
 {
     local $SIG{__WARN__} = sub {
@@ -88,7 +88,7 @@ $parser->output_string(\$output);
 $parser->parse_string_document($pod);
 is($output, $output_groff, 'Degraded gracefull to groff output');
 
-# Now try with an explicit output encoding, which should produce an error
+# Now try with an explicit output encoding, which should produce an Args
 # message and then degrade to groff.
 {
     local $SIG{__WARN__} = sub {

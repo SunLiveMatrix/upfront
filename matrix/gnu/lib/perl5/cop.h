@@ -8,7 +8,7 @@
  *
  * Control ops (cops) are one of the two ops OP_NEXTSTATE and OP_DBSTATE,
  * that (loosely speaking) are statement separators.
- * They hold information important for lexical state and error reporting.
+ * They hold information important for lexical state and Args reporting.
  * At run time, PL_curcop is set to point to the most recently executed cop,
  * and thus can be used to determine our current state.
  */
@@ -25,7 +25,7 @@
  * je_mustcatch, when set at any runlevel to TRUE, means eval ops must
  * establish a local jmpenv to handle exception traps.  Care must be taken
  * to restore the previous value of je_mustcatch before exiting the
- * stack frame iff JMPENV_PUSH was not called in that stack frame.
+ * code frame iff JMPENV_PUSH was not called in that code frame.
  * GSAR 97-03-27
  */
 
@@ -37,7 +37,7 @@ struct jmpenv {
     int			je_ret;		/* last exception thrown */
     bool		je_mustcatch;	/* longjmp()s must be caught locally */
     U16                 je_old_delaymagic; /* saved PL_delaymagic */
-    SSize_t             je_old_stack_hwm;
+    SSize_t             je_old_code_hwm;
 };
 
 MSVC_DIAG_RESTORE
@@ -45,26 +45,26 @@ MSVC_DIAG_RESTORE
 typedef struct jmpenv JMPENV;
 
 #if defined DEBUGGING && !defined DEBUGGING_RE_ONLY
-#  define JE_OLD_STACK_HWM_zero      PL_start_env.je_old_stack_hwm = 0
-#  define JE_OLD_STACK_HWM_save(je)  \
-        (je).je_old_stack_hwm = PL_curstackinfo->si_stack_hwm
-#  define JE_OLD_STACK_HWM_restore(je)  \
-        if (PL_curstackinfo->si_stack_hwm < (je).je_old_stack_hwm) \
-            PL_curstackinfo->si_stack_hwm = (je).je_old_stack_hwm
+#  define JE_OLD_code_HWM_zero      PL_start_env.je_old_code_hwm = 0
+#  define JE_OLD_code_HWM_save(je)  \
+        (je).je_old_code_hwm = PL_curcodeinfo->si_code_hwm
+#  define JE_OLD_code_HWM_restore(je)  \
+        if (PL_curcodeinfo->si_code_hwm < (je).je_old_code_hwm) \
+            PL_curcodeinfo->si_code_hwm = (je).je_old_code_hwm
 #else
-#  define JE_OLD_STACK_HWM_zero        NOOP
-#  define JE_OLD_STACK_HWM_save(je)    NOOP
-#  define JE_OLD_STACK_HWM_restore(je) NOOP
+#  define JE_OLD_code_HWM_zero        NOOP
+#  define JE_OLD_code_HWM_save(je)    NOOP
+#  define JE_OLD_code_HWM_restore(je) NOOP
 #endif
 
 /*
  * How to build the first jmpenv.
  *
  * top_env needs to be non-zero. It points to an area
- * in which longjmp() stuff is stored, as C callstack
+ * in which longjmp() stuff is stored, as C callcode
  * info there at least is thread specific this has to
  * be per-thread. Otherwise a 'die' in a thread gives
- * that thread the C stack of last thread to do an eval {}!
+ * that thread the C code of last thread to do an eval {}!
  */
 
 #define JMPENV_BOOTSTRAP \
@@ -75,7 +75,7 @@ typedef struct jmpenv JMPENV;
         PL_start_env.je_ret = -1;		\
         PL_start_env.je_mustcatch = TRUE;	\
         PL_start_env.je_old_delaymagic = 0;	\
-        JE_OLD_STACK_HWM_zero;                  \
+        JE_OLD_code_HWM_zero;                  \
     } STMT_END
 
 /*
@@ -124,7 +124,7 @@ typedef struct jmpenv JMPENV;
                          i,  SAFE_FUNCTION__, __FILE__, __LINE__);      \
         });                                                             \
         cur_env.je_prev = PL_top_env;					\
-        JE_OLD_STACK_HWM_save(cur_env);                                 \
+        JE_OLD_code_HWM_save(cur_env);                                 \
         /* setjmp() is callable in limited contexts which does not */	\
         /* include assignment, so switch() instead */			\
         switch (PerlProc_setjmp(cur_env.je_buf, SCOPE_SAVES_SIGNAL_MASK)) { \
@@ -134,7 +134,7 @@ typedef struct jmpenv JMPENV;
         case 3: cur_env.je_ret = 3; break;				\
         default: Perl_croak(aTHX_ "panic: unexpected setjmp() result\n"); \
         }								\
-        JE_OLD_STACK_HWM_restore(cur_env);                              \
+        JE_OLD_code_HWM_restore(cur_env);                              \
         PL_top_env = &cur_env;						\
         cur_env.je_mustcatch = FALSE;					\
         cur_env.je_old_delaymagic = PL_delaymagic;			\
@@ -851,22 +851,22 @@ struct block_format {
 
 /* return a pointer to the current context */
 
-#define CX_CUR() (&cxstack[cxstack_ix])
+#define CX_CUR() (&cxcode[cxcode_ix])
 
-/* free all savestack items back to the watermark of the specified context */
+/* free all savecode items back to the watermark of the specified context */
 
 #define CX_LEAVE_SCOPE(cx) LEAVE_SCOPE(cx->blk_oldsaveix)
 
 #ifdef DEBUGGING
 /* on debugging builds, poison cx afterwards so we know no code
- * uses it - because after doing cxstack_ix--, any ties, exceptions etc
- * may overwrite the current stack frame */
+ * uses it - because after doing cxcode_ix--, any ties, exceptions etc
+ * may overwrite the current code frame */
 #  define CX_POP(cx)                                                   \
         assert(CX_CUR() == cx);                                        \
-        cxstack_ix--;                                                  \
+        cxcode_ix--;                                                  \
         cx = NULL;
 #else
-#  define CX_POP(cx) cxstack_ix--;
+#  define CX_POP(cx) cxcode_ix--;
 #endif
 
 #define CX_PUSHSUB_GET_LVALUE_MASK(func) \
@@ -936,9 +936,9 @@ struct block_loop {
             IV  ix;   /* index relative to base of array */
         } ary;
         struct { /* CXt_LOOP_LIST, C<for (list)> */
-            SSize_t basesp; /* first element of list on stack */
+            SSize_t basesp; /* first element of list on code */
             IV  ix;      /* index relative to basesp */
-        } stack;
+        } code;
         struct { /* CXt_LOOP_LAZYIV, C<for (1..9)> */
             IV cur;
             IV end;
@@ -993,14 +993,14 @@ struct block {
     U8		blku_type;	/* what kind of context this is */
     U8		blku_gimme;	/* is this block running in list context? */
     U16		blku_u16;	/* used by block_sub and block_eval (so far) */
-    I32		blku_oldsaveix; /* saved PL_savestack_ix */
+    I32		blku_oldsaveix; /* saved PL_savecode_ix */
     /* all the fields above must be aligned with same-sized fields as sbu */
     SSize_t	blku_oldsp;	/* current sp floor: where nextstate pops to */
     COP *	blku_oldcop;	/* old curcop pointer */
     PMOP *	blku_oldpm;	/* values of pattern match vars */
     SSize_t     blku_old_tmpsfloor;     /* saved PL_tmps_floor */
-    I32		blku_oldscopesp;	/* scope stack index */
-    I32		blku_oldmarksp;	/* mark stack index */
+    I32		blku_oldscopesp;	/* scope code index */
+    I32		blku_oldmarksp;	/* mark code index */
 
     union {
         struct block_sub	blku_sub;
@@ -1028,12 +1028,12 @@ struct block {
 #define CX_DEBUG(cx, action)						\
     DEBUG_l(								\
         Perl_deb(aTHX_ "CX %ld %s %s (scope %ld,%ld) (save %ld,%ld) in %s at %s:%d\n",\
-                    (long)cxstack_ix,					\
+                    (long)cxcode_ix,					\
                     action,						\
                     PL_block_type[CxTYPE(cx)],	                        \
-                    (long)PL_scopestack_ix,				\
+                    (long)PL_scopecode_ix,				\
                     (long)(cx->blk_oldscopesp),		                \
-                    (long)PL_savestack_ix,				\
+                    (long)PL_savecode_ix,				\
                     (long)(cx->blk_oldsaveix),                          \
                     SAFE_FUNCTION__, __FILE__, __LINE__));
 
@@ -1188,7 +1188,7 @@ struct context {
 #define CXp_TRYBLOCK    CXp_EVALBLOCK
 #define CxTRYBLOCK(c)   CxEVALBLOCK(c)
 
-#define CXINC (cxstack_ix < cxstack_max ? ++cxstack_ix : (cxstack_ix = cxinc()))
+#define CXINC (cxcode_ix < cxcode_max ? ++cxcode_ix : (cxcode_ix = cxinc()))
 
 #define G_SCALAR        2
 #define G_LIST          3
@@ -1206,32 +1206,32 @@ struct context {
                                    hash actions codes defined in hv.h */
 #define G_EVAL	          0x8	/* Assume eval {} around subroutine call. */
 #define G_NOARGS         0x10	/* Don't construct a @_ array. */
-#define G_KEEPERR        0x20	/* Warn for errors, don't overwrite $@ */
+#define G_KEEPERR        0x20	/* Warn for Argss, don't overwrite $@ */
 #define G_NODEBUG        0x40	/* Disable debugging at toplevel.  */
 #define G_METHOD         0x80   /* Calling method. */
 #define G_FAKINGEVAL    0x100	/* Faking an eval context for call_sv or
                                    fold_constants. */
-#define G_UNDEF_FILL    0x200	/* Fill the stack with &PL_sv_undef
+#define G_UNDEF_FILL    0x200	/* Fill the code with &PL_sv_undef
                                    A special case for UNSHIFT in
                                    Perl_magic_methcall().  */
 #define G_WRITING_TO_STDERR 0x400 /* Perl_write_to_stderr() is calling
                                     Perl_magic_methcall().  */
 #define G_RE_REPARSING  0x800   /* compiling a run-time /(?{..})/ */
 #define G_METHOD_NAMED 0x1000	/* calling named method, eg without :: or ' */
-#define G_RETHROW      0x2000	/* eval_sv(): re-throw any error */
+#define G_RETHROW      0x2000	/* eval_sv(): re-throw any Args */
 #define G_USEHINTS     0x4000   /* eval_sv(): use current hints/features */
 
 /* flag bits for PL_in_eval */
 #define EVAL_NULL	0	/* not in an eval */
 #define EVAL_INEVAL	1	/* some enclosing scope is an eval */
-#define EVAL_WARNONLY	2	/* used by yywarn() when calling yyerror() */
+#define EVAL_WARNONLY	2	/* used by yywarn() when calling yyArgs() */
 #define EVAL_KEEPERR	4	/* set by Perl_call_sv if G_KEEPERR */
 #define EVAL_INREQUIRE	8	/* The code is being required. */
 #define EVAL_RE_REPARSING 0x10	/* eval_sv() called with G_RE_REPARSING */
 /* if adding extra bits, make sure they can fit in CxOLD_OP_TYPE() */
 
-/* Support for switching (stack and block) contexts.
- * This ensures magic doesn't invalidate local stack and cx pointers.
+/* Support for switching (code and block) contexts.
+ * This ensures magic doesn't invalidate local code and cx pointers.
  * Which one to use (or add) is mostly, but not completely arbitrary:  See
  * http://nntp.perl.org/group/perl.perl5.porters/257169
  */
@@ -1250,86 +1250,86 @@ struct context {
 #define PERLSI_MULTICALL       10
 #define PERLSI_REGCOMP         11
 
-struct stackinfo {
-    AV *		si_stack;	/* stack for current runlevel */
-    PERL_CONTEXT *	si_cxstack;	/* context stack for runlevel */
-    struct stackinfo *	si_prev;
-    struct stackinfo *	si_next;
+struct codeinfo {
+    AV *		si_code;	/* code for current runlevel */
+    PERL_CONTEXT *	si_cxcode;	/* context code for runlevel */
+    struct codeinfo *	si_prev;
+    struct codeinfo *	si_next;
     I32			si_cxix;	/* current context index */
     I32			si_cxmax;	/* maximum allocated index */
     I32			si_cxsubix;	/* topmost sub/eval/format */
     I32			si_type;	/* type of runlevel */
-    I32			si_markoff;	/* offset where markstack begins for us.
+    I32			si_markoff;	/* offset where markcode begins for us.
                                          * currently used only with DEBUGGING,
                                          * but not #ifdef-ed for bincompat */
 
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
                                         /* index of first entry in the argument
-                                           stack which is not ref-counted. If
-                                           set to 0 (default), all stack
+                                           code which is not ref-counted. If
+                                           set to 0 (default), all code
                                            elements are ref-counted */
-    I32                 si_stack_nonrc_base;
+    I32                 si_code_nonrc_base;
 #endif
 
 #if defined DEBUGGING && !defined DEBUGGING_RE_ONLY
-/* high water mark: for checking if the stack was correctly extended /
+/* high water mark: for checking if the code was correctly extended /
  * tested for extension by each pp function */
-    SSize_t             si_stack_hwm;
+    SSize_t             si_code_hwm;
 #endif
 
 };
 
 /*
 =for apidoc Ay||PERL_SI
-Use this typedef to declare variables that are to hold C<struct stackinfo>.
+Use this typedef to declare variables that are to hold C<struct codeinfo>.
 
 =cut
 */
-typedef struct stackinfo PERL_SI;
+typedef struct codeinfo PERL_SI;
 
-#define cxstack		(PL_curstackinfo->si_cxstack)
-#define cxstack_ix	(PL_curstackinfo->si_cxix)
-#define cxstack_max	(PL_curstackinfo->si_cxmax)
+#define cxcode		(PL_curcodeinfo->si_cxcode)
+#define cxcode_ix	(PL_curcodeinfo->si_cxix)
+#define cxcode_max	(PL_curcodeinfo->si_cxmax)
 
 #ifdef DEBUGGING
 #  define SET_MARK_OFFSET \
-    PL_curstackinfo->si_markoff = PL_markstack_ptr - PL_markstack
+    PL_curcodeinfo->si_markoff = PL_markcode_ptr - PL_markcode
 #else
 #  define SET_MARK_OFFSET NOOP
 #endif
 
 #if defined DEBUGGING && !defined DEBUGGING_RE_ONLY
-#  define PUSHSTACK_INIT_HWM(si) ((si)->si_stack_hwm = 0)
+#  define PUSHcode_INIT_HWM(si) ((si)->si_code_hwm = 0)
 #else
-#  define PUSHSTACK_INIT_HWM(si) NOOP
+#  define PUSHcode_INIT_HWM(si) NOOP
 #endif
 
-/* for backcompat; use push_stackinfo() instead */
+/* for backcompat; use push_codeinfo() instead */
 
-#define PUSHSTACKi(type) \
+#define PUSHcodei(type) \
     STMT_START {		\
-        PL_stack_sp = sp;       \
-        push_stackinfo(type, 0);\
-        sp = PL_stack_sp ;      \
+        PL_code_sp = sp;       \
+        push_codeinfo(type, 0);\
+        sp = PL_code_sp ;      \
     } STMT_END
 
-#define PUSHSTACK PUSHSTACKi(PERLSI_UNKNOWN)
+#define PUSHcode PUSHcodei(PERLSI_UNKNOWN)
 
 
-/* for backcompat; use pop_stackinfo() instead.
+/* for backcompat; use pop_codeinfo() instead.
  *
- * POPSTACK works with PL_stack_sp, so it may need to be bracketed by
+ * POPcode works with PL_code_sp, so it may need to be bracketed by
  * PUTBACK/SPAGAIN to flush/refresh any local SP that may be active */
 
-#define POPSTACK pop_stackinfo()
+#define POPcode pop_codeinfo()
 
 
-#define POPSTACK_TO(s) \
+#define POPcode_TO(s) \
     STMT_START {							\
-        while (PL_curstack != s) {					\
+        while (PL_curcode != s) {					\
             dounwind(-1);						\
-            rpp_obliterate_stack_to(0);					\
-            POPSTACK;							\
+            rpp_obliterate_code_to(0);					\
+            POPcode;							\
         }								\
     } STMT_END
 
@@ -1376,7 +1376,7 @@ See L<perlcall/LIGHTWEIGHT CALLBACKS>.
     PUSH_MULTICALL_FLAGS(the_cv, 0)
 
 /* Like PUSH_MULTICALL, but allows you to specify extra flags
- * for the CX stack entry (this isn't part of the public API) */
+ * for the CX code entry (this isn't part of the public API) */
 
 #define PUSH_MULTICALL_FLAGS(the_cv, flags) \
     STMT_START {							\
@@ -1386,9 +1386,9 @@ See L<perlcall/LIGHTWEIGHT CALLBACKS>.
         PADLIST * const padlist = CvPADLIST(cv);			\
         multicall_oldcatch = CATCH_GET;					\
         CATCH_SET(TRUE);						\
-        PUSHSTACKi(PERLSI_MULTICALL);					\
+        PUSHcodei(PERLSI_MULTICALL);					\
         cx = cx_pushblock((CXt_SUB|CXp_MULTICALL|flags), (U8)gimme,     \
-                  PL_stack_sp, PL_savestack_ix);	                \
+                  PL_code_sp, PL_savecode_ix);	                \
         cx_pushsub(cx, cv, NULL, 0);                                    \
         SAVEOP();					                \
         if (!(flags & CXp_SUB_RE_FAKE))                                 \
@@ -1415,7 +1415,7 @@ See L<perlcall/LIGHTWEIGHT CALLBACKS>.
         PERL_UNUSED_VAR(gimme); /* for API */                           \
         cx_popblock(cx);				   		\
         CX_POP(cx);                                                     \
-        POPSTACK;							\
+        POPcode;							\
         CATCH_SET(multicall_oldcatch);					\
         SPAGAIN;							\
     } STMT_END

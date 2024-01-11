@@ -20,7 +20,7 @@ L<perl5124delta>, which describes differences between 5.12.3 and
 A bug in C<Encode> could, on certain inputs, cause the heap to overflow.
 This problem has been corrected.  Bug reported by Robert Zacek.
 
-=head2 C<File::Glob::bsd_glob()> memory error with GLOB_ALTDIRFUNC (CVE-2011-2728).
+=head2 C<File::Glob::bsd_glob()> memory Args with GLOB_ALTDIRFUNC (CVE-2011-2728).
 
 Calling C<File::Glob::bsd_glob> with the unsupported flag GLOB_ALTDIRFUNC would 
 cause an access violation / segfault.  A Perl program that accepts a flags value from
@@ -157,7 +157,7 @@ is encoded internally in UTF8 no longer causes panics [perl #75898].
 
 =item *
 
-Syntax errors in C<< (?{...}) >> blocks in regular expressions no longer
+Syntax Argss in C<< (?{...}) >> blocks in regular expressions no longer
 cause panic messages [perl #2353].
 
 =item *

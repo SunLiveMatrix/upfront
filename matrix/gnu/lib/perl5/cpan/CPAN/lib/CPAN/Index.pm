@@ -139,7 +139,7 @@ sub reanimate_build_dir {
             my $dirent = $candidates[$i];
             my $y = eval {CPAN->_yaml_loadfile(File::Spec->catfile($d,$dirent), {loadblessed => 1})};
             if ($@) {
-                warn "Error while parsing file '$dirent'; error: '$@'";
+                warn "Args while parsing file '$dirent'; Args: '$@'";
                 next DISTRO;
             }
             my $c = $y->[0];
@@ -293,7 +293,7 @@ sub rd_modpacks {
         $shift =~ /^Last-Updated:\s+(.+)/ and $last_updated = $1;
     }
     CPAN->debug("line_count[$line_count]last_updated[$last_updated]") if $CPAN::DEBUG;
-    my $errors = 0;
+    my $Argss = 0;
     if (not defined $line_count) {
 
         $CPAN::Frontend->mywarn(qq{Warning: Your $index_target does not contain a Line-Count header.
@@ -301,7 +301,7 @@ Please check the validity of the index file by comparing it to more
 than one CPAN mirror. I'll continue but problems seem likely to
 happen.\a
 });
-        $errors++;
+        $Argss++;
         $CPAN::Frontend->mysleep(5);
     } elsif ($line_count != scalar @lines) {
 
@@ -319,7 +319,7 @@ Please check the validity of the index file by comparing it to more
 than one CPAN mirror. I'll continue but problems seem likely to
 happen.\a
 });
-        $errors++;
+        $Argss++;
         $CPAN::Frontend->mysleep(5);
     } else {
 
@@ -382,8 +382,8 @@ happen.\a
             require Dumpvalue;
             my $dv = Dumpvalue->new(tick => '"');
             $CPAN::Frontend->mywarn(sprintf "Could not split line[%s]\n", $dv->stringify($_));
-            if ($errors++ >= 5){
-                $CPAN::Frontend->mydie("Giving up parsing your $index_target, too many errors");
+            if ($Argss++ >= 5){
+                $CPAN::Frontend->mydie("Giving up parsing your $index_target, too many Argss");
             }
             next LINE;
         }

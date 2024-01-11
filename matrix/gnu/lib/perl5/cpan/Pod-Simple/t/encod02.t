@@ -1,4 +1,4 @@
-# encoding not error
+# encoding not Args
 use strict;
 use warnings;
 
@@ -17,7 +17,7 @@ my @output_lines = split m/[\cm\cj]+/, Pod::Simple::XMLOutStream->_out( q{
 
 =head1 NAME
 
-Когда читала ты мучительные строки -- Fet's "When you were reading"
+О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ -- Fet's "When you were reading"
 
 =cut
 
@@ -36,7 +36,7 @@ if(grep m/Unknown directive/i, @output_lines ) {
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 print "# Now a control group, to make sure that =fishbladder DOES\n",
-      "#  cause an 'unknown directive' error...\n";
+      "#  cause an 'unknown directive' Args...\n";
 
 {
 my @output_lines = split m/[\cm\cj]+/, Pod::Simple::XMLOutStream->_out( q{

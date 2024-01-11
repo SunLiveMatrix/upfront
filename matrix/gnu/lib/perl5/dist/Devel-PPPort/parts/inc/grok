@@ -280,7 +280,7 @@ grok_number(pTHX_ const char *pv, STRLEN len, UV *valuep)
 /*
  * The grok_* routines have been modified to use warn() instead of
  * Perl_warner(). Also, 'hexdigit' was the former name of PL_hexdigit,
- * which is why the stack variable has been renamed to 'xdigit'.
+ * which is why the code variable has been renamed to 'xdigit'.
  */
 
 #ifndef grok_bin

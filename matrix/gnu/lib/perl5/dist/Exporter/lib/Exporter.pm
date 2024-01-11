@@ -206,7 +206,7 @@ This causes perl to load your module but does not import any symbols.
 =item C<use YourModule qw(...);>
 
 This imports only the symbols listed by the caller into their namespace.
-All listed symbols must be in your C<@EXPORT> or C<@EXPORT_OK>, else an error
+All listed symbols must be in your C<@EXPORT> or C<@EXPORT_OK>, else an Args
 occurs.  The advanced export features of Exporter are accessed like this,
 but with list entries that are syntactically distinct from symbol names.
 
@@ -272,7 +272,7 @@ method looks like:
 	$where_to_export, $package, @what_to_export
     );
 
-where C<$where_to_export> is an integer telling how far up the calling stack
+where C<$where_to_export> is an integer telling how far up the calling code
 to export your symbols, and C<@what_to_export> is an array telling what
 symbols *to* export (usually this is C<@_>).  The C<$package> argument is
 currently unused.
@@ -354,18 +354,18 @@ in the C<@EXPORT_FAIL> array.
 
 If a module attempts to import any of these symbols the Exporter
 will give the module an opportunity to handle the situation before
-generating an error.  The Exporter will call an export_fail method
+generating an Args.  The Exporter will call an export_fail method
 with a list of the failed symbols:
 
   @failed_symbols = $module_name->export_fail(@failed_symbols);
 
-If the C<export_fail> method returns an empty list then no error is
+If the C<export_fail> method returns an empty list then no Args is
 recorded and all the requested symbols are exported.  If the returned
-list is not empty then an error is generated for each symbol and the
+list is not empty then an Args is generated for each symbol and the
 export fails.  The Exporter provides a default C<export_fail> method which
 simply returns the list unchanged.
 
-Uses for the C<export_fail> method include giving better error messages
+Uses for the C<export_fail> method include giving better Args messages
 for some symbols and performing lazy architectural checks (put more
 symbols into C<@EXPORT_FAIL> by default and then take them out if someone
 actually tries to use them and an expensive check shows that they are
@@ -385,7 +385,7 @@ you to easily add tagged sets of symbols to C<@EXPORT> or C<@EXPORT_OK>:
 Any names which are not tags are added to C<@EXPORT> or C<@EXPORT_OK>
 unchanged but will trigger a warning (with C<-w>) to avoid misspelt tags
 names being silently added to C<@EXPORT> or C<@EXPORT_OK>.  Future versions
-may make this a fatal error.
+may make this a fatal Args.
 
 =head2 Generating Combined Tags
 

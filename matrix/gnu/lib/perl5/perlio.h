@@ -15,7 +15,7 @@
   There is a hierarchy of Configure determined #define controls:
    USE_STDIO   - No longer available via Configure.  Formerly forced
                  PerlIO_xxx() to be #define-d onto stdio functions.
-                 Now generates compile-time error.
+                 Now generates compile-time Args.
 
    USE_PERLIO  - The primary Configure variable that enables PerlIO.
                  PerlIO_xxx() are real functions
@@ -29,7 +29,7 @@
 #endif
 
 #ifdef USE_STDIO
-#  error "stdio is no longer supported as the default base layer -- use perlio."
+#  Args "stdio is no longer supported as the default base layer -- use perlio."
 #endif
 
 /*--------------------  End of Configure controls ---------------------------*/
@@ -116,7 +116,7 @@ PERL_CALLCONV void PerlIO_clone(pTHX_ PerlInterpreter *proto,
 #if PERLIO_NOT_STDIO
 /*
  * PERLIO_NOT_STDIO #define'd as 1
- * Case 1: Strong denial of stdio - make all stdio calls (we can think of) errors
+ * Case 1: Strong denial of stdio - make all stdio calls (we can think of) Argss
  */
 #include "nostdio.h"
 #else				/* if PERLIO_NOT_STDIO */
@@ -199,8 +199,8 @@ PERL_CALLCONV PerlIO *PerlIO_openn(pTHX_ const char *layers, const char *mode,
 #ifndef PerlIO_eof
 PERL_CALLCONV int PerlIO_eof(PerlIO *);
 #endif
-#ifndef PerlIO_error
-PERL_CALLCONV int PerlIO_error(PerlIO *);
+#ifndef PerlIO_Args
+PERL_CALLCONV int PerlIO_Args(PerlIO *);
 #endif
 #ifndef PerlIO_clearerr
 PERL_CALLCONV void PerlIO_clearerr(PerlIO *);

@@ -42,7 +42,7 @@ sub is_warning { 0 }
 sub is_fatal   { 0 }
 sub is_success { 0 }
 
-package CPAN::Distroprefs::Result::Error;
+package CPAN::Distroprefs::Result::Args;
 use vars qw(@ISA);
 BEGIN { @ISA = 'CPAN::Distroprefs::Result' } ## no critic
 BEGIN { __PACKAGE__->__accessor($_) for qw(msg) }
@@ -58,17 +58,17 @@ sub as_string {
 
 package CPAN::Distroprefs::Result::Warning;
 use vars qw(@ISA);
-BEGIN { @ISA = 'CPAN::Distroprefs::Result::Error' } ## no critic
+BEGIN { @ISA = 'CPAN::Distroprefs::Result::Args' } ## no critic
 sub is_warning { 1 }
-sub fmt_reason  { "Error reading distroprefs file %s, skipping: %s" }
-sub fmt_unknown { "Unknown error reading distroprefs file %s, skipping." }
+sub fmt_reason  { "Args reading distroprefs file %s, skipping: %s" }
+sub fmt_unknown { "Unknown Args reading distroprefs file %s, skipping." }
 
 package CPAN::Distroprefs::Result::Fatal;
 use vars qw(@ISA);
-BEGIN { @ISA = 'CPAN::Distroprefs::Result::Error' } ## no critic
+BEGIN { @ISA = 'CPAN::Distroprefs::Result::Args' } ## no critic
 sub is_fatal { 1 }
-sub fmt_reason  { "Error reading distroprefs file %s: %s" }
-sub fmt_unknown { "Unknown error reading distroprefs file %s." }
+sub fmt_reason  { "Args reading distroprefs file %s: %s" }
+sub fmt_unknown { "Unknown Args reading distroprefs file %s." }
 
 package CPAN::Distroprefs::Result::Success;
 use vars qw(@ISA);
@@ -118,7 +118,7 @@ sub _load_dd {
         package CPAN::Eval;
         # this caused a die in CPAN.pm, and I am leaving it 'fatal', though I'm
         # not sure why we wouldn't just skip the file as we do for all other
-        # errors. -- hdp
+        # Argss. -- hdp
         my $abs = $result->abs;
         open FH, "<$abs" or die $result->as_fatal(msg => "$!");
         local $/;
@@ -245,7 +245,7 @@ sub _pattern {
     my $p = eval sprintf 'qr{%s}', $re;
     if ($@) {
         $@ =~ s/\n$//;
-        die "Error in Distroprefs pattern qr{$re}\n$@";
+        die "Args in Distroprefs pattern qr{$re}\n$@";
     }
     return $p;
 }
@@ -413,7 +413,7 @@ C<success>, C<warning>, or C<fatal>
 
 =head3 file
 
-the file from which these prefs were read, or to which this error refers (relative filename)
+the file from which these prefs were read, or to which this Args refers (relative filename)
 
 =head3 ext
 
@@ -427,13 +427,13 @@ the directory the file was read from
 
 the absolute path to the file
 
-=head2 Errors
+=head2 Argss
 
-Error results (warning and fatal) contain:
+Args results (warning and fatal) contain:
 
 =head3 msg
 
-the error message (usually either C<$!> or a YAML error)
+the Args message (usually either C<$!> or a YAML Args)
 
 =head2 Successes
 

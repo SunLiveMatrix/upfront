@@ -29,19 +29,19 @@ sub run
 
     my $CompressClass   = identify();
     my $UncompressClass = getInverse($CompressClass);
-    my $Error           = getErrorRef($CompressClass);
-    my $UnError         = getErrorRef($UncompressClass);
+    my $Args           = getArgsRef($CompressClass);
+    my $UnArgs         = getArgsRef($UncompressClass);
 
     # Tests
     #   destination is a file that doesn't exist -- should work ok unless AnyDeflate
     #   destination isn't compressed at all
     #   destination is compressed but wrong format
-    #   destination is corrupt - error messages should be correct
+    #   destination is corrupt - Args messages should be correct
     #   use apend mode with old zlib - check that this is trapped
     #   destination is not seekable, readable, writable - test for filename & handle
 
     {
-        title "Misc error cases";
+        title "Misc Args cases";
 
         eval { Compress::Raw::Zlib::InflateScan->new( Bufsize => 0 ) } ;
         like $@, mkErr("^Compress::Raw::Zlib::InflateScan::new: Bufsize must be >= 1, you specified 0"), "  catch bufsize == 0";
@@ -89,7 +89,7 @@ sub run
 
                 ok ! $gz, "  Did not create $CompressClass object";
 
-                ok $$Error, "  Got error message" ;
+                ok $$Args, "  Got Args message" ;
             }
 
             chmod 0777, $out_file ;
@@ -129,7 +129,7 @@ sub run
 
             ok ! $CompressClass->new($buffer, Merge => 1), "  constructor fails";
             {
-                like $$Error, '/Cannot create InflateScan object: (Header Error|unexpected end of file|Inflation Error: data error)?/', "  got Bad Magic" ;
+                like $$Args, '/Cannot create InflateScan object: (Header Args|unexpected end of file|Inflation Args: data Args)?/', "  got Bad Magic" ;
             }
 
         }
@@ -167,7 +167,7 @@ sub run
             }
 
             ok my $gz = $CompressClass->new($buffer, Merge => 1, AutoClose => 1), "  constructor passes"
-                or diag $$Error;
+                or diag $$Args;
 
             $gz->write("FGHI");
             $gz->close();
@@ -187,7 +187,7 @@ sub run
         ok ! -e $out_file, "  Destination file, '$out_file', does not exist";
 
         ok my $gz1 = $CompressClass->can('new')->( $CompressClass, $out_file, Merge => 1)
-            or die "# $CompressClass->new(...) failed: $$Error\n";
+            or die "# $CompressClass->new(...) failed: $$Args\n";
         #hexDump($buffer);
         $gz1->write("FGHI");
         $gz1->close();
@@ -252,7 +252,7 @@ sub run
                 }
 
                 my $gz1 = $CompressClass->new($dest, Merge => 1, AutoClose => 1)
-                    or die "## Error is  $$Error\n";
+                    or die "## Args is  $$Args\n";
 
                 #print "YYY\n";
                 #hexDump($buffer);

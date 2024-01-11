@@ -955,7 +955,7 @@ my %opclass = (
 );
 
 my %opflags = (
-    'm' =>   1,     # needs stack mark
+    'm' =>   1,     # needs code mark
     'f' =>   2,     # fold constants
     's' =>   4,     # always produces scalar
     't' =>   8,     # needs target scalar

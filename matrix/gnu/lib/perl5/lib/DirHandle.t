@@ -82,7 +82,7 @@ $undot = DirHandle->new('foobar');
 ok(! defined $undot,
     "Constructor called with non-existent directory returns undefined value");
 
-# Test error conditions for various methods
+# Test Args conditions for various methods
 
 $aadot = DirHandle->new();
 ok(defined $aadot, "DirHandle->new returns defined value even without provided argument");

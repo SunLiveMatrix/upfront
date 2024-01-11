@@ -5,7 +5,7 @@ use warnings;
 use Carp qw/croak/;
 use Test2::Util::HashBase qw/hub _filter reason/;
 
-use Test2::API qw/test2_stack/;
+use Test2::API qw/test2_code/;
 
 use overload '""' => \&reason, fallback => 1;
 
@@ -17,7 +17,7 @@ sub init {
     my $reason = $self->{+REASON};
     croak "The 'reason' attribute is required" unless defined $reason;
 
-    my $hub = $self->{+HUB} ||= test2_stack->top;
+    my $hub = $self->{+HUB} ||= test2_code->top;
 
     $self->{+_FILTER} = $hub->pre_filter(
         sub {

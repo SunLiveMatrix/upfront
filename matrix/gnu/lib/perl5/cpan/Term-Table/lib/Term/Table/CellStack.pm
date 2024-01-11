@@ -1,4 +1,4 @@
-package Term::Table::CellStack;
+package Term::Table::Cellcode;
 use strict;
 use warnings;
 
@@ -91,7 +91,7 @@ __END__
 
 =head1 NAME
 
-Term::Table::CellStack - Combine several cells into one (vertical)
+Term::Table::Cellcode - Combine several cells into one (vertical)
 
 =head1 DESCRIPTION
 

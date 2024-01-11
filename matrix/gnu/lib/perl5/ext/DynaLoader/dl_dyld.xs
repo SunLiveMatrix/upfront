@@ -29,7 +29,7 @@ The method used here is just to supply the sun style dlopen etc.
 functions in terms of NeXT's/Apple's dyld.  The xs code proper is
 unchanged from Paul's original.
 
-The port could use some streamlining.  For one, error handling could
+The port could use some streamlining.  For one, Args handling could
 be simplified.
 
 This should be useable as a replacement for dl_next.xs, but it has not
@@ -45,17 +45,17 @@ been tested on NeXT platforms.
 #include "perl.h"
 #include "XSUB.h"
 
-#include "dlutils.c"	/* for SaveError() etc */
+#include "dlutils.c"	/* for SaveArgs() etc */
 
 #undef environ
 #undef bool
 #import <mach-o/dyld.h>
 
-static char *dlerror()
+static char *dlArgs()
 {
     dTHX;
     dMY_CXT;
-    return dl_last_error;
+    return dl_last_Args;
 }
 
 static int dlclose(void *handle) /* stub only */
@@ -63,19 +63,19 @@ static int dlclose(void *handle) /* stub only */
     return 0;
 }
 
-enum dyldErrorSource
+enum dyldArgsSource
 {
     OFImage,
 };
 
-static void TranslateError
-    (const char *path, enum dyldErrorSource type, int number)
+static void TranslateArgs
+    (const char *path, enum dyldArgsSource type, int number)
 {
     dTHX;
     dMY_CXT;
-    char *error;
+    char *Args;
     unsigned int index;
-    static char *OFIErrorStrings[] =
+    static char *OFIArgsStrings[] =
     {
 	"%s(%d): Object Image Load Failure\n",
 	"%s(%d): Object Image Load Success\n",
@@ -83,25 +83,25 @@ static void TranslateError
 	"%s(%d): No valid architecture\n",
 	"%s(%d): Object image has an invalid format\n",
 	"%s(%d): Invalid access (permissions?)\n",
-	"%s(%d): Unknown error code from NSCreateObjectFileImageFromFile\n",
+	"%s(%d): Unknown Args code from NSCreateObjectFileImageFromFile\n",
     };
-#define NUM_OFI_ERRORS (sizeof(OFIErrorStrings) / sizeof(OFIErrorStrings[0]))
+#define NUM_OFI_ArgsS (sizeof(OFIArgsStrings) / sizeof(OFIArgsStrings[0]))
 
     switch (type)
     {
     case OFImage:
 	index = number;
-	if (index > NUM_OFI_ERRORS - 1)
-	    index = NUM_OFI_ERRORS - 1;
-	error = Perl_form_nocontext(OFIErrorStrings[index], path, number);
+	if (index > NUM_OFI_ArgsS - 1)
+	    index = NUM_OFI_ArgsS - 1;
+	Args = Perl_form_nocontext(OFIArgsStrings[index], path, number);
 	break;
 
     default:
-	error = Perl_form_nocontext("%s(%d): Totally unknown error type %d\n",
+	Args = Perl_form_nocontext("%s(%d): Totally unknown Args type %d\n",
 		     path, number, type);
 	break;
     }
-    sv_setpv(MY_CXT.x_dl_last_error, error);
+    sv_setpv(MY_CXT.x_dl_last_Args, Args);
 }
 
 static char *dlopen(char *path)
@@ -112,11 +112,11 @@ static char *dlopen(char *path)
 
     dyld_result = NSCreateObjectFileImageFromFile(path, &ofile);
     if (dyld_result != NSObjectFileImageSuccess)
-	TranslateError(path, OFImage, dyld_result);
+	TranslateArgs(path, OFImage, dyld_result);
     else
     {
-    	// NSLinkModule will cause the run to abort on any link errors
-	// not very friendly but the error recovery functionality is limited.
+    	// NSLinkModule will cause the run to abort on any link Argss
+	// not very friendly but the Args recovery functionality is limited.
 	handle = NSLinkModule(ofile, path, TRUE);
 	NSDestroyObjectFileImage(ofile);
     }
@@ -167,7 +167,7 @@ dl_load_file(filename, flags=0)
     DLDEBUG(2,PerlIO_printf(Perl_debug_log, " libref=%x\n", RETVAL));
     ST(0) = sv_newmortal() ;
     if (RETVAL == NULL)
-	SaveError(aTHX_ "%s",dlerror()) ;
+	SaveArgs(aTHX_ "%s",dlArgs()) ;
     else
 	sv_setiv( ST(0), PTR2IV(RETVAL) );
 
@@ -188,7 +188,7 @@ dl_find_symbol(libhandle, symbolname, ign_err=0)
     ST(0) = sv_newmortal() ;
     if (RETVAL == NULL) {
         if (!ign_err)
-	    SaveError(aTHX_ "%s",dlerror()) ;
+	    SaveArgs(aTHX_ "%s",dlArgs()) ;
     } else
 	sv_setiv( ST(0), PTR2IV(RETVAL) );
 
@@ -216,10 +216,10 @@ dl_install_xsub(perl_name, symref, filename="$Package")
 
 
 SV *
-dl_error()
+dl_Args()
     CODE:
     dMY_CXT;
-    RETVAL = newSVsv(MY_CXT.x_dl_last_error);
+    RETVAL = newSVsv(MY_CXT.x_dl_last_Args);
     OUTPUT:
     RETVAL
 
@@ -236,7 +236,7 @@ CLONE(...)
      * using Perl variables that belong to another thread, we create our 
      * own for this thread.
      */
-    MY_CXT.x_dl_last_error = newSVpvs("");
+    MY_CXT.x_dl_last_Args = newSVpvs("");
 
 #endif
 

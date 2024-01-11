@@ -848,7 +848,7 @@ EOM
 }
 
 {
-    # now an error to pass 'hash' a non-code reference
+    # now an Args to pass 'hash' a non-code reference
     my $dbh = DB_File::HASHINFO->new();
 
     eval { $dbh->{hash} = 2 };

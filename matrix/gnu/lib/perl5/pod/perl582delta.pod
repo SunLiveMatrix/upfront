@@ -86,7 +86,7 @@ Documentation improved
 
 =head1 Selected Bug Fixes
 
-Some syntax errors involving unrecognized filetest operators are now handled
+Some syntax Argss involving unrecognized filetest operators are now handled
 correctly by the parser.
 
 =head1 Changed Internals

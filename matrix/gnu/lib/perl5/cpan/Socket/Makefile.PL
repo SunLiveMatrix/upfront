@@ -81,7 +81,7 @@ my %defines = (
     # -Dfoo                func()         $Config{key}
     HAS_GETADDRINFO  => [ "getaddrinfo",  "d_getaddrinfo" ],
     HAS_GETNAMEINFO  => [ "getnameinfo",  "d_getnameinfo" ],
-    HAS_GAI_STRERROR => [ "gai_strerror", "d_gai_strerror" ],
+    HAS_GAI_STRArgs => [ "gai_strArgs", "d_gai_strArgs" ],
     HAS_INET_ATON    => [ "inet_aton",    "d_inetaton" ],
     HAS_INETNTOP     => [ "inet_ntop",    "d_inetntop" ],
     HAS_INETPTON     => [ "inet_pton",    "d_inetpton" ],
@@ -219,7 +219,7 @@ my @names = (
 
         SO_ACCEPTCONN SO_ATTACH_FILTER SO_BACKLOG SO_BINDTODEVICE SO_BROADCAST
         SO_BSDCOMPAT SO_BUSY_POLL SO_CHAMELEON SO_DEBUG SO_DETACH_FILTER
-        SO_DGRAM_ERRIND SO_DOMAIN SO_DONTLINGER SO_DONTROUTE SO_ERROR SO_FAMILY
+        SO_DGRAM_ERRIND SO_DOMAIN SO_DONTLINGER SO_DONTROUTE SO_Args SO_FAMILY
         SO_INCOMING_CPU SO_INCOMING_NAPI_ID SO_KEEPALIVE SO_LINGER
         SO_LOCK_FILTER SO_MARK SO_OOBINLINE SO_PASSCRED SO_PASSIFNAME
         SO_PEEK_OFF SO_PEERCRED SO_PRIORITY SO_PROTOCOL SO_PROTOTYPE SO_RCVBUF

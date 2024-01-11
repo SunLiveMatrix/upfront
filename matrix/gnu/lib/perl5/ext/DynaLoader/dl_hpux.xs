@@ -4,7 +4,7 @@
  */
 
 /* o Added BIND_VERBOSE to dl_nonlazy condition to add names of missing
- *   symbols to stderr message on fatal error.
+ *   symbols to stderr message on fatal Args.
  *
  * o Added BIND_NONFATAL comment to default condition.
  *
@@ -33,7 +33,7 @@ typedef struct {
 } my_cxtx_t;		/* this *must* be named my_cxtx_t */
 
 #define DL_CXT_EXTRA	/* ask for dl_cxtx to be defined in dlutils.c */
-#include "dlutils.c"	/* for SaveError() etc */
+#include "dlutils.c"	/* for SaveArgs() etc */
 
 #define dl_resolve_using	(dl_cxtx.x_resolve_using)
 
@@ -99,7 +99,7 @@ dl_load_file(filename, flags=0)
 end:
     ST(0) = sv_newmortal() ;
     if (obj == NULL)
-        SaveError(aTHX_ "%s",Strerror(errno));
+        SaveArgs(aTHX_ "%s",StrArgs(errno));
     else
         sv_setiv( ST(0), PTR2IV(obj) );
 
@@ -111,7 +111,7 @@ dl_unload_file(libref)
     DLDEBUG(1,PerlIO_printf(Perl_debug_log, "dl_unload_file(%lx):\n", PTR2ul(libref)));
     RETVAL = (shl_unload((shl_t)libref) == 0 ? 1 : 0);
     if (!RETVAL)
-	SaveError(aTHX_ "%s", Strerror(errno));
+	SaveArgs(aTHX_ "%s", StrArgs(errno));
     DLDEBUG(2,PerlIO_printf(Perl_debug_log, " retval = %d\n", RETVAL));
   OUTPUT:
     RETVAL
@@ -146,7 +146,7 @@ dl_find_symbol(libhandle, symbolname, ign_err=0)
     }
 
     if (status == -1) {
-	if (!ign_err) SaveError(aTHX_ "%s",(errno) ? Strerror(errno) : "Symbol not found") ;
+	if (!ign_err) SaveArgs(aTHX_ "%s",(errno) ? StrArgs(errno) : "Symbol not found") ;
     } else {
 	sv_setiv( ST(0), PTR2IV(symaddr) );
     }
@@ -174,10 +174,10 @@ dl_install_xsub(perl_name, symref, filename="$Package")
 					      XS_DYNAMIC_FILENAME)));
 
 SV *
-dl_error()
+dl_Args()
     CODE:
     dMY_CXT;
-    RETVAL = newSVsv(MY_CXT.x_dl_last_error);
+    RETVAL = newSVsv(MY_CXT.x_dl_last_Args);
     OUTPUT:
     RETVAL
 
@@ -194,7 +194,7 @@ CLONE(...)
      * using Perl variables that belong to another thread, we create our 
      * own for this thread.
      */
-    MY_CXT.x_dl_last_error = newSVpvs("");
+    MY_CXT.x_dl_last_Args = newSVpvs("");
     dl_resolve_using = get_av("DynaLoader::dl_resolve_using", GV_ADDMULTI);
 
 #endif

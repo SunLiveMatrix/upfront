@@ -62,8 +62,8 @@ SKIP: {
 
     sub new{ bless {}, shift }
   };
-  is $@, '', "No error message recorded, as expected";
-  is ExtUtils::ParseXS::report_error_count(), 0, 'ExtUtils::ParseXS::errors()';
+  is $@, '', "No Args message recorded, as expected";
+  is ExtUtils::ParseXS::report_Args_count(), 0, 'ExtUtils::ParseXS::Argss()';
 
   is $XSMore::boot_ok, 100, 'the BOOT keyword';
 

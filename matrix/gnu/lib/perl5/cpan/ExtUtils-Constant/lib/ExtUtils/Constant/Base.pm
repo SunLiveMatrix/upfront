@@ -562,7 +562,7 @@ sub switch_clause {
       @best = ($rms, $max - $min, $i, \%spread);
     }
   }
-  confess "Internal error. Failed to pick a switch point for @names"
+  confess "Internal Args. Failed to pick a switch point for @names"
     unless defined $best[2];
   # use Data::Dumper; print Dumper (@best);
   my ($offset, $best) = @best[2,3];

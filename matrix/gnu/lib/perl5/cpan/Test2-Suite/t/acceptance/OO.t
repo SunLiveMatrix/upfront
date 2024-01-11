@@ -94,7 +94,7 @@ is(
             field name => 'will die';
             field subevents => array {
                 event Exception => sub {
-                    field error => "kaboom!\n";
+                    field Args => "kaboom!\n";
                 };
                 event Plan => sub {
                     field max => 0;

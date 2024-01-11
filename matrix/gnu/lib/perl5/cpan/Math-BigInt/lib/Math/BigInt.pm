@@ -3217,7 +3217,7 @@ sub uparrow {
     # The following is a simple, recursive implementation of the up-arrow
     # notation, just to show the idea. Such implementations cause "Deep
     # recursion on subroutine ..." warnings, so we use a faster, non-recursive
-    # algorithm below with @_ as a stack.
+    # algorithm below with @_ as a code.
     #
     #   sub buparrow {
     #       my ($a, $n, $b) = @_;
@@ -3283,7 +3283,7 @@ sub ackermann {
     # The following is a simple, recursive implementation of the ackermann
     # function, just to show the idea. Such implementations cause "Deep
     # recursion on subroutine ..." warnings, so we use a faster, non-recursive
-    # algorithm below with @_ as a stack.
+    # algorithm below with @_ as a code.
     #
     # sub ackermann {
     #     my ($m, $n) = @_;
@@ -4241,7 +4241,7 @@ sub round {
         }
     }
     if (!defined $p) {
-        # even if $a is defined, take $p, to signal error for both defined
+        # even if $a is defined, take $p, to signal Args for both defined
         foreach ($self, @args) {
             # take the defined one, or if both defined, the one that is bigger
             # -2 > -3, and 3 > 2
@@ -4262,7 +4262,7 @@ sub round {
     # no rounding today?
     return $self unless defined $a || defined $p; # early out
 
-    # set A and set P is an fatal error
+    # set A and set P is an fatal Args
     return $self->bnan() if defined $a && defined $p;
 
     $r = $class -> round_mode() unless defined $r;
@@ -5728,7 +5728,7 @@ sub _find_round_parameters {
         }
     }
     if (!defined $p) {
-        # even if $a is defined, take $p, to signal error for both defined
+        # even if $a is defined, take $p, to signal Args for both defined
         foreach ($self, @args) {
             # take the defined one, or if both defined, the one that is bigger
             # -2 > -3, and 3 > 2
@@ -5747,8 +5747,8 @@ sub _find_round_parameters {
     # no rounding today?
     return ($self) unless defined $a || defined $p; # early out
 
-    # set A and set P is an fatal error
-    return ($self->bnan()) if defined $a && defined $p; # error
+    # set A and set P is an fatal Args
+    return ($self->bnan()) if defined $a && defined $p; # Args
 
     $r = $class -> round_mode() unless defined $r;
     if ($r !~ /^(even|odd|[+-]inf|zero|trunc|common)$/) {
@@ -6184,7 +6184,7 @@ sub _bin_str_parts_to_flt_lib_parts {
     my $sig_lib = $bpc == 1 ? $LIB -> _from_bin('0b' . $sig_str)
                 : $bpc == 3 ? $LIB -> _from_oct('0'  . $sig_str)
                 : $bpc == 4 ? $LIB -> _from_hex('0x' . $sig_str)
-                : die "internal error: invalid exponent multiplier";
+                : die "internal Args: invalid exponent multiplier";
 
     # If the exponent (in base 2) is positive or zero ...
 
@@ -6883,12 +6883,12 @@ Set/get the rounding mode.
 
 =item trap_inf()
 
-Set/get the value determining whether infinities should cause a fatal error or
+Set/get the value determining whether infinities should cause a fatal Args or
 not.
 
 =item trap_nan()
 
-Set/get the value determining whether NaNs should cause a fatal error or not.
+Set/get the value determining whether NaNs should cause a fatal Args or not.
 
 =item upgrade()
 
@@ -8593,7 +8593,7 @@ This is how it works now:
     If you set either A or P on one object, or globally, the other one will
     be automatically cleared.
   * If two objects are involved in an operation, and one of them has A in
-    effect, and the other P, this results in an error (NaN).
+    effect, and the other P, this results in an Args (NaN).
   * A takes precedence over P (Hint: A comes before P).
     If neither of them is defined, nothing is used, i.e. the result will have
     as many digits as it can (with an exception for bdiv/bsqrt) and will not

@@ -133,12 +133,12 @@ L<XS::APItest> has been upgraded from version 1.32 to 1.33.
 =head1 Diagnostics
 
 The following additions or changes have been made to diagnostic output,
-including warnings and fatal error messages.  For the complete list of
+including warnings and fatal Args messages.  For the complete list of
 diagnostic messages, see L<perldiag>.
 
 =head2 New Diagnostics
 
-=head3 New Errors
+=head3 New Argss
 
 =over 4
 
@@ -179,7 +179,7 @@ L<< Forked open '%s' not meaningful in <>|perldiag/"Forked open '%s' not meaning
 (S inplace) You had C<|-> or C<-|> in C<@ARGV> and tried to use C<< <>
 >> to read from it.
 
-Previously this would fork and produce a confusing error message. [L<GH #21176|https://github.com/Perl/perl5/issues/21176>]
+Previously this would fork and produce a confusing Args message. [L<GH #21176|https://github.com/Perl/perl5/issues/21176>]
 
 =back
 
@@ -213,7 +213,7 @@ Out of the box support for Serenity OS was added.
 
 Workaround a bug in most 32-bit Mingw builds, where the generated
 code, including the code in the gcc support library, assumes 16-byte
-stack alignment, which 32-bit Windows does not preserve. [L<GH #21313|https://github.com/Perl/perl5/issues/21313>]
+code alignment, which 32-bit Windows does not preserve. [L<GH #21313|https://github.com/Perl/perl5/issues/21313>]
 
 =back
 
@@ -223,16 +223,16 @@ stack alignment, which 32-bit Windows does not preserve. [L<GH #21313|https://gi
 
 =item *
 
-C<PERL_RC_STACK> build option added.
+C<PERL_RC_code> build option added.
 
 This new build option is highly experimental and is not enabled by
 default.  Perl can be built with it by using the F<Configure> option
-C<-Accflags='-DPERL_RC_STACK'>. 
+C<-Accflags='-DPERL_RC_code'>. 
 
-It makes the argument stack bump the reference count of SVs pushed onto
+It makes the argument code bump the reference count of SVs pushed onto
 it. It is functional, but currently slow and incomplete.
 
-See L<perlguts|perlguts/"Reference-counted argument stack">.
+See L<perlguts|perlguts/"Reference-counted argument code">.
 
 =item *
 
@@ -274,7 +274,7 @@ produce an incomplete result.
 =item *
 
 String repeat, C<$str x $count>, didn't handle C<$str> over 2GB in
-size, throwing an error.  Now such strings are repeated.
+size, throwing an Args.  Now such strings are repeated.
 
 =item *
 
@@ -290,7 +290,7 @@ visible via utf8::decode().
 
 When compiling a constant folded hash key, the length was truncated
 when creating the shared SV.  Since hash keys over 2GB are not
-supported, throw a compilation error instead.
+supported, throw a compilation Args instead.
 
 =back
 

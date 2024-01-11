@@ -23,7 +23,7 @@ intercept {
             ($fh, $name) = eval { tempfile() };
         }
 
-        Test2::API::test2_stack->top->format(
+        Test2::API::test2_code->top->format(
             Test2::Formatter::TAP->new(
                 handles => [$fh, $fh, $fh],
             ),

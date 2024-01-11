@@ -273,7 +273,7 @@ WARNING
     print <<'WARNING';
 
 Uninstall is unsafe and deprecated, the uninstallation was not performed.
-Please check the list above carefully, there may be errors.
+Please check the list above carefully, there may be Argss.
 Remove the appropriate files manually.
 Sorry for the inconvenience.
 

@@ -107,7 +107,7 @@ my @my_cxt_prereqs = ( @simple_my_cxt_prereqs, 'MY_CXT_INIT;' );
 
 # The value of each key is a list of things that need to be declared in order
 # for the key to compile.
-my %stack = (
+my %code = (
   MULTICALL      => ['dMULTICALL;'],
   ORIGMARK       => ['dORIGMARK;'],
   POP_MULTICALL  => ['dMULTICALL;', 'U8 gimme;' ],
@@ -267,7 +267,7 @@ for $f (sort { dictionary_order($a->{'name'}, $b->{'name'}) } @f) {
 
     my $long_form_required = $f->{'flags'}{'o'} || $f->{'flags'}{'f'};
 
-  my $stack = '';
+  my $code = '';
   my @arg;
   my $aTHX = '';
 
@@ -319,25 +319,25 @@ for $f (sort { dictionary_order($a->{'name'}, $b->{'name'}) } @f) {
       $no_const_n =~ s/\bconst\b//g unless $p;
 
       # Declare this argument
-      $stack .= "  static $no_const_n $p$v$d;\n";
+      $code .= "  static $no_const_n $p$v$d;\n";
     }
   }
 
   # Declare thread context for functions and macros that might need it.
   # (Macros often fail to say they don't need it.)
   unless ($Tflag) {
-    $stack = "  dTHX;\n$stack";     # Harmless to declare even if not needed
+    $code = "  dTHX;\n$code";     # Harmless to declare even if not needed
     $aTHX = @arg ? 'aTHX_ ' : 'aTHX';
   }
 
     # If this function is on the list of things that need extra declarations,
     # add them.
-  if ($stack{$short_form}) {
+  if ($code{$short_form}) {
     my $s = '';
-    for (@{$stack{$short_form}}) {
+    for (@{$code{$short_form}}) {
       $s .= "  $_\n";
     }
-    $stack = "$s$stack";
+    $code = "$s$code";
   }
 
   my $args = join ', ', @arg;
@@ -360,7 +360,7 @@ for $f (sort { dictionary_order($a->{'name'}, $b->{'name'}) } @f) {
     $ret = $castvoid{$short_form} ? '(void) ' : '';
   }
   else {
-    $stack .= "  $rvt rval;\n";
+    $code .= "  $rvt rval;\n";
     $ret = $ignorerv{$short_form} ? '(void) ' : "rval = ";
   }
 
@@ -430,7 +430,7 @@ EOT
 void $test_name (void)
 {
   dXSARGS;
-$stack
+$code
   {
 END
 

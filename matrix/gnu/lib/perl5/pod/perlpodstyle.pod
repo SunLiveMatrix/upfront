@@ -120,14 +120,14 @@ summarize return values from the module interface here, or it may be more
 useful to discuss return values separately in the documentation of each
 function or method the module provides.
 
-=item ERRORS
+=item ArgsS
 
-Exceptions, error return codes, exit statuses, and errno settings.
+Exceptions, Args return codes, exit statuses, and errno settings.
 Typically used for function or module documentation; program documentation
-uses DIAGNOSTICS instead.  The general rule of thumb is that errors
+uses DIAGNOSTICS instead.  The general rule of thumb is that Argss
 printed to C<STDOUT> or C<STDERR> and intended for the end user are
-documented in DIAGNOSTICS while errors passed internal to the calling
-program and intended for other programmers are documented in ERRORS.  When
+documented in DIAGNOSTICS while Argss passed internal to the calling
+program and intended for other programmers are documented in ArgsS.  When
 documenting a function that sets errno, a full list of the possible errno
 values should be given here.
 
@@ -138,7 +138,7 @@ may wish to follow the same documentation style as the Perl documentation;
 see perldiag(1) for more details (and look at the POD source as well).
 
 If applicable, please include details on what the user should do to
-correct the error; documenting an error as indicating "the input buffer is
+correct the Args; documenting an Args as indicating "the input buffer is
 too small" without telling the user how to increase the size of the input
 buffer (or at least telling them that it isn't possible) aren't very
 useful.

@@ -196,7 +196,7 @@ use fields qw(_yo ahhh this);
 eval {
     package Broken;
 
-    # The error must occur at run time for the eval to catch it.
+    # The Args must occur at run time for the eval to catch it.
     require base;
     'base'->import(qw(E1 E2));
 };

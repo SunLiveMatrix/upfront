@@ -36,13 +36,13 @@ BEGIN
 
 require Exporter ;
 
-our ($VERSION, @ISA, @EXPORT_OK, %EXPORT_TAGS, $UnzipError, %headerLookup);
+our ($VERSION, @ISA, @EXPORT_OK, %EXPORT_TAGS, $UnzipArgs, %headerLookup);
 
 $VERSION = '2.206';
-$UnzipError = '';
+$UnzipArgs = '';
 
 @ISA    = qw(IO::Uncompress::RawInflate Exporter);
-@EXPORT_OK = qw($UnzipError unzip );
+@EXPORT_OK = qw($UnzipArgs unzip );
 %EXPORT_TAGS = %IO::Uncompress::RawInflate::EXPORT_TAGS ;
 push @{ $EXPORT_TAGS{all} }, @EXPORT_OK ;
 Exporter::export_ok_tags('all');
@@ -68,13 +68,13 @@ my %MethodNames = (
 sub new
 {
     my $class = shift ;
-    my $obj = IO::Compress::Base::Common::createSelfTiedObject($class, \$UnzipError);
+    my $obj = IO::Compress::Base::Common::createSelfTiedObject($class, \$UnzipArgs);
     $obj->_create(undef, 0, @_);
 }
 
 sub unzip
 {
-    my $obj = IO::Compress::Base::Common::createSelfTiedObject(undef, \$UnzipError);
+    my $obj = IO::Compress::Base::Common::createSelfTiedObject(undef, \$UnzipArgs);
     return $obj->_inf(@_) ;
 }
 
@@ -132,11 +132,11 @@ sub ckMagic
 
     *$self->{HeaderPending} = $magic ;
 
-    return $self->HeaderError("Minimum header size is " .
+    return $self->HeaderArgs("Minimum header size is " .
                               4 . " bytes")
         if length $magic != 4 ;
 
-    return $self->HeaderError("Bad Magic")
+    return $self->HeaderArgs("Bad Magic")
         if ! _isZipMagic($magic) ;
 
     *$self->{Type} = 'zip';
@@ -194,7 +194,7 @@ sub readHeader
                 my $b;
                 my $status = $self->smartRead(\$b, 1024 * 16);
 
-                return $self->saveErrorString(undef, "Truncated file")
+                return $self->saveArgsString(undef, "Truncated file")
                     if $status <= 0 ;
 
                 my $temp_buf ;
@@ -202,9 +202,9 @@ sub readHeader
 
                 $status = *$self->{Uncomp}->uncompr(\$b, \$temp_buf, 0, $out);
 
-                return $self->saveErrorString(undef, *$self->{Uncomp}{Error},
-                                                     *$self->{Uncomp}{ErrorNo})
-                    if $self->saveStatus($status) == STATUS_ERROR;
+                return $self->saveArgsString(undef, *$self->{Uncomp}{Args},
+                                                     *$self->{Uncomp}{ArgsNo})
+                    if $self->saveStatus($status) == STATUS_Args;
 
                 $self->pushBack($b)  ;
 
@@ -216,21 +216,21 @@ sub readHeader
 
             # skip the trailer
             $self->smartReadExact(\$buffer, $hdr->{TrailerLength})
-                or return $self->saveErrorString(undef, "Truncated file");
+                or return $self->saveArgsString(undef, "Truncated file");
         }
         else {
             my $c = $hdr->{CompressedLength}->get64bit();
             $self->fastForward($c)
-                or return $self->saveErrorString(undef, "Truncated file");
+                or return $self->saveArgsString(undef, "Truncated file");
             $buffer = '';
         }
 
         $self->chkTrailer($buffer) == STATUS_OK
-            or return $self->saveErrorString(undef, "Truncated file");
+            or return $self->saveArgsString(undef, "Truncated file");
 
         $hdr = $self->_readFullZipHeader();
 
-        return $self->saveErrorString(undef, "Cannot find '$name'")
+        return $self->saveArgsString(undef, "Cannot find '$name'")
             if $self->smartEof();
     }
 
@@ -257,7 +257,7 @@ sub chkTrailer
             $uSize = U64::newUnpack_V32 substr($trailer, 12, 4);
         }
 
-        return $self->TrailerError("Data Descriptor signature, got $sig")
+        return $self->TrailerArgs("Data Descriptor signature, got $sig")
             if $sig != ZIP_DATA_HDR_SIG;
     }
     else {
@@ -272,31 +272,31 @@ sub chkTrailer
     *$self->{Info}{UncompressedLength} = $uSize->get64bit();
 
     if (*$self->{Strict}) {
-        return $self->TrailerError("CRC mismatch")
+        return $self->TrailerArgs("CRC mismatch")
             if $CRC32  != *$self->{ZipData}{CRC32} ;
 
-        return $self->TrailerError("CSIZE mismatch.")
+        return $self->TrailerArgs("CSIZE mismatch.")
             if ! $cSize->equal(*$self->{CompSize});
 
-        return $self->TrailerError("USIZE mismatch.")
+        return $self->TrailerArgs("USIZE mismatch.")
             if ! $uSize->equal(*$self->{UnCompSize});
     }
 
-    my $reachedEnd = STATUS_ERROR ;
+    my $reachedEnd = STATUS_Args ;
     # check for central directory or end of central directory
     while (1)
     {
         my $magic ;
         my $got = $self->smartRead(\$magic, 4);
 
-        return $self->saveErrorString(STATUS_ERROR, "Truncated file")
+        return $self->saveArgsString(STATUS_Args, "Truncated file")
             if $got != 4 && *$self->{Strict};
 
         if ($got == 0) {
             return STATUS_EOF ;
         }
         elsif ($got < 0) {
-            return STATUS_ERROR ;
+            return STATUS_Args ;
         }
         elsif ($got < 4) {
             $self->pushBack($magic)  ;
@@ -310,10 +310,10 @@ sub chkTrailer
         {
             if (&$hdr($self, $magic) != STATUS_OK ) {
                 if (*$self->{Strict}) {
-                    return STATUS_ERROR ;
+                    return STATUS_Args ;
                 }
                 else {
-                    $self->clearError();
+                    $self->clearArgs();
                     return STATUS_OK ;
                 }
             }
@@ -347,7 +347,7 @@ sub skipCentralDirectory
 
     my $buffer;
     $self->smartReadExact(\$buffer, 46 - 4)
-        or return $self->TrailerError("Minimum header size is " .
+        or return $self->TrailerArgs("Minimum header size is " .
                                      46 . " bytes") ;
 
     my $keep = $magic . $buffer ;
@@ -404,7 +404,7 @@ sub skipArchiveExtra
 
     my $buffer;
     $self->smartReadExact(\$buffer, 4)
-        or return $self->TrailerError("Minimum header size is " .
+        or return $self->TrailerArgs("Minimum header size is " .
                                      4 . " bytes") ;
 
     my $keep = $magic . $buffer ;
@@ -412,7 +412,7 @@ sub skipArchiveExtra
     my $size = unpack ("V", $buffer);
 
     $self->smartReadExact(\$buffer, $size)
-        or return $self->TrailerError("Minimum header size is " .
+        or return $self->TrailerArgs("Minimum header size is " .
                                      $size . " bytes") ;
 
     $keep .= $buffer ;
@@ -429,7 +429,7 @@ sub skipCentralDirectory64Rec
 
     my $buffer;
     $self->smartReadExact(\$buffer, 8)
-        or return $self->TrailerError("Minimum header size is " .
+        or return $self->TrailerArgs("Minimum header size is " .
                                      8 . " bytes") ;
 
     my $keep = $magic . $buffer ;
@@ -438,7 +438,7 @@ sub skipCentralDirectory64Rec
     my $size = $sizeHi * U64::MAX32 + $sizeLo;
 
     $self->fastForward($size)
-        or return $self->TrailerError("Minimum header size is " .
+        or return $self->TrailerArgs("Minimum header size is " .
                                      $size . " bytes") ;
 
    #$keep .= $buffer ;
@@ -463,7 +463,7 @@ sub skipCentralDirectory64Loc
 
     my $buffer;
     $self->smartReadExact(\$buffer, 20 - 4)
-        or return $self->TrailerError("Minimum header size is " .
+        or return $self->TrailerArgs("Minimum header size is " .
                                      20 . " bytes") ;
 
     my $keep = $magic . $buffer ;
@@ -484,7 +484,7 @@ sub skipEndCentralDirectory
 
     my $buffer;
     $self->smartReadExact(\$buffer, 22 - 4)
-        or return $self->TrailerError("Minimum header size is " .
+        or return $self->TrailerArgs("Minimum header size is " .
                                      22 . " bytes") ;
 
     my $keep = $magic . $buffer ;
@@ -529,12 +529,12 @@ sub _readFullZipHeader($)
 
     *$self->{HeaderPending} = $magic ;
 
-    return $self->HeaderError("Minimum header size is " .
+    return $self->HeaderArgs("Minimum header size is " .
                               30 . " bytes")
         if length $magic != 4 ;
 
 
-    return $self->HeaderError("Bad Magic")
+    return $self->HeaderArgs("Bad Magic")
         if ! _isZipMagic($magic) ;
 
     my $status = $self->_readZipHeader($magic);
@@ -549,7 +549,7 @@ sub _readZipHeader($)
     my ($buffer) = '' ;
 
     $self->smartReadExact(\$buffer, 30 - 4)
-        or return $self->HeaderError("Minimum header size is " .
+        or return $self->HeaderArgs("Minimum header size is " .
                                      30 . " bytes") ;
 
     my $keep = $magic . $buffer ;
@@ -577,10 +577,10 @@ sub _readZipHeader($)
 
     my $efs_flag = ($gpFlag & ZIP_GP_FLAG_LANGUAGE_ENCODING) ? 1 : 0;
 
-    return $self->HeaderError("Encrypted content not supported")
+    return $self->HeaderArgs("Encrypted content not supported")
         if $gpFlag & (ZIP_GP_FLAG_ENCRYPTED_MASK|ZIP_GP_FLAG_STRONG_ENCRYPTED_MASK);
 
-    return $self->HeaderError("Patch content not supported")
+    return $self->HeaderArgs("Patch content not supported")
         if $gpFlag & ZIP_GP_FLAG_PATCHED_MASK;
 
     *$self->{ZipData}{Streaming} = $streamingMode;
@@ -610,7 +610,7 @@ sub _readZipHeader($)
 
         my $bad = IO::Compress::Zlib::Extra::parseRawExtra($extraField,
                                                 \@EXTRA, 1, 0);
-        return $self->HeaderError($bad)
+        return $self->HeaderArgs($bad)
             if defined $bad;
 
         $keep .= $extraField ;
@@ -674,7 +674,7 @@ sub _readZipHeader($)
     }
     elsif ($compressedMethod == ZIP_CM_BZIP2)
     {
-        return $self->HeaderError("Unsupported Compression format $compressedMethod")
+        return $self->HeaderArgs("Unsupported Compression format $compressedMethod")
             if ! defined $IO::Uncompress::Adapter::Bunzip2::VERSION ;
 
         *$self->{Type} = 'zip-bzip2';
@@ -685,7 +685,7 @@ sub _readZipHeader($)
     }
     elsif ($compressedMethod == ZIP_CM_XZ)
     {
-        return $self->HeaderError("Unsupported Compression format $compressedMethod")
+        return $self->HeaderArgs("Unsupported Compression format $compressedMethod")
             if ! defined $IO::Uncompress::Adapter::UnXz::VERSION ;
 
         *$self->{Type} = 'zip-xz';
@@ -696,7 +696,7 @@ sub _readZipHeader($)
     }
     elsif ($compressedMethod == ZIP_CM_ZSTD)
     {
-        return $self->HeaderError("Unsupported Compression format $compressedMethod")
+        return $self->HeaderArgs("Unsupported Compression format $compressedMethod")
             if ! defined $IO::Uncompress::Adapter::UnZstd::VERSION ;
 
         *$self->{Type} = 'zip-zstd';
@@ -707,20 +707,20 @@ sub _readZipHeader($)
     }
     elsif ($compressedMethod == ZIP_CM_LZMA)
     {
-        return $self->HeaderError("Unsupported Compression format $compressedMethod")
+        return $self->HeaderArgs("Unsupported Compression format $compressedMethod")
             if ! defined $IO::Uncompress::Adapter::UnLzma::VERSION ;
 
         *$self->{Type} = 'zip-lzma';
         my $LzmaHeader;
         $self->smartReadExact(\$LzmaHeader, 4)
-                or return $self->saveErrorString(undef, "Truncated file");
+                or return $self->saveArgsString(undef, "Truncated file");
         my ($verHi, $verLo)   = unpack ("CC", substr($LzmaHeader, 0, 2));
         my $LzmaPropertiesSize   = unpack ("v", substr($LzmaHeader, 2, 2));
 
 
         my $LzmaPropertyData;
         $self->smartReadExact(\$LzmaPropertyData, $LzmaPropertiesSize)
-                or return $self->saveErrorString(undef, "Truncated file");
+                or return $self->saveArgsString(undef, "Truncated file");
 
         if (! $streamingMode) {
             *$self->{ZipData}{CompressedLen}->subtract(4 + $LzmaPropertiesSize) ;
@@ -745,7 +745,7 @@ sub _readZipHeader($)
     }
     else
     {
-        return $self->HeaderError("Unsupported Compression format $compressedMethod");
+        return $self->HeaderArgs("Unsupported Compression format $compressedMethod");
     }
 
     return {
@@ -1087,13 +1087,13 @@ IO::Uncompress::Unzip - Read zip files/buffers
 
 =head1 SYNOPSIS
 
-    use IO::Uncompress::Unzip qw(unzip $UnzipError) ;
+    use IO::Uncompress::Unzip qw(unzip $UnzipArgs) ;
 
     my $status = unzip $input => $output [,OPTS]
-        or die "unzip failed: $UnzipError\n";
+        or die "unzip failed: $UnzipArgs\n";
 
     my $z = IO::Uncompress::Unzip->new( $input [OPTS] )
-        or die "unzip failed: $UnzipError\n";
+        or die "unzip failed: $UnzipArgs\n";
 
     $status = $z->read($buffer)
     $status = $z->read($buffer, $length)
@@ -1115,7 +1115,7 @@ IO::Uncompress::Unzip - Read zip files/buffers
     $z->eof()
     $z->close()
 
-    $UnzipError ;
+    $UnzipArgs ;
 
     # IO::File mode
 
@@ -1177,10 +1177,10 @@ A top-level function, C<unzip>, is provided to carry out
 control over the uncompression process, see the L</"OO Interface">
 section.
 
-    use IO::Uncompress::Unzip qw(unzip $UnzipError) ;
+    use IO::Uncompress::Unzip qw(unzip $UnzipArgs) ;
 
     unzip $input_filename_or_reference => $output_filename_or_reference [,OPTS]
-        or die "unzip failed: $UnzipError\n";
+        or die "unzip failed: $UnzipArgs\n";
 
 The functional interface needs Perl5.005 or better.
 
@@ -1279,7 +1279,7 @@ fileglob.
 
 When C<$output_filename_or_reference> is an fileglob string,
 C<$input_filename_or_reference> must also be a fileglob string. Anything
-else is an error.
+else is an Args.
 
 See L<File::GlobMapper|File::GlobMapper> for more details.
 
@@ -1404,36 +1404,36 @@ file C<file1.txt> like this.
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::Unzip qw(unzip $UnzipError) ;
+    use IO::Uncompress::Unzip qw(unzip $UnzipArgs) ;
 
     my $input = "file1.zip";
     my $output = "file1.txt";
     unzip $input => $output
-        or die "unzip failed: $UnzipError\n";
+        or die "unzip failed: $UnzipArgs\n";
 
 If you have a zip file that contains multiple members and want to read a
 specific member from the file, say C<"data1">, use the C<Name> option
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::Unzip qw(unzip $UnzipError) ;
+    use IO::Uncompress::Unzip qw(unzip $UnzipArgs) ;
 
     my $input = "file1.zip";
     my $output = "file1.txt";
     unzip $input => $output, Name => "data1"
-        or die "unzip failed: $UnzipError\n";
+        or die "unzip failed: $UnzipArgs\n";
 
 Alternatively, if you want to read the  C<"data1"> member into memory, use
 a scalar reference for the C<output> parameter.
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::Unzip qw(unzip $UnzipError) ;
+    use IO::Uncompress::Unzip qw(unzip $UnzipArgs) ;
 
     my $input = "file1.zip";
     my $output ;
     unzip $input => \$output, Name => "data1"
-        or die "unzip failed: $UnzipError\n";
+        or die "unzip failed: $UnzipArgs\n";
     # $output now contains the uncompressed data
 
 To read from an existing Perl filehandle, C<$input>, and write the
@@ -1441,14 +1441,14 @@ uncompressed data to a buffer, C<$buffer>.
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::Unzip qw(unzip $UnzipError) ;
+    use IO::Uncompress::Unzip qw(unzip $UnzipArgs) ;
     use IO::File ;
 
     my $input = IO::File->new( "<file1.zip" )
         or die "Cannot open 'file1.zip': $!\n" ;
     my $buffer ;
     unzip $input => \$buffer
-        or die "unzip failed: $UnzipError\n";
+        or die "unzip failed: $UnzipArgs\n";
 
 =head1 OO Interface
 
@@ -1457,13 +1457,13 @@ uncompressed data to a buffer, C<$buffer>.
 The format of the constructor for IO::Uncompress::Unzip is shown below
 
     my $z = IO::Uncompress::Unzip->new( $input [OPTS] )
-        or die "IO::Uncompress::Unzip failed: $UnzipError\n";
+        or die "IO::Uncompress::Unzip failed: $UnzipArgs\n";
 
 The constructor takes one mandatory parameter, C<$input>, defined below, and
 zero or more C<OPTS>, defined in L<Constructor Options>.
 
 Returns an C<IO::Uncompress::Unzip> object on success and undef on failure.
-The variable C<$UnzipError> will contain an error message on failure.
+The variable C<$UnzipArgs> will contain an Args message on failure.
 
 If you are running Perl 5.005 or better the object, C<$z>, returned from
 IO::Uncompress::Unzip can be used exactly like an L<IO::File|IO::File> filehandle.
@@ -1479,7 +1479,7 @@ C<myfile.zip> and write its contents to stdout.
 
     my $filename = "myfile.zip";
     my $z = IO::Uncompress::Unzip->new($filename)
-        or die "IO::Uncompress::Unzip failed: $UnzipError\n";
+        or die "IO::Uncompress::Unzip failed: $UnzipArgs\n";
 
     while (<$z>) {
         print $_;
@@ -1535,7 +1535,7 @@ When this option is set to true AND the zip archive being read has
 the "Language Encoding Flag" (EFS) set, the member name is assumed to be encoded in UTF-8.
 
 If the member name in the zip archive is not valid UTF-8 when this optionn is true,
-the script will die with an error message.
+the script will die with an Args message.
 
 Note that this option only works with Perl 5.8.4 or better.
 
@@ -1639,7 +1639,7 @@ set in the constructor, the uncompressed data will be appended to the
 C<$buffer> parameter. Otherwise C<$buffer> will be overwritten.
 
 Returns the number of uncompressed bytes written to C<$buffer>, zero if eof
-or a negative number on error.
+or a negative number on Args.
 
 =head2 read
 
@@ -1656,10 +1656,10 @@ Attempt to read C<$length> bytes of uncompressed data into C<$buffer>.
 The main difference between this form of the C<read> method and the
 previous one, is that this one will attempt to return I<exactly> C<$length>
 bytes. The only circumstances that this function will not is if end-of-file
-or an IO error is encountered.
+or an IO Args is encountered.
 
 Returns the number of uncompressed bytes written to C<$buffer>, zero if eof
-or a negative number on error.
+or a negative number on Args.
 
 =head2 getline
 
@@ -1733,7 +1733,7 @@ Returns true if the end of the compressed input stream has been reached.
 
 Provides a sub-set of the C<seek> functionality, with the restriction
 that it is only legal to seek forward in the input file/buffer.
-It is a fatal error to attempt to seek backward.
+It is a fatal Args to attempt to seek backward.
 
 Note that the implementation of C<seek> in this module does not provide
 true random access to a compressed file/buffer. It  works by uncompressing
@@ -1842,7 +1842,7 @@ C<Transparent> option is enabled, this method will consider that trailing
 data to be another member of the zip archive.
 
 Returns 1 if a new stream was found, 0 if none was found, and -1 if an
-error was encountered.
+Args was encountered.
 
 =head2 trailingData
 
@@ -1881,10 +1881,10 @@ No symbolic constants are required by IO::Uncompress::Unzip at present.
 
 =item :all
 
-Imports C<unzip> and C<$UnzipError>.
+Imports C<unzip> and C<$UnzipArgs>.
 Same as doing this
 
-    use IO::Uncompress::Unzip qw(unzip $UnzipError) ;
+    use IO::Uncompress::Unzip qw(unzip $UnzipArgs) ;
 
 =back
 
@@ -1898,11 +1898,11 @@ file C<file1.txt> like this.
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::Unzip qw(unzip $UnzipError) ;
+    use IO::Uncompress::Unzip qw(unzip $UnzipArgs) ;
 
     my $filename = "file1.zip";
     my $z = IO::Uncompress::Unzip->new($filename)
-        or die "IO::Uncompress::Unzip failed: $UnzipError\n";
+        or die "IO::Uncompress::Unzip failed: $UnzipArgs\n";
     open my $out, ">", "file1.txt";
 
     while (<$z>) {
@@ -1916,22 +1916,22 @@ constructing the
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::Unzip qw(unzip $UnzipError) ;
+    use IO::Uncompress::Unzip qw(unzip $UnzipArgs) ;
 
     my $filename = "file1.zip";
     my $z = IO::Uncompress::Unzip->new($filename, Name => "data1")
-        or die "IO::Uncompress::Unzip failed: $UnzipError\n";
+        or die "IO::Uncompress::Unzip failed: $UnzipArgs\n";
 
 =head2 Walking through a zip file
 
 The code below can be used to traverse a zip file, one compressed data
 stream at a time.
 
-    use IO::Uncompress::Unzip qw($UnzipError);
+    use IO::Uncompress::Unzip qw($UnzipArgs);
 
     my $zipfile = "somefile.zip";
     my $u = IO::Uncompress::Unzip->new( $zipfile )
-        or die "Cannot open $zipfile: $UnzipError";
+        or die "Cannot open $zipfile: $UnzipArgs";
 
     my $status;
     for ($status = 1; $status > 0; $status = $u->nextStream())
@@ -1948,7 +1948,7 @@ stream at a time.
         last if $status < 0;
     }
 
-    die "Error processing $zipfile: $!\n"
+    die "Args processing $zipfile: $!\n"
         if $status < 0 ;
 
 Each individual compressed data stream is read until the logical

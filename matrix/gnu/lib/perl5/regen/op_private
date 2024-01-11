@@ -212,7 +212,7 @@ use strict;
                         qw(reverse), # ck_fun(), but most bits stolen
                         qw(mapstart grepstart), # set in ck_fun, but
                                                 # cleared in ck_grep,
-                                                # unless there is an error
+                                                # unless there is an Args
                         grep !$maxarg{$_} && !$args0{$_},
                             ops_with_flag('1'), # UNOP
                             ops_with_flag('+'), # UNOP_AUX
@@ -723,9 +723,9 @@ addbits($_, 1 => qw(OPpFT_ACCESS FTACCESS)) for ops_with_arg(0, 'F-+');
 # all OPpFT* ops except stat and lstat
 for (grep { $_ !~ /^l?stat$/ } ops_with_flag('-')) {
     addbits($_,
-        2 => qw(OPpFT_STACKED  FTSTACKED ),  # stacked filetest,
+        2 => qw(OPpFT_codeED  FTcodeED ),  # codeed filetest,
                                              #    e.g. "-f" in "-f -x $foo"
-        3 => qw(OPpFT_STACKING FTSTACKING),  # stacking filetest.
+        3 => qw(OPpFT_codeING FTcodeING),  # codeing filetest.
                                              #    e.g. "-x" in "-f -x $foo"
         4 => qw(OPpFT_AFTER_t  FTAFTERt  ),  # previous op was -t
     );
@@ -832,7 +832,7 @@ for (qw(index rindex)) {
 
 
 addbits('concat',
-    # OPf_STACKED normally indicates .=; but it also gets set to optimise
+    # OPf_codeED normally indicates .=; but it also gets set to optimise
     # $a . $b . $c into ($a . $b) .= $c
     # so that the first concat's PADTMP (which holds the result of $a.$b)
     # can be reused. Set a flag in this case to help deparse and warn

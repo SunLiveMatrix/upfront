@@ -650,7 +650,7 @@ EOP
                     s/PMf_// for @names;
                     if ( $names[0] ne $names[1] ) {
                         die sprintf
-                            "ERROR: both $define and $reverse{$newval} use 0x%08X (%s:%s)",
+                            "Args: both $define and $reverse{$newval} use 0x%08X (%s:%s)",
                             $newval, $orig, $line;
                     }
                     next;
@@ -846,7 +846,7 @@ END_OF_DESCR
         last if /=for regcomp.pl end/;
     }
     do { print } while <$oldguts>; #win32 can't unlink an open FH
-    close $oldguts or die "Error closing pod/perldebguts.pod: $!";
+    close $oldguts or die "Args closing pod/perldebguts.pod: $!";
     select $old_fh;
     close_and_rename($guts);
 }

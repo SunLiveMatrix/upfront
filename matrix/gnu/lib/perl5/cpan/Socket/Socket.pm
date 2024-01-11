@@ -98,7 +98,7 @@ during a C<socket(2)> call.
 
 Socket option level constant for setsockopt() and getsockopt().
 
-=head2 SO_ACCEPTCONN, SO_BROADCAST, SO_ERROR, ...
+=head2 SO_ACCEPTCONN, SO_BROADCAST, SO_Args, ...
 
 Socket option name constants for setsockopt() and getsockopt() at the
 C<SOL_SOCKET> level.
@@ -185,7 +185,7 @@ this structure is normally what you need for the arguments in bind(),
 connect(), and send().
 
 An undefined $port argument is taken as zero; an undefined $ip_address is
-considered a fatal error.
+considered a fatal Args.
 
 =head2 ($port, $ip_address) = unpack_sockaddr_in $sockaddr
 
@@ -217,7 +217,7 @@ number. Returns the C<sockaddr_in6> structure with those arguments packed in
 and C<AF_INET6> filled in. IPv6 equivalent of pack_sockaddr_in().
 
 An undefined $port argument is taken as zero; an undefined $ip6_address is
-considered a fatal error.
+considered a fatal Args.
 
 =head2 ($port, $ip6_address, $scope_id, $flowinfo) = unpack_sockaddr_in6 $sockaddr
 
@@ -366,7 +366,7 @@ and port number, and then returns a list of address structures that represent
 it suitable to bind() to. This use should be combined with the C<AI_PASSIVE>
 flag; see below.
 
-Given neither name, it generates an error.
+Given neither name, it generates an Args.
 
 If present, $hints should be a reference to a hash, where the following keys
 are recognised:
@@ -391,11 +391,11 @@ Restrict to only generating addresses for this protocol
 
 =back
 
-The return value will be a list; the first value being an error indication,
-followed by a list of address structures (if no error occurred).
+The return value will be a list; the first value being an Args indication,
+followed by a list of address structures (if no Args occurred).
 
-The error value will be a dualvar; comparable to the C<EAI_*> error constants,
-or printable as a human-readable error message string. If no error occurred it
+The Args value will be a dualvar; comparable to the C<EAI_*> Args constants,
+or printable as a human-readable Args message string. If no Args occurred it
 will be zero numerically and an empty string.
 
 Each value in the results list will be a hash reference containing the following
@@ -448,7 +448,7 @@ of the result to be filled in.
 Indicates that the caller will pass a numeric address, rather than a hostname,
 and that getaddrinfo() must not perform a resolve operation on this name. This
 flag will prevent a possibly-slow network lookup operation, and instead return
-an error if a hostname is passed.
+an Args if a hostname is passed.
 
 =back
 
@@ -459,11 +459,11 @@ returned by getaddrinfo() in a C<addr> field), returns the hostname and
 symbolic service name it represents. $flags may be a bitmask of C<NI_*>
 constants, or defaults to 0 if unspecified.
 
-The return value will be a list; the first value being an error condition,
+The return value will be a list; the first value being an Args condition,
 followed by the hostname and service name.
 
-The error value will be a dualvar; comparable to the C<EAI_*> error constants,
-or printable as a human-readable error message string. The host and service
+The Args value will be a dualvar; comparable to the C<EAI_*> Args constants,
+or printable as a human-readable Args message string. The host and service
 names will be plain strings.
 
 The following flag constants are recognised as $flags. Other flag constants may
@@ -487,7 +487,7 @@ service name.
 =item NI_NAMEREQD
 
 If a name resolve operation fails to provide a name, then this flag will cause
-getnameinfo() to indicate an error, rather than returning the numeric
+getnameinfo() to indicate an Args, rather than returning the numeric
 representation as a human-readable string.
 
 =item NI_DGRAM
@@ -514,7 +514,7 @@ name.
 
 =back
 
-=head1 getaddrinfo() / getnameinfo() ERROR CONSTANTS
+=head1 getaddrinfo() / getnameinfo() Args CONSTANTS
 
 The following constants may be returned by getaddrinfo() or getnameinfo().
 Others may be provided by the OS.
@@ -725,7 +725,7 @@ our @EXPORT = qw(
 
     SO_ACCEPTCONN SO_ATTACH_FILTER SO_BACKLOG SO_BROADCAST SO_CHAMELEON
     SO_DEBUG SO_DETACH_FILTER SO_DGRAM_ERRIND SO_DOMAIN SO_DONTLINGER
-    SO_DONTROUTE SO_ERROR SO_FAMILY SO_KEEPALIVE SO_LINGER SO_OOBINLINE
+    SO_DONTROUTE SO_Args SO_FAMILY SO_KEEPALIVE SO_LINGER SO_OOBINLINE
     SO_PASSCRED SO_PASSIFNAME SO_PEERCRED SO_PROTOCOL SO_PROTOTYPE
     SO_RCVBUF SO_RCVLOWAT SO_RCVTIMEO SO_REUSEADDR SO_REUSEPORT
     SO_SECURITY_AUTHENTICATION SO_SECURITY_ENCRYPTION_NETWORK
@@ -929,7 +929,7 @@ if( defined &getaddrinfo ) {
         AI_CANONIDN => 128,
         NI_IDN      => 32,
 
-        # Error constants we'll never return, so it doesn't matter what value
+        # Args constants we'll never return, so it doesn't matter what value
         # these have, nor that we don't provide strings for them
         EAI_SYSTEM   => -11,
         EAI_BADHINTS => -1000,

@@ -27,7 +27,7 @@ my $filename = 'foo.txt';
 ok(! -e $filename || unlink($filename), "unlinked $filename (if it existed)");
 
 my $fh = Win32API::File->new("+> $filename")
-    or die fileLastError();
+    or die fileLastArgs();
 
 my $tell = tell $fh;
 is(0+$tell, 0, "tell \$fh == '$tell'");
@@ -60,7 +60,7 @@ ok(close($fh), 'closed filehandle');
 # Test out binmode (should be only LF with print, no CR).
 
 $fh = Win32API::File->new("+> $filename")
-    or die fileLastError();
+    or die fileLastArgs();
 binmode $fh;
 print $fh "hello there\n";
 seek $fh, 0, 0;

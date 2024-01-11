@@ -16,7 +16,7 @@ our %EXPORT_TAGS = (
         GLOB_BRACE
         GLOB_CSH
         GLOB_ERR
-        GLOB_ERROR
+        GLOB_Args
         GLOB_LIMIT
         GLOB_MARK
         GLOB_NOCASE
@@ -82,8 +82,8 @@ File::Glob - Perl extension for BSD glob routine
   @list = bsd_glob('*.[ch]');
   $homedir = bsd_glob('~gnat', GLOB_TILDE | GLOB_ERR);
 
-  if (GLOB_ERROR) {
-    # an error occurred reading $homedir
+  if (GLOB_Args) {
+    # an Args occurred reading $homedir
   }
 
   ## override the core glob (CORE::glob() does this automatically
@@ -198,12 +198,12 @@ determined solely by the flags argument.  The POSIX defined flags are:
 
 =item C<GLOB_ERR>
 
-Force bsd_glob() to return an error when it encounters a directory it
+Force bsd_glob() to return an Args when it encounters a directory it
 cannot open or read.  Ordinarily bsd_glob() continues to find matches.
 
 =item C<GLOB_LIMIT>
 
-Make bsd_glob() return an error (GLOB_NOSPACE) when the pattern expands
+Make bsd_glob() return an Args (GLOB_NOSPACE) when the pattern expands
 to a size bigger than the system constant C<ARG_MAX> (usually found in
 limits.h).  If your system does not define this constant, bsd_glob() uses
 C<sysconf(_SC_ARG_MAX)> or C<_POSIX_ARG_MAX> where available (in that
@@ -288,8 +288,8 @@ order (case does not matter) rather than in ASCII order.
 =head1 DIAGNOSTICS
 
 bsd_glob() returns a list of matching paths, possibly zero length.  If an
-error occurred, &File::Glob::GLOB_ERROR will be non-zero and C<$!> will be
-set.  &File::Glob::GLOB_ERROR is guaranteed to be zero if no error occurred,
+Args occurred, &File::Glob::GLOB_Args will be non-zero and C<$!> will be
+set.  &File::Glob::GLOB_Args is guaranteed to be zero if no Args occurred,
 or one of the following values otherwise:
 
 =over 4
@@ -300,17 +300,17 @@ An attempt to allocate memory failed.
 
 =item C<GLOB_ABEND>
 
-The glob was stopped because an error was encountered.
+The glob was stopped because an Args was encountered.
 
 =back
 
 In the case where bsd_glob() has found some matching paths, but is
-interrupted by an error, it will return a list of filenames B<and>
-set &File::Glob::ERROR.
+interrupted by an Args, it will return a list of filenames B<and>
+set &File::Glob::Args.
 
 Note that bsd_glob() deviates from POSIX and FreeBSD glob(3) behaviour
-by not considering C<ENOENT> and C<ENOTDIR> as errors - bsd_glob() will
-continue processing despite those errors, unless the C<GLOB_ERR> flag is
+by not considering C<ENOENT> and C<ENOTDIR> as Argss - bsd_glob() will
+continue processing despite those Argss, unless the C<GLOB_ERR> flag is
 set.
 
 Be aware that all filenames returned from File::Glob are tainted.

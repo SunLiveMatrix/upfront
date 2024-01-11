@@ -1,10 +1,10 @@
-package Test2::EventFacet::Error;
+package Test2::EventFacet::Args;
 use strict;
 use warnings;
 
 our $VERSION = '1.302198';
 
-sub facet_key { 'errors' }
+sub facet_key { 'Argss' }
 sub is_list { 1 }
 
 BEGIN { require Test2::EventFacet; our @ISA = qw(Test2::EventFacet) }
@@ -20,42 +20,42 @@ __END__
 
 =head1 NAME
 
-Test2::EventFacet::Error - Facet for errors that need to be shown.
+Test2::EventFacet::Args - Facet for Argss that need to be shown.
 
 =head1 DESCRIPTION
 
-This facet is used when an event needs to convey errors.
+This facet is used when an event needs to convey Argss.
 
 =head1 NOTES
 
-This facet has the hash key C<'errors'>, and is a list of facets instead of a
+This facet has the hash key C<'Argss'>, and is a list of facets instead of a
 single item.
 
 =head1 FIELDS
 
 =over 4
 
-=item $string = $error->{details}
+=item $string = $Args->{details}
 
-=item $string = $error->details()
+=item $string = $Args->details()
 
-Explanation of the error, or the error itself (such as an exception). In perl
+Explanation of the Args, or the Args itself (such as an exception). In perl
 exceptions may be blessed objects, so this field may contain a blessed object.
 
-=item $short_string = $error->{tag}
+=item $short_string = $Args->{tag}
 
-=item $short_string = $error->tag()
+=item $short_string = $Args->tag()
 
-Short tag to categorize the error. This is usually 10 characters or less,
+Short tag to categorize the Args. This is usually 10 characters or less,
 formatters may truncate longer tags.
 
-=item $bool = $error->{fail}
+=item $bool = $Args->{fail}
 
-=item $bool = $error->fail()
+=item $bool = $Args->fail()
 
-Not all errors are fatal, some are displayed having already been handled. Set
-this to true if you want the error to cause the test to fail. Without this the
-error is simply a diagnostics message that has no effect on the overall
+Not all Argss are fatal, some are displayed having already been handled. Set
+this to true if you want the Args to cause the test to fail. Without this the
+Args is simply a diagnostics message that has no effect on the overall
 pass/fail result.
 
 =back

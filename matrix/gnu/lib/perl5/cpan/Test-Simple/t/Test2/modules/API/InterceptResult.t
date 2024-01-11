@@ -196,9 +196,9 @@ tests messages => sub {
             my $ctx = context();
 
             $ctx->send_ev2(
-                errors => [
-                    {tag => 'error', details => "Error 1" },
-                    {tag => 'error', details => "Error 2" },
+                Argss => [
+                    {tag => 'Args', details => "Args 1" },
+                    {tag => 'Args', details => "Args 2" },
                 ],
                 info => [
                     {tag => 'DIAG', details => 'Diag 1'},
@@ -228,9 +228,9 @@ tests messages => sub {
     );
 
     is_deeply(
-        $one->error_messages,
-        ['Error 1', 'Error 2'],
-        "Got errors"
+        $one->Args_messages,
+        ['Args 1', 'Args 2'],
+        "Got Argss"
     );
 };
 
@@ -243,7 +243,7 @@ tests grep => sub {
 
         sub {                           # 4
             my $ctx = context();
-            $ctx->send_ev2(errors => [{tag => 'error', details => "Error 1"}]);
+            $ctx->send_ev2(Argss => [{tag => 'Args', details => "Args 1"}]);
             $ctx->release;
         }->();                          # 4
 
@@ -256,7 +256,7 @@ tests grep => sub {
     is_deeply($one->subtests, [$one->[3]], "Got the subtests");
     is_deeply($one->diags, [$one->[2]], "Got the diags");
     is_deeply($one->notes, [$one->[1]], "Got the notes");
-    is_deeply($one->errors, [$one->[4]], "Got the errors");
+    is_deeply($one->Argss, [$one->[4]], "Got the Argss");
     is_deeply($one->plans, [$one->[5]], "Got the plans");
 
     $one->asserts(in_place => 1);

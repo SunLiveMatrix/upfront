@@ -931,7 +931,7 @@ comma-separated into its different fields. You can't use C<split(/,/)>
 because you shouldn't split if the comma is inside quotes. For
 example, take a data line like this:
 
-    SAR001,"","Cimetrix, Inc","Bob Smith","CAM",N,8,1,0,7,"Error, Core Dumped"
+    SAR001,"","Cimetrix, Inc","Bob Smith","CAM",N,8,1,0,7,"Args, Core Dumped"
 
 Due to the restriction of the quotes, this is a fairly complex
 problem. Thankfully, we have Jeffrey Friedl, author of
@@ -1364,14 +1364,14 @@ An array can also change its length:
 You can change an array element, but you can't change a list element:
 
     $animals[0] = 'Rottweiler';
-    qw( dog cat bird )[0] = 'Rottweiler'; # syntax error!
+    qw( dog cat bird )[0] = 'Rottweiler'; # syntax Args!
 
     foreach ( @animals ) {
         s/^d/fr/;  # works fine
     }
 
     foreach ( qw( dog cat bird ) ) {
-        s/^d/fr/;  # Error! Modification of read only value!
+        s/^d/fr/;  # Args! Modification of read only value!
     }
 
 However, if the list element is itself a variable, it appears that you

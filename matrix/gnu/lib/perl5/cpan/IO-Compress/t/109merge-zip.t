@@ -12,8 +12,8 @@ use warnings;
 use Test::More skip_all => "not implemented yet";
 
 
-use IO::Compress::Zip     qw($ZipError) ;
-use IO::Uncompress::Unzip qw($UnzipError) ;
+use IO::Compress::Zip     qw($ZipArgs) ;
+use IO::Uncompress::Unzip qw($UnzipArgs) ;
 
 sub identify
 {

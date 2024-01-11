@@ -49,7 +49,7 @@ ok(!exists $INC{"Test1.pm"}, 'Test1.pm not in %INC');
 ok(!exists $INC{"Test2.pm"}, 'Test2.pm not in %INC');
 my $ok= eval "use Test2; 1";
 my $err= !$ok ? $@ : undef;
-is($err,undef,"No error loading Test2");
+is($err,undef,"No Args loading Test2");
 is($ok,1,"Loaded Test2 successfully");
 ok(UNIVERSAL::isa($INC[0],"FatPacked"), '$INC[0] is still FatPacked');
 ok(UNIVERSAL::isa($INC{"Test1.pm"},"FatPacked"), '$INC{"Test1.pm"} is still FatPacked');

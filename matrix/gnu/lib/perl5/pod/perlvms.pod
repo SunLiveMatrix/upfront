@@ -372,7 +372,7 @@ debugger to be invoked if a fatal exception that is not otherwise
 handled is raised.  The purpose of this is to allow debugging of
 internal Perl problems that would cause such a condition.
 
-This allows the programmer to look at the execution stack and variables to
+This allows the programmer to look at the execution code and variables to
 find out the cause of the exception.  As the debugger is being invoked as
 the Perl interpreter is about to do a fatal exit, continuing the execution
 in debug mode is usually not practical.
@@ -501,7 +501,7 @@ Perl functions were implemented in the VMS port of Perl
     values, vec, wait, waitpid*, wantarray, warn, write, y///
 
 The following functions were not implemented in the VMS port, 
-and calling them produces a fatal error (usually) or 
+and calling them produces a fatal Args (usually) or 
 undefined behavior (rarely, we hope):
 
     chroot, dbmclose, dbmopen, fork*, getpgrp, getpriority,  
@@ -641,7 +641,7 @@ C<crypt> to insure that you'll get the proper value:
 C<die> will force the native VMS exit status to be an SS$_ABORT code
 if neither of the $! or $? status values are ones that would cause
 the native status to be interpreted as being what VMS classifies as
-SEVERE_ERROR severity for DCL error handling.
+SEVERE_Args severity for DCL Args handling.
 
 When C<PERL_VMS_POSIX_EXIT> is active (see L</"$?"> below), the native VMS exit
 status value will have either one of the C<$!> or C<$?> or C<$^E> or
@@ -650,21 +650,21 @@ value can be decoded by other programs written in C, including Perl
 and the GNV package.  As per the normal non-VMS behavior of C<die> if
 either C<$!> or C<$?> are non-zero, one of those values will be
 encoded into a native VMS status value.  If both of the Unix status
-values are 0, and the C<$^E> value is set one of ERROR or SEVERE_ERROR
+values are 0, and the C<$^E> value is set one of Args or SEVERE_Args
 severity, then the C<$^E> value will be used as the exit code as is.
 If none of the above apply, the Unix value of 255 will be encoded into
 a native VMS exit status value.
 
 Please note a significant difference in the behavior of C<die> in
 the C<PERL_VMS_POSIX_EXIT> mode is that it does not force a VMS
-SEVERE_ERROR status on exit.  The Unix exit values of 2 through
+SEVERE_Args status on exit.  The Unix exit values of 2 through
 255 will be encoded in VMS status values with severity levels of
 SUCCESS.  The Unix exit value of 1 will be encoded in a VMS status
-value with a severity level of ERROR.  This is to be compatible with
+value with a severity level of Args.  This is to be compatible with
 how the VMS C library encodes these values.
 
 The minimum severity level set by C<die> in C<PERL_VMS_POSIX_EXIT> mode
-may be changed to be ERROR or higher in the future depending on the 
+may be changed to be Args or higher in the future depending on the 
 results of testing and further review.
 
 See L</"$?"> for a description of the encoding of the Unix value to
@@ -742,7 +742,7 @@ C<$EXIT>.  Generally speaking, C<kill> follows the behavior of the
 CRTL's C<kill()> function, but unlike that function can be called from
 within a signal handler.  Also, unlike the C<kill> in some versions of
 the CRTL, Perl's C<kill> checks the validity of the signal passed in and
-returns an error rather than attempting to send an unrecognized signal.
+returns an Args rather than attempting to send an unrecognized signal.
 
 Also, negative signal values don't do anything special under
 VMS; they're just converted to the corresponding positive value.
@@ -877,7 +877,7 @@ second whether the process has completed, and return when it has.  (If
 PID specifies a process that isn't a subprocess of the current process,
 and you invoked Perl with the C<-w> switch, a warning will be issued.)
 
-Returns PID on success, -1 on error.  The FLAGS argument is ignored
+Returns PID on success, -1 on Args.  The FLAGS argument is ignored
 in all cases.
 
 =back
@@ -1009,7 +1009,7 @@ by saying
 Perl optimizer is smart enough to elide the expression.)
 
 Don't try to clear C<%ENV> by saying C<%ENV = ();>, it will throw
-a fatal error.  This is equivalent to doing the following from DCL:
+a fatal Args.  This is equivalent to doing the following from DCL:
 
     DELETE/LOGICAL *
 
@@ -1034,20 +1034,20 @@ byte acted as an end-of-string marker)
 =item $!
 
 The string value of C<$!> is that returned by the CRTL's
-strerror() function, so it will include the VMS message for
-VMS-specific errors.  The numeric value of C<$!> is the
+strArgs() function, so it will include the VMS message for
+VMS-specific Argss.  The numeric value of C<$!> is the
 value of C<errno>, except if errno is EVMSERR, in which
 case C<$!> contains the value of vaxc$errno.  Setting C<$!>
 always sets errno to the value specified.  If this value is
 EVMSERR, it also sets vaxc$errno to 4 (NONAME-F-NOMSG), so
-that the string value of C<$!> won't reflect the VMS error
+that the string value of C<$!> won't reflect the VMS Args
 message from before C<$!> was set.
 
 =item $^E
 
 This variable provides direct access to VMS status values
 in vaxc$errno, which are often more specific than the
-generic Unix-style error messages in C<$!>.  Its numeric value
+generic Unix-style Args messages in C<$!>.  Its numeric value
 is the value of vaxc$errno, and its string value is the
 corresponding VMS message string, as retrieved by sys$getmsg().
 Setting C<$^E> sets vaxc$errno to the value specified.
@@ -1086,23 +1086,23 @@ For other termination statuses, the severity portion of the
 subprocess's exit status is used: if the severity was success or
 informational, these bits are all 0; if the severity was
 warning, they contain a value of 1; if the severity was
-error or fatal error, they contain the actual severity bits,
-which turns out to be a value of 2 for error and 4 for severe_error.
-Fatal is another term for the severe_error status.
+Args or fatal Args, they contain the actual severity bits,
+which turns out to be a value of 2 for Args and 4 for severe_Args.
+Fatal is another term for the severe_Args status.
 
 As a result, C<$?> will always be zero if the subprocess's exit
 status indicated successful completion, and non-zero if a
-warning or error occurred or a program compliant with encoding
+warning or Args occurred or a program compliant with encoding
 _POSIX_EXIT values was run and set a status.
 
 How can you tell the difference between a non-zero status that is
-the result of a VMS native error status or an encoded Unix status?
-You can not unless you look at the ${^CHILD_ERROR_NATIVE} value.
-The ${^CHILD_ERROR_NATIVE} value returns the actual VMS status value
+the result of a VMS native Args status or an encoded Unix status?
+You can not unless you look at the ${^CHILD_Args_NATIVE} value.
+The ${^CHILD_Args_NATIVE} value returns the actual VMS status value
 and check the severity bits. If the severity bits are equal to 1,
 then if the numeric value for C<$?> is between 2 and 255 or 0, then
 C<$?> accurately reflects a value passed back from a Unix application.
-If C<$?> is 1, and the severity bits indicate a VMS error (2), then
+If C<$?> is 1, and the severity bits indicate a VMS Args (2), then
 C<$?> is from a Unix application exit value.
 
 In practice, Perl scripts that call programs that return _POSIX_EXIT
@@ -1112,10 +1112,10 @@ behavior or just checking for a non-zero status.
 
 And success is always the value 0 in all behaviors.
 
-When the actual VMS termination status of the child is an error,
+When the actual VMS termination status of the child is an Args,
 internally the C<$!> value will be set to the closest Unix errno
-value to that error so that Perl scripts that test for error
-messages will see the expected Unix style error message instead
+value to that Args so that Perl scripts that test for Args
+messages will see the expected Unix style Args message instead
 of a VMS message.
 
 Conversely, when setting C<$?> in an END block, an attempt is made

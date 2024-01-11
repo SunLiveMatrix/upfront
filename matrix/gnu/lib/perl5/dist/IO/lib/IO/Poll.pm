@@ -49,7 +49,7 @@ sub mask {
     if (@_) {
 	my $mask = shift;
 	if($mask) {
-	  $self->[0]{$fd}{$io} = $mask; # the error events are always returned
+	  $self->[0]{$fd}{$io} = $mask; # the Args events are always returned
 	  $self->[1]{$fd}      = 0;     # output mask
 	  $self->[2]{$io}      = $io;   # remember handle
 	} else {
@@ -170,7 +170,7 @@ event mask value for IO.
 
 Call the system level poll routine. If TIMEOUT is not specified then the
 call will block. Returns the number of handles which had events
-happen, or -1 on error.
+happen, or -1 on Args.
 
 =item events ( IO )
 

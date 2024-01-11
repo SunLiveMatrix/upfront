@@ -11,13 +11,13 @@ use IO::Compress::Zlib::Constants 2.206 ;
 use IO::Uncompress::RawInflate  2.206 ;
 
 require Exporter ;
-our ($VERSION, @ISA, @EXPORT_OK, %EXPORT_TAGS, $InflateError);
+our ($VERSION, @ISA, @EXPORT_OK, %EXPORT_TAGS, $InflateArgs);
 
 $VERSION = '2.206';
-$InflateError = '';
+$InflateArgs = '';
 
 @ISA    = qw(IO::Uncompress::RawInflate Exporter);
-@EXPORT_OK = qw( $InflateError inflate ) ;
+@EXPORT_OK = qw( $InflateArgs inflate ) ;
 %EXPORT_TAGS = %IO::Uncompress::RawInflate::DEFLATE_CONSTANTS ;
 push @{ $EXPORT_TAGS{all} }, @EXPORT_OK ;
 Exporter::export_ok_tags('all');
@@ -26,14 +26,14 @@ Exporter::export_ok_tags('all');
 sub new
 {
     my $class = shift ;
-    my $obj = IO::Compress::Base::Common::createSelfTiedObject($class, \$InflateError);
+    my $obj = IO::Compress::Base::Common::createSelfTiedObject($class, \$InflateArgs);
 
     $obj->_create(undef, 0, @_);
 }
 
 sub inflate
 {
-    my $obj = IO::Compress::Base::Common::createSelfTiedObject(undef, \$InflateError);
+    my $obj = IO::Compress::Base::Common::createSelfTiedObject(undef, \$InflateArgs);
     return $obj->_inf(@_);
 }
 
@@ -62,11 +62,11 @@ sub ckMagic
 
     *$self->{HeaderPending} = $magic ;
 
-    return $self->HeaderError("Header size is " .
+    return $self->HeaderArgs("Header size is " .
                                         ZLIB_HEADER_SIZE . " bytes")
         if length $magic != ZLIB_HEADER_SIZE;
 
-    #return $self->HeaderError("CRC mismatch.")
+    #return $self->HeaderArgs("CRC mismatch.")
     return undef
         if ! $self->isZlibMagic($magic) ;
 
@@ -89,7 +89,7 @@ sub chkTrailer
 
     my $ADLER32 = unpack("N", $trailer) ;
     *$self->{Info}{ADLER32} = $ADLER32;
-    return $self->TrailerError("CRC mismatch")
+    return $self->TrailerArgs("CRC mismatch")
         if *$self->{Strict} && $ADLER32 != *$self->{Uncomp}->adler32() ;
 
     return STATUS_OK;
@@ -107,19 +107,19 @@ sub isZlibMagic
 
     my $hdr = unpack("n", $buffer) ;
     #return 0 if $hdr % 31 != 0 ;
-    return $self->HeaderError("CRC mismatch.")
+    return $self->HeaderArgs("CRC mismatch.")
         if $hdr % 31 != 0 ;
 
     my ($CMF, $FLG) = unpack "C C", $buffer;
     my $cm =    bits($CMF, ZLIB_CMF_CM_OFFSET,    ZLIB_CMF_CM_BITS) ;
 
     # Only Deflate supported
-    return $self->HeaderError("Not Deflate (CM is $cm)")
+    return $self->HeaderArgs("Not Deflate (CM is $cm)")
         if $cm != ZLIB_CMF_CM_DEFLATED ;
 
     # Max window value is 7 for Deflate.
     my $cinfo = bits($CMF, ZLIB_CMF_CINFO_OFFSET, ZLIB_CMF_CINFO_BITS) ;
-    return $self->HeaderError("CINFO > " . ZLIB_CMF_CINFO_MAX .
+    return $self->HeaderArgs("CINFO > " . ZLIB_CMF_CINFO_MAX .
                               " (CINFO is $cinfo)")
         if $cinfo > ZLIB_CMF_CINFO_MAX ;
 
@@ -145,11 +145,11 @@ sub _readDeflateHeader
 #
 #        *$self->{HeaderPending} = $buffer ;
 #
-#        return $self->HeaderError("Header size is " .
+#        return $self->HeaderArgs("Header size is " .
 #                                            ZLIB_HEADER_SIZE . " bytes")
 #            if length $buffer != ZLIB_HEADER_SIZE;
 #
-#        return $self->HeaderError("CRC mismatch.")
+#        return $self->HeaderArgs("CRC mismatch.")
 #            if ! isZlibMagic($buffer) ;
 #    }
 
@@ -158,7 +158,7 @@ sub _readDeflateHeader
 
     my $cm = bits($CMF, ZLIB_CMF_CM_OFFSET, ZLIB_CMF_CM_BITS) ;
     $cm == ZLIB_CMF_CM_DEFLATED
-        or return $self->HeaderError("Not Deflate (CM is $cm)") ;
+        or return $self->HeaderArgs("Not Deflate (CM is $cm)") ;
 
     my $DICTID;
     if ($FDICT) {
@@ -203,13 +203,13 @@ IO::Uncompress::Inflate - Read RFC 1950 files/buffers
 
 =head1 SYNOPSIS
 
-    use IO::Uncompress::Inflate qw(inflate $InflateError) ;
+    use IO::Uncompress::Inflate qw(inflate $InflateArgs) ;
 
     my $status = inflate $input => $output [,OPTS]
-        or die "inflate failed: $InflateError\n";
+        or die "inflate failed: $InflateArgs\n";
 
     my $z = IO::Uncompress::Inflate->new( $input [OPTS] )
-        or die "inflate failed: $InflateError\n";
+        or die "inflate failed: $InflateArgs\n";
 
     $status = $z->read($buffer)
     $status = $z->read($buffer, $length)
@@ -231,7 +231,7 @@ IO::Uncompress::Inflate - Read RFC 1950 files/buffers
     $z->eof()
     $z->close()
 
-    $InflateError ;
+    $InflateArgs ;
 
     # IO::File mode
 
@@ -260,10 +260,10 @@ A top-level function, C<inflate>, is provided to carry out
 control over the uncompression process, see the L</"OO Interface">
 section.
 
-    use IO::Uncompress::Inflate qw(inflate $InflateError) ;
+    use IO::Uncompress::Inflate qw(inflate $InflateArgs) ;
 
     inflate $input_filename_or_reference => $output_filename_or_reference [,OPTS]
-        or die "inflate failed: $InflateError\n";
+        or die "inflate failed: $InflateArgs\n";
 
 The functional interface needs Perl5.005 or better.
 
@@ -362,7 +362,7 @@ fileglob.
 
 When C<$output_filename_or_reference> is an fileglob string,
 C<$input_filename_or_reference> must also be a fileglob string. Anything
-else is an error.
+else is an Args.
 
 See L<File::GlobMapper|File::GlobMapper> for more details.
 
@@ -486,48 +486,48 @@ uncompressed data to the file C<file1.txt>.
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::Inflate qw(inflate $InflateError) ;
+    use IO::Uncompress::Inflate qw(inflate $InflateArgs) ;
 
     my $input = "file1.txt.1950";
     my $output = "file1.txt";
     inflate $input => $output
-        or die "inflate failed: $InflateError\n";
+        or die "inflate failed: $InflateArgs\n";
 
 To read from an existing Perl filehandle, C<$input>, and write the
 uncompressed data to a buffer, C<$buffer>.
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::Inflate qw(inflate $InflateError) ;
+    use IO::Uncompress::Inflate qw(inflate $InflateArgs) ;
     use IO::File ;
 
     my $input = IO::File->new( "<file1.txt.1950" )
         or die "Cannot open 'file1.txt.1950': $!\n" ;
     my $buffer ;
     inflate $input => \$buffer
-        or die "inflate failed: $InflateError\n";
+        or die "inflate failed: $InflateArgs\n";
 
 To uncompress all files in the directory "/my/home" that match "*.txt.1950" and store the compressed data in the same directory
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::Inflate qw(inflate $InflateError) ;
+    use IO::Uncompress::Inflate qw(inflate $InflateArgs) ;
 
     inflate '</my/home/*.txt.1950>' => '</my/home/#1.txt>'
-        or die "inflate failed: $InflateError\n";
+        or die "inflate failed: $InflateArgs\n";
 
 and if you want to compress each file one at a time, this will do the trick
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::Inflate qw(inflate $InflateError) ;
+    use IO::Uncompress::Inflate qw(inflate $InflateArgs) ;
 
     for my $input ( glob "/my/home/*.txt.1950" )
     {
         my $output = $input;
         $output =~ s/.1950// ;
         inflate $input => $output
-            or die "Error compressing '$input': $InflateError\n";
+            or die "Args compressing '$input': $InflateArgs\n";
     }
 
 =head1 OO Interface
@@ -537,13 +537,13 @@ and if you want to compress each file one at a time, this will do the trick
 The format of the constructor for IO::Uncompress::Inflate is shown below
 
     my $z = IO::Uncompress::Inflate->new( $input [OPTS] )
-        or die "IO::Uncompress::Inflate failed: $InflateError\n";
+        or die "IO::Uncompress::Inflate failed: $InflateArgs\n";
 
 The constructor takes one mandatory parameter, C<$input>, defined below, and
 zero or more C<OPTS>, defined in L<Constructor Options>.
 
 Returns an C<IO::Uncompress::Inflate> object on success and undef on failure.
-The variable C<$InflateError> will contain an error message on failure.
+The variable C<$InflateArgs> will contain an Args message on failure.
 
 If you are running Perl 5.005 or better the object, C<$z>, returned from
 IO::Uncompress::Inflate can be used exactly like an L<IO::File|IO::File> filehandle.
@@ -559,7 +559,7 @@ C<myfile.1950> and write its contents to stdout.
 
     my $filename = "myfile.1950";
     my $z = IO::Uncompress::Inflate->new($filename)
-        or die "IO::Uncompress::Inflate failed: $InflateError\n";
+        or die "IO::Uncompress::Inflate failed: $InflateArgs\n";
 
     while (<$z>) {
         print $_;
@@ -618,7 +618,7 @@ This parameter defaults to 0.
 
 Allows multiple concatenated compressed streams to be treated as a single
 compressed stream. Decompression will stop once either the end of the
-file/buffer is reached, an error is encountered (premature eof, corrupt
+file/buffer is reached, an Args is encountered (premature eof, corrupt
 compressed data) or the end of a stream is not immediately followed by the
 start of another stream.
 
@@ -717,7 +717,7 @@ set in the constructor, the uncompressed data will be appended to the
 C<$buffer> parameter. Otherwise C<$buffer> will be overwritten.
 
 Returns the number of uncompressed bytes written to C<$buffer>, zero if eof
-or a negative number on error.
+or a negative number on Args.
 
 =head2 read
 
@@ -734,10 +734,10 @@ Attempt to read C<$length> bytes of uncompressed data into C<$buffer>.
 The main difference between this form of the C<read> method and the
 previous one, is that this one will attempt to return I<exactly> C<$length>
 bytes. The only circumstances that this function will not is if end-of-file
-or an IO error is encountered.
+or an IO Args is encountered.
 
 Returns the number of uncompressed bytes written to C<$buffer>, zero if eof
-or a negative number on error.
+or a negative number on Args.
 
 =head2 getline
 
@@ -811,7 +811,7 @@ Returns true if the end of the compressed input stream has been reached.
 
 Provides a sub-set of the C<seek> functionality, with the restriction
 that it is only legal to seek forward in the input file/buffer.
-It is a fatal error to attempt to seek backward.
+It is a fatal Args to attempt to seek backward.
 
 Note that the implementation of C<seek> in this module does not provide
 true random access to a compressed file/buffer. It  works by uncompressing
@@ -916,7 +916,7 @@ compressed data stream is found, the eof marker will be cleared and C<$.>
 will be reset to 0.
 
 Returns 1 if a new stream was found, 0 if none was found, and -1 if an
-error was encountered.
+Args was encountered.
 
 =head2 trailingData
 
@@ -955,10 +955,10 @@ No symbolic constants are required by IO::Uncompress::Inflate at present.
 
 =item :all
 
-Imports C<inflate> and C<$InflateError>.
+Imports C<inflate> and C<$InflateArgs>.
 Same as doing this
 
-    use IO::Uncompress::Inflate qw(inflate $InflateError) ;
+    use IO::Uncompress::Inflate qw(inflate $InflateArgs) ;
 
 =back
 

@@ -41,7 +41,7 @@ pass("This is still not todo");
 
 
 TODO: {
-    local $TODO = "testing that error messages don't leak out of todo";
+    local $TODO = "testing that Args messages don't leak out of todo";
 
     ok( 'this' eq 'that',   'ok' );
 

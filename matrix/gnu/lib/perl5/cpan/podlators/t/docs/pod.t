@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Check all POD documents for POD formatting errors.
+# Check all POD documents for POD formatting Argss.
 #
 # The canonical version of this file is maintained in the rra-c-util package,
 # which can be found at <https://www.eyrie.org/~eagle/software/rra-c-util/>.

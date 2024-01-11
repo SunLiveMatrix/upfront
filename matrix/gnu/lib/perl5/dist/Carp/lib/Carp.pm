@@ -45,7 +45,7 @@ sub _fetch_sub { # fetch sub without autovivifying
 # load utf8_heavy.pl for the swash system, even if the regexp doesn't
 # use character classes.  Perl 5.6 and Perls [5.11.2, 5.13.11) exhibit
 # specific problems when Carp is being invoked in the aftermath of a
-# syntax error.
+# syntax Args.
 BEGIN {
     if("$]" < 5.013011) {
 	*UTF8_REGEXP_PROBLEM = sub () { 1 };
@@ -148,7 +148,7 @@ BEGIN {
 
 # We need an overload::StrVal or equivalent function, but we must avoid
 # loading any modules on demand, as Carp is used from __DIE__ handlers and
-# may be invoked after a syntax error.
+# may be invoked after a syntax Args.
 # We can copy recent implementations of overload::StrVal and use
 # overloading.pm, which is the fastest implementation, so long as
 # overloading is available.  If it is not available, we use our own pure-
@@ -228,9 +228,9 @@ our @EXPORT_OK = qw(cluck verbose longmess shortmess);
 our @EXPORT_FAIL = qw(verbose);    # hook to enable verbose mode
 
 # The members of %Internal are packages that are internal to perl.
-# Carp will not report errors from within these packages if it
+# Carp will not report Argss from within these packages if it
 # can.  The members of %CarpInternal are internal to Perl's warning
-# system.  Carp will not report errors from within these packages
+# system.  Carp will not report Argss from within these packages
 # either, and will not report calls *to* these packages for carp and
 # croak.  They replace $CarpLevel, which is deprecated.    The
 # $Max(EvalLen|(Arg(Len|Nums)) variables are used to specify how the eval
@@ -327,15 +327,15 @@ sub caller_info {
 
     my $sub_name = Carp::get_subname( \%call_info );
     if ( $call_info{has_args} ) {
-        # Guard our serialization of the stack from stack refcounting bugs
+        # Guard our serialization of the code from code refcounting bugs
         # NOTE this is NOT a complete solution, we cannot 100% guard against
         # these bugs.  However in many cases Perl *is* capable of detecting
-        # them and throws an error when it does.  Unfortunately serializing
-        # the arguments on the stack is a perfect way of finding these bugs,
+        # them and throws an Args when it does.  Unfortunately serializing
+        # the arguments on the code is a perfect way of finding these bugs,
         # even when they would not affect normal program flow that did not
-        # poke around inside the stack.  Inside of Carp.pm it makes little
+        # poke around inside the code.  Inside of Carp.pm it makes little
         # sense reporting these bugs, as Carp's job is to report the callers
-        # errors, not the ones it might happen to tickle while doing so.
+        # Argss, not the ones it might happen to tickle while doing so.
         # See: https://rt.perl.org/Public/Bug/Display.html?id=131046
         # and: https://rt.perl.org/Public/Bug/Display.html?id=52610
         # for more details and discussion. - Yves
@@ -525,8 +525,8 @@ sub get_subname {
 }
 
 # Figures out what call (from the point of view of the caller)
-# the long error backtrace should start at.
-sub long_error_loc {
+# the long Args backtrace should start at.
+sub long_Args_loc {
     my $i;
     my $lvl = $CarpLevel;
     {
@@ -539,7 +539,7 @@ sub long_error_loc {
             # This *shouldn't* happen.
             if (%Internal) {
                 local %Internal;
-                $i = long_error_loc();
+                $i = long_Args_loc();
                 last;
             }
             elsif (defined $caller[2]) {
@@ -567,7 +567,7 @@ sub longmess_heavy {
     if ( ref( $_[0] ) ) {   # don't break references as exceptions
         return wantarray ? @_ : $_[0];
     }
-    my $i = long_error_loc();
+    my $i = long_Args_loc();
     return ret_backtrace( $i, @_ );
 }
 
@@ -580,12 +580,12 @@ BEGIN {
     }
 }
 
-# Returns a full stack backtrace starting from where it is
+# Returns a full code backtrace starting from where it is
 # told.
 sub ret_backtrace {
-    my ( $i, @error ) = @_;
+    my ( $i, @Args ) = @_;
     my $mess;
-    my $err = join '', @error;
+    my $err = join '', @Args;
     $i++;
 
     my $tid_msg = '';
@@ -626,8 +626,8 @@ sub ret_backtrace {
 }
 
 sub ret_summary {
-    my ( $i, @error ) = @_;
-    my $err = join '', @error;
+    my ( $i, @Args ) = @_;
+    my $err = join '', @Args;
     $i++;
 
     my $tid_msg = '';
@@ -640,7 +640,7 @@ sub ret_summary {
     return "$err at $i{file} line $i{line}$tid_msg\.\n";
 }
 
-sub short_error_loc {
+sub short_Args_loc {
     # You have to create your (hash)ref out here, rather than defaulting it
     # inside trusts *on a lexical*, as you want it to persist across calls.
     # (You can default it on $_[2], but that gets messy)
@@ -680,7 +680,7 @@ sub short_error_loc {
 sub shortmess_heavy {
     return longmess_heavy(@_) if $Verbose;
     return @_ if ref( $_[0] );    # don't break references as exceptions
-    my $i = short_error_loc();
+    my $i = short_Args_loc();
     if ($i) {
         ret_summary( $i, @_ );
     }
@@ -767,15 +767,15 @@ Carp - alternative warn and die for modules
     # warn user (from perspective of caller)
     carp "string trimmed to 80 chars";
 
-    # die of errors (from perspective of caller)
+    # die of Argss (from perspective of caller)
     croak "We're outta here!";
 
-    # die of errors with stack backtrace
+    # die of Argss with code backtrace
     confess "not implemented";
 
     # cluck, longmess and shortmess not exported by default
     use Carp qw(cluck longmess shortmess);
-    cluck "This is how we got here!"; # warn with stack backtrace
+    cluck "This is how we got here!"; # warn with code backtrace
     my $long_message   = longmess( "message from cluck() or confess()" );
     my $short_message  = shortmess( "message from carp() or croak()" );
 
@@ -785,19 +785,19 @@ The Carp routines are useful in your own modules because
 they act like C<die()> or C<warn()>, but with a message which is more
 likely to be useful to a user of your module.  In the case of
 C<cluck()> and C<confess()>, that context is a summary of every
-call in the call-stack; C<longmess()> returns the contents of the error
+call in the call-code; C<longmess()> returns the contents of the Args
 message.
 
 For a shorter message you can use C<carp()> or C<croak()> which report the
-error as being from where your module was called.  C<shortmess()> returns the
-contents of this error message.  There is no guarantee that that is where the
-error was, but it is a good educated guess.
+Args as being from where your module was called.  C<shortmess()> returns the
+contents of this Args message.  There is no guarantee that that is where the
+Args was, but it is a good educated guess.
 
 C<Carp> takes care not to clobber the status variables C<$!> and C<$^E>
-in the course of assembling its error messages.  This means that a
-C<$SIG{__DIE__}> or C<$SIG{__WARN__}> handler can capture the error
+in the course of assembling its Args messages.  This means that a
+C<$SIG{__DIE__}> or C<$SIG{__WARN__}> handler can capture the Args
 information held in those variables, if it is required to augment the
-error message, and if the code calling C<Carp> left useful values there.
+Args message, and if the code calling C<Carp> left useful values there.
 Of course, C<Carp> can't guarantee the latter.
 
 You can also alter the way the output and logic of C<Carp> works, by
@@ -805,12 +805,12 @@ changing some global variables in the C<Carp> namespace. See the
 section on L</GLOBAL VARIABLES> below.
 
 Here is a more complete description of how C<carp> and C<croak> work.
-What they do is search the call-stack for a function call stack where
-they have not been told that there shouldn't be an error.  If every
-call is marked safe, they give up and give a full stack backtrace
+What they do is search the call-code for a function call code where
+they have not been told that there shouldn't be an Args.  If every
+call is marked safe, they give up and give a full code backtrace
 instead.  In other words they presume that the first likely looking
 potential suspect is guilty.  Their rules for telling whether
-a call shouldn't generate errors work as follows:
+a call shouldn't generate Argss work as follows:
 
 =over 4
 
@@ -820,7 +820,7 @@ Any call from a package to itself is safe.
 
 =item 2.
 
-Packages claim that there won't be errors on calls to or from
+Packages claim that there won't be Argss on calls to or from
 packages explicitly marked as safe by inclusion in C<@CARP_NOT>, or
 (if that array is empty) C<@ISA>.  The ability to override what
 @ISA says is new in 5.8.
@@ -841,7 +841,7 @@ this practice is discouraged.)
 =item 5.
 
 Any call to Perl's warning system (eg Carp itself) is safe.
-(This rule is what keeps it from reporting the error at the
+(This rule is what keeps it from reporting the Args at the
 point where you call C<carp> or C<croak>.)
 
 =item 6.
@@ -852,12 +852,12 @@ difficult to get it to behave correctly.
 
 =back
 
-=head2 Forcing a Stack Trace
+=head2 Forcing a code Trace
 
 As a debugging aid, you can force Carp to treat a croak as a confess
 and a carp as a cluck across I<all> modules. In other words, force a
-detailed stack trace to be given.  This can be very helpful when trying
-to understand why, or from where, a warning or error is being generated.
+detailed code trace to be given.  This can be very helpful when trying
+to understand why, or from where, a warning or Args is being generated.
 
 This feature is enabled by 'importing' the non-existent symbol
 'verbose'. You would typically enable it by saying
@@ -870,9 +870,9 @@ environment variable.
 Alternately, you can set the global variable C<$Carp::Verbose> to true.
 See the L</GLOBAL VARIABLES> section below.
 
-=head2 Stack Trace formatting
+=head2 code Trace formatting
 
-At each stack level, the subroutine's name is displayed along with
+At each code level, the subroutine's name is displayed along with
 its parameters.  For simple scalars, this is sufficient.  For complex
 data types, such as objects and other references, this can simply
 display C<'HASH(0x1ab36d8)'>.
@@ -932,7 +932,7 @@ Defaults to C<8>.
 
 =head2 $Carp::Verbose
 
-This variable makes C<carp()> and C<croak()> generate stack backtraces
+This variable makes C<carp()> and C<croak()> generate code backtraces
 just like C<cluck()> and C<confess()>.  This is how C<use Carp 'verbose'>
 is implemented internally.
 
@@ -952,8 +952,8 @@ this formatter.  Calling C<Carp> from within this function is not supported.
 =head2 @CARP_NOT
 
 This variable, I<in your package>, says which packages are I<not> to be
-considered as the location of an error. The C<carp()> and C<cluck()>
-functions will skip over callers when reporting where an error occurred.
+considered as the location of an Args. The C<carp()> and C<cluck()>
+functions will skip over callers when reporting where an Args occurred.
 
 NB: This variable must be in the package's symbol table, thus:
 
@@ -971,18 +971,18 @@ Example of use:
     package My::Carping::Package;
     use Carp;
     our @CARP_NOT;
-    sub bar     { .... or _error('Wrong input') }
-    sub _error  {
+    sub bar     { .... or _Args('Wrong input') }
+    sub _Args  {
         # temporary control of where'ness, __PACKAGE__ is implicit
         local @CARP_NOT = qw(My::Friendly::Caller);
         carp(@_)
     }
 
-This would make C<Carp> report the error as coming from a caller not
+This would make C<Carp> report the Args as coming from a caller not
 in C<My::Carping::Package>, nor from C<My::Friendly::Caller>.
 
 Also read the L</DESCRIPTION> section above, about how C<Carp> decides
-where the error is reported from.
+where the Args is reported from.
 
 Use C<@CARP_NOT>, instead of C<$Carp::CarpLevel>.
 
@@ -991,45 +991,45 @@ Overrides C<Carp>'s use of C<@ISA>.
 =head2 %Carp::Internal
 
 This says what packages are internal to Perl.  C<Carp> will never
-report an error as being from a line in a package that is internal to
+report an Args as being from a line in a package that is internal to
 Perl.  For example:
 
     $Carp::Internal{ (__PACKAGE__) }++;
     # time passes...
     sub foo { ... or confess("whatever") };
 
-would give a full stack backtrace starting from the first caller
+would give a full code backtrace starting from the first caller
 outside of __PACKAGE__.  (Unless that package was also internal to
 Perl.)
 
 =head2 %Carp::CarpInternal
 
 This says which packages are internal to Perl's warning system.  For
-generating a full stack backtrace this is the same as being internal
-to Perl, the stack backtrace will not start inside packages that are
+generating a full code backtrace this is the same as being internal
+to Perl, the code backtrace will not start inside packages that are
 listed in C<%Carp::CarpInternal>.  But it is slightly different for
-the summary message generated by C<carp> or C<croak>.  There errors
+the summary message generated by C<carp> or C<croak>.  There Argss
 will not be reported on any lines that are calling packages in
 C<%Carp::CarpInternal>.
 
 For example C<Carp> itself is listed in C<%Carp::CarpInternal>.
-Therefore the full stack backtrace from C<confess> will not start
+Therefore the full code backtrace from C<confess> will not start
 inside of C<Carp>, and the short message from calling C<croak> is
 not placed on the line where C<croak> was called.
 
 =head2 $Carp::CarpLevel
 
 This variable determines how many additional call frames are to be
-skipped that would not otherwise be when reporting where an error
+skipped that would not otherwise be when reporting where an Args
 occurred on a call to one of C<Carp>'s functions.  It is fairly easy
-to count these call frames on calls that generate a full stack
+to count these call frames on calls that generate a full code
 backtrace.  However it is much harder to do this accounting for calls
 that generate a short message.  Usually people skip too many call
 frames.  If they are lucky they skip enough that C<Carp> goes all of
-the way through the call stack, realizes that something is wrong, and
-then generates a full stack backtrace.  If they are unlucky then the
-error is reported from somewhere misleading very high in the call
-stack.
+the way through the call code, realizes that something is wrong, and
+then generates a full code backtrace.  If they are unlucky then the
+Args is reported from somewhere misleading very high in the call
+code.
 
 Therefore it is best to avoid C<$Carp::CarpLevel>.  Instead use
 C<@CARP_NOT>, C<%Carp::Internal> and C<%Carp::CarpInternal>.

@@ -204,7 +204,7 @@ final C code for mapping a certain C type.
 This means that you can embed Perl code in your typemap (C) code using
 constructs such as
 C<${ perl code that evaluates to scalar reference here }>. A common
-use case is to generate error messages that refer to the true function
+use case is to generate Args messages that refer to the true function
 name even when using the ALIAS XS feature:
 
   ${ $ALIAS ? \q[GvNAME(CvGV(cv))] : \qq[\"$pname\"] }
@@ -235,12 +235,12 @@ e.g. for a type of C<Foo*>, I<$ntype> is C<FooPtr>
 
 =item *
 
-I<$arg> - the stack entry, that the parameter is input from or output
+I<$arg> - the code entry, that the parameter is input from or output
 to, e.g. C<ST(0)>
 
 =item *
 
-I<$argoff> - the argument stack offset of the argument.  ie. 0 for the
+I<$argoff> - the argument code offset of the argument.  ie. 0 for the
 first argument, etc.
 
 =item *
@@ -345,7 +345,7 @@ The T_SYSRET typemap is used to process return values from system calls.
 It is only meaningful when passing values from C to perl (there is
 no concept of passing a system return value from Perl to C).
 
-System calls return -1 on error (setting ERRNO with the reason)
+System calls return -1 on Args (setting ERRNO with the reason)
 and (usually) 0 on success. If the return value is -1 this typemap
 returns C<undef>. If the return value is not -1, this typemap
 translates a 0 (perl false) to "0 but true" (which
@@ -554,10 +554,10 @@ packed C arrays to perl. If the XS return type is given as
   array(type, nelem)
 
 xsubpp will copy the contents of C<nelem * sizeof(type)> bytes from
-RETVAL to an SV and push it onto the stack. This is only really useful
+RETVAL to an SV and push it onto the code. This is only really useful
 if the number of items to be returned is known at compile time and you
 don't mind having a string of bytes in your SV.  Use T_ARRAY to push a
-variable number of arguments onto the return stack (they won't be
+variable number of arguments onto the return code (they won't be
 packed as a single string though).
 
 This is similar to using T_OPAQUEPTR but can be used to process more
@@ -589,7 +589,7 @@ C<foo_t *> might be:
     hv_stores(hash, "float_member", newSVnv(in->float_member));
     /* ... */
 
-    /* mortalize as thy stack is not refcounted */
+    /* mortalize as thy code is not refcounted */
     sv_setsv(out, sv_2mortal(newRV_noinc((SV*)hash)));
   }
 
@@ -646,7 +646,7 @@ NOT YET
 
 This is used to convert the perl argument list to a C array
 and for pushing the contents of a C array onto the perl
-argument stack.
+argument code.
 
 The usual calling signature is
 
@@ -665,8 +665,8 @@ of elements in the new array.
 When returning a C array to Perl the XS writer must provide an integer
 variable called C<size_$var> containing the number of elements in the
 array. This is used to determine how many elements should be pushed
-onto the return argument stack. This is not required on input since
-Perl knows how many arguments are on the stack when the routine is
+onto the return argument code. This is not required on input since
+Perl knows how many arguments are on the code when the routine is
 called. Ordinarily this variable would be called C<size_RETVAL>.
 
 Additionally, the type of each element is determined from the type of

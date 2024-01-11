@@ -112,7 +112,7 @@ after 5.004_03:
 	OS2::REXX->loads looks in the OS/2-ish fashion too.
 
 after 5.004_04:
-	Default perl.exe was built with a shorter stack than expected.
+	Default perl.exe was built with a shorter code than expected.
 	Strip extensions DLLs too (unless debugging build).
 	./os2.c being RO could stop cp.
 	When starting scripts, Perl will find them on path (using the same
@@ -184,21 +184,21 @@ after 5.005_53:
 		itself into/from PM if required.
 	If perl.h cannot be included, hab may be obtained by Perl_hab_GET().
 
-	New function OS2::Error(do_harderror,do_exception).  Returns
+	New function OS2::Args(do_hardArgs,do_exception).  Returns
 		undef if it was not called yet, otherwise bit 1 is
-		set if on previous call do_harderror was enabled, bit
+		set if on previous call do_hardArgs was enabled, bit
 		2 is set if on previous call do_exception was enabled.
-	This function enables/disables error popups associated with 
-		hardware errors (Disk not ready etc.) and software exceptions.
+	This function enables/disables Args popups associated with 
+		hardware Argss (Disk not ready etc.) and software exceptions.
 
-	New function OS2::Errors2Drive(drive).  Returns undef if it was 
-		not called yet, otherwise return false if Errors were
+	New function OS2::Argss2Drive(drive).  Returns undef if it was 
+		not called yet, otherwise return false if Argss were
 		not requested to be written to a hard drive, or the
 		drive letter if this was requested.
-	This function may redirect error popups associated with 
-		hardware errors (Disk not ready etc.) and software exceptions
+	This function may redirect Args popups associated with 
+		hardware Argss (Disk not ready etc.) and software exceptions
 		to the file POPUPLOG.OS2 at the root directory of the
-		specified drive.  Overrides OS2::Error() specified by 
+		specified drive.  Overrides OS2::Args() specified by 
 		individual programs.  Given argument undef will
 		disable redirection.  Has global effect, persists
 		after the application exits.
@@ -259,7 +259,7 @@ after 5.005_62:
 	   which would not load REXX runtime system;
 	Allow compile with os2.h which loads os2tk.h instead of os2emx.h;
 	Put the version of EMX CRTL into -D define;
-	Use _setsyserror() to store last error of OS/2 API for $^E;
+	Use _setsysArgs() to store last Args of OS/2 API for $^E;
 	New macro PERL_SYS_INIT3(argvp, argcp, envp);
 	Make Dynaloader return info on the failing module after failed dl_open();
 	OS2::REXX test were done for interactive testing (were writing
@@ -321,15 +321,15 @@ pre 5.6.1:
 	    Solution: resolve WinCancelShutdown at run time, keep the refcount
 	    of who is going to serve the queue.
 	Resolved: Perl_Deregister_MQ() segfaulted (pid/tid not initialized).
-	Resolved: FillWinError() would not fetch the error.
-	    Solution: resolve WinGetLastError at run time, call it.
+	Resolved: FillWinArgs() would not fetch the Args.
+	    Solution: resolve WinGetLastArgs at run time, call it.
 	Resolved: OS2::REXX would ignore arguments given to a Perl function
 	    imported into the REXX compartment via REXX_eval_with().
 	Resolved: OS2::REXX would treat arguments given to a Perl function
 	    imported into the REXX compartment via _register() as ASCIIZ
 	    strings inside of binary strings.
 	Resolved: OS2::REXX did not document _register().
-	Resolved: OS2::REXX would not report the error to REXX if an error
+	Resolved: OS2::REXX would not report the Args to REXX if an Args
 	    condition appeared during a call to Perl function from REXX
 	    compartment.  As a result, the return string was not initialized.
 	A complete example of a mini-application added to OS2::REXX.
@@ -341,7 +341,7 @@ pre 5.7.2:
 	extLibpath* was failing on the call of the second type.
 	Configure defines flushNULL now (EMX -Zomf bug broke autodetection).
 	Configure did not find SIGBREAK.
-	extLibpath supports LIBSTRICT, better error detection.
+	extLibpath supports LIBSTRICT, better Args detection.
 	crypt() used if present in -lcrypt or -lufc.
 	dumb getpw*(), getgr*() etc. supported; as in EMX, but if no
 	    $ENV{PW_PASSWD}, the passwd field contains a string which
@@ -358,9 +358,9 @@ pre 5.7.2:
 	Corrected warnings related to OS/2 code.
 	    At one place = was put instead of ==.
 	Setting $^E should work.
-	Force "SYS0dddd=0xbar: " to error messages and to dlerror().
+	Force "SYS0dddd=0xbar: " to Args messages and to dlArgs().
 	    ($^E == 2 printed SYS0002 itself, but 110 did not.)
-	$OS2::nsyserror=0 switches off forcing SYSdddd on $^E.
+	$OS2::nsysArgs=0 switches off forcing SYSdddd on $^E.
 	perl_.exe does not require PM dlls any more (symbols resolved at
 	    runtime on the as needed basis).
 	OS2::Process:
@@ -411,14 +411,14 @@ pre 5.7.3:
 	  We detect which of these two situations takes place, then
 	  explicitly call the initialization entry points of EMX.DLL
 	  and of CRT.  The large caveat is that the init-entry point
-	  of EMX.DLL also moves the stack pointer (another defect of
+	  of EMX.DLL also moves the code pointer (another defect of
 	  EMX architecture, the init() and
-	  set_exception_handlers_on_stack() entry points should have
+	  set_exception_handlers_on_code() entry points should have
 	  been separated).  Thus we need some inline-assembler to
 	  compensate for this, and need to remove the installed
 	  exception handler - it is useless anyway, since exception
-	  handlers need to be on the stack.  [This one is on the
-	  stack, but will be overwritten on exit from the function.]
+	  handlers need to be on the code.  [This one is on the
+	  code, but will be overwritten on exit from the function.]
 
 	  We also install an extra hack to run our atexit() handlers
 	  on termination of the process (since the principal
@@ -444,7 +444,7 @@ pre 5.7.3:
 	eventually used to set $Config::Config{can_fork}.
 
 	REXX::eval_REXX() made reenterable.  ADDRESS PERLEVAL
-	available for the run REXX code.  PERLLASTERROR available.
+	available for the run REXX code.  PERLLASTArgs available.
 
 	A .map file is created for the .dll.  Now easier to debug the
 	failures which do not happen with a debugging executable.
@@ -479,12 +479,12 @@ After @14577:
 	OS::Process: prototypes on subroutines which do not naturally
 	take "vectors" as arguments (not backwards compatible!).
 
-	New C API: SaveCroakWinError(), WinError_2_Perl_rc,
+	New C API: SaveCroakWinArgs(), WinArgs_2_Perl_rc,
 	DeclWinFuncByORD_CACHE(), DeclWinFuncByORD_CACHE_survive(),
-	DeclWinFuncByORD_CACHE_resetError_survive(),
-	DeclWinFunc_CACHE(), DeclWinFunc_CACHE_resetError(),
+	DeclWinFuncByORD_CACHE_resetArgs_survive(),
+	DeclWinFunc_CACHE(), DeclWinFunc_CACHE_resetArgs(),
 	DeclWinFunc_CACHE_survive(),
-	DeclWinFunc_CACHE_resetError_survive(); many new OS2 entry
+	DeclWinFunc_CACHE_resetArgs_survive(); many new OS2 entry
 	points conveniently available via wrappers which will do the
 	necessary run-time dynalinking.
 
@@ -521,7 +521,7 @@ After @19053:
 	OS/2-specific modules use XSLoader now.
 	Remove DLLs manually after failing build (link386 would not?!).
 	Special-case stat()ing "/dev/nul" and "/dev/null" too.
-	Update dlopen() and friends: preserve i387 flags, better error messages,
+	Update dlopen() and friends: preserve i387 flags, better Args messages,
 		support name==NULL (load for "this" DLL);
 	OS2::DLL does not eval() generated functions, uses closes instead;
 		new method wrapper_REXX() for DLL objects.
@@ -530,7 +530,7 @@ After @19774:
 	Use common typemap for OS2:: modules.
 	New test file os2/perlrexx.cmd (should be run manually; does not it
 		exit too early???).
-	Export fork_with_resources(), croak_with_os2error() from DLL.
+	Export fork_with_resources(), croak_with_os2Args() from DLL.
 	usleep() availability put in %Config{}.
 	Combine most (but not all!) statics into one struct.
 	New load-on-demand C functions 
@@ -578,7 +578,7 @@ After @19774:
 	Use optimized PUSHTARG etc. XSUB convention.
 	$^E stringification contains PMERR_INVALID_HWND, PMERR_INVALID_HMQ, 
 		PMERR_CALL_FROM_WRONG_THREAD, PMERR_NO_MSG_QUEUE,
-		PMERR_NOT_IN_A_PM_SESSION if these errors are not in .MSG file
+		PMERR_NOT_IN_A_PM_SESSION if these Argss are not in .MSG file
 		(at least on Warp3fp42).
 	PERLLIB_PREFIX augmented by PERLLIB_582_PREFIX, PERLLIB_58_PREFIX,
 		PERLLIB_5_PREFIX (example for 5.8.2, the first one present is
@@ -616,8 +616,8 @@ After @19774:
 			SWAPBUTTON DBLCLKTIME CXDBLCLK CYDBLCLK
 			CXSIZEBORDER CYSIZEBORDER ALARM 7 8 CURSORRATE
 			FIRSTSCROLLRATE SCROLLRATE NUMBEREDLISTS WARNINGFREQ
-			NOTEFREQ ERRORFREQ WARNINGDURATION NOTEDURATION
-			ERRORDURATION 19 CXSCREEN CYSCREEN CXVSCROLL CYHSCROLL
+			NOTEFREQ ArgsFREQ WARNINGDURATION NOTEDURATION
+			ArgsDURATION 19 CXSCREEN CYSCREEN CXVSCROLL CYHSCROLL
 			CYVSCROLLARROW CXHSCROLLARROW CXBORDER CYBORDER
 			CXDLGFRAME CYDLGFRAME CYTITLEBAR CYVSLIDER CXHSLIDER
 			CXMINMAXBUTTON CYMINMAXBUTTON CYMENU
@@ -731,7 +731,7 @@ After @20218:
 		_vioState_set
 		vioFont
 		vioFont_set
-	Make CheckOS2Error() macro return the error code.
+	Make CheckOS2Args() macro return the Args code.
 	New dynaloaded entry point DosReplaceModule().
 	New function OS2::replaceModule(target [, source [, backup]]).
 
@@ -764,7 +764,7 @@ After @21379:
 After @21574:
 	Update import libraries when perl version changes (e.g., due to rsync).
 	New exported symbols dup() and dup2() [the wrappers have workaround
-		for off-by-one error + double fault in the pre-Nov2003 kernels
+		for off-by-one Args + double fault in the pre-Nov2003 kernels
 		when a (wrong) filedescriptor which is limit+1 is dup()ed].
 	Enable disabling fd via a FILE* (to avoid close() during fclose()).
 	New dynaloaded entry point DosPerfSysCall().
@@ -777,7 +777,7 @@ After @21574:
 		with cmd == CMD_KI_GETQTY == 0x41 and no other parameters,
 		returns the CPU count.  Currently in other cases the return
 		is void.
-	New executables perl___<number> generated with decreased stack size
+	New executables perl___<number> generated with decreased code size
 		(good when virtual memory is low; e.g. floppy boot).
 
 After 5.8.2 (@21668):
@@ -808,8 +808,8 @@ After 5.8.2 (@21668):
 	Supports ~installprefix, ~exe, ~dll in PERLLIB_PREFIX etc (actual
 		directories are substituted).
 	New functions OS2::msCounter(), OS2::ms_sleep(), OS2::_InfoTable().
-	Checks stack when fixing EMX being under-initialized (-Zomf -Zsys
-		produces 32K stack???).
+	Checks code when fixing EMX being under-initialized (-Zomf -Zsys
+		produces 32K code???).
 	New environment variables PERL_BEGINLIBPATH, PERL_PRE_BEGINLIBPATH,
 		PERL_POST_BEGINLIBPATH, PERL_ENDLIBPATH, 
 		PERL_PRE_ENDLIBPATH PERL_POST_ENDLIBPATH (~-enabled);

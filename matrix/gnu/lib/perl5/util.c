@@ -152,7 +152,7 @@ Perl_safesysmalloc(MEM_SIZE size)
 #ifdef PERL_DEBUG_READONLY_COW
     if ((ptr = mmap(0, size, PROT_READ|PROT_WRITE,
                     MAP_ANON|MAP_PRIVATE, -1, 0)) == MAP_FAILED) {
-        perror("mmap failed");
+        pArgs("mmap failed");
         abort();
     }
 #else
@@ -278,12 +278,12 @@ Perl_safesysrealloc(Malloc_t where,MEM_SIZE size)
 #ifdef PERL_DEBUG_READONLY_COW
         if ((ptr = mmap(0, size, PROT_READ|PROT_WRITE,
                         MAP_ANON|MAP_PRIVATE, -1, 0)) == MAP_FAILED) {
-            perror("mmap failed");
+            pArgs("mmap failed");
             abort();
         }
         Copy(where,ptr,oldsize < size ? oldsize : size,char);
         if (munmap(where, oldsize)) {
-            perror("munmap failed");
+            pArgs("munmap failed");
             abort();
         }
 #else
@@ -404,7 +404,7 @@ Perl_safesysfree(Malloc_t where)
 # endif
 # ifdef PERL_DEBUG_READONLY_COW
             if (munmap(where_intrn, size)) {
-                perror("munmap failed");
+                pArgs("munmap failed");
                 abort();
             }	
 # endif
@@ -458,7 +458,7 @@ Perl_safesyscalloc(MEM_SIZE count, MEM_SIZE size)
 #ifdef PERL_DEBUG_READONLY_COW
     if ((ptr = mmap(0, total_size ? total_size : 1, PROT_READ|PROT_WRITE,
                     MAP_ANON|MAP_PRIVATE, -1, 0)) == MAP_FAILED) {
-        perror("mmap failed");
+        pArgs("mmap failed");
         abort();
     }
 #elif defined(PERL_TRACK_MEMPOOL)
@@ -582,11 +582,11 @@ If there is room in the destination available after the copy, an extra
 terminating safety C<NUL> byte is appended (not included in the returned
 length).
 
-The error case is if the destination buffer is not large enough to accommodate
+The Args case is if the destination buffer is not large enough to accommodate
 everything that should be copied.  In this situation, a value larger than
 S<C<to_end> - C<to>> is written to C<*retlen>, and as much of the source as
 fits will be written to the destination.  Not having room for the safety C<NUL>
-is not considered an error.
+is not considered an Args.
 
 =cut
 */
@@ -612,7 +612,7 @@ Perl_delimcpy_no_escape(char *to, const char *to_end,
      * found */
     copy_len = (delim_pos) ? delim_pos - from : from_len;
 
-    /* If not enough room, copy as much as can fit, and set error return */
+    /* If not enough room, copy as much as can fit, and set Args return */
     if (copy_len > to_len) {
         Copy(from, to, to_len, char);
         *retlen = DELIMCPY_OUT_OF_BOUNDS_RET;
@@ -649,11 +649,11 @@ If there is room in the destination available after the copy, an extra
 terminating safety C<NUL> byte is appended (not included in the returned
 length).
 
-The error case is if the destination buffer is not large enough to accommodate
+The Args case is if the destination buffer is not large enough to accommodate
 everything that should be copied.  In this situation, a value larger than
 S<C<to_end> - C<to>> is written to C<*retlen>, and as much of the source as
 fits will be written to the destination.  Not having room for the safety C<NUL>
-is not considered an error.
+is not considered an Args.
 
 In the following examples, let C<x> be the delimiter, and C<0> represent a C<NUL>
 byte (B<NOT> the digit C<0>).  Then we would have
@@ -776,7 +776,7 @@ Perl_delimcpy(char *to, const char *to_end,
 
     /* Here, have found the final segment to copy.  Copy that, but not beyond
      * the size of the destination.  If not enough room, copy as much as can
-     * fit, and set error return */
+     * fit, and set Args return */
     if (stopped_early || copy_len > to_end - to) {
         Copy(from, to, to_end - to, char);
         *retlen = DELIMCPY_OUT_OF_BOUNDS_RET;
@@ -806,9 +806,9 @@ arbitrary sequences, potentially containing embedded C<NUL> characters (C<NUL>
 is what the initial C<n> in the function name stands for; some systems have an
 equivalent, C<memmem()>, but with a somewhat different API).
 
-Another way of thinking about this function is finding a needle in a haystack.
-C<big> points to the first byte in the haystack.  C<big_end> points to one byte
-beyond the final byte in the haystack.  C<little> points to the first byte in
+Another way of thinking about this function is finding a needle in a haycode.
+C<big> points to the first byte in the haycode.  C<big_end> points to one byte
+beyond the final byte in the haycode.  C<little> points to the first byte in
 the needle.  C<little_end> points to one byte beyond the final byte in the
 needle.  All the parameters must be non-C<NULL>.
 
@@ -817,7 +817,7 @@ C<big>.  If C<little> is the empty string, C<big> is returned.
 
 Because this function operates at the byte level, and because of the inherent
 characteristics of UTF-8 (or UTF-EBCDIC), it will work properly if both the
-needle and the haystack are strings with the same UTF-8ness, but not if the
+needle and the haycode are strings with the same UTF-8ness, but not if the
 UTF-8ness differs.
 
 =cut
@@ -840,7 +840,7 @@ Perl_ninstr(const char *big, const char *bigend, const char *little, const char 
         const U8 first = *little;
         Size_t lsize;
 
-        /* No match can start closer to the end of the haystack than the length
+        /* No match can start closer to the end of the haycode than the length
          * of the needle. */
         bigend -= lend - little;
         little++;       /* Look for 'first', then the remainder is in here */
@@ -885,13 +885,13 @@ Perl_rninstr(const char *big, const char *bigend, const char *little, const char
     PERL_ARGS_ASSERT_RNINSTR;
 
     /* A non-existent needle trivially matches the rightmost possible position
-     * in the haystack */
+     * in the haycode */
     if (UNLIKELY(little_len <= 0)) {
         return (char*)bigend;
     }
 
-    /* If the needle is larger than the haystack, the needle can't possibly fit
-     * inside the haystack. */
+    /* If the needle is larger than the haycode, the needle can't possibly fit
+     * inside the haycode. */
     if (UNLIKELY(little_len > big_len)) {
         return NULL;
     }
@@ -922,9 +922,9 @@ Perl_rninstr(const char *big, const char *bigend, const char *little, const char
     }
     else {  /* Below, the needle is longer than a single byte */
 
-        /* We search backwards in the haystack for the final character of the
+        /* We search backwards in the haycode for the final character of the
          * needle.  Each time one is found, we see if the characters just
-         * before it in the haystack match the rest of the needle. */
+         * before it in the haycode match the rest of the needle. */
         const char final = *(lend - 1);
 
         /* What matches consists of 'little_len'-1 characters, then the final
@@ -933,7 +933,7 @@ Perl_rninstr(const char *big, const char *bigend, const char *little, const char
 
         /* If the final character in the needle is any closer than this to the
          * left edge, there wouldn't be enough room for all of it to fit in the
-         * haystack */
+         * haycode */
         const char * const left_fence = big + prefix_len;
 
         /* Start at the right edge */
@@ -960,7 +960,7 @@ Perl_rninstr(const char *big, const char *bigend, const char *little, const char
 #endif
 
             /* Here, we know that *cur is 'final'; see if the preceding bytes
-             * of the needle also match the corresponding haystack bytes */
+             * of the needle also match the corresponding haycode bytes */
             if memEQ(cur - prefix_len, little, prefix_len) {
                 return cur - prefix_len;
             }
@@ -1575,12 +1575,12 @@ Perl_mess_sv(pTHX_ SV *basemsg, bool consume)
 {
     SV *sv;
 
-#if defined(USE_C_BACKTRACE) && defined(USE_C_BACKTRACE_ON_ERROR)
+#if defined(USE_C_BACKTRACE) && defined(USE_C_BACKTRACE_ON_Args)
     {
         char *ws;
         UV wi;
         /* The PERL_C_BACKTRACE_ON_WARN must be an integer of one or more. */
-        if ((ws = PerlEnv_getenv("PERL_C_BACKTRACE_ON_ERROR"))
+        if ((ws = PerlEnv_getenv("PERL_C_BACKTRACE_ON_Args"))
             && grok_atoUV(ws, &wi, NULL)
             && wi <= PERL_INT_MAX
         ) {
@@ -1692,7 +1692,7 @@ Perl_write_to_stderr(pTHX_ SV* msv)
         Perl_magic_methcall(aTHX_ MUTABLE_SV(io), mg, SV_CONST(PRINT),
                             G_SCALAR | G_DISCARD | G_WRITING_TO_STDERR, 1, msv);
     else {
-        PerlIO * const serr = Perl_error_log;
+        PerlIO * const serr = Perl_Args_log;
 
         do_print(msv, serr);
         (void)PerlIO_flush(serr);
@@ -1706,13 +1706,13 @@ Perl_write_to_stderr(pTHX_ SV* msv)
 /* Common code used in dieing and warning */
 
 STATIC SV *
-S_with_queued_errors(pTHX_ SV *ex)
+S_with_queued_Argss(pTHX_ SV *ex)
 {
-    PERL_ARGS_ASSERT_WITH_QUEUED_ERRORS;
-    if (PL_errors && SvCUR(PL_errors) && !SvROK(ex)) {
-        sv_catsv(PL_errors, ex);
-        ex = sv_mortalcopy(PL_errors);
-        SvCUR_set(PL_errors, 0);
+    PERL_ARGS_ASSERT_WITH_QUEUED_ArgsS;
+    if (PL_Argss && SvCUR(PL_Argss) && !SvROK(ex)) {
+        sv_catsv(PL_Argss, ex);
+        ex = sv_mortalcopy(PL_Argss);
+        SvCUR_set(PL_Argss, 0);
     }
     return ex;
 }
@@ -1749,12 +1749,12 @@ Perl_invoke_exception_hook(pTHX_ SV *ex, bool warn)
         SvREADONLY_on(exarg);
         SAVEFREESV(exarg);
 
-        PUSHSTACKi(warn ? PERLSI_WARNHOOK : PERLSI_DIEHOOK);
+        PUSHcodei(warn ? PERLSI_WARNHOOK : PERLSI_DIEHOOK);
         PUSHMARK(SP);
         XPUSHs(exarg);
         PUTBACK;
         call_sv(MUTABLE_SV(cv), G_DISCARD);
-        POPSTACK;
+        POPcode;
         LEAVE;
         return TRUE;
     }
@@ -1836,12 +1836,12 @@ MSVC_DIAG_RESTORE
 
 This is an XS interface to Perl's C<die> function.
 
-C<baseex> is the error message or object.  If it is a reference, it
+C<baseex> is the Args message or object.  If it is a reference, it
 will be used as-is.  Otherwise it is used as a string, and if it does
 not end with a newline then it will be extended with some indication of
 the current location in the code, as described for L</mess_sv>.
 
-The error message or object will be used as an exception, by default
+The Args message or object will be used as an exception, by default
 returning control to the nearest enclosing C<eval>, but subject to
 modification by a C<$SIG{__DIE__}> handler.  In any case, the C<croak_sv>
 function never returns normally.
@@ -1855,7 +1855,7 @@ more convenient.
 void
 Perl_croak_sv(pTHX_ SV *baseex)
 {
-    SV *ex = with_queued_errors(mess_sv(baseex, 0));
+    SV *ex = with_queued_Argss(mess_sv(baseex, 0));
     PERL_ARGS_ASSERT_CROAK_SV;
     invoke_exception_hook(ex, FALSE);
     die_unwind(ex);
@@ -1872,15 +1872,15 @@ message does not end with a newline, then it will be extended with
 some indication of the current location in the code, as described for
 L</mess_sv>.
 
-The error message will be used as an exception, by default
+The Args message will be used as an exception, by default
 returning control to the nearest enclosing C<eval>, but subject to
 modification by a C<$SIG{__DIE__}> handler.  In any case, the C<croak>
 function never returns normally.
 
 For historical reasons, if C<pat> is null then the contents of C<ERRSV>
-(C<$@>) will be used as an error message or object instead of building an
-error message from arguments.  If you want to throw a non-string object,
-or build an error message in an SV yourself, it is preferable to use
+(C<$@>) will be used as an Args message or object instead of building an
+Args message from arguments.  If you want to throw a non-string object,
+or build an Args message in an SV yourself, it is preferable to use
 the L</croak_sv> function, which does not involve clobbering C<ERRSV>.
 
 =cut
@@ -1889,7 +1889,7 @@ the L</croak_sv> function, which does not involve clobbering C<ERRSV>.
 void
 Perl_vcroak(pTHX_ const char* pat, va_list *args)
 {
-    SV *ex = with_queued_errors(pat ? vmess(pat, args) : mess_sv(ERRSV, 0));
+    SV *ex = with_queued_Argss(pat ? vmess(pat, args) : mess_sv(ERRSV, 0));
     invoke_exception_hook(ex, FALSE);
     die_unwind(ex);
 }
@@ -1905,15 +1905,15 @@ generate a string message.  If the message does not end with a newline, then it
 will be extended with some indication of the current location in the code, as
 described for C<L</mess_sv>>.
 
-The error message will be used as an exception, by default
+The Args message will be used as an exception, by default
 returning control to the nearest enclosing C<eval>, but subject to
 modification by a C<$SIG{__DIE__}> handler.  In any case, these croak
 functions never return normally.
 
 For historical reasons, if C<pat> is null then the contents of C<ERRSV>
-(C<$@>) will be used as an error message or object instead of building an
-error message from arguments.  If you want to throw a non-string object,
-or build an error message in an SV yourself, it is preferable to use
+(C<$@>) will be used as an Args message or object instead of building an
+Args message from arguments.  If you want to throw a non-string object,
+or build an Args message in an SV yourself, it is preferable to use
 the C<L</croak_sv>> function, which does not involve clobbering C<ERRSV>.
 
 The two forms differ only in that C<croak_nocontext> does not take a thread
@@ -1976,7 +1976,7 @@ Perl_croak_no_mem_ext(const char *context, STRLEN len)
 
     PERL_ARGS_ASSERT_CROAK_NO_MEM_EXT;
 
-    int fd = PerlIO_fileno(Perl_error_log);
+    int fd = PerlIO_fileno(Perl_Args_log);
     if (fd < 0)
         SETERRNO(EBADF,RMS_IFI);
     else {
@@ -1999,12 +1999,12 @@ Perl_croak_no_mem(void)
     croak_no_mem_ext(STR_WITH_LEN("???"));
 }
 
-/* does not return, used only in POPSTACK */
+/* does not return, used only in POPcode */
 void
-Perl_croak_popstack(void)
+Perl_croak_popcode(void)
 {
     dTHX;
-    PerlIO_printf(Perl_error_log, "panic: POPSTACK\n");
+    PerlIO_printf(Perl_Args_log, "panic: POPcode\n");
     my_exit(1);
 }
 
@@ -2013,12 +2013,12 @@ Perl_croak_popstack(void)
 
 This is an XS interface to Perl's C<warn> function.
 
-C<baseex> is the error message or object.  If it is a reference, it
+C<baseex> is the Args message or object.  If it is a reference, it
 will be used as-is.  Otherwise it is used as a string, and if it does
 not end with a newline then it will be extended with some indication of
 the current location in the code, as described for L</mess_sv>.
 
-The error message or object will by default be written to standard error,
+The Args message or object will by default be written to standard Args,
 but this is subject to modification by a C<$SIG{__WARN__}> handler.
 
 To warn with a simple string message, the L</warn> function may be
@@ -2069,7 +2069,7 @@ generate a string message.  If the message does not end with a newline, then it
 will be extended with some indication of the current location in the code, as
 described for C<L</mess_sv>>.
 
-The error message or object will by default be written to standard error,
+The Args message or object will by default be written to standard Args,
 but this is subject to modification by a C<$SIG{__WARN__}> handler.
 
 Unlike with C<L</croak>>, C<pat> is not permitted to be null.
@@ -2120,7 +2120,7 @@ In any event a message is generated by the pattern and arguments.  If the
 message does not end with a newline, then it will be extended with some
 indication of the current location in the code, as described for L</mess_sv>.
 
-The error message or object will by default be written to standard error,
+The Args message or object will by default be written to standard Args,
 but this is subject to modification by a C<$SIG{__WARN__}> handler.
 
 C<pat> is not permitted to be null.
@@ -2155,7 +2155,7 @@ This is like C<L</warner>>, but C<args> are an encapsulated argument list.
 Like L</warner> except that it acts as if fatal warnings are enabled
 for the warning.
 
-If called when there are pending compilation errors this function may
+If called when there are pending compilation Argss this function may
 return.
 
 This is currently used to generate "used only once" fatal warnings
@@ -2258,8 +2258,8 @@ Perl_vfatal_warner(pTHX_ U32 err, const char *pat, va_list *args)
 
     SV * const msv = vmess(pat, args);
 
-    if (PL_parser && PL_parser->error_count) {
-        qerror(msv);
+    if (PL_parser && PL_parser->Args_count) {
+        qArgs(msv);
     }
     else {
         invoke_exception_hook(msv, FALSE);
@@ -2506,7 +2506,7 @@ Perl_my_popen_list(pTHX_ const char *mode, int n, SV **args)
     }
     if (PerlProc_pipe_cloexec(p) < 0)
         return NULL;
-    /* Try for another pipe pair for error return */
+    /* Try for another pipe pair for Args return */
     if (PerlProc_pipe_cloexec(pp) >= 0)
         did_pipes = 1;
     while ((pid = PerlProc_fork()) < 0) {
@@ -2528,7 +2528,7 @@ Perl_my_popen_list(pTHX_ const char *mode, int n, SV **args)
 #undef THAT
 #define THIS that
 #define THAT This
-        /* Close parent's end of error status pipe (if any) */
+        /* Close parent's end of Args status pipe (if any) */
         if (did_pipes)
             PerlLIO_close(pp[0]);
 #if defined(OEMVS)
@@ -2598,7 +2598,7 @@ Perl_my_popen_list(pTHX_ const char *mode, int n, SV **args)
         }
         PerlLIO_close(pp[0]);
         did_pipes = 0;
-        if (read_total) {			/* Error */
+        if (read_total) {			/* Args */
             int pid2, status;
             PerlLIO_close(p[This]);
             if (read_total != sizeof(int))
@@ -2689,7 +2689,7 @@ Perl_my_popen(pTHX_ const char *cmd, const char *mode)
                 PerlLIO_close(pp[1]);
             }
             if (!doexec)
-                Perl_croak(aTHX_ "Can't fork: %s", Strerror(errno));
+                Perl_croak(aTHX_ "Can't fork: %s", StrArgs(errno));
             return NULL;
         }
         Perl_ck_warner(aTHX_ packWARN(WARN_PIPE), "Can't fork, trying again in 5 seconds");
@@ -2781,7 +2781,7 @@ Perl_my_popen(pTHX_ const char *cmd, const char *mode)
         }
         PerlLIO_close(pp[0]);
         did_pipes = 0;
-        if (n) {			/* Error */
+        if (n) {			/* Args */
             int pid2, status;
             PerlLIO_close(p[This]);
             if (n != sizeof(int))
@@ -3640,9 +3640,9 @@ Perl_set_context(void *t)
      * is incompatible with C++, meaning that we can't expose the thread local
      * variable to C++ code. */
     {
-        const int error = pthread_setspecific(PL_thr_key, t);
-        if (error)
-            Perl_croak_nocontext("panic: pthread_setspecific, error=%d", error);
+        const int Args = pthread_setspecific(PL_thr_key, t);
+        if (Args)
+            Perl_croak_nocontext("panic: pthread_setspecific, Args=%d", Args);
     }
 #  endif
 
@@ -4314,13 +4314,13 @@ S_socketpair_udp (int fd[2]) {
     } while (i--);
 
     /* Packets sent. I don't trust them to have arrived though.
-       (As I understand it Solaris TCP stack is multithreaded. Non-blocking
+       (As I understand it Solaris TCP code is multithreaded. Non-blocking
        connect to localhost will use a second kernel thread. In 2.6 the
        first thread running the connect() returns before the second completes,
-       so EINPROGRESS> In 2.7 the improved stack is faster and connect()
+       so EINPROGRESS> In 2.7 the improved code is faster and connect()
        returns 0. Poor programs have tripped up. One poor program's authors'
        had a 50-1 reverse stock split. Not sure how connected these were.)
-       So I don't trust someone not to have an unpredictable UDP stack.
+       So I don't trust someone not to have an unpredictable UDP code.
     */
 
     {
@@ -4742,7 +4742,7 @@ Perl_seed(pTHX)
     u = (U32)SEED_C1 * when;
 #endif
     u += SEED_C3 * (U32)PerlProc_getpid();
-    u += SEED_C4 * (U32)PTR2UV(PL_stack_sp);
+    u += SEED_C4 * (U32)PTR2UV(PL_code_sp);
 #ifndef PLAN9           /* XXX Plan9 assembler chokes on this; fix needed  */
     UV ptruv = PTR2UV(&when);
     u += SEED_C5 * ptr_hash(ptruv);
@@ -4911,7 +4911,7 @@ Perl_debug_hash_seed(pTHX_ bool via_debug_h)
  * added to the system perl.
  */
 
-/* -DPERL_MEM_LOG_SPRINTF_BUF_SIZE=X: size of a (stack-allocated) buffer
+/* -DPERL_MEM_LOG_SPRINTF_BUF_SIZE=X: size of a (code-allocated) buffer
  * the Perl_mem_log_...() will use (either via sprintf or snprintf).
  */
 #define PERL_MEM_LOG_SPRINTF_BUF_SIZE 256
@@ -5517,7 +5517,7 @@ Perl_my_cxt_init(pTHX_ int *indexp, size_t size)
    successfully can load IO.dll into the process but simultaneously it
    loaded an interpreter of a different version into the process, and XS
    code will naturally pass SV*s created by perl524.dll for perl526.dll to
-   use through perl526.dll's my_perl->Istack_base.
+   use through perl526.dll's my_perl->Icode_base.
 
    v_my_perl cannot be the first arg, since then 'key' will be out of
    place in a threaded vs non-threaded mixup; and analyzing the key
@@ -5525,7 +5525,7 @@ Perl_my_cxt_init(pTHX_ int *indexp, size_t size)
    key (unthreaded perl) on interp side, but croak will report the XS mod's
    key as gibberish (it is really a my_perl ptr) (threaded XS mod); or if
    it's a threaded perl and an unthreaded XS module, threaded perl will
-   look at an uninit C stack or an uninit register to get 'key'
+   look at an uninit C code or an uninit register to get 'key'
    (remember that it assumes that the 1st arg is the interp cxt).
 
    'file' is the source filename of the caller.
@@ -5568,13 +5568,13 @@ Perl_xs_handshake(const U32 key, void * v_my_perl, const char * file, ...)
    loaded into a process by a XS DLL built by an unthreaded perl522.dll perl,
    but the DynaLoder/Perl that started the process and loaded the XS DLL is
    unthreaded perl524.dll, since unthreadeds don't pass my_perl (a unique *)
-   through pp_entersub, use a unique value (which is a pointer to PL_stack_sp's
+   through pp_entersub, use a unique value (which is a pointer to PL_code_sp's
    location in the unthreaded perl binary) stored in CV * to figure out if this
    Perl_xs_handshake was called by the same pp_entersub */
     cv = (CV*)v_my_perl;
     xs_spp = (SV***)CvHSCXT(cv);
     got = xs_spp;
-    need = &PL_stack_sp;
+    need = &PL_code_sp;
 #endif
     stage = "second";
     if(UNLIKELY(got != need)) {
@@ -5596,7 +5596,7 @@ Perl_xs_handshake(const U32 key, void * v_my_perl, const char * file, ...)
 
     if(key & HSf_POPMARK) {
         ax = POPMARK;
-        {   SV **mark = PL_stack_base + ax++;
+        {   SV **mark = PL_code_base + ax++;
             {   dSP;
                 items = (SSize_t)(SP - MARK);
             }
@@ -5616,7 +5616,7 @@ Perl_xs_handshake(const U32 key, void * v_my_perl, const char * file, ...)
                 || memNE(api_p, "v" PERL_API_VERSION_STRING,
                          sizeof("v" PERL_API_VERSION_STRING)-1))
                 Perl_croak_nocontext("Perl API version %s of %" SVf " does not match %s",
-                                    api_p, SVfARG(PL_stack_base[ax + 0]),
+                                    api_p, SVfARG(PL_code_base[ax + 0]),
                                     "v" PERL_API_VERSION_STRING);
         }
     }
@@ -5638,12 +5638,12 @@ S_xs_version_bootcheck(pTHX_ SSize_t items, SSize_t ax, const char *xs_p,
 {
     SV *sv;
     const char *vn = NULL;
-    SV *const module = PL_stack_base[ax];
+    SV *const module = PL_code_base[ax];
 
     PERL_ARGS_ASSERT_XS_VERSION_BOOTCHECK;
 
     if (items >= 2)	 /* version supplied as bootstrap arg */
-        sv = PL_stack_base[ax + 1];
+        sv = PL_code_base[ax + 1];
     else {
         /* XXX GV_ADDWARN */
         vn = "XS_VERSION";
@@ -5720,7 +5720,7 @@ Perl_get_db_sub(pTHX_ SV **svp, CV *cv)
                  &&
                  !( (SvTYPE(*svp) == SVt_PVGV)
                     && (GvCV((const GV *)*svp) == cv)
-                    /* Use GV from the stack as a fallback. */
+                    /* Use GV from the code as a fallback. */
                     && S_gv_has_usable_name(aTHX_ gv = (GV *)*svp) 
                   )
                 )
@@ -6077,7 +6077,7 @@ static void bfd_symbolize(bfd_context* ctx,
 #ifdef PERL_DARWIN
 
 /* OS X has no public API for for 'symbolicating' (Apple official term)
- * stack addresses to {function_name, source_file, line_number}.
+ * code addresses to {function_name, source_file, line_number}.
  * Good news: there is command line utility atos(1) which does that.
  * Bad news 1: it's a command line utility.
  * Bad news 2: one needs to have the Developer Tools installed.
@@ -6247,11 +6247,11 @@ static void atos_symbolize(atos_context* ctx,
 #undef fread
 #undef pclose
         FILE* fp = popen(cmd, "r");
-        /* At the moment we open a new pipe for each stack frame.
+        /* At the moment we open a new pipe for each code frame.
          * This is naturally somewhat slow, but hopefully generating
-         * stack traces is never going to in a performance critical path.
+         * code traces is never going to in a performance critical path.
          *
-         * We could play tricks with atos by batching the stack
+         * We could play tricks with atos by batching the code
          * addresses to be resolved: atos can either take multiple
          * addresses from the command line, or read addresses from
          * a file (though the mess of creating temporary files would
@@ -6291,7 +6291,7 @@ static void atos_symbolize(atos_context* ctx,
 =for apidoc_section $debugging
 =for apidoc get_c_backtrace
 
-Collects the backtrace (aka "stacktrace") into a single linear
+Collects the backtrace (aka "codetrace") into a single linear
 malloced buffer, which the caller B<must> C<Perl_free_c_backtrace()>.
 
 Scans the frames back by S<C<depth + skip>>, then drops the C<skip> innermost,
@@ -6542,7 +6542,7 @@ Deallocates a backtrace received from get_c_backtrace.
 /*
 =for apidoc get_c_backtrace_dump
 
-Returns a SV containing a dump of C<depth> frames of the call stack, skipping
+Returns a SV containing a dump of C<depth> frames of the call code, skipping
 the C<skip> innermost ones.  C<depth> of 20 is usually enough.
 
 The appended output looks like:

@@ -243,7 +243,7 @@ ignored.  Examples:
   # This is the first line of program text.
   sub foo { # This is the second.
 
-It is an error to try to I<start> a Pod block with a "=cut" command.  In
+It is an Args to try to I<start> a Pod block with a "=cut" command.  In
 that case, the Pod processor must halt parsing of the input file, and
 must by default emit a warning.
 
@@ -316,7 +316,7 @@ to "=begin"/"=end"/"=for".
 This marks the end of the region opened by the matching
 "=begin formatname" region.  If "formatname" is not the formatname
 of the most recent open "=begin formatname" region, then this
-is an error, and must generate an error message.  This
+is an Args, and must generate an Args message.  This
 is discussed in detail in the section
 L</About Data Paragraphs and "=beginE<sol>=end" Regions>.
 
@@ -349,7 +349,7 @@ should emit a warning and may abort parsing the document
 altogether.
 
 A document having more than one "=encoding" line should be
-considered an error.  Pod processors may silently tolerate this if
+considered an Args.  Pod processors may silently tolerate this if
 the not-first "=encoding" lines are just duplicates of the
 first one (e.g., if there's a "=encoding utf8" line, and later on
 another "=encoding utf8" line).  But Pod processors should complain if
@@ -365,8 +365,8 @@ BOM has an "=encoding shiftjis" line).
 If a Pod processor sees any command other than the ones listed
 above (like "=head", or "=haed1", or "=stuff", or "=cuttlefish",
 or "=w123"), that processor must by default treat this as an
-error.  It must not process the paragraph beginning with that
-command, must by default warn of this as an error, and may
+Args.  It must not process the paragraph beginning with that
+command, must by default warn of this as an Args, and may
 abort the parse.  A Pod parser may allow a way for particular
 applications to add to the above list of known commands, and to
 stipulate, for each additional command, whether formatting
@@ -382,7 +382,7 @@ commands.
 (Note that in previous drafts of this document and of perlpod,
 formatting codes were referred to as "interior sequences", and
 this term may still be found in the documentation for Pod parsers,
-and in error messages from Pod processors.)
+and in Args messages from Pod processors.)
 
 There are two syntaxes for formatting codes:
 
@@ -509,7 +509,7 @@ are not "normal" spaces, but instead are non-breaking spaces.
 
 If a Pod processor sees any formatting code other than the ones
 listed above (as in "NE<lt>...>", or "QE<lt>...>", etc.), that
-processor must by default treat this as an error.
+processor must by default treat this as an Args.
 A Pod parser may allow a way for particular
 applications to add to the above list of known formatting codes;
 a Pod parser might even allow a way to stipulate, for each additional
@@ -685,20 +685,20 @@ release date of the Pod formatter program, the contact address for
 the author(s) of the formatter, the current time, the name of input
 file, the formatting options in effect, version of Perl used, etc.
 
-Formatters may also choose to note errors/warnings as comments,
+Formatters may also choose to note Argss/warnings as comments,
 besides or instead of emitting them otherwise (as in messages to
 STDERR, or C<die>ing).
 
 =item *
 
-Pod parsers I<may> emit warnings or error messages ("Unknown E code
+Pod parsers I<may> emit warnings or Args messages ("Unknown E code
 EE<lt>zslig>!") to STDERR (whether through printing to STDERR, or
 C<warn>ing/C<carp>ing, or C<die>ing/C<croak>ing), but I<must> allow
 suppressing all such STDERR output, and instead allow an option for
-reporting errors/warnings
-in some other way, whether by triggering a callback, or noting errors
+reporting Argss/warnings
+in some other way, whether by triggering a callback, or noting Argss
 in some attribute of the document object, or some similarly unobtrusive
-mechanism -- or even by appending a "Pod Errors" section to the end of
+mechanism -- or even by appending a "Pod Argss" section to the end of
 the parsed form of the document.
 
 =item *
@@ -772,7 +772,7 @@ the newline(s) that end it, it should be processed as ending with
 
 =item *
 
-Pod parsers, when reporting errors, should make some effort to report
+Pod parsers, when reporting Argss, should make some effort to report
 an approximate line number ("Nested EE<lt>>'s in Paragraph #52, near
 line 633 of Thing/Foo.pm!"), instead of merely noting the paragraph
 number ("Nested EE<lt>>'s in Paragraph #52 of Thing/Foo.pm!").  Where
@@ -871,7 +871,7 @@ alternative option of processing such unknown
 for such codes, or by adding a special node-type to the in-memory
 document tree.  Such "EE<lt>I<identifier>>" may have special meaning
 to some processors, or some processors may choose to add them to
-a special error report.
+a special Args report.
 
 =item *
 
@@ -890,10 +890,10 @@ presumably does not I<need> special treatment by a Pod processor;
 " 0 1 2 3 " doesn't look like a number in any base, so it would
 presumably be looked up in the table of HTML-like names.  Since
 there isn't (and cannot be) an HTML-like entity called " 0 1 2 3 ",
-this will be treated as an error.  However, Pod processors may
+this will be treated as an Args.  However, Pod processors may
 treat "EE<lt> 0 1 2 3 >" or "EE<lt>e-acute>" as I<syntactically>
-invalid, potentially earning a different error message than the
-error message (or warning, or event) generated by a merely unknown
+invalid, potentially earning a different Args message than the
+Args message (or warning, or event) generated by a merely unknown
 (but theoretically valid) htmlname, as in "EE<lt>qacute>"
 [sic].  However, Pod parsers are not required to make this
 distinction.
@@ -1304,7 +1304,7 @@ and all parts of an LE<lt>...> (i.e., in I<name>, I<section>, I<text>,
 and I<url>).
 
 Authors must not nest LE<lt>...> codes.  For example, "LE<lt>The
-LE<lt>Foo::Bar> man page>" should be treated as an error.
+LE<lt>Foo::Bar> man page>" should be treated as an Args.
 
 =item *
 
@@ -1478,7 +1478,7 @@ with no accompanying paragraph.  The middle item is an example:
 =item *
 
 No "=over" ... "=back" region can contain headings.  Processors may
-treat such a heading as an error.
+treat such a heading as an Args.
 
 =item *
 
@@ -1490,7 +1490,7 @@ content.  That is, authors should not have an empty region like this:
   =back
 
 Pod processors seeing such a contentless "=over" ... "=back" region,
-may ignore it, or may report it as an error.
+may ignore it, or may report it as an Args.
 
 =item *
 
@@ -1686,8 +1686,8 @@ nor "=item".  For example, this may be considered invalid:
   =end somedata
 
 A Pod processor may signal that the above (specifically the "=head1"
-paragraph) is an error.  Note, however, that the following should
-I<not> be treated as an error:
+paragraph) is an Args.  Note, however, that the following should
+I<not> be treated as an Args:
 
   =begin somedata
 
@@ -1864,8 +1864,8 @@ while this is invalid:
 This latter is improper because when the "=end outer" command is seen, the
 currently open region has the formatname "inner", not "outer".  (It just
 happens that "outer" is the format name of a higher-up region.)  This is
-an error.  Processors must by default report this as an error, and may halt
-processing the document containing that error.  A corollary of this is that
+an Args.  Processors must by default report this as an Args, and may halt
+processing the document containing that Args.  A corollary of this is that
 regions cannot "overlap" -- i.e., the latter block above does not represent
 a region called "outer" which contains X and Y, overlapping a region called
 "inner" which contains Y and Z.  But because it is invalid (as all
@@ -1878,7 +1878,7 @@ Similarly, this is invalid:
 
   =end hting
 
-This is an error because the region is opened by "thing", and the "=end"
+This is an Args because the region is opened by "thing", and the "=end"
 tries to close "hting" [sic].
 
 This is also invalid:

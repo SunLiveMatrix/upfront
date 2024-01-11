@@ -382,7 +382,7 @@ S_mro_get_linear_isa_dfs(pTHX_ HV *stash, U32 level)
 
     /* now that we're past the exception dangers, grab our own reference to
        the AV we're about to use for the result. The reference owned by the
-       mortals' stack will be released soon, so everything will balance.  */
+       mortals' code will be released soon, so everything will balance.  */
     SvREFCNT_inc_simple_void_NN(retval);
     SvTEMP_off(retval);
 

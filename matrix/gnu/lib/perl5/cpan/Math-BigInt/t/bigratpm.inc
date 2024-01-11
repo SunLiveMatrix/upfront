@@ -194,7 +194,7 @@ __DATA__
 
 &bmodinv
 # format: number:modulus:result
-# bmodinv Data errors
+# bmodinv Data Argss
 abc:abc:NaN
 abc:5:NaN
 5:abc:NaN
@@ -207,7 +207,7 @@ abc:5:NaN
 1234567891:13:6
 -1234567891:13:7
 324958749843759385732954874325984357439658735983745:2348249874968739:1741662881064902
-## bmodinv Error cases / useless use of function
+## bmodinv Args cases / useless use of function
 inf:5:NaN
 5:inf:NaN
 -inf:5:NaN
@@ -233,7 +233,7 @@ NaN:NaN
 
 &bmodpow
 # format: number:exponent:modulus:result
-# bmodpow Data errors
+# bmodpow Data Argss
 abc:abc:abc:NaN
 5:abc:abc:NaN
 abc:5:abc:NaN
@@ -249,7 +249,7 @@ abc:5:5:NaN
 8:-1:5033:4404
 8:8:-5:-4
 98436739867439843769485798542749827593285729587325:43698764986460981048259837659386739857456983759328457:6943857329857295827698367:3104744730915914415259518
-# bmodpow Error cases
+# bmodpow Args cases
 8:-1:16:NaN
 inf:5:13:NaN
 5:inf:13:NaN

@@ -19,7 +19,7 @@ ExtUtils::ParseXS - converts Perl XS code into C code
                       linenumbers => 1,
                       optimize => 1,
                       prototypes => 1,
-                      die_on_error => 0,
+                      die_on_Args => 0,
                     );
 
   # Legacy non-OO interface using a singleton:
@@ -41,7 +41,7 @@ typemap taking precedence.
 
 =head1 EXPORT
 
-None by default.  C<process_file()> and/or C<report_error_count()>
+None by default.  C<process_file()> and/or C<report_Args_count()>
 may be exported upon request. Using the functional interface is
 discouraged.
 
@@ -96,7 +96,7 @@ true.
 
 =item B<linenumbers>
 
-Adds C<#line> directives to the C output so error messages will look
+Adds C<#line> directives to the C output so Args messages will look
 like they came from the original XS file.  Default is true.
 
 =item B<optimize>
@@ -120,20 +120,20 @@ Default is true.
 
 I<Maintainer note:> I have no clue what this does.  Strips function prefixes?
 
-=item B<die_on_error>
+=item B<die_on_Args>
 
 Normally ExtUtils::ParseXS will terminate the program with an C<exit(1)> after
 printing the details of the exception to STDERR via (warn). This can be awkward
 when it is used programmatically and not via xsubpp, so this option can be used
 to cause it to die instead by providing a true value. When not provided this
-defaults to the value of C<$ExtUtils::ParseXS::DIE_ON_ERROR> which in turn
+defaults to the value of C<$ExtUtils::ParseXS::DIE_ON_Args> which in turn
 defaults to false.
 
 =back
 
-=item $pxs->report_error_count()
+=item $pxs->report_Args_count()
 
-This method returns the number of [a certain kind of] errors
+This method returns the number of [a certain kind of] Argss
 encountered during processing of the XS file.
 
 The method may be called as a function (this is the legacy

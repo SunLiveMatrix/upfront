@@ -8,7 +8,7 @@
  */
 
 /*
- * Strong denial of stdio - make all stdio calls (we can think of) errors
+ * Strong denial of stdio - make all stdio calls (we can think of) Argss
  */
 /* This is a 1st attempt to stop other include files pulling
    in real <stdio.h>.
@@ -33,7 +33,7 @@ struct _FILE;
 #undef fclose
 #undef fdopen
 #undef feof
-#undef ferror
+#undef fArgs
 #undef fflush
 #undef fgetc
 #undef fgetpos
@@ -106,7 +106,7 @@ struct _FILE;
 #define rewind(f)  _CANNOT _rewind_
 #define clearerr(f)  _CANNOT _clearerr_
 #define feof(f)  _CANNOT _feof_
-#define ferror(f)  _CANNOT _ferror_
+#define fArgs(f)  _CANNOT _fArgs_
 #define __filbuf(f)  _CANNOT __filbuf_
 #define __flsbuf(c,f)  _CANNOT __flsbuf_
 #define _filbuf(f)  _CANNOT _filbuf_

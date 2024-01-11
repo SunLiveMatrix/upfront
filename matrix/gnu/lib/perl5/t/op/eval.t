@@ -19,16 +19,16 @@ eval "\$foo\n    = # this is a comment\n'ok 4\n';";
 is($foo, "ok 4\n");
 
 print eval '
-$foo =;';		# this tests for a call through yyerror()
+$foo =;';		# this tests for a call through yyArgs()
 like($@, qr/line 2/);
 
 print eval '$foo = /';	# this tests for a call through fatal()
 like($@, qr/Search/);
 
-is scalar(eval '++'), undef, 'eval syntax error in scalar context';
-is scalar(eval 'die'), undef, 'eval run-time error in scalar context';
-is +()=eval '++', 0, 'eval syntax error in list context';
-is +()=eval 'die', 0, 'eval run-time error in list context';
+is scalar(eval '++'), undef, 'eval syntax Args in scalar context';
+is scalar(eval 'die'), undef, 'eval run-time Args in scalar context';
+is +()=eval '++', 0, 'eval syntax Args in list context';
+is +()=eval 'die', 0, 'eval run-time Args in list context';
 
 is(eval '"ok 7\n";', "ok 7\n");
 
@@ -197,7 +197,7 @@ is(do {
 
 {
     my $c = eval "(1,2)x10";
-    is($c, '2222222222', 'scalar eval"" pops stack correctly');
+    is($c, '2222222222', 'scalar eval"" pops code correctly');
 }
 
 # return from eval {} should clear $@ correctly
@@ -273,7 +273,7 @@ eval q{
 fred2(49);
 { my $zzz = 2; fred2(50) }
 
-# sort() starts a new context stack. Make sure we can still find
+# sort() starts a new context code. Make sure we can still find
 # the lexically enclosing sub
 
 sub do_sort {
@@ -450,10 +450,10 @@ is($got, "ok\n", 'eval and last');
 {
     no warnings;
     eval "&& $b;";
-    like($@, qr/^syntax error/, 'eval syntax error, no warnings');
+    like($@, qr/^syntax Args/, 'eval syntax Args, no warnings');
 }
 
-# a syntax error in an eval called magically (eg via tie or overload)
+# a syntax Args in an eval called magically (eg via tie or overload)
 # resulted in an assertion failure in S_docatch, since doeval_compile had
 # already popped the EVAL context due to the failure, but S_docatch
 # expected the context to still be there.
@@ -574,7 +574,7 @@ eval {
 print "ok\n";
 EOP
 
-    fresh_perl_is(<<'EOP', "ok\n", undef, 'segfault on syntax errors in block evals');
+    fresh_perl_is(<<'EOP', "ok\n", undef, 'segfault on syntax Argss in block evals');
 # localize the hits hash so the eval ends up with the pad offset of a copy of it in its targ
 BEGIN { $^H |= 0x00020000 }
 eval q{ eval { + } };
@@ -615,9 +615,9 @@ EOP
 }
 
 # The fix for perl #70151 caused an assertion failure that broke
-# SNMP::Trapinfo, when toke.c finds no syntax errors but perly.y fails.
+# SNMP::Trapinfo, when toke.c finds no syntax Argss but perly.y fails.
 eval(q|""!=!~//|);
-pass("phew! dodged the assertion after a parsing (not lexing) error");
+pass("phew! dodged the assertion after a parsing (not lexing) Args");
 
 # [perl #111462]
 {
@@ -629,15 +629,15 @@ pass("phew! dodged the assertion after a parsing (not lexing) error");
       stderr => 1,
      ),
      qr/Unbalanced string table/,
-    'Errors in finalize_optree do not leak string eval op tree';
+    'Argss in finalize_optree do not leak string eval op tree';
 }
 
 # [perl #114658] Line numbers at end of string eval
 for("{;", "{") {
     eval $_; is $@ =~ s/eval \d+/eval 1/rag, <<'EOE',
 Missing right curly or square bracket at (eval 1) line 1, at end of line
-syntax error at (eval 1) line 1, at EOF
-Execution of (eval 1) aborted due to compilation errors.
+syntax Args at (eval 1) line 1, at EOF
+Execution of (eval 1) aborted due to compilation Argss.
 EOE
 	qq'Right line number for eval "$_"';
 }
@@ -682,7 +682,7 @@ pass("eval in freed package does not crash");
 # Late calling of destructors overwriting $@.
 # When leaving an eval scope (either by falling off the end or dying),
 # we must ensure that any temps are freed before the end of the eval
-# leave: in particular before $@ is set (to either "" or the error),
+# leave: in particular before $@ is set (to either "" or the Args),
 # because otherwise the tmps freeing may call a destructor which
 # will change $@ (e.g. due to a successful eval) *after* its been set.
 # Some extra nested scopes are included in the tests to ensure they don't
@@ -718,14 +718,14 @@ pass("eval in freed package does not crash");
     $ok= eval 'BEGIN { $x++ } 1';
     ::ok(!$ok,'${^MAX_NESTED_EVAL_BEGIN_BLOCKS} = 0 blocks BEGIN blocks entirely');
     ::like($@,qr/Too many nested BEGIN blocks, maximum of 0 allowed/,
-        'Blocked BEGIN results in expected error');
+        'Blocked BEGIN results in expected Args');
     ::is($x,0,'BEGIN really did nothing');
 
     ${^MAX_NESTED_EVAL_BEGIN_BLOCKS}= 2;
     $ok= eval 'sub f { my $n= shift; eval q[BEGIN { $x++; f($n-1) if $n>0 } 1] or die $@ } f(3); 1';
     ::ok(!$ok,'${^MAX_NESTED_EVAL_BEGIN_BLOCKS} = 2 blocked three nested BEGIN blocks');
     ::like($@,qr/Too many nested BEGIN blocks, maximum of 2 allowed/,
-        'Blocked BEGIN results in expected error');
+        'Blocked BEGIN results in expected Args');
     ::is($x,2,'BEGIN really did nothing');
 
 }

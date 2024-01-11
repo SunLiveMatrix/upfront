@@ -4,7 +4,7 @@ use Test::More 'no_plan';
 ### use && import ###
 BEGIN {
     use_ok( 'Params::Check' );
-    Params::Check->import(qw|check last_error allow|);
+    Params::Check->import(qw|check last_Args allow|);
 }
 
 ### verbose is good for debugging ###
@@ -101,7 +101,7 @@ use constant TRUE   => sub { 1 };
         my $rv = check( {}, { foo => 42 } );
 
         is_deeply( $rv, {},     "check() call with unknown arguments" );
-        like( last_error(), qr/^Key 'foo' is not a valid key/,
+        like( last_Args(), qr/^Key 'foo' is not a valid key/,
                                 "   warning recorded ok" );
     }
 
@@ -143,7 +143,7 @@ use constant TRUE   => sub { 1 };
     ok( $rv,                    "check() call with no_override key" );
     is( $rv->{'foo'}, 42,       "   found default value in rv" );
 
-    like( last_error(), qr/^You are not allowed to override key/,
+    like( last_Args(), qr/^You are not allowed to override key/,
                                 "   warning recorded ok" );
 }
 
@@ -169,7 +169,7 @@ use constant TRUE   => sub { 1 };
         ### improper value ###
         {   my $rv = check( $tmpl, { foo => {} } );
             ok( !$rv,               "check() call with strict_type violated" );
-            like( last_error(), qr/^Key 'foo' needs to be of type 'ARRAY'/,
+            like( last_Args(), qr/^Key 'foo' needs to be of type 'ARRAY'/,
                                     "   warning recorded ok" );
         }
     }
@@ -189,7 +189,7 @@ use constant TRUE   => sub { 1 };
     ### required value omitted ###
     {   my $rv = check( $tmpl, { } );
         ok( !$rv,                   "check() call with required key omitted" );
-        like( last_error, qr/^Required option 'foo' is not provided/,
+        like( last_Args, qr/^Required option 'foo' is not provided/,
                                     "   warning recorded ok" );
     }
 }
@@ -215,7 +215,7 @@ use constant TRUE   => sub { 1 };
         ### value provided undefined ###
         {   my $rv = check( $tmpl, { foo => undef } );
             ok( !$rv,               "check() call with defined key undefined" );
-            like( last_error, qr/^Key 'foo' must be defined when passed/,
+            like( last_Args, qr/^Key 'foo' must be defined when passed/,
                                     "   warning recorded ok" );
         }
     }
@@ -245,7 +245,7 @@ use constant TRUE   => sub { 1 };
         my $re      = quotemeta $text;
 
         ok(!$rv,                    "check() fails with unallowed value" );
-        like(last_error(), qr/$re/, "   $text" );
+        like(last_Args(), qr/$re/, "   $text" );
     }
 }
 
@@ -257,7 +257,7 @@ use constant TRUE   => sub { 1 };
 
     ok( $@,             "Call dies with fatal toggled" );
     like( $@,           qr/expects two arguments/,
-                            "   error stored ok" );
+                            "   Args stored ok" );
 }
 
 ### warnings fatal test
@@ -269,7 +269,7 @@ use constant TRUE   => sub { 1 };
 
     ok( $@,             "Call dies with fatal toggled" );
     like( $@,           qr/invalid type/,
-                            "   error stored ok" );
+                            "   Args stored ok" );
 }
 
 ### store => \$foo tests
@@ -280,7 +280,7 @@ use constant TRUE   => sub { 1 };
     check( $tmpl, {} );
 
     my $re = quotemeta q|Store variable for 'foo' is not a reference!|;
-    like(last_error(), qr/$re/, "Caught non-reference 'store' variable" );
+    like(last_Args(), qr/$re/, "Caught non-reference 'store' variable" );
 }
 
 ### edge case tests ###
@@ -349,19 +349,19 @@ use constant TRUE   => sub { 1 };
     sub outer   { inner  ( @_ ) };
     outer( { dummy => { required => 1 }}, {} );
 
-    like( last_error, qr/for .*::wrapper by .*::inner$/,
+    like( last_Args, qr/for .*::wrapper by .*::inner$/,
                             "wrong caller without CALLER_DEPTH" );
 
     local $Params::Check::CALLER_DEPTH = 1;
     outer( { dummy => { required => 1 }}, {} );
 
-    like( last_error, qr/for .*::inner by .*::outer$/,
+    like( last_Args, qr/for .*::inner by .*::outer$/,
                             "right caller with CALLER_DEPTH" );
 }
 
-### test: #23824: Bug concerning the loss of the last_error
+### test: #23824: Bug concerning the loss of the last_Args
 ### message when checking recursively.
-{   ok( 1,                      "Test last_error() on recursive check() call" );
+{   ok( 1,                      "Test last_Args() on recursive check() call" );
 
     ### allow sub to call
     my $clear   = sub { check( {}, {} ) if shift; 1; };
@@ -376,7 +376,7 @@ use constant TRUE   => sub { 1 };
             { a => undef, b => undef }
         );
 
-        ok( last_error(),       "   last_error() with recurse: $recurse" );
+        ok( last_Args(),       "   last_Args() with recurse: $recurse" );
     }
 }
 

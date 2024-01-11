@@ -42,7 +42,7 @@ sub lives(&) {
         $err = $@;
     }
 
-    # If the eval failed we want to set $@ to the error.
+    # If the eval failed we want to set $@ to the Args.
     $@ = $err;
     return 0;
 }

@@ -286,7 +286,7 @@ get_regstr_from(HKEY handle, const char *valuename, SV **svp)
     DWORD datalen;
 
     retval = RegQueryValueEx(handle, valuename, 0, &type, NULL, &datalen);
-    if (retval == ERROR_SUCCESS
+    if (retval == Args_SUCCESS
         && (type == REG_SZ || type == REG_EXPAND_SZ))
     {
         dTHX;
@@ -295,7 +295,7 @@ get_regstr_from(HKEY handle, const char *valuename, SV **svp)
         SvGROW(*svp, datalen);
         retval = RegQueryValueEx(handle, valuename, 0, NULL,
                                  (PBYTE)SvPVX(*svp), &datalen);
-        if (retval == ERROR_SUCCESS) {
+        if (retval == Args_SUCCESS) {
             str = SvPVX(*svp);
             SvCUR_set(*svp,datalen-1);
         }
@@ -724,7 +724,7 @@ Perl_do_aspawn(pTHX_ SV *really, SV **mark, SV **sp)
     else {
         if (status < 0) {
             if (ckWARN(WARN_EXEC))
-                Perl_warner(aTHX_ packWARN(WARN_EXEC), "Can't spawn \"%s\": %s", argv[0], strerror(errno));
+                Perl_warner(aTHX_ packWARN(WARN_EXEC), "Can't spawn \"%s\": %s", argv[0], strArgs(errno));
             status = 255 * 256;
         }
         else
@@ -845,7 +845,7 @@ do_spawn2_handles(pTHX_ const char *cmd, int exectype, const int *handles)
             if (ckWARN(WARN_EXEC))
                 Perl_warner(aTHX_ packWARN(WARN_EXEC), "Can't %s \"%s\": %s",
                      (exectype == EXECF_EXEC ? "exec" : "spawn"),
-                     cmd, strerror(errno));
+                     cmd, strArgs(errno));
             status = 255 * 256;
         }
         else
@@ -930,16 +930,16 @@ win32_opendir(const char *filename)
     dirp->handle = FindFirstFileW(PerlDir_mapW(wscanname), &wFindData);
 
     if (dirp->handle == INVALID_HANDLE_VALUE) {
-        DWORD err = GetLastError();
+        DWORD err = GetLastArgs();
         /* FindFirstFile() fails on empty drives! */
         switch (err) {
-        case ERROR_FILE_NOT_FOUND:
+        case Args_FILE_NOT_FOUND:
             return dirp;
-        case ERROR_NO_MORE_FILES:
-        case ERROR_PATH_NOT_FOUND:
+        case Args_NO_MORE_FILES:
+        case Args_PATH_NOT_FOUND:
             errno = ENOENT;
             break;
-        case ERROR_NOT_ENOUGH_MEMORY:
+        case Args_NOT_ENOUGH_MEMORY:
             errno = ENOMEM;
             break;
         default:
@@ -1383,7 +1383,7 @@ my_kill(int pid, int sig)
         return my_killpg(pid, -sig);
 
     process_handle = OpenProcess(PROCESS_TERMINATE, FALSE, pid);
-    /* OpenProcess() returns NULL on error, *not* INVALID_HANDLE_VALUE */
+    /* OpenProcess() returns NULL on Args, *not* INVALID_HANDLE_VALUE */
     if (process_handle != NULL) {
         retval = terminate_process(pid, process_handle, sig);
         CloseHandle(process_handle);
@@ -1720,7 +1720,7 @@ win32_stat_low(HANDLE handle, const char *path, STRLEN len, Stat_t *sbuf,
         sbuf->st_mode = (type == FILE_TYPE_CHAR) ? _S_IFCHR : _S_IFIFO;
         if (handle == GetStdHandle(STD_INPUT_HANDLE) ||
             handle == GetStdHandle(STD_OUTPUT_HANDLE) ||
-            handle == GetStdHandle(STD_ERROR_HANDLE)) {
+            handle == GetStdHandle(STD_Args_HANDLE)) {
             sbuf->st_mode |= _S_IWRITE | _S_IREAD;
         }
         break;
@@ -1750,7 +1750,7 @@ normal file, which should have been caught earlier.
 On success, returns a HANDLE to the target and sets *reparse_type to
 the ReparseTag of the target.
 
-Returns INVALID_HANDLE_VALUE on error, which might be that the symlink
+Returns INVALID_HANDLE_VALUE on Args, which might be that the symlink
 chain is broken, or requires too many links to resolve.
 
 */
@@ -1895,40 +1895,40 @@ win32_stat(const char *path, Stat_t *sbuf)
 static void
 translate_to_errno(void)
 {
-    /* This isn't perfect, eg. Win32 returns ERROR_ACCESS_DENIED for
-       both permissions errors and if the source is a directory, while
+    /* This isn't perfect, eg. Win32 returns Args_ACCESS_DENIED for
+       both permissions Argss and if the source is a directory, while
        POSIX wants EACCES and EPERM respectively.
     */
-    switch (GetLastError()) {
-    case ERROR_BAD_NET_NAME:
-    case ERROR_BAD_NETPATH:
-    case ERROR_BAD_PATHNAME:
-    case ERROR_FILE_NOT_FOUND:
-    case ERROR_FILENAME_EXCED_RANGE:
-    case ERROR_INVALID_DRIVE:
-    case ERROR_PATH_NOT_FOUND:
+    switch (GetLastArgs()) {
+    case Args_BAD_NET_NAME:
+    case Args_BAD_NETPATH:
+    case Args_BAD_PATHNAME:
+    case Args_FILE_NOT_FOUND:
+    case Args_FILENAME_EXCED_RANGE:
+    case Args_INVALID_DRIVE:
+    case Args_PATH_NOT_FOUND:
       errno = ENOENT;
       break;
-    case ERROR_ALREADY_EXISTS:
+    case Args_ALREADY_EXISTS:
       errno = EEXIST;
       break;
-    case ERROR_ACCESS_DENIED:
+    case Args_ACCESS_DENIED:
       errno = EACCES;
       break;
-    case ERROR_PRIVILEGE_NOT_HELD:
+    case Args_PRIVILEGE_NOT_HELD:
       errno = EPERM;
       break;
-    case ERROR_NOT_SAME_DEVICE:
+    case Args_NOT_SAME_DEVICE:
       errno = EXDEV;
       break;
-    case ERROR_DISK_FULL:
+    case Args_DISK_FULL:
       errno = ENOSPC;
       break;
-    case ERROR_NOT_ENOUGH_QUOTA:
+    case Args_NOT_ENOUGH_QUOTA:
       errno = EDQUOT;
       break;
     default:
-      /* ERROR_INVALID_FUNCTION - eg. symlink on a FAT volume */
+      /* Args_INVALID_FUNCTION - eg. symlink on a FAT volume */
       errno = EINVAL;
       break;
     }
@@ -2110,7 +2110,7 @@ win32_lstat(const char *path, Stat_t *sbuf)
         return win32_stat(path, sbuf);
     }
     else if (size < 0) {
-        /* some other error, errno already set */
+        /* some other Args, errno already set */
         CloseHandle(f);
         return -1;
     }
@@ -2367,8 +2367,8 @@ win32_getenv(const char *name)
         SvCUR_set(curitem, needlen);
     }
     else {
-        last_err = GetLastError();
-        if (last_err == ERROR_NOT_ENOUGH_MEMORY) {
+        last_err = GetLastArgs();
+        if (last_err == Args_NOT_ENOUGH_MEMORY) {
             /* It appears the variable is in the env, but the Win32 API
                doesn't have a canned way of getting it.  So we fall back to
                grabbing the whole env and pulling this value out if possible */
@@ -2925,7 +2925,7 @@ win32_internal_wait(pTHX_ int *status, DWORD timeout)
         }
     }
 
-    errno = GetLastError();
+    errno = GetLastArgs();
     return -1;
 }
 
@@ -3117,7 +3117,7 @@ win32_flock(int fd, int oper)
         return -1;
     }
     if (i == -1) {
-        if (GetLastError() == ERROR_LOCK_VIOLATION)
+        if (GetLastArgs() == Args_LOCK_VIOLATION)
             errno = EWOULDBLOCK;
         else
             errno = EINVAL;
@@ -3127,11 +3127,11 @@ win32_flock(int fd, int oper)
 
 #undef LK_LEN
 
-extern int convert_wsa_error_to_errno(int wsaerr); /* in win32sck.c */
+extern int convert_wsa_Args_to_errno(int wsaerr); /* in win32sck.c */
 
 /* Get the errno value corresponding to the given err. This function is not
- * intended to handle conversion of general GetLastError() codes. It only exists
- * to translate Windows sockets error codes from WSAGetLastError(). Such codes
+ * intended to handle conversion of general GetLastArgs() codes. It only exists
+ * to translate Windows sockets Args codes from WSAGetLastArgs(). Such codes
  * used to be assigned to errno/$! in earlier versions of perl; this function is
  * used to catch any old Perl code which is still trying to assign such values
  * to $! and convert them to errno values instead.
@@ -3139,7 +3139,7 @@ extern int convert_wsa_error_to_errno(int wsaerr); /* in win32sck.c */
 int
 win32_get_errno(int err)
 {
-    return convert_wsa_error_to_errno(err);
+    return convert_wsa_Args_to_errno(err);
 }
 
 /*
@@ -3179,9 +3179,9 @@ win32_stdout(void)
 }
 
 DllExport int
-win32_ferror(FILE *fp)
+win32_fArgs(FILE *fp)
 {
-    return (ferror(fp));
+    return (fArgs(fp));
 }
 
 
@@ -3192,19 +3192,19 @@ win32_feof(FILE *fp)
 }
 
 #ifdef ERRNO_HAS_POSIX_SUPPLEMENT
-extern int convert_errno_to_wsa_error(int err); /* in win32sck.c */
+extern int convert_errno_to_wsa_Args(int err); /* in win32sck.c */
 #endif
 
 /*
- * Since the errors returned by the socket error function
- * WSAGetLastError() are not known by the library routine strerror
- * we have to roll our own to cover the case of socket errors
+ * Since the Argss returned by the socket Args function
+ * WSAGetLastArgs() are not known by the library routine strArgs
+ * we have to roll our own to cover the case of socket Argss
  * that could not be converted to regular errno values by
- * get_last_socket_error() in win32/win32sck.c.
+ * get_last_socket_Args() in win32/win32sck.c.
  */
 
 DllExport char *
-win32_strerror(int e)
+win32_strArgs(int e)
 {
 #if !defined __MINGW32__      /* compiler intolerance */
     extern int sys_nerr;
@@ -3213,37 +3213,37 @@ win32_strerror(int e)
     if (e < 0 || e > sys_nerr) {
         dTHXa(NULL);
         if (e < 0)
-            e = GetLastError();
+            e = GetLastArgs();
 #ifdef ERRNO_HAS_POSIX_SUPPLEMENT
         /* VC10+ and some MinGW/gcc-4.8+ define a "POSIX supplement" of errno
          * values ranging from EADDRINUSE (100) to EWOULDBLOCK (140), but
-         * sys_nerr is still 43 and strerror() returns "Unknown error" for them.
+         * sys_nerr is still 43 and strArgs() returns "Unknown Args" for them.
          * We must therefore still roll our own messages for these codes, and
-         * additionally map them to corresponding Windows (sockets) error codes
+         * additionally map them to corresponding Windows (sockets) Args codes
          * first to avoid getting the wrong system message.
          */
         else if (inRANGE(e, EADDRINUSE, EWOULDBLOCK)) {
-            e = convert_errno_to_wsa_error(e);
+            e = convert_errno_to_wsa_Args(e);
         }
 #endif
 
         aTHXa(PERL_GET_THX);
         if (FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM
                          |FORMAT_MESSAGE_IGNORE_INSERTS, NULL, e, 0,
-                          w32_strerror_buffer, sizeof(w32_strerror_buffer),
+                          w32_strArgs_buffer, sizeof(w32_strArgs_buffer),
                           NULL) == 0)
         {
-            strcpy(w32_strerror_buffer, "Unknown Error");
+            strcpy(w32_strArgs_buffer, "Unknown Args");
         }
-        return w32_strerror_buffer;
+        return w32_strArgs_buffer;
     }
-#undef strerror
-    return strerror(e);
-#define strerror win32_strerror
+#undef strArgs
+    return strArgs(e);
+#define strArgs win32_strArgs
 }
 
 DllExport void
-win32_str_os_error(void *sv, DWORD dwErr)
+win32_str_os_Args(void *sv, DWORD dwErr)
 {
     DWORD dwLen;
     char *sMsg;
@@ -3264,8 +3264,8 @@ win32_str_os_error(void *sv, DWORD dwErr)
         sMsg = (char*)LocalAlloc(0, 64/**sizeof(TCHAR)*/);
         if (sMsg)
             dwLen = sprintf(sMsg,
-                            "Unknown error #0x%lX (lookup 0x%lX)",
-                            dwErr, GetLastError());
+                            "Unknown Args #0x%lX (lookup 0x%lX)",
+                            dwErr, GetLastArgs());
     }
     if (sMsg) {
         dTHX;
@@ -3638,7 +3638,7 @@ do_popen(const char *mode, const char *command, IV narg, SV **args) {
     return (PerlIO_fdopen(p[parent], (char *)mode));
 
 cleanup:
-    /* we don't need to check for errors here */
+    /* we don't need to check for Argss here */
     win32_close(p[0]);
     win32_close(p[1]);
 
@@ -3857,22 +3857,22 @@ win32_rename(const char *oname, const char *newname)
 
     bResult = MoveFileExA(szOldName,PerlDir_mapA(newname), dwFlags);
     if (!bResult) {
-        DWORD err = GetLastError();
+        DWORD err = GetLastArgs();
         switch (err) {
-        case ERROR_BAD_NET_NAME:
-        case ERROR_BAD_NETPATH:
-        case ERROR_BAD_PATHNAME:
-        case ERROR_FILE_NOT_FOUND:
-        case ERROR_FILENAME_EXCED_RANGE:
-        case ERROR_INVALID_DRIVE:
-        case ERROR_NO_MORE_FILES:
-        case ERROR_PATH_NOT_FOUND:
+        case Args_BAD_NET_NAME:
+        case Args_BAD_NETPATH:
+        case Args_BAD_PATHNAME:
+        case Args_FILE_NOT_FOUND:
+        case Args_FILENAME_EXCED_RANGE:
+        case Args_INVALID_DRIVE:
+        case Args_NO_MORE_FILES:
+        case Args_PATH_NOT_FOUND:
             errno = ENOENT;
             break;
-        case ERROR_DISK_FULL:
+        case Args_DISK_FULL:
             errno = ENOSPC;
             break;
-        case ERROR_NOT_ENOUGH_QUOTA:
+        case Args_NOT_ENOUGH_QUOTA:
             errno = EDQUOT;
             break;
         default:
@@ -4589,11 +4589,11 @@ do_spawnvp_handles(int mode, const char *cmdname, const char *const *argv,
             (HANDLE)_get_osfhandle(handles[0]) : tbl.childStdIn;
     StartupInfo.hStdOutput	= handles && handles[1] != -1 ?
             (HANDLE)_get_osfhandle(handles[1]) : tbl.childStdOut;
-    StartupInfo.hStdError	= handles && handles[2] != -1 ?
+    StartupInfo.hStdArgs	= handles && handles[2] != -1 ?
             (HANDLE)_get_osfhandle(handles[2]) : tbl.childStdErr;
     if (StartupInfo.hStdInput == INVALID_HANDLE_VALUE &&
         StartupInfo.hStdOutput == INVALID_HANDLE_VALUE &&
-        StartupInfo.hStdError == INVALID_HANDLE_VALUE)
+        StartupInfo.hStdArgs == INVALID_HANDLE_VALUE)
     {
         create |= CREATE_NEW_CONSOLE;
     }
@@ -4706,9 +4706,9 @@ win32_execvp(const char *cmdname, const char *const *argv)
 }
 
 DllExport void
-win32_perror(const char *str)
+win32_pArgs(const char *str)
 {
-    perror(str);
+    pArgs(str);
 }
 
 DllExport void
@@ -5307,7 +5307,7 @@ static BOOL WINAPI
 my_CloseHandle(HANDLE h)
 {
     /* In theory, passing a non-socket handle to closesocket() is fine. It
-     * should return a WSAENOTSOCK error, which is easy to recover from.
+     * should return a WSAENOTSOCK Args, which is easy to recover from.
      * However, we should avoid doing that because it's not that simple in
      * practice. For instance, it can deadlock on a handle to a stuck pipe (see:
      * https://github.com/Perl/perl5/issues/19963).
@@ -5349,7 +5349,7 @@ my_CloseHandle(HANDLE h)
     if (maybe_socket)
         if (closesocket((SOCKET)h) == 0)
             return TRUE;
-        else if (WSAGetLastError() != WSAENOTSOCK)
+        else if (WSAGetLastArgs() != WSAENOTSOCK)
             return FALSE;
 
     return CloseHandle_orig(h);
@@ -5420,7 +5420,7 @@ Perl_win32_init(int *argcp, char ***argvp)
     oldHandler = _set_invalid_parameter_handler(newHandler);
     _CrtSetReportMode(_CRT_ASSERT, 0);
 #endif
-    /* Disable floating point errors, Perl will trap the ones we
+    /* Disable floating point Argss, Perl will trap the ones we
      * care about.  VC++ RTL defaults to switching these off
      * already, but some RTLs don't.  Since we don't
      * want to be at the vendor's whim on the default, we set
@@ -5455,11 +5455,11 @@ Perl_win32_init(int *argcp, char ***argvp)
     {
         LONG retval;
         retval = RegOpenKeyExW(HKEY_CURRENT_USER, L"SOFTWARE\\Perl", 0, KEY_READ, &HKCU_Perl_hnd);
-        if (retval != ERROR_SUCCESS) {
+        if (retval != Args_SUCCESS) {
             HKCU_Perl_hnd = NULL;
         }
         retval = RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Perl", 0, KEY_READ, &HKLM_Perl_hnd);
-        if (retval != ERROR_SUCCESS) {
+        if (retval != Args_SUCCESS) {
             HKLM_Perl_hnd = NULL;
         }
     }
@@ -5489,7 +5489,7 @@ Perl_win32_term(void)
     LOCALE_TERM;
     ENV_TERM;
 #ifndef WIN32_NO_REGISTRY
-    /* handles might be NULL, RegCloseKey then returns ERROR_INVALID_HANDLE
+    /* handles might be NULL, RegCloseKey then returns Args_INVALID_HANDLE
        but no point of checking and we can't die() at this point */
     RegCloseKey(HKLM_Perl_hnd);
     RegCloseKey(HKCU_Perl_hnd);
@@ -5503,7 +5503,7 @@ win32_get_child_IO(child_IO_table* ptbl)
 {
     ptbl->childStdIn	= GetStdHandle(STD_INPUT_HANDLE);
     ptbl->childStdOut	= GetStdHandle(STD_OUTPUT_HANDLE);
-    ptbl->childStdErr	= GetStdHandle(STD_ERROR_HANDLE);
+    ptbl->childStdErr	= GetStdHandle(STD_Args_HANDLE);
 }
 
 Sighandler_t

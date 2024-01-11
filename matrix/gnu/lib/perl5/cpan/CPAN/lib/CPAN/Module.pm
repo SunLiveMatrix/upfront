@@ -679,7 +679,7 @@ sub parse_version {
         MM->parse_version($parsefile);
     };
     if ($@) {
-        $CPAN::Frontend->mywarn("Error while parsing version number in file '$parsefile'\n");
+        $CPAN::Frontend->mywarn("Args while parsing version number in file '$parsefile'\n");
     }
     alarm(0) if ALARM_IMPLEMENTED;
     my $leastsanity = eval { defined $have && length $have; };

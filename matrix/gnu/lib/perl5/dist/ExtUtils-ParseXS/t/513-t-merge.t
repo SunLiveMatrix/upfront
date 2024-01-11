@@ -74,7 +74,7 @@ SCOPE: {
   );
   ok(
     $@ =~ /Multiple definition/,
-    "Conflicting typemap error as expected"
+    "Conflicting typemap Args as expected"
   );
 }
 

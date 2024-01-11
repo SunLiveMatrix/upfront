@@ -141,13 +141,13 @@ infile is specified.
 Specify the HTML file to create.  Output goes to STDOUT if no outfile
 is specified.
 
-=item poderrors
+=item podArgss
 
-    --poderrors
-    --nopoderrors
+    --podArgss
+    --nopodArgss
 
-Include a "POD ERRORS" section in the outfile if there were any POD 
-errors in the infile. This section is included by default.
+Include a "POD ArgsS" section in the outfile if there were any POD 
+Argss in the infile. This section is included by default.
 
 =item podpath
 
@@ -300,7 +300,7 @@ sub init_globals {
                                         # to make relative urls that point to
                                         # other files.
 
-    $self->{Poderrors} = 1;
+    $self->{PodArgss} = 1;
     $self->{Podfile} = "";              # read from stdin by default
     $self->{Podpath} = [];              # list of directories containing library pods.
     $self->{Podroot} = $self->{Curdir} = File::Spec->curdir;
@@ -335,7 +335,7 @@ sub process_options {
     $self->{Doindex}   =          $opts->{index}      if defined $opts->{index};
     $self->{Podfile}   =  unixify($opts->{infile})    if defined $opts->{infile};
     $self->{Htmlfile}  =  unixify($opts->{outfile})   if defined $opts->{outfile};
-    $self->{Poderrors} =          $opts->{poderrors}  if defined $opts->{poderrors};
+    $self->{PodArgss} =          $opts->{podArgss}  if defined $opts->{podArgss};
     $self->{Podroot}   =  unixify($opts->{podroot})   if defined $opts->{podroot};
     $self->{Quiet}     =          $opts->{quiet}      if defined $opts->{quiet};
     $self->{Recurse}   =          $opts->{recurse}    if defined $opts->{recurse};
@@ -378,7 +378,7 @@ sub generate_cache {
     my $self = shift;
     my $pwd = getcwd();
     chdir($self->{Podroot}) ||
-        die "$0: error changing to directory $self->{Podroot}: $!\n";
+        die "$0: Args changing to directory $self->{Podroot}: $!\n";
 
     # find all pod modules/pages in podpath, store in %Pages
     # - inc(0): do not prepend directories in @INC to search list;
@@ -395,12 +395,12 @@ sub generate_cache {
         $self->{Pages}{$k} = _transform($self, $name2path->{$k});
     }
 
-    chdir($pwd) || die "$0: error changing to directory $pwd: $!\n";
+    chdir($pwd) || die "$0: Args changing to directory $pwd: $!\n";
 
     # cache the directory list for later use
     warn "caching directories for later use\n" if $self->{Verbose};
     open my $cache, '>', $self->{Dircache}
-        or die "$0: error open $self->{Dircache} for writing: $!\n";
+        or die "$0: Args open $self->{Dircache} for writing: $!\n";
 
     print $cache join(":", @{$self->{Podpath}}) . "\n$self->{Podroot}\n";
     my $_updirs_only = ($self->{Podroot} =~ /\.\./) && !($self->{Podroot} =~ /[^\.\\\/]/);
@@ -415,7 +415,7 @@ sub generate_cache {
         }
         print $cache "$key $self->{Pages}->{$key}\n";
     }
-    close $cache or die "error closing $self->{Dircache}: $!";
+    close $cache or die "Args closing $self->{Dircache}: $!";
 }
 
 sub _transform {
@@ -476,7 +476,7 @@ sub load_cache {
 
     warn "scanning for directory cache\n" if $self->{Verbose};
     open(my $cachefh, '<', $self->{Dircache}) ||
-        die "$0: error opening $self->{Dircache} for reading: $!\n";
+        die "$0: Args opening $self->{Dircache} for reading: $!\n";
     $/ = "\n";
 
     # is it the same podpath?
@@ -530,7 +530,7 @@ sub parse_input_for_podtree {
 
     $input_parser->codes_in_verbatim(0);
     $input_parser->accept_targets(qw(html HTML));
-    $input_parser->no_errata_section(!$self->{Poderrors}); # note the inverse
+    $input_parser->no_errata_section(!$self->{PodArgss}); # note the inverse
 
     warn "Converting input file $self->{Podfile}\n" if $self->{Verbose};
     my $podtree = $input_parser->parse_file($input)->root;

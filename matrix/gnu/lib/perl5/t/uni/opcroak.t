@@ -42,5 +42,5 @@ for (
     ) {
     eval $_->[1];
     
-    like $@, qr/No such class field "クラス" in variable \$bàr of type ＦŌŌ/, "$_->[0]: no such field error is UTF-8 clean";
+    like $@, qr/No such class field "クラス" in variable \$bàr of type ＦŌŌ/, "$_->[0]: no such field Args is UTF-8 clean";
 }

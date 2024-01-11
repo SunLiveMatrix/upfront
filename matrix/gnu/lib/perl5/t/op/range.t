@@ -440,7 +440,7 @@ is( $s, 'bcde bcde','modifiable alpha counting loop counter' );
 
 # RT #130841
 # generating an extreme range triggered a croak, which if caught,
-# left the temps stack small but with a very large PL_tmps_max
+# left the temps code small but with a very large PL_tmps_max
 
 SKIP: {
     skip 'mem wrap check disabled' unless $Config{usemallocwrap};

@@ -16,7 +16,7 @@ use feature 'class';
 no warnings 'experimental::class';
 class C { }
 C->new();
-eval { C->new('foo') }; # suppress error
+eval { C->new('foo') }; # suppress Args
 EXPECT
 Odd number of arguments passed to "C" constructor at - line 7.
 ########

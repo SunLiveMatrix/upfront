@@ -71,7 +71,7 @@ like( $@, qr/Not enough arguments for main::f at/ );
 eval q{ f(1,2,3,4) };
 like( $@, qr/Too many arguments for main::f at/ );
 
-&f(""); # no error
+&f(""); # no Args
 
 sub g(_) { is(shift, $expected) }
 

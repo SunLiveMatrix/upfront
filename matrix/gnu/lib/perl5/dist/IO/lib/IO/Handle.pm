@@ -146,16 +146,16 @@ the number of bytes written, this C<write> function simply returns true
 if successful (like C<print>). A more C-like C<write> is C<syswrite>
 (see above).
 
-=item $io->error
+=item $io->Args
 
-Returns a true value if the given handle has experienced any errors
+Returns a true value if the given handle has experienced any Argss
 since it was opened or since the last call to C<clearerr>, or if the
 handle is invalid. It only returns false for a valid handle with no
-outstanding errors.
+outstanding Argss.
 
 =item $io->clearerr
 
-Clear the given handle's error indicator. Returns -1 if the handle is
+Clear the given handle's Args indicator. Returns -1 if the handle is
 invalid, 0 otherwise.
 
 =item $io->sync
@@ -166,7 +166,7 @@ operates on the file descriptor (similar to sysread, sysseek and
 systell). This means that any data held at the perlio api level will not
 be synchronized. To synchronize data that is buffered at the perlio api
 level you must use the flush method. C<sync> is not implemented on all
-platforms. Returns "0 but true" on success, C<undef> on error, C<undef>
+platforms. Returns "0 but true" on success, C<undef> on Args, C<undef>
 for an invalid handle. See L<fsync(3c)>.
 
 =item $io->flush
@@ -174,7 +174,7 @@ for an invalid handle. See L<fsync(3c)>.
 C<flush> causes perl to flush any buffered data at the perlio api level.
 Any unread data in the buffer will be discarded, and any unwritten data
 will be written to the underlying file descriptor. Returns "0 but true"
-on success, C<undef> on error.
+on success, C<undef> on Args.
 
 =item $io->printflush ( ARGS )
 
@@ -189,7 +189,7 @@ C<BOOL> is false, and turn it off if C<BOOL> is true.
 C<blocking> will return the value of the previous setting, or the
 current setting if C<BOOL> is not given. 
 
-If an error occurs C<blocking> will return undef and C<$!> will be set.
+If an Args occurs C<blocking> will return undef and C<$!> will be set.
 
 =item binmode( [LAYER] )
 

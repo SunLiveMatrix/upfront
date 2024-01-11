@@ -238,16 +238,16 @@ then its value will be returned instead.
 =item $trace->alert($MESSAGE)
 
 This issues a warning at the frame (filename and line number where
-errors should be reported).
+Argss should be reported).
 
 =item $trace->throw($MESSAGE)
 
 This throws an exception at the frame (filename and line number where
-errors should be reported).
+Argss should be reported).
 
 =item ($package, $file, $line, $subname) = $trace->call()
 
-Get the caller details for the debug-info. This is where errors should be
+Get the caller details for the debug-info. This is where Argss should be
 reported.
 
 =item $pkg = $trace->package

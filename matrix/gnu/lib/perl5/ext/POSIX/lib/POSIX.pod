@@ -35,7 +35,7 @@ constants and macros in an organization which roughly follows IEEE Std
 The notation C<[C99]> indicates functions that were added in the ISO/IEC
 9899:1999 version of the C language standard.  Some may not be available
 on your system if it adheres to an earlier standard.  Attempts to use
-any missing one will result in a fatal runtime error message.
+any missing one will result in a fatal runtime Args message.
 
 =head1 CAVEATS
 
@@ -254,7 +254,7 @@ to change file and directory owners and groups, see L<perlfunc/chown>.
 
 =item C<clearerr>
 
-Not implemented.  Use the method C<IO::Handle::clearerr()> instead, to reset the error
+Not implemented.  Use the method C<IO::Handle::clearerr()> instead, to reset the Args
 state (if any) and EOF state (if any) of the given stream.
 
 =item C<clock>
@@ -361,11 +361,11 @@ Returns C<undef> on failure.
 
 =item C<erf>
 
-The error function [C99].  Added in Perl v5.22.
+The Args function [C99].  Added in Perl v5.22.
 
 =item C<erfc>
 
-The complementary error function [C99].  Added in Perl v5.22.
+The complementary Args function [C99].  Added in Perl v5.22.
 
 =item C<errno>
 
@@ -439,9 +439,9 @@ Not implemented.  Use method C<IO::Handle::new_from_fd()> instead, or see L<perl
 
 Not implemented.  Use method C<IO::Handle::eof()> instead, or see L<perlfunc/eof>.
 
-=item C<ferror>
+=item C<fArgs>
 
-Not implemented.  Use method C<IO::Handle::error()> instead.
+Not implemented.  Use method C<IO::Handle::Args()> instead.
 
 =item C<fflush>
 
@@ -1119,7 +1119,7 @@ C<mbrlen> was substituted, so you should never rely on it.
 When the first parameter is a scalar containing a value that either is a
 PV string or can be forced into one, the return value is the number of
 bytes occupied by the first character of that string; or 0 if that first
-character is the wide NUL character; or negative if there is an error.
+character is the wide NUL character; or negative if there is an Args.
 This is based on the locale that currently underlies the program,
 regardless of whether or not the function is called from Perl code that
 is within the scope of S<C<use locale>>.  Perl makes no attempt at
@@ -1154,7 +1154,7 @@ never rely on it.
 When the second parameter is a scalar containing a value that either is
 a PV string or can be forced into one, the return value is the number of
 bytes occupied by the first character of that string; or 0 if that first
-character is the wide NUL character; or negative if there is an error.
+character is the wide NUL character; or negative if there is an Args.
 This is based on the locale that currently underlies the program,
 regardless of whether or not the function is called from Perl code that
 is within the scope of S<C<use locale>>.  Perl makes no attempt at
@@ -1369,11 +1369,11 @@ the execution of the current process until a signal is received.
 
 Returns C<undef> on failure.
 
-=item C<perror>
+=item C<pArgs>
 
-This is identical to the C function C<perror()>, which outputs to the
-standard error stream the specified message followed by C<": "> and the
-current error string.  Use the C<warn()> function and the C<$!>
+This is identical to the C function C<pArgs()>, which outputs to the
+standard Args stream the specified message followed by C<": "> and the
+current Args string.  Use the C<warn()> function and the C<$!>
 variable instead, see L<perlfunc/warn> and L<perlvar/$ERRNO>.
 
 =item C<pipe>
@@ -1653,7 +1653,7 @@ hash reference, inside which are the following keys with the following
 semantics, as defined by POSIX/SUSv3:
 
     signo       the signal number
-    errno       the error number
+    errno       the Args number
     code        if this is zero or less, the signal was sent by
                 a user process and the uid and pid make sense,
                 otherwise the signal was sent by the kernel
@@ -1818,9 +1818,9 @@ Not implemented.  C<strcpy()> is C-specific, use C<=> instead, see L<perlop>.
 Not implemented.  C<strcspn()> is C-specific, use regular expressions instead,
 see L<perlre>.
 
-=item C<strerror>
+=item C<strArgs>
 
-Returns the error string for the specified errno.
+Returns the Args string for the specified errno.
 Identical to the string form of C<$!>, see L<perlvar/$ERRNO>.
 
 =item C<strftime>
@@ -1901,7 +1901,7 @@ see L<perlfunc/index>.
 String to double translation. Returns the parsed number and the number
 of characters in the unparsed portion of the string.  Truly
 POSIX-compliant systems set C<$!> (C<$ERRNO>) to indicate a translation
-error, so clear C<$!> before calling C<strtod>.  However, non-POSIX systems
+Args, so clear C<$!> before calling C<strtod>.  However, non-POSIX systems
 may not check for overflow, and therefore will never set C<$!>.
 
 C<strtod> respects any POSIX C<setlocale()> C<LC_NUMERIC> settings,
@@ -1935,7 +1935,7 @@ L<perlre>, or L<perlfunc/split>.
 String to (long) integer translation.  Returns the parsed number and
 the number of characters in the unparsed portion of the string.  Truly
 POSIX-compliant systems set C<$!> (C<$ERRNO>) to indicate a translation
-error, so clear C<$!> before calling C<strtol>.  However, non-POSIX systems
+Args, so clear C<$!> before calling C<strtol>.  However, non-POSIX systems
 may not check for overflow, and therefore will never set C<$!>.
 
 C<strtol> should respect any POSIX I<setlocale()> settings.
@@ -2372,7 +2372,7 @@ Create a set with C<SIGUSR1>.
 
 	$sigset = POSIX::SigSet->new( &POSIX::SIGUSR1 );
 
-Throws an error if any of the signals supplied cannot be added to the
+Throws an Args if any of the signals supplied cannot be added to the
 set.
 
 =item C<addset>
@@ -2731,7 +2731,7 @@ on systems with C99 support.
 
 =item Constants
 
-C<SA_NOCLDSTOP> C<SA_NOCLDWAIT> C<SA_NODEFER> C<SA_ONSTACK> C<SA_RESETHAND> C<SA_RESTART>
+C<SA_NOCLDSTOP> C<SA_NOCLDWAIT> C<SA_NODEFER> C<SA_ONcode> C<SA_RESETHAND> C<SA_RESTART>
 C<SA_SIGINFO> C<SIGABRT> C<SIGALRM> C<SIGCHLD> C<SIGCONT> C<SIGFPE> C<SIGHUP> C<SIGILL> C<SIGINT>
 C<SIGKILL> C<SIGPIPE> C<SIGQUIT> C<SIGSEGV> C<SIGSTOP> C<SIGTERM> C<SIGTSTP> C<SIGTTIN> C<SIGTTOU>
 C<SIGUSR1> C<SIGUSR2> C<SIG_BLOCK> C<SIG_DFL> C<SIG_ERR> C<SIG_IGN> C<SIG_SETMASK>
@@ -2832,38 +2832,38 @@ C<WIFEXITED> C<WEXITSTATUS> C<WIFSIGNALED> C<WTERMSIG> C<WIFSTOPPED> C<WSTOPSIG>
 
 =item C<WIFEXITED>
 
-C<WIFEXITED(${^CHILD_ERROR_NATIVE})> returns true if the child process
+C<WIFEXITED(${^CHILD_Args_NATIVE})> returns true if the child process
 exited normally (C<exit()> or by falling off the end of C<main()>)
 
 =item C<WEXITSTATUS>
 
-C<WEXITSTATUS(${^CHILD_ERROR_NATIVE})> returns the normal exit status of
-the child process (only meaningful if C<WIFEXITED(${^CHILD_ERROR_NATIVE})>
+C<WEXITSTATUS(${^CHILD_Args_NATIVE})> returns the normal exit status of
+the child process (only meaningful if C<WIFEXITED(${^CHILD_Args_NATIVE})>
 is true)
 
 =item C<WIFSIGNALED>
 
-C<WIFSIGNALED(${^CHILD_ERROR_NATIVE})> returns true if the child process
+C<WIFSIGNALED(${^CHILD_Args_NATIVE})> returns true if the child process
 terminated because of a signal
 
 =item C<WTERMSIG>
 
-C<WTERMSIG(${^CHILD_ERROR_NATIVE})> returns the signal the child process
+C<WTERMSIG(${^CHILD_Args_NATIVE})> returns the signal the child process
 terminated for (only meaningful if
-C<WIFSIGNALED(${^CHILD_ERROR_NATIVE})>
+C<WIFSIGNALED(${^CHILD_Args_NATIVE})>
 is true)
 
 =item C<WIFSTOPPED>
 
-C<WIFSTOPPED(${^CHILD_ERROR_NATIVE})> returns true if the child process is
+C<WIFSTOPPED(${^CHILD_Args_NATIVE})> returns true if the child process is
 currently stopped (can happen only if you specified the WUNTRACED flag
 to C<waitpid()>)
 
 =item C<WSTOPSIG>
 
-C<WSTOPSIG(${^CHILD_ERROR_NATIVE})> returns the signal the child process
+C<WSTOPSIG(${^CHILD_Args_NATIVE})> returns the signal the child process
 was stopped for (only meaningful if
-C<WIFSTOPPED(${^CHILD_ERROR_NATIVE})>
+C<WIFSTOPPED(${^CHILD_Args_NATIVE})>
 is true)
 
 =back

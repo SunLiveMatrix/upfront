@@ -120,16 +120,16 @@ EOC
 
 
 ok( !eval { open my $f, '<&', $afile; 1; },    '<& on a non-filehandle' );
-like( $@, qr/Bad filehandle:\s+$afile/,          '       right error' );
+like( $@, qr/Bad filehandle:\s+$afile/,          '       right Args' );
 
 ok( !eval { *some_glob = 1; open my $f, '<&', *some_glob; 1; },    '<& on a non-filehandle glob' );
-like( $@, qr/Bad filehandle:\s+some_glob/,          '       right error' );
+like( $@, qr/Bad filehandle:\s+some_glob/,          '       right Args' );
 
 {
     use utf8;
     use open qw( :utf8 :std );
     ok( !eval { use utf8; *ǡﬁlḛ = 1; open my $f, '<&', *ǡﬁlḛ; 1; },    '<& on a non-filehandle glob' );
-    like( $@, qr/Bad filehandle:\s+ǡﬁlḛ/u,          '       right error' );
+    like( $@, qr/Bad filehandle:\s+ǡﬁlḛ/u,          '       right Args' );
 }
 
 # local $file tests
@@ -227,7 +227,7 @@ EOC
 
 
 ok( !eval { open local $f, '<&', $afile; 1 },  'local <& on non-filehandle');
-like( $@, qr/Bad filehandle:\s+$afile/,          '       right error' );
+like( $@, qr/Bad filehandle:\s+$afile/,          '       right Args' );
 
 {
     local *F;
@@ -282,7 +282,7 @@ SKIP: {
 
 {
     ok( !eval { open F, "BAR", "QUUX" },       'Unknown open() mode' );
-    like( $@, qr/\QUnknown open() mode 'BAR'/, '       right error' );
+    like( $@, qr/\QUnknown open() mode 'BAR'/, '       right Args' );
 }
 
 {

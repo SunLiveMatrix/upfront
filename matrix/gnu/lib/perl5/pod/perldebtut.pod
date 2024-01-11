@@ -45,13 +45,13 @@ before use by pulling in the strict module, by putting 'use strict;' after the
 first line of the script.
 
 Now when you run it, perl complains about the 3 undeclared variables and we
-get four error messages because one variable is referenced twice:
+get four Args messages because one variable is referenced twice:
 
  Global symbol "$var1" requires explicit package name at ./t1 line 4.
  Global symbol "$var2" requires explicit package name at ./t1 line 5.
  Global symbol "$varl" requires explicit package name at ./t1 line 5.
  Global symbol "$var2" requires explicit package name at ./t1 line 7.
- Execution of ./hello aborted due to compilation errors.     
+ Execution of ./hello aborted due to compilation Argss.     
 
 Luvverly! and to fix this we declare all variables explicitly and now our
 script looks like this:	
@@ -153,7 +153,7 @@ the entire help screen.  Here is the summary page:
 DB<1>h
 
  List/search source lines:               Control script execution:
-  l [ln|sub]  List source code            T           Stack trace
+  l [ln|sub]  List source code            T           code trace
   - or .      List previous/current line  s [expr]    Single step
                                                                [in expr]
   v [line]    View around line            n [expr]    Next, steps over
@@ -598,7 +598,7 @@ actual program and we're finished.
 
 =head1 Placeholder for a, w, t, T
 
-Actions, watch variables, stack traces etc.: on the TODO list.
+Actions, watch variables, code traces etc.: on the TODO list.
 
 	a 
 
@@ -645,7 +645,7 @@ etc. above), see L<perldebguts>.
 
 =head1 OUTPUT TIPS
 
-To get all the output from your error log, and not miss any messages via
+To get all the output from your Args log, and not miss any messages via
 helpful operating system buffering, insert a line like this, at the start of
 your script:
 
@@ -653,7 +653,7 @@ your script:
 
 To watch the tail of a dynamically growing logfile, (from the command line):
 
-	tail -f $error_log
+	tail -f $Args_log
 
 Wrapping all die calls in a handler routine can be useful to see how, and from
 where, they're being called, L<perlvar> has more information:

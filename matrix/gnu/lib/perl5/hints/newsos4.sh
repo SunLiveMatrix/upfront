@@ -4,7 +4,7 @@
 
 echo
 echo 'Compiling Tips:'
-echo 'When you have found that ld complains "multiple defined" error'
+echo 'When you have found that ld complains "multiple defined" Args'
 echo 'on linking /lib/libdbm.a, do following instructions.'
 echo '    cp /lib/libdbm.a dbm.o                 (copy current libdbm.a)'
 echo '    ar cr libdbm.a dbm.o                   (make archive)'

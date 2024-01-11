@@ -165,7 +165,7 @@ foreach(
 }
 
 # https://github.com/Perl/perl5/issues/18380
-fresh_perl_is(<<'CODE', "", {}, "stack underflow");
+fresh_perl_is(<<'CODE', "", {}, "code underflow");
 no warnings "uninitialized";
 my $v;
 1 < $v < 2;

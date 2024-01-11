@@ -45,13 +45,13 @@ BEGIN
 
 require Exporter ;
 
-our ($VERSION, @ISA, @EXPORT_OK, %EXPORT_TAGS, %DEFLATE_CONSTANTS, $ZipError);
+our ($VERSION, @ISA, @EXPORT_OK, %EXPORT_TAGS, %DEFLATE_CONSTANTS, $ZipArgs);
 
 $VERSION = '2.206';
-$ZipError = '';
+$ZipArgs = '';
 
 @ISA = qw(IO::Compress::RawDeflate Exporter);
-@EXPORT_OK = qw( $ZipError zip ) ;
+@EXPORT_OK = qw( $ZipArgs zip ) ;
 %EXPORT_TAGS = %IO::Compress::RawDeflate::DEFLATE_CONSTANTS ;
 
 push @{ $EXPORT_TAGS{all} }, @EXPORT_OK ;
@@ -65,14 +65,14 @@ sub new
 {
     my $class = shift ;
 
-    my $obj = IO::Compress::Base::Common::createSelfTiedObject($class, \$ZipError);
+    my $obj = IO::Compress::Base::Common::createSelfTiedObject($class, \$ZipArgs);
     $obj->_create(undef, @_);
 
 }
 
 sub zip
 {
-    my $obj = IO::Compress::Base::Common::createSelfTiedObject(undef, \$ZipError);
+    my $obj = IO::Compress::Base::Common::createSelfTiedObject(undef, \$ZipArgs);
     return $obj->_def(@_);
 }
 
@@ -177,7 +177,7 @@ sub mkComp
         *$self->{ZipData}{CRC32} = Compress::Raw::Zlib::crc32(undef);
     }
 
-    return $self->saveErrorString(undef, $errstr, $errno)
+    return $self->saveArgsString(undef, $errstr, $errno)
        if ! defined $obj;
 
     if (! defined *$self->{ZipData}{SizesOffset}) {
@@ -618,7 +618,7 @@ sub ckParams
     if ($got->parsed('extime') ) {
         my $timeRef = $got->getValue('extime');
         if ( defined $timeRef) {
-            return $self->saveErrorString(undef, "exTime not a 3-element array ref")
+            return $self->saveArgsString(undef, "exTime not a 3-element array ref")
                 if ref $timeRef ne 'ARRAY' || @$timeRef != 3;
         }
 
@@ -633,7 +633,7 @@ sub ckParams
         if ($got->parsed($name) ) {
             my $idRef = $got->getValue($name);
             if ( defined $idRef) {
-                return $self->saveErrorString(undef, "$name not a 2-element array ref")
+                return $self->saveArgsString(undef, "$name not a 2-element array ref")
                     if ref $idRef ne 'ARRAY' || @$idRef != 2;
             }
 
@@ -649,14 +649,14 @@ sub ckParams
     *$self->{ZipData}{Stream} = $got->getValue('stream');
 
     my $method = $got->getValue('method');
-    return $self->saveErrorString(undef, "Unknown Method '$method'")
+    return $self->saveArgsString(undef, "Unknown Method '$method'")
         if ! defined $ZIP_CM_MIN_VERSIONS{$method};
 
-    return $self->saveErrorString(undef, "Bzip2 not available")
+    return $self->saveArgsString(undef, "Bzip2 not available")
         if $method == ZIP_CM_BZIP2 and
            ! defined $IO::Compress::Adapter::Bzip2::VERSION;
 
-    return $self->saveErrorString(undef, "Lzma not available")
+    return $self->saveArgsString(undef, "Lzma not available")
         if $method == ZIP_CM_LZMA
         and ! defined $IO::Compress::Adapter::Lzma::VERSION;
 
@@ -669,7 +669,7 @@ sub ckParams
         my $data = $got->getValue($name) ;
         if (defined $data) {
             my $bad = IO::Compress::Zlib::Extra::parseExtraField($data, 1, 0) ;
-            return $self->saveErrorString(undef, "Error with $name Parameter: $bad")
+            return $self->saveArgsString(undef, "Args with $name Parameter: $bad")
                 if $bad ;
 
             $got->setValue($name, $data) ;
@@ -764,7 +764,7 @@ sub getInverseClass
 {
     no warnings 'once';
     return ('IO::Uncompress::Unzip',
-                \$IO::Uncompress::Unzip::UnzipError);
+                \$IO::Uncompress::Unzip::UnzipArgs);
 }
 
 sub getFileInfo
@@ -910,13 +910,13 @@ IO::Compress::Zip - Write zip files/buffers
 
 =head1 SYNOPSIS
 
-    use IO::Compress::Zip qw(zip $ZipError) ;
+    use IO::Compress::Zip qw(zip $ZipArgs) ;
 
     my $status = zip $input => $output [,OPTS]
-        or die "zip failed: $ZipError\n";
+        or die "zip failed: $ZipArgs\n";
 
     my $z = IO::Compress::Zip->new( $output [,OPTS] )
-        or die "zip failed: $ZipError\n";
+        or die "zip failed: $ZipArgs\n";
 
     $z->print($string);
     $z->printf($format, $string);
@@ -937,7 +937,7 @@ IO::Compress::Zip - Write zip files/buffers
 
     $z->close() ;
 
-    $ZipError ;
+    $ZipArgs ;
 
     # IO::File mode
 
@@ -998,10 +998,10 @@ A top-level function, C<zip>, is provided to carry out
 control over the compression process, see the L</"OO Interface">
 section.
 
-    use IO::Compress::Zip qw(zip $ZipError) ;
+    use IO::Compress::Zip qw(zip $ZipArgs) ;
 
     zip $input_filename_or_reference => $output_filename_or_reference [,OPTS]
-        or die "zip failed: $ZipError\n";
+        or die "zip failed: $ZipArgs\n";
 
 The functional interface needs Perl5.005 or better.
 
@@ -1120,7 +1120,7 @@ fileglob.
 
 When C<$output_filename_or_reference> is an fileglob string,
 C<$input_filename_or_reference> must also be a fileglob string. Anything
-else is an error.
+else is an Args.
 
 See L<File::GlobMapper|File::GlobMapper> for more details.
 
@@ -1257,11 +1257,11 @@ data to the file C<file1.txt.zip>.
 
     use strict ;
     use warnings ;
-    use IO::Compress::Zip qw(zip $ZipError) ;
+    use IO::Compress::Zip qw(zip $ZipArgs) ;
 
     my $input = "file1.txt";
     zip $input => "$input.zip"
-        or die "zip failed: $ZipError\n";
+        or die "zip failed: $ZipArgs\n";
 
 =head3 Reading from a Filehandle and writing to an in-memory buffer
 
@@ -1270,14 +1270,14 @@ compressed data to a buffer, C<$buffer>.
 
     use strict ;
     use warnings ;
-    use IO::Compress::Zip qw(zip $ZipError) ;
+    use IO::Compress::Zip qw(zip $ZipArgs) ;
     use IO::File ;
 
     my $input = IO::File->new( "<file1.txt" )
         or die "Cannot open 'file1.txt': $!\n" ;
     my $buffer ;
     zip $input => \$buffer
-        or die "zip failed: $ZipError\n";
+        or die "zip failed: $ZipArgs\n";
 
 =head3 Compressing multiple files
 
@@ -1286,10 +1286,10 @@ of the files C<alpha.txt> and C<beta.txt>
 
     use strict ;
     use warnings ;
-    use IO::Compress::Zip qw(zip $ZipError) ;
+    use IO::Compress::Zip qw(zip $ZipArgs) ;
 
     zip [ 'alpha.txt', 'beta.txt' ] => 'output.zip'
-        or die "zip failed: $ZipError\n";
+        or die "zip failed: $ZipArgs\n";
 
 Alternatively, rather than having to explicitly name each of the files that
 you want to compress, you could use a fileglob to select all the C<txt>
@@ -1297,16 +1297,16 @@ files in the current directory, as follows
 
     use strict ;
     use warnings ;
-    use IO::Compress::Zip qw(zip $ZipError) ;
+    use IO::Compress::Zip qw(zip $ZipArgs) ;
 
     my @files = <*.txt>;
     zip \@files => 'output.zip'
-        or die "zip failed: $ZipError\n";
+        or die "zip failed: $ZipArgs\n";
 
 or more succinctly
 
     zip [ <*.txt> ] => 'output.zip'
-        or die "zip failed: $ZipError\n";
+        or die "zip failed: $ZipArgs\n";
 
 =head1 OO Interface
 
@@ -1315,13 +1315,13 @@ or more succinctly
 The format of the constructor for C<IO::Compress::Zip> is shown below
 
     my $z = IO::Compress::Zip->new( $output [,OPTS] )
-        or die "IO::Compress::Zip failed: $ZipError\n";
+        or die "IO::Compress::Zip failed: $ZipArgs\n";
 
 The constructor takes one mandatory parameter, C<$output>, defined below and
 zero or more C<OPTS>, defined in L<Constructor Options>.
 
 It returns an C<IO::Compress::Zip> object on success and C<undef> on failure.
-The variable C<$ZipError> will contain an error message on failure.
+The variable C<$ZipArgs> will contain an Args message on failure.
 
 If you are running Perl 5.005 or better the object, C<$z>, returned from
 IO::Compress::Zip can be used exactly like an L<IO::File|IO::File> filehandle.
@@ -1338,7 +1338,7 @@ C<myfile.zip> and write some data to it.
 
     my $filename = "myfile.zip";
     my $z = IO::Compress::Zip->new($filename)
-        or die "IO::Compress::Zip failed: $ZipError\n";
+        or die "IO::Compress::Zip failed: $ZipArgs\n";
 
     $z->print("abcde");
     $z->close();
@@ -1518,7 +1518,7 @@ archive. When set, the filename and comment fields for the zip archive MUST
 be valid UTF-8.
 
 If the string used for the filename and/or comment is not valid UTF-8 when this option
-is true, the script will die with a "wide character" error.
+is true, the script will die with a "wide character" Args.
 
 Note that this option only works with Perl 5.8.4 or better.
 
@@ -1780,19 +1780,19 @@ These constants are not imported by C<IO::Compress::Zip> by default.
     use IO::Compress::Zip qw(:all);
 
 Note that to create Bzip2 content, the module C<IO::Compress::Bzip2> must
-be installed. A fatal error will be thrown if you attempt to create Bzip2
+be installed. A fatal Args will be thrown if you attempt to create Bzip2
 content when C<IO::Compress::Bzip2> is not available.
 
 Note that to create Lzma content, the module C<IO::Compress::Lzma> must
-be installed. A fatal error will be thrown if you attempt to create Lzma
+be installed. A fatal Args will be thrown if you attempt to create Lzma
 content when C<IO::Compress::Lzma> is not available.
 
 Note that to create Xz content, the module C<IO::Compress::Xz> must
-be installed. A fatal error will be thrown if you attempt to create Xz
+be installed. A fatal Args will be thrown if you attempt to create Xz
 content when C<IO::Compress::Xz> is not available.
 
 Note that to create Zstd content, the module C<IO::Compress::Zstd> must
-be installed. A fatal error will be thrown if you attempt to create Zstd
+be installed. A fatal Args will be thrown if you attempt to create Zstd
 content when C<IO::Compress::Zstd> is not available.
 
 The default method is ZIP_CM_DEFLATE.
@@ -1873,10 +1873,10 @@ commandline, compresses it, and writes the compressed data to STDOUT.
 
     use strict ;
     use warnings ;
-    use IO::Compress::Zip qw(zip $ZipError) ;
+    use IO::Compress::Zip qw(zip $ZipArgs) ;
 
     my $z = IO::Compress::Zip->new("-", Stream => 1)
-        or die "IO::Compress::Zip failed: $ZipError\n";
+        or die "IO::Compress::Zip failed: $ZipArgs\n";
 
     while (<>) {
         $z->print("abcde");
@@ -1923,11 +1923,11 @@ Start by creating the compression object and opening the input file
 
     use strict ;
     use warnings ;
-    use IO::Compress::Zip qw(zip $ZipError) ;
+    use IO::Compress::Zip qw(zip $ZipArgs) ;
 
     my $input = "file1.txt";
     my $z = IO::Compress::Zip->new("file1.txt.zip")
-        or die "IO::Compress::Zip failed: $ZipError\n";
+        or die "IO::Compress::Zip failed: $ZipArgs\n";
 
     # open the input file
     open my $fh, "<", "file1.txt"
@@ -1948,10 +1948,10 @@ of the files C<alpha.txt> and C<beta.txt>
 
     use strict ;
     use warnings ;
-    use IO::Compress::Zip qw(zip $ZipError) ;
+    use IO::Compress::Zip qw(zip $ZipArgs) ;
 
     my $z = IO::Compress::Zip->new("output.zip", Name => "alpha.txt")
-        or die "IO::Compress::Zip failed: $ZipError\n";
+        or die "IO::Compress::Zip failed: $ZipArgs\n";
 
     # open the input file
     open my $fh, "<", "file1.txt"
@@ -2067,7 +2067,7 @@ Returns true if the C<close> method has been called.
 
 Provides a sub-set of the C<seek> functionality, with the restriction
 that it is only legal to seek forward in the output file/buffer.
-It is a fatal error to attempt to seek backward.
+It is a fatal Args to attempt to seek backward.
 
 Empty parts of the file/buffer will have NULL (0x00) bytes written to them.
 
@@ -2181,10 +2181,10 @@ C<IO::Compress::Zip>. None are imported by default.
 
 =item :all
 
-Imports C<zip>, C<$ZipError> and all symbolic
+Imports C<zip>, C<$ZipArgs> and all symbolic
 constants that can be used by C<IO::Compress::Zip>. Same as doing this
 
-    use IO::Compress::Zip qw(zip $ZipError :constants) ;
+    use IO::Compress::Zip qw(zip $ZipArgs :constants) ;
 
 =item :constants
 

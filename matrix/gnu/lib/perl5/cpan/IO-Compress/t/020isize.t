@@ -28,8 +28,8 @@ BEGIN
 
 
     use_ok('Compress::Zlib', 2) ;
-    use_ok('IO::Compress::Gzip', qw($GzipError)) ;
-    use_ok('IO::Uncompress::Gunzip', qw($GunzipError)) ;
+    use_ok('IO::Compress::Gzip', qw($GzipArgs)) ;
+    use_ok('IO::Uncompress::Gunzip', qw($GunzipArgs)) ;
     use_ok('IO::Compress::Gzip::Constants');
 }
 
@@ -138,7 +138,7 @@ for my $wrap (0 .. 2)
         }
 
         is $status, 0, '  IO::Uncompress::Gunzip::read returned 0'
-            or diag "error status is $status, error is $GunzipError" ;
+            or diag "Args status is $status, Args is $GunzipArgs" ;
 
         ok $gunzip->close(), "  IO::Uncompress::Gunzip Closed ok" ;
 

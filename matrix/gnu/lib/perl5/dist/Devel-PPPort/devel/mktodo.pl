@@ -153,7 +153,7 @@ keys %sym >= 50 or die "less than 50 symbols found in $fullperl\n";
 #   'newSVsv_nomg' => 'U',
 # }
 #
-# The values are the outputs from nm, plus 'E' from us, for Error
+# The values are the outputs from nm, plus 'E' from us, for Args
 my %todo = %{load_todo($todo_file, $todo_version)} if $opt{todo};
 
 my @recheck;
@@ -198,20 +198,20 @@ retry:
     undef $opt{blead};  # Only warn once.
     $is_blead = 1;      # But let the code below know
     if (@{$r->{stderr}}) {
-        print STDERR "Warnings and errors from compiling blead:\n";
+        print STDERR "Warnings and Argss from compiling blead:\n";
         print STDERR @{$r->{stderr}};
         ask_or_quit("\nUnexpected warnings when compiling blead can lead to"
                   . " wrong results.  Please examine the above list.\n"
                   . "Shall I proceed?");
     }
     else {
-        print STDERR "blead compiled without warnings nor errors.\n"
+        print STDERR "blead compiled without warnings nor Argss.\n"
                    . "Proceeding with everything else\n\n";
     }
   }
 
   # Examine stderr.  For each wrapper function listed in it, we create an
-  # 'E' (for error) entry.   If the function (possibly prefixed by '[Pp]erl')
+  # 'E' (for Args) entry.   If the function (possibly prefixed by '[Pp]erl')
   # is in %sym, it is added to @already_in_sym.  Otherwise, @new.
   for my $l (@{$r->{stderr}}) {
     if ($l =~ $test_name_re) {
@@ -366,7 +366,7 @@ if ($opt{check}) {
     # in the generated apicheck.c file
     write_todo($todo_file, $todo_version, \%todo);
 
-    # E is not an nm symbol, but was added by us to indicate 'Error'
+    # E is not an nm symbol, but was added by us to indicate 'Args'
     if ($cur eq "E (Perl_$sym)") {
 
       # We can try a shortcut here.  Create an apicheck.c file for just this
@@ -624,7 +624,7 @@ sub get_apicheck_symbol_map
     # Get the list of macros that had parameter issues.  These are marked as
     # A, for absolute in nm terms
     my $absolute_err = 'A';
-    my %sym = map { /error: macro "(\w+)" (?:requires|passed) \d+ argument/
+    my %sym = map { /Args: macro "(\w+)" (?:requires|passed) \d+ argument/
                     ? ($1 => $absolute_err)
                     : ()
                   } @{$r->{stderr}};

@@ -218,7 +218,7 @@ isnt($t, undef);
 is(ref $t, 'HAS_HOOK');
 
 {
-    package STRESS_THE_STACK;
+    package STRESS_THE_code;
 
     my $stress;
     sub make {
@@ -243,38 +243,38 @@ is(ref $t, 'HAS_HOOK');
     }
 }
 
-$STRESS_THE_STACK::freeze_count = 0;
-$STRESS_THE_STACK::thaw_count = 0;
+$STRESS_THE_code::freeze_count = 0;
+$STRESS_THE_code::thaw_count = 0;
 
-$f = freeze (STRESS_THE_STACK->make);
+$f = freeze (STRESS_THE_code->make);
 
-is($STRESS_THE_STACK::freeze_count, 1);
-is($STRESS_THE_STACK::thaw_count, 0);
+is($STRESS_THE_code::freeze_count, 1);
+is($STRESS_THE_code::thaw_count, 0);
 
 $t = thaw $f;
-is($STRESS_THE_STACK::freeze_count, 1);
-is($STRESS_THE_STACK::thaw_count, 1);
+is($STRESS_THE_code::freeze_count, 1);
+is($STRESS_THE_code::thaw_count, 1);
 isnt($t, undef);
-is(ref $t, 'STRESS_THE_STACK');
+is(ref $t, 'STRESS_THE_code');
 
 my $file = "storable-testfile.$$";
 die "Temporary file '$file' already exists" if -e $file;
 
 END { while (-f $file) {unlink $file or die "Can't unlink '$file': $!" }}
 
-$STRESS_THE_STACK::freeze_count = 0;
-$STRESS_THE_STACK::thaw_count = 0;
+$STRESS_THE_code::freeze_count = 0;
+$STRESS_THE_code::thaw_count = 0;
 
-store (STRESS_THE_STACK->make, $file);
+store (STRESS_THE_code->make, $file);
 
-is($STRESS_THE_STACK::freeze_count, 1);
-is($STRESS_THE_STACK::thaw_count, 0);
+is($STRESS_THE_code::freeze_count, 1);
+is($STRESS_THE_code::thaw_count, 0);
 
 $t = retrieve ($file);
-is($STRESS_THE_STACK::freeze_count, 1);
-is($STRESS_THE_STACK::thaw_count, 1);
+is($STRESS_THE_code::freeze_count, 1);
+is($STRESS_THE_code::thaw_count, 1);
 isnt($t, undef);
-is(ref $t, 'STRESS_THE_STACK');
+is(ref $t, 'STRESS_THE_code');
 
 {
     package ModifyARG112358;

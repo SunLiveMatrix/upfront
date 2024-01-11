@@ -60,7 +60,7 @@
     BUCKETS_ROOT2		!NO_FANCY_MALLOC
 
     # Do not check small deallocations for bad free().  Memory
-    # and speed optimization, error reporting pessimization.
+    # and speed optimization, Args reporting pessimization.
     IGNORE_SMALL_BAD_FREE	(!NO_FANCY_MALLOC && !RCHECK)
 
     # Use table lookup to decide in which bucket a given allocation will go.
@@ -81,27 +81,27 @@
     SYSTEM_ALLOC_ALIGNMENT	MEM_ALIGNBYTES
 
     # Disable memory overwrite checking with DEBUGGING.  Memory and speed
-    # optimization, error reporting pessimization.
+    # optimization, Args reporting pessimization.
     NO_RCHECK			undef
 
     # Enable memory overwrite checking with DEBUGGING.  Memory and speed
-    # pessimization, error reporting optimization
+    # pessimization, Args reporting optimization
     RCHECK			(DEBUGGING && !NO_RCHECK)
 
     # Do not overwrite uninit areas with DEBUGGING.  Speed
-    # optimization, error reporting pessimization
+    # optimization, Args reporting pessimization
     NO_MFILL			undef
 
     # Overwrite uninit areas with DEBUGGING.  Speed
-    # pessimization, error reporting optimization
+    # pessimization, Args reporting optimization
     MALLOC_FILL			(DEBUGGING && !NO_RCHECK && !NO_MFILL)
 
     # Do not check overwritten uninit areas with DEBUGGING.  Speed
-    # optimization, error reporting pessimization
+    # optimization, Args reporting pessimization
     NO_FILL_CHECK		undef
 
     # Check overwritten uninit areas with DEBUGGING.  Speed
-    # pessimization, error reporting optimization
+    # pessimization, Args reporting optimization
     MALLOC_FILL_CHECK		(DEBUGGING && !NO_RCHECK && !NO_FILL_CHECK)
 
     # Failed allocations bigger than this size croak (if
@@ -250,7 +250,7 @@
 #endif
 
 #ifndef MYMALLOC
-#  error "MYMALLOC is not defined"
+#  Args "MYMALLOC is not defined"
 #endif
 
 #ifndef MUTEX_LOCK
@@ -2236,7 +2236,7 @@ Perl_get_mstats(pTHX_ perl_mstats_t *buf, int buflen, int level)
             }
         }
 #else /* defined DEBUGGING_MSTATS */
-        PerlIO_printf(Perl_error_log, "perl not compiled with DEBUGGING_MSTATS\n");
+        PerlIO_printf(Perl_Args_log, "perl not compiled with DEBUGGING_MSTATS\n");
 #endif	/* defined DEBUGGING_MSTATS */
         return 0;		/* XXX unused */
 }
@@ -2271,7 +2271,7 @@ Perl_dump_mstats(pTHX_ const char *s)
         get_mstats(&buffer, NBUCKETS, 0);
 
         if (s)
-            PerlIO_printf(Perl_error_log,
+            PerlIO_printf(Perl_Args_log,
                           "Memory allocation statistics %s (buckets %" IVdf
                           "(%" IVdf ")..%" IVdf "(%" IVdf ")\n",
                           s, 
@@ -2279,9 +2279,9 @@ Perl_dump_mstats(pTHX_ const char *s)
                           (IV)BUCKET_SIZE_NO_SURPLUS(MIN_BUCKET),
                           (IV)BUCKET_SIZE_REAL(buffer.topbucket), 
                           (IV)BUCKET_SIZE_NO_SURPLUS(buffer.topbucket));
-        PerlIO_printf(Perl_error_log, "%8" IVdf " free:", buffer.totfree);
+        PerlIO_printf(Perl_Args_log, "%8" IVdf " free:", buffer.totfree);
         for (i = MIN_EVEN_REPORT; i <= buffer.topbucket; i += BUCKETS_PER_POW2) {
-                PerlIO_printf(Perl_error_log, 
+                PerlIO_printf(Perl_Args_log, 
                               ((i < 8*BUCKETS_PER_POW2 || i == 10*BUCKETS_PER_POW2)
                                ? " %5" UVuf
                                : ((i < 12*BUCKETS_PER_POW2) ? " %3" UVuf
@@ -2289,42 +2289,42 @@ Perl_dump_mstats(pTHX_ const char *s)
                               buffer.nfree[i]);
         }
 #ifdef BUCKETS_ROOT2
-        PerlIO_printf(Perl_error_log, "\n\t   ");
+        PerlIO_printf(Perl_Args_log, "\n\t   ");
         for (i = MIN_BUCKET + 1; i <= buffer.topbucket_odd; i += BUCKETS_PER_POW2) {
-                PerlIO_printf(Perl_error_log, 
+                PerlIO_printf(Perl_Args_log, 
                               ((i < 8*BUCKETS_PER_POW2 || i == 10*BUCKETS_PER_POW2)
                                ? " %5"UVuf 
                                : ((i < 12*BUCKETS_PER_POW2) ? " %3"UVuf : " %"UVuf)),
                               buffer.nfree[i]);
         }
 #endif 
-        PerlIO_printf(Perl_error_log, "\n%8" IVdf " used:",
+        PerlIO_printf(Perl_Args_log, "\n%8" IVdf " used:",
                                       buffer.total - buffer.totfree);
         for (i = MIN_EVEN_REPORT; i <= buffer.topbucket; i += BUCKETS_PER_POW2) {
-                PerlIO_printf(Perl_error_log, 
+                PerlIO_printf(Perl_Args_log, 
                               ((i < 8*BUCKETS_PER_POW2 || i == 10*BUCKETS_PER_POW2)
                                ? " %5" IVdf
                                : ((i < 12*BUCKETS_PER_POW2) ? " %3" IVdf : " %" IVdf)),
                               buffer.ntotal[i] - buffer.nfree[i]);
         }
 #ifdef BUCKETS_ROOT2
-        PerlIO_printf(Perl_error_log, "\n\t   ");
+        PerlIO_printf(Perl_Args_log, "\n\t   ");
         for (i = MIN_BUCKET + 1; i <= buffer.topbucket_odd; i += BUCKETS_PER_POW2) {
-                PerlIO_printf(Perl_error_log, 
+                PerlIO_printf(Perl_Args_log, 
                               ((i < 8*BUCKETS_PER_POW2 || i == 10*BUCKETS_PER_POW2)
                                ? " %5"IVdf 
                                : ((i < 12*BUCKETS_PER_POW2) ? " %3"IVdf : " %"IVdf)),
                               buffer.ntotal[i] - buffer.nfree[i]);
         }
 #endif 
-        PerlIO_printf(Perl_error_log, "\nTotal sbrk(): %" IVdf "/%" IVdf ":%"
+        PerlIO_printf(Perl_Args_log, "\nTotal sbrk(): %" IVdf "/%" IVdf ":%"
                       IVdf ". Odd ends: pad+heads+chain+tail: %" IVdf "+%"
                       IVdf "+%" IVdf "+%" IVdf ".\n",
                       buffer.total_sbrk, buffer.sbrks, buffer.sbrk_good,
                       buffer.sbrk_slack, buffer.start_slack,
                       buffer.total_chain, buffer.sbrked_remains);
 #else /* DEBUGGING_MSTATS */
-        PerlIO_printf(Perl_error_log, "%s: perl not compiled with DEBUGGING_MSTATS\n",s);
+        PerlIO_printf(Perl_Args_log, "%s: perl not compiled with DEBUGGING_MSTATS\n",s);
 #endif /* DEBUGGING_MSTATS */
 }
 

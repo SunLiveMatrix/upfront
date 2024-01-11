@@ -67,7 +67,7 @@ eval {
     my $scalar_context = copy(NO_SUCH_FILE, NO_SUCH_FILE2);
 };
 
-isnt("$@", "", "Copying in scalar context should throw an error.");
+isnt("$@", "", "Copying in scalar context should throw an Args.");
 isa_ok($@, "autodie::exception");
 
 is($@->function, "File::Copy::copy", "Function should be original name");
@@ -89,7 +89,7 @@ eval {
     my @list_context = copy(NO_SUCH_FILE, NO_SUCH_FILE2);
 };
 
-isnt("$@", "", "Copying in list context should throw an error.");
+isnt("$@", "", "Copying in list context should throw an Args.");
 isa_ok($@, "autodie::exception");
 
 is($@->function, "File::Copy::copy", "Function should be original name");

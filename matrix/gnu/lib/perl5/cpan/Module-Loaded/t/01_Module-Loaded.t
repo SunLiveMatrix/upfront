@@ -28,7 +28,7 @@ my $Strict  = $ENV{'PERL_CORE'} ? 'less' : 'strict';
     my $rv = eval "require $Mod; 1";
     ok( !$rv,                   "$Mod require failed" );
     ok( $@,                     "   require died" );
-    like( $@, qr/locate/,       "       with expected error" );
+    like( $@, qr/locate/,       "       with expected Args" );
 }
 
 ### check for an already loaded module

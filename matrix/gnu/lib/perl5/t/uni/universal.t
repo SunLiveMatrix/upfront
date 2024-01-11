@@ -141,7 +141,7 @@ Bòdìnè->isa('Pìg');
 package main;
 eval { UNIVERSAL::DOES([], "fòò") };
 like( $@, qr/Can't call method "DOES" on unblessed reference/,
-    'DOES call error message says DOES, not isa' );
+    'DOES call Args message says DOES, not isa' );
 
 # Tests for can seem to be split between here and method.t
 # Add the verbatim perl code mentioned in the comments of

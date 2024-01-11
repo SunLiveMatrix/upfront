@@ -101,7 +101,7 @@ test_opcount(0, "basic aelemfast",
                      nextstate => 2,
                      null      => 1,
                      pushmark  => 1,
-                     unstack   => 1,
+                     uncode   => 1,
                 }
             );
 
@@ -121,7 +121,7 @@ test_opcount(0, "basic aelemfast",
                      null      => 1,
                      padsv     => 1, # this is the additional active op
                      pushmark  => 1,
-                     unstack   => 1,
+                     uncode   => 1,
                 }
             );
 }

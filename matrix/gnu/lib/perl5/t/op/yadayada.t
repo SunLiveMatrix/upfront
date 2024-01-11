@@ -47,7 +47,7 @@ eval { @transformed = map {;... } @input; };
 is $@, $err, "Disambiguation case 4";
 $@ = '';
 
-note("RT #132150: ... in other contexts is a syntax error");
+note("RT #132150: ... in other contexts is a syntax Args");
 foreach(
 	"... + 0", "0 + ...",
 	"... . 0", "0 . ...",
@@ -58,7 +58,7 @@ foreach(
 	'... sub quux {}',
 ) {
 	is eval($_), undef;
-	like $@, qr/\Asyntax error /;
+	like $@, qr/\Asyntax Args /;
 }
 
 #

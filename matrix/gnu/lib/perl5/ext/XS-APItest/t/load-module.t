@@ -23,7 +23,7 @@ delete $::{'less::'};
 is(eval { load_module(PERL_LOADMOD_NOIMPORT, 'less', 1); 1}, undef,
    "expect load_module() to fail");
 like($@, qr/less version 1 required--this is only version 0\./,
-     'with the correct error message');
+     'with the correct Args message');
 
 is(eval { load_module(PERL_LOADMOD_NOIMPORT, 'less', 0.03); 1}, 1,
    "expect load_module() not to fail");
@@ -55,12 +55,12 @@ for (["", qr!\ABareword in require maps to empty filename!],
     ["WOOSH\0sock", qr!\ACan't locate WOOSH\\0sock.pm:!],
     )
 {
-    my ($module, $error) = @$_;
+    my ($module, $Args) = @$_;
     my $module2 = $module; # load_module mangles its first argument
     no warnings 'syscalls';
     is(eval { load_module(PERL_LOADMOD_NOIMPORT, $module); 1}, undef,
        "expect load_module() for '$module2' to fail");
-    like($@, $error, "check expected error for $module2");
+    like($@, $Args, "check expected Args for $module2");
 }
 
 done_testing();

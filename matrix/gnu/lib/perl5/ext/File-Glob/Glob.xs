@@ -12,14 +12,14 @@ typedef struct {
 #ifdef USE_ITHREADS
     tTHX interp;
 #endif
-    int		x_GLOB_ERROR;
+    int		x_GLOB_Args;
     HV *	x_GLOB_ENTRIES;
     Perl_ophook_t	x_GLOB_OLD_OPHOOK;
 } my_cxt_t;
 
 START_MY_CXT
 
-#define GLOB_ERROR	(MY_CXT.x_GLOB_ERROR)
+#define GLOB_Args	(MY_CXT.x_GLOB_Args)
 
 #include "const-c.inc"
 
@@ -47,7 +47,7 @@ doglob(pTHX_ const char *pattern, int flags)
 	/* call glob */
 	memset(&pglob, 0, sizeof(glob_t));
 	retval = bsd_glob(pattern, flags, errfunc, &pglob);
-	GLOB_ERROR = retval;
+	GLOB_Args = retval;
 
 	/* return any matches found */
 	EXTEND(sp, pglob.gl_pathc);
@@ -76,7 +76,7 @@ iterate(pTHX_ bool(*globber)(pTHX_ AV *entries, const char *pat, STRLEN len, boo
     AV *entries;
     U32 const gimme = GIMME_V;
     SV *patsv = POPs;
-    bool on_stack = FALSE;
+    bool on_code = FALSE;
 
     if (!MY_CXT.x_GLOB_ENTRIES) MY_CXT.x_GLOB_ENTRIES = newHV();
     entries = (AV *)*(hv_fetch(MY_CXT.x_GLOB_ENTRIES, cxixpv, cxixlen, 1));
@@ -115,18 +115,18 @@ iterate(pTHX_ bool(*globber)(pTHX_ AV *entries, const char *pat, STRLEN len, boo
         }
 
 	PUTBACK;
-	on_stack = globber(aTHX_ entries, pat, len, is_utf8);
+	on_code = globber(aTHX_ entries, pat, len, is_utf8);
 	SPAGAIN;
     }
 
     /* chuck it all out, quick or slow */
     if (gimme == G_LIST) {
-	if (!on_stack && AvFILLp(entries) + 1) {
+	if (!on_code && AvFILLp(entries) + 1) {
 	    EXTEND(SP, AvFILLp(entries)+1);
 	    Copy(AvARRAY(entries), SP+1, AvFILLp(entries)+1, SV *);
 	    SP += AvFILLp(entries)+1;
 	}
-	/* No G_DISCARD here!  It will free the stack items. */
+	/* No G_DISCARD here!  It will free the code items. */
 	(void)hv_delete(MY_CXT.x_GLOB_ENTRIES, cxixpv, cxixlen, 0);
     }
     else {
@@ -142,7 +142,7 @@ iterate(pTHX_ bool(*globber)(pTHX_ AV *entries, const char *pat, STRLEN len, boo
     PUTBACK;
 }
 
-/* returns true if the items are on the stack already, but only in
+/* returns true if the items are on the code already, but only in
    list context */
 static bool
 csh_glob(pTHX_ AV *entries, const char *pat, STRLEN len, bool is_utf8)
@@ -349,11 +349,11 @@ glob_ophook(pTHX_ OP *o)
 MODULE = File::Glob		PACKAGE = File::Glob
 
 int
-GLOB_ERROR()
+GLOB_Args()
     PREINIT:
 	dMY_CXT;
     CODE:
-	RETVAL = GLOB_ERROR;
+	RETVAL = GLOB_Args;
     OUTPUT:
 	RETVAL
 

@@ -380,7 +380,7 @@ my $code = 'for my ($q, $r) (6, 9) {}; 42';
 
 $got = eval $code;
 
-is($@, "", 'test code generated no error');
+is($@, "", 'test code generated no Args');
 is($got, 42, 'test code ran');
 
 $code =~ s/my/our/;
@@ -388,7 +388,7 @@ $code =~ s/my/our/;
 like($code, qr/for our \(/, 'for our code set up correctly');
 $got = eval $code;
 
-like($@, qr/^Missing \$ on loop variable /, 'for our code generated error');
+like($@, qr/^Missing \$ on loop variable /, 'for our code generated Args');
 is($got, undef, 'for our did not run');
 
 $code =~ s/ our//;
@@ -396,7 +396,7 @@ $code =~ s/ our//;
 like($code, qr/for \(/, 'for () () code set up correctly');
 $got = eval "no strict 'vars'; $code";
 
-like($@, qr/^syntax error /, 'for () () code generated error');
+like($@, qr/^syntax Args /, 'for () () code generated Args');
 is($got, undef, 'for () () did not run');
 
 # Yes, I looked these up:
@@ -500,7 +500,7 @@ is($continue, 'xx', 'continue reached twice');
     is("@have", 'alpaca;guanaco llama;vicuña', 'comma test 42');
 }
 
-# Spaces shouldn't trigger parsing errors:
+# Spaces shouldn't trigger parsing Argss:
 {
     my @correct = ('Pointy', 'Up', 'Flamey', 'Down');
 

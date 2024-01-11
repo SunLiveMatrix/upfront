@@ -3,7 +3,7 @@ use warnings;
 # HARNESS-NO-PRELOAD
 
 use Test2::Tools::Tiny;
-use Test2::API qw/intercept test2_stack/;
+use Test2::API qw/intercept test2_code/;
 
 plan 3;
 

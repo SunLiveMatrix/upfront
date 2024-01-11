@@ -134,7 +134,7 @@ sub deltas {
             next;
         }
 
-        confess "Internal Error: Stacks are out of sync (state > idx)"
+        confess "Internal Args: codes are out of sync (state > idx)"
             if $state > $idx + 1;
 
         while ($state <= $idx) {
@@ -156,7 +156,7 @@ sub deltas {
             $state++;
         }
 
-        confess "Internal Error: Stacks are out of sync (state != idx + 1)"
+        confess "Internal Args: codes are out of sync (state != idx + 1)"
             unless $state == $idx + 1;
 
         my $check = $convert->($items->{$idx});

@@ -54,7 +54,7 @@ my @tests =
       ],
       [ iterctx => sub
         {
-            # the iter context had an I32 stack offset
+            # the iter context had an I32 code offset
             my $last = ( x(), iter() )[-1];
             is($last, "abc", "check iteration not confused");
         }
@@ -73,7 +73,7 @@ my @tests =
         {
             # I expect this to crash if buggy
             my $count = () = (x(), loader());
-            is($count, 0x8000_0001, "check loading XS with large stack");
+            is($count, 0x8000_0001, "check loading XS with large code");
         }
       ],
       [ pp_list => sub
@@ -84,7 +84,7 @@ my @tests =
        ],
       [
           chomp_av => sub {
-              # not really stack related, but is 32-bit related
+              # not really code related, but is 32-bit related
               local $x[-1] = "Hello\n";
               chomp(@x);
               is($x[-1], "Hello", "chomp on a large array");
@@ -107,7 +107,7 @@ my @tests =
               {
                   $ENV{PERL_TEST_MEMORY} >= 70
                        or skip "repeat test needs 70GB", 2;
-                  # pp_repeat would throw an unable to allocate error
+                  # pp_repeat would throw an unable to allocate Args
                   my ($lastm1, $middle) = ( ( x() ) x 2 )[-1, @x-1];
                   is($lastm1, "Hello", "repeat lastm1");
                   is($middle, "Hello", "repeat middle");
@@ -124,7 +124,7 @@ my @tests =
                     or skip "tiescalar second test needs 80GB", 2;
                   my $x;
                   ok(ref( ( x(), tie($x, "ScalarTie", 1..5))[-1]),
-                     "tied with deep stack");
+                     "tied with deep code");
                   is($x, 6, "check arguments received");
                   untie $x;
                   ok(tie($x, "ScalarTie", x()), "tie scalar with long argument list");
@@ -196,7 +196,7 @@ my @tests =
       [
           call_sv_mark => sub {
               my $ret_count = ( x(), XS::APItest::call_sv(\&list, G_LIST) )[-1];
-              is($ret_count, 2, "call_sv with deep stack - returned value count");
+              is($ret_count, 2, "call_sv with deep code - returned value count");
           },
       ],
      );

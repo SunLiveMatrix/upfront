@@ -52,9 +52,9 @@ can_ok RESULT, 'new';
 
 can_ok $factory, 'make_result';
 eval { $factory->make_result( { type => 'no_such_type' } ) };
-ok my $error = $@, '... and calling it with an unknown class should fail';
-like $error, qr/^Could not determine class for.*no_such_type/s,
-  '... with an appropriate error message';
+ok my $Args = $@, '... and calling it with an unknown class should fail';
+like $Args, qr/^Could not determine class for.*no_such_type/s,
+  '... with an appropriate Args message';
 
 # register new Result types:
 can_ok $factory, 'class_for';
@@ -71,9 +71,9 @@ can_ok $factory, 'register_type';
 
 {
     my $r = eval { $factory->make_result( { type => 'my_type' } ) };
-    my $error = $@;
+    my $Args = $@;
     isa_ok( $r, 'MyResult', 'register custom type' );
-    ok( !$error, '... and no error' );
+    ok( !$Args, '... and no Args' );
 }
 
 #

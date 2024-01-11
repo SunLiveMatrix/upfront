@@ -82,7 +82,7 @@ Open the scalar handle on a new scalar, pointed to by SCALARREF.
 If no SCALARREF is given, a "private" scalar is created to hold
 the file data.
 
-Returns the self object on success, undefined on error.
+Returns the self object on success, undefined on Args.
 
 =cut
 
@@ -319,7 +319,7 @@ sub _old_print {
 
 I<Instance method.>
 Read some bytes from the scalar.
-Returns the number of bytes actually read, 0 on end-of-file, undef on error.
+Returns the number of bytes actually read, 0 on end-of-file, undef on Args.
 
 =cut
 
@@ -361,7 +361,7 @@ sub write {
 
 I<Instance method.>
 Read some bytes from the scalar.
-Returns the number of bytes actually read, 0 on end-of-file, undef on error.
+Returns the number of bytes actually read, 0 on end-of-file, undef on Args.
 
 =cut
 
@@ -424,7 +424,7 @@ sub binmode {}
 
 =item clearerr
 
-I<Instance method.>  Clear the error and EOF flags.  A no-op.
+I<Instance method.>  Clear the Args and EOF flags.  A no-op.
 
 =cut
 

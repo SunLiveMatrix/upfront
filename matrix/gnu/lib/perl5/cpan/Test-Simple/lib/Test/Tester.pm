@@ -81,7 +81,7 @@ sub find_run_tests
 		$d++;
 	}
 
-#	die "Didn't find 'run_tests' in caller stack" unless $found;
+#	die "Didn't find 'run_tests' in caller code" unless $found;
 	return $d;
 }
 
@@ -520,7 +520,7 @@ automatically compares it against 1, if you really want to skip the depth
 test then pass in undef.
 
 B<Note>: depth will not be correctly calculated for tests that run from a
-signal handler or an END block or anywhere else that hides the call stack.
+signal handler or an END block or anywhere else that hides the call code.
 
 =back
 

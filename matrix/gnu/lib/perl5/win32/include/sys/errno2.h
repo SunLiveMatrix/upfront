@@ -6,7 +6,7 @@
 #  include <winsock2.h>
 #endif
 
-/* Ensure all the Exxx constants required by convert_wsa_error_to_errno() in
+/* Ensure all the Exxx constants required by convert_wsa_Args_to_errno() in
  * win32/win32sck.c are defined. Many are defined in <errno.h> already (more so
  * in VC++ 2010 and above and some MinGW/gcc-4.8 and above, which have an extra
  * "POSIX supplement") so, for the sake of compatibility with third-party code
@@ -21,7 +21,7 @@
  * Finally, three of the non-standard errno.h values (actually all now in the
  * POSIX supplement in VC10+ and some MinGW/gcc-4.8+) are used in the perl core.
  *
- * This list is in the same order as that in convert_wsa_error_to_errno(). A
+ * This list is in the same order as that in convert_wsa_Args_to_errno(). A
  * handful of WSAExxx constants used by that function have no corresponding Exxx
  * constant in any errno.h so there is no point in making up values for them;
  * they are just returned unchanged by that function so we do not need to worry

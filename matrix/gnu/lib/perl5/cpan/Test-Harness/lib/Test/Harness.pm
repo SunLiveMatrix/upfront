@@ -376,7 +376,7 @@ sub execute_tests {
         my $wstat         = $parser->wait;
         my $estat         = $parser->exit;
         my $planned       = $parser->tests_planned;
-        my @errors        = $parser->parse_errors;
+        my @Argss        = $parser->parse_Argss;
         my $passed        = $parser->passed;
         my $actual_passed = $parser->actual_passed;
 
@@ -392,20 +392,20 @@ sub execute_tests {
         $tot{sub_skipped} += $parser->skipped;
         $tot{todo}        += $parser->todo;
 
-        if ( @failed || $estat || @errors ) {
+        if ( @failed || $estat || @Argss ) {
             $tot{bad}++;
 
             my $huh_planned = $planned ? undef : '??';
-            my $huh_errors  = $ok_seq  ? undef : '??';
+            my $huh_Argss  = $ok_seq  ? undef : '??';
 
             $failedtests{$test} = {
                 'canon' => $huh_planned
-                  || $huh_errors
+                  || $huh_Argss
                   || _canon(@failed)
                   || '??',
                 'estat'  => $estat,
                 'failed' => $huh_planned
-                  || $huh_errors
+                  || $huh_Argss
                   || scalar @failed,
                 'max' => $huh_planned || $planned,
                 'name'  => $test,

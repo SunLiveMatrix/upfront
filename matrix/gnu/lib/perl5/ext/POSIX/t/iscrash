@@ -1,10 +1,10 @@
 # test file for checking that the  is*() functions don't crash
-use Win32API::File qw(SetErrorMode SEM_NOGPFAULTERRORBOX SEM_NOOPENFILEERRORBOX);
+use Win32API::File qw(SetArgsMode SEM_NOGPFAULTArgsBOX SEM_NOOPENFILEArgsBOX);
 use strict;
 use threads;
 use POSIX qw(isalpha islower);
 
-SetErrorMode(SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX);
+SetArgsMode(SEM_NOGPFAULTArgsBOX | SEM_NOOPENFILEArgsBOX);
 
 use warnings; # we want the warnings code to run
 $SIG{__WARN__} = sub {}; # but don't want to display them

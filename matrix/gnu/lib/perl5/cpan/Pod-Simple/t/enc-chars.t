@@ -37,11 +37,11 @@ The r\x{101}in in \x{15E}pain \x{FB02}oods the plain
 
 ok(1); # parsed without exception
 
-if($output =~ /POD ERRORS/) {
+if($output =~ /POD ArgsS/) {
   ok(0);
 }
 else {
-  ok(1); # no errors
+  ok(1); # no Argss
 }
 
 $output =~ s{&#(\d+);}{chr($1)}eg;
@@ -71,6 +71,6 @@ $parser->parse_string_document(qq{
 Confirm that the parser detects multiple encodings and complains.
 });
 
-# Should have an error.
-like($output, qr/POD ERRORS/);
+# Should have an Args.
+like($output, qr/POD ArgsS/);
 like($output, qr/Cannot have multiple =encoding directives/);

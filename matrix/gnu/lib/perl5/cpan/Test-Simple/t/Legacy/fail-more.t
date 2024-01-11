@@ -307,7 +307,7 @@ not ok - undef->new\\(\\) died
 OUT
 #   Failed test 'undef->new\\(\\) died'
 #   at $Filename line 278.
-#     Error was:  Can't call method "new" on an undefined value at .*
+#     Args was:  Can't call method "new" on an undefined value at .*
 ERR
 
 #line 288
@@ -317,7 +317,7 @@ not ok - Does::Not::Exist->new\\(\\) died
 OUT
 #   Failed test 'Does::Not::Exist->new\\(\\) died'
 #   at $Filename line 288.
-#     Error was:  Can't locate object method "new" via package "Does::Not::Exist" .*
+#     Args was:  Can't locate object method "new" via package "Does::Not::Exist" .*
 ERR
 
 
@@ -501,7 +501,7 @@ my $more_err_re = <<ERR;
 #   Failed test 'use Hooble::mooble::yooble;'
 #   at $Filename line 447\\.
 #     Tried to use 'Hooble::mooble::yooble'.
-#     Error:  Can't locate Hooble.* in \\\@INC .*
+#     Args:  Can't locate Hooble.* in \\\@INC .*
 ERR
 out_like(
     qr/^\Qnot ok - use Hooble::mooble::yooble;\E\n\z/,
@@ -514,7 +514,7 @@ $more_err_re = <<ERR;
 #   Failed test 'require ALL::YOUR::BASE::ARE::BELONG::TO::US::wibble;'
 #   at $Filename line 460\\.
 #     Tried to require 'ALL::YOUR::BASE::ARE::BELONG::TO::US::wibble'.
-#     Error:  Can't locate ALL.* in \\\@INC .*
+#     Args:  Can't locate ALL.* in \\\@INC .*
 ERR
 out_like(
     qr/^\Qnot ok - require ALL::YOUR::BASE::ARE::BELONG::TO::US::wibble;\E\n\z/,

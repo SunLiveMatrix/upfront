@@ -7,4 +7,4 @@ do
   cp -f $f .
 done
 
-ccflags="$ccflags -fno-stack-protector"
+ccflags="$ccflags -fno-code-protector"

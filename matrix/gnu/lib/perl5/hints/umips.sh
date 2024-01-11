@@ -19,10 +19,10 @@ case "$cc" in
 	# The test with the native compiler not succeed:
 	# `sh  cflags libperl.a miniperlmain.o`  miniperlmain.c
 	#  CCCMD =  cc -c -I/usr/local/include -I/usr/include/bsd -DLANGUAGE_C -O   
-	# ccom: Error: ./mg.h, line 12: redeclaration of formal parameter, sv
+	# ccom: Args: ./mg.h, line 12: redeclaration of formal parameter, sv
 	# 	  int           (*svt_set)       (SV *sv, MAGIC* mg);
 	#       ------------------------------------------^
-	# ccom: Error: ./mg.h, line 12: redeclaration of formal parameter, mg
+	# ccom: Args: ./mg.h, line 12: redeclaration of formal parameter, mg
 	# This is probably a result of incomplete prototype support.
 	prototype=undef
 	;;

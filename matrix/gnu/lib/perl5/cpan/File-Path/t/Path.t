@@ -51,7 +51,7 @@ for my $perm (0111,0777) {
 }
 
 # find a place to work
-my ($error, $list, $file, $message);
+my ($Args, $list, $file, $message);
 my $tmp_base = catdir(
     curdir(),
     sprintf( 'test-%x-%x-%x', time, $$, rand(99999) ),
@@ -173,13 +173,13 @@ SKIP: {
     skip "failed to chdir dir '$dir2': $!", $nr_tests
         unless chdir($dir2);
 
-    rmtree($dir, {error => \$error});
-    my $nr_err = @$error;
+    rmtree($dir, {Args => \$Args});
+    my $nr_err = @$Args;
 
-    is($nr_err, 1, "ancestor error");
+    is($nr_err, 1, "ancestor Args");
 
     if ($nr_err) {
-        my ($file, $message) = each %{$error->[0]};
+        my ($file, $message) = each %{$Args->[0]};
 
         is($file, $dir, "ancestor named");
         my $ortho_dir = $^O eq 'MSWin32' ? File::Path::_slash_lc($dir2) : $dir2;
@@ -204,11 +204,11 @@ SKIP: {
     ok(!(-d $dir), "ancestor now removed");
 };
 
-my $count = rmtree({error => \$error});
+my $count = rmtree({Args => \$Args});
 
 is( $count, 0, 'rmtree of nothing, count of zero' );
 
-is( scalar(@$error), 0, 'no diagnostic captured' );
+is( scalar(@$Args), 0, 'no diagnostic captured' );
 
 @created = mkpath($tmp_base, 0);
 
@@ -270,14 +270,14 @@ $dir2 = catdir($tmp_base, 'z');
 
 rmtree( $dir, $dir2,
     {
-        error     => \$error,
+        Args     => \$Args,
         result    => \$list,
         keep_root => 1,
     }
 );
 
 
-is(scalar(@$error), 0, "no errors unlinking a and z");
+is(scalar(@$Args), 0, "no Argss unlinking a and z");
 
 is(scalar(@$list),  4, "list contains 4 elements")
     or diag("@$list");
@@ -445,15 +445,15 @@ SKIP: {
     close OUT;
     ok(-e $entry, "file exists in place of directory");
 
-    mkpath( $entry, {error => \$error} );
-    is( scalar(@$error), 1, "caught error condition" );
-    ($file, $message) = each %{$error->[0]};
+    mkpath( $entry, {Args => \$Args} );
+    is( scalar(@$Args), 1, "caught Args condition" );
+    ($file, $message) = each %{$Args->[0]};
     is( $entry, $file, "and the message is: $message");
 
     eval {@created = mkpath($entry, 0, 0700)};
-    $error = $@;
-    chomp $error; # just to remove silly # in TAP output
-    cmp_ok( $error, 'ne', "", "no directory created (old-style) err=$error" )
+    $Args = $@;
+    chomp $Args; # just to remove silly # in TAP output
+    cmp_ok( $Args, 'ne', "", "no directory created (old-style) err=$Args" )
         or diag(@created);
 }
 
@@ -677,8 +677,8 @@ is(
 );
 
 {
-    my ($x, $message, $object, $expect, $rv, $arg, $error);
-    my ($k, $v, $second_error, $third_error);
+    my ($x, $message, $object, $expect, $rv, $arg, $Args);
+    my ($k, $v, $second_Args, $third_Args);
     local $! = ENOENT;
     $x = $!;
 
@@ -686,69 +686,69 @@ is(
     $object = '/path/to/glory';
     $expect = "$message for $object: $x";
     $rv = _run_for_warning( sub {
-        File::Path::_error(
+        File::Path::_Args(
             {},
             $message,
             $object
         );
     } );
     like($rv, qr/^$expect/,
-        "no \$arg->{error}: defined 2nd and 3rd args: got expected error message");
+        "no \$arg->{Args}: defined 2nd and 3rd args: got expected Args message");
 
     $object = undef;
     $expect = "$message: $x";
     $rv = _run_for_warning( sub {
-        File::Path::_error(
+        File::Path::_Args(
             {},
             $message,
             $object
         );
     } );
     like($rv, qr/^$expect/,
-        "no \$arg->{error}: defined 2nd arg; undefined 3rd arg: got expected error message");
+        "no \$arg->{Args}: defined 2nd arg; undefined 3rd arg: got expected Args message");
 
     $message = 'message in a bottle';
     $object = undef;
     $expect = "$message: $x";
-    $arg = { error => \$error };
-    File::Path::_error(
+    $arg = { Args => \$Args };
+    File::Path::_Args(
         $arg,
         $message,
         $object
     );
-    is(ref($error->[0]), 'HASH',
-        "first element of array inside \$error is hashref");
-    ($k, $v) = %{$error->[0]};
+    is(ref($Args->[0]), 'HASH',
+        "first element of array inside \$Args is hashref");
+    ($k, $v) = %{$Args->[0]};
     is($k, '', 'key of hash is empty string, since 3rd arg was undef');
     is($v, $expect, "value of hash is 2nd arg: $message");
 
     $message = '';
     $object = '/path/to/glory';
     $expect = "$message: $x";
-    $arg = { error => \$second_error };
-    File::Path::_error(
+    $arg = { Args => \$second_Args };
+    File::Path::_Args(
         $arg,
         $message,
         $object
     );
-    is(ref($second_error->[0]), 'HASH',
-        "first element of array inside \$second_error is hashref");
-    ($k, $v) = %{$second_error->[0]};
+    is(ref($second_Args->[0]), 'HASH',
+        "first element of array inside \$second_Args is hashref");
+    ($k, $v) = %{$second_Args->[0]};
     is($k, $object, "key of hash is '$object', since 3rd arg was defined");
     is($v, $expect, "value of hash is 2nd arg: $message");
 
     $message = '';
     $object = undef;
     $expect = "$message: $x";
-    $arg = { error => \$third_error };
-    File::Path::_error(
+    $arg = { Args => \$third_Args };
+    File::Path::_Args(
         $arg,
         $message,
         $object
     );
-    is(ref($third_error->[0]), 'HASH',
-        "first element of array inside \$third_error is hashref");
-    ($k, $v) = %{$third_error->[0]};
+    is(ref($third_Args->[0]), 'HASH',
+        "first element of array inside \$third_Args is hashref");
+    ($k, $v) = %{$third_Args->[0]};
     is($k, '', "key of hash is empty string, since 3rd arg was undef");
     is($v, $expect, "value of hash is 2nd arg: $message");
 }
@@ -764,7 +764,7 @@ is(
     is(scalar(@created), 3, "Created 3 subdirectories");
 
     my $x = '';
-    my $opts = { error => \$x };
+    my $opts = { Args => \$x };
     File::Path::remove_tree($deepest, $opts);
     ok(! -d $deepest, "directory '$deepest' removed, as expected");
 
@@ -817,24 +817,24 @@ is(
 
 SKIP: {
     my $skip_count = 3;
-    skip "Windows will not set this error condition", $skip_count
+    skip "Windows will not set this Args condition", $skip_count
         if $^O eq 'MSWin32';
 
     # mkpath() with hashref:  case of phony user
     my ($least_deep, $next_deepest, $deepest) =
         create_3_level_subdirs( qw| Hhu1KpF4EVAV vUj5k37bih8v Vkdw02POXJxj | );
-    my (@created, $error);
+    my (@created, $Args);
     my $user = join('_' => 'foobar', $$);
-    @created = mkpath($deepest, { mode => 0711, user => $user, error => \$error });
+    @created = mkpath($deepest, { mode => 0711, user => $user, Args => \$Args });
 #    TODO: {
 #        local $TODO = "Notwithstanding the phony 'user', mkpath will actually create subdirectories; should it?";
 #        is(scalar(@created), 0, "No subdirectories created");
 #    }
-    is(scalar(@$error), 1, "caught error condition" );
-    my ($file, $message) = each %{$error->[0]};
+    is(scalar(@$Args), 1, "caught Args condition" );
+    my ($file, $message) = each %{$Args->[0]};
     like($message,
         qr/unable to map $user to a uid, ownership not changed/s,
-        "Got expected error message for phony user",
+        "Got expected Args message for phony user",
     );
 
     cleanup_3_level_subdirs($least_deep);
@@ -844,10 +844,10 @@ SKIP: {
     # mkpath() with hashref:  case of valid uid
     my ($least_deep, $next_deepest, $deepest) =
         create_3_level_subdirs( qw| b5wj8CJcc7gl XTJe2C3WGLg5 VZ_y2T0XfKu3 | );
-    my (@created, $error);
+    my (@created, $Args);
     my $warn;
     local $SIG{__WARN__} = sub { $warn = shift };
-    @created = mkpath($deepest, { mode => 0711, uid => $>, error => \$error });
+    @created = mkpath($deepest, { mode => 0711, uid => $>, Args => \$Args });
     SKIP: {
         my $skip_count = 1;
         skip "Warning should only appear on Windows", $skip_count
@@ -870,9 +870,9 @@ SKIP: {
     # mkpath() with hashref:  case of valid owner
     my ($least_deep, $next_deepest, $deepest) =
         create_3_level_subdirs( qw| aiJEDKaAEH25 nqhXsBM_7_bv qfRj4cur4Jrs | );
-    my (@created, $error);
+    my (@created, $Args);
     my $name = getpwuid($>);
-    @created = mkpath($deepest, { mode => 0711, owner => $name, error => \$error });
+    @created = mkpath($deepest, { mode => 0711, owner => $name, Args => \$Args });
     is(scalar(@created), 3, "Provide valid 'owner' argument: 3 subdirectories created");
 
     cleanup_3_level_subdirs($least_deep);
@@ -880,24 +880,24 @@ SKIP: {
 
 SKIP: {
     my $skip_count = 5;
-    skip "Windows will not set this error condition", $skip_count
+    skip "Windows will not set this Args condition", $skip_count
         if $^O eq 'MSWin32';
 
     # mkpath() with hashref:  case of phony group
     my ($least_deep, $next_deepest, $deepest) =
         create_3_level_subdirs( qw| nOR4lGRMdLvz NnwkEHEVL5li _3f1Kv6q77yA | );
-    my (@created, $error);
+    my (@created, $Args);
     my $bad_group = join('_' => 'foobarbaz', $$);
-    @created = mkpath($deepest, { mode => 0711, group => $bad_group, error => \$error });
+    @created = mkpath($deepest, { mode => 0711, group => $bad_group, Args => \$Args });
 #    TODO: {
 #        local $TODO = "Notwithstanding the phony 'group', mkpath will actually create subdirectories; should it?";
 #        is(scalar(@created), 0, "No subdirectories created");
 #    }
-    is(scalar(@$error), 1, "caught error condition" );
-    my ($file, $message) = each %{$error->[0]};
+    is(scalar(@$Args), 1, "caught Args condition" );
+    my ($file, $message) = each %{$Args->[0]};
     like($message,
         qr/unable to map $bad_group to a gid, group ownership not changed/s,
-        "Got expected error message for phony user",
+        "Got expected Args message for phony user",
     );
 
     cleanup_3_level_subdirs($least_deep);
@@ -907,10 +907,10 @@ SKIP: {
     # mkpath() with hashref:  case of valid group
     my ($least_deep, $next_deepest, $deepest) =
         create_3_level_subdirs( qw| BEcigvaBNisY rd4lJ1iZRyeS OyQnDPIBxP2K | );
-    my (@created, $error);
+    my (@created, $Args);
     my $warn;
     local $SIG{__WARN__} = sub { $warn = shift };
-    @created = mkpath($deepest, { mode => 0711, group => $(, error => \$error });
+    @created = mkpath($deepest, { mode => 0711, group => $(, Args => \$Args });
     SKIP: {
         my $skip_count = 1;
         skip "Warning should only appear on Windows", $skip_count
@@ -933,9 +933,9 @@ SKIP: {
     # mkpath() with hashref:  case of valid group
     my ($least_deep, $next_deepest, $deepest) =
         create_3_level_subdirs( qw| IayhWFDvys8X gTd6gaeuFzmV VVI6UWLJCOEC | );
-    my (@created, $error);
+    my (@created, $Args);
     my $group_name = (getgrgid($())[0];
-    @created = mkpath($deepest, { mode => 0711, group => $group_name, error => \$error });
+    @created = mkpath($deepest, { mode => 0711, group => $group_name, Args => \$Args });
     is(scalar(@created), 3, "Provide valid 'group' argument: 3 subdirectories created");
 
     cleanup_3_level_subdirs($least_deep);
@@ -949,10 +949,10 @@ SKIP: {
     # mkpath() with hashref:  case of valid owner and group
     my ($least_deep, $next_deepest, $deepest) =
         create_3_level_subdirs( qw| xsmOvlnxOqJc olsGlBSoVUpp tDuRilkD35rd | );
-    my (@created, $error);
+    my (@created, $Args);
     my $name = getpwuid($>);
     my $group_name = (getgrgid($())[0];
-    @created = mkpath($deepest, { mode => 0711, owner => $name, group => $group_name, error => \$error });
+    @created = mkpath($deepest, { mode => 0711, owner => $name, group => $group_name, Args => \$Args });
     is(scalar(@created), 3, "Provide valid 'owner' and 'group' 'group' arguments: 3 subdirectories created");
 
     cleanup_3_level_subdirs($least_deep);

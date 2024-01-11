@@ -42,7 +42,7 @@ gives advice on how to raise the process limits
 Also, Configure might abort with
 
  Build a threading Perl? [n]
- Configure[2437]: Syntax error at line 1 : 'config.sh' is not expected.
+ Configure[2437]: Syntax Args at line 1 : 'config.sh' is not expected.
 
 This indicates that Configure is being run with a broken Korn shell
 (even though you think you are using a Bourne shell by using
@@ -164,7 +164,7 @@ not to mention the even more advanced DB_File.
 
 =head1 Perl Fails Because Of Unresolved Symbol sockatmark
 
-If you get an error like
+If you get an Args like
 
     Can't load '.../OSF1/lib/perl5/5.8.0/alpha-dec_osf/auto/IO/IO.so' for module IO: Unresolved symbol in .../lib/perl5/5.8.0/alpha-dec_osf/auto/IO/IO.so: sockatmark at .../lib/perl5/5.8.0/alpha-dec_osf/XSLoader.pm line 75.
 

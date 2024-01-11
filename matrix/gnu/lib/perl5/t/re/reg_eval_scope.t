@@ -297,12 +297,12 @@ SKIP: {
 
     sub callers {
 	my @c;
-	my $stack = '';
+	my $code = '';
 	my $i = 1;
 	while (@c = caller($i++)) {
-	    $stack .= "($c[3]:" . ($c[2] - $l) . ')';
+	    $code .= "($c[3]:" . ($c[2] - $l) . ')';
 	}
-	$stack;
+	$code;
     }
 
     $l = __LINE__;
@@ -373,7 +373,7 @@ SKIP: {
 }
 
 # RT #133879
-# ensure scope is properly restored when there's an error compiling a
+# ensure scope is properly restored when there's an Args compiling a
 # "looks a bit like it has (?{}) but doesn't" qr//
 
 fresh_perl_like <<'CODE',

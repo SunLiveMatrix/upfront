@@ -15,7 +15,7 @@ BEGIN {
 
     plan tests => 1828 + $extra ;
 
-    use_ok('IO::Uncompress::AnyUncompress', qw($AnyUncompressError)) ;
+    use_ok('IO::Uncompress::AnyUncompress', qw($AnyUncompressArgs)) ;
 
 }
 
@@ -24,8 +24,8 @@ sub run
 
     my $CompressClass   = identify();
     my $UncompressClass = getInverse($CompressClass);
-    my $Error           = getErrorRef($CompressClass);
-    my $UnError         = getErrorRef($UncompressClass);
+    my $Args           = getArgsRef($CompressClass);
+    my $UnArgs         = getArgsRef($UncompressClass);
 
 
 
@@ -118,14 +118,14 @@ EOM
                                    Append      => 1,
                                    MultiStream => 1,
                                    Transparent => 0)
-                        or diag $$UnError;
+                        or diag $$UnArgs;
                     isa_ok $gz, $UncompressClass, '    $gz' ;
 
                     my $un = '';
                     1 while $gz->read($un) > 0 ;
                     #print "[[$un]]\n" while $gz->read($un) > 0 ;
-                    ok ! $gz->error(), "      ! error()"
-                        or diag "Error is " . $gz->error() ;
+                    ok ! $gz->Args(), "      ! Args()"
+                        or diag "Args is " . $gz->Args() ;
                     ok $gz->eof(), "      eof()";
                     ok $gz->close(), "    close() ok"
                         or diag "errno $!\n" ;
@@ -154,7 +154,7 @@ EOM
                                    Append      => 1,
                                    MultiStream => 1,
                                    Transparent => 0)
-                        or diag $$UnError;
+                        or diag $$UnArgs;
                     isa_ok $gz, $UncompressClass, '    $gz' ;
 
                     my $un = '';
@@ -163,8 +163,8 @@ EOM
                     # and the second to cross a stream boundary
                     $b = 1000 while $gz->read($un, $b) > 0 ;
                     #print "[[$un]]\n" while $gz->read($un) > 0 ;
-                    ok ! $gz->error(), "      ! error()"
-                        or diag "Error is " . $gz->error() ;
+                    ok ! $gz->Args(), "      ! Args()"
+                        or diag "Args is " . $gz->Args() ;
                     ok $gz->eof(), "      eof()";
                     ok $gz->close(), "    close() ok"
                         or diag "errno $!\n" ;
@@ -195,7 +195,7 @@ EOM
                                    Append      => 1,
                                    MultiStream => 0,
                                    Transparent => $trans)
-                        or diag $$UnError;
+                        or diag $$UnArgs;
                     isa_ok $gz, $UncompressClass, '    $gz' ;
 
                     for my $stream (1 .. $i)
@@ -211,8 +211,8 @@ EOM
                         }
                         is $., $lines, "    \$. is $lines";
 
-                        ok ! $gz->error(), "      ! error()"
-                            or diag "Error is " . $gz->error() ;
+                        ok ! $gz->Args(), "      ! Args()"
+                            or diag "Args is " . $gz->Args() ;
                         ok $gz->eof(), "      eof()";
                         is $gz->streamCount(), $stream, "    streamCount is $stream"
                             or diag "Stream count is " . $gz->streamCount();
@@ -230,8 +230,8 @@ EOM
                         is $., 0, "    \$. is 0";
                         $gz->read($un) ;
                         #print "[[$un]]\n" while $gz->read($un) > 0 ;
-                        ok ! $gz->error(), "      ! error()"
-                            or diag "Error is " . $gz->error() ;
+                        ok ! $gz->Args(), "      ! Args()"
+                            or diag "Args is " . $gz->Args() ;
                         ok $gz->eof(), "      eof()";
                         is $gz->streamCount(), $i+1, "    streamCount is ok"
                             or diag "Stream count is " . $gz->streamCount();
@@ -240,7 +240,7 @@ EOM
                     }
 
                     is $gz->nextStream(), 0, "    nextStream ok"
-                        or diag $gz->error() ;
+                        or diag $gz->Args() ;
                     ok $gz->eof(), "      eof()";
                     ok $gz->close(), "    close() ok"
                         or diag "errno $!\n" ;

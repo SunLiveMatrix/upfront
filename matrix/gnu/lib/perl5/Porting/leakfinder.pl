@@ -141,7 +141,7 @@ $share_dir->{dist} = [ $share_dir->{dist} ];
 s![^/+]*$!man!&&-d&&!$s{$_}++&&push@m,#_;END{print"@m"}'
 $spec = [$spec, $_[0]];
 *s = ~(*s);
-$stack[$i++] &= ~1;
+$code[$i++] &= ~1;
 $step = [$step];
 sub CHECK {print ":check"}
 sub INIT {print ":init"}

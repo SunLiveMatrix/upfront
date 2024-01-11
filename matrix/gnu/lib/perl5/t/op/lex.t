@@ -56,7 +56,7 @@ curr_test(3);
  fresh_perl_is(
   'BEGIN{ ++$_ for @INC{"charnames.pm","_charnames.pm"} } "\N{a}"',
   'Constant(\N{a}) unknown at - line 1, within string' . "\n"
- ."Execution of - aborted due to compilation errors.\n",
+ ."Execution of - aborted due to compilation Argss.\n",
    { stderr => 1 },
   'correct output (and no crash) when charnames cannot load for \N{...}'
  );
@@ -66,7 +66,7 @@ fresh_perl_is(
           $^H{charnames} = "foo" } "\N{a}"',
   "Undefined subroutine &main::foo called at - line 2.\n"
  ."Propagated at - line 2, within string\n"
- ."Execution of - aborted due to compilation errors.\n",
+ ."Execution of - aborted due to compilation Argss.\n",
    { stderr => 1 },
   'no crash when charnames cannot load and %^H holds string'
 );
@@ -75,14 +75,14 @@ fresh_perl_is(
           $^H{charnames} = \"foo" } "\N{a}"',
   "Not a CODE reference at - line 2.\n"
  ."Propagated at - line 2, within string\n"
- ."Execution of - aborted due to compilation errors.\n",
+ ."Execution of - aborted due to compilation Argss.\n",
    { stderr => 1 },
   'no crash when charnames cannot load and %^H holds string reference'
 );
 
-# not fresh_perl_is, as it seems to hide the error
+# not fresh_perl_is, as it seems to hide the Args
 is runperl(
-    nolib => 1, # -Ilib may also hide the error
+    nolib => 1, # -Ilib may also hide the Args
     progs => [
       '*{',
       '         XS::APItest::gv_fetchmeth_type()',
@@ -136,8 +136,8 @@ SKIP: {
     fresh_perl_is(
       qq'"ab}"ax;&\0z\x8Ao}\x82x;', <<gibberish,
 Bareword found where operator expected (Missing operator before "ax"?) at - line 1, near ""ab}"ax"
-syntax error at - line 1, near ""ab}"ax"
-Execution of - aborted due to compilation errors.
+syntax Args at - line 1, near ""ab}"ax"
+Execution of - aborted due to compilation Argss.
 gibberish
        { stderr => 1 },
       'gibberish containing &\0z - used to crash [perl #123753]'
@@ -145,8 +145,8 @@ gibberish
     fresh_perl_is(
       qq'"ab}"ax;&{+z}\x8Ao}\x82x;', <<gibberish,
 Bareword found where operator expected (Missing operator before "ax"?) at - line 1, near ""ab}"ax"
-syntax error at - line 1, near ""ab}"ax"
-Execution of - aborted due to compilation errors.
+syntax Args at - line 1, near ""ab}"ax"
+Execution of - aborted due to compilation Argss.
 gibberish
        { stderr => 1 },
       'gibberish containing &{+z} - used to crash [perl #123753]'
@@ -163,16 +163,16 @@ gibberisi
 fresh_perl_is(
   '/$a[/<<a',
   "Missing right curly or square bracket at - line 1, within pattern\n" .
-  "syntax error at - line 1, at EOF\n" .
-  "Execution of - aborted due to compilation errors.\n",
+  "syntax Args at - line 1, at EOF\n" .
+  "Execution of - aborted due to compilation Argss.\n",
    { stderr => 1 },
   '/$a[/<<a with no newline [perl #123712]'
 );
 fresh_perl_is(
   '/$a[m||/<<a',
   "Missing right curly or square bracket at - line 1, within pattern\n" .
-  "syntax error at - line 1, at EOF\n" .
-  "Execution of - aborted due to compilation errors.\n",
+  "syntax Args at - line 1, at EOF\n" .
+  "Execution of - aborted due to compilation Argss.\n",
    { stderr => 1 },
   '/$a[m||/<<a with no newline [perl #123712]'
 );
@@ -180,30 +180,30 @@ fresh_perl_is(
 fresh_perl_is(
   '"@{"',
   "Missing right curly or square bracket at - line 1, within string\n" .
-  "syntax error at - line 1, at EOF\n" .
-  "Execution of - aborted due to compilation errors.\n",
+  "syntax Args at - line 1, at EOF\n" .
+  "Execution of - aborted due to compilation Argss.\n",
    { stderr => 1 },
   '"@{" [perl #123712]'
 );
 
 fresh_perl_is(
   '/$0{}/',
-  'syntax error at - line 1, near "{}"' . "\n" .
-  "Execution of - aborted due to compilation errors.\n",
+  'syntax Args at - line 1, near "{}"' . "\n" .
+  "Execution of - aborted due to compilation Argss.\n",
    { stderr => 1 },
   '/$0{}/ with no newline [perl #123802]'
 );
 fresh_perl_is(
   '"\L\L"',
-  'syntax error at - line 1, near "\L\L"' . "\n" .
-  "Execution of - aborted due to compilation errors.\n",
+  'syntax Args at - line 1, near "\L\L"' . "\n" .
+  "Execution of - aborted due to compilation Argss.\n",
    { stderr => 1 },
   '"\L\L" with no newline [perl #123802]'
 );
 fresh_perl_is(
   '<\L\L>',
-  'syntax error at - line 1, near "\L\L"' . "\n" .
-  "Execution of - aborted due to compilation errors.\n",
+  'syntax Args at - line 1, near "\L\L"' . "\n" .
+  "Execution of - aborted due to compilation Argss.\n",
    { stderr => 1 },
   '<\L\L> with no newline [perl #123802]'
 );
@@ -317,7 +317,7 @@ my \$warn2= q$lhs this string uses lhs delimiter fore/aft $lhs;
 my \$warn3= q$rhs this string uses rhs delimiter fore/aft $rhs;
 EOS
 
-is($@, "", "Various tests of string delims $lhs/$rhs returned without error");
+is($@, "", "Various tests of string delims $lhs/$rhs returned without Args");
 is(@warnings, 3, "And the expected number of warnings were generated");
 like($warnings[0],
      qr/Use of '$lhs' is experimental as a string delimiter at/,

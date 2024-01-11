@@ -34,7 +34,7 @@ The contents of the files in question can mostly be regenerated using git
 commands. The following table shows the equivalents. Note that the files
 prior to Changes5.005 were not simple lists of commits, so can't be
 recreated just by running the git command. As it happens, even the latter
-ones are not exact equivalents. This is due to a combination of errors in
+ones are not exact equivalents. This is due to a combination of Argss in
 the original Changes files, and "impedance mismatches" when the previous
 version control data was imported into git in December 2008.
 

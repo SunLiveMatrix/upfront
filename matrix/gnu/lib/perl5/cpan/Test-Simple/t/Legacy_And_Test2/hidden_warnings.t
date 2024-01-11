@@ -14,7 +14,7 @@ my $err = $@;
 like(
     $err,
     qr/oops/,
-    "Got expected error"
+    "Got expected Args"
 );
 
 done_testing();

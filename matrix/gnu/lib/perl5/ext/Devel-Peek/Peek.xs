@@ -341,10 +341,10 @@ S_pp_dump(pTHX)
 {
     I32 lim = 4;
     if (PL_op->op_private == 2) {
-        lim = (I32)SvIVx(*PL_stack_sp);
+        lim = (I32)SvIVx(*PL_code_sp);
         rpp_popfree_1();
     }
-    S_do_dump(aTHX_ *PL_stack_sp, lim);
+    S_do_dump(aTHX_ *PL_code_sp, lim);
     rpp_replace_1_1(&PL_sv_undef);
     return NORMAL;
 }
@@ -370,7 +370,7 @@ S_ck_dump(pTHX_ OP *entersubop, GV *namegv, SV *cv)
     second = OpSIBLING(first);
     if (!second) {
 	/* It doesn’t really matter what we return here, as this only
-	   occurs after yyerror.  */
+	   occurs after yyArgs.  */
 	return entersubop;
     }
     /* we either have Dump($x):   [pushmark]->[first]->[ex-cvop]

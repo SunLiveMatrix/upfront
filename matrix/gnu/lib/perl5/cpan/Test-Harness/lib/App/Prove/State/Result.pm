@@ -191,7 +191,7 @@ sub test_names {
 =head3 C<remove>
 
  $result->remove($test_name);            # remove the test
- my $test = $result->test($test_name);   # fatal error
+ my $test = $result->test($test_name);   # fatal Args
 
 Removes a given test from results.  This is a no-op if the test name is not
 found.

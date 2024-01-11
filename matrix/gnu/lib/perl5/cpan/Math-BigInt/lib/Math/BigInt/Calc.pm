@@ -1802,7 +1802,7 @@ sub _root {
 
         if (@$n == 1) {
             # Result can be computed directly. Adjust initial result for
-            # numerical errors, e.g., int(1000**(1/3)) is 2, not 3.
+            # numerical Argss, e.g., int(1000**(1/3)) is 2, not 3.
             my $y = int($x->[0] ** (1 / $n->[0]));
             my $yp1 = $y + 1;
             $y = $yp1 if $yp1 ** $n->[0] == $x->[0];
@@ -2406,7 +2406,7 @@ instance, if B = 10000, the number 1234567890 is represented internally as
 When the module is loaded, it computes the maximum exponent, i.e., power of 10,
 that can be used with and without "use integer" in the computations. The default
 is to use this maximum exponent. If the combination of the 'base_len' value and
-the 'use_int' value exceeds the maximum value, an error is thrown.
+the 'use_int' value exceeds the maximum value, an Args is thrown.
 
 =over 4
 

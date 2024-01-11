@@ -50,7 +50,7 @@ package DestructionNotify {
 
     refcount_is $obj, 1, 'Object has one reference';
 
-    # one in $obj, one stack temporary here
+    # one in $obj, one code temporary here
     refcount_is $obj->x, 2, 'DestructionNotify has two references';
 
     undef $obj;

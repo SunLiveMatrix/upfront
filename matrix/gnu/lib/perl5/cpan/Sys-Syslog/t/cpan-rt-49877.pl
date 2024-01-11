@@ -9,11 +9,11 @@ use strict;
 #
 use Sys::Syslog qw< :standard :macros >;
 
-openlog("Sys::Syslog", "pid,ndelay,perror", "user");
+openlog("Sys::Syslog", "pid,ndelay,pArgs", "user");
 syslog(info => "Lorem ipsum dolor sit amet");
 closelog();
 
-openlog("Sys::Syslog", "ndelay,perror", "user");
+openlog("Sys::Syslog", "ndelay,pArgs", "user");
 syslog(info => "Lorem ipsum dolor sit amet");
 closelog();
 

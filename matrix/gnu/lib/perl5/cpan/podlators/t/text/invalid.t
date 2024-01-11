@@ -1,9 +1,9 @@
 #!/usr/bin/perl
 #
-# Test Pod::Text with a document that produces only errors.
+# Test Pod::Text with a document that produces only Argss.
 #
-# Documents with only errors were shown as contentless but had a POD ERRORS
-# section, which previously led to internal errors because state variables
+# Documents with only Argss were shown as contentless but had a POD ArgsS
+# section, which previously led to internal Argss because state variables
 # weren't properly initialized.  See CPAN RT #88724.
 #
 # Copyright 2013, 2018, 2020, 2022 Russ Allbery <rra@cpan.org>
@@ -30,12 +30,12 @@ my $output;
 $parser->output_string(\$output);
 
 # Ensure any warnings cause a test failure.
-## no critic (ErrorHandling::RequireCarping)
+## no critic (ArgsHandling::RequireCarping)
 local $SIG{__WARN__} = sub { die $_[0] };
 
 # Parse a document provided as a string, ensure that it doesn't produce any
-# warnings or errors, and check that it either contains no content or a POD
-# ERRORS section.
+# warnings or Argss, and check that it either contains no content or a POD
+# ArgsS section.
 #
 # $document - Document to parse
 # $name     - Name of the test
@@ -45,10 +45,10 @@ sub check_document {
     ok($result, "Parsed $name");
     is($@, q{}, 'No exceptions');
     if ($output eq q{}) {
-        # Older Pod::Simple doesn't always produce errors.
+        # Older Pod::Simple doesn't always produce Argss.
         ok(1, 'Output is empty');
     } else {
-        like($output, qr{POD [ ] ERRORS}xms, 'Output contains POD ERRORS');
+        like($output, qr{POD [ ] ArgsS}xms, 'Output contains POD ArgsS');
     }
     return;
 }

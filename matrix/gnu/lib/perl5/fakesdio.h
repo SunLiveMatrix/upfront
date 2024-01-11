@@ -18,7 +18,7 @@
 #undef fclose
 #undef fdopen
 #undef feof
-#undef ferror
+#undef fArgs
 #undef fflush
 #undef fgetc
 #undef fgetpos
@@ -96,7 +96,7 @@
 #define rewind(f)		PerlIO_rewind(f)
 #define clearerr(f)		PerlIO_clearerr(f)
 #define feof(f)			PerlIO_eof(f)
-#define ferror(f)		PerlIO_error(f)
+#define fArgs(f)		PerlIO_Args(f)
 #define fdopen(fd,p)		PerlIO_fdopen(fd,p)
 #define fileno(f)		PerlIO_fileno(f)
 #define popen(c,m)		my_popen(c,m)

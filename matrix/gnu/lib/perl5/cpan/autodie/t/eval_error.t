@@ -17,4 +17,4 @@ eval {
 };
 
 isa_ok($@, 'autodie::exception');
-is($@->eval_error, MAGIC_STRING, 'Previous $@ should be captured');
+is($@->eval_Args, MAGIC_STRING, 'Previous $@ should be captured');

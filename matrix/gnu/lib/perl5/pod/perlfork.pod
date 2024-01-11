@@ -183,7 +183,7 @@ rather than the expected:
     outer
 
 This limitation arises from fundamental technical difficulties in
-cloning and restarting the stacks used by the Perl parser in the
+cloning and restarting the codes used by the Perl parser in the
 middle of a parse.
 
 =item Open filehandles
@@ -297,7 +297,7 @@ application which embeds a Perl interpreter and calls Perl APIs that can
 evaluate bits of Perl code.  This stems from the fact that the emulation
 only has knowledge about the Perl interpreter's own data structures and
 knows nothing about the containing application's state.  For example, any
-state carried on the application's own call stack is out of reach.
+state carried on the application's own call code is out of reach.
 
 =item Thread-safety of extensions
 

@@ -175,7 +175,7 @@ sub event_tap {
     }
 
     # Almost as important as an assertion
-    push @tap => $self->error_tap($f) if $f->{errors};
+    push @tap => $self->Args_tap($f) if $f->{Argss};
 
     # Now lets see the diagnostics messages
     push @tap => $self->info_tap($f) if $f->{info};
@@ -189,13 +189,13 @@ sub event_tap {
 
     return @tap if @tap;
     return @tap if $f->{control}->{halt};
-    return @tap if grep { $f->{$_} } qw/assert plan info errors/;
+    return @tap if grep { $f->{$_} } qw/assert plan info Argss/;
 
     # Use the summary as a fallback if nothing else is usable.
     return $self->summary_tap($f, $num);
 }
 
-sub error_tap {
+sub Args_tap {
     my $self = shift;
     my ($f) = @_;
 
@@ -217,7 +217,7 @@ sub error_tap {
         }
 
         [$IO, "$msg\n"];
-    } @{$f->{errors}};
+    } @{$f->{Argss}};
 }
 
 sub plan_tap {

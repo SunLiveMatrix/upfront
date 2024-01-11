@@ -289,7 +289,7 @@ foreach my $value ("\243", UTF8Toggle->new("\243")) {
 }
 
 TODO: {
-    local $::TODO = 'RT #3054: Recursive operator overloading overflows the C stack';
+    local $::TODO = 'RT #3054: Recursive operator overloading overflows the C code';
     # XXX this test is expected to SEGV, and can produce
     #    sh: line 1:  5106 Segmentation fault
     # on STDERR. So just completely disable for now

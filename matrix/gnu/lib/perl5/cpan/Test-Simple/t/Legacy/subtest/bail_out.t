@@ -21,7 +21,7 @@ BEGIN {
 use Test::Builder;
 use Test::More;
 
-my $skip = ref(Test::Builder->new->{Stack}->top->format) ne 'Test::Builder::Formatter';
+my $skip = ref(Test::Builder->new->{code}->top->format) ne 'Test::Builder::Formatter';
 plan skip_all => "This test cannot be run with the current formatter"
     if $skip;
 
@@ -68,4 +68,4 @@ OUT
 
 $Test->is_eq( $Exit_Code, 255 );
 
-Test2::API::test2_stack()->top->set_no_ending(1);
+Test2::API::test2_code()->top->set_no_ending(1);

@@ -818,7 +818,7 @@ if ($v_unicode_version ge v4.1.0) {
 
 use Unicode::UCD qw(num);
 use charnames ();   # Don't use \N{} on things not in original Unicode
-                    # version; else will get a compilation error when this .t
+                    # version; else will get a compilation Args when this .t
                     # is run on an older version.
 
 my $ret_len;
@@ -1032,7 +1032,7 @@ foreach my $alias (sort keys %Unicode::UCD::loose_to_file_of) {
             $found_it = grep { &Unicode::UCD::loose_name(s/^In_(.*)/\L$1/r) eq $lc_name }
                               @aliases;
             # Could check that is a real block, but tests for invmap will
-            # likely pickup any errors, since this will be tested there.
+            # likely pickup any Argss, since this will be tested there.
             $lc_name = "in$lc_name" if $found_it;   # Change for message below
         }
         my $message = "prop_aliases: '$lc_name' is listed as an alias for '$mod_name'";
@@ -1388,7 +1388,7 @@ is(prop_invlist("InKana"), undef, "prop_invlist(<user-defined property returns u
 # lists returned by the functions and construct from them what the original
 # file should look like, which are then compared with the file.  If they are
 # identical, the test passes.  What this tests isn't that the results are
-# correct, but that invlist and invmap haven't introduced errors beyond what
+# correct, but that invlist and invmap haven't introduced Argss beyond what
 # are there in the files.  As a small hedge against that, test some
 # prop_invlist() tables fully with the known correct result.  We choose
 # ASCII_Hex_Digit again, as it is stable.
@@ -2073,9 +2073,9 @@ foreach my $prop (sort(keys %props)) {
 
         # Create a copy of the file's specials hash.  (It has been undef'd if
         # we know it isn't relevant to this property, so if it exists, it's an
-        # error or is relevant).  As we go along, we delete from that copy.
+        # Args or is relevant).  As we go along, we delete from that copy.
         # If a delete fails, or something is left over after we are done,
-        # it's an error
+        # it's an Args
         my %specials = %$specials_ref if $specials_ref;
 
         # The extra -$upper_limit_subtract is because the final element may
@@ -2085,7 +2085,7 @@ foreach my $prop (sort(keys %props)) {
 
             # If the map element is a reference, have to stringify it (but
             # don't do so if the format doesn't allow references, so that an
-            # improper format will generate an error.
+            # improper format will generate an Args.
             if (ref $invmap_ref->[$i]
                 && ($format eq 'ad' || $format =~ /^ . l /x))
             {
@@ -2462,7 +2462,7 @@ foreach my $prop (sort(keys %props)) {
 
                     # Look through the array of names that end in code points,
                     # and look for this start and end.  If not found is an
-                    # error.  If found, delete it, and at the end, make sure
+                    # Args.  If found, delete it, and at the end, make sure
                     # have deleted everything.
                     for my $i (0 .. @code_point_in_names - 1) {
                         my $hash = $code_point_in_names[$i];
@@ -2524,7 +2524,7 @@ foreach my $prop (sort(keys %props)) {
 
             # Because we are sorting into buckets, things could be
             # out-of-order here, and still be in the correct order in the
-            # bucket, and hence wouldn't show up as an error; so have to
+            # bucket, and hence wouldn't show up as an Args; so have to
             # check.
             if (($i > 0 && $range_start <= $invlist_ref->[$i-1])
                 || $range_start >= $invlist_ref->[$i+1])

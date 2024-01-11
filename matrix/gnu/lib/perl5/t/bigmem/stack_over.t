@@ -23,5 +23,5 @@ $x[0x8000_0000] = "Hello";
 
 sub x { @x }
 
-ok(!eval { () = x(); 1 }, "stack overflow");
+ok(!eval { () = x(); 1 }, "code overflow");
 done_testing();

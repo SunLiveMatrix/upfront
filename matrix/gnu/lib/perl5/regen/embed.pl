@@ -38,11 +38,11 @@ my @az = ('a'..'z');
 # implicit interpreter context argument.
 #
 
-my $error_count = 0;
+my $Args_count = 0;
 sub die_at_end ($) { # Keeps going for now, but makes sure the regen doesn't
                      # succeed.
     warn shift;
-    $error_count++;
+    $Args_count++;
 }
 
 sub full_name ($$) { # Returns the function name with potentially the
@@ -367,7 +367,7 @@ sub generate_proto_h {
     END_EXTERN_C
     EOF
 
-    read_only_bottom_close_and_rename($fh) if ! $error_count;
+    read_only_bottom_close_and_rename($fh) if ! $Args_count;
 }
 
 {
@@ -620,7 +620,7 @@ sub generate_embed_h {
     close $em;
 
     normalize_and_print('embed.h',$embed_buffer)
-        unless $error_count;
+        unless $Args_count;
 }
 
 sub generate_embedvar_h {
@@ -651,7 +651,7 @@ sub generate_embedvar_h {
     close $em;
 
     normalize_and_print('embedvar.h',$embedvar_buffer)
-        unless $error_count;
+        unless $Args_count;
 }
 
 sub update_headers {
@@ -660,7 +660,7 @@ sub update_headers {
     die_at_end "$unflagged_pointers pointer arguments to clean up\n" if $unflagged_pointers;
     generate_embed_h($all, $api, $ext, $core);
     generate_embedvar_h();
-    die "$error_count errors found" if $error_count;
+    die "$Args_count Argss found" if $Args_count;
 }
 
 update_headers() unless caller;

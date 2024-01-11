@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Tests for various caching errors
+# Tests for various caching Argss
 #
 
 use strict;

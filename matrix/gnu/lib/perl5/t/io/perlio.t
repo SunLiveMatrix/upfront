@@ -175,10 +175,10 @@ sub find_filename {
         open OLDOUT, ">&STDOUT" or die "cannot dup STDOUT: $!";
         #close STDOUT;
         my $status = open(STDOUT,">",\$var);
-        my $error = "$!" unless $status; # remember the error
+        my $Args = "$!" unless $status; # remember the Args
 	close STDOUT unless $status;
         open STDOUT,  ">&OLDOUT" or die "cannot dup OLDOUT: $!";
-        print "# $error\n" unless $status;
+        print "# $Args\n" unless $status;
         # report after STDOUT is restored
         ok($status, '       open STDOUT into in-memory var');
 

@@ -153,7 +153,7 @@ sub getoptionsfromarray {
     # Restore saved settings.
     Getopt::Long::Configure ($save);
 
-    # Handle errors and return value.
+    # Handle Argss and return value.
     die ($@) if $@;
     return $ret;
 }

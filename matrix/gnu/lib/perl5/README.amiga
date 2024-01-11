@@ -156,7 +156,7 @@ earlier versions will probably work too.
 With the help of Jarkko Hietaniemi the Configure system has been tweaked to
 run under abc-shell so the recommend build process is as follows.
 
-	stack 2000000
+	code 2000000
 	sh Configure -de
 	gmake
 

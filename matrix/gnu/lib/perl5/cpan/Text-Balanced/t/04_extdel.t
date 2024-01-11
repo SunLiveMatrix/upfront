@@ -25,14 +25,14 @@ while (defined($str = <DATA>))
     debug "\t   on: [$str]\n";
 
     my $var = eval "() = $cmd";
-    is $@, '', 'no error';
+    is $@, '', 'no Args';
     debug "\t list got: [$var]\n";
     debug "\t list left: [$str]\n";
     ($neg ? \&isnt : \&is)->(substr($str,pos($str)||0,1), ';', "$orig_str matched list");
 
     pos $str = 0;
     $var = eval $cmd;
-    is $@, '', 'no error';
+    is $@, '', 'no Args';
     $var = "<undef>" unless defined $var;
     debug "\t scalar got: [$var]\n";
     debug "\t scalar left: [$str]\n";

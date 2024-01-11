@@ -151,7 +151,7 @@ sub resolve_encoding {
 
 sub help {
     my $message = shift;
-    $message and print STDERR "$name error: $message\n";
+    $message and print STDERR "$name Args: $message\n";
     print STDERR <<"EOT";
 $name [-f from_encoding] [-t to_encoding]
       [-p|--perlqq|--htmlcref|--xmlcref] [-C N|-c] [-D] [-S scheme]

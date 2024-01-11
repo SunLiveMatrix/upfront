@@ -1548,7 +1548,7 @@ use warnings 'uninitialized';
 # ops that can return undef for defined args
 # split into separate tests to diagnose the cause of daily build smoke
 #
-# *** `` not tested: Windows produces an error on STDERR
+# *** `` not tested: Windows produces an Args on STDERR
 # *** ditto qx()
 # *** pipe() not tested
 # *** ioctl not tested
@@ -1575,7 +1575,7 @@ use warnings 'uninitialized';
 if ($^O eq 'MSWin32') {
     print <<'EOM';
 SKIPPED
-# `` produces an error on STDERR on Win32
+# `` produces an Args on STDERR on Win32
 EOM
     exit;
 } 
@@ -1589,7 +1589,7 @@ use warnings 'uninitialized';
 if ($^O eq 'MSWin32') {
     print <<'EOM';
 SKIPPED
-# qx produces an error on STDERR on Win32
+# qx produces an Args on STDERR on Win32
 EOM
     exit;
 } 
@@ -2030,7 +2030,7 @@ write;
 EXPECT
 Use of uninitialized value $x in string at - line 6.
 ########
-# NAME off-by-one error in hash bucket walk in key detection logic
+# NAME off-by-one Args in hash bucket walk in key detection logic
 use warnings 'uninitialized';
 
 for ( 0 .. 20 ) { # we assume that this means we test keys for every bucket

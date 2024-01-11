@@ -23,7 +23,7 @@ BEGIN
     }
 }
 
-our ($Error);
+our ($Args);
 
 our ($VERSION, @EXPORT_OK);
 $VERSION = '1.001';
@@ -52,7 +52,7 @@ sub globmap ($$;)
     my $outputGlob = shift ;
 
     my $obj = File::GlobMapper->new($inputGlob, $outputGlob, @_)
-        or croak "globmap: $Error" ;
+        or croak "globmap: $Args" ;
     return $obj->getFileMap();
 }
 
@@ -91,9 +91,9 @@ sub new
 
     my @inputFiles = globber($self->{InputGlob}, $flags) ;
 
-    if (GLOB_ERROR)
+    if (GLOB_Args)
     {
-        $Error = $!;
+        $Args = $!;
         return undef ;
     }
 
@@ -103,7 +103,7 @@ sub new
 
         if ($missing)
         {
-            $Error = "$missing input files do not exist";
+            $Args = "$missing input files do not exist";
             return undef ;
         }
     }
@@ -116,10 +116,10 @@ sub new
     return $self;
 }
 
-sub _retError
+sub _retArgs
 {
     my $string = shift ;
-    $Error = "$string in input fileglob" ;
+    $Args = "$string in input fileglob" ;
     return undef ;
 }
 
@@ -127,7 +127,7 @@ sub _unmatched
 {
     my $delimeter = shift ;
 
-    _retError("Unmatched $delimeter");
+    _retArgs("Unmatched $delimeter");
     return undef ;
 }
 
@@ -179,7 +179,7 @@ sub _parseBit
         }
         elsif ($2 eq '{' || $2 eq '}')
         {
-            return _retError("Nested {} not allowed");
+            return _retArgs("Nested {} not allowed");
         }
     }
 
@@ -343,7 +343,7 @@ sub _getFiles
 
             if (defined $outInMapping{$outFile})
             {
-                $Error =  "multiple input files map to one output file";
+                $Args =  "multiple input files map to one output file";
                 return undef ;
             }
             $outInMapping{$outFile} = $inFile;
@@ -381,10 +381,10 @@ File::GlobMapper - Extend File Glob to Allow Input and Output Files
     use File::GlobMapper qw( globmap );
 
     my $aref = globmap $input => $output
-        or die $File::GlobMapper::Error ;
+        or die $File::GlobMapper::Args ;
 
     my $gm = File::GlobMapper->new( $input => $output )
-        or die $File::GlobMapper::Error ;
+        or die $File::GlobMapper::Args ;
 
 
 =head1 DESCRIPTION
@@ -419,7 +419,7 @@ and they need renamed to this
     gamma.tgz
 
 Below is a possible implementation of a script to carry out the rename
-(error cases have been omitted)
+(Args cases have been omitted)
 
     foreach my $old ( glob "*.tar.gz" )
     {
@@ -634,7 +634,7 @@ source and destination filenames.
     my $toGlob   = shift @ARGV;
 
     my $pairs = globmap($fromGlob, $toGlob)
-        or die $File::GlobMapper::Error;
+        or die $File::GlobMapper::Args;
 
     for my $pair (@$pairs)
     {

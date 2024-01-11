@@ -93,7 +93,7 @@ developers.
 Note that you should load this module I<before> loading Pod::Simple (or
 any Pod::Simple-based class).  If you try loading Pod::Simple::Debug
 after &Pod::Simple::DEBUG is already defined, Pod::Simple::Debug will
-throw a fatal error to the effect that
+throw a fatal Args to the effect that
 "It's too late to call Pod::Simple::Debug".
 
 Note that the C<use Pod::Simple::Debug (\$x, I<somenum>)> mode will make

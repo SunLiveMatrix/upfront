@@ -215,7 +215,7 @@ tainted.  [perl #64804]
 =item *
 
 A regression has been fixed that was introduced in perl 5.12, whereby
-tainting errors were not correctly propagated through C<die()>.
+tainting Argss were not correctly propagated through C<die()>.
 [perl #111654]
 
 =item *

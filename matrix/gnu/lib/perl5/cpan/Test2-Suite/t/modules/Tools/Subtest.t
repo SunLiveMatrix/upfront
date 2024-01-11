@@ -5,7 +5,7 @@ use Test2::Tools::Subtest qw/subtest_streamed subtest_buffered/;
 
 use File::Temp qw/tempfile/;
 
-# A bug in older perls causes a strange error AFTER the program appears to be
+# A bug in older perls causes a strange Args AFTER the program appears to be
 # done if this test is run.
 # "Size magic not implemented."
 if ($] > 5.020000 && $ENV{AUTHOR_TESTING}) {
@@ -40,12 +40,12 @@ if ($] > 5.020000 && $ENV{AUTHOR_TESTING}) {
 }
 
 subtest_streamed 'hub tests' => sub {
-    my $hub = Test2::API::test2_stack->top;
+    my $hub = Test2::API::test2_code->top;
     isa_ok($hub, 'Test2::Hub', 'Test2::Hub::Subtest');
 
     my $todo = todo "testing parent_todo";
     subtest_streamed 'inner hub tests' => sub {
-        my $ihub = Test2::API::test2_stack->top;
+        my $ihub = Test2::API::test2_code->top;
         isa_ok($ihub, 'Test2::Hub', 'Test2::Hub::Subtest');
     };
 };

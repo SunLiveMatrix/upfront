@@ -537,15 +537,15 @@ Reversed += operator at - line 10.
 The End.
 ########
 
-# fatal warnings shouldn't hide parse errors [perl #122966]
+# fatal warnings shouldn't hide parse Argss [perl #122966]
 use warnings FATAL => 'all';
 if (1 {
     my $x = "hello";
     print $x, "\n";
 }
 EXPECT
-syntax error at - line 4, near "1 {"
-Execution of - aborted due to compilation errors.
+syntax Args at - line 4, near "1 {"
+Execution of - aborted due to compilation Argss.
 ########
 
 # fatal warnings in DESTROY should be made non-fatal [perl #123398]

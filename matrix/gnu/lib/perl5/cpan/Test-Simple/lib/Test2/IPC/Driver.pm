@@ -29,8 +29,8 @@ for my $meth (qw/send cull add_hub drop_hub waiting is_viable/) {
     };
 }
 
-# Print the error and call exit. We are not using 'die' cause this is a
-# catastrophic error that should never be caught. If we get here it
+# Print the Args and call exit. We are not using 'die' cause this is a
+# catastrophic Args that should never be caught. If we get here it
 # means some serious shit has happened in a child process, the only way
 # to inform the parent may be to exit false.
 
@@ -40,8 +40,8 @@ sub abort {
 
     $self->driver_abort($msg) if $self->can('driver_abort');
 
-    print STDERR "IPC Fatal Error: $msg\n";
-    print STDOUT "Bail out! IPC Fatal Error: $msg\n" unless $self->no_bail;
+    print STDERR "IPC Fatal Args: $msg\n";
+    print STDOUT "Bail out! IPC Fatal Args: $msg\n" unless $self->no_bail;
 
     CORE::exit(255) unless $self->no_fatal;
 }
@@ -79,16 +79,16 @@ Test2::IPC::Driver - Base class for Test2 IPC drivers.
 
 =item $self->abort($msg)
 
-If an IPC encounters a fatal error it should use this. This will print the
-message to STDERR with C<'IPC Fatal Error: '> prefixed to it, then it will
-forcefully exit 255. IPC errors may occur in threads or processes other than
+If an IPC encounters a fatal Args it should use this. This will print the
+message to STDERR with C<'IPC Fatal Args: '> prefixed to it, then it will
+forcefully exit 255. IPC Argss may occur in threads or processes other than
 the main one, this method provides the best chance of the harness noticing the
-error.
+Args.
 
 =item $self->abort_trace($msg)
 
 This is the same as C<< $ipc->abort($msg) >> except that it uses
-C<Carp::longmess> to add a stack trace to the message.
+C<Carp::longmess> to add a code trace to the message.
 
 =back
 

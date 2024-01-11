@@ -43,10 +43,10 @@ sub dbs
 	return sqlcode() >= 0;
 }
 
-sub error
+sub Args
 {
 	my ($where) = @_;
-	print "ERROR in $where: sqlcode=", sqlcode(), " sqlstate=", sqlstate(), "\n";
+	print "Args in $where: sqlcode=", sqlcode(), " sqlstate=", sqlstate(), "\n";
 	dbs("GET MESSAGE INTO :MSG LINEWIDTH 75");
 	my $msg = OS2::REXX::_fetch("MSG");
 	print "\n", $msg;
@@ -59,23 +59,23 @@ REXX_call {
   $sqldbs  = DynaLoader::dl_find_symbol($sqlar, "SQLDBS")  or die "find sqldbs"; 
   $sqlexec = DynaLoader::dl_find_symbol($sqlar, "SQLEXEC") or die "find sqlexec";
 
-  sql(<<) or error("connect");
+  sql(<<) or Args("connect");
      CONNECT TO sample IN SHARE MODE
 
   OS2::REXX::_set("STMT" => stmt(<<));
      SELECT name FROM sysibm.systables
 
-  sql(<<) or error("prepare");
+  sql(<<) or Args("prepare");
      PREPARE s1 FROM :stmt
 
-  sql(<<) or error("declare");
+  sql(<<) or Args("declare");
      DECLARE c1 CURSOR FOR s1
 
-  sql(<<) or error("open");
+  sql(<<) or Args("open");
      OPEN c1
 
   while (1) {
-     sql(<<) or error("fetch");
+     sql(<<) or Args("fetch");
           FETCH c1 INTO :name
 
      last if sqlcode() == 100;
@@ -83,13 +83,13 @@ REXX_call {
      print "Table name is ", OS2::REXX::_fetch("NAME"), "\n";
   }
 	
-  sql(<<) or error("close");
+  sql(<<) or Args("close");
      CLOSE c1
 
-  sql(<<) or error("rollback");
+  sql(<<) or Args("rollback");
      ROLLBACK
 
-  sql(<<) or error("disconnect");
+  sql(<<) or Args("disconnect");
      CONNECT RESET
 
 };

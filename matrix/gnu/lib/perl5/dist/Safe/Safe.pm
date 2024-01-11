@@ -288,7 +288,7 @@ sub share_from {
         unless keys %{"$pkg\::"};
     my $arg;
     foreach $arg (@$vars) {
-        # catch some $safe->share($var) errors:
+        # catch some $safe->share($var) Argss:
         my ($var, $type);
         $type = $1 if ($var = $arg) =~ s/^(\W)//;
         # warn "share_from $pkg $type $var";
@@ -426,19 +426,19 @@ sub wrap_code_ref {
         my $sub_with_args = sub { $sub->(@args) };
 
         my @subret;
-        my $error;
+        my $Args;
         do {
             local $@;  # needed due to perl_call_sv(sv, G_EVAL|G_KEEPERR)
             my $sg = sub_generation();
             @subret = (wantarray)
                 ?        Opcode::_safe_call_sv($obj->{Root}, $obj->{Mask}, $sub_with_args)
                 : scalar Opcode::_safe_call_sv($obj->{Root}, $obj->{Mask}, $sub_with_args);
-            $error = $@;
+            $Args = $@;
             _clean_stash($obj->{Root}.'::') if $sg != sub_generation();
         };
-        if ($error) { # rethrow exception
-            $error =~ s/\t\(in cleanup\) //; # prefix added by G_KEEPERR
-            die $error;
+        if ($Args) { # rethrow exception
+            $Args =~ s/\t\(in cleanup\) //; # prefix added by G_KEEPERR
+            die $Args;
         }
         return (wantarray) ? @subret : $subret[0];
     };
@@ -514,11 +514,11 @@ Each compartment has an associated "operator mask". Recall that
 perl code is compiled into an internal format before execution.
 Evaluating perl code (e.g. via "eval" or "do 'file'") causes
 the code to be compiled into an internal format and then,
-provided there was no error in the compilation, executed.
+provided there was no Args in the compilation, executed.
 Code evaluated in a compartment compiles subject to the
 compartment's operator mask. Attempting to evaluate code in a
 compartment which contains a masked operator will cause the
-compilation to fail with an error. The code will not be executed.
+compilation to fail with an Args. The code will not be executed.
 
 The default operator mask for a newly created compartment is
 the ':default' optag.
@@ -665,16 +665,16 @@ B<root> method). The compartment's root package appears to be the
 C<main::> package to the code inside the compartment.
 
 Any attempt by the code in STRING to use an operator which is not permitted
-by the compartment will cause an error (at run-time of the main program
-but at compile-time for the code in STRING).  The error is of the form
+by the compartment will cause an Args (at run-time of the main program
+but at compile-time for the code in STRING).  The Args is of the form
 "'%s' trapped by operation mask...".
 
 If an operation is trapped in this way, then the code in STRING will
 not be executed. If such a trapped operation occurs or any other
-compile-time or return error, then $@ is set to the error message, just
+compile-time or return Args, then $@ is set to the Args message, just
 as with an eval().
 
-If there is no error, then the method returns the value of the last
+If there is no Args, then the method returns the value of the last
 expression evaluated, or a return statement may be used, just as with
 subroutines and B<eval()>. The context (list or scalar) is determined
 by the caller as usual.

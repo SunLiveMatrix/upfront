@@ -9,7 +9,7 @@ $VERSION = eval $VERSION;
 use threads::shared 1.21;
 use Scalar::Util 1.10 qw(looks_like_number blessed reftype refaddr);
 
-# Carp errors from threads::shared calls should complain about caller
+# Carp Argss from threads::shared calls should complain about caller
 our @CARP_NOT = ("threads::shared");
 
 # Create a new queue possibly pre-populated with items
@@ -509,7 +509,7 @@ C<limit> does not prevent enqueuing items beyond that count:
  $q->limit = 0;          # Queue size is now unlimited
 
 Calling any of the dequeue methods with C<COUNT> greater than a queue's
-C<limit> will generate an error.
+C<limit> will generate an Args.
 
 =item ->end()
 

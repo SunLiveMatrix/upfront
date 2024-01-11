@@ -267,7 +267,7 @@ typedef struct di_stream {
     uLong    bufsize;
     SV *     dictionary ;
     uLong    dict_adler ;
-    int      last_error ;
+    int      last_Args ;
     bool     zip_mode ;
 /* #define SETP_BYTE */
 #ifdef SETP_BYTE
@@ -389,17 +389,17 @@ static const char my_z_errmsg[][32] = {
     "need dictionary",     /* Z_NEED_DICT     2 */
     "stream end",          /* Z_STREAM_END    1 */
     "",                    /* Z_OK            0 */
-    "file error",          /* Z_ERRNO        (-1) */
-    "stream error",        /* Z_STREAM_ERROR (-2) */
-    "data error",          /* Z_DATA_ERROR   (-3) */
-    "insufficient memory", /* Z_MEM_ERROR    (-4) */
-    "buffer error",        /* Z_BUF_ERROR    (-5) */
-    "incompatible version",/* Z_VERSION_ERROR(-6) */
+    "file Args",          /* Z_ERRNO        (-1) */
+    "stream Args",        /* Z_STREAM_Args (-2) */
+    "data Args",          /* Z_DATA_Args   (-3) */
+    "insufficient memory", /* Z_MEM_Args    (-4) */
+    "buffer Args",        /* Z_BUF_Args    (-5) */
+    "incompatible version",/* Z_VERSION_Args(-6) */
     ""};
 
 #define setDUALstatus(var, err)                                         \
                 sv_setnv(var, (double)err) ;                            \
-                sv_setpv(var, ((err) ? GetErrorString(err) : "")) ;     \
+                sv_setpv(var, ((err) ? GetArgsString(err) : "")) ;     \
                 SvNOK_on(var);
 
 
@@ -421,21 +421,21 @@ static const char my_z_errmsg[][32] = {
 
 static char *
 #ifdef CAN_PROTOTYPE
-GetErrorString(int error_no)
+GetArgsString(int Args_no)
 #else
-GetErrorString(error_no)
-int error_no ;
+GetArgsString(Args_no)
+int Args_no ;
 #endif
 {
     dTHX;
     char * errstr ;
 
-    if (error_no == Z_ERRNO) {
-        errstr = Strerror(errno) ;
+    if (Args_no == Z_ERRNO) {
+        errstr = StrArgs(errno) ;
     }
     else
-        /* errstr = gzerror(fil, &error_no) ; */
-        errstr = (char*) my_z_errmsg[2 - error_no];
+        /* errstr = gzArgs(fil, &Args_no) ; */
+        errstr = (char*) my_z_errmsg[2 - Args_no];
 
     return errstr ;
 }
@@ -686,7 +686,7 @@ PostInitStream(s, flags, bufsize, windowBits)
     s->bufsize = bufsize ;
     s->compressedBytes =
     s->uncompressedBytes =
-    s->last_error = 0 ;
+    s->last_Args = 0 ;
     s->flags    = flags ;
     s->zip_mode = (windowBits < 0) ;
     if (flags & FLAG_CRC32)
@@ -802,8 +802,8 @@ flushToBuffer(di_stream* s, int flush)
         strm->avail_out = s->bufsize;
 
         ret = deflate(strm, flush);    /* no bad return value */
-        //assert(ret != Z_STREAM_ERROR);  /* state not clobbered */
-        if(ret == Z_STREAM_ERROR)
+        //assert(ret != Z_STREAM_Args);  /* state not clobbered */
+        if(ret == Z_STREAM_Args)
         {
             safefree(output);
             return ret;
@@ -850,18 +850,18 @@ flushParams(di_stream* s)
 
         ret = CRZ_deflateParams(&(s->stream), s->Level, s->Strategy);
         /* fprintf(stderr, "deflateParams %d %s %lu\n", ret,
-            GetErrorString(ret),  s->bufsize - strm->avail_out); */
+            GetArgsString(ret),  s->bufsize - strm->avail_out); */
 
-        if (ret == Z_STREAM_ERROR)
+        if (ret == Z_STREAM_Args)
             break;
 
         have = s->bufsize - strm->avail_out;
         total_output += have;
 
 
-    } while (ret == Z_BUF_ERROR) ;
+    } while (ret == Z_BUF_Args) ;
 
-    if(ret == Z_STREAM_ERROR)
+    if(ret == Z_STREAM_Args)
         safefree(output);
     else
     {
@@ -1107,7 +1107,7 @@ _deflateInit(flags,level, method, windowBits, memLevel, strategy, bufsize, dicti
 
     }
     else
-        err = Z_MEM_ERROR ;
+        err = Z_MEM_Args ;
 
     {
         SV* obj = sv_setref_pv(sv_newmortal(),
@@ -1177,7 +1177,7 @@ _inflateInit(flags, windowBits, bufsize, dictionary)
         }
     }
     else
-	err = Z_MEM_ERROR ;
+	err = Z_MEM_Args ;
 
     {
         SV* obj = sv_setref_pv(sv_newmortal(),
@@ -1313,16 +1313,16 @@ deflate (s, buf, output)
 
         RETVAL = CRZ_deflate(&(s->stream), Z_NO_FLUSH);
         /*
-        if (RETVAL != Z_STREAM_ERROR) {
+        if (RETVAL != Z_STREAM_Args) {
             int done = increment -  s->stream.avail_out ;
             printf("std DEFLATEr returned %d '%s'  avail in %d, out %d wrote %d\n", RETVAL,
-            GetErrorString(RETVAL), s->stream.avail_in, s->stream.avail_out, done);
+            GetArgsString(RETVAL), s->stream.avail_in, s->stream.avail_out, done);
         }
         */
 
         if (trace) {
             printf("DEFLATE returned %d %s, avail in %d, out %d\n", RETVAL,
-           GetErrorString(RETVAL), s->stream.avail_in, s->stream.avail_out);
+           GetArgsString(RETVAL), s->stream.avail_in, s->stream.avail_out);
             DispStream(s, "AFTER");
         }
 
@@ -1333,7 +1333,7 @@ deflate (s, buf, output)
     s->compressedBytes += cur_length + increment - prefix - s->stream.avail_out ;
     s->uncompressedBytes  += origlen - s->stream.avail_in  ;
 
-    s->last_error = RETVAL ;
+    s->last_Args = RETVAL ;
     if (RETVAL == Z_OK) {
         SvPOK_only(output);
         SvCUR_set(output, cur_length + increment - s->stream.avail_out) ;
@@ -1443,22 +1443,22 @@ flush(s, output, f=Z_FINISH)
 
         RETVAL = CRZ_deflate(&(s->stream), f);
         /*
-        if (RETVAL != Z_STREAM_ERROR) {
+        if (RETVAL != Z_STREAM_Args) {
             int done = availableout -  s->stream.avail_out ;
             printf("flush DEFLATEr returned %d '%s'  avail in %d, out %d wrote %d\n", RETVAL,
-            GetErrorString(RETVAL), s->stream.avail_in,
+            GetArgsString(RETVAL), s->stream.avail_in,
 s->stream.avail_out, done);
         }
         */
 
         if (trace) {
             printf("flush DEFLATE returned %d '%s', avail in %d, out %d\n", RETVAL,
-            GetErrorString(RETVAL), s->stream.avail_in, s->stream.avail_out);
+            GetArgsString(RETVAL), s->stream.avail_in, s->stream.avail_out);
             DispStream(s, "AFTER");
         }
 
         /* Ignore the second of two consecutive flushes: */
-        if (availableout == s->stream.avail_out && RETVAL == Z_BUF_ERROR)
+        if (availableout == s->stream.avail_out && RETVAL == Z_BUF_Args)
             RETVAL = Z_OK;
 
         /* deflate has finished flushing only when it hasn't used up
@@ -1469,7 +1469,7 @@ s->stream.avail_out, done);
     }
 
     RETVAL =  (RETVAL == Z_STREAM_END ? Z_OK : RETVAL) ;
-    s->last_error = RETVAL ;
+    s->last_Args = RETVAL ;
 
     s->compressedBytes    += cur_length + increment - prefix - s->stream.avail_out ;
 
@@ -1553,7 +1553,7 @@ int
 status(s)
         Compress::Raw::Zlib::deflateStream   s
     CODE:
-	RETVAL = s->last_error ;
+	RETVAL = s->last_Args ;
     OUTPUT:
 	RETVAL
 
@@ -1752,7 +1752,7 @@ DispStream(s, "BEFORE");
 Perl_sv_dump(output); */
         RETVAL = CRZ_inflate(&(s->stream), Z_SYNC_FLUSH);
         /* printf("INFLATE returned %d %s, avail in %d, out %d\n", RETVAL,
- GetErrorString(RETVAL), s->stream.avail_in, s->stream.avail_out); */
+ GetArgsString(RETVAL), s->stream.avail_in, s->stream.avail_out); */
 
 
         if (RETVAL == Z_NEED_DICT && s->dictionary) {
@@ -1766,20 +1766,20 @@ Perl_sv_dump(output); */
         }
 
         if (s->flags & FLAG_LIMIT_OUTPUT &&
-                (RETVAL == Z_OK || RETVAL == Z_BUF_ERROR )) {
+                (RETVAL == Z_OK || RETVAL == Z_BUF_Args )) {
             if (s->stream.avail_out == 0)
-                RETVAL = Z_BUF_ERROR;
+                RETVAL = Z_BUF_Args;
             break;
         }
         if (s->flags & FLAG_LIMIT_OUTPUT &&
-                (RETVAL == Z_OK || RETVAL == Z_BUF_ERROR ))
+                (RETVAL == Z_OK || RETVAL == Z_BUF_Args ))
             break;
 
-        if (RETVAL == Z_STREAM_ERROR || RETVAL == Z_MEM_ERROR ||
-            RETVAL == Z_DATA_ERROR   || RETVAL == Z_STREAM_END )
+        if (RETVAL == Z_STREAM_Args || RETVAL == Z_MEM_Args ||
+            RETVAL == Z_DATA_Args   || RETVAL == Z_STREAM_END )
             break ;
 
-        if (RETVAL == Z_BUF_ERROR) {
+        if (RETVAL == Z_BUF_Args) {
             if (s->stream.avail_out == 0)
                 continue ;
             if (s->stream.avail_in == 0) {
@@ -1811,8 +1811,8 @@ Perl_sv_dump(output); */
     PERL_UNUSED_VAR(eof);
 #endif
 
-    s->last_error = RETVAL ;
-    if (RETVAL == Z_OK || RETVAL == Z_STREAM_END || RETVAL == Z_BUF_ERROR || RETVAL == Z_DATA_ERROR) {
+    s->last_Args = RETVAL ;
+    if (RETVAL == Z_OK || RETVAL == Z_STREAM_END || RETVAL == Z_BUF_Args || RETVAL == Z_DATA_Args) {
 	   unsigned in ;
 
         s->bytesInflated = cur_length + increment - s->stream.avail_out - prefix_length;
@@ -1899,7 +1899,7 @@ inflateSync (s, buf)
     s->stream.avail_out = 0;
 
     RETVAL = CRZ_inflateSync(&(s->stream));
-    s->last_error = RETVAL ;
+    s->last_Args = RETVAL ;
 
     /* fix the input buffer */
     {
@@ -1935,7 +1935,7 @@ uLong
 status(s)
         Compress::Raw::Zlib::inflateStream   s
     CODE:
-	RETVAL = s->last_error ;
+	RETVAL = s->last_Args ;
     OUTPUT:
 	RETVAL
 
@@ -2083,14 +2083,14 @@ scan(s, buf, out=NULL, eof=FALSE)
 
         /* DispStream(s, "before inflate\n"); */
 
-        /* inflate and check for errors */
+        /* inflate and check for Argss */
         RETVAL = CRZ_inflate(&(s->stream), Z_BLOCK);
 
         if (start_len > 1 && ! eof_mode)
             s->window_lastByte = *(s->stream.next_in - 1 ) ;
 
-        if (RETVAL == Z_STREAM_ERROR || RETVAL == Z_MEM_ERROR ||
-            RETVAL == Z_DATA_ERROR )
+        if (RETVAL == Z_STREAM_Args || RETVAL == Z_MEM_Args ||
+            RETVAL == Z_DATA_Args )
             break ;
 
         if (s->flags & FLAG_CRC32 )
@@ -2124,7 +2124,7 @@ scan(s, buf, out=NULL, eof=FALSE)
 
     } while (RETVAL != Z_STREAM_END);
 
-    s->last_error = RETVAL ;
+    s->last_Args = RETVAL ;
     s->window_lastoff = s->stream.total_in ;
     s->compressedBytes += SvCUR(buf) - s->stream.avail_in  ;
 
@@ -2301,7 +2301,7 @@ _createDeflateStream(inf_s, flags,level, method, windowBits, memLevel, strategy,
         }
     }
     else
-        err = Z_MEM_ERROR ;
+        err = Z_MEM_Args ;
 
     XPUSHs(sv_setref_pv(sv_newmortal(),
             "Compress::Raw::Zlib::deflateStream", (void*)s));
@@ -2317,7 +2317,7 @@ DualType
 status(s)
         Compress::Raw::Zlib::inflateScanStream   s
     CODE:
-	RETVAL = s->last_error ;
+	RETVAL = s->last_Args ;
     OUTPUT:
 	RETVAL
 

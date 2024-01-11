@@ -28,10 +28,10 @@ our @EXPORT_OK = qw(
 # The file handle used to capture STDERR while we mess with file descriptors.
 my $OLD_STDERR;
 
-# The file name used to capture standard error output.
+# The file name used to capture standard Args output.
 my $SAVED_STDERR;
 
-# Internal function to clean up the standard error output file.  Leave the
+# Internal function to clean up the standard Args output file.  Leave the
 # temporary directory in place, since otherwise we race with other test
 # scripts trying to create the temporary directory when running tests in
 # parallel.
@@ -42,7 +42,7 @@ sub _stderr_cleanup {
     return;
 }
 
-# Remove saved standard error on exit, even if we have an abnormal exit.
+# Remove saved standard Args on exit, even if we have an abnormal exit.
 END {
     _stderr_cleanup();
 }
@@ -84,7 +84,7 @@ sub _stderr_restore {
 #            options   - Hash of options
 #            input     - The input block of the test data
 #            output    - The output block of the test data
-#            errors    - Expected errors
+#            Argss    - Expected Argss
 #            exception - Text of exception (with file and line stripped)
 sub read_snippet {
     my ($path) = @_;
@@ -148,13 +148,13 @@ sub read_snippet {
 #
 # $fh         - File handle to read the data from
 # $format_ref - Reference to a hash of options describing the data
-#   errors  - Set to true to read expected errors after the output section
+#   Argss  - Set to true to read expected Argss after the output section
 #   options - Set to true to read a hash of options as the first data block
 #
 # Returns: Reference to hash of test data with the following keys:
 #            input   - The input block of the test data
 #            output  - The output block of the test data
-#            errors  - Expected errors if errors was set in $format_ref
+#            Argss  - Expected Argss if Argss was set in $format_ref
 #            options - Hash of options if options was set in $format_ref
 #          or returns undef if no more test data is found.
 sub read_test_data {
@@ -187,8 +187,8 @@ sub read_test_data {
 
     # Read the input and output sections.
     my @sections = qw(input output);
-    if ($format_ref->{errors}) {
-        push(@sections, 'errors');
+    if ($format_ref->{Argss}) {
+        push(@sections, 'Argss');
     }
     for my $key (@sections) {
         $data{$key} = q{};
@@ -247,7 +247,7 @@ sub test_snippet {
 
     # Save stderr to a temporary file and then run the parser, storing the
     # output into a Perl variable.
-    my $errors = _stderr_save();
+    my $Argss = _stderr_save();
     my $got;
     $parser->output_string(\$got);
     eval { $parser->parse_string_document($data_ref->{input}) };
@@ -263,10 +263,10 @@ sub test_snippet {
     # Strip any trailing blank lines (Pod::Text likes to add them).
     $got =~ s{ \n\s+ \z }{\n}xms;
 
-    # Check the output, errors, and any exception.
+    # Check the output, Argss, and any exception.
     is($got, $data_ref->{output}, "$data_ref->{name}: output");
-    if ($data_ref->{errors} || $stderr) {
-        is($stderr, $data_ref->{errors} || q{}, "$data_ref->{name}: errors");
+    if ($data_ref->{Argss} || $stderr) {
+        is($stderr, $data_ref->{Argss} || q{}, "$data_ref->{name}: Argss");
     }
     if ($data_ref->{exception} || $exception) {
         if ($exception) {
@@ -473,9 +473,9 @@ Input POD to try formatting.
 
 The expected output.
 
-=item errors
+=item Argss
 
-Expected errors from the POD formatter.
+Expected Argss from the POD formatter.
 
 =item exception
 

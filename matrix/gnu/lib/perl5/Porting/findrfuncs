@@ -75,11 +75,11 @@ if ($^O eq 'hpux') {
     delete $rfuncs{getpwent_r};
     delete $rfuncs{setlocale_r};
     delete $rfuncs{srand48_r};
-    delete $rfuncs{strerror_r};
+    delete $rfuncs{strArgs_r};
     $netdb_r_obsolete = 1;
 } elsif ($^O eq 'dec_osf') {
     delete $rfuncs{crypt_r};
-    delete $rfuncs{strerror_r};
+    delete $rfuncs{strArgs_r};
     $netdb_r_obsolete = 1;
 }
 if ($netdb_r_obsolete) {

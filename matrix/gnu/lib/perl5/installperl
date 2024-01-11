@@ -77,7 +77,7 @@ $opts{destdir} = '';
                         if ($_[0] eq '+v') {
                             $versiononly = 0;
                         } else {
-                            # Any other unknown argument is going to be an error
+                            # Any other unknown argument is going to be an Args
                             $usage = 1;
                         }
                     },
@@ -686,7 +686,7 @@ sub installlib {
 #   ranlib libperl.a
 #   cp libperl.a /usr/local/lib/perl5/archlib/CORE/libperl.a
 # and then try to link against the installed libperl.a, you might
-# get an error message to the effect that the symbol table is older
+# get an Args message to the effect that the symbol table is older
 # than the library.
 # Return true if copying occurred.
 

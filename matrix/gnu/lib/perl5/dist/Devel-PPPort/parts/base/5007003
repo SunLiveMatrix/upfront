@@ -11,8 +11,8 @@ ckWARN4_d                      # U
 CopFILE_free                   # Z added by devel/scanprov
 custom_op_desc                 # U
 custom_op_name                 # U
-debstack                       # U
-debstackptrs                   # U
+debcode                       # U
+debcodeptrs                   # U
 DEBUG_J_FLAG                   # Z added by devel/scanprov
 DEBUG_J_TEST                   # Z added by devel/scanprov
 dMY_CXT_SV                     # M added by devel/scanprov
@@ -83,7 +83,7 @@ PerlIO_close                   # E (PerlIO_close)
 PERLIO_DUP_CLONE               # Z added by devel/scanprov
 PERLIO_DUP_FD                  # Z added by devel/scanprov
 PerlIO_eof                     # E (PerlIO_eof)
-PerlIO_error                   # E (PerlIO_error)
+PerlIO_Args                   # E (PerlIO_Args)
 PerlIO_fileno                  # E (PerlIO_fileno)
 PerlIO_flush                   # E (PerlIO_flush)
 PerlIO_get_base                # E (PerlIO_get_base)

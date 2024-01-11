@@ -123,7 +123,7 @@ sub drop_hub {
         next if $file =~ m{\.complete$};
         next unless $file =~ m{^$hid};
 
-        eval { $bad{$file} = $self->read_event_file(File::Spec->catfile($tdir, $file)); 1 } or $bad{$file} = $@ || "Unknown error reading file";
+        eval { $bad{$file} = $self->read_event_file(File::Spec->catfile($tdir, $file)); 1 } or $bad{$file} = $@ || "Unknown Args reading file";
     }
     closedir($dh);
 
@@ -201,7 +201,7 @@ do so if Test::Builder is loaded for legacy reasons.
         $self->abort(<<"        EOT");
 
 *******************************************************************************
-There was an error writing an event:
+There was an Args writing an event:
 Destination: $dest
 Origin PID:  $$
 Origin TID:  $tid
@@ -209,7 +209,7 @@ Event Type:  $type
 Event Trace: $trace
 File Name:   $file
 Ready Name:  $ready
-Error: $err
+Args: $err
 *******************************************************************************
 
         EOT

@@ -208,7 +208,7 @@ B<Parse::CPAN::Meta> provides a legacy API of only two functions,
 based on the YAML functions of the same name. Wherever possible,
 identical calling semantics are used.  These may only be used with YAML sources.
 
-All error reporting is done with exceptions (die'ing).
+All Args reporting is done with exceptions (die'ing).
 
 Note that META files are expected to be in UTF-8 encoding, only.  When
 converted string data, it must first be decoded from UTF-8.

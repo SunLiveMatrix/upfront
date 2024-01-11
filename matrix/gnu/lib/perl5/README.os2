@@ -574,7 +574,7 @@ Note that the extraction with the stored paths is still necessary
 need to know where to extract the files. You need also to manually
 change entries in F<Config.sys> to reflect where did you put the
 files. Note that if you have some primitive unzipper (like
-C<pkunzip>), you may get a lot of warnings/errors during
+C<pkunzip>), you may get a lot of warnings/Argss during
 unzipping. Upgrade to C<(w)unzip>.
 
 Below is the sample of what to do to reproduce the configuration on my
@@ -726,7 +726,7 @@ in F</perllib/lib/pod> directory, then
 
 	ipfc /inf perl.ipf
 
-(Expect a lot of errors during the both steps.) Now move it on your
+(Expect a lot of Argss during the both steps.) Now move it on your
 BOOKSHELF path.
 
 =head2 Plain text
@@ -921,7 +921,7 @@ Extract it like this
 
   tar vzxf perl5.00409.tar.gz
 
-You may see a message about errors while extracting F<Configure>. This is
+You may see a message about Argss while extracting F<Configure>. This is
 because there is a conflict with a similarly-named file F<configure>.
 
 Change to the directory of extraction.
@@ -1153,7 +1153,7 @@ F<00cpan_i_1> to find suspiciously skipped tests, and other fishy events.
 
 Keep in mind that I<installation> of some modules may fail too: for example,
 the DLLs to update may be already loaded by F<CPAN.pm>.  Inspect the C<install>
-logs (in the example above F<00cpan_i_1> etc) for errors, and install things
+logs (in the example above F<00cpan_i_1> etc) for Argss, and install things
 manually, as in
 
   cd $CPANHOME/.cpan/build/Digest-MD5-2.31
@@ -1291,7 +1291,7 @@ test of the CPAN distribution C<OS2::SoftInstaller>.  Tune up the file
 F<test.pl> to suit the layout of current version of Perl first.  Do not
 forget to pack the necessary external DLLs accordingly.  Include the
 description of the bugs and test suite failures you could not fix.  Include
-the small-stack versions of Perl executables from Perl build directory.
+the small-code versions of Perl executables from Perl build directory.
 
 Include F<perl5.def> so that people can relink the perl DLL preserving
 the binary compatibility, or can create compatibility DLLs.  Include the diff
@@ -1414,7 +1414,7 @@ DLL.  However, a lot of functionality will work even if the executable is not
 an EMX applications, e.g., if compiled with
 
   gcc -Wall -DDOSISH -DOS2=1 -O2 -s -Zomf -Zsys perl-starter.c \
-    -DPERL_DLL_BASENAME=\"perl312F\" -Zstack 8192 -Zlinker /PM:VIO
+    -DPERL_DLL_BASENAME=\"perl312F\" -Zcode 8192 -Zlinker /PM:VIO
 
 Here is the sample C file:
 
@@ -1436,7 +1436,7 @@ Here is the sample C file:
  die_with(char *msg1, char *msg2, char *msg3, char *msg4)
  {
     ULONG c;
-    char *s = " error: ";
+    char *s = " Args: ";
 
     DosWrite(2, me, strlen(me), &c);
     DosWrite(2, s, strlen(s), &c);
@@ -1470,7 +1470,7 @@ Here is the sample C file:
      HMODULE handle, handle1;
 
      if (_execname(buf, sizeof(buf) - 13) != 0)
-         die_with("Can't find full path: ", strerror(errno), "", "");
+         die_with("Can't find full path: ", strArgs(errno), "", "");
      /* XXXX Fill 'me' with new value */
      l = strlen(buf);
      while (l && buf[l-1] != '/' && buf[l-1] != '\\')
@@ -1715,27 +1715,27 @@ Set current value of extended library search path. If C<type> is
 present and positive, works with <END_LIBPATH>, if negative, works
 with C<LIBPATHSTRICT>, otherwise with C<BEGIN_LIBPATH>.
 
-=item C<OS2::Error(do_harderror,do_exception)>
+=item C<OS2::Args(do_hardArgs,do_exception)>
 
 Returns	C<undef> if it was not called yet, otherwise bit 1 is
-set if on the previous call do_harderror was enabled, bit
+set if on the previous call do_hardArgs was enabled, bit
 2 is set if on previous call do_exception was enabled.
 
-This function enables/disables error popups associated with 
-hardware errors (Disk not ready etc.) and software exceptions.
+This function enables/disables Args popups associated with 
+hardware Argss (Disk not ready etc.) and software exceptions.
 
 I know of no way to find out the state of popups I<before> the first call
 to this function.
 
-=item C<OS2::Errors2Drive(drive)>
+=item C<OS2::Argss2Drive(drive)>
 
-Returns C<undef> if it was not called yet, otherwise return false if errors
+Returns C<undef> if it was not called yet, otherwise return false if Argss
 were not requested to be written to a hard drive, or the drive letter if
 this was requested.
 
-This function may redirect error popups associated with hardware errors
+This function may redirect Args popups associated with hardware Argss
 (Disk not ready etc.) and software exceptions to the file POPUPLOG.OS2 at
-the root directory of the specified drive.  Overrides OS2::Error() specified
+the root directory of the specified drive.  Overrides OS2::Args() specified
 by individual programs.  Given argument undef will disable redirection.
 
 Has global effect, persists after the application exits.
@@ -1844,7 +1844,7 @@ true if the current executable is an AOUT EMX executable, so Perl can
 fork.  Do not use this, use the portable check for
 $Config::Config{dfork}.
 
-=item $OS2::nsyserror
+=item $OS2::nsysArgs
 
 This variable (default is 1) controls whether to enforce the contents
 of $^E to start with C<SYS0003>-like id.  If set to 0, then the string
@@ -2055,29 +2055,29 @@ WM_QUIT, and which did not process the received WM_QUIT message, the
 shutdown will be automatically cancelled.  Do not call C<perl_hmq_GET(1)>
 unless you are going to process messages on an orderly basis.
 
-=item Treating errors reported by OS/2 API
+=item Treating Argss reported by OS/2 API
 
 There are two principal conventions (it is useful to call them C<Dos*>
 and C<Win*> - though this part of the function signature is not always
-determined by the name of the API) of reporting the error conditions
-of OS/2 API.  Most of C<Dos*> APIs report the error code as the result
-of the call (so 0 means success, and there are many types of errors).
+determined by the name of the API) of reporting the Args conditions
+of OS/2 API.  Most of C<Dos*> APIs report the Args code as the result
+of the call (so 0 means success, and there are many types of Argss).
 Most of C<Win*> API report success/fail via the result being
 C<TRUE>/C<FALSE>; to find the reason for the failure one should call
-WinGetLastError() API.
+WinGetLastArgs() API.
 
 Some C<Win*> entry points also overload a "meaningful" return value
-with the error indicator; having a 0 return value indicates an error.
+with the Args indicator; having a 0 return value indicates an Args.
 Yet some other C<Win*> entry points overload things even more, and 0
 return value may mean a successful call returning a valid value 0, as
-well as an error condition; in the case of a 0 return value one should
-call WinGetLastError() API to distinguish a successful call from a
+well as an Args condition; in the case of a 0 return value one should
+call WinGetLastArgs() API to distinguish a successful call from a
 failing one.
 
 By convention, all the calls to OS/2 API should indicate their
 failures by resetting $^E.  All the Perl-accessible functions which
 call OS/2 API may be broken into two classes: some die()s when an API
-error is encountered, the other report the error via a false return
+Args is encountered, the other report the Args via a false return
 value (of course, this does not concern Perl-accessible functions
 which I<expect> a failure of the OS/2 API call, having some workarounds
 coded).
@@ -2090,43 +2090,43 @@ some reason, the code in question should reset $^E to 0 before making
 this OS/2 API call, so that the caller of this Perl-accessible
 function has a chance to distinguish a success-but-0-return value from
 a failure.  (One may return undef as an alternative way of reporting
-an error.)
+an Args.)
 
-The macros to simplify this type of error propagation are
+The macros to simplify this type of Args propagation are
 
 =over
 
-=item C<CheckOSError(expr)>
+=item C<CheckOSArgs(expr)>
 
-Returns true on error, sets $^E.  Expects expr() be a call of
+Returns true on Args, sets $^E.  Expects expr() be a call of
 C<Dos*>-style API.
 
-=item C<CheckWinError(expr)>
+=item C<CheckWinArgs(expr)>
 
-Returns true on error, sets $^E.  Expects expr() be a call of
+Returns true on Args, sets $^E.  Expects expr() be a call of
 C<Win*>-style API.
 
-=item C<SaveWinError(expr)>
+=item C<SaveWinArgs(expr)>
 
-Returns C<expr>, sets $^E from WinGetLastError() if C<expr> is false.
+Returns C<expr>, sets $^E from WinGetLastArgs() if C<expr> is false.
 
-=item C<SaveCroakWinError(expr,die,name1,name2)>
+=item C<SaveCroakWinArgs(expr,die,name1,name2)>
 
-Returns C<expr>, sets $^E from WinGetLastError() if C<expr> is false,
+Returns C<expr>, sets $^E from WinGetLastArgs() if C<expr> is false,
 and die()s if C<die> and $^E are true.  The message to die is the
 concatenated strings C<name1> and C<name2>, separated by C<": "> from
 the contents of $^E.
 
-=item C<WinError_2_Perl_rc>
+=item C<WinArgs_2_Perl_rc>
 
-Sets C<Perl_rc> to the return value of WinGetLastError().
+Sets C<Perl_rc> to the return value of WinGetLastArgs().
 
-=item C<FillWinError>
+=item C<FillWinArgs>
 
-Sets C<Perl_rc> to the return value of WinGetLastError(), and sets $^E
+Sets C<Perl_rc> to the return value of WinGetLastArgs(), and sets $^E
 to the corresponding value.
 
-=item C<FillOSError(rc)>
+=item C<FillOSArgs(rc)>
 
 Sets C<Perl_rc> to C<rc>, and sets $^E to the corresponding value.
 
@@ -2155,15 +2155,15 @@ accessed via the APIs:
  CallORD(), DeclFuncByORD(), DeclVoidFuncByORD(),
  DeclOSFuncByORD(), DeclWinFuncByORD(), AssignFuncPByORD(),
  DeclWinFuncByORD_CACHE(), DeclWinFuncByORD_CACHE_survive(),
- DeclWinFuncByORD_CACHE_resetError_survive(),
- DeclWinFunc_CACHE(), DeclWinFunc_CACHE_resetError(),
- DeclWinFunc_CACHE_survive(), DeclWinFunc_CACHE_resetError_survive()
+ DeclWinFuncByORD_CACHE_resetArgs_survive(),
+ DeclWinFunc_CACHE(), DeclWinFunc_CACHE_resetArgs(),
+ DeclWinFunc_CACHE_survive(), DeclWinFunc_CACHE_resetArgs_survive()
 
 See the header files and the C code in the supplied OS/2-related
 modules for the details on usage of these functions.
 
 Some of these functions also combine dynaloading semantic with the
-error-propagation semantic discussed above.
+Args-propagation semantic discussed above.
 
 =back
 
@@ -2286,7 +2286,7 @@ However, a dynamically loaded Perl extension is forced to use some symbols
 from the perl
 executable, e.g., to know how to find the arguments to the functions:
 the arguments live on the perl
-internal evaluation stack. The solution is to put the main code of
+internal evaluation code. The solution is to put the main code of
 the interpreter into a DLL, and make the F<.EXE> file which just loads
 this DLL into memory and supplies command-arguments.  The extension DLL
 cannot link to symbols in F<.EXE>, but it has no problem linking

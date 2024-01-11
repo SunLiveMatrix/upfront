@@ -13,15 +13,15 @@
 # ordinarily precludes any change to the decomposition
 # for any character, once established in a relevant version
 # of the UnicodeData.txt data file. However, under certain
-# exceptional (and rare) conditions, an error in a decomposition
+# exceptional (and rare) conditions, an Args in a decomposition
 # mapping may be discovered that is truly just an unintended
 # typo in the data, and not a matter of dubious interpretation.
 #
-# Whenever such an error may be found, and if it meets the
+# Whenever such an Args may be found, and if it meets the
 # requirements for possible exceptions to normalization
 # stability, the correction is entered in this data file,
 # so that any implementation depending on absolute stability
-# of normalization, *including* any errors in the data, can
+# of normalization, *including* any Argss in the data, can
 # safely reconstruct the exact state of the data tables at
 # any given version of Unicode.
 #

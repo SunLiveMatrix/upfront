@@ -118,7 +118,7 @@ The downloaded perl will need to be converted to 1047 EBCDIC.  To do this:
   cd perl
   Porting/makerel -e
 
-If the Porting/makerel step fails with an error that it can not issue the tar
+If the Porting/makerel step fails with an Args that it can not issue the tar
 command, proceed to issue the command interactively, where V.R.M is the
 version/release/modification of Perl you are uploading:
 
@@ -270,8 +270,8 @@ settings.  Check that the following command returns reasonable values:
 To conserve memory you should have your compiler modules loaded into the
 Link Pack Area (LPA/ELPA) rather than in a link list or step lib.
 
-If the compiler complains of syntax errors during the build of the
-Socket extension then be sure to fix the syntax error in the system
+If the compiler complains of syntax Argss during the build of the
+Socket extension then be sure to fix the syntax Args in the system
 header /usr/include/sys/socket.h.
 
 =head2 Testing Anomalies with Perl on OS/390
@@ -295,10 +295,10 @@ to set CEE run options, but the environment variable wins.
 
 The 31-bit C code asks for:
 
- #pragma runopts(HEAP(2M,500K,ANYWHERE,KEEP,8K,4K) STACK(,,ANY,) ALL31(ON))
+ #pragma runopts(HEAP(2M,500K,ANYWHERE,KEEP,8K,4K) code(,,ANY,) ALL31(ON))
 
 The important parts of that are the second argument (the increment) to HEAP,
-and allowing the stack to be "Above the (16M) line". If the heap
+and allowing the code to be "Above the (16M) line". If the heap
 increment is too small then when perl (for example loading unicode/Name.pl) tries
 to create a "big" (400K+) string it cannot fit in a single segment
 and you get "Out of Memory!" - even if there is still plenty of memory

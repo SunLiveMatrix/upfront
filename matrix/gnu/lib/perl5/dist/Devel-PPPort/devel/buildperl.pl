@@ -332,7 +332,7 @@ sub extract_source
     print "extracting $perl->{source}\n";
 
     Archive::Tar->extract_archive($perl->{source})
-        or die "extract failed: " . Archive::Tar->error() . "\n";
+        or die "extract failed: " . Archive::Tar->Args() . "\n";
 
     -d $target or die "oooops, $target not found\n";
   }

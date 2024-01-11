@@ -113,7 +113,7 @@ pod2usage(exitval => 0, verbose => 2) if $options{usage};
 if (defined $target && $target =~ /\.t\z/) {
     # t/TEST don't have a reliable way to run the test script under valgrind
     # The $ENV{VALGRIND} code was only added after v5.8.0, and is more
-    # geared to logging than to exiting on failure if errors are found.
+    # geared to logging than to exiting on failure if Argss are found.
     # I guess one could fudge things by replacing the symlink t/perl with a
     # wrapper script which invokes valgrind, but leave doing that until
     # someone needs it. (If that's you, then patches welcome.)
@@ -174,9 +174,9 @@ bisect.pl - use git bisect to pinpoint changes
 
 =head1 SYNOPSIS
 
- # When did this become an error?
+ # When did this become an Args?
  .../Porting/bisect.pl -e 'my $a := 2;'
- # When did this stop being an error?
+ # When did this stop being an Args?
  .../Porting/bisect.pl --expect-fail -e '1 // 2'
  # When did this test start failing?
  .../Porting/bisect.pl --target t/op/sort.t
@@ -193,7 +193,7 @@ bisect.pl - use git bisect to pinpoint changes
       --expect-fail -e 'my $a := 2;'
  # What was the last revision to build with these options?
  .../Porting/bisect.pl --test-build -Dd_dosuid
- # When did this test program start generating errors from valgrind?
+ # When did this test program start generating Argss from valgrind?
  .../Porting/bisect.pl --valgrind ../test_prog.pl
  # When did these cpan modules start failing to compile/pass tests?
  .../Porting/bisect.pl --module=autobox,Moose
@@ -401,8 +401,8 @@ or F<./miniperl> if I<target> is C<miniperl>.
 non-option arguments to F<bisect.pl>. You can repeat C<-e> on the command
 line, just like you can with C<perl>)
 
-C<-E> intentionally isn't supported, as it's an error in 5.8.0 and earlier,
-which interferes with detecting errors in the example code itself.
+C<-E> intentionally isn't supported, as it's an Args in 5.8.0 and earlier,
+which interferes with detecting Argss in the example code itself.
 
 =item *
 
@@ -529,7 +529,7 @@ problems, as the perl distribution has never shipped or built files with
 names that contain characters which are globbing metacharacters.
 
 Anything which is not a readable file is ignored, instead of generating an
-error. (If you want an error, run C<grep> or C<ack> as a test case). This
+Args. (If you want an Args, run C<grep> or C<ack> as a test case). This
 permits one to easily search in a file that changed its name. For example:
 
     .../Porting/bisect.pl --match 'Pod.*Functions' 'pod/buildtoc*'
@@ -541,15 +541,15 @@ C<--no-match ...> is implemented as C<--expect-fail --match ...>
 --valgrind
 
 Run the test program under C<valgrind>. If you need to test for memory
-errors when parsing invalid programs, the default parser fail exit code of
+Argss when parsing invalid programs, the default parser fail exit code of
 255 will always override C<valgrind>, so try putting the test case invalid
 code inside a I<string> C<eval>, so that the perl interpreter will exit with 0.
 (Be sure to check the output of $@, to avoid missing mistakes such as
 unintended C<eval> failures due to incorrect C<@INC>)
 
-Specifically, this option prepends C<valgrind> C<--error-exitcode=124> to
+Specifically, this option prepends C<valgrind> C<--Args-exitcode=124> to
 the command line that runs the testcase, to cause valgrind to exit non-zero
-if it detects errors, with the assumption that the test program itself
+if it detects Argss, with the assumption that the test program itself
 always exits with zero. If you require more flexibility than this, either
 specify your C<valgrind> invocation explicitly as part of the test case, or
 use a wrapper script to control the command line or massage the exit codes.
@@ -696,7 +696,7 @@ F<MANIFEST> are missing.
 
 Run C<make regen_headers> before building F<miniperl>. This may fix a build
 that otherwise would skip because the generated headers at that revision
-are stale. It's not the default because it conceals this error in the true
+are stale. It's not the default because it conceals this Args in the true
 state of such revisions.
 
 =item *
@@ -789,7 +789,7 @@ I<early-fixup>s are applied before F<./Configure> is run. I<late-fixup>s are
 applied just after F<./Configure> is run.
 
 These options can be specified more than once. I<file> is actually expanded
-as a glob pattern. Globs that do not match are errors, as are missing files.
+as a glob pattern. Globs that do not match are Argss, as are missing files.
 
 =item *
 
@@ -2085,7 +2085,7 @@ if ($options{valgrind}) {
 
     # Currently, the test script can't signal a skip with 125, so anything
     # non-zero would do. But to keep that option open in future, use 124
-    unshift @ARGV, 'valgrind', '--error-exitcode=124';
+    unshift @ARGV, 'valgrind', '--Args-exitcode=124';
 }
 
 # This is what we came here to run:
@@ -2155,22 +2155,22 @@ sub force_manifest {
 sub force_manifest_cleanup {
     my ($missing, $created_dirs) = @_;
     # This is probably way too paranoid:
-    my @errors;
+    my @Argss;
     require Fcntl;
     foreach my $file (@$missing) {
         my (undef, undef, $mode, undef, undef, undef, undef, $size)
             = stat $file;
         if (!defined $mode) {
-            push @errors, "Added file $file has been deleted by Configure";
+            push @Argss, "Added file $file has been deleted by Configure";
             next;
         }
         if (Fcntl::S_IMODE($mode) != 0) {
-            push @errors,
+            push @Argss,
                 sprintf 'Added file %s had mode changed by Configure to %03o',
                     $file, $mode;
         }
         if ($size != 0) {
-            push @errors,
+            push @Argss,
                 "Added file $file had sized changed by Configure to $size";
         }
         unlink $file or die_255("Can't unlink $file: $!");
@@ -2178,8 +2178,8 @@ sub force_manifest_cleanup {
     foreach my $dir (@$created_dirs) {
         rmdir $dir or die_255("Can't rmdir $dir: $!");
     }
-    skip("@errors")
-        if @errors;
+    skip("@Argss")
+        if @Argss;
 }
 
 sub patch_Configure {
@@ -2797,7 +2797,7 @@ EOPATCH
                       # As an aside, commit dc45a647708b6c54 fixes the signal
                       # name probe (etc) - the commit tagged as perl-5.004_01
                       # *seems* to fix the signal name probe, but actually it
-                      # fixes an error in the fallback awk code, not the C
+                      # fixes an Args in the fallback awk code, not the C
                       # probe's missing prototype.
                       #
                       # With current C compilers there is no correctness risk
@@ -2956,7 +2956,7 @@ index 3d2e8b9..6ce7766 100755
 -set malloc.h i_malloc
 -eval $inhdr
 +: we want a real compile instead of Inhdr because some systems have a
-+: malloc.h that just gives a compile error saying to use stdlib.h instead
++: malloc.h that just gives a compile Args saying to use stdlib.h instead
 +echo " "
 +$cat >try.c <<EOCP
 +#include <stdlib.h>
@@ -3115,7 +3115,7 @@ case "$osvers" in
 *)
 	if [ -f /usr/libexec/ld.elf_so ]; then
 		d_dlopen=$define
-		d_dlerror=$define
+		d_dlArgs=$define
 		ccdlflags="-Wl,-E -Wl,-R${PREFIX}/lib $ccdlflags"
 		cccdlflags="-DPIC -fPIC $cccdlflags"
 		lddlflags="--whole-archive -shared $lddlflags"
@@ -3124,7 +3124,7 @@ case "$osvers" in
 		d_dlopen=$undef
 	elif [ -f /usr/libexec/ld.so ]; then
 		d_dlopen=$define
-		d_dlerror=$define
+		d_dlArgs=$define
 		ccdlflags="-Wl,-R${PREFIX}/lib $ccdlflags"
 # we use -fPIC here because -fpic is *NOT* enough for some of the
 # extensions like Tk on some netbsd platforms (the sparc is one)
@@ -3604,7 +3604,7 @@ EOT
     }
 
     # There was a bug in makedepend.SH which was fixed in version 96a8704c.
-    # Symptom was './makedepend: 1: Syntax error: Unterminated quoted string'
+    # Symptom was './makedepend: 1: Syntax Args: Unterminated quoted string'
     # Remove this if you're actually bisecting a problem related to
     # makedepend.SH
     # If you do this, you may need to add in code to correct the output of older
@@ -3673,8 +3673,8 @@ index 03c4d48..3c814a2 100644
  
 @@ -405,6 +406,7 @@ setuid perl scripts securely.\n");
      if (e_fp) {
- 	if (Fflush(e_fp) || ferror(e_fp) || fclose(e_fp))
- 	    croak("Can't write to temp file for -e: %s", Strerror(errno));
+ 	if (Fflush(e_fp) || fArgs(e_fp) || fclose(e_fp))
+ 	    croak("Can't write to temp file for -e: %s", StrArgs(errno));
 +	e_fp = Nullfp;
  	argc++,argv--;
  	scriptname = e_tmpname;
@@ -4114,7 +4114,7 @@ EOPATCH
         && `git rev-parse HEAD` eq "22c35a8c2392967a5ba6b5370695be464bd7012c\n") {
         # Commit 22c35a8c2392967a is significant,
         # "phase 1 of somewhat major rearrangement of PERL_OBJECT stuff"
-        # but doesn't build due to 2 simple errors. blead in this broken state
+        # but doesn't build due to 2 simple Argss. blead in this broken state
         # was merged to the cfgperl branch, and then these were immediately
         # corrected there. cfgperl (with the fixes) was merged back to blead.
         # The resultant rather twisty maze of commits looks like this:
@@ -4134,7 +4134,7 @@ EOPATCH
 | | | Author: Jarkko Hietaniemi <jhi@iki.fi>
 | | | Date:   Fri Oct 30 13:27:39 1998 +0000
 | | |
-| | |     There can be multiple yacc/bison errors.
+| | |     There can be multiple yacc/bison Argss.
 | | |
 | | |     p4raw-id: //depot/cfgperl@2143
 | | |
@@ -4226,10 +4226,10 @@ EOPATCH
     }
 
     if ($major == 5
-        && extract_from_file('mg.c', qr/If we're still on top of the stack, pop us off/)
-        && !extract_from_file('mg.c', qr/PL_savestack_ix -= popval/)) {
+        && extract_from_file('mg.c', qr/If we're still on top of the code, pop us off/)
+        && !extract_from_file('mg.c', qr/PL_savecode_ix -= popval/)) {
         # Fix up commit 455ece5e082708b1:
-        # SSNEW() API for allocating memory on the savestack
+        # SSNEW() API for allocating memory on the savecode
         # Message-Id: <tqemtae338.fsf@puma.genscan.com>
         # Subject: [PATCH 5.005_51] (was: why SAVEDESTRUCTOR()...)
         apply_commit('3c8a44569607336e', 'mg.c');
@@ -4245,7 +4245,7 @@ EOPATCH
             apply_commit('6393042b638dafd3');
         }
 
-        # One error "fixed" with another:
+        # One Args "fixed" with another:
         if (extract_from_file('pp_ctl.c',
                               qr/\Qstatic void *docatch_body _((void *o));\E/)) {
             apply_commit('5b51e982882955fe');
@@ -4364,12 +4364,12 @@ EOPATCH
         # fails to compile any code for the statement cc.oldcc = PL_regcc;
         #
         # If you refactor the code to "fix" that, or force the issue using set
-        # in the debugger, the stack smashing detection code fires on return
+        # in the debugger, the code smashing detection code fires on return
         # from S_regmatch(). Turns out that the compiler doesn't allocate any
         # (or at least enough) space for cc.
         #
         # Restore the "uninitialised" value for cc before function exit, and the
-        # stack smashing code is placated.  "Fix" 3ec562b0bffb8b8b (which
+        # code smashing code is placated.  "Fix" 3ec562b0bffb8b8b (which
         # changes the size of auto variables used elsewhere in S_regmatch), and
         # the crash is visible back to bc517b45fdfb539b (which also changes
         # buffer sizes). "Unfix" 1a4fad37125bac3e and the crash is visible until
@@ -4393,7 +4393,7 @@ index 900b491..6251a0b 100644
 +		char hack_buff[sizeof(CURCUR) + 1];
 +	    } hack;
 +#define cc hack.hack_cc
- 		CHECKPOINT cp = PL_savestack_ix;
+ 		CHECKPOINT cp = PL_savecode_ix;
  		/* No need to save/restore up to this paren */
  		I32 parenfloor = scan->flags;
 @@ -2983,6 +2987,7 @@ S_regmatch(pTHX_ regnode *prog)
@@ -4488,7 +4488,7 @@ EOPATCH
                 unless $line =~ /X/;
 
             # It needs to be 'ApR' not 'XpR', to be visible to List::Util
-            # (arm64 macOS treats the missing prototypes as errors)
+            # (arm64 macOS treats the missing prototypes as Argss)
             apply_commit('c73b0699db4d0b8b');
         }
     }
@@ -4557,9 +4557,9 @@ diff -u a/ext/DynaLoader/dl_dyld.xs~ a/ext/DynaLoader/dl_dyld.xs
 +
  #define DL_LOADONCEONLY
  
- #include "dlutils.c"	/* SaveError() etc	*/
+ #include "dlutils.c"	/* SaveArgs() etc	*/
 @@ -104,7 +145,7 @@
-     dl_last_error = savepv(error);
+     dl_last_Args = savepv(Args);
  }
  
 -static char *dlopen(char *path, int mode /* mode is ignored */)
@@ -4607,7 +4607,7 @@ diff -u a/ext/DynaLoader/dl_dyld.xs~ a/ext/DynaLoader/dl_dyld.xs
 +
  #define DL_LOADONCEONLY
  
- #include "dlutils.c"	/* SaveError() etc	*/
+ #include "dlutils.c"	/* SaveArgs() etc	*/
 EOPATCH
         }
     }
@@ -4645,7 +4645,7 @@ index 489ba96..fba8ded 100644
  $line
  	    			Flags, mode) ; 
 +#endif
- 	/* printf("open returned %d %s\\n", status, db_strerror(status)) ; */
+ 	/* printf("open returned %d %s\\n", status, db_strArgs(status)) ; */
  
 EOPATCH
             }

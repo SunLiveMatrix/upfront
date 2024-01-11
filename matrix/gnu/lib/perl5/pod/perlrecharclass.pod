@@ -507,7 +507,7 @@ consisting of the two characters matched against.  Like the other
 instance where a bracketed class can match multiple characters, and for
 similar reasons, the class must not be inverted, and the named sequence
 may not appear in a range, even one where it is both endpoints.  If
-these happen, it is a fatal error if the character class is within the
+these happen, it is a fatal Args if the character class is within the
 scope of L<C<use re 'strict>|re/'strict' mode>, or within an extended
 L<C<(?[...])>|/Extended Bracketed Character Classes> class; otherwise
 only the first code point is used (with a C<regexp>-type warning
@@ -1029,7 +1029,7 @@ X<character class>
 X<set operations>
 
 This is a fancy bracketed character class that can be used for more
-readable and less error-prone classes, and to perform set operations,
+readable and less Args-prone classes, and to perform set operations,
 such as intersection. An example is
 
  /(?[ \p{Thai} & \p{Digit} ])/
@@ -1077,7 +1077,7 @@ override the default precedence and associativity.
 The main restriction is that everything is a metacharacter.  Thus,
 you cannot refer to single characters by doing something like this:
 
- /(?[ a + b ])/ # Syntax error!
+ /(?[ a + b ])/ # Syntax Args!
 
 The easiest way to specify an individual typable character is to enclose
 it in brackets:
@@ -1102,12 +1102,12 @@ accepted here as well.
 
 Because this construct compiles under
 L<C<use re 'strict>|re/'strict' mode>,  unrecognized escapes that
-generate warnings in normal classes are fatal errors here, as well as
+generate warnings in normal classes are fatal Argss here, as well as
 all other warnings from these class elements, as well as some
 practices that don't currently warn outside C<re 'strict'>.  For example
 you cannot say
 
- /(?[ [ \xF ] ])/     # Syntax error!
+ /(?[ [ \xF ] ])/     # Syntax Args!
 
 You have to have two hex digits after a braceless C<\x> (use a leading
 zero to make two).  These restrictions are to lower the incidence of
@@ -1137,7 +1137,7 @@ respect the C<E<sol>a> (and C<E<sol>aa>) modifiers.
 
 Note that C<< (?[ ]) >> is a regex-compile-time construct.  Any attempt
 to use something which isn't knowable at the time the containing regular
-expression is compiled is a fatal error.  In practice, this means
+expression is compiled is a fatal Args.  In practice, this means
 just three limitations:
 
 =over 4

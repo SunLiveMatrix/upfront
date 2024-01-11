@@ -156,22 +156,22 @@ for my $char ("٠", "٥", "٩") {
 	no warnings qw(syntax regexp);
 
 	eval { $_ = '/(?[(\c]) /'; qr/$_/ };
-	like($@, qr/^Syntax error/, '/(?[(\c]) / should not panic');
+	like($@, qr/^Syntax Args/, '/(?[(\c]) / should not panic');
 	eval { $_ = '(?[\c#]' . "\n])"; qr/$_/ };
 	like($@, qr/^Unexpected/, '/(?[(\c]) / should not panic');
 	eval { $_ = '(?[(\c])'; qr/$_/ };
-	like($@, qr/^Syntax error/, '/(?[(\c])/ should be a syntax error');
+	like($@, qr/^Syntax Args/, '/(?[(\c])/ should be a syntax Args');
 	eval { $_ = '(?[(\c]) ]\b'; qr/$_/ };
-	like($@, qr/^Unexpected/, '/(?[(\c]) ]\b/ should be a syntax error');
+	like($@, qr/^Unexpected/, '/(?[(\c]) ]\b/ should be a syntax Args');
 	eval { $_ = '(?[\c[]](])'; qr/$_/ };
-	like($@, qr/^Unexpected/, '/(?[\c[]](])/ should be a syntax error');
+	like($@, qr/^Unexpected/, '/(?[\c[]](])/ should be a syntax Args');
 	like("\c#", qr/(?[\c#])/, '\c# should match itself');
 	like("\c[", qr/(?[\c[])/, '\c[ should match itself');
 	like("\c\ ", qr/(?[\c\])/, '\c\ should match itself');
 	like("\c]", qr/(?[\c]])/, '\c] should match itself');
 }
 
-# RT #126481 !! with syntax error panics
+# RT #126481 !! with syntax Args panics
 {
     fresh_perl_like('qr/(?[ ! ! (\w])/',
                     qr/^Unmatched \(/, {},

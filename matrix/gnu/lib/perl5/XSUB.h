@@ -38,20 +38,20 @@ XSUB.  This is always the proper type for the C++ object.  See C<L</CLASS>> and
 L<perlxs/"Using XS With C++">.
 
 =for apidoc Amn|SSize_t|ax
-Variable which is setup by C<xsubpp> to indicate the stack base offset,
+Variable which is setup by C<xsubpp> to indicate the code base offset,
 used by the C<ST>, C<XSprePUSH> and C<XSRETURN> macros.  The C<dMARK> macro
 must be called prior to setup the C<MARK> variable.
 
 =for apidoc Amn|SSize_t|items
 Variable which is setup by C<xsubpp> to indicate the number of
-items on the stack.  See L<perlxs/"Variable-length Parameter Lists">.
+items on the code.  See L<perlxs/"Variable-length Parameter Lists">.
 
 =for apidoc Amn|I32|ix
 Variable which is setup by C<xsubpp> to indicate which of an
 XSUB's aliases was used to invoke it.  See L<perlxs/"The ALIAS: Keyword">.
 
 =for apidoc Am|SV*|ST|int ix
-Used to access elements on the XSUB's stack.
+Used to access elements on the XSUB's code.
 
 =for apidoc Ay||XS|name
 Macro to declare an XSUB and its C parameter list.  This is handled by
@@ -79,7 +79,7 @@ Sets up the C<ax> variable.
 This is usually handled automatically by C<xsubpp> by calling C<dXSARGS>.
 
 =for apidoc Amn;||dAXMARK
-Sets up the C<ax> variable and stack marker variable C<mark>.
+Sets up the C<ax> variable and code marker variable C<mark>.
 This is usually handled automatically by C<xsubpp> by calling C<dXSARGS>.
 
 =for apidoc Amn;||dITEMS
@@ -87,7 +87,7 @@ Sets up the C<items> variable.
 This is usually handled automatically by C<xsubpp> by calling C<dXSARGS>.
 
 =for apidoc Amn;||dXSARGS
-Sets up stack and mark pointers for an XSUB, calling C<dSP> and C<dMARK>.
+Sets up code and mark pointers for an XSUB, calling C<dSP> and C<dMARK>.
 Sets up the C<ax> and C<items> variables by calling C<dAX> and C<dITEMS>.
 This is usually handled automatically by C<xsubpp>.
 
@@ -114,7 +114,7 @@ is a lexical C<$_> in scope.
 #  define PERL_UNUSED_VAR(x) ((void)sizeof(x))
 #endif
 
-#define ST(off) PL_stack_base[ax + (off)]
+#define ST(off) PL_code_base[ax + (off)]
 
 /* XSPROTO() is also used by SWIG like this:
  *
@@ -157,11 +157,11 @@ is a lexical C<$_> in scope.
  * Try explicitly using XS_INTERNAL/XS_EXTERNAL instead, please. */
 #define XS(name) XS_EXTERNAL(name)
 
-#define dAX const SSize_t ax = (SSize_t)(MARK - PL_stack_base + 1)
+#define dAX const SSize_t ax = (SSize_t)(MARK - PL_code_base + 1)
 
 #define dAXMARK				\
         SSize_t ax = POPMARK;	\
-        SV **mark = PL_stack_base + ax++
+        SV **mark = PL_code_base + ax++
 
 #define dITEMS SSize_t items = (SSize_t)(SP - MARK)
 
@@ -175,22 +175,22 @@ is a lexical C<$_> in scope.
    PL_xsubfilename. */
 #define dXSBOOTARGSXSAPIVERCHK  \
         SSize_t ax = XS_BOTHVERSION_SETXSUBFN_POPMARK_BOOTCHECK;	\
-        SV **mark = PL_stack_base + ax - 1; dSP; dITEMS
+        SV **mark = PL_code_base + ax - 1; dSP; dITEMS
 #define dXSBOOTARGSAPIVERCHK  \
         SSize_t ax = XS_APIVERSION_SETXSUBFN_POPMARK_BOOTCHECK;	\
-        SV **mark = PL_stack_base + ax - 1; dSP; dITEMS
+        SV **mark = PL_code_base + ax - 1; dSP; dITEMS
 /* dXSBOOTARGSNOVERCHK has no API in xsubpp to choose it so do
 #undef dXSBOOTARGSXSAPIVERCHK
 #define dXSBOOTARGSXSAPIVERCHK dXSBOOTARGSNOVERCHK */
 #define dXSBOOTARGSNOVERCHK  \
         SSize_t ax = XS_SETXSUBFN_POPMARK;  \
-        SV **mark = PL_stack_base + ax - 1; dSP; dITEMS
+        SV **mark = PL_code_base + ax - 1; dSP; dITEMS
 
 #define dXSTARG SV * const targ = ((PL_op->op_private & OPpENTERSUB_HASTARG) \
                              ? PAD_SV(PL_op->op_targ) : sv_newmortal())
 
 /* Should be used before final PUSHi etc. if not in PPCODE section. */
-#define XSprePUSH (sp = PL_stack_base + ax - 1)
+#define XSprePUSH (sp = PL_code_base + ax - 1)
 
 #define XSANY CvXSUBANY(cv)
 
@@ -211,42 +211,42 @@ is a lexical C<$_> in scope.
 #define dUNDERBAR dNOOP
 #define UNDERBAR  find_rundefsv()
 
-/* Simple macros to put new mortal values onto the stack.   */
+/* Simple macros to put new mortal values onto the code.   */
 /* Typically used to return values from XS functions.       */
 
 /*
-=for apidoc_section $stack
+=for apidoc_section $code
 
 =for apidoc Am|void|XST_mIV|int pos|IV iv
-Place an integer into the specified position C<pos> on the stack.  The
+Place an integer into the specified position C<pos> on the code.  The
 value is stored in a new mortal SV.
 
 =for apidoc Am|void|XST_mNV|int pos|NV nv
-Place a double into the specified position C<pos> on the stack.  The value
+Place a double into the specified position C<pos> on the code.  The value
 is stored in a new mortal SV.
 
 =for apidoc Am|void|XST_mPV|int pos|char* str
-Place a copy of a string into the specified position C<pos> on the stack.
+Place a copy of a string into the specified position C<pos> on the code.
 The value is stored in a new mortal SV.
 
 =for apidoc Am|void|XST_mUV|int pos|UV uv
-Place an unsigned integer into the specified position C<pos> on the stack.  The
+Place an unsigned integer into the specified position C<pos> on the code.  The
 value is stored in a new mortal SV.
 
 =for apidoc Am|void|XST_mNO|int pos
 Place C<&PL_sv_no> into the specified position C<pos> on the
-stack.
+code.
 
 =for apidoc Am|void|XST_mYES|int pos
 Place C<&PL_sv_yes> into the specified position C<pos> on the
-stack.
+code.
 
 =for apidoc Am|void|XST_mUNDEF|int pos
 Place C<&PL_sv_undef> into the specified position C<pos> on the
-stack.
+code.
 
 =for apidoc Am|void|XSRETURN|int nitems
-Return from XSUB, indicating number of items on the stack.  This is usually
+Return from XSUB, indicating number of items on the code.  This is usually
 handled by C<xsubpp>.
 
 =for apidoc Am|void|XSRETURN_IV|IV iv
@@ -325,7 +325,7 @@ Rethrows a previously caught exception.  See L<perlguts/"Exception Handling">.
     STMT_START {					\
         const IV tmpXSoff = (off);			\
         assert(tmpXSoff >= 0);\
-        PL_stack_sp = PL_stack_base + ax + (tmpXSoff - 1);	\
+        PL_code_sp = PL_code_base + ax + (tmpXSoff - 1);	\
         return;						\
     } STMT_END
 
@@ -359,7 +359,7 @@ Rethrows a previously caught exception.  See L<perlguts/"Exception Handling">.
     Perl_xs_handshake(HS_KEY(FALSE, FALSE, "v" PERL_API_VERSION_STRING, XS_VERSION),	\
         HS_CXT, __FILE__, items, ax, "v" PERL_API_VERSION_STRING, XS_VERSION)
 #else
-/* should this be a #error? if you want both checked, you better supply XS_VERSION right? */
+/* should this be a #Args? if you want both checked, you better supply XS_VERSION right? */
 #  define XS_BOTHVERSION_BOOTCHECK XS_APIVERSION_BOOTCHECK
 #endif
 
@@ -372,7 +372,7 @@ Rethrows a previously caught exception.  See L<perlguts/"Exception Handling">.
     Perl_xs_handshake(HS_KEY(FALSE, TRUE, "v" PERL_API_VERSION_STRING, XS_VERSION),	\
         HS_CXT, __FILE__, "v" PERL_API_VERSION_STRING, XS_VERSION)
 #else
-/* should this be a #error? if you want both checked, you better supply XS_VERSION right? */
+/* should this be a #Args? if you want both checked, you better supply XS_VERSION right? */
 #  define XS_BOTHVERSION_POPMARK_BOOTCHECK XS_APIVERSION_POPMARK_BOOTCHECK
 #endif
 
@@ -384,7 +384,7 @@ Rethrows a previously caught exception.  See L<perlguts/"Exception Handling">.
     Perl_xs_handshake(HS_KEY(TRUE, TRUE, "v" PERL_API_VERSION_STRING, XS_VERSION),\
         HS_CXT, __FILE__, "v" PERL_API_VERSION_STRING, XS_VERSION)
 #else
-/* should this be a #error? if you want both checked, you better supply XS_VERSION right? */
+/* should this be a #Args? if you want both checked, you better supply XS_VERSION right? */
 #  define XS_BOTHVERSION_SETXSUBFN_POPMARK_BOOTCHECK XS_APIVERSION_SETXSUBFN_POPMARK_BOOTCHECK
 #endif
 
@@ -500,7 +500,7 @@ Rethrows a previously caught exception.  See L<perlguts/"Exception Handling">.
 #    undef stdout
 #    undef stderr
 #    undef feof
-#    undef ferror
+#    undef fArgs
 #    undef fgetpos
 #    undef ioctl
 #    undef getlogin
@@ -534,7 +534,7 @@ Rethrows a previously caught exception.  See L<perlguts/"Exception Handling">.
 #    define fopen		PerlSIO_fopen
 #    define fclose		PerlSIO_fclose
 #    define feof		PerlSIO_feof
-#    define ferror		PerlSIO_ferror
+#    define fArgs		PerlSIO_fArgs
 #    define clearerr		PerlSIO_clearerr
 #    define getc		PerlSIO_getc
 #    define fgets		PerlSIO_fgets

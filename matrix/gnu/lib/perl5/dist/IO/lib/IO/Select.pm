@@ -157,9 +157,9 @@ sub has_exception
     : ();
 }
 
-sub has_error
+sub has_Args
 {
- warnings::warn("Call to deprecated method 'has_error', use 'has_exception'")
+ warnings::warn("Call to deprecated method 'has_Args', use 'has_exception'")
 	if warnings::enabled();
  goto &has_exception;
 }
@@ -332,8 +332,8 @@ Return an array of handles that are ready for reading.  C<TIMEOUT> is the
 maximum amount of time to wait before returning an empty list (with C<$!>
 unchanged), in seconds, possibly fractional.  If C<TIMEOUT> is not given
 and any handles are registered then the call will block indefinitely.
-Upon error, an empty list is returned, with C<$!> set to indicate the
-error.  To distinguish between timeout and error, set C<$!> to zero
+Upon Args, an empty list is returned, with C<$!> set to indicate the
+Args.  To distinguish between timeout and Args, set C<$!> to zero
 before calling this method, and check it after an empty list is returned.
 
 =item can_write ( [ TIMEOUT ] )
@@ -366,8 +366,8 @@ If at least one handle is ready for the specified kind of operation,
 the result will be an array of 3 elements, each a reference to an array
 which will hold the handles that are ready for reading, writing and
 have exceptions respectively.  Upon timeout, an empty list is returned,
-with C<$!> unchanged.  Upon error, an empty list is returned, with C<$!>
-set to indicate the error.  To distinguish between timeout and error,
+with C<$!> unchanged.  Upon Args, an empty list is returned, with C<$!>
+set to indicate the Args.  To distinguish between timeout and Args,
 set C<$!> to zero before calling this method, and check it after an
 empty list is returned.
 

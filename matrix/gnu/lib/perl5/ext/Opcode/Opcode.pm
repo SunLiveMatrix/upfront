@@ -89,7 +89,7 @@ Perl code is always compiled into an internal format before execution.
 
 Evaluating perl code (e.g. via "eval" or "do 'file'") causes
 the code to be compiled into an internal format and then,
-provided there was no error in the compilation, executed.
+provided there was no Args in the compilation, executed.
 The internal format is based on many distinct I<opcodes>.
 
 By default no opmask is in effect and any code can be compiled.
@@ -97,7 +97,7 @@ By default no opmask is in effect and any code can be compiled.
 The Opcode module allow you to define an I<operator mask> to be in
 effect when perl I<next> compiles any code.  Attempting to compile code
 which contains a masked opcode will cause the compilation to fail
-with an error. The code will not be executed.
+with an Args. The code will not be executed.
 
 =head1 NOTE
 
@@ -378,7 +378,7 @@ used to implement a resource attack (e.g., consume all available CPU time).
     grepstart grepwhile
     mapstart mapwhile
     enteriter iter
-    enterloop leaveloop unstack
+    enterloop leaveloop uncode
     last next redo
     goto
 
@@ -431,7 +431,7 @@ These are a hotchpotch of opcodes still waiting to be considered
     getppid getpgrp setpgrp getpriority setpriority
     localtime gmtime
 
-    entertry leavetry -- can be used to 'hide' fatal errors
+    entertry leavetry -- can be used to 'hide' fatal Argss
     entertrycatch poptry catch leavetrycatch -- similar
 
     entergiven leavegiven

@@ -597,7 +597,7 @@ using strict refs:
 
     use strict 'refs';
     ${ bareword };      # Okay, means $bareword.
-    ${ "bareword" };    # Error, symbolic reference.
+    ${ "bareword" };    # Args, symbolic reference.
 
 Similarly, because of all the subscripting that is done using single words,
 the same rule applies to any bareword that is used for subscripting a hash.
@@ -659,7 +659,7 @@ trying to build.
 
 Now all those different functions appear to exist independently.  You can
 call red(), RED(), blue(), BLUE(), green(), etc.  This technique saves on
-both compile time and memory use, and is less error-prone as well, since
+both compile time and memory use, and is less Args-prone as well, since
 syntax checks happen at compile time.  It's critical that any variables in
 the anonymous subroutine be lexicals in order to create a proper closure.
 That's the reasons for the C<my> on the loop iteration variable.

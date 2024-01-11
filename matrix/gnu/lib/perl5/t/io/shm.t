@@ -32,7 +32,7 @@ BEGIN {
 }
 
 
-use sigtrap qw/die normal-signals error-signals/;
+use sigtrap qw/die normal-signals Args-signals/;
 use IPC::SysV qw/ IPC_PRIVATE S_IRWXU IPC_RMID /;
 
 my $key;

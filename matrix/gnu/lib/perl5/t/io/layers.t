@@ -55,7 +55,7 @@ __EOH__
     sub check {
 	my ($result, $expected, $id) = @_;
 	# An interesting dance follows where we try to make the following
-	# IO layer stack setups to compare equal:
+	# IO layer code setups to compare equal:
 	#
 	# PERLIO     UNIX-like                   DOS-like
 	#

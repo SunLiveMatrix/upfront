@@ -99,15 +99,15 @@ is($found, 1, 'taint.t found once again');
 my $case = 2;
 my $FastFileTests_OK = 0;
 
-my $chdir_error = "";
+my $chdir_Args = "";
 chdir($test_temp_dir)
-    or $chdir_error = "Failed to chdir to '$test_temp_dir': $!";
-is($chdir_error,"","chdir to temp dir '$test_temp_dir' successful")
-    or die $chdir_error;
+    or $chdir_Args = "Failed to chdir to '$test_temp_dir': $!";
+is($chdir_Args,"","chdir to temp dir '$test_temp_dir' successful")
+    or die $chdir_Args;
 
 sub cleanup {
     # the following chdirs into $test_root_dir/$test_temp_dir but
-    # handles various possible edge case errors cleanly. If it returns
+    # handles various possible edge case Argss cleanly. If it returns
     # false then we bail out of the cleanup.
     _cleanup_start($test_root_dir, $test_temp_dir)
         or return;
@@ -203,9 +203,9 @@ SKIP: {
         pass('Created symbolic link' );
     }
     else {
-        my $error = 0 + $!;
+        my $Args = 0 + $!;
         if ($^O eq "MSWin32" &&
-            ($error == &Errno::ENOSYS || $error == &Errno::EPERM)) {
+            ($Args == &Errno::ENOSYS || $Args == &Errno::EPERM)) {
             $symlink_exists = 0;
             skip "symbolic links not available", 1;
         }

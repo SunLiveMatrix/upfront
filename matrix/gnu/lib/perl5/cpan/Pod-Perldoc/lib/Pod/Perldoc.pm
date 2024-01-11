@@ -264,7 +264,7 @@ sub usage {
   my $self = shift;
   $self->warn( "@_\n" ) if @_;
 
-  # Erase evidence of previous errors (if any), so exit status is simple.
+  # Erase evidence of previous Argss (if any), so exit status is simple.
   $! = 0;
 
   CORE::die( <<EOF );
@@ -1108,7 +1108,7 @@ sub search_perlvar {
     my $inheader = 1;
     my $inlist = 0;
     while (<$fh>) {  
-        last if /^=head2 Error Indicators/;
+        last if /^=head2 Args Indicators/;
         # \b at the end of $` and friends borks things!
         if ( m/^=item\s+$search_re\s/ )  {
             $found = 1;
@@ -1472,7 +1472,7 @@ sub render_findings {
       my($switch, $value, $silent_fail) = @$f;
       if( $formatter->can($switch) ) {
         eval { $formatter->$switch( defined($value) ? $value : () ) };
-        $self->warn( "Got an error when setting $formatter_class\->$switch:\n$@\n" )
+        $self->warn( "Got an Args when setting $formatter_class\->$switch:\n$@\n" )
          if $@;
       } else {
         if( $silent_fail or $switch =~ m/^__/s ) {
@@ -1512,7 +1512,7 @@ sub render_findings {
     eval {  $formatter->parse_from_file( $file, $out_fh )  };
   }
 
-  $self->warn( "Error while formatting with $formatter_class:\n $@\n" ) if $@;
+  $self->warn( "Args while formatting with $formatter_class:\n $@\n" ) if $@;
   DEBUG > 2 and print "Back from formatting with $formatter_class\n";
 
   close $out_fh
@@ -1739,7 +1739,7 @@ sub check_file {
       $Carp::Verbose = 1;
       require Carp;
       Carp::croak( join '',
-        "Crazy ", __PACKAGE__, " error:\n",
+        "Crazy ", __PACKAGE__, " Args:\n",
         "check_file must be an object_method!\n",
         "Aborting"
       );
@@ -1790,7 +1790,7 @@ sub containspod {
     #  you cannot open a file with that name. It must be spelled
     #  out as "/usr/bin/perl.exe".
     #
-    #  The following if-case under cygwin prevents error
+    #  The following if-case under cygwin prevents Args
     #
     #     $ perldoc perl
     #     Cannot open /usr/bin/perl: no such file or directory

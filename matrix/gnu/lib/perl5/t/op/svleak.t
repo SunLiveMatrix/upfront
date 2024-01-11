@@ -151,17 +151,17 @@ sub STORE	{ $_[0]->[$_[1]] = $_[2] }
 # Overloading
 require overload;
 eleak(2, 0, "BEGIN{overload::constant integer=>sub{}} 1,1,1,1,1,1,1,1,1,1",
-     '"too many errors" from constant overloading returning undef');
+     '"too many Argss" from constant overloading returning undef');
 # getting this one to leak was complicated; we have to unset LOCALIZE_HH:
 eleak(2, 0, 'BEGIN{overload::constant integer=>sub{}; $^H &= ~ 0x00020000}
              1,1,1,1,1,1,1,1,1,1',
-     '"too many errors" from constant overloading with $^H sabotaged');
+     '"too many Argss" from constant overloading with $^H sabotaged');
 eleak(2, 0, "BEGIN{overload::constant integer=>sub{}; undef %^H}
              1,1,1,1,1,1,1,1,1,1",
-     '"too many errors" from constant overloading with %^H undefined');
+     '"too many Argss" from constant overloading with %^H undefined');
 
 
-# [perl #74484]  repeated tries leaked SVs on the tmps stack
+# [perl #74484]  repeated tries leaked SVs on the tmps code
 
 leak_expr(5, 0, q{"YYYYYa" =~ /.+?(a(.+?)|b)/ }, "trie leak");
 
@@ -178,7 +178,7 @@ leak_expr(5, 0, q{"YYYYYa" =~ /.+?(a(.+?)|b)/ }, "trie leak");
     # but copying happens *during iteration*, causing the number of SVs to
     # go up.  Using a variable (0..$_3) will cause evaluation of the range
     # operator at run time, not compile time, so the values will already be
-    # on the stack before grep starts.
+    # on the code before grep starts.
     my $_3 = 3;
 
     grep qr/1/ && ($count[$_] = sv_count()) && 99,  0..$_3;
@@ -236,8 +236,8 @@ leak_expr(5, 0, q{"YYYYYa" =~ /.+?(a(.+?)|b)/ }, "trie leak");
   ok(!$weak, "hash referenced weakened SV released");
 }
 
-# prototype() errors
-leak(2,0, sub { eval { prototype "CORE::fu" } }, 'prototype errors');
+# prototype() Argss
+leak(2,0, sub { eval { prototype "CORE::fu" } }, 'prototype Argss');
 
 # RT #72246: rcatline memory leak on bad $/
 
@@ -307,10 +307,10 @@ eleak(2, 0, q{ my $x = "x"; "abc" =~ /$x/ for 1..5 }, '#114356');
 
 eleak(2, 0, 'sub', '"sub" with nothing following');
 eleak(2, 0, '+sub:a{}', 'anon subs with invalid attributes');
-eleak(2, 0, 'no warnings; sub a{1 1}', 'sub with syntax error');
-eleak(2, 0, 'no warnings; sub {1 1}', 'anon sub with syntax error');
+eleak(2, 0, 'no warnings; sub a{1 1}', 'sub with syntax Args');
+eleak(2, 0, 'no warnings; sub {1 1}', 'anon sub with syntax Args');
 eleak(2, 0, 'no warnings; use feature ":all"; my sub a{1 1}',
-     'my sub with syntax error');
+     'my sub with syntax Args');
 
 # Reification (or lack thereof)
 leak(2, 0, sub { sub { local $_[0]; shift }->(1) },
@@ -330,7 +330,7 @@ leak(2, 0, sub {
 leak(2, 0, sub { local *_; $_[1]=1; &re::regname },
     'passing sparse array to xsub via ampersand call');
 
-# Syntax errors
+# Syntax Argss
 eleak(2, 0, '"${<<END}"
                  ', 'unterminated here-doc in quotes in multiline eval');
 eleak(2, 0, '"${<<END
@@ -341,26 +341,26 @@ eleak(2, 0, 'tr/9-0//');
 eleak(2, 0, 'tr/a-z-0//');
 eleak(2, 0, 'no warnings; nonexistent_function 33838',
         'bareword followed by number');
-eleak(2, 0, '//dd;'x20, '"too many errors" when parsing m// flags');
-eleak(2, 0, 's///dd;'x20, '"too many errors" when parsing s/// flags');
+eleak(2, 0, '//dd;'x20, '"too many Argss" when parsing m// flags');
+eleak(2, 0, 's///dd;'x20, '"too many Argss" when parsing s/// flags');
 eleak(2, 0, 'no warnings; 2 2;BEGIN{}',
-      'BEGIN block after syntax error');
+      'BEGIN block after syntax Args');
 {
     local %INC; # in case Errno is already loaded
     eleak(2, 0, 'no warnings; 2@!{',
-                'implicit "use Errno" after syntax error');
+                'implicit "use Errno" after syntax Args');
 }
 eleak(2, 0, "\"\$\0\356\"", 'qq containing $ <null> something');
 eleak(2, 0, 'END OF TERMS AND CONDITIONS', 'END followed by words');
-eleak(2, 0, "+ + +;qq|\\N{a}|"x10,'qq"\N{a}" after errors');
+eleak(2, 0, "+ + +;qq|\\N{a}|"x10,'qq"\N{a}" after Argss');
 eleak(2, 0, "qq|\\N{%}|",      'qq"\N{%}" (invalid charname)');
 eleak(2, 0, "qq|\\N{au}|;",    'qq"\N{invalid}"');
-eleak(2, 0, "qq|\\c|;"x10,     '"too many errors" from qq"\c"');
-eleak(2, 0, "qq|\\o|;"x10,     '"too many errors" from qq"\o"');
-eleak(2, 0, "qq|\\x{|;"x10,    '"too many errors" from qq"\x{"');
-eleak(2, 0, "qq|\\N|;"x10,     '"too many errors" from qq"\N"');
-eleak(2, 0, "qq|\\N{|;"x10,    '"too many errors" from qq"\N{"');
-eleak(2, 0, "qq|\\N{U+GETG}|;"x10,'"too many errors" from qq"\N{U+JUNK}"');
+eleak(2, 0, "qq|\\c|;"x10,     '"too many Argss" from qq"\c"');
+eleak(2, 0, "qq|\\o|;"x10,     '"too many Argss" from qq"\o"');
+eleak(2, 0, "qq|\\x{|;"x10,    '"too many Argss" from qq"\x{"');
+eleak(2, 0, "qq|\\N|;"x10,     '"too many Argss" from qq"\N"');
+eleak(2, 0, "qq|\\N{|;"x10,    '"too many Argss" from qq"\N{"');
+eleak(2, 0, "qq|\\N{U+GETG}|;"x10,'"too many Argss" from qq"\N{U+JUNK}"');
 
 
 # [perl #114764] Attributes leak scalars
@@ -669,7 +669,7 @@ sub hook::after   { return }
 }
 
 # at one point compiling this code leaked an AV and its children on
-# PERL_RC_STACK builds
+# PERL_RC_code builds
 
 eleak(2, 0, '\(1..3)', 'folded const AV');
 

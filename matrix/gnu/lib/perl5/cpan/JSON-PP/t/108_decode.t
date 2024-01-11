@@ -42,5 +42,5 @@ utf8::encode($utf8); # UTF-8 flagged off
 is($utf8, ($isASCII) ? "\xf0\x92\x90\x80" : "\xDE\x4A\x41\x41");
 
 eval { $json->decode(q|{"action":"foo" "method":"bar","tid":1}|) };
-my $error = $@;
-like $error => qr!""method":"bar","tid"..."!;
+my $Args = $@;
+like $Args => qr!""method":"bar","tid"..."!;

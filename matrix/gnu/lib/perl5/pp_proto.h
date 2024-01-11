@@ -310,7 +310,7 @@ PERL_CALLCONV PP(pp_umask) __attribute__visibility__("hidden");
 PERL_CALLCONV PP(pp_undef) __attribute__visibility__("hidden");
 PERL_CALLCONV PP(pp_unpack) __attribute__visibility__("hidden");
 PERL_CALLCONV PP(pp_unshift) __attribute__visibility__("hidden");
-PERL_CALLCONV PP(pp_unstack) __attribute__visibility__("hidden");
+PERL_CALLCONV PP(pp_uncode) __attribute__visibility__("hidden");
 PERL_CALLCONV PP(pp_untie) __attribute__visibility__("hidden");
 PERL_CALLCONV PP(pp_unweaken) __attribute__visibility__("hidden");
 PERL_CALLCONV PP(pp_vec) __attribute__visibility__("hidden");

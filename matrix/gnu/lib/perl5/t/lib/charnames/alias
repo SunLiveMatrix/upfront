@@ -1,4 +1,4 @@
-Tests for use charnames with compilation errors and aliases.
+Tests for use charnames with compilation Argss and aliases.
 __END__
 # NAME illegal :pragma
 use warnings;
@@ -340,7 +340,7 @@ EXPECT
 OPTIONS regex
 PADDING CHARACTER
 ########
-# NAME A wrong character in :alias is an error
+# NAME A wrong character in :alias is an Args
 # These next tests could be combined, but the messages can come out in
 # different orders on EBCDIC vs ASCII, and can't have both 'random' and 'regex'
 # options, and need 'regex' to avoid 'at line X' getting in the way.
@@ -351,7 +351,7 @@ EXPECT
 OPTIONS regex
 Invalid character in charnames alias definition; marked by <-- HERE in '4<-- HERE e_ACUTE'
 ########
-# NAME Another wrong character in :alias is an error
+# NAME Another wrong character in :alias is an Args
 use charnames ":full", ":alias" => {
                             "e_A,CUTE" => "LATIN SMALL LETTER E WITH ACUTE",
                     };
@@ -359,7 +359,7 @@ EXPECT
 OPTIONS regex
 Invalid character in charnames alias definition; marked by <-- HERE in 'e_A,<-- HERE CUTE'
 ########
-# NAME Another wrong character in :alias is an error
+# NAME Another wrong character in :alias is an Args
 # The EXPECT regex matches both the UTF-8 and non-UTF-8 form.
 # This is because under some circumstances the message gets output as UTF-8.
 # We use \xab, as that is invalid in both ASCII and EBCDIC platforms, and we
@@ -380,7 +380,7 @@ print "ok\n" if "\N{自転車に乗る人}" eq "\x{1F6B4}";
 EXPECT
 ok
 ########
-# NAME Misspelled \N{} UTF-8 names are errors
+# NAME Misspelled \N{} UTF-8 names are Argss
 use utf8;
 use open qw( :utf8 :std );
 use charnames ":full", ":alias" => { "自転車に乗る人" => "BICYCLIST" };
@@ -389,7 +389,7 @@ EXPECT
 OPTIONS regex
 Unknown charname '転車に乗る人' at - line \d+, within string
 ########
-# NAME various wrong UTF-8 characters in :alias are errors
+# NAME various wrong UTF-8 characters in :alias are Argss
 # First has a punctuation, KATAKANA MIDDLE DOT, in it; second begins with a
 # digit: ARABIC-INDIC DIGIT FOUR
 # Note that output order is alphabetical by character name

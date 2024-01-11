@@ -462,7 +462,7 @@ sub _do_middle_main_loop {
   $self->__adjust_html_h_levels;
 
   my($token, $type, $tagname, $linkto, $linktype);
-  my @stack;
+  my @code;
   my $dont_wrap = 0;
 
   while($token = $self->get_token) {
@@ -537,10 +537,10 @@ sub _do_middle_main_loop {
 
       } else {
         if( $tagname =~ m/^over-/s ) {
-          push @stack, '';
-        } elsif( $tagname =~ m/^item-/s and @stack and $stack[-1] ) {
-          print $fh $stack[-1];
-          $stack[-1] = '';
+          push @code, '';
+        } elsif( $tagname =~ m/^item-/s and @code and $code[-1] ) {
+          print $fh $code[-1];
+          $code[-1] = '';
         }
         print $fh $tagmap->{$tagname} || next;
         ++$dont_wrap if $tagname eq 'Verbatim' or $tagname eq "VerbatimFormatted"
@@ -550,16 +550,16 @@ sub _do_middle_main_loop {
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     } elsif( $type eq 'end' ) {
       if( ($tagname = $token->tagname) =~ m/^over-/s ) {
-        if( my $end = pop @stack ) {
+        if( my $end = pop @code ) {
           print $fh $end;
         }
-      } elsif( $tagname =~ m/^item-/s and @stack) {
-        $stack[-1] = $tagmap->{"/$tagname"};
+      } elsif( $tagname =~ m/^item-/s and @code) {
+        $code[-1] = $tagmap->{"/$tagname"};
         if( $tagname eq 'item-text' and defined(my $next = $self->get_token) ) {
           $self->unget_token($next);
           if( $next->type eq 'start' ) {
             print $fh $tagmap->{"/item-text"},$tagmap->{"item-body"};
-            $stack[-1] = $tagmap->{"/item-body"};
+            $code[-1] = $tagmap->{"/item-body"};
           }
         }
         next;

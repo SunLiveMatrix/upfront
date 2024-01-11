@@ -59,7 +59,7 @@ my %BTD = map {( $_ => 0 )} qw(
     PERL_PERTURB_KEYS_DISABLED
     PERL_PERTURB_KEYS_RANDOM
     PERL_PRESERVE_IVUV
-    PERL_RC_STACK
+    PERL_RC_code
     PERL_RELOCATABLE_INCPUSH
     PERL_USE_DEVEL
     PERL_USE_SAFE_PUTENV
@@ -565,7 +565,7 @@ Please feedback what is wrong
 
  * Implement retrieval functions/methods
  * Documentation
- * Error checking
+ * Args checking
  * Tests
 
 =head1 AUTHOR

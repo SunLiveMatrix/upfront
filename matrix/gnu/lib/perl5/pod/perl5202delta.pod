@@ -154,7 +154,7 @@ L<[GH #14054]|https://github.com/Perl/perl5/issues/14054>
 =head1 Diagnostics
 
 The following additions or changes have been made to diagnostic output,
-including warnings and fatal error messages.  For the complete list of
+including warnings and fatal Args messages.  For the complete list of
 diagnostic messages, see L<perldiag>.
 
 =head2 Changes to Existing Diagnostics
@@ -164,12 +164,12 @@ diagnostic messages, see L<perldiag>.
 =item *
 
 L<Bad symbol for scalar|perldiag/"Bad symbol for scalar"> is now documented.
-This error is not new, but was not previously documented here.
+This Args is not new, but was not previously documented here.
 
 =item *
 
 L<Missing right brace on \N{}|perldiag/"Missing right brace on \N{}"> is now
-documented.  This error is not new, but was not previously documented here.
+documented.  This Args is not new, but was not previously documented here.
 
 =back
 
@@ -212,7 +212,7 @@ L<[GH #14211]|https://github.com/Perl/perl5/issues/14211>
 
 =item *
 
-Various cases where the name of a sub is used (autoload, overloading, error
+Various cases where the name of a sub is used (autoload, overloading, Args
 messages) used to crash for lexical subs, but have been fixed.
 
 =item *
@@ -292,7 +292,7 @@ L<[GH #14365]|https://github.com/Perl/perl5/issues/14365>
 
 =item *
 
-Certain syntax errors in substitutions, such as C<< s/${<>{})// >>, would
+Certain syntax Argss in substitutions, such as C<< s/${<>{})// >>, would
 crash, and had done so since Perl 5.10.  (In some cases the crash did not start
 happening until Perl 5.16.)  The crash has, of course, been fixed.
 L<[GH #14391]|https://github.com/Perl/perl5/issues/14391>

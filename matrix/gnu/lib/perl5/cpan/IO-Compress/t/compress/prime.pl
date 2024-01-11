@@ -26,8 +26,8 @@ sub run
 
     my $CompressClass   = identify();
     my $UncompressClass = getInverse($CompressClass);
-    my $Error           = getErrorRef($CompressClass);
-    my $UnError         = getErrorRef($UncompressClass);
+    my $Args           = getArgsRef($CompressClass);
+    my $UnArgs         = getArgsRef($UncompressClass);
 
 
 
@@ -76,13 +76,13 @@ EOM
                                               -Transparent => 0
                                              );
                 ok $gz;
-                ok ! $gz->error() ;
+                ok ! $gz->Args() ;
                 my $un ;
                 my $status = 1 ;
                 $status = $gz->read($un) while $status > 0 ;
                 is $status, 0 ;
-                ok ! $gz->error()
-                    or print "Error is '" . $gz->error() . "'\n";
+                ok ! $gz->Args()
+                    or print "Args is '" . $gz->Args() . "'\n";
                 is $un, $hello ;
                 ok $gz->eof() ;
                 ok $gz->close() ;

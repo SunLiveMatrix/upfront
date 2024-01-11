@@ -36,7 +36,7 @@ sub mkCompObject
         if $status != Z_OK;
 
     return bless {'Def'        => $def,
-                  'Error'      => '',
+                  'Args'      => '',
                  } ;
 }
 
@@ -59,7 +59,7 @@ sub mkCompObject1
         if $status != Z_OK;
 
     return bless {'Def'        => $def,
-                  'Error'      => '',
+                  'Args'      => '',
                  } ;
 }
 
@@ -70,12 +70,12 @@ sub compr
     my $def   = $self->{Def};
 
     my $status = $def->deflate($_[0], $_[1]) ;
-    $self->{ErrorNo} = $status;
+    $self->{ArgsNo} = $status;
 
     if ($status != Z_OK)
     {
-        $self->{Error} = "Deflate Error: $status";
-        return STATUS_ERROR;
+        $self->{Args} = "Deflate Args: $status";
+        return STATUS_Args;
     }
 
     return STATUS_OK;
@@ -89,12 +89,12 @@ sub flush
 
     my $opt = $_[1] || Z_FINISH;
     my $status = $def->flush($_[0], $opt);
-    $self->{ErrorNo} = $status;
+    $self->{ArgsNo} = $status;
 
     if ($status != Z_OK)
     {
-        $self->{Error} = "Deflate Error: $status";
-        return STATUS_ERROR;
+        $self->{Args} = "Deflate Args: $status";
+        return STATUS_Args;
     }
 
     return STATUS_OK;
@@ -117,11 +117,11 @@ sub reset
     my $def   = $self->{Def};
 
     my $status = $def->deflateReset() ;
-    $self->{ErrorNo} = $status;
+    $self->{ArgsNo} = $status;
     if ($status != Z_OK)
     {
-        $self->{Error} = "Deflate Error: $status";
-        return STATUS_ERROR;
+        $self->{Args} = "Deflate Args: $status";
+        return STATUS_Args;
     }
 
     return STATUS_OK;
@@ -134,11 +134,11 @@ sub deflateParams
     my $def   = $self->{Def};
 
     my $status = $def->deflateParams(@_);
-    $self->{ErrorNo} = $status;
+    $self->{ArgsNo} = $status;
     if ($status != Z_OK)
     {
-        $self->{Error} = "deflateParams Error: $status";
-        return STATUS_ERROR;
+        $self->{Args} = "deflateParams Args: $status";
+        return STATUS_Args;
     }
 
     return STATUS_OK;

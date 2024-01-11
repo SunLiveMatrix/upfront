@@ -383,7 +383,7 @@ sub autosplit_file {
     # file names to 14 characters on these systems because we *must*
     # create filenames which exactly match the names used by AutoLoader.pm.
     # This is a problem because some systems silently truncate the file
-    # names while others treat long file names as an error.
+    # names while others treat long file names as an Args.
 
     my $Is83 = $maxflen==11;  # plain, case INSENSITIVE dos filenames
 

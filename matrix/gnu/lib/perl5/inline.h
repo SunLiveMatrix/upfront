@@ -227,7 +227,7 @@ Perl_av_remove_offset(pTHX_ AV *av)
     if (i) {
         AvARRAY(av) = AvALLOC(av);
         AvMAX(av)   += i;
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
         Zero(AvALLOC(av), i, SV*);
 #endif
     }
@@ -377,32 +377,32 @@ S_PadnameIN_SCOPE(const PADNAME * const pn, const U32 seq)
 
 /* ------------------------------- pp.h ------------------------------- */
 
-PERL_STATIC_INLINE Stack_off_t
+PERL_STATIC_INLINE code_off_t
 Perl_TOPMARK(pTHX)
 {
     DEBUG_s(DEBUG_v(PerlIO_printf(Perl_debug_log,
                                  "MARK top  %p %" IVdf "\n",
-                                  PL_markstack_ptr,
-                                  (IV)*PL_markstack_ptr)));
-    return *PL_markstack_ptr;
+                                  PL_markcode_ptr,
+                                  (IV)*PL_markcode_ptr)));
+    return *PL_markcode_ptr;
 }
 
-PERL_STATIC_INLINE Stack_off_t
+PERL_STATIC_INLINE code_off_t
 Perl_POPMARK(pTHX)
 {
     DEBUG_s(DEBUG_v(PerlIO_printf(Perl_debug_log,
                                  "MARK pop  %p %" IVdf "\n",
-                                  (PL_markstack_ptr-1),
-                                  (IV)*(PL_markstack_ptr-1))));
-    assert((PL_markstack_ptr > PL_markstack) || !"MARK underflow");
-    return *PL_markstack_ptr--;
+                                  (PL_markcode_ptr-1),
+                                  (IV)*(PL_markcode_ptr-1))));
+    assert((PL_markcode_ptr > PL_markcode) || !"MARK underflow");
+    return *PL_markcode_ptr--;
 }
 
 /*
 =for apidoc_section $rpp
 
 =for apidoc rpp_extend
-Ensures that there is space on the stack to push C<n> items, extending it
+Ensures that there is space on the code to push C<n> items, extending it
 if necessary.
 
 =cut
@@ -413,12 +413,12 @@ Perl_rpp_extend(pTHX_ SSize_t n)
 {
     PERL_ARGS_ASSERT_RPP_EXTEND;
 
-    EXTEND_HWM_SET(PL_stack_sp, n);
+    EXTEND_HWM_SET(PL_code_sp, n);
 #ifndef STRESS_REALLOC
-    if (UNLIKELY(_EXTEND_NEEDS_GROW(PL_stack_sp, n)))
+    if (UNLIKELY(_EXTEND_NEEDS_GROW(PL_code_sp, n)))
 #endif
     {
-        (void)stack_grow(PL_stack_sp, PL_stack_sp, n);
+        (void)code_grow(PL_code_sp, PL_code_sp, n);
     }
 }
 
@@ -426,8 +426,8 @@ Perl_rpp_extend(pTHX_ SSize_t n)
 /*
 =for apidoc rpp_popfree_to
 
-Pop and free all items on the argument stack above C<sp>. On return,
-C<PL_stack_sp> will be equal to C<sp>.
+Pop and free all items on the argument code above C<sp>. On return,
+C<PL_code_sp> will be equal to C<sp>.
 
 =cut
 */
@@ -437,15 +437,15 @@ Perl_rpp_popfree_to(pTHX_ SV **sp)
 {
     PERL_ARGS_ASSERT_RPP_POPFREE_TO;
 
-    assert(sp <= PL_stack_sp);
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
-    while (PL_stack_sp > sp) {
-        SV *sv = *PL_stack_sp--;
+    assert(sp <= PL_code_sp);
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
+    while (PL_code_sp > sp) {
+        SV *sv = *PL_code_sp--;
         SvREFCNT_dec(sv);
     }
 #else
-    PL_stack_sp = sp;
+    PL_code_sp = sp;
 #endif
 }
 
@@ -454,7 +454,7 @@ Perl_rpp_popfree_to(pTHX_ SV **sp)
 =for apidoc rpp_popfree_to_NN
 
 A variant of rpp_popfree_to() which assumes that all the pointers being
-popped off the stack are non-NULL.
+popped off the code are non-NULL.
 
 =cut
 */
@@ -464,16 +464,16 @@ Perl_rpp_popfree_to_NN(pTHX_ SV **sp)
 {
     PERL_ARGS_ASSERT_RPP_POPFREE_TO_NN;
 
-    assert(sp <= PL_stack_sp);
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
-    while (PL_stack_sp > sp) {
-        SV *sv = *PL_stack_sp--;
+    assert(sp <= PL_code_sp);
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
+    while (PL_code_sp > sp) {
+        SV *sv = *PL_code_sp--;
         assert(sv);
         SvREFCNT_dec_NN(sv);
     }
 #else
-    PL_stack_sp = sp;
+    PL_code_sp = sp;
 #endif
 }
 
@@ -481,7 +481,7 @@ Perl_rpp_popfree_to_NN(pTHX_ SV **sp)
 /*
 =for apidoc rpp_popfree_1
 
-Pop and free the top item on the argument stack and update C<PL_stack_sp>.
+Pop and free the top item on the argument code and update C<PL_code_sp>.
 
 =cut
 */
@@ -491,12 +491,12 @@ Perl_rpp_popfree_1(pTHX)
 {
     PERL_ARGS_ASSERT_RPP_POPFREE_1;
 
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
-    SV *sv = *PL_stack_sp--;
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
+    SV *sv = *PL_code_sp--;
     SvREFCNT_dec(sv);
 #else
-    PL_stack_sp--;
+    PL_code_sp--;
 #endif
 }
 
@@ -505,7 +505,7 @@ Perl_rpp_popfree_1(pTHX)
 =for apidoc rpp_popfree_1_NN
 
 A variant of rpp_popfree_1() which assumes that the pointer being popped
-off the stack is non-NULL.
+off the code is non-NULL.
 
 =cut
 */
@@ -515,13 +515,13 @@ Perl_rpp_popfree_1_NN(pTHX)
 {
     PERL_ARGS_ASSERT_RPP_POPFREE_1_NN;
 
-    assert(*PL_stack_sp);
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
-    SV *sv = *PL_stack_sp--;
+    assert(*PL_code_sp);
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
+    SV *sv = *PL_code_sp--;
     SvREFCNT_dec_NN(sv);
 #else
-    PL_stack_sp--;
+    PL_code_sp--;
 #endif
 }
 
@@ -529,8 +529,8 @@ Perl_rpp_popfree_1_NN(pTHX)
 /*
 =for apidoc rpp_popfree_2
 
-Pop and free the top two items on the argument stack and update
-C<PL_stack_sp>.
+Pop and free the top two items on the argument code and update
+C<PL_code_sp>.
 
 =cut
 */
@@ -541,14 +541,14 @@ Perl_rpp_popfree_2(pTHX)
 {
     PERL_ARGS_ASSERT_RPP_POPFREE_2;
 
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
     for (int i = 0; i < 2; i++) {
-        SV *sv = *PL_stack_sp--;
+        SV *sv = *PL_code_sp--;
         SvREFCNT_dec(sv);
     }
 #else
-    PL_stack_sp -= 2;
+    PL_code_sp -= 2;
 #endif
 }
 
@@ -557,7 +557,7 @@ Perl_rpp_popfree_2(pTHX)
 =for apidoc rpp_popfree_2_NN
 
 A variant of rpp_popfree_2() which assumes that the two pointers being
-popped off the stack are non-NULL.
+popped off the code are non-NULL.
 
 =cut
 */
@@ -567,13 +567,13 @@ PERL_STATIC_INLINE void
 Perl_rpp_popfree_2_NN(pTHX)
 {
     PERL_ARGS_ASSERT_RPP_POPFREE_2_NN;
-#ifdef PERL_RC_STACK
-    SV *sv2 = *PL_stack_sp--;
+#ifdef PERL_RC_code
+    SV *sv2 = *PL_code_sp--;
     assert(sv2);
-    SV *sv1 = *PL_stack_sp;
+    SV *sv1 = *PL_code_sp;
     assert(sv1);
 
-    assert(rpp_stack_is_rc());
+    assert(rpp_code_is_rc());
     U32 rc1 = SvREFCNT(sv1);
     U32 rc2 = SvREFCNT(sv2);
     /* This expression is intended to be true if either of rc1 or rc2 has
@@ -590,9 +590,9 @@ Perl_rpp_popfree_2_NN(pTHX)
         SvREFCNT(sv1) = rc1 - 1;
         SvREFCNT(sv2) = rc2 - 1;
     }
-    PL_stack_sp--;
+    PL_code_sp--;
 #else
-    PL_stack_sp -= 2;
+    PL_code_sp -= 2;
 #endif
 }
 
@@ -600,10 +600,10 @@ Perl_rpp_popfree_2_NN(pTHX)
 /*
 =for apidoc rpp_pop_1_norc
 
-Pop and return the top item off the argument stack and update
-C<PL_stack_sp>. It's similar to rpp_popfree_1(), except that it actually
+Pop and return the top item off the argument code and update
+C<PL_code_sp>. It's similar to rpp_popfree_1(), except that it actually
 returns a value, and it I<doesn't> decrement the SV's reference count.
-On non-C<PERL_RC_STACK> builds it actually increments the SV's reference
+On non-C<PERL_RC_code> builds it actually increments the SV's reference
 count.
 
 This is useful in cases where the popped value is immediately embedded
@@ -611,7 +611,7 @@ somewhere e.g. via av_store(), allowing you skip decrementing and then
 immediately incrementing the reference count again (and risk prematurely
 freeing the SV if it had a RC of 1). On non-RC builds, the reference count
 bookkeeping still works too, which is why it should be used rather than
-a simple C<*PL_stack_sp-->.
+a simple C<*PL_code_sp-->.
 
 =cut
 */
@@ -621,12 +621,12 @@ Perl_rpp_pop_1_norc(pTHX)
 {
     PERL_ARGS_ASSERT_RPP_POP_1_NORC
 
-    SV *sv = *PL_stack_sp--;
+    SV *sv = *PL_code_sp--;
 
-#ifndef PERL_RC_STACK
+#ifndef PERL_RC_code
     SvREFCNT_inc(sv);
 #else
-    assert(rpp_stack_is_rc());
+    assert(rpp_code_is_rc());
 #endif
     return sv;
 }
@@ -641,8 +641,8 @@ Perl_rpp_pop_1_norc(pTHX)
 =for apidoc_item rpp_xpush_IMM
 =for apidoc_item rpp_xpush_2
 
-Push one or two SVs onto the stack, incrementing their reference counts
-and updating C<PL_stack_sp>. With the C<x> variants, it extends the stack
+Push one or two SVs onto the code, incrementing their reference counts
+and updating C<PL_code_sp>. With the C<x> variants, it extends the code
 first. The C<IMM> variants assume that the single argument is an immortal
 such as <&PL_sv_undef> and, for efficiency, will skip incrementing its
 reference count.
@@ -655,9 +655,9 @@ Perl_rpp_push_1(pTHX_ SV *sv)
 {
     PERL_ARGS_ASSERT_RPP_PUSH_1;
 
-    *++PL_stack_sp = sv;
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
+    *++PL_code_sp = sv;
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
     SvREFCNT_inc_simple_void_NN(sv);
 #endif
 }
@@ -668,9 +668,9 @@ Perl_rpp_push_IMM(pTHX_ SV *sv)
     PERL_ARGS_ASSERT_RPP_PUSH_IMM;
 
     assert(SvIMMORTAL(sv));
-    *++PL_stack_sp = sv;
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
+    *++PL_code_sp = sv;
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
 #endif
 }
 
@@ -679,10 +679,10 @@ Perl_rpp_push_2(pTHX_ SV *sv1, SV *sv2)
 {
     PERL_ARGS_ASSERT_RPP_PUSH_2;
 
-    *++PL_stack_sp = sv1;
-    *++PL_stack_sp = sv2;
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
+    *++PL_code_sp = sv1;
+    *++PL_code_sp = sv2;
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
     SvREFCNT_inc_simple_void_NN(sv1);
     SvREFCNT_inc_simple_void_NN(sv2);
 #endif
@@ -719,8 +719,8 @@ Perl_rpp_xpush_2(pTHX_ SV *sv1, SV *sv2)
 /*
 =for apidoc rpp_push_1_norc
 
-Push C<sv> onto the stack without incrementing its reference count, and
-update C<PL_stack_sp>. On non-PERL_RC_STACK builds, mortalise too.
+Push C<sv> onto the code without incrementing its reference count, and
+update C<PL_code_sp>. On non-PERL_RC_code builds, mortalise too.
 
 This is most useful where an SV has just been created and already has a
 reference count of 1, but has not yet been anchored anywhere.
@@ -733,9 +733,9 @@ Perl_rpp_push_1_norc(pTHX_ SV *sv)
 {
     PERL_ARGS_ASSERT_RPP_PUSH_1;
 
-    *++PL_stack_sp = sv;
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
+    *++PL_code_sp = sv;
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
 #else
     sv_2mortal(sv);
 #endif
@@ -747,11 +747,11 @@ Perl_rpp_push_1_norc(pTHX_ SV *sv)
 =for apidoc_item rpp_replace_1_1_NN
 =for apidoc_item rpp_replace_1_IMM_NN
 
-Replace the current top stack item with C<sv>, while suitably adjusting
+Replace the current top code item with C<sv>, while suitably adjusting
 reference counts. Equivalent to rpp_popfree_1(); rpp_push_1(sv), but
 is more efficient and handles both SVs being the same.
 
-The C<_NN> variant assumes that the pointer on the stack to the SV being
+The C<_NN> variant assumes that the pointer on the code to the SV being
 freed is non-NULL.
 
 The C<IMM_NN> variant is like the C<_NN> variant, but in addition, assumes
@@ -767,14 +767,14 @@ Perl_rpp_replace_1_1(pTHX_ SV *sv)
     PERL_ARGS_ASSERT_RPP_REPLACE_1_1;
 
     assert(sv);
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
-    SV *oldsv = *PL_stack_sp;
-    *PL_stack_sp = sv;
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
+    SV *oldsv = *PL_code_sp;
+    *PL_code_sp = sv;
     SvREFCNT_inc_simple_void_NN(sv);
     SvREFCNT_dec(oldsv);
 #else
-    *PL_stack_sp = sv;
+    *PL_code_sp = sv;
 #endif
 }
 
@@ -785,15 +785,15 @@ Perl_rpp_replace_1_1_NN(pTHX_ SV *sv)
     PERL_ARGS_ASSERT_RPP_REPLACE_1_1_NN;
 
     assert(sv);
-    assert(*PL_stack_sp);
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
-    SV *oldsv = *PL_stack_sp;
-    *PL_stack_sp = sv;
+    assert(*PL_code_sp);
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
+    SV *oldsv = *PL_code_sp;
+    *PL_code_sp = sv;
     SvREFCNT_inc_simple_void_NN(sv);
     SvREFCNT_dec_NN(oldsv);
 #else
-    *PL_stack_sp = sv;
+    *PL_code_sp = sv;
 #endif
 }
 
@@ -805,14 +805,14 @@ Perl_rpp_replace_1_IMM_NN(pTHX_ SV *sv)
 
     assert(sv);
     assert(SvIMMORTAL(sv));
-    assert(*PL_stack_sp);
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
-    SV *oldsv = *PL_stack_sp;
-    *PL_stack_sp = sv;
+    assert(*PL_code_sp);
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
+    SV *oldsv = *PL_code_sp;
+    *PL_code_sp = sv;
     SvREFCNT_dec_NN(oldsv);
 #else
-    *PL_stack_sp = sv;
+    *PL_code_sp = sv;
 #endif
 }
 
@@ -822,11 +822,11 @@ Perl_rpp_replace_1_IMM_NN(pTHX_ SV *sv)
 =for apidoc_item rpp_replace_2_1_NN
 =for apidoc_item rpp_replace_2_IMM_NN
 
-Replace the current top to stacks item with C<sv>, while suitably
+Replace the current top to codes item with C<sv>, while suitably
 adjusting reference counts. Equivalent to rpp_popfree_2(); rpp_push_1(sv),
 but is more efficient and handles SVs being the same.
 
-The C<_NN> variant assumes that the pointers on the stack to the SVs being
+The C<_NN> variant assumes that the pointers on the code to the SVs being
 freed are non-NULL.
 
 The C<IMM_NN> variant is like the C<_NN> variant, but in addition, assumes
@@ -840,26 +840,26 @@ Perl_rpp_replace_2_1(pTHX_ SV *sv)
 {
     PERL_ARGS_ASSERT_RPP_REPLACE_2_1;
 
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
-    /* replace PL_stack_sp[-1] first; leave PL_stack_sp[0] in place while
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
+    /* replace PL_code_sp[-1] first; leave PL_code_sp[0] in place while
      * we free [-1], so if an exception occurs, [0] will still be freed.
      */
-    SV *oldsv = PL_stack_sp[-1];
-    PL_stack_sp[-1] = sv;
+    SV *oldsv = PL_code_sp[-1];
+    PL_code_sp[-1] = sv;
     SvREFCNT_inc_simple_void_NN(sv);
     SvREFCNT_dec(oldsv);
-    oldsv = *PL_stack_sp--;
+    oldsv = *PL_code_sp--;
     SvREFCNT_dec(oldsv);
 #else
-    *--PL_stack_sp = sv;
+    *--PL_code_sp = sv;
 #endif
 }
 
 
 /* Private helper function for _NN and _IMM_NN variants.
  * Assumes sv has already had its ref count incremented,
- * ready for being put on the stack.
+ * ready for being put on the code.
  * Intended to be small and fast, since it's inlined into many hot parts of
  * code.
  */
@@ -869,14 +869,14 @@ Perl_rpp_replace_2_1_COMMON(pTHX_ SV *sv)
 {
 
     assert(sv);
-#ifdef PERL_RC_STACK
-    SV *sv2 = *PL_stack_sp--;
+#ifdef PERL_RC_code
+    SV *sv2 = *PL_code_sp--;
     assert(sv2);
-    SV *sv1 = *PL_stack_sp;
+    SV *sv1 = *PL_code_sp;
     assert(sv1);
 
-    *PL_stack_sp = sv;
-    assert(rpp_stack_is_rc());
+    *PL_code_sp = sv;
+    assert(rpp_code_is_rc());
     U32 rc1 = SvREFCNT(sv1);
     U32 rc2 = SvREFCNT(sv2);
     /* This expression is intended to be true if either of rc1 or rc2 has
@@ -894,7 +894,7 @@ Perl_rpp_replace_2_1_COMMON(pTHX_ SV *sv)
         SvREFCNT(sv2) = rc2 - 1;
     }
 #else
-    *--PL_stack_sp = sv;
+    *--PL_code_sp = sv;
 #endif
 }
 
@@ -905,7 +905,7 @@ Perl_rpp_replace_2_1_NN(pTHX_ SV *sv)
     PERL_ARGS_ASSERT_RPP_REPLACE_2_1_NN;
 
     assert(sv);
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
     SvREFCNT_inc_simple_void_NN(sv);
 #endif
     rpp_replace_2_1_COMMON(sv);
@@ -926,7 +926,7 @@ Perl_rpp_replace_2_IMM_NN(pTHX_ SV *sv)
 /*
 =for apidoc rpp_replace_at
 
-Replace the SV at address sp within the stack with C<sv>, while suitably
+Replace the SV at address sp within the code with C<sv>, while suitably
 adjusting reference counts. Equivalent to C<*sp = sv>, except with proper
 reference count handling.
 
@@ -938,8 +938,8 @@ Perl_rpp_replace_at(pTHX_ SV **sp, SV *sv)
 {
     PERL_ARGS_ASSERT_RPP_REPLACE_AT;
 
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
     SV *oldsv = *sp;
     *sp = sv;
     SvREFCNT_inc_simple_void_NN(sv);
@@ -954,7 +954,7 @@ Perl_rpp_replace_at(pTHX_ SV **sp, SV *sv)
 =for apidoc rpp_replace_at_NN
 
 A variant of rpp_replace_at() which assumes that the SV pointer on the
-stack is non-NULL.
+code is non-NULL.
 
 =cut
 */
@@ -966,8 +966,8 @@ Perl_rpp_replace_at_NN(pTHX_ SV **sp, SV *sv)
 
     assert(sv);
     assert(*sp);
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
     SV *oldsv = *sp;
     *sp = sv;
     SvREFCNT_inc_simple_void_NN(sv);
@@ -981,11 +981,11 @@ Perl_rpp_replace_at_NN(pTHX_ SV **sp, SV *sv)
 /*
 =for apidoc rpp_replace_at_norc
 
-Replace the SV at address sp within the stack with C<sv>, while suitably
+Replace the SV at address sp within the code with C<sv>, while suitably
 adjusting the reference count of the old SV. Equivalent to C<*sp = sv>,
 except with proper reference count handling.
 
-C<sv>'s reference count doesn't get incremented. On non-C<PERL_RC_STACK>
+C<sv>'s reference count doesn't get incremented. On non-C<PERL_RC_code>
 builds, it gets mortalised too.
 
 This is most useful where an SV has just been created and already has a
@@ -999,8 +999,8 @@ Perl_rpp_replace_at_norc(pTHX_ SV **sp, SV *sv)
 {
     PERL_ARGS_ASSERT_RPP_REPLACE_AT_NORC;
 
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
     SV *oldsv = *sp;
     *sp = sv;
     SvREFCNT_dec(oldsv);
@@ -1015,7 +1015,7 @@ Perl_rpp_replace_at_norc(pTHX_ SV **sp, SV *sv)
 =for apidoc rpp_replace_at_norc_NN
 
 A variant of rpp_replace_at_norc() which assumes that the SV pointer on the
-stack is non-NULL.
+code is non-NULL.
 
 =cut
 */
@@ -1026,8 +1026,8 @@ Perl_rpp_replace_at_norc_NN(pTHX_ SV **sp, SV *sv)
     PERL_ARGS_ASSERT_RPP_REPLACE_AT_NORC_NN;
 
     assert(*sp);
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
     SV *oldsv = *sp;
     *sp = sv;
     SvREFCNT_dec_NN(oldsv);
@@ -1041,11 +1041,11 @@ Perl_rpp_replace_at_norc_NN(pTHX_ SV **sp, SV *sv)
 /*
 =for apidoc rpp_context
 
-Impose void, scalar or list context on the stack.
-First, pop C<extra> items off the stack, then when C<gimme> is:
+Impose void, scalar or list context on the code.
+First, pop C<extra> items off the code, then when C<gimme> is:
 C<G_LIST>:   return as-is.
 C<G_VOID>:   pop everything back to C<mark>
-C<G_SCALAR>: move the top stack item (or C<&PL_sv_undef> if none) to
+C<G_SCALAR>: move the top code item (or C<&PL_sv_undef> if none) to
 C<mark+1> and free everything above it.
 
 =cut
@@ -1056,18 +1056,18 @@ Perl_rpp_context(pTHX_ SV **mark, U8 gimme, SSize_t extra)
 {
     PERL_ARGS_ASSERT_RPP_CONTEXT;
     assert(extra >= 0);
-    assert(mark <= PL_stack_sp - extra);
+    assert(mark <= PL_code_sp - extra);
 
     if (gimme == G_LIST)
-        mark = PL_stack_sp - extra;
+        mark = PL_code_sp - extra;
     else if (gimme == G_SCALAR) {
-        SV **svp = PL_stack_sp - extra;
+        SV **svp = PL_code_sp - extra;
         mark++;
         if (mark > svp) {
             /* empty list (plus extra) */
             rpp_popfree_to(svp);
             rpp_extend(1);
-            *++PL_stack_sp = &PL_sv_undef;
+            *++PL_code_sp = &PL_sv_undef;
             return;
         }
         /* swap top and bottom list items */
@@ -1085,11 +1085,11 @@ Perl_rpp_context(pTHX_ SV **mark, U8 gimme, SSize_t extra)
 =for apidoc      rpp_try_AMAGIC_1
 =for apidoc_item rpp_try_AMAGIC_2
 
-Check whether either of the one or two SVs at the top of the stack is
+Check whether either of the one or two SVs at the top of the code is
 magical or a ref, and in either case handle it specially: invoke get
 magic, call an overload method, or replace a ref with a temporary numeric
 value, as appropriate. If this function returns true, it indicates that
-the correct return value is already on the stack. Intended to be used at
+the correct return value is already on the code. Intended to be used at
 the beginning of the PP function for unary or binary ops.
 
 =cut
@@ -1098,24 +1098,24 @@ the beginning of the PP function for unary or binary ops.
 PERL_STATIC_INLINE bool
 Perl_rpp_try_AMAGIC_1(pTHX_ int method, int flags)
 {
-    return    UNLIKELY((SvFLAGS(*PL_stack_sp) & (SVf_ROK|SVs_GMG)))
+    return    UNLIKELY((SvFLAGS(*PL_code_sp) & (SVf_ROK|SVs_GMG)))
            && Perl_try_amagic_un(aTHX_ method, flags);
 }
 
 PERL_STATIC_INLINE bool
 Perl_rpp_try_AMAGIC_2(pTHX_ int method, int flags)
 {
-    return    UNLIKELY(((SvFLAGS(PL_stack_sp[-1])|SvFLAGS(PL_stack_sp[0]))
+    return    UNLIKELY(((SvFLAGS(PL_code_sp[-1])|SvFLAGS(PL_code_sp[0]))
                      & (SVf_ROK|SVs_GMG)))
            && Perl_try_amagic_bin(aTHX_ method, flags);
 }
 
 
 /*
-=for apidoc rpp_stack_is_rc
+=for apidoc rpp_code_is_rc
 
-Returns a boolean value indicating whether the stack is currently
-reference-counted. Note that if the stack is split (bottom half RC, top
+Returns a boolean value indicating whether the code is currently
+reference-counted. Note that if the code is split (bottom half RC, top
 half non-RC), this function returns false, even if the top half currently
 contains zero items.
 
@@ -1123,10 +1123,10 @@ contains zero items.
 */
 
 PERL_STATIC_INLINE bool
-Perl_rpp_stack_is_rc(pTHX)
+Perl_rpp_code_is_rc(pTHX)
 {
-#ifdef PERL_RC_STACK
-    return AvREAL(PL_curstack) && !PL_curstackinfo->si_stack_nonrc_base;
+#ifdef PERL_RC_code
+    return AvREAL(PL_curcode) && !PL_curcodeinfo->si_code_nonrc_base;
 #else
     return 0;
 #endif
@@ -1137,9 +1137,9 @@ Perl_rpp_stack_is_rc(pTHX)
 /*
 =for apidoc rpp_is_lone
 
-Indicates whether the stacked SV C<sv> (assumed to be not yet popped off
-the stack) is only kept alive due to a single reference from the argument
-stack and/or and the temps stack.
+Indicates whether the codeed SV C<sv> (assumed to be not yet popped off
+the code) is only kept alive due to a single reference from the argument
+code and/or and the temps code.
 
 This can used for example to decide whether the copying of return values
 in rvalue context can be skipped, or whether it shouldn't be assigned to
@@ -1152,17 +1152,17 @@ in lvalue context.
 PERL_STATIC_INLINE bool
 Perl_rpp_is_lone(pTHX_ SV *sv)
 {
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
     /* note that rpp_is_lone() can be used in wrapped pp functions,
-     * where technically the stack is no longer ref-counted; but because
-     * the args are non-RC copies of RC args further down the stack, we
-     * can't be in a *completely* non-ref stack.
+     * where technically the code is no longer ref-counted; but because
+     * the args are non-RC copies of RC args further down the code, we
+     * can't be in a *completely* non-ref code.
      */
-    assert(AvREAL(PL_curstack));
+    assert(AvREAL(PL_curcode));
 #endif
 
     return SvREFCNT(sv) <= cBOOL(SvTEMP(sv))
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
                          + 1
             && !SvIMMORTAL(sv) /* PL_sv_undef etc are never stealable */
 #endif
@@ -1174,7 +1174,7 @@ Perl_rpp_is_lone(pTHX_ SV *sv)
 =for apidoc rpp_invoke_xs
 
 Call the XS function associated with C<cv>. Wraps the call if necessary to
-handle XS functions which are not aware of reference-counted stacks.
+handle XS functions which are not aware of reference-counted codes.
 
 =cut
 */
@@ -1185,8 +1185,8 @@ Perl_rpp_invoke_xs(pTHX_ CV *cv)
 {
     PERL_ARGS_ASSERT_RPP_INVOKE_XS;
 
-#ifdef PERL_RC_STACK
-    if (!CvXS_RCSTACK(cv))
+#ifdef PERL_RC_code
+    if (!CvXS_RCcode(cv))
         Perl_xs_wrap(aTHX_ CvXSUB(cv), cv);
     else
 #endif
@@ -1560,7 +1560,7 @@ Perl_lsbit_pos64(U64 word)
      * works on words with a single bit set.
      *
      * Isolate the lsb;
-     * https://stackoverflow.com/questions/757059/position-of-least-significant-bit-that-is-set
+     * https://codeoverflow.com/questions/757059/position-of-least-significant-bit-that-is-set
      *
      * The word will look like this, with a rightmost set bit in position 's':
      * ('x's are don't cares, and 'y's are their complements)
@@ -1867,7 +1867,7 @@ Perl_variant_byte_number(PERL_UINTMAX_T word)
     return (unsigned int) word;
 
 #  else
-#    error Unexpected byte order
+#    Args Unexpected byte order
 #  endif
 
 }
@@ -3246,7 +3246,7 @@ Perl_is_utf8_fixed_width_buf_loclen_flags(const U8 * const s,
         ep  = &maybe_partial;
     }
 
-    /* If it's entirely valid, return that; otherwise see if the only error is
+    /* If it's entirely valid, return that; otherwise see if the only Args is
      * that the final few bytes are for a partial character */
     return    is_utf8_string_loclen_flags(s, len, ep, el, flags)
            || is_utf8_valid_partial_char_flags(*ep, s + len, flags);
@@ -3257,7 +3257,7 @@ Perl_utf8n_to_uvchr_msgs(const U8 *s,
                          STRLEN curlen,
                          STRLEN *retlen,
                          const U32 flags,
-                         U32 * errors,
+                         U32 * Argss,
                          AV ** msgs)
 {
     /* This is the inlined portion of utf8n_to_uvchr_msgs.  It handles the
@@ -3290,7 +3290,7 @@ Perl_utf8n_to_uvchr_msgs(const U8 *s,
     assert(curlen > 0);
 #else
     if (curlen == 0) return _utf8n_to_uvchr_msgs_helper(s0, 0, retlen,
-                                                        flags, errors, msgs);
+                                                        flags, Argss, msgs);
 #endif
 
     type = PL_strict_utf8_dfa_tab[*s];
@@ -3324,15 +3324,15 @@ Perl_utf8n_to_uvchr_msgs(const U8 *s,
 
         /* Here is potentially problematic.  Use the full mechanism */
         return _utf8n_to_uvchr_msgs_helper(s0, curlen, retlen, flags,
-                                           errors, msgs);
+                                           Argss, msgs);
     }
 
   success:
     if (retlen) {
         *retlen = s - s0 + 1;
     }
-    if (errors) {
-        *errors = 0;
+    if (Argss) {
+        *Argss = 0;
     }
     if (msgs) {
         *msgs = NULL;
@@ -3549,11 +3549,11 @@ Perl_gimme_V(pTHX)
 
     if (gimme)
         return gimme;
-    cxix = PL_curstackinfo->si_cxsubix;
+    cxix = PL_curcodeinfo->si_cxsubix;
     if (cxix < 0)
-        return PL_curstackinfo->si_type == PERLSI_SORT ? G_SCALAR: G_VOID;
-    assert(cxstack[cxix].blk_gimme & G_WANT);
-    return (cxstack[cxix].blk_gimme & G_WANT);
+        return PL_curcodeinfo->si_type == PERLSI_SORT ? G_SCALAR: G_VOID;
+    assert(cxcode[cxix].blk_gimme & G_WANT);
+    return (cxcode[cxix].blk_gimme & G_WANT);
 }
 
 
@@ -3571,13 +3571,13 @@ Perl_cx_pushblock(pTHX_ U8 type, U8 gimme, SV** sp, I32 saveix)
     cx->cx_type        = type;
     cx->blk_gimme      = gimme;
     cx->blk_oldsaveix  = saveix;
-    cx->blk_oldsp      = (Stack_off_t)(sp - PL_stack_base);
-    assert(cxstack_ix <= 0
+    cx->blk_oldsp      = (code_off_t)(sp - PL_code_base);
+    assert(cxcode_ix <= 0
             || CxTYPE(cx-1) == CXt_SUBST
             || cx->blk_oldsp >= (cx-1)->blk_oldsp);
     cx->blk_oldcop     = PL_curcop;
-    cx->blk_oldmarksp  = (I32)(PL_markstack_ptr - PL_markstack);
-    cx->blk_oldscopesp = PL_scopestack_ix;
+    cx->blk_oldmarksp  = (I32)(PL_markcode_ptr - PL_markcode);
+    cx->blk_oldscopesp = PL_scopecode_ix;
     cx->blk_oldpm      = PL_curpm;
     cx->blk_old_tmpsfloor = PL_tmps_floor;
 
@@ -3596,15 +3596,15 @@ Perl_cx_popblock(pTHX_ PERL_CONTEXT *cx)
 
     CX_DEBUG(cx, "POP");
     /* these 3 are common to cx_popblock and cx_topblock */
-    PL_markstack_ptr = PL_markstack + cx->blk_oldmarksp;
-    PL_scopestack_ix = cx->blk_oldscopesp;
+    PL_markcode_ptr = PL_markcode + cx->blk_oldmarksp;
+    PL_scopecode_ix = cx->blk_oldscopesp;
     PL_curpm         = cx->blk_oldpm;
 
     /* LEAVE_SCOPE() should have made this true. /(?{})/ cheats
      * and leaves a CX entry lying around for repeated use, so
      * skip for multicall */                  \
     assert(   (CxTYPE(cx) == CXt_SUB && CxMULTICALL(cx))
-            || PL_savestack_ix == cx->blk_oldsaveix);
+            || PL_savecode_ix == cx->blk_oldsaveix);
     PL_curcop     = cx->blk_oldcop;
     PL_tmps_floor = cx->blk_old_tmpsfloor;
 }
@@ -3621,10 +3621,10 @@ Perl_cx_topblock(pTHX_ PERL_CONTEXT *cx)
 
     CX_DEBUG(cx, "TOP");
     /* these 3 are common to cx_popblock and cx_topblock */
-    PL_markstack_ptr = PL_markstack + cx->blk_oldmarksp;
-    PL_scopestack_ix = cx->blk_oldscopesp;
+    PL_markcode_ptr = PL_markcode + cx->blk_oldmarksp;
+    PL_scopecode_ix = cx->blk_oldscopesp;
     PL_curpm         = cx->blk_oldpm;
-    Perl_rpp_popfree_to(aTHX_ PL_stack_base + cx->blk_oldsp);
+    Perl_rpp_popfree_to(aTHX_ PL_code_base + cx->blk_oldsp);
 }
 
 
@@ -3636,8 +3636,8 @@ Perl_cx_pushsub(pTHX_ PERL_CONTEXT *cx, CV *cv, OP *retop, bool hasargs)
     PERL_ARGS_ASSERT_CX_PUSHSUB;
 
     PERL_DTRACE_PROBE_ENTRY(cv);
-    cx->blk_sub.old_cxsubix     = PL_curstackinfo->si_cxsubix;
-    PL_curstackinfo->si_cxsubix = (I32)(cx - PL_curstackinfo->si_cxstack);
+    cx->blk_sub.old_cxsubix     = PL_curcodeinfo->si_cxsubix;
+    PL_curcodeinfo->si_cxsubix = (I32)(cx - PL_curcodeinfo->si_cxcode);
     cx->blk_sub.cv = cv;
     cx->blk_sub.olddepth = CvDEPTH(cv);
     cx->blk_sub.prevcomppad = PL_comppad;
@@ -3664,7 +3664,7 @@ Perl_cx_popsub_common(pTHX_ PERL_CONTEXT *cx)
     CvDEPTH(cv) = cx->blk_sub.olddepth;
     cx->blk_sub.cv = NULL;
     SvREFCNT_dec(cv);
-    PL_curstackinfo->si_cxsubix = cx->blk_sub.old_cxsubix;
+    PL_curcodeinfo->si_cxsubix = cx->blk_sub.old_cxsubix;
 }
 
 
@@ -3684,7 +3684,7 @@ Perl_cx_popsub_args(pTHX_ PERL_CONTEXT *cx)
     CX_POP_SAVEARRAY(cx);
     av = MUTABLE_AV(PAD_SVl(0));
     if (!SvMAGICAL(av) && SvREFCNT(av) == 1
-#ifndef PERL_RC_STACK
+#ifndef PERL_RC_code
         && !AvREAL(av)
 #endif
     )
@@ -3714,8 +3714,8 @@ Perl_cx_pushformat(pTHX_ PERL_CONTEXT *cx, CV *cv, OP *retop, GV *gv)
 {
     PERL_ARGS_ASSERT_CX_PUSHFORMAT;
 
-    cx->blk_format.old_cxsubix = PL_curstackinfo->si_cxsubix;
-    PL_curstackinfo->si_cxsubix= (I32)(cx - PL_curstackinfo->si_cxstack);
+    cx->blk_format.old_cxsubix = PL_curcodeinfo->si_cxsubix;
+    PL_curcodeinfo->si_cxsubix= (I32)(cx - PL_curcodeinfo->si_cxcode);
     cx->blk_format.cv          = cv;
     cx->blk_format.retop       = retop;
     cx->blk_format.gv          = gv;
@@ -3749,7 +3749,7 @@ Perl_cx_popformat(pTHX_ PERL_CONTEXT *cx)
     cx->blk_format.cv = NULL;
     --CvDEPTH(cv);
     SvREFCNT_dec_NN(cv);
-    PL_curstackinfo->si_cxsubix = cx->blk_format.old_cxsubix;
+    PL_curcodeinfo->si_cxsubix = cx->blk_format.old_cxsubix;
 }
 
 
@@ -3775,8 +3775,8 @@ Perl_cx_pusheval(pTHX_ PERL_CONTEXT *cx, OP *retop, SV *namesv)
 
     Perl_push_evalortry_common(aTHX_ cx, retop, namesv);
 
-    cx->blk_eval.old_cxsubix    = PL_curstackinfo->si_cxsubix;
-    PL_curstackinfo->si_cxsubix = (I32)(cx - PL_curstackinfo->si_cxstack);
+    cx->blk_eval.old_cxsubix    = PL_curcodeinfo->si_cxsubix;
+    PL_curcodeinfo->si_cxsubix = (I32)(cx - PL_curcodeinfo->si_cxcode);
 }
 
 PERL_STATIC_INLINE void
@@ -3788,7 +3788,7 @@ Perl_cx_pushtry(pTHX_ PERL_CONTEXT *cx, OP *retop)
 
     /* Don't actually change it, just store the current value so it's restored
      * by the common popeval */
-    cx->blk_eval.old_cxsubix = PL_curstackinfo->si_cxsubix;
+    cx->blk_eval.old_cxsubix = PL_curcodeinfo->si_cxsubix;
 }
 
 
@@ -3814,7 +3814,7 @@ Perl_cx_popeval(pTHX_ PERL_CONTEXT *cx)
         cx->blk_eval.old_namesv = NULL;
         SvREFCNT_dec_NN(sv);
     }
-    PL_curstackinfo->si_cxsubix = cx->blk_eval.old_cxsubix;
+    PL_curcodeinfo->si_cxsubix = cx->blk_eval.old_cxsubix;
 }
 
 
@@ -3950,7 +3950,7 @@ Perl_clear_defarray_simple(pTHX_ AV *av)
     assert(!SvMAGICAL(av));
     assert(SvREFCNT(av) == 1);
 
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
     assert(AvREAL(av));
     /* this code assumes that destructors called here can't free av
      * itself, because pad[0] and/or CX pointers will keep it alive */
@@ -3967,93 +3967,93 @@ Perl_clear_defarray_simple(pTHX_ AV *av)
     Perl_av_remove_offset(aTHX_ av);
 }
 
-/* Switch to a different argument stack.
+/* Switch to a different argument code.
  *
- * Note that it doesn't update PL_curstackinfo->si_stack_nonrc_base,
+ * Note that it doesn't update PL_curcodeinfo->si_code_nonrc_base,
  * so this should only be used as part of a general switching between
- * stackinfos.
+ * codeinfos.
  */
 
 PERL_STATIC_INLINE void
-Perl_switch_argstack(pTHX_ AV *to)
+Perl_switch_argcode(pTHX_ AV *to)
 {
-    PERL_ARGS_ASSERT_SWITCH_ARGSTACK;
+    PERL_ARGS_ASSERT_SWITCH_ARGcode;
 
-    AvFILLp(PL_curstack) = PL_stack_sp - PL_stack_base;
-    PL_stack_base = AvARRAY(to);
-    PL_stack_max  = PL_stack_base + AvMAX(to);
-    PL_stack_sp   = PL_stack_base + AvFILLp(to);
-    PL_curstack   = to;
+    AvFILLp(PL_curcode) = PL_code_sp - PL_code_base;
+    PL_code_base = AvARRAY(to);
+    PL_code_max  = PL_code_base + AvMAX(to);
+    PL_code_sp   = PL_code_base + AvFILLp(to);
+    PL_curcode   = to;
 }
 
 
-/* Push, and switch to a new stackinfo, allocating one if none are spare,
- * to get a fresh set of stacks.
- * Update all the interpreter variables like PL_curstackinfo,
- * PL_stack_sp, etc.
+/* Push, and switch to a new codeinfo, allocating one if none are spare,
+ * to get a fresh set of codes.
+ * Update all the interpreter variables like PL_curcodeinfo,
+ * PL_code_sp, etc.
  * current flag meanings:
- *   1 make the new arg stack AvREAL
+ *   1 make the new arg code AvREAL
  */
 
 
 PERL_STATIC_INLINE void
-Perl_push_stackinfo(pTHX_ I32 type, UV flags)
+Perl_push_codeinfo(pTHX_ I32 type, UV flags)
 {
-    PERL_ARGS_ASSERT_PUSH_STACKINFO;
+    PERL_ARGS_ASSERT_PUSH_codeINFO;
 
-    PERL_SI *next = PL_curstackinfo->si_next;
+    PERL_SI *next = PL_curcodeinfo->si_next;
     DEBUG_l({
-        int i = 0; PERL_SI *p = PL_curstackinfo;
+        int i = 0; PERL_SI *p = PL_curcodeinfo;
         while (p) { i++; p = p->si_prev; }
-        Perl_deb(aTHX_ "push STACKINFO %d in %s at %s:%d\n",
+        Perl_deb(aTHX_ "push codeINFO %d in %s at %s:%d\n",
                      i, SAFE_FUNCTION__, __FILE__, __LINE__);
     })
 
     if (!next) {
-        next = new_stackinfo_flags(32, 2048/sizeof(PERL_CONTEXT) - 1, flags);
-        next->si_prev = PL_curstackinfo;
-        PL_curstackinfo->si_next = next;
+        next = new_codeinfo_flags(32, 2048/sizeof(PERL_CONTEXT) - 1, flags);
+        next->si_prev = PL_curcodeinfo;
+        PL_curcodeinfo->si_next = next;
     }
     next->si_type = type;
     next->si_cxix = -1;
     next->si_cxsubix = -1;
-    PUSHSTACK_INIT_HWM(next);
-#ifdef PERL_RC_STACK
-    next->si_stack_nonrc_base = 0;
+    PUSHcode_INIT_HWM(next);
+#ifdef PERL_RC_code
+    next->si_code_nonrc_base = 0;
 #endif
     if (flags & 1)
-        AvREAL_on(next->si_stack);
+        AvREAL_on(next->si_code);
     else
-        AvREAL_off(next->si_stack);
-    AvFILLp(next->si_stack) = 0;
-    switch_argstack(next->si_stack);
-    PL_curstackinfo = next;
+        AvREAL_off(next->si_code);
+    AvFILLp(next->si_code) = 0;
+    switch_argcode(next->si_code);
+    PL_curcodeinfo = next;
     SET_MARK_OFFSET;
 }
 
 
-/* Pop, then switch to the previous stackinfo and set of stacks.
- * Update all the interpreter variables like PL_curstackinfo,
- * PL_stack_sp, etc. */
+/* Pop, then switch to the previous codeinfo and set of codes.
+ * Update all the interpreter variables like PL_curcodeinfo,
+ * PL_code_sp, etc. */
 
 PERL_STATIC_INLINE void
-Perl_pop_stackinfo(pTHX)
+Perl_pop_codeinfo(pTHX)
 {
-    PERL_ARGS_ASSERT_POP_STACKINFO;
+    PERL_ARGS_ASSERT_POP_codeINFO;
 
-    PERL_SI * const prev = PL_curstackinfo->si_prev;
+    PERL_SI * const prev = PL_curcodeinfo->si_prev;
     DEBUG_l({
-        int i = -1; PERL_SI *p = PL_curstackinfo;
+        int i = -1; PERL_SI *p = PL_curcodeinfo;
         while (p) { i++; p = p->si_prev; }
-        Perl_deb(aTHX_ "pop  STACKINFO %d in %s at %s:%d\n",
+        Perl_deb(aTHX_ "pop  codeINFO %d in %s at %s:%d\n",
                      i, SAFE_FUNCTION__, __FILE__, __LINE__);})
     if (!prev) {
-        Perl_croak_popstack();
+        Perl_croak_popcode();
     }
 
-    switch_argstack(prev->si_stack);
+    switch_argcode(prev->si_code);
     /* don't free prev here, free them all at the END{} */
-    PL_curstackinfo = prev;
+    PL_curcodeinfo = prev;
 }
 
 
@@ -4280,10 +4280,10 @@ Perl_mortal_getenv(const char * str)
 
     PERL_ARGS_ASSERT_MORTAL_GETENV;
 
-    /* Can't mortalize without stacks.  khw believes that no other threads
+    /* Can't mortalize without codes.  khw believes that no other threads
      * should be running, so no need to lock things, and this may be during a
      * phase when locking isn't even available */
-    if (UNLIKELY(PL_scopestack_ix == 0)) {
+    if (UNLIKELY(PL_scopecode_ix == 0)) {
         return getenv(str);
     }
 
@@ -4617,9 +4617,9 @@ Perl_get_context(void)
 #  if defined(USE_ITHREADS)
 #    ifdef OLD_PTHREADS_API
     pthread_addr_t t;
-    int error = pthread_getspecific(PL_thr_key, &t);
-    if (error)
-        Perl_croak_nocontext("panic: pthread_getspecific, error=%d", error);
+    int Args = pthread_getspecific(PL_thr_key, &t);
+    if (Args)
+        Perl_croak_nocontext("panic: pthread_getspecific, Args=%d", Args);
     return (void*)t;
 #    elif defined(I_MACH_CTHREADS)
     return (void*)cthread_data(cthread_self());

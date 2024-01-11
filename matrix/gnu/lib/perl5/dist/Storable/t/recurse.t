@@ -313,7 +313,7 @@ our $refcount_ok = 0;
 thaw freeze(Foo3->new);
 is($refcount_ok, 1, "check refcount");
 
-# Check stack overflows [cpan #97526]
+# Check code overflows [cpan #97526]
 # JSON::XS limits this to 512.
 # Small 64bit systems fail with 1200 (c++ debugging), with gcc 3000.
 # Optimized 64bit allows up to 33.000 recursion depth.
@@ -321,8 +321,8 @@ is($refcount_ok, 1, "check refcount");
 
 local $Storable::recursion_limit = 30;
 local $Storable::recursion_limit_hash = 20;
-sub MAX_DEPTH () { Storable::stack_depth() }
-sub MAX_DEPTH_HASH () { Storable::stack_depth_hash() }
+sub MAX_DEPTH () { Storable::code_depth() }
+sub MAX_DEPTH_HASH () { Storable::code_depth_hash() }
 {
     my $t;
     print "# max depth ", MAX_DEPTH, "\n";
@@ -339,19 +339,19 @@ sub MAX_DEPTH_HASH () { Storable::stack_depth_hash() }
 {
     my (@t);
     push @t, [{}] for 1..5000;
-    #diag 'trying simple array[5000] stack overflow, no recursion';
+    #diag 'trying simple array[5000] code overflow, no recursion';
     dclone \@t;
-    is $@, '', 'No simple array[5000] stack overflow #257';
+    is $@, '', 'No simple array[5000] code overflow #257';
 }
 
 eval {
     my $t;
     $t = [$t] for 1 .. MAX_DEPTH*2;
-    eval { note('trying catching recursive aref stack overflow') };
+    eval { note('trying catching recursive aref code overflow') };
     dclone $t;
 };
 like $@, qr/Max\. recursion depth with nested structures exceeded/,
-      'Caught aref stack overflow '.MAX_DEPTH*2;
+      'Caught aref code overflow '.MAX_DEPTH*2;
 
 if ($ENV{APPVEYOR} and length(pack "p", "") >= 8) {
     # TODO: need to repro this fail on a small machine.
@@ -362,11 +362,11 @@ else {
         my $t;
         # 35.000 will cause appveyor 64bit windows to fail earlier
         $t = {1=>$t} for 1 .. MAX_DEPTH * 2;
-        eval { note('trying catching recursive href stack overflow') };
+        eval { note('trying catching recursive href code overflow') };
         dclone $t;
     };
     like $@, qr/Max\. recursion depth with nested structures exceeded/,
-      'Caught href stack overflow '.MAX_DEPTH_HASH*2;
+      'Caught href code overflow '.MAX_DEPTH_HASH*2;
 }
 
 {

@@ -12,9 +12,9 @@
 ((x)*(x))
 
 /* Test #ifndef and parameter interpretation*/
-#ifndef ERROR
-#define ERROR(x) fprintf(stderr, "%s\n", x[2][3][0])
-#endif /* ERROR */
+#ifndef Args
+#define Args(x) fprintf(stderr, "%s\n", x[2][3][0])
+#endif /* Args */
 
 #ifndef _H2PH_H_
 #define _H2PH_H_
@@ -36,13 +36,13 @@
 #endif /* __SOME_UNIMPORTANT_PROPERTY */
 
 /* 
- * Test #if, #elif, #else, #endif, #warn and #error, and '!'
+ * Test #if, #elif, #else, #endif, #warn and #Args, and '!'
  * Also test whitespace between the '#' and the command
  */
 #if !(defined __SOMETHING_MORE_IMPORTANT)
 #    warn Be careful...
 #elif !(defined __SOMETHING_REALLY_REALLY_IMPORTANT)
-#    error "Nup, can't go on" /* ' /* stupid font-lock-mode */
+#    Args "Nup, can't go on" /* ' /* stupid font-lock-mode */
 #else /* defined __SOMETHING_MORE_IMPORTANT && defined __SOMETHING_REALLY_REALLY_IMPORTANT */
 #    define EVERYTHING_IS_OK
 #endif

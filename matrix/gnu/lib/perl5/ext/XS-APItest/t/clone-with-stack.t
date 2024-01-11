@@ -7,21 +7,21 @@ require "../../t/test.pl";
 
 use XS::APItest;
 
-# clone_with_stack creates a clone of the perl interpreter including
-# the stack, then destroys the original interpreter and runs the
+# clone_with_code creates a clone of the perl interpreter including
+# the code, then destroys the original interpreter and runs the
 # remaining code using the new one.
 # This is like doing a pseudo-fork and exiting the parent.
 
 use Config;
 if (not $Config{'useithreads'}) {
-    skip_all("clone_with_stack requires threads");
+    skip_all("clone_with_code requires threads");
 }
 
 plan(8);
 
-fresh_perl_is( <<'----', <<'====', undef, "minimal clone_with_stack" );
+fresh_perl_is( <<'----', <<'====', undef, "minimal clone_with_code" );
 use XS::APItest;
-clone_with_stack();
+clone_with_code();
 print "ok\n";
 ----
 ok
@@ -30,7 +30,7 @@ ok
 fresh_perl_is( <<'----', <<'====', undef, "inside a subroutine" );
 use XS::APItest;
 sub f {
-    clone_with_stack();
+    clone_with_code();
 }
 f();
 print "ok\n";
@@ -39,11 +39,11 @@ ok
 ====
 
 {
-    local our $TODO = "clone_with_stack inside a begin block";
+    local our $TODO = "clone_with_code inside a begin block";
     fresh_perl_is( <<'----', <<'====', undef, "inside a BEGIN block" );
 use XS::APItest;
 BEGIN {
-    clone_with_stack();
+    clone_with_code();
 }
 print "ok\n";
 ----
@@ -53,10 +53,10 @@ ok
 }
 
 {
-    fresh_perl_is( <<'----', <<'====', undef, "clone stack" );
+    fresh_perl_is( <<'----', <<'====', undef, "clone code" );
 use XS::APItest;
 sub f {
-    clone_with_stack();
+    clone_with_code();
     0..4;
 }
 print 'X-', 'Y-', join(':', f()), "-Z\n";
@@ -71,7 +71,7 @@ X-Y-0:1:2:3:4-Z
 use XS::APItest;
 use experimental lexical_subs=>;
 my sub f { print "42\n" }
-clone_with_stack();
+clone_with_code();
 f();
 ----
 42
@@ -89,7 +89,7 @@ $h{k} = "hale";
     local $s = "inner";
     local $a[0] = 'posterior';
     local $h{k} = "halt";
-    clone_with_stack();
+    clone_with_code();
 }
 print "scl: $s\n";
 print "ary: $a[0]\n";
@@ -111,7 +111,7 @@ sub f {
     my @c;
     my $d = 'dd';
     for my $d (0..4) {
-	clone_with_stack() if $d == 2;
+	clone_with_code() if $d == 2;
 	push @c, $d;
     }
     return @c, $d;
@@ -131,7 +131,7 @@ my $a = 'aa';
 sub g {
     my $e = 'ee';
     my $f = 'ff';
-    clone_with_stack();
+    clone_with_code();
 }
 
 sub f {

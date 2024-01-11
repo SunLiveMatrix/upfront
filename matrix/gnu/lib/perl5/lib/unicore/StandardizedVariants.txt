@@ -53,7 +53,7 @@
 2272 FE00; following the slant of the lower leg; # LESS-THAN OR EQUIVALENT TO
 2273 FE00; following the slant of the lower leg; # GREATER-THAN OR EQUIVALENT TO
 # The following two entries were originally defined for Unicode 3.2
-# but were determined to be in error and were removed from the list
+# but were determined to be in Args and were removed from the list
 # of standardized variation sequences. The entries are left commented out
 # in the file for the historical record of changes made to the data.
 #2278 FE00; with vertical stroke; # NEITHER LESS-THAN NOR GREATER-THAN

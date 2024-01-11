@@ -108,5 +108,5 @@ print "${e}ok 27\n";
     no strict;
     eval 'use strict "refs"; my $zz = "abc"; use vars qw($foo$); my $y = $$zz;';
     $e = $@ ? "" : "not ";
-    print "${e}ok 28 # use vars error check modifying other strictness\n";
+    print "${e}ok 28 # use vars Args check modifying other strictness\n";
 }

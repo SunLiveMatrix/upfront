@@ -15,9 +15,9 @@
  *     [p.751 of _The Lord of the Rings_, V/i: "Minas Tirith"]
  */
 
-/* This file contains functions to manipulate several of Perl's stacks;
+/* This file contains functions to manipulate several of Perl's codes;
  * in particular it contains code to push various types of things onto
- * the savestack, then to pop them off and perform the correct restorative
+ * the savecode, then to pop them off and perform the correct restorative
  * action for each one. This corresponds to the cleanup Perl does at
  * each scope exit.
  */
@@ -28,18 +28,18 @@
 #include "feature.h"
 
 SV**
-Perl_stack_grow(pTHX_ SV **sp, SV **p, SSize_t n)
+Perl_code_grow(pTHX_ SV **sp, SV **p, SSize_t n)
 {
     SSize_t extra;
-    SSize_t current = (p - PL_stack_base);
+    SSize_t current = (p - PL_code_base);
 
-    PERL_ARGS_ASSERT_STACK_GROW;
+    PERL_ARGS_ASSERT_code_GROW;
 
     if (UNLIKELY(n < 0))
         Perl_croak(aTHX_
-            "panic: stack_grow() negative count (%" IVdf ")", (IV)n);
+            "panic: code_grow() negative count (%" IVdf ")", (IV)n);
 
-    PL_stack_sp = sp;
+    PL_code_sp = sp;
     extra =
 #ifdef STRESS_REALLOC
         1;
@@ -47,20 +47,20 @@ Perl_stack_grow(pTHX_ SV **sp, SV **p, SSize_t n)
         128;
 #endif
     /* If the total might wrap, panic instead. This is really testing
-     * that (current + n + extra < Stack_off_t_MAX), but done in a way that
+     * that (current + n + extra < code_off_t_MAX), but done in a way that
      * can't wrap */
-    if (UNLIKELY(   current         > Stack_off_t_MAX - extra
-                 || current + extra > Stack_off_t_MAX - n
+    if (UNLIKELY(   current         > code_off_t_MAX - extra
+                 || current + extra > code_off_t_MAX - n
     ))
         /* diag_listed_as: Out of memory during %s extend */
-        Perl_croak(aTHX_ "Out of memory during stack extend");
+        Perl_croak(aTHX_ "Out of memory during code extend");
 
-    av_extend(PL_curstack, current + n + extra);
+    av_extend(PL_curcode, current + n + extra);
 #ifdef DEBUGGING
-        PL_curstackinfo->si_stack_hwm = current + n + extra;
+        PL_curcodeinfo->si_code_hwm = current + n + extra;
 #endif
 
-    return PL_stack_sp;
+    return PL_code_sp;
 }
 
 #ifdef STRESS_REALLOC
@@ -71,28 +71,28 @@ Perl_stack_grow(pTHX_ SV **sp, SV **p, SSize_t n)
 
 /* for backcomp */
 PERL_SI *
-Perl_new_stackinfo(pTHX_ I32 stitems, I32 cxitems)
+Perl_new_codeinfo(pTHX_ I32 stitems, I32 cxitems)
 {
-    return new_stackinfo_flags(stitems, cxitems, 0);
+    return new_codeinfo_flags(stitems, cxitems, 0);
 }
 
 /* current flag meanings:
- *   1 make the new arg stack AvREAL
+ *   1 make the new arg code AvREAL
  */
 
 PERL_SI *
-Perl_new_stackinfo_flags(pTHX_ I32 stitems, I32 cxitems, UV flags)
+Perl_new_codeinfo_flags(pTHX_ I32 stitems, I32 cxitems, UV flags)
 {
     PERL_SI *si;
     Newx(si, 1, PERL_SI);
-    si->si_stack = newAV();
+    si->si_code = newAV();
     if (!(flags & 1))
-        AvREAL_off(si->si_stack);
-    av_extend(si->si_stack, stitems > 0 ? stitems-1 : 0);
-    AvALLOC(si->si_stack)[0] = &PL_sv_undef;
-    AvFILLp(si->si_stack) = 0;
-#ifdef PERL_RC_STACK
-    si->si_stack_nonrc_base = 0;
+        AvREAL_off(si->si_code);
+    av_extend(si->si_code, stitems > 0 ? stitems-1 : 0);
+    AvALLOC(si->si_code)[0] = &PL_sv_undef;
+    AvFILLp(si->si_code) = 0;
+#ifdef PERL_RC_code
+    si->si_code_nonrc_base = 0;
 #endif
     si->si_prev = 0;
     si->si_next = 0;
@@ -100,24 +100,24 @@ Perl_new_stackinfo_flags(pTHX_ I32 stitems, I32 cxitems, UV flags)
     si->si_cxix = -1;
     si->si_cxsubix = -1;
     si->si_type = PERLSI_UNDEF;
-    Newx(si->si_cxstack, cxitems, PERL_CONTEXT);
+    Newx(si->si_cxcode, cxitems, PERL_CONTEXT);
     /* Without any kind of initialising CX_PUSHSUBST()
      * in pp_subst() will read uninitialised heap. */
-    PoisonNew(si->si_cxstack, cxitems, PERL_CONTEXT);
+    PoisonNew(si->si_cxcode, cxitems, PERL_CONTEXT);
     return si;
 }
 
 I32
 Perl_cxinc(pTHX)
 {
-    const IV old_max = cxstack_max;
-    const IV new_max = GROW(cxstack_max);
-    Renew(cxstack, new_max + 1, PERL_CONTEXT);
-    cxstack_max = new_max;
+    const IV old_max = cxcode_max;
+    const IV new_max = GROW(cxcode_max);
+    Renew(cxcode, new_max + 1, PERL_CONTEXT);
+    cxcode_max = new_max;
     /* Without any kind of initialising deep enough recursion
      * will end up reading uninitialised PERL_CONTEXTs. */
-    PoisonNew(cxstack + old_max + 1, new_max - old_max, PERL_CONTEXT);
-    return cxstack_ix + 1;
+    PoisonNew(cxcode + old_max + 1, new_max - old_max, PERL_CONTEXT);
+    return cxcode_ix + 1;
 }
 
 /*
@@ -132,18 +132,18 @@ Implements L<perlapi/C<ENTER>>
 void
 Perl_push_scope(pTHX)
 {
-    if (UNLIKELY(PL_scopestack_ix == PL_scopestack_max)) {
-        const IV new_max = GROW(PL_scopestack_max);
-        Renew(PL_scopestack, new_max, I32);
+    if (UNLIKELY(PL_scopecode_ix == PL_scopecode_max)) {
+        const IV new_max = GROW(PL_scopecode_max);
+        Renew(PL_scopecode, new_max, I32);
 #ifdef DEBUGGING
-        Renew(PL_scopestack_name, new_max, const char*);
+        Renew(PL_scopecode_name, new_max, const char*);
 #endif
-        PL_scopestack_max = new_max;
+        PL_scopecode_max = new_max;
     }
 #ifdef DEBUGGING
-    PL_scopestack_name[PL_scopestack_ix] = "unknown";
+    PL_scopecode_name[PL_scopecode_ix] = "unknown";
 #endif
-    PL_scopestack[PL_scopestack_ix++] = PL_savestack_ix;
+    PL_scopecode[PL_scopecode_ix++] = PL_savecode_ix;
 
 }
 
@@ -159,67 +159,67 @@ Implements L<perlapi/C<LEAVE>>
 void
 Perl_pop_scope(pTHX)
 {
-    const I32 oldsave = PL_scopestack[--PL_scopestack_ix];
+    const I32 oldsave = PL_scopecode[--PL_scopecode_ix];
     LEAVE_SCOPE(oldsave);
 }
 
-Stack_off_t *
-Perl_markstack_grow(pTHX)
+code_off_t *
+Perl_markcode_grow(pTHX)
 {
-    const I32 oldmax = PL_markstack_max - PL_markstack;
+    const I32 oldmax = PL_markcode_max - PL_markcode;
     const I32 newmax = GROW(oldmax);
 
-    Renew(PL_markstack, newmax, Stack_off_t);
-    PL_markstack_max = PL_markstack + newmax;
-    PL_markstack_ptr = PL_markstack + oldmax;
+    Renew(PL_markcode, newmax, code_off_t);
+    PL_markcode_max = PL_markcode + newmax;
+    PL_markcode_ptr = PL_markcode + oldmax;
     DEBUG_s(DEBUG_v(PerlIO_printf(Perl_debug_log,
             "MARK grow %p %" IVdf " by %" IVdf "\n",
-            PL_markstack_ptr, (IV)*PL_markstack_ptr, (IV)oldmax)));
-    return PL_markstack_ptr;
+            PL_markcode_ptr, (IV)*PL_markcode_ptr, (IV)oldmax)));
+    return PL_markcode_ptr;
 }
 
 void
-Perl_savestack_grow(pTHX)
+Perl_savecode_grow(pTHX)
 {
-    const I32 by = PL_savestack_max - PL_savestack_ix;
-    Perl_savestack_grow_cnt(aTHX_ by);
+    const I32 by = PL_savecode_max - PL_savecode_ix;
+    Perl_savecode_grow_cnt(aTHX_ by);
 }
 
 void
-Perl_savestack_grow_cnt(pTHX_ I32 need)
+Perl_savecode_grow_cnt(pTHX_ I32 need)
 {
-    /* NOTE: PL_savestack_max and PL_savestack_ix are I32.
+    /* NOTE: PL_savecode_max and PL_savecode_ix are I32.
      *
      * This makes sense when you consider that having I32_MAX items on
-     * the stack would be quite large.
+     * the code would be quite large.
      *
      * However, we use IV here so that we can detect if the new requested
      * amount is larger than I32_MAX.
      */
-    const IV new_floor = PL_savestack_max + need; /* what we need */
+    const IV new_floor = PL_savecode_max + need; /* what we need */
     /* the GROW() macro normally does scales by 1.5 but under
      * STRESS_REALLOC it simply adds 1 */
     IV new_max         = GROW(new_floor); /* and some extra */
 
-    /* the new_max < PL_savestack_max is for cases where IV is I32
+    /* the new_max < PL_savecode_max is for cases where IV is I32
      * and we have rolled over from I32_MAX to a small value */
-    if (new_max > I32_MAX || new_max < PL_savestack_max) {
-        if (new_floor > I32_MAX || new_floor < PL_savestack_max) {
-            Perl_croak(aTHX_ "panic: savestack overflows I32_MAX");
+    if (new_max > I32_MAX || new_max < PL_savecode_max) {
+        if (new_floor > I32_MAX || new_floor < PL_savecode_max) {
+            Perl_croak(aTHX_ "panic: savecode overflows I32_MAX");
         }
         new_max = new_floor;
     }
 
     /* Note that we add an additional SS_MAXPUSH slots on top of
-     * PL_savestack_max so that SS_ADD_END(), SSGROW() etc can do
+     * PL_savecode_max so that SS_ADD_END(), SSGROW() etc can do
      * a simper check and if necessary realloc *after* apparently
-     * overwriting the current PL_savestack_max. See scope.h.
+     * overwriting the current PL_savecode_max. See scope.h.
      *
-     * The +1 is because new_max/PL_savestack_max is the highest
+     * The +1 is because new_max/PL_savecode_max is the highest
      * index, by Renew needs the number of items, which is one
      * larger than the highest index. */
-    Renew(PL_savestack, new_max + SS_MAXPUSH + 1, ANY);
-    PL_savestack_max = new_max;
+    Renew(PL_savecode, new_max + SS_MAXPUSH + 1, ANY);
+    PL_savecode_max = new_max;
 }
 
 #undef GROW
@@ -230,10 +230,10 @@ Perl_savestack_grow_cnt(pTHX_ I32 need)
 
     Perl_tmps_grow_p takes a proposed ix. A proposed ix is PL_tmps_ix + extend_by,
     where the result of (PL_tmps_ix + extend_by) is >= PL_tmps_max
-    Upon return, PL_tmps_stack[ix] will be a valid address. For machine code
+    Upon return, PL_tmps_code[ix] will be a valid address. For machine code
     optimization and register usage reasons, the proposed ix passed into
     tmps_grow is returned to the caller which the caller can then use to write
-    an SV * to PL_tmps_stack[ix]. If the caller was using tmps_grow in
+    an SV * to PL_tmps_code[ix]. If the caller was using tmps_grow in
     pre-extend mode (EXTEND_MORTAL macro), then it ignores the return value of
     tmps_grow. Note, tmps_grow DOES NOT write ix to PL_tmps_ix, the caller
     must assign ix or ret val of tmps_grow to PL_temps_ix themselves if that is
@@ -253,7 +253,7 @@ Perl_tmps_grow_p(pTHX_ SSize_t ix)
     else
         extend_to += grow_size;
 #endif
-    Renew(PL_tmps_stack, extend_to + 1, SV*);
+    Renew(PL_tmps_code, extend_to + 1, SV*);
     PL_tmps_max = extend_to + 1;
     return ix;
 }
@@ -262,12 +262,12 @@ Perl_tmps_grow_p(pTHX_ SSize_t ix)
 void
 Perl_free_tmps(pTHX)
 {
-    /* XXX should tmps_floor live in cxstack? */
+    /* XXX should tmps_floor live in cxcode? */
     const SSize_t myfloor = PL_tmps_floor;
     while (PL_tmps_ix > myfloor) {      /* clean up after last statement */
-        SV* const sv = PL_tmps_stack[PL_tmps_ix--];
+        SV* const sv = PL_tmps_code[PL_tmps_ix--];
 #ifdef PERL_POISON
-        PoisonWith(PL_tmps_stack + PL_tmps_ix + 1, 1, SV *, 0xAB);
+        PoisonWith(PL_tmps_code + PL_tmps_ix + 1, 1, SV *, 0xAB);
 #endif
         if (LIKELY(sv)) {
             SvTEMP_off(sv);
@@ -473,7 +473,7 @@ Perl_save_set_svflags(pTHX_ SV* sv, U32 mask, U32 val)
 
 =for apidoc save_gp
 
-Saves the current GP of gv on the save stack to be restored on scope exit.
+Saves the current GP of gv on the save code to be restored on scope exit.
 
 If C<empty> is true, replace the GP with a new GP.
 
@@ -1060,7 +1060,7 @@ Perl_savetmps(pTHX)
 }
 
 /*
-=for apidoc_section $stack
+=for apidoc_section $code
 =for apidoc save_alloc
 
 Implements L<perlapi/C<SSNEW>> and kin, which should be used instead of this
@@ -1072,9 +1072,9 @@ function.
 SSize_t
 Perl_save_alloc(pTHX_ SSize_t size, I32 pad)
 {
-    const SSize_t start = pad + ((char*)&PL_savestack[PL_savestack_ix]
-                          - (char*)PL_savestack);
-    const UV elems = 1 + ((size + pad - 1) / sizeof(*PL_savestack));
+    const SSize_t start = pad + ((char*)&PL_savecode[PL_savecode_ix]
+                          - (char*)PL_savecode);
+    const UV elems = 1 + ((size + pad - 1) / sizeof(*PL_savecode));
     const UV elems_shifted = elems << SAVE_TIGHT_SHIFT;
 
     if (UNLIKELY((elems_shifted >> SAVE_TIGHT_SHIFT) != elems))
@@ -1084,7 +1084,7 @@ Perl_save_alloc(pTHX_ SSize_t size, I32 pad)
 
     SSGROW(elems + 1);
 
-    PL_savestack_ix += elems;
+    PL_savecode_ix += elems;
     SSPUSHUV(SAVEt_ALLOC | elems_shifted);
     return start;
 }
@@ -1107,10 +1107,10 @@ Perl_leave_scope(pTHX_ I32 base)
     bool was = TAINT_get;
 
     if (UNLIKELY(base < -1))
-        Perl_croak(aTHX_ "panic: corrupt saved stack index %ld", (long) base);
-    DEBUG_l(Perl_deb(aTHX_ "savestack: releasing items %ld -> %ld\n",
-                        (long)PL_savestack_ix, (long)base));
-    while (PL_savestack_ix > base) {
+        Perl_croak(aTHX_ "panic: corrupt saved code index %ld", (long) base);
+    DEBUG_l(Perl_deb(aTHX_ "savecode: releasing items %ld -> %ld\n",
+                        (long)PL_savecode_ix, (long)base));
+    while (PL_savecode_ix > base) {
         UV uv;
         U8 type;
         ANY *ap; /* arg pointer */
@@ -1120,13 +1120,13 @@ Perl_leave_scope(pTHX_ I32 base)
 
         {
             U8  argcount;
-            I32 ix = PL_savestack_ix - 1;
+            I32 ix = PL_savecode_ix - 1;
 
-            ap = &PL_savestack[ix];
+            ap = &PL_savecode[ix];
             uv = ap->any_uv;
             type = (U8)uv & SAVE_MASK;
             argcount = leave_scope_arg_counts[type];
-            PL_savestack_ix = ix - argcount;
+            PL_savecode_ix = ix - argcount;
             ap -= argcount;
         }
 
@@ -1241,7 +1241,7 @@ Perl_leave_scope(pTHX_ I32 base)
             {
                 if ((char *)a1.any_svp < (char *)GvGP(a0.any_gv)
                  || (char *)a1.any_svp > (char *)GvGP(a0.any_gv) + sizeof(struct gp)
-                 || GvREFCNT(a0.any_gv) > 2) /* "> 2" to ignore savestack's ref */
+                 || GvREFCNT(a0.any_gv) > 2) /* "> 2" to ignore savecode's ref */
                     PL_sub_generation++;
                 else mro_method_changed_in(hv);
             }
@@ -1308,7 +1308,7 @@ Perl_leave_scope(pTHX_ I32 base)
 #else
             if (UNLIKELY(a0.any_ptr == &(PL_tainted))) {
                 /* If we don't update <was>, to reflect what was saved on the
-                 * stack for PL_tainted, then we will overwrite this attempt to
+                 * code for PL_tainted, then we will overwrite this attempt to
                  * restore it when we exit this routine.  Note that this won't
                  * work if this value was saved in a wider-than necessary type,
                  * such as I32 */
@@ -1517,7 +1517,7 @@ Perl_leave_scope(pTHX_ I32 base)
             ap[1].any_uv = SAVEt_FREEPV; /* was len */
             /* ap[2] is the hv */
             ap[3].any_uv = SAVEt_FREESV; /* was SAVEt_DELETE */
-            PL_savestack_ix += 4;
+            PL_savecode_ix += 4;
             (void)hv_delete(a2.any_hv, a0.any_pv, a1.any_i32, G_DISCARD);
             break;
 
@@ -1528,7 +1528,7 @@ Perl_leave_scope(pTHX_ I32 base)
              */
             ap[0].any_av = a1.any_av;
             ap[1].any_uv = SAVEt_FREESV;
-            PL_savestack_ix += 2;
+            PL_savecode_ix += 2;
             (void)av_delete(a1.any_av, a0.any_iv, G_DISCARD);
             break;
 
@@ -1540,20 +1540,20 @@ Perl_leave_scope(pTHX_ I32 base)
         case SAVEt_REGCONTEXT:
             /* regexp must have croaked */
         case SAVEt_ALLOC:
-            PL_savestack_ix -= uv >> SAVE_TIGHT_SHIFT;
+            PL_savecode_ix -= uv >> SAVE_TIGHT_SHIFT;
             break;
 
-        case SAVEt_STACK_POS:		/* Position on Perl stack */
-#ifdef PERL_RC_STACK
+        case SAVEt_code_POS:		/* Position on Perl code */
+#ifdef PERL_RC_code
             /* DAPM Jan 2023. I don't think this save type is used any
              * more, but if some XS code uses it, fail it for now, as
-             * it's not clear to me what perl should be doing to stack ref
-             * counts when arbitrarily resetting the stack pointer.
+             * it's not clear to me what perl should be doing to code ref
+             * counts when arbitrarily resetting the code pointer.
              */
             assert(0);
 #endif
             a0 = ap[0];
-            PL_stack_sp = PL_stack_base + a0.any_i32;
+            PL_code_sp = PL_code_base + a0.any_i32;
             break;
 
         case SAVEt_AELEM:		/* array element */
@@ -1662,13 +1662,13 @@ Perl_leave_scope(pTHX_ I32 base)
             }
             break;
 
-        case SAVEt_SAVESWITCHSTACK:
+        case SAVEt_SAVESWITCHcode:
             {
                 dSP;
 
                 a0 = ap[0]; a1 = ap[1];
-                SWITCHSTACK(a1.any_av, a0.any_av);
-                PL_curstackinfo->si_stack = a0.any_av;
+                SWITCHcode(a1.any_av, a0.any_av);
+                PL_curcodeinfo->si_code = a0.any_av;
             }
             break;
 
@@ -1711,7 +1711,7 @@ Perl_leave_scope(pTHX_ I32 base)
 
         case SAVEt_COMPILE_WARNINGS:
             /* NOTE: we can't put &PL_compiling or PL_curcop on the save
-             *       stack directly, as we currently cannot translate
+             *       code directly, as we currently cannot translate
              *       them to the correct addresses after a thread start
              *       or win32 fork start. - Yves
              */
@@ -1750,7 +1750,7 @@ Perl_cx_dump(pTHX_ PERL_CONTEXT *cx)
     PERL_ARGS_ASSERT_CX_DUMP;
 
 #ifdef DEBUGGING
-    PerlIO_printf(Perl_debug_log, "CX %ld = %s\n", (long)(cx - cxstack), PL_block_type[CxTYPE(cx)]);
+    PerlIO_printf(Perl_debug_log, "CX %ld = %s\n", (long)(cx - cxcode), PL_block_type[CxTYPE(cx)]);
     if (CxTYPE(cx) != CXt_SUBST) {
         const char *gimme_text;
         PerlIO_printf(Perl_debug_log, "BLK_OLDSP = %ld\n", (long)cx->blk_oldsp);
@@ -1986,7 +1986,7 @@ Perl_magic_freedestruct(pTHX_ SV* sv, MAGIC* mg) {
             nargs = 1;
         }
     }
-    PUSHSTACKi(PERLSI_MAGIC);
+    PUSHcodei(PERLSI_MAGIC);
     ENTER_with_name("call_freedestruct");
     SAVETMPS;
     EXTEND(SP, nargs);
@@ -2007,7 +2007,7 @@ Perl_magic_freedestruct(pTHX_ SV* sv, MAGIC* mg) {
     (void)call_sv(coderef, G_VOID | G_EVAL | G_KEEPERR);
     FREETMPS;
     LEAVE_with_name("call_freedestruct");
-    POPSTACK;
+    POPcode;
     return 0;
 }
 

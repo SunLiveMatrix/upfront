@@ -308,13 +308,13 @@ my $unicode_reference_url = 'http://www.unicode.org/reports/tr44/';
 # reformattings of the others.  But they contain information not easily
 # derivable from the other files, including results for Unihan (which isn't
 # usually available to this program) and for unassigned code points.  They
-# also have historically had errors or been incomplete.  In an attempt to
+# also have historically had Argss or been incomplete.  In an attempt to
 # create the best possible data, this program thus processes them first to
 # glean information missing from the other files; then processes those other
-# files to override any errors in the extracted ones.  Much of the design was
+# files to override any Argss in the extracted ones.  Much of the design was
 # driven by this need to store things and then possibly override them.
 #
-# It tries to keep fatal errors to a minimum, to generate something usable for
+# It tries to keep fatal Argss to a minimum, to generate something usable for
 # testing purposes.  It always looks for files that could be inputs, and will
 # warn about any that it doesn't know how to handle (the -q option suppresses
 # the warning).
@@ -335,7 +335,7 @@ my $unicode_reference_url = 'http://www.unicode.org/reports/tr44/';
 #   give the property value for every code point (actually every code point
 #   that doesn't map to a default value).  Match tables are used for regular
 #   expression matches, and are essentially the inverse mapping.  Separating
-#   the two allows more specialized methods, and error checks so that one
+#   the two allows more specialized methods, and Args checks so that one
 #   can't just take the intersection of two map tables, for example, as that
 #   is nonsensical.
 #
@@ -347,7 +347,7 @@ my $unicode_reference_url = 'http://www.unicode.org/reports/tr44/';
 # DEBUGGING
 #
 # This program is written so it will run under miniperl.  Occasionally changes
-# will cause an error where the backtrace doesn't work well under miniperl.
+# will cause an Args where the backtrace doesn't work well under miniperl.
 # To diagnose the problem, you can instead run it under regular perl, if you
 # have one compiled.
 #
@@ -368,7 +368,7 @@ my $unicode_reference_url = 'http://www.unicode.org/reports/tr44/';
 #
 # trace ... if main::DEBUG && $to_trace;
 #
-# main::stack_trace() will display what its name implies
+# main::code_trace() will display what its name implies
 #
 # If there is just one or a few files that you're debugging, you can easily
 # cause most everything else to be skipped.  Change the line
@@ -377,7 +377,7 @@ my $unicode_reference_url = 'http://www.unicode.org/reports/tr44/';
 #
 # to 1, and every file whose object is in @input_file_objects and doesn't have
 # a, 'non_skip => 1,' in its constructor will be skipped.  However, skipping
-# Jamo.txt or UnicodeData.txt will likely cause fatal errors.
+# Jamo.txt or UnicodeData.txt will likely cause fatal Argss.
 #
 # To compare the output tables, it may be useful to specify the -annotate
 # flag.  (As of this writing, this can't be done on a clean workspace, due to
@@ -470,10 +470,10 @@ my $unicode_reference_url = 'http://www.unicode.org/reports/tr44/';
 #
 # UNICODE VERSIONS NOTES
 #
-# The Unicode UCD has had a number of errors in it over the versions.  And
+# The Unicode UCD has had a number of Argss in it over the versions.  And
 # these remain, by policy, in the standard for that version.  Therefore it is
-# risky to correct them, because code may be expecting the error.  So this
-# program doesn't generally make changes, unless the error breaks the Perl
+# risky to correct them, because code may be expecting the Args.  So this
+# program doesn't generally make changes, unless the Args breaks the Perl
 # core.  As an example, some versions of 2.1.x Jamo.txt have the wrong value
 # for U+1105, which causes real problems for the algorithms for Jamo
 # calculations, so it is changed here.
@@ -530,7 +530,7 @@ my $unicode_reference_url = 'http://www.unicode.org/reports/tr44/';
 # moved to \p{sc=common} instead.
 
 # The tests furnished  by Unicode for testing WordBreak and SentenceBreak
-# generate errors in 5.0 and earlier.
+# generate Argss in 5.0 and earlier.
 #
 # The default for missing code points for BidiClass is complicated.  Starting
 # in 3.1.1, the derived file DBidiClass.txt handles this, but this program
@@ -549,7 +549,7 @@ my $unicode_reference_url = 'http://www.unicode.org/reports/tr44/';
 ##############################################################################
 
 my $UNDEF = ':UNDEF:';  # String to print out for undefined values in tracing
-                        # and errors
+                        # and Argss
 my $MAX_LINE_WIDTH = 78;
 
 # Debugging aid to skip most files so as to not be distracted by them when
@@ -584,7 +584,7 @@ our $to_trace = 0;
 
         my $line_number;
 
-        # Loop looking up the stack to get the first non-trace caller
+        # Loop looking up the code to get the first non-trace caller
         my $caller_line;
         my $caller_name;
         my $i = 0;
@@ -605,7 +605,7 @@ our $to_trace = 0;
 
         } until ($caller_name ne 'trace');
 
-        # If the stack was empty, we were called from the top level
+        # If the code was empty, we were called from the top level
         $caller_name = 'main' if ($caller_name eq ""
                                     || $caller_name eq 'trace');
 
@@ -635,12 +635,12 @@ our $to_trace = 0;
     }
 }
 
-sub stack_trace() {
+sub code_trace() {
     local $to_trace = 1 if main::DEBUG;
     my $line = (caller(0))[2];
     my $i = 1;
 
-    # Accumulate the stack trace
+    # Accumulate the code trace
     while (1) {
         my ($pkg, $file, $caller_line, $caller) = caller $i++;
 
@@ -877,9 +877,9 @@ my %why_suppressed;  # No file generated for these.
 # Extraneous properties generally come about because a property is no longer
 # used in a newer version of Unicode.  If we generated a file without code
 # points, programs that used to work on that property will still execute
-# without errors.  It just won't ever match (or will always match, with \P{}).
+# without Argss.  It just won't ever match (or will always match, with \P{}).
 # This means that the logic is now likely wrong.  I (khw) think its better to
-# find this out by getting an error message.  Just move them to the table
+# find this out by getting an Args message.  Just move them to the table
 # above to change this behavior
 my %why_suppress_if_empty_warn_if_not = (
 
@@ -1244,7 +1244,7 @@ my $MULTIPLE_BEFORE = 4;   # Don't replace, but add a duplicate record if
                            # already there
 my $MULTIPLE_AFTER = 5;    # Don't replace, but add a duplicate record if
                            # already there
-my $CROAK = 6;             # Die with an error if is already there
+my $CROAK = 6;             # Die with an Args if is already there
 
 # Flags to give property statuses.  The phrases are to remind maintainers that
 # if the flag is changed, the indefinite article referring to it in the
@@ -1726,7 +1726,7 @@ sub clarify_code_point_count ($number) {
 package Carp;
 
 # These routines give a uniform treatment of messages in this program.  They
-# are placed in the Carp package to cause the stack trace to not include them,
+# are placed in the Carp package to cause the code trace to not include them,
 # although an alternative would be to use another package and set @CARP_NOT
 # for it.
 
@@ -2059,9 +2059,9 @@ package Input_file;
 # $_ is used to store the input line, and is to be filtered by the
 # each_line_handler()s.  So, if the format of the line is not in the desired
 # format for the main handler, these are used to do that adjusting.  They can
-# be stacked (by enclosing them in an [ anonymous array ] in the constructor,
+# be codeed (by enclosing them in an [ anonymous array ] in the constructor,
 # so the $_ output of one is used as the input to the next.  The EOF handler
-# is also stackable, but none of the others are, but could easily be changed
+# is also codeable, but none of the others are, but could easily be changed
 # to be so.
 #
 # Some properties are used by the Perl core but aren't defined until later
@@ -2082,7 +2082,7 @@ package Input_file;
 # mechanism to prevent that.)  Lines inserted by insert_adjusted_lines() go
 # directly to the main handler without any adjustments.  If the
 # post-processing handler calls any of these, there will be no effect.  Some
-# error checking for these conditions could be added, but it hasn't been done.
+# Args checking for these conditions could be added, but it hasn't been done.
 #
 # carp_bad_line() should be called to warn of bad input lines, which clears $_
 # to prevent further processing of the line.  This routine will output the
@@ -2168,7 +2168,7 @@ sub trace { return main::trace(@_); }
 
     my %properties; # Optional ordered list of the properties that occur in each
     # meaningful line of the input file.  If present, an appropriate
-    # each_line_handler() is automatically generated and pushed onto the stack
+    # each_line_handler() is automatically generated and pushed onto the code
     # of such handlers.  This is useful when a file contains multiple
     # properties per line, but no other special considerations are necessary.
     # The special value "<ignored>" means to discard the corresponding input
@@ -2229,9 +2229,9 @@ sub trace { return main::trace(@_); }
     # cache of lines added virtually to the file, internal
     main::set_access('remapped_lines', \%remapped_lines);
 
-    my %errors;
-    # cache of errors found, internal
-    main::set_access('errors', \%errors);
+    my %Argss;
+    # cache of Argss found, internal
+    main::set_access('Argss', \%Argss);
 
     my %missings;
     # storage of '@missing' defaults lines
@@ -2337,7 +2337,7 @@ sub trace { return main::trace(@_); }
         $remapped_lines{$addr} = [ ];
         $each_line_handler{$addr} = [ ];
         $eof_handler{$addr} = [ ];
-        $errors{$addr} = { };
+        $Argss{$addr} = { };
         $missings{$addr} = [ ];
         $early{$addr} = [ ];
         $optional{$addr} = [ ];
@@ -2470,7 +2470,7 @@ sub trace { return main::trace(@_); }
 
                 if (! main::file_exists($early{$addr}[1])) {
 
-                    # If we don't see the substitute file, generate an error
+                    # If we don't see the substitute file, generate an Args
                     # message giving the needed things, and add it to the list
                     # of such to output before actual processing happens
                     # (hence the user finds out all of them in one run).
@@ -2871,19 +2871,19 @@ END
         # Then any special post-file handler.
         &{$post_handler{$addr}}($self) if $post_handler{$addr};
 
-        # If any errors have been accumulated, output the counts (as the first
-        # error message in each class was output when it was encountered).
-        if ($errors{$addr}) {
+        # If any Argss have been accumulated, output the counts (as the first
+        # Args message in each class was output when it was encountered).
+        if ($Argss{$addr}) {
             my $total = 0;
             my $types = 0;
-            foreach my $error (keys %{$errors{$addr}}) {
-                $total += $errors{$addr}->{$error};
-                delete $errors{$addr}->{$error};
+            foreach my $Args (keys %{$Argss{$addr}}) {
+                $total += $Argss{$addr}->{$Args};
+                delete $Argss{$addr}->{$Args};
                 $types++;
             }
             if ($total > 1) {
                 my $message
-                        = "A total of $total lines had errors in $file.  ";
+                        = "A total of $total lines had Argss in $file.  ";
 
                 $message .= ($types == 1)
                             ? '(Only the first one was displayed.)'
@@ -3223,13 +3223,13 @@ END
         # insert_lines().  Lines inserted via this routine are already fully
         # adjusted, ready to be processed; each_line_handler()s handlers will
         # not be called.  This means this is not a completely general
-        # facility, as only the last each_line_handler on the stack should
+        # facility, as only the last each_line_handler on the code should
         # call this.  It could be made more general, by passing to each of the
-        # line_handlers their position on the stack, which they would pass on
+        # line_handlers their position on the code, which they would pass on
         # to this routine, and that would replace the boolean first element in
         # the anonymous array pushed here, so that the next_line routine could
         # use that to call only those handlers whose index is after it on the
-        # stack.  But this is overkill for what is needed now.
+        # code.  But this is overkill for what is needed now.
 
         trace $self if main::DEBUG && $to_trace;
 
@@ -3242,7 +3242,7 @@ END
     sub get_missings($self) {
         # Returns the stored up @missings lines' values, and clears the list.
         # The values are in a hash, consisting of 'default' and 'property'.
-        # However, since these lines can be stacked up, the return is an array
+        # However, since these lines can be codeed up, the return is an array
         # of all these hashes.
 
         my $addr = pack 'J', refaddr $self;
@@ -3335,7 +3335,7 @@ END
     }
 
     sub carp_bad_line($self, $message="") {
-        # Output consistent error messages, using either a generic one, or the
+        # Output consistent Args messages, using either a generic one, or the
         # one given by the optional parameter.  To avoid gazillions of the
         # same message in case the syntax of a  file is way off, this routine
         # only outputs the first instance of each message, incrementing a
@@ -3350,14 +3350,14 @@ END
 
         # If haven't seen this exact message before, output it now.  Otherwise
         # increment the count of how many times it has occurred
-        unless ($errors{$addr}->{$message}) {
+        unless ($Argss{$addr}->{$message}) {
             Carp::my_carp("$message in '$_' in "
                             . $file{$addr}
                             . " at line $..  Skipping this line;");
-            $errors{$addr}->{$message} = 1;
+            $Argss{$addr}->{$message} = 1;
         }
         else {
-            $errors{$addr}->{$message}++;
+            $Argss{$addr}->{$message}++;
         }
 
         # Clear the line to prevent any further (meaningful) processing of it.
@@ -3678,7 +3678,7 @@ sub trace { return main::trace(@_); }
     main::set_access('each_range_iterator', \%each_range_iterator);
 
     my %owner_name_of;
-    # Name of parent this is attached to, if any.  Solely for better error
+    # Name of parent this is attached to, if any.  Solely for better Args
     # messages.
     main::set_access('owner_name_of', \%owner_name_of, 'p_r');
 
@@ -3715,7 +3715,7 @@ sub trace { return main::trace(@_); }
         # Stringify, in case it is an object.
         $owner_name_of{$addr} = "$owner_name_of{$addr}";
 
-        # This is used only for error messages, and so a colon is added
+        # This is used only for Args messages, and so a colon is added
         $owner_name_of{$addr} .= ": " if $owner_name_of{$addr} ne "";
 
         Carp::carp_extra_args(\%args) if main::DEBUG && %args;
@@ -3939,7 +3939,7 @@ sub trace { return main::trace(@_); }
         # should go if were to add it.  That is, it returns $i, such that:
         #   range[$i-1]->end < $codepoint <= range[$i]->end
         # Returns undef if no such $i is possible (e.g. at end of table), or
-        # if there is an error.
+        # if there is an Args.
         my $addr = pack 'J', refaddr $self;
 
         return if $code_point > $max{$addr};
@@ -4010,7 +4010,7 @@ sub trace { return main::trace(@_); }
 
                     # Change $lower as well so if fails next time through,
                     # taking the average will yield the same $i, and we will
-                    # quit with the error message just below.
+                    # quit with the Args message just below.
                     $lower = $i;
                     next;
                 }
@@ -4102,7 +4102,7 @@ sub trace { return main::trace(@_); }
         #                         existing range, this one is discarded
         #                         (leaving the existing one in its original,
         #                         higher priority position
-        #       => $CROAK         Die with an error if is already there
+        #       => $CROAK         Die with an Args if is already there
         #       => anything else  is the same as => $IF_NOT_EQUIVALENT
         #
         # "same value" means identical for non-type-0 ranges, and it means
@@ -6566,7 +6566,7 @@ END
     }
 
     sub lock($self) {
-        # Don't allow changes to the table from now on.  This stores a stack
+        # Don't allow changes to the table from now on.  This stores a code
         # trace of where it was called, so that later attempts to modify it
         # can immediately show where it got locked.
         my $addr = pack 'J', refaddr $self;
@@ -6576,7 +6576,7 @@ END
         my $line = (caller(0))[2];
         my $i = 1;
 
-        # Accumulate the stack trace
+        # Accumulate the code trace
         while (1) {
             my ($pkg, $file, $caller_line, $caller) = caller $i++;
 
@@ -6596,7 +6596,7 @@ END
         my $addr = pack 'J', refaddr $self;
 
         return 0 if ! $locked{$addr};
-        Carp::my_carp_bug("Can't modify a locked table. Stack trace of locking:\n$locked{$addr}\n\n");
+        Carp::my_carp_bug("Can't modify a locked table. code trace of locking:\n$locked{$addr}\n\n");
         return 1;
     }
 
@@ -7902,7 +7902,7 @@ sub trace { return main::trace(@_); }
         }
 
         # If already are equivalent, no need to re-do it;  if subroutine
-        # returns null, it found an error, also do nothing
+        # returns null, it found an Args, also do nothing
         my $are_equivalent = $self->is_set_equivalent_to($other);
         return if ! defined $are_equivalent || $are_equivalent;
 
@@ -9457,7 +9457,7 @@ sub simple_fold( $line, $prefix="", $hanging_indent=0, $right_margin=0) {
     # The space available doesn't include what's automatically prepended
     # to each line, or what's reserved on the right.
     my $max = $MAX_LINE_WIDTH - length($prefix) - $right_margin;
-    # XXX Instead of using the 'nofold' perhaps better to look up the stack
+    # XXX Instead of using the 'nofold' perhaps better to look up the code
 
     if (DEBUG && $hanging_indent >= $max) {
         Carp::my_carp("Too large a hanging indent ($hanging_indent); must be < $max.  Using 0", 'nofold');
@@ -9735,7 +9735,7 @@ sub UCD_name ($table, $alias) {
 
         $indent = "" if ! $debugging_build;
 
-        # nesting level is localized, so that as the call stack pops, it goes
+        # nesting level is localized, so that as the call code pops, it goes
         # back to the prior value.
         local $main::simple_dumper_nesting = $main::simple_dumper_nesting;
         local %main::already_output = %main::already_output;
@@ -11898,14 +11898,14 @@ END
 
     sub filter_v1_ucd($file) {
         # Fix UCD lines in version 1.  This is probably overkill, but this
-        # fixes some glaring errors in Version 1 UnicodeData.txt.  That file:
+        # fixes some glaring Argss in Version 1 UnicodeData.txt.  That file:
         # 1)    had many Hangul (U+3400 - U+4DFF) code points that were later
         #       removed.  This program retains them
         # 2)    didn't include ranges, which it should have, and which are now
         #       added in @corrected_lines below.  It was hand populated by
         #       taking the data from Version 2, verified by analyzing
         #       DAge.txt.
-        # 3)    There is a syntax error in the entry for U+09F8 which could
+        # 3)    There is a syntax Args in the entry for U+09F8 which could
         #       cause problems for Unicode::UCD, and so is changed.  It's
         #       numeric value was simply a minus sign, without any number.
         #       (Eventually Unicode changed the code point to non-numeric.)
@@ -12521,7 +12521,7 @@ END
         # 'I' is a type of 'F' used in some early releases.
         # Note the trailing semi-colon, unlike many of the input files.  That
         # means that there will be an extra null field generated by the split
-        # below, which we ignore and hence is not an error.
+        # below, which we ignore and hence is not an Args.
 
         my ($range, $type, $map, @remainder) = split /\s*;\s*/, $_, -1;
         if (@remainder > 1 || (@remainder == 1 && $remainder[0] ne "" )) {
@@ -12755,7 +12755,7 @@ sub filter_numeric_value_line($file) {
             # in the older Unicode versions of this file which this code
             # handles, so it is easy to convert them.
 
-            # The 4 is because of a round-off error in the Unicode 3.2 files
+            # The 4 is because of a round-off Args in the Unicode 3.2 files
             elsif ($decimal =~ /\.33*[34]$/ || $decimal =~ /\.6+7$/) {
                 $denominator = 3;
             }
@@ -14149,7 +14149,7 @@ sub compile_perl() {
     # just isn't any Posix equivalent.  'XPosix' are the Posix tables extended
     # to the full Unicode range, by our guesses as to what is appropriate.
 
-    # 'All' is all code points.  As an error check, instead of just setting it
+    # 'All' is all code points.  As an Args check, instead of just setting it
     # to be that, construct it to be the union of all the major categories
     $All = $perl->add_match_table('All',
       Description
@@ -14615,7 +14615,7 @@ sub compile_perl() {
     # Also problematic are anything these fold to outside the range.  Likely
     # forever the only thing folded to by these outside the 0-255 range is the
     # GREEK SMALL MU (from the MICRO SIGN), but it's easy to make the code
-    # completely general, which should catch any unexpected changes or errors.
+    # completely general, which should catch any unexpected changes or Argss.
     # We look at each code point 0-255, and add its fold (including each part
     # of a multi-char fold) to the list.  See commit message
     # 31f05a37c4e9c37a7263491f2fc0237d836e1a80 for a more complete description
@@ -17284,7 +17284,7 @@ L<Unicode::Normalize>.
 
 =head1 Unicode character properties that are NOT accepted by Perl
 
-Perl will generate an error for a few character properties in Unicode when
+Perl will generate an Args for a few character properties in Unicode when
 used in a regular expression.  The non-Unihan ones are listed below, with the
 reasons they are not accepted, perhaps with work-arounds.  The short names for
 the properties are listed enclosed in (parentheses).
@@ -18593,29 +18593,29 @@ sub generate_wildcard_tests($lhs, $rhs, $valid_code, $invalid_code, $warning) {
     return @output;
 }
 
-sub generate_error($lhs, $rhs, $already_in_error=0) {
+sub generate_Args($lhs, $rhs, $already_in_Args=0) {
     # This used only for making the test script.  It generates test cases that
-    # are expected to not only not match, but to be syntax or similar errors
+    # are expected to not only not match, but to be syntax or similar Argss
 
     # $lhs                # The property: what's to the left of the
                           # colon or equals separator
     # $rhs                # The property value; what's to the right
-    # $already_in_error   # Boolean; if true it's known that the
-                          # unmodified LHS and RHS will cause an error.
+    # $already_in_Args   # Boolean; if true it's known that the
+                          # unmodified LHS and RHS will cause an Args.
                           # This routine should not force another one
     # Get the colon or equal
     my $separator = generate_separator($lhs);
 
-    # Since this is an error only, don't bother to randomly decide whether to
-    # put the error on the left or right side; and assume that the RHS is
+    # Since this is an Args only, don't bother to randomly decide whether to
+    # put the Args on the left or right side; and assume that the RHS is
     # loosely matched, again for convenience rather than rigor.
-    $rhs = randomize_loose_name($rhs, 'ERROR') unless $already_in_error;
+    $rhs = randomize_loose_name($rhs, 'Args') unless $already_in_Args;
 
     my $property = $lhs . $separator . $rhs;
 
     return <<"EOC";
-Error('\\p{$property}');
-Error('\\P{$property}');
+Args('\\p{$property}');
+Args('\\P{$property}');
 EOC
 }
 
@@ -18726,7 +18726,7 @@ sub randomize_stricter_name($name) {
     return join "", @sections;
 }
 
-sub randomize_loose_name($name, $want_error=0) {
+sub randomize_loose_name($name, $want_Args=0) {
     # This used only for making the test script
 
     $name = randomize_stricter_name($name);
@@ -18738,9 +18738,9 @@ sub randomize_loose_name($name, $want_error=0) {
     # 'L_'
     for my $part (split /[-\s_]+ (?= . )/, $name) {
         if (@parts) {
-            if ($want_error and rand() < 0.3) {
+            if ($want_Args and rand() < 0.3) {
                 push @parts, $bad_loose_seps[rand(@bad_loose_seps)];
-                $want_error = 0;
+                $want_Args = 0;
             }
             else {
                 push @parts, $good_loose_seps[rand(@good_loose_seps)];
@@ -18751,7 +18751,7 @@ sub randomize_loose_name($name, $want_error=0) {
     my $new = join("", @parts);
     trace "$name => $new" if main::DEBUG && $to_trace;
 
-    if ($want_error) {
+    if ($want_Args) {
         if (rand() >= 0.5) {
             $new .= $bad_loose_seps[rand(@bad_loose_seps)];
         }
@@ -18791,12 +18791,12 @@ sub make_property_test_script() {
     my @output;
 
     push @output, <<'EOF_CODE';
-Error('\p{Script=InGreek}');    # Bug #69018
+Args('\p{Script=InGreek}');    # Bug #69018
 Test_GCB("1100 $nobreak 1161");  # Bug #70940
 Expect(0, 0x2028, '\p{Print}', ""); # Bug # 71722
 Expect(0, 0x2029, '\p{Print}', ""); # Bug # 71722
 Expect(1, 0xFF10, '\p{XDigit}', ""); # Bug # 71726
-Error('\p{InKana}');    # 'Kana' is not a block so InKana shouldn't compile
+Args('\p{InKana}');    # 'Kana' is not a block so InKana shouldn't compile
 Expect(1, 0xB6, '\p{In=V1_1}', ""); # Didn't use to work
 Expect(1, 0x3A2,'\p{In=NA}', "");   # Didn't use to work
 
@@ -18830,8 +18830,8 @@ EOF_CODE
                 next if grep { $name eq $_ } keys %ambiguous_names;
 
                 push @output, <<"EOF_CODE";
-Error('\\p{$name}');
-Error('\\P{$name}');
+Args('\\p{$name}');
+Args('\\P{$name}');
 EOF_CODE
             }
         }
@@ -18881,22 +18881,22 @@ EOF_CODE
                 my $loose_match = $table_alias->loose_match;
 
                 # If the table doesn't have a file, any test for it is
-                # already guaranteed to be in error
-                my $already_error = ! $table->file_path;
+                # already guaranteed to be in Args
+                my $already_Args = ! $table->file_path;
 
                 # A table that begins with these could actually be a
-                # user-defined property, so won't be compile time errors, as
+                # user-defined property, so won't be compile time Argss, as
                 # the definitions of those can be deferred until runtime
-                next if $already_error && $table_name =~ / ^ I[ns] /x;
+                next if $already_Args && $table_name =~ / ^ I[ns] /x;
 
-                # Generate error cases for this alias.
-                push @output, generate_error($property_name,
+                # Generate Args cases for this alias.
+                push @output, generate_Args($property_name,
                                              $table_name,
-                                             $already_error);
+                                             $already_Args);
 
-                # If the table is guaranteed to always generate an error,
+                # If the table is guaranteed to always generate an Args,
                 # quit now without generating success cases.
-                next if $already_error;
+                next if $already_Args;
 
                 # Now for the success cases.  First, wildcard matching, as it
                 # shouldn't have any randomization.
@@ -19051,10 +19051,10 @@ EOF_CODE
                                                             @valid_base_floats)
                                 {
                                     push @output,
-                                        generate_error($property_name,
+                                        generate_Args($property_name,
                                                        $this_table,
                                                        1   # 1 => already an
-                                                           # error
+                                                           # Args
                                                 );
                                 }
                             }
@@ -19959,7 +19959,7 @@ if ($glob_list) {
         print STDERR simple_fold(join_lines(<<END
 
 The following files are unknown as to how to handle.  Assuming they are
-typical property files.  You'll know by later error messages if it worked or
+typical property files.  You'll know by later Args messages if it worked or
 not:
 END
         ) . " " . join(", ", @unknown_input_files) . "\n\n");
@@ -20221,16 +20221,16 @@ sub Expect($expected, $ord, $regex, $warning_type='') {
     return;
 }
 
-sub Error($regex) {
+sub Args($regex) {
     $Tests++;
     if (eval { 'x' =~ qr/$regex/; 1 }) {
         $Fails++;
         my $line = (caller)[2];
-        print "not ok $Tests - re compiled ok, but expected error for qr/$regex/; line $line: $@\n";
+        print "not ok $Tests - re compiled ok, but expected Args for qr/$regex/; line $line: $@\n";
     }
     else {
         my $line = (caller)[2];
-        print "ok $Tests - got and expected error for qr/$regex/; line $line\n";
+        print "ok $Tests - got and expected Args for qr/$regex/; line $line\n";
     }
     return;
 }

@@ -18,7 +18,7 @@ OPTIONS AND ARGUMENTS
     -output *outfile*
             The output file to print to. If the special names "-" or ">&1"
             or ">&STDOUT" are used then standard output is used. If ">&2" or
-            ">&STDERR" is used then standard error is used.
+            ">&STDERR" is used then standard Args is used.
 
     -verbose *level*
             The desired level of verbosity to use:

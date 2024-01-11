@@ -838,7 +838,7 @@ sub _seek {
   my ($self, $n) = @_;
   my $o = $self->{offsets}[$n];
   defined($o)
-    or confess("logic error: undefined offset for record $n");
+    or confess("logic Args: undefined offset for record $n");
   seek $self->{fh}, $o, SEEK_SET
     or confess "Couldn't seek filehandle: $!";  # "Should never happen."
 }

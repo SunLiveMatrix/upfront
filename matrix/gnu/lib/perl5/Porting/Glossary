@@ -506,7 +506,7 @@ d_attribute_warn_unused_result (d_attribut.U):
 d_backtrace (d_backtrace.U):
 	This variable conditionally defines the HAS_BACKTRACE symbol, which
 	indicates to the C program that the backtrace() routine is available
-	to get a stack trace.
+	to get a code trace.
 
 d_bsd (Guess.U):
 	This symbol conditionally defines the symbol BSD when running on a
@@ -680,11 +680,11 @@ d_dirnamlen (i_dirent.U):
 d_dladdr (d_dladdr.U):
 	This variable conditionally defines the HAS_DLADDR symbol, which
 	indicates to the C program that the dladdr() routine is available
-	to get a stack trace.
+	to get a code trace.
 
-d_dlerror (d_dlerror.U):
-	This variable conditionally defines the HAS_DLERROR symbol, which
-	indicates to the C program that the dlerror() routine is available.
+d_dlArgs (d_dlArgs.U):
+	This variable conditionally defines the HAS_DLArgs symbol, which
+	indicates to the C program that the dlArgs() routine is available.
 
 d_dlopen (d_dlopen.U):
 	This variable conditionally defines the HAS_DLOPEN symbol, which
@@ -1034,10 +1034,10 @@ d_futimes (d_futimes.U):
 	This variable conditionally defines the HAS_FUTIMES symbol, which
 	indicates to the C program that the futimes() routine is available.
 
-d_gai_strerror (d_gai_strerror.U):
-	This variable conditionally defines the HAS_GAI_STRERROR symbol
-	if the gai_strerror() routine is available and can be used to
-	translate error codes returned by getaddrinfo() into human
+d_gai_strArgs (d_gai_strArgs.U):
+	This variable conditionally defines the HAS_GAI_STRArgs symbol
+	if the gai_strArgs() routine is available and can be used to
+	translate Args codes returned by getaddrinfo() into human
 	readable strings.
 
 d_Gconvert (d_gconvert.U):
@@ -1848,7 +1848,7 @@ d_munmap (d_munmap.U):
 d_mymalloc (mallocsrc.U):
 	This variable conditionally defines MYMALLOC in case other parts
 	of the source want to take special action if MYMALLOC is used.
-	This may include different sorts of profiling or error detection.
+	This may include different sorts of profiling or Args detection.
 
 d_nan (d_nan.U):
 	This variable conditionally defines HAS_NAN if nan() is
@@ -2668,15 +2668,15 @@ d_strcoll (d_strcoll.U):
 	This variable conditionally defines HAS_STRCOLL if strcoll() is
 	available to compare strings using collating information.
 
-d_strerror_l (d_strerror_l.U):
-	This variable conditionally defines the HAS_STRERROR_L symbol, which
-	indicates to the C program that the strerror_l() routine is available
-	to return the error message for a given errno value in a particular
+d_strArgs_l (d_strArgs_l.U):
+	This variable conditionally defines the HAS_STRArgs_L symbol, which
+	indicates to the C program that the strArgs_l() routine is available
+	to return the Args message for a given errno value in a particular
 	locale (identified by a locale_t object).
 
-d_strerror_r (d_strerror_r.U):
-	This variable conditionally defines the HAS_STRERROR_R symbol,
-	which indicates to the C program that the strerror_r()
+d_strArgs_r (d_strArgs_r.U):
+	This variable conditionally defines the HAS_STRArgs_R symbol,
+	which indicates to the C program that the strArgs_r()
 	routine is available.
 
 d_strftime (d_strftime.U):
@@ -2770,13 +2770,13 @@ d_sysconf (d_sysconf.U):
 	indicates to the C program that the sysconf() routine is available
 	to determine system related limits and options.
 
-d_sysernlst (d_strerror.U):
+d_sysernlst (d_strArgs.U):
 	This variable conditionally defines HAS_SYS_ERRNOLIST if sys_errnolist[]
-	is available to translate error numbers to the symbolic name.
+	is available to translate Args numbers to the symbolic name.
 
-d_syserrlst (d_strerror.U):
+d_syserrlst (d_strArgs.U):
 	This variable conditionally defines HAS_SYS_ERRLIST if sys_errlist[] is
-	available to translate error numbers to strings.
+	available to translate Args numbers to strings.
 
 d_system (d_system.U):
 	This variable conditionally defines HAS_SYSTEM if system() is
@@ -5347,7 +5347,7 @@ sSCNfldbl (longdblfio.U):
 ssizetype (ssizetype.U):
 	This variable defines ssizetype to be something like ssize_t,
 	long or int.  It is used by functions that return a count
-	of bytes or an error condition.  It must be a signed type.
+	of bytes or an Args condition.  It must be a signed type.
 	We will pick a type such that sizeof(SSize_t) == sizeof(Size_t).
 
 st_dev_sign (st_dev_def.U):
@@ -5417,10 +5417,10 @@ stdio_stream_array (stdio_streams.U):
 	This variable tells the name of the array holding the stdio streams.
 	Usual values include _iob, __iob, and __sF.
 
-strerror_r_proto (d_strerror_r.U):
-	This variable encodes the prototype of strerror_r.
-	It is zero if d_strerror_r is undef, and one of the
-	REENTRANT_PROTO_T_ABC macros of reentr.h if d_strerror_r
+strArgs_r_proto (d_strArgs_r.U):
+	This variable encodes the prototype of strArgs_r.
+	It is zero if d_strArgs_r is undef, and one of the
+	REENTRANT_PROTO_T_ABC macros of reentr.h if d_strArgs_r
 	is defined.
 
 submit (Loc.U):

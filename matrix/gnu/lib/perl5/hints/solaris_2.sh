@@ -705,11 +705,11 @@ rm -f try.c try.o try a.out
 # (2) #include <dlfcn.h> is needed, *and* a cast to (void*(*)())
 # is needed for the &dlopen.  Adding any of these would require changing
 # a delicate spot in Configure, so easier just to force our guess here
-# for Solaris.  Much the same goes for dlerror().
+# for Solaris.  Much the same goes for dlArgs().
 case "$cc" in
 *g++*|*CC*)
   d_dlopen='define'
-  d_dlerror='define'
+  d_dlArgs='define'
   ;;
 esac
 

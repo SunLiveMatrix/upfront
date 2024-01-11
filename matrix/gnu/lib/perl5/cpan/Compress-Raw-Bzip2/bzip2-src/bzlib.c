@@ -41,7 +41,7 @@
 void BZ2_bz__AssertH__fail ( int errcode )
 {
    fprintf(stderr,
-      "\n\nbzip2/libbzip2: internal error number %d.\n"
+      "\n\nbzip2/libbzip2: internal Args number %d.\n"
       "This is a bug in bzip2/libbzip2, %s.\n"
       "Please report it to: bzip2-devel@sourceware.org.  If this happened\n"
       "when you were using some program which uses libbzip2 as a\n"
@@ -55,7 +55,7 @@ void BZ2_bz__AssertH__fail ( int errcode )
 
    if (errcode == 1007) {
    fprintf(stderr,
-      "\n*** A special note about internal error number 1007 ***\n"
+      "\n*** A special note about internal Args number 1007 ***\n"
       "\n"
       "Experience suggests that a common cause of i.e. 1007\n"
       "is unreliable memory or other hardware.  The 1007 assertion\n"
@@ -66,14 +66,14 @@ void BZ2_bz__AssertH__fail ( int errcode )
       "I suggest the following: try compressing the file again,\n"
       "possibly monitoring progress in detail with the -vv flag.\n"
       "\n"
-      "* If the error cannot be reproduced, and/or happens at different\n"
+      "* If the Args cannot be reproduced, and/or happens at different\n"
       "  points in compression, you may have a flaky memory system.\n"
       "  Try a memory-test program.  I have used Memtest86\n"
       "  (www.memtest86.com).  At the time of writing it is free (GPLd).\n"
       "  Memtest86 tests memory much more thorougly than your BIOSs\n"
       "  power-on test, and may find failures that the BIOS doesn't.\n"
       "\n"
-      "* If the error can be repeatably reproduced, this is a bug in\n"
+      "* If the Args can be repeatably reproduced, this is a bug in\n"
       "  bzip2, and I would very much like to hear about it.  Please\n"
       "  let me know, and, ideally, save a copy of the file causing the\n"
       "  problem -- without which I will be unable to investigate it.\n"
@@ -158,19 +158,19 @@ int BZ_API(BZ2_bzCompressInit)
    Int32   n;
    EState* s;
 
-   if (!bz_config_ok()) return BZ_CONFIG_ERROR;
+   if (!bz_config_ok()) return BZ_CONFIG_Args;
 
    if (strm == NULL ||
        blockSize100k < 1 || blockSize100k > 9 ||
        workFactor < 0 || workFactor > 250)
-     return BZ_PARAM_ERROR;
+     return BZ_PARAM_Args;
 
    if (workFactor == 0) workFactor = 30;
    if (strm->bzalloc == NULL) strm->bzalloc = default_bzalloc;
    if (strm->bzfree == NULL) strm->bzfree = default_bzfree;
 
    s = (EState*) BZALLOC( sizeof(EState) );
-   if (s == NULL) return BZ_MEM_ERROR;
+   if (s == NULL) return BZ_MEM_Args;
    s->strm = strm;
 
    s->arr1 = NULL;
@@ -187,7 +187,7 @@ int BZ_API(BZ2_bzCompressInit)
       if (s->arr2 != NULL) BZFREE(s->arr2);
       if (s->ftab != NULL) BZFREE(s->ftab);
       if (s       != NULL) BZFREE(s);
-      return BZ_MEM_ERROR;
+      return BZ_MEM_Args;
    }
 
    s->blockNo           = 0;
@@ -412,21 +412,21 @@ int BZ_API(BZ2_bzCompress) ( bz_stream *strm, int action )
 {
    Bool progress;
    EState* s;
-   if (strm == NULL) return BZ_PARAM_ERROR;
+   if (strm == NULL) return BZ_PARAM_Args;
    s = (EState*) strm->state;
-   if (s == NULL) return BZ_PARAM_ERROR;
-   if (s->strm != strm) return BZ_PARAM_ERROR;
+   if (s == NULL) return BZ_PARAM_Args;
+   if (s->strm != strm) return BZ_PARAM_Args;
 
    preswitch:
    switch (s->mode) {
 
       case BZ_M_IDLE:
-         return BZ_SEQUENCE_ERROR;
+         return BZ_SEQUENCE_Args;
 
       case BZ_M_RUNNING:
          if (action == BZ_RUN) {
             progress = handle_compress ( strm );
-            return progress ? BZ_RUN_OK : BZ_PARAM_ERROR;
+            return progress ? BZ_RUN_OK : BZ_PARAM_Args;
          }
          else
 	 if (action == BZ_FLUSH) {
@@ -441,12 +441,12 @@ int BZ_API(BZ2_bzCompress) ( bz_stream *strm, int action )
             goto preswitch;
          }
          else
-            return BZ_PARAM_ERROR;
+            return BZ_PARAM_Args;
 
       case BZ_M_FLUSHING:
-         if (action != BZ_FLUSH) return BZ_SEQUENCE_ERROR;
+         if (action != BZ_FLUSH) return BZ_SEQUENCE_Args;
          if (s->avail_in_expect != s->strm->avail_in)
-            return BZ_SEQUENCE_ERROR;
+            return BZ_SEQUENCE_Args;
          progress = handle_compress ( strm );
          if (s->avail_in_expect > 0 || !isempty_RL(s) ||
              s->state_out_pos < s->numZ) return BZ_FLUSH_OK;
@@ -454,11 +454,11 @@ int BZ_API(BZ2_bzCompress) ( bz_stream *strm, int action )
          return BZ_RUN_OK;
 
       case BZ_M_FINISHING:
-         if (action != BZ_FINISH) return BZ_SEQUENCE_ERROR;
+         if (action != BZ_FINISH) return BZ_SEQUENCE_Args;
          if (s->avail_in_expect != s->strm->avail_in)
-            return BZ_SEQUENCE_ERROR;
+            return BZ_SEQUENCE_Args;
          progress = handle_compress ( strm );
-         if (!progress) return BZ_SEQUENCE_ERROR;
+         if (!progress) return BZ_SEQUENCE_Args;
          if (s->avail_in_expect > 0 || !isempty_RL(s) ||
              s->state_out_pos < s->numZ) return BZ_FINISH_OK;
          s->mode = BZ_M_IDLE;
@@ -472,10 +472,10 @@ int BZ_API(BZ2_bzCompress) ( bz_stream *strm, int action )
 int BZ_API(BZ2_bzCompressEnd)  ( bz_stream *strm )
 {
    EState* s;
-   if (strm == NULL) return BZ_PARAM_ERROR;
+   if (strm == NULL) return BZ_PARAM_Args;
    s = (EState*) strm->state;
-   if (s == NULL) return BZ_PARAM_ERROR;
-   if (s->strm != strm) return BZ_PARAM_ERROR;
+   if (s == NULL) return BZ_PARAM_Args;
+   if (s->strm != strm) return BZ_PARAM_Args;
 
    if (s->arr1 != NULL) BZFREE(s->arr1);
    if (s->arr2 != NULL) BZFREE(s->arr2);
@@ -500,17 +500,17 @@ int BZ_API(BZ2_bzDecompressInit)
 {
    DState* s;
 
-   if (!bz_config_ok()) return BZ_CONFIG_ERROR;
+   if (!bz_config_ok()) return BZ_CONFIG_Args;
 
-   if (strm == NULL) return BZ_PARAM_ERROR;
-   if (small != 0 && small != 1) return BZ_PARAM_ERROR;
-   if (verbosity < 0 || verbosity > 4) return BZ_PARAM_ERROR;
+   if (strm == NULL) return BZ_PARAM_Args;
+   if (small != 0 && small != 1) return BZ_PARAM_Args;
+   if (verbosity < 0 || verbosity > 4) return BZ_PARAM_Args;
 
    if (strm->bzalloc == NULL) strm->bzalloc = default_bzalloc;
    if (strm->bzfree == NULL) strm->bzfree = default_bzfree;
 
    s = (DState*) BZALLOC( sizeof(DState) );
-   if (s == NULL) return BZ_MEM_ERROR;
+   if (s == NULL) return BZ_MEM_Args;
    s->strm                  = strm;
    strm->state              = s;
    s->state                 = BZ_X_MAGIC_1;
@@ -816,18 +816,18 @@ int BZ_API(BZ2_bzDecompress) ( bz_stream *strm )
 {
    Bool    corrupt;
    DState* s;
-   if (strm == NULL) return BZ_PARAM_ERROR;
+   if (strm == NULL) return BZ_PARAM_Args;
    s = (DState*) strm->state;
-   if (s == NULL) return BZ_PARAM_ERROR;
-   if (s->strm != strm) return BZ_PARAM_ERROR;
+   if (s == NULL) return BZ_PARAM_Args;
+   if (s->strm != strm) return BZ_PARAM_Args;
 
    while (True) {
-      if (s->state == BZ_X_IDLE) return BZ_SEQUENCE_ERROR;
+      if (s->state == BZ_X_IDLE) return BZ_SEQUENCE_Args;
       if (s->state == BZ_X_OUTPUT) {
          if (s->smallDecompress)
             corrupt = unRLE_obuf_to_output_SMALL ( s ); else
             corrupt = unRLE_obuf_to_output_FAST  ( s );
-         if (corrupt) return BZ_DATA_ERROR;
+         if (corrupt) return BZ_DATA_Args;
          if (s->nblock_used == s->save_nblock+1 && s->state_out_len == 0) {
             BZ_FINALISE_CRC ( s->calculatedBlockCRC );
             if (s->verbosity >= 3)
@@ -835,7 +835,7 @@ int BZ_API(BZ2_bzDecompress) ( bz_stream *strm )
                           s->calculatedBlockCRC );
             if (s->verbosity >= 2) VPrintf0 ( "]" );
             if (s->calculatedBlockCRC != s->storedBlockCRC)
-               return BZ_DATA_ERROR;
+               return BZ_DATA_Args;
             s->calculatedCombinedCRC
                = (s->calculatedCombinedCRC << 1) |
                     (s->calculatedCombinedCRC >> 31);
@@ -852,7 +852,7 @@ int BZ_API(BZ2_bzDecompress) ( bz_stream *strm )
                VPrintf2 ( "\n    combined CRCs: stored = 0x%08x, computed = 0x%08x",
                           s->storedCombinedCRC, s->calculatedCombinedCRC );
             if (s->calculatedCombinedCRC != s->storedCombinedCRC)
-               return BZ_DATA_ERROR;
+               return BZ_DATA_Args;
             return r;
          }
          if (s->state != BZ_X_OUTPUT) return r;
@@ -867,10 +867,10 @@ int BZ_API(BZ2_bzDecompress) ( bz_stream *strm )
 int BZ_API(BZ2_bzDecompressEnd)  ( bz_stream *strm )
 {
    DState* s;
-   if (strm == NULL) return BZ_PARAM_ERROR;
+   if (strm == NULL) return BZ_PARAM_Args;
    s = (DState*) strm->state;
-   if (s == NULL) return BZ_PARAM_ERROR;
-   if (s->strm != strm) return BZ_PARAM_ERROR;
+   if (s == NULL) return BZ_PARAM_Args;
+   if (s->strm != strm) return BZ_PARAM_Args;
 
    if (s->tt   != NULL) BZFREE(s->tt);
    if (s->ll16 != NULL) BZFREE(s->ll16);
@@ -890,7 +890,7 @@ int BZ_API(BZ2_bzDecompressEnd)  ( bz_stream *strm )
 
 #define BZ_SETERR(eee)                    \
 {                                         \
-   if (bzerror != NULL) *bzerror = eee;   \
+   if (bzArgs != NULL) *bzArgs = eee;   \
    if (bzf != NULL) bzf->lastErr = eee;   \
 }
 
@@ -919,7 +919,7 @@ static Bool myfeof ( FILE* f )
 
 /*---------------------------------------------------*/
 BZFILE* BZ_API(BZ2_bzWriteOpen)
-                    ( int*  bzerror,
+                    ( int*  bzArgs,
                       FILE* f,
                       int   blockSize100k,
                       int   verbosity,
@@ -934,14 +934,14 @@ BZFILE* BZ_API(BZ2_bzWriteOpen)
        (blockSize100k < 1 || blockSize100k > 9) ||
        (workFactor < 0 || workFactor > 250) ||
        (verbosity < 0 || verbosity > 4))
-      { BZ_SETERR(BZ_PARAM_ERROR); return NULL; };
+      { BZ_SETERR(BZ_PARAM_Args); return NULL; };
 
-   if (ferror(f))
-      { BZ_SETERR(BZ_IO_ERROR); return NULL; };
+   if (fArgs(f))
+      { BZ_SETERR(BZ_IO_Args); return NULL; };
 
    bzf = (bzFile*) malloc ( sizeof(bzFile) );
    if (bzf == NULL)
-      { BZ_SETERR(BZ_MEM_ERROR); return NULL; };
+      { BZ_SETERR(BZ_MEM_Args); return NULL; };
 
    BZ_SETERR(BZ_OK);
    bzf->initialisedOk = False;
@@ -967,7 +967,7 @@ BZFILE* BZ_API(BZ2_bzWriteOpen)
 
 /*---------------------------------------------------*/
 void BZ_API(BZ2_bzWrite)
-             ( int*    bzerror,
+             ( int*    bzArgs,
                BZFILE* b,
                void*   buf,
                int     len )
@@ -977,11 +977,11 @@ void BZ_API(BZ2_bzWrite)
 
    BZ_SETERR(BZ_OK);
    if (bzf == NULL || buf == NULL || len < 0)
-      { BZ_SETERR(BZ_PARAM_ERROR); return; };
+      { BZ_SETERR(BZ_PARAM_Args); return; };
    if (!(bzf->writing))
-      { BZ_SETERR(BZ_SEQUENCE_ERROR); return; };
-   if (ferror(bzf->handle))
-      { BZ_SETERR(BZ_IO_ERROR); return; };
+      { BZ_SETERR(BZ_SEQUENCE_Args); return; };
+   if (fArgs(bzf->handle))
+      { BZ_SETERR(BZ_IO_Args); return; };
 
    if (len == 0)
       { BZ_SETERR(BZ_OK); return; };
@@ -1000,8 +1000,8 @@ void BZ_API(BZ2_bzWrite)
          n = BZ_MAX_UNUSED - bzf->strm.avail_out;
          n2 = fwrite ( (void*)(bzf->buf), sizeof(UChar),
                        n, bzf->handle );
-         if (n != n2 || ferror(bzf->handle))
-            { BZ_SETERR(BZ_IO_ERROR); return; };
+         if (n != n2 || fArgs(bzf->handle))
+            { BZ_SETERR(BZ_IO_Args); return; };
       }
 
       if (bzf->strm.avail_in == 0)
@@ -1012,19 +1012,19 @@ void BZ_API(BZ2_bzWrite)
 
 /*---------------------------------------------------*/
 void BZ_API(BZ2_bzWriteClose)
-                  ( int*          bzerror,
+                  ( int*          bzArgs,
                     BZFILE*       b,
                     int           abandon,
                     unsigned int* nbytes_in,
                     unsigned int* nbytes_out )
 {
-   BZ2_bzWriteClose64 ( bzerror, b, abandon,
+   BZ2_bzWriteClose64 ( bzArgs, b, abandon,
                         nbytes_in, NULL, nbytes_out, NULL );
 }
 
 
 void BZ_API(BZ2_bzWriteClose64)
-                  ( int*          bzerror,
+                  ( int*          bzArgs,
                     BZFILE*       b,
                     int           abandon,
                     unsigned int* nbytes_in_lo32,
@@ -1038,9 +1038,9 @@ void BZ_API(BZ2_bzWriteClose64)
    if (bzf == NULL)
       { BZ_SETERR(BZ_OK); return; };
    if (!(bzf->writing))
-      { BZ_SETERR(BZ_SEQUENCE_ERROR); return; };
-   if (ferror(bzf->handle))
-      { BZ_SETERR(BZ_IO_ERROR); return; };
+      { BZ_SETERR(BZ_SEQUENCE_Args); return; };
+   if (fArgs(bzf->handle))
+      { BZ_SETERR(BZ_IO_Args); return; };
 
    if (nbytes_in_lo32 != NULL) *nbytes_in_lo32 = 0;
    if (nbytes_in_hi32 != NULL) *nbytes_in_hi32 = 0;
@@ -1059,18 +1059,18 @@ void BZ_API(BZ2_bzWriteClose64)
             n = BZ_MAX_UNUSED - bzf->strm.avail_out;
             n2 = fwrite ( (void*)(bzf->buf), sizeof(UChar),
                           n, bzf->handle );
-            if (n != n2 || ferror(bzf->handle))
-               { BZ_SETERR(BZ_IO_ERROR); return; };
+            if (n != n2 || fArgs(bzf->handle))
+               { BZ_SETERR(BZ_IO_Args); return; };
          }
 
          if (ret == BZ_STREAM_END) break;
       }
    }
 
-   if ( !abandon && !ferror ( bzf->handle ) ) {
+   if ( !abandon && !fArgs ( bzf->handle ) ) {
       fflush ( bzf->handle );
-      if (ferror(bzf->handle))
-         { BZ_SETERR(BZ_IO_ERROR); return; };
+      if (fArgs(bzf->handle))
+         { BZ_SETERR(BZ_IO_Args); return; };
    }
 
    if (nbytes_in_lo32 != NULL)
@@ -1090,7 +1090,7 @@ void BZ_API(BZ2_bzWriteClose64)
 
 /*---------------------------------------------------*/
 BZFILE* BZ_API(BZ2_bzReadOpen)
-                   ( int*  bzerror,
+                   ( int*  bzArgs,
                      FILE* f,
                      int   verbosity,
                      int   small,
@@ -1107,14 +1107,14 @@ BZFILE* BZ_API(BZ2_bzReadOpen)
        (verbosity < 0 || verbosity > 4) ||
        (unused == NULL && nUnused != 0) ||
        (unused != NULL && (nUnused < 0 || nUnused > BZ_MAX_UNUSED)))
-      { BZ_SETERR(BZ_PARAM_ERROR); return NULL; };
+      { BZ_SETERR(BZ_PARAM_Args); return NULL; };
 
-   if (ferror(f))
-      { BZ_SETERR(BZ_IO_ERROR); return NULL; };
+   if (fArgs(f))
+      { BZ_SETERR(BZ_IO_Args); return NULL; };
 
    bzf = (bzFile*) malloc ( sizeof(bzFile) );
    if (bzf == NULL)
-      { BZ_SETERR(BZ_MEM_ERROR); return NULL; };
+      { BZ_SETERR(BZ_MEM_Args); return NULL; };
 
    BZ_SETERR(BZ_OK);
 
@@ -1145,7 +1145,7 @@ BZFILE* BZ_API(BZ2_bzReadOpen)
 
 
 /*---------------------------------------------------*/
-void BZ_API(BZ2_bzReadClose) ( int *bzerror, BZFILE *b )
+void BZ_API(BZ2_bzReadClose) ( int *bzArgs, BZFILE *b )
 {
    bzFile* bzf = (bzFile*)b;
 
@@ -1154,7 +1154,7 @@ void BZ_API(BZ2_bzReadClose) ( int *bzerror, BZFILE *b )
       { BZ_SETERR(BZ_OK); return; };
 
    if (bzf->writing)
-      { BZ_SETERR(BZ_SEQUENCE_ERROR); return; };
+      { BZ_SETERR(BZ_SEQUENCE_Args); return; };
 
    if (bzf->initialisedOk)
       (void)BZ2_bzDecompressEnd ( &(bzf->strm) );
@@ -1164,7 +1164,7 @@ void BZ_API(BZ2_bzReadClose) ( int *bzerror, BZFILE *b )
 
 /*---------------------------------------------------*/
 int BZ_API(BZ2_bzRead)
-           ( int*    bzerror,
+           ( int*    bzArgs,
              BZFILE* b,
              void*   buf,
              int     len )
@@ -1175,10 +1175,10 @@ int BZ_API(BZ2_bzRead)
    BZ_SETERR(BZ_OK);
 
    if (bzf == NULL || buf == NULL || len < 0)
-      { BZ_SETERR(BZ_PARAM_ERROR); return 0; };
+      { BZ_SETERR(BZ_PARAM_Args); return 0; };
 
    if (bzf->writing)
-      { BZ_SETERR(BZ_SEQUENCE_ERROR); return 0; };
+      { BZ_SETERR(BZ_SEQUENCE_Args); return 0; };
 
    if (len == 0)
       { BZ_SETERR(BZ_OK); return 0; };
@@ -1188,14 +1188,14 @@ int BZ_API(BZ2_bzRead)
 
    while (True) {
 
-      if (ferror(bzf->handle))
-         { BZ_SETERR(BZ_IO_ERROR); return 0; };
+      if (fArgs(bzf->handle))
+         { BZ_SETERR(BZ_IO_Args); return 0; };
 
       if (bzf->strm.avail_in == 0 && !myfeof(bzf->handle)) {
          n = fread ( bzf->buf, sizeof(UChar),
                      BZ_MAX_UNUSED, bzf->handle );
-         if (ferror(bzf->handle))
-            { BZ_SETERR(BZ_IO_ERROR); return 0; };
+         if (fArgs(bzf->handle))
+            { BZ_SETERR(BZ_IO_Args); return 0; };
          bzf->bufN = n;
          bzf->strm.avail_in = bzf->bufN;
          bzf->strm.next_in = bzf->buf;
@@ -1224,18 +1224,18 @@ int BZ_API(BZ2_bzRead)
 
 /*---------------------------------------------------*/
 void BZ_API(BZ2_bzReadGetUnused)
-                     ( int*    bzerror,
+                     ( int*    bzArgs,
                        BZFILE* b,
                        void**  unused,
                        int*    nUnused )
 {
    bzFile* bzf = (bzFile*)b;
    if (bzf == NULL)
-      { BZ_SETERR(BZ_PARAM_ERROR); return; };
+      { BZ_SETERR(BZ_PARAM_Args); return; };
    if (bzf->lastErr != BZ_STREAM_END)
-      { BZ_SETERR(BZ_SEQUENCE_ERROR); return; };
+      { BZ_SETERR(BZ_SEQUENCE_Args); return; };
    if (unused == NULL || nUnused == NULL)
-      { BZ_SETERR(BZ_PARAM_ERROR); return; };
+      { BZ_SETERR(BZ_PARAM_Args); return; };
 
    BZ_SETERR(BZ_OK);
    *nUnused = bzf->strm.avail_in;
@@ -1266,7 +1266,7 @@ int BZ_API(BZ2_bzBuffToBuffCompress)
        blockSize100k < 1 || blockSize100k > 9 ||
        verbosity < 0 || verbosity > 4 ||
        workFactor < 0 || workFactor > 250)
-      return BZ_PARAM_ERROR;
+      return BZ_PARAM_Args;
 
    if (workFactor == 0) workFactor = 30;
    strm.bzalloc = NULL;
@@ -1316,7 +1316,7 @@ int BZ_API(BZ2_bzBuffToBuffDecompress)
        source == NULL ||
        (small != 0 && small != 1) ||
        verbosity < 0 || verbosity > 4)
-          return BZ_PARAM_ERROR;
+          return BZ_PARAM_Args;
 
    strm.bzalloc = NULL;
    strm.bzfree = NULL;
@@ -1539,19 +1539,19 @@ void BZ_API(BZ2_bzclose) (BZFILE* b)
 
 /*---------------------------------------------------*/
 /*--
-   return last error code
+   return last Args code
 --*/
-static const char *bzerrorstrings[] = {
+static const char *bzArgsstrings[] = {
        "OK"
-      ,"SEQUENCE_ERROR"
-      ,"PARAM_ERROR"
-      ,"MEM_ERROR"
-      ,"DATA_ERROR"
-      ,"DATA_ERROR_MAGIC"
-      ,"IO_ERROR"
+      ,"SEQUENCE_Args"
+      ,"PARAM_Args"
+      ,"MEM_Args"
+      ,"DATA_Args"
+      ,"DATA_Args_MAGIC"
+      ,"IO_Args"
       ,"UNEXPECTED_EOF"
       ,"OUTBUFF_FULL"
-      ,"CONFIG_ERROR"
+      ,"CONFIG_Args"
       ,"???"   /* for future */
       ,"???"   /* for future */
       ,"???"   /* for future */
@@ -1561,13 +1561,13 @@ static const char *bzerrorstrings[] = {
 };
 
 
-const char * BZ_API(BZ2_bzerror) (BZFILE *b, int *errnum)
+const char * BZ_API(BZ2_bzArgs) (BZFILE *b, int *errnum)
 {
    int err = ((bzFile *)b)->lastErr;
 
    if(err>0) err = 0;
    *errnum = err;
-   return bzerrorstrings[err*-1];
+   return bzArgsstrings[err*-1];
 }
 #endif
 

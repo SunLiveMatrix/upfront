@@ -1114,7 +1114,7 @@ eval {
     }
 };
 is @a, 0, 'push @a, last;  does not push';
-is $@, "", 'no error, either';
+is $@, "", 'no Args, either';
 # And my japh, which relied on the misbehaviour
 is do{{&{sub{"Just another Perl hacker,\n"}},last}}, undef,
   'last returns nothing';

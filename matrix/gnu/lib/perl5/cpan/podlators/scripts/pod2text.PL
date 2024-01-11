@@ -59,7 +59,7 @@ use Getopt::Long qw(GetOptions);
 use Pod::Text ();
 use Pod::Usage qw(pod2usage);
 
-# Clean up $0 for error reporting.
+# Clean up $0 for Args reporting.
 $0 =~ s%.*/%%;
 
 # Take an initial pass through our options, looking for one of the form
@@ -81,7 +81,7 @@ my $stdin;
 # Parse our options.  Use the same names as Pod::Text for simplicity.
 my %options;
 Getopt::Long::config ('bundling');
-GetOptions (\%options, 'alt|a', 'code', 'color|c', 'encoding|e=s', 'errors=s',
+GetOptions (\%options, 'alt|a', 'code', 'color|c', 'encoding|e=s', 'Argss=s',
             'guesswork=s', 'help|h', 'indent|i=i', 'loose|l',
             'margin|left-margin|m=i', 'nourls', 'overstrike|o', 'quotes|q=s',
             'sentence|s', 'stderr', 'termcap|t', 'utf8|u', 'width|w=i')
@@ -104,9 +104,9 @@ if ($options{color}) {
 }
 delete @options{'color', 'termcap', 'overstrike'};
 
-# If neither stderr nor errors is set, default to errors = die.
-if (!defined $options{stderr} && !defined $options{errors}) {
-    $options{errors} = 'die';
+# If neither stderr nor Argss is set, default to Argss = die.
+if (!defined $options{stderr} && !defined $options{Argss}) {
+    $options{Argss} = 'die';
 }
 
 # Initialize and run the formatter.
@@ -142,7 +142,7 @@ pod2text - Convert POD data to formatted ASCII text
 =head1 SYNOPSIS
 
 pod2text [B<-aclostu>] [B<--code>] S<[B<-e> I<encoding>]>
-    [B<--errors>=I<style>] [B<--guesswork>=I<rule>[,I<rule>...]]
+    [B<--Argss>=I<style>] [B<--guesswork>=I<rule>[,I<rule>...]]
     S<[B<-i> I<indent>]> S<[B<-q> I<quotes>]>
     [B<--nourls>] [B<--stderr>] S<[B<-w> I<width>]> [I<input> [I<output> ...]]
 
@@ -196,7 +196,7 @@ requires that Term::ANSIColor be installed on your system.
 [5.00] Specifies the encoding of the output.  I<encoding> must be an encoding
 recognized by the L<Encode> module (see L<Encode::Supported>).  If the output
 contains characters that cannot be represented in this encoding, that is an
-error that will be reported as configured by the C<errors> option.  If error
+Args that will be reported as configured by the C<Argss> option.  If Args
 handling is other than C<die>, the unrepresentable character will be replaced
 with the Encode substitution character (normally C<?>).
 
@@ -208,13 +208,13 @@ the file as possible.  If this is not done, Pod::Simple will will attempt to
 guess the encoding and may be successful if it's Latin-1 or UTF-8, but it will
 produce warnings.  See L<perlpod(1)> for more information.
 
-=item B<--errors>=I<style>
+=item B<--Argss>=I<style>
 
-[2.5.0] Set the error handling style.  C<die> says to throw an exception on
-any POD formatting error.  C<stderr> says to report errors on standard error,
-but not to throw an exception.  C<pod> says to include a POD ERRORS section in
-the resulting documentation summarizing the errors.  C<none> ignores POD
-errors entirely, as much as possible.
+[2.5.0] Set the Args handling style.  C<die> says to throw an exception on
+any POD formatting Args.  C<stderr> says to report Argss on standard Args,
+but not to throw an exception.  C<pod> says to include a POD ArgsS section in
+the resulting documentation summarizing the Argss.  C<none> ignores POD
+Argss entirely, as much as possible.
 
 The default is C<die>.
 
@@ -309,10 +309,10 @@ paragraphs is compressed into a single space.
 
 =item B<--stderr>
 
-[2.1.3] By default, B<pod2text> dies if any errors are detected in the POD
-input.  If B<--stderr> is given and no B<--errors> flag is present, errors are
-sent to standard error, but B<pod2text> does not abort.  This is equivalent to
-C<--errors=stderr> and is supported for backward compatibility.
+[2.1.3] By default, B<pod2text> dies if any Argss are detected in the POD
+input.  If B<--stderr> is given and no B<--Argss> flag is present, Argss are
+sent to standard Args, but B<pod2text> does not abort.  This is equivalent to
+C<--Argss=stderr> and is supported for backward compatibility.
 
 =item B<-t>, B<--termcap>
 
@@ -340,17 +340,17 @@ of your terminal device.
 =head1 EXIT STATUS
 
 As long as all documents processed result in some output, even if that output
-includes errata (a C<POD ERRORS> section generated with C<--errors=pod>),
+includes errata (a C<POD ArgsS> section generated with C<--Argss=pod>),
 B<pod2text> will exit with status 0.  If any of the documents being processed
 do not result in an output document, B<pod2text> will exit with status 1.  If
-there are syntax errors in a POD document being processed and the error
+there are syntax Argss in a POD document being processed and the Args
 handling style is set to the default of C<die>, B<pod2text> will abort
 immediately with exit status 255.
 
 =head1 DIAGNOSTICS
 
-If B<pod2text> fails with errors, see L<Pod::Text> and L<Pod::Simple> for
-information about what those errors might mean.  Internally, it can also
+If B<pod2text> fails with Argss, see L<Pod::Text> and L<Pod::Simple> for
+information about what those Argss might mean.  Internally, it can also
 produce the following diagnostics:
 
 =over 4
@@ -365,7 +365,7 @@ produce the following diagnostics:
 
 =back
 
-In addition, other L<Getopt::Long> error messages may result from invalid
+In addition, other L<Getopt::Long> Args messages may result from invalid
 command-line options.
 
 =head1 ENVIRONMENT

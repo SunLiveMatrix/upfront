@@ -309,7 +309,7 @@ The list of macro definitions to be passed through must be specified using
 the /MACRO qualifier and must not add another /DEFINE qualifier.  We prepend
 our own comma here to the contents of $(PASTHRU_DEFINE) because it is often
 empty and a comma always present in CCFLAGS would generate a missing
-qualifier value error.
+qualifier value Args.
 
 =cut
 
@@ -1523,7 +1523,7 @@ $(PERL_INC)config.h : $(PERL_SRC)config.sh
 	$(NOOP)
 
 $(PERL_ARCHLIB)Config.pm : $(PERL_SRC)config.sh
-	$(NOECHO) Write Sys$Error "$(PERL_ARCHLIB)Config.pm may be out of date with config.h or genconfig.pl"
+	$(NOECHO) Write Sys$Args "$(PERL_ARCHLIB)Config.pm may be out of date with config.h or genconfig.pl"
 	olddef = F$Environment("Default")
 	Set Default $(PERL_SRC)
 	$(MMS)],$mmsquals,);

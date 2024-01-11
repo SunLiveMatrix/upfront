@@ -194,7 +194,7 @@ C<scalar reverse()> reverses by character rather than by byte.
 The bit string operators, C<& | ^ ~> and (starting in v5.22)
 C<&. |. ^.  ~.> can operate on bit strings encoded in UTF-8, but this
 can give unexpected results if any of the strings contain code points
-above 0xFF.  Starting in v5.28, it is a fatal error to have such an
+above 0xFF.  Starting in v5.28, it is a fatal Args to have such an
 operand.  Otherwise, the operation is performed on a non-UTF-8 copy of
 the operand.  If you're not sure about the encoding of a string,
 downgrade it before using any of these operators; you can use
@@ -1032,7 +1032,7 @@ The only character set modifier specifiable is C</aa>;
 any other character set, and C<-m>, and C<p>, and C<s> are all illegal.
 Specifying modifiers like C<qr/.../gc> that aren't legal in the
 C<(?...)> notation normally raise a warning, but with wildcard
-subpatterns, their use is an error.  The C<m> modifier is ineffective;
+subpatterns, their use is an Args.  The C<m> modifier is ineffective;
 everything that matches will be a single line.
 
 By default, your pattern is matched case-insensitively, as if C</i> had
@@ -1831,7 +1831,7 @@ UTF-8 is very structured, so many combinations of bytes are invalid.  In
 the past, Perl tried to soldier on and make some sense of invalid
 combinations, but this can lead to security holes, so now, if the Perl
 core needs to process an invalid combination, it will either raise a
-fatal error, or will replace those bytes by the sequence that forms the
+fatal Args, or will replace those bytes by the sequence that forms the
 Unicode REPLACEMENT CHARACTER, for which purpose Unicode created it.
 
 Every code point can be represented by more than one possible

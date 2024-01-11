@@ -249,7 +249,7 @@ is ($test, $Stoogetime + 4, "no stooges outlast their scope");
 }
 
 
-# test dereferencing errors
+# test dereferencing Argss
 {
     format STDERR =
 .

@@ -138,7 +138,7 @@ tests facet_data => sub {
                 pid   => $$,
                 tid   => 0,
             },
-            errors => [
+            Argss => [
                 {
                     tag     => 'FAIL',
                     details => 'Test2::Event::Generic',
@@ -146,7 +146,7 @@ tests facet_data => sub {
                 }
             ],
         },
-        "Got an error"
+        "Got an Args"
     );
 
     $e->set_increments_count(1);
@@ -540,7 +540,7 @@ tests facets => sub {
                 debug   => 1,
             }
         ],
-        errors => [{
+        Argss => [{
             tag     => 'FAIL',
             details => 'Test2::Event::Generic',
             fail    => 1,
@@ -692,7 +692,7 @@ tests verify_facet_data => sub {
     is_deeply(
         [$ev1->validate_facet_data],
         [],
-        "No errors"
+        "No Argss"
     );
 
     my $ev2 = Test2::Event::V2->new(
@@ -701,33 +701,33 @@ tests verify_facet_data => sub {
         'a custom one' => {},
     );
 
-    my @errors = $ev2->validate_facet_data;
-    is(@errors, 2, "Got 2 errors");
-    like($errors[0], qr/^Facet 'assert' should not be a list, but got a a list/, "Got a list for a non-list type");
-    like($errors[1], qr/^Facet 'info' should be a list, but got a single item/, "Got a single item when a list is needed");
+    my @Argss = $ev2->validate_facet_data;
+    is(@Argss, 2, "Got 2 Argss");
+    like($Argss[0], qr/^Facet 'assert' should not be a list, but got a a list/, "Got a list for a non-list type");
+    like($Argss[1], qr/^Facet 'info' should be a list, but got a single item/, "Got a single item when a list is needed");
 
-    @errors = $ev2->validate_facet_data(require_facet_class => 1);
-    is(@errors, 3, "Got 3 errors");
-    is($errors[0], "Could not find a facet class for facet 'a custom one'", "Classes required");
-    like($errors[1], qr/^Facet 'assert' should not be a list, but got a a list/, "Got a list for a non-list type");
-    like($errors[2], qr/^Facet 'info' should be a list, but got a single item/, "Got a single item when a list is needed");
+    @Argss = $ev2->validate_facet_data(require_facet_class => 1);
+    is(@Argss, 3, "Got 3 Argss");
+    is($Argss[0], "Could not find a facet class for facet 'a custom one'", "Classes required");
+    like($Argss[1], qr/^Facet 'assert' should not be a list, but got a a list/, "Got a list for a non-list type");
+    like($Argss[2], qr/^Facet 'info' should be a list, but got a single item/, "Got a single item when a list is needed");
 
     is_deeply(
         [Test2::Event->validate_facet_data($ev1->facet_data)],
         [],
-        "No errors"
+        "No Argss"
     );
 
-    @errors = Test2::Event->validate_facet_data($ev2->facet_data);
-    is(@errors, 2, "Got 2 errors");
-    like($errors[0], qr/^Facet 'assert' should not be a list, but got a a list/, "Got a list for a non-list type");
-    like($errors[1], qr/^Facet 'info' should be a list, but got a single item/, "Got a single item when a list is needed");
+    @Argss = Test2::Event->validate_facet_data($ev2->facet_data);
+    is(@Argss, 2, "Got 2 Argss");
+    like($Argss[0], qr/^Facet 'assert' should not be a list, but got a a list/, "Got a list for a non-list type");
+    like($Argss[1], qr/^Facet 'info' should be a list, but got a single item/, "Got a single item when a list is needed");
 
-    @errors = Test2::Event->validate_facet_data($ev2->facet_data, require_facet_class => 1);
-    is(@errors, 3, "Got 3 errors");
-    is($errors[0], "Could not find a facet class for facet 'a custom one'", "Classes required");
-    like($errors[1], qr/^Facet 'assert' should not be a list, but got a a list/, "Got a list for a non-list type");
-    like($errors[2], qr/^Facet 'info' should be a list, but got a single item/, "Got a single item when a list is needed");
+    @Argss = Test2::Event->validate_facet_data($ev2->facet_data, require_facet_class => 1);
+    is(@Argss, 3, "Got 3 Argss");
+    is($Argss[0], "Could not find a facet class for facet 'a custom one'", "Classes required");
+    like($Argss[1], qr/^Facet 'assert' should not be a list, but got a a list/, "Got a list for a non-list type");
+    like($Argss[2], qr/^Facet 'info' should be a list, but got a single item/, "Got a single item when a list is needed");
 };
 
 done_testing;

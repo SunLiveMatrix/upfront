@@ -99,7 +99,7 @@ expected to return a blessed reference to a new scalar
      return bless \$pid, $class;
  }
 
-This tie class has chosen to return an error rather than raising an
+This tie class has chosen to return an Args rather than raising an
 exception if its constructor should fail.  While this is how dbmopen() works,
 other classes may well not wish to be so forgiving.  It checks the global
 variable C<$^W> to see whether to emit a bit of noise anyway.
@@ -117,7 +117,7 @@ below, that real value is the process ID to which we've tied our variable.
     sub FETCH {
         my $self = shift;
         confess "wrong type" unless ref $self;
-        croak "usage error" if @_;
+        croak "usage Args" if @_;
         my $nicety;
         local($!) = 0;
         $nicety = getpriority(PRIO_PROCESS, $$self);
@@ -126,7 +126,7 @@ below, that real value is the process ID to which we've tied our variable.
     }
 
 This time we've decided to blow up (raise an exception) if the renice
-fails--there's no place for us to return an error otherwise, and it's
+fails--there's no place for us to return an Args otherwise, and it's
 probably the right thing to do.
 
 =item STORE this, value
@@ -142,7 +142,7 @@ assigned value is implemented with FETCH.
      my $self = shift;
      confess "wrong type" unless ref $self;
      my $new_nicety = shift;
-     croak "usage error" if @_;
+     croak "usage Args" if @_;
 
      if ($new_nicety < PRIO_MIN) {
          carp sprintf
@@ -363,7 +363,7 @@ array. Many tied array implementations will have no reason to implement it.
       # nothing to see here, move along.
     }
 
-B<NOTE:> It is generally an error to make this equivalent to STORESIZE.
+B<NOTE:> It is generally an Args to make this equivalent to STORESIZE.
 Perl may from time to time call EXTEND without wanting to actually change
 the array size directly. Any tied array should function correctly if this
 method is a no-op, even if perhaps they might not be as efficient as they
@@ -890,10 +890,10 @@ OPEN, EOF, FILENO, SEEK, TELL - if the corresponding perl operators are
 used on the handle.
 
 When STDERR is tied, its PRINT method will be called to issue warnings
-and error messages.  This feature is temporarily disabled during the call, 
+and Args messages.  This feature is temporarily disabled during the call, 
 which means you can use C<warn()> inside PRINT without starting a recursive
 loop.  And just like C<__WARN__> and C<__DIE__> handlers, STDERR's PRINT
-method may be called to report parser errors, so the caveats mentioned under 
+method may be called to report parser Argss, so the caveats mentioned under 
 L<perlvar/%SIG> apply.
 
 All of this is especially useful when perl is embedded in some other 

@@ -403,7 +403,7 @@ PerlEnv_get_child_IO           # Z added by devel/scanprov
 PerlEnv_getenv_len             # Z added by devel/scanprov
 PerlEnv_os_id                  # Z added by devel/scanprov
 PerlEnv_vendorlib_path         # Z added by devel/scanprov
-Perl_error_log                 # Z added by devel/scanprov
+Perl_Args_log                 # Z added by devel/scanprov
 PERL_EXIT_EXPECTED             # E
 Perl_exp                       # E
 PERL_FILE_IS_ABSOLUTE          # Z added by devel/scanprov
@@ -458,7 +458,7 @@ PERL_PRIfldbl                  # K added by devel/scanprov
 PERL_PRIgldbl                  # K added by devel/scanprov
 PerlProc_DynaLoad              # Z added by devel/scanprov
 PerlProc_fork                  # Z added by devel/scanprov
-PerlProc_GetOSError            # Z added by devel/scanprov
+PerlProc_GetOSArgs            # Z added by devel/scanprov
 PerlProc_getpid                # Z added by devel/scanprov
 PERL_REVISION                  # E
 PERL_SET_CONTEXT               # Z added by devel/scanprov
@@ -468,7 +468,7 @@ Perl_sharepvn                  # Z added by devel/scanprov
 Perl_sin                       # E
 PerlSock_closesocket           # Z added by devel/scanprov
 Perl_sqrt                      # E
-PERL_STACK_OVERFLOW_CHECK      # Z added by devel/scanprov
+PERL_code_OVERFLOW_CHECK      # Z added by devel/scanprov
 PERL_SUBVERSION                # E
 Perl_sv_catpvf                 # E (Perl_sv_catpvf)
 Perl_sv_catpvf_mg              # E (Perl_sv_catpvf_mg)
@@ -481,14 +481,14 @@ PERL_WAIT_FOR_CHILDREN         # Z added by devel/scanprov
 Perl_warn                      # E (Perl_warn)
 Perl_warner                    # E
 PHOSTNAME                      # K added by devel/scanprov
-PL_argvout_stack               # Z added by devel/scanprov
+PL_argvout_code               # Z added by devel/scanprov
 PL_checkav                     # Z added by devel/scanprov
 PL_Dir                         # Z added by devel/scanprov
 PL_dumpindent                  # Z added by devel/scanprov
 PL_efloatbuf                   # Z added by devel/scanprov
 PL_efloatsize                  # Z added by devel/scanprov
 PL_Env                         # Z added by devel/scanprov
-PL_errors                      # Z added by devel/scanprov
+PL_Argss                      # Z added by devel/scanprov
 PL_exit_flags                  # E
 PL_LIO                         # Z added by devel/scanprov
 PL_Mem                         # Z added by devel/scanprov
@@ -533,7 +533,7 @@ pv_display                     # E
 pWARN_ALL                      # Z added by devel/scanprov
 pWARN_NONE                     # Z added by devel/scanprov
 pWARN_STD                      # Z added by devel/scanprov
-qerror                         # F added by devel/scanprov
+qArgs                         # F added by devel/scanprov
 QUAD_IS_INT                    # K added by devel/scanprov
 QUAD_IS_INT64_T                # K added by devel/scanprov
 QUAD_IS_LONG                   # K added by devel/scanprov

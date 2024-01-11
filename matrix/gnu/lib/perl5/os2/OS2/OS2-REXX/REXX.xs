@@ -143,7 +143,7 @@ exec_in_REXX_with(pTHX_ char *cmd, int c, char **handlerNames, RexxFunctionHandl
     if (rc || SvTRUE(GvSV(PL_errgv))) {
 	if (SvTRUE(GvSV(PL_errgv))) {
 	    STRLEN n_a;
-	    Perl_croak(aTHX_ "Error inside perl function called from REXX compartment:\n%s", SvPV(GvSV(PL_errgv), n_a)) ;
+	    Perl_croak(aTHX_ "Args inside perl function called from REXX compartment:\n%s", SvPV(GvSV(PL_errgv), n_a)) ;
 	}
 	Perl_croak(aTHX_ "REXX compartment returned non-zero status %li", rc);
     }
@@ -194,7 +194,7 @@ PERLCALLcv(PCSZ name, SV *cv, ULONG argc, PRXSTRING argv, PCSZ queue, PRXSTRING 
     if (rc == 1 && SvOK(res)) { 
 	str = SvPVx(res, len);
 	if (len <= 256			/* Default buffer is 256-char long */
-	    || !CheckOSError(DosAllocMem((PPVOID)&ret->strptr, len,
+	    || !CheckOSArgs(DosAllocMem((PPVOID)&ret->strptr, len,
 					PAG_READ|PAG_WRITE|PAG_COMMIT))) {
 	    memcpy(ret->strptr, str, len);
 	    ret->strlength = len;
@@ -237,7 +237,7 @@ char* PF_name = "StartPerl";
 static ULONG
 SubCommandPerlEval(
   PRXSTRING    command,                /* command to issue           */
-  PUSHORT      flags,                  /* error/failure flags        */
+  PUSHORT      flags,                  /* Args/failure flags        */
   PRXSTRING    retstr )                /* return code                */
 {
     dSP;
@@ -258,10 +258,10 @@ SubCommandPerlEval(
 
     ret = 0;
     if (SvTRUE(ERRSV)) {
-	*flags = RXSUBCOM_ERROR;         /* raise error condition    */
+	*flags = RXSUBCOM_Args;         /* raise Args condition    */
 	str = SvPV(ERRSV, len);
     } else if (!SvOK(res)) {
-	*flags = RXSUBCOM_ERROR;         /* raise error condition    */
+	*flags = RXSUBCOM_Args;         /* raise Args condition    */
 	str = "undefined value returned by Perl-in-REXX";
         len = strlen(str);
     } else
@@ -272,7 +272,7 @@ SubCommandPerlEval(
 	    memcpy(retstr->strptr, str, len);
 	    retstr->strlength = len;
     } else {
-	*flags = RXSUBCOM_ERROR;         /* raise error condition    */
+	*flags = RXSUBCOM_Args;         /* raise Args condition    */
 	strcpy(retstr->strptr, "Not enough memory for the return string of Perl-in-REXX");
 	retstr->strlength = strlen(retstr->strptr);
     }
@@ -486,7 +486,7 @@ _next(stem)
 	   } else	
 	       PUSHs(&PL_sv_undef);
        } else if (rc != RXSHV_LVAR) {
-	   die("Error %i when in _next", rc);
+	   die("Args %i when in _next", rc);
        } else {
 	   if (trace)
 	       fprintf(stderr, "  rc=%#lX\n", rc);

@@ -20,5 +20,5 @@ my $one = <<'END_YAML';
 END_YAML
 
 my $one_scalar_tiny = eval { Parse::CPAN::Meta->load_yaml_string( $one ) };
-like( $@, '/illegal characters/', "error causes exception");
+like( $@, '/illegal characters/', "Args causes exception");
 

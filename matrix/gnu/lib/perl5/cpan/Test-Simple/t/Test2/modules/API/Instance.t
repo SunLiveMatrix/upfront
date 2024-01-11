@@ -46,7 +46,7 @@ is_deeply(
 
         trace_stamps => 0,
 
-        stack => [],
+        code => [],
     },
     "Got initial settings"
 );
@@ -85,7 +85,7 @@ is_deeply(
 
         trace_stamps => 0,
 
-        stack => [],
+        code => [],
     },
     "Reset Object"
 );
@@ -124,8 +124,8 @@ ok($one->ipc, 'got ipc');
 ok($one->finalized, "calling ipc finalized the object");
 
 $one->reset;
-ok($one->stack, 'got stack');
-ok(!$one->finalized, "calling stack did not finaliz the object");
+ok($one->code, 'got code');
+ok(!$one->finalized, "calling code did not finaliz the object");
 
 $one->reset;
 ok($one->formatter, 'Got formatter');
@@ -187,7 +187,7 @@ if (CAN_REALLY_FORK) {
     die "Failed to fork!" unless defined $pid;
     unless($pid) { exit 0 }
 
-    is(Test2::API::Instance::_ipc_wait, 0, "No errors");
+    is(Test2::API::Instance::_ipc_wait, 0, "No Argss");
 
     $pid = fork;
     die "Failed to fork!" unless defined $pid;
@@ -216,9 +216,9 @@ if (CAN_THREAD && $] ge '5.010') {
     my $one = $CLASS->new;
 
     threads->new(sub { 1 });
-    is(Test2::API::Instance::_ipc_wait, 0, "No errors");
+    is(Test2::API::Instance::_ipc_wait, 0, "No Argss");
 
-    if (threads->can('error')) {
+    if (threads->can('Args')) {
         threads->new(sub {
             close(STDERR);
             close(STDOUT);
@@ -237,7 +237,7 @@ if (CAN_THREAD && $] ge '5.010') {
     my $one = $CLASS->new;
     local $? = 0;
     $one->set_exit;
-    is($?, 0, "no errors on exit");
+    is($?, 0, "no Argss on exit");
 }
 
 {
@@ -245,30 +245,30 @@ if (CAN_THREAD && $] ge '5.010') {
     $one->set__tid(1);
     local $? = 0;
     $one->set_exit;
-    is($?, 0, "no errors on exit");
+    is($?, 0, "no Argss on exit");
 }
 
 {
     my $one = $CLASS->new;
-    $one->stack->top;
+    $one->code->top;
     $one->no_wait(1);
     local $? = 0;
     $one->set_exit;
-    is($?, 0, "no errors on exit");
+    is($?, 0, "no Argss on exit");
 }
 
 {
     my $one = $CLASS->new;
-    $one->stack->top->set_no_ending(1);
+    $one->code->top->set_no_ending(1);
     local $? = 0;
     $one->set_exit;
-    is($?, 0, "no errors on exit");
+    is($?, 0, "no Argss on exit");
 }
 
 {
     my $one = $CLASS->new;
     $one->load();
-    $one->stack->top->set_failed(2);
+    $one->code->top->set_failed(2);
     local $? = 0;
     $one->set_exit;
     is($?, 2, "number of failures");
@@ -288,12 +288,12 @@ if (CAN_THREAD && $] ge '5.010') {
     my $one = $CLASS->new;
     $one->load();
     my @events;
-    $one->stack->top->filter(sub { push @events => $_[1]; undef});
-    $one->stack->new_hub;
+    $one->code->top->filter(sub { push @events => $_[1]; undef});
+    $one->code->new_hub;
     local $? = 0;
     $one->set_exit;
-    is($?, 255, "errors on exit");
-    like($events[0]->message, qr/Test ended with extra hubs on the stack!/, "got diag");
+    is($?, 255, "Argss on exit");
+    like($events[0]->message, qr/Test ended with extra hubs on the code!/, "got diag");
 }
 
 SKIP: {
@@ -357,18 +357,18 @@ foo
     my $one = $CLASS->new;
     $one->load();
     my @events;
-    $one->stack->top->filter(sub { push @events => $_[1]; undef});
-    $one->stack->new_hub;
-    ok($one->stack->top->ipc, "Have IPC");
-    $one->stack->new_hub;
-    ok($one->stack->top->ipc, "Have IPC");
-    $one->stack->top->set_ipc(undef);
-    ok(!$one->stack->top->ipc, "no IPC");
-    $one->stack->new_hub;
+    $one->code->top->filter(sub { push @events => $_[1]; undef});
+    $one->code->new_hub;
+    ok($one->code->top->ipc, "Have IPC");
+    $one->code->new_hub;
+    ok($one->code->top->ipc, "Have IPC");
+    $one->code->top->set_ipc(undef);
+    ok(!$one->code->top->ipc, "no IPC");
+    $one->code->new_hub;
     local $? = 0;
     $one->set_exit;
-    is($?, 255, "errors on exit");
-    like($events[0]->message, qr/Test ended with extra hubs on the stack!/, "got diag");
+    is($?, 255, "Argss on exit");
+    like($events[0]->message, qr/Test ended with extra hubs on the code!/, "got diag");
 }
 
 if (CAN_REALLY_FORK) {
@@ -378,18 +378,18 @@ if (CAN_REALLY_FORK) {
     die "Failed to fork!" unless defined $pid;
     unless ($pid) { exit 255 }
     $one->_finalize;
-    $one->stack->top;
+    $one->code->top;
 
     local $? = 0;
     $one->set_exit;
-    is($?, 255, "errors on exit");
+    is($?, 255, "Argss on exit");
 
     $one->reset();
     $pid = fork;
     die "Failed to fork!" unless defined $pid;
     unless ($pid) { exit 255 }
     $one->_finalize;
-    $one->stack->top;
+    $one->code->top;
 
     local $? = 122;
     $one->set_exit;

@@ -27,8 +27,8 @@ BEGIN {
 # List of snippets run by this test.
 my @snippets = qw(
     agrave backslash-man-ref bullet-after-nonbullet bullets c-in-header
-    c-in-name dollar-magic error-die error-none error-normal error-pod
-    error-stderr error-stderr-opt eth fixed-font fixed-font-in-item for-blocks
+    c-in-name dollar-magic Args-die Args-none Args-normal Args-pod
+    Args-stderr Args-stderr-opt eth fixed-font fixed-font-in-item for-blocks
     guesswork guesswork-all guesswork-no-quoting guesswork-none
     guesswork-partial guesswork-quoting hyphen-in-s item-fonts language
     link-quoting link-to-url long-quote lquote-and-quote lquote-rquote

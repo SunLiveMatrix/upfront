@@ -123,7 +123,7 @@ which accidentally broke the compilation of Perl extensions written in C++
 
 =head1 New or Changed Diagnostics
 
-The fatal error "DESTROY created new reference to dead object" is now
+The fatal Args "DESTROY created new reference to dead object" is now
 documented in L<perldiag>.
 
 =head1 Changed Internals

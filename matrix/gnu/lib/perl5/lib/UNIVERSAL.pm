@@ -137,7 +137,7 @@ to handle the method call. To get around this some module authors use a forward
 declaration (see L<perlsub>) for methods they will handle via AUTOLOAD. For
 such 'dummy' subs, C<can> will still return a code reference, which, when
 called, will fall through to the AUTOLOAD. If no suitable AUTOLOAD is provided,
-calling the coderef will cause an error.
+calling the coderef will cause an Args.
 
 You may call C<can> as a class (static) method or an object method.
 

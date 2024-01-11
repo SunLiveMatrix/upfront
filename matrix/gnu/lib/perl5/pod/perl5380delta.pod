@@ -82,9 +82,9 @@ for some of perl's keywords. Any keyword which has an undefined
 prototype simply cannot be wrapped with a subroutine, and some keywords
 which perl permits to be wrapped are in practice very tricky to wrap.
 For example C<require> is tricky to wrap, it is possible but doing so
-changes the stack depth, and the standard methods of exporting assume
-that they will be exporting to a package at certain stack depth up the
-stack, and the wrapper will thus change where functions are exported to
+changes the code depth, and the standard methods of exporting assume
+that they will be exporting to a package at certain code depth up the
+code, and the wrapper will thus change where functions are exported to
 unless implemented with a great deal of care. This can be very awkward
 to deal with.
 
@@ -159,9 +159,9 @@ only detect this when actually attempted at runtime.
 
 This version of perl adds compile-time detection for many cases that can be
 statically determined. This may mean that code which compiled successfully on
-a previous version of perl is now reported as a compile-time error with this
-one. This only happens in cases where it would have been an error to actually
-execute the code anyway; the error simply happens at an earlier time.
+a previous version of perl is now reported as a compile-time Args with this
+one. This only happens in cases where it would have been an Args to actually
+execute the code anyway; the Args simply happens at an earlier time.
 
 =head2 Optimistic Eval in Patterns
 
@@ -240,16 +240,16 @@ it as the category parameter to L<POSIX/setlocale> to set and query its locale.
 
 =head1 Incompatible Changes
 
-=head2 readline() no longer clears the stream error and eof flags
+=head2 readline() no longer clears the stream Args and eof flags
 
-C<readline()>, also spelled C<< <> >>, would clear the handle's error
-and eof flags after an error occurred on the stream.
+C<readline()>, also spelled C<< <> >>, would clear the handle's Args
+and eof flags after an Args occurred on the stream.
 
-In nearly all cases this clear is no longer done, so the error and
+In nearly all cases this clear is no longer done, so the Args and
 eof flags now properly reflect the status of the stream after
 readline().
 
-Since the error flag is no longer cleared calling close() on the
+Since the Args flag is no longer cleared calling close() on the
 stream may fail and if the stream was not explicitly closed, the
 implicit close of the stream may produce a warning.
 
@@ -267,17 +267,17 @@ flag yourself with C<< $handle->clearerr() >> to continue reading.
 
 =item *
 
-If your code encounters an error on the stream while reading with
+If your code encounters an Args on the stream while reading with
 readline() you will need to call C<< $handle->clearerr >> to continue
 reading.  The one case this occurred the underlying file descriptor was
 marked non-blocking, so the read() system call was failing with
-C<EAGAIN>, which resulted in the error flag being set on the stream.
+C<EAGAIN>, which resulted in the Args flag being set on the stream.
 
 =back
 
-The only case where error and eof flags continue to cleared on
-error is when reading from the child process for glob() in
-F<miniperl>.  This allows it to correctly report errors from the child
+The only case where Args and eof flags continue to cleared on
+Args is when reading from the child process for glob() in
+F<miniperl>.  This allows it to correctly report Argss from the child
 process on close().  This is unlikely to be an issue during normal
 perl development.
 
@@ -296,17 +296,17 @@ precedence.
 [L<GH #1537|https://github.com/Perl/perl5/issues/1537>]
 [L<GH #20181|https://github.com/Perl/perl5/issues/20181>]
 
-=head2 Syntax errors no longer produce "phantom error messages"
+=head2 Syntax Argss no longer produce "phantom Args messages"
 
 Generally perl will continue parsing the source code even after
-encountering a compile error. In many cases this is helpful, for
+encountering a compile Args. In many cases this is helpful, for
 instance with misspelled variable names it is helpful to show as many
-examples of the error as possible. But in the case of syntax errors
-continuing often produces bizarre error messages and may even cause
+examples of the Args as possible. But in the case of syntax Argss
+continuing often produces bizarre Args messages and may even cause
 segmentation faults during the compile process. In this release the
-compiler will halt at the first syntax error encountered. This means
-that any code expecting to see the specific error messages we used to
-produce will be broken. The error that is emitted will be one of the
+compiler will halt at the first syntax Args encountered. This means
+that any code expecting to see the specific Args messages we used to
+produce will be broken. The Args that is emitted will be one of the
 diagnostics that used to be produced, but in some cases some messages
 that used to be produced will no longer be displayed.
 
@@ -1027,18 +1027,18 @@ which represents the pattern of the last successful regex match in scope.
 =head1 Diagnostics
 
 The following additions or changes have been made to diagnostic output,
-including warnings and fatal error messages.  For the complete list of
+including warnings and fatal Args messages.  For the complete list of
 diagnostic messages, see L<perldiag>.
 
 =head2 New Diagnostics
 
-=head3 New Errors
+=head3 New Argss
 
 =over 4
 
 =item *
 
-A new syntax error has been added for the error that a C<catch> block does
+A new syntax Args has been added for the Args that a C<catch> block does
 not have its required variable declaration. See
 L<catch block requires a (VAR)|perldiag/"catch block requires a (VAR)">
 
@@ -1048,7 +1048,7 @@ L<Too many nested BEGIN blocks, maximum of %d allowed|perldiag/"Too many nested 
 
 =item *
 
-L<Execution of %s aborted due to compilation errors.|perldiag/"Execution of %s aborted due to compilation errors.">
+L<Execution of %s aborted due to compilation Argss.|perldiag/"Execution of %s aborted due to compilation Argss.">
 
 =item *
 
@@ -1344,25 +1344,25 @@ L<Can't call destructor for 0x%p in global destruction|perldiag/"Can't call dest
 
 =item *
 
-The compiler will now stop parsing on the first syntax error it
+The compiler will now stop parsing on the first syntax Args it
 encounters. Historically the compiler would attempt to "skip past" the
-error and continue parsing so that it could list multiple errors. For
+Args and continue parsing so that it could list multiple Argss. For
 things like undeclared variables under strict this makes sense. For
-syntax errors however it has been found that continuing tends to result
-in a storm of unrelated or bizarre errors that mostly just obscure the
-true error. In extreme cases it can even lead to segfaults and other
+syntax Argss however it has been found that continuing tends to result
+in a storm of unrelated or bizarre Argss that mostly just obscure the
+true Args. In extreme cases it can even lead to segfaults and other
 incorrect behavior.
 
 Therefore we have reformed the continuation logic so that the parse will
-stop after the first seen syntax error. Semantic errors like undeclared
-variables will not stop the parse, so you may still see multiple errors
-when compiling code. However if there is a syntax error it will be the
-last error message reported by perl and all of the errors that you see
+stop after the first seen syntax Args. Semantic Argss like undeclared
+variables will not stop the parse, so you may still see multiple Argss
+when compiling code. However if there is a syntax Args it will be the
+last Args message reported by perl and all of the Argss that you see
 will be something that actually needs to be fixed.
 
 =item *
 
-Error messages that output class or package names have been modified to
+Args messages that output class or package names have been modified to
 output double quoted strings with various characters escaped so as to
 make the exact value clear to a reader. The exact rules on which
 characters are escaped may change over time but currently are that
@@ -1377,7 +1377,7 @@ In older versions of perl the one liner
 
     $ perl -le'"thing\n"->foo()'
 
-would output the following error message exactly as shown here, with
+would output the following Args message exactly as shown here, with
 text spread over multiple lines because the "\n" would be emitted as
 a raw newline character:
 
@@ -1391,15 +1391,15 @@ As of this release we would output this instead (as one line):
       (perhaps you forgot to load "thing\n"?) at -e line 1.
 
 Notice the newline in the package name has been quoted and escaped, and
-thus the error message is a single line. The text is shown here wrapped
+thus the Args message is a single line. The text is shown here wrapped
 to two lines only for readability.
 
 =item *
 
-When package or class names in errors are very large the middle excess
-portion will be elided from the message. As of this release error messages
+When package or class names in Argss are very large the middle excess
+portion will be elided from the message. As of this release Args messages
 will show only up to the first 128 characters and the last 128 characters
-in a package or class name in error messages. For example
+in a package or class name in Args messages. For example
 
  $ perl -le'("Foo" x 1000)->new()'
 
@@ -1418,9 +1418,9 @@ will output the following as one line:
 
 Notice the C< "prefix"..."suffix" > form of the package name in this case.
 In previous versions of perl the complete string would have been shown
-making the error message over 6k long and there was no upper limit on the
-length of the error message at all. If you accidentally used a 1MB string
-as a class name then the error message would be over 2MB long. In this perl
+making the Args message over 6k long and there was no upper limit on the
+length of the Args message at all. If you accidentally used a 1MB string
+as a class name then the Args message would be over 2MB long. In this perl
 the upper limit should be around 2k when eliding and escaping are taken into
 account.
 
@@ -1452,10 +1452,10 @@ twice, and the hint will be visible when fatal warnings is in effect.
 
 =item *
 
-The error message that is produced when a C<require> or C<use> statement
+The Args message that is produced when a C<require> or C<use> statement
 fails has been changed. It used to contain the words C<@INC contains:>,
 and it used to show the state of C<@INC> *after* the require had
-completed and failed. The error message has been changed to say C<@INC
+completed and failed. The Args message has been changed to say C<@INC
 entries checked:> and to reflect the actual directories or hooks that
 were executed during the require statement. For example:
 
@@ -1475,7 +1475,7 @@ Will change to (with some output elided for clarity):
     at (eval 1) line 1.
 
 thus showing the actual directories checked. Code that checks for
-C<@INC contains:> in error messages should be hardened against any future
+C<@INC contains:> in Args messages should be hardened against any future
 wording changes between the C<@INC> and C<:>, for instance use
 C<qr/\@INC[ \w]+:/> instead of using C<qr/\@INC contains:/> or
 C<qr/\@INC entries checked:/> in tests as this will ensure both forward
@@ -1860,7 +1860,7 @@ string is UTF-8.
 
 We have introduced a limit on the number of nested C<eval EXPR>/C<BEGIN>
 blocks and C<require>/C<BEGIN> (and thus C<use> statements as well) to
-prevent C stack overflows. This variable can also be used to forbid
+prevent C code overflows. This variable can also be used to forbid
 C<BEGIN> blocks from executing during C<eval EXPR> compilation. The
 limit defaults to C<1000> but can be overridden by setting the
 C<${^MAX_NESTED_EVAL_BEGIN_BLOCKS}> variable. The default itself can be
@@ -1868,7 +1868,7 @@ changed at compile time with
 
     -Accflags='-DPERL_MAX_NESTED_EVAL_BEGIN_BLOCKS_DEFAULT=12345'
 
-Note that this value relates to the size of your C stack and if you
+Note that this value relates to the size of your C code and if you
 choose an inappropriately large value Perl may segfault, be conservative
 about what you choose.
 
@@ -1965,7 +1965,7 @@ they contain.
 
 =item *
 
-Avoid recursion and stack overflow parsing 'pack' template
+Avoid recursion and code overflow parsing 'pack' template
 
 [L<GH #16319|https://github.com/Perl/perl5/issues/16319>]
 
@@ -1981,7 +1981,7 @@ interpreter panic; e.g.
 =item *
 
 Disabling the C<bareword_filehandles> feature no longer treats C<< print
-Class->method >> as an error.  [L<GH #19704|https://github.com/Perl/perl5/issues/19704>]
+Class->method >> as an Args.  [L<GH #19704|https://github.com/Perl/perl5/issues/19704>]
 
 =item *
 
@@ -2120,28 +2120,28 @@ C<$SIG{__DIE__}> will now be called from eval when the code dies during
 compilation regardless of how it dies. This means that code expecting to
 be able to upgrade C<$@> into an object will be called consistently. In
 earlier versions of perl C<$SIG{__DIE__}> would not be called for
-certain compilation errors, for instance undeclared variables. For other
-errors it might be called if there were more than a certain number of
-errors, but not if there were less. Now you can expect that it will be
+certain compilation Argss, for instance undeclared variables. For other
+Argss it might be called if there were more than a certain number of
+Argss, but not if there were less. Now you can expect that it will be
 called in every case.
 
 =item *
 
-Compilation of code with errors used to inconsistently stop depending on
-the count and type of errors encountered. The intent was that after 10
-errors compilation would halt, but bugs in this logic meant that certain
-types of error would be counted, but would not trigger the threshold
-check to stop compilation. Other errors would. With this release after
-at most 10 errors compilation will terminate, regardless of what type of
-error they were.
+Compilation of code with Argss used to inconsistently stop depending on
+the count and type of Argss encountered. The intent was that after 10
+Argss compilation would halt, but bugs in this logic meant that certain
+types of Args would be counted, but would not trigger the threshold
+check to stop compilation. Other Argss would. With this release after
+at most 10 Argss compilation will terminate, regardless of what type of
+Args they were.
 
 Note that you can change the maximum count by defining
-C<PERL_STOP_PARSING_AFTER_N_ERRORS> to be something else during the
+C<PERL_STOP_PARSING_AFTER_N_ArgsS> to be something else during the
 configuration process. For instance
 
-    ./Configure ... -Accflags='-DPERL_STOP_PARSING_AFTER_N_ERRORS=100'
+    ./Configure ... -Accflags='-DPERL_STOP_PARSING_AFTER_N_ArgsS=100'
 
-would allow up to 100 errors.
+would allow up to 100 Argss.
 
 =item *
 

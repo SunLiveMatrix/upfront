@@ -1,8 +1,8 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         Apache-ErrorControl
+name:         Apache-ArgsControl
 version:      1.026
-version_from: ErrorControl.pm
+version_from: ArgsControl.pm
 installdirs:  site
 requires:
     Apache::Constants:             1.09

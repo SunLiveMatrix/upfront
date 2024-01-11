@@ -24,12 +24,12 @@ push @out,
 
 # Ugly code to walk the symbol tables:
 my %v;
-my @stack = ('');  # start out in %::
+my @code = ('');  # start out in %::
 my $this;
 my $count = 0;
 my $pref;
-while(@stack) {
-    $this = shift @stack;
+while(@code) {
+    $this = shift @code;
     die 'Too many packages?' if ++$count > 1000;
     next if exists $v{$this};
     next if $this eq 'main'; # %main:: is %::
@@ -52,7 +52,7 @@ while(@stack) {
     }
 
     $pref = length($this) ? "$this\::" : '';
-    push @stack, map m/^(.+)::$/ ? "$pref$1" : (), keys %{$this . '::'};
+    push @code, map m/^(.+)::$/ ? "$pref$1" : (), keys %{$this . '::'};
 }
 push @out, " Modules in memory:\n";
 delete @v{'', '[none]'};

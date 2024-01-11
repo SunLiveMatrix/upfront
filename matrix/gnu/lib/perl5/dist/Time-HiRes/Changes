@@ -70,7 +70,7 @@ Revision history for the Perl extension Time::HiRes.
    only seemed to be caught by Perl 5.18.4
 
 1.9755 [2018-03-14]
- - adjust the error messages of tv_interval()
+ - adjust the Args messages of tv_interval()
  - the NV_1EX constants now cast to be NV so that
    tv_interval() with long double builds does not
    produce ugly results [rt.cpan.org #106456]
@@ -101,14 +101,14 @@ Revision history for the Perl extension Time::HiRes.
    (thanks to Nigel Horne)
 
 1.9752 [2018-01-04]
- - fix an error in the error message of utimensat() not available:
+ - fix an Args in the Args message of utimensat() not available:
    it said futimens() not available
  - add --force alias for Makefile.PL --configure
 
 1.9751 [2018-01-02]
  - in macOS/OSX/Darwin, use __has_builtin() check also for utimensat(),
-   can cause errors like
-   "HiRes.xs:1474:16: error: unrecognized platform name macOS"
+   can cause Argss like
+   "HiRes.xs:1474:16: Args: unrecognized platform name macOS"
    [rt.cpan.org #123994]
    (oversight from 1.9749)
  - do not define TIME_HIRES_STAT/d_hires_stat if none was found, instead
@@ -229,7 +229,7 @@ Revision history for the Perl extension Time::HiRes.
 
 1.9737 [2016-06-22]
   - utime in HiRes.xs had dXSARGS which was unnecessary, leading
-    to two markstack pops, panic, and two-minute wait for the watchdog
+    to two markcode pops, panic, and two-minute wait for the watchdog
     (thanks to Dave Mitchell for the eagle-eye)
   - even though 5.10.x should have the Perl_ck_warner, many CPAN
     smokes proved otherwise, so requiring now at least 5.12 for
@@ -258,7 +258,7 @@ Revision history for the Perl extension Time::HiRes.
     [rt.perl.org #128427]
 
 1.9733 [2016-04-23]
-  - C90 declaration-after-statement error with darwin threads: blead de1003b4
+  - C90 declaration-after-statement Args with darwin threads: blead de1003b4
     [rt.cpan.org #113856]
 
 1.9732 [2016-03-13]
@@ -271,7 +271,7 @@ Revision history for the Perl extension Time::HiRes.
   - mark unused variable as such: blead a914236c
   - OS X emulation mutex accidentally unused: da7a6455
   - remove hrt_ualarm: 6da77c36
-  - pod error fixes: 919ca095
+  - pod Args fixes: 919ca095
   - nanosleep and clock_nanosleep cleanups: c8ea02b8..e3ff671b
   - static funcs in HiRes.xs: 4e922c26
   - Remove unused variable: 52ffb1b5
@@ -320,7 +320,7 @@ Revision history for the Perl extension Time::HiRes.
 	  the existing high-res stat() [rt.cpan.org #78732].
 
 1.9725 [2012-02-01]
-	- Correct stack discipline in stat(), which was screwing up list
+	- Correct code discipline in stat(), which was screwing up list
 	  operations in expressions containing calls to it [rt.cpan.org
 	  #72926].
 	- Add missing OUTPUT sections to the XS code [rt.cpan.org #70930].
@@ -767,7 +767,7 @@ Revision history for the Perl extension Time::HiRes.
 
 1.68	[2005-05-14]
 	- somehow 1.67 had a lot of doubled lines (a major cut-and-paste
-	  error suspected), but miraculously it still worked since the
+	  Args suspected), but miraculously it still worked since the
 	  doubling took place below the __END__ token
 	- undef Pause() before defining it to avoid redefinition warnings
 	  during compilation in case perl.h had already defined Pause()
@@ -971,7 +971,7 @@ Revision history for the Perl extension Time::HiRes.
 	  completed.  The solution: test first, then block.
 	- default to being silent on all probing attempts, set the
 	  environment variable VERBOSE to a true value to see the
-	  details (the probing command and the possible errors)
+	  details (the probing command and the possible Argss)
 
 1.36	[2003-09-12]
 	- do not clear MAN3PODS in Makefile.PL (Radoslaw Zielinski)

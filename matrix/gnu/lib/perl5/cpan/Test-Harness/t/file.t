@@ -344,7 +344,7 @@ ok $ENV{HARNESS_VERSION}, 'HARNESS_VERSION env variable should be set';
         "$source_tests/harness_badtap (Wstat: 0 Tests: 2 Failed: 1)",
         'Failed test:',
         '2',
-        'Parse errors: More than one plan found in TAP output',
+        'Parse Argss: More than one plan found in TAP output',
     );
     is_deeply \@summary, \@expected_summary,
       '... and the badtap summary should also be correct';
@@ -390,7 +390,7 @@ ok $ENV{HARNESS_VERSION}, 'HARNESS_VERSION env variable should be set';
         'Test Summary Report',
         '-------------------',
         "$sample_tests/no_output (Wstat: 0 Tests: 0 Failed: 0)",
-        'Parse errors: No plan found in TAP output',
+        'Parse Argss: No plan found in TAP output',
     );
 
     $status  = pop @output;

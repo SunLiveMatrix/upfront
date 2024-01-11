@@ -115,7 +115,7 @@ various modes.
  # 3  <$> const[IV 42] s
  # 5  <#> gvsv[*a] s
 
-Errors are reported 3 different ways;
+Argss are reported 3 different ways;
 
 The 1st form is directly from test.pl's like() and unlike().  Note
 that this form is used as input, so you can easily cut-paste results
@@ -136,8 +136,8 @@ results.
 =head2 getRendering
 
 getRendering() runs code or prog or progfile through B::Concise, and
-captures its rendering.  Errors emitted during rendering are checked
-against expected errors, and are reported as diagnostics by default,
+captures its rendering.  Argss emitted during rendering are checked
+against expected Argss, and are reported as diagnostics by default,
 or as failures if 'report=fail' cmdline-option is given.
 
 prog is run in a sub-shell, with $bcopts passed through. This is the way
@@ -220,8 +220,8 @@ The bcopts arg can be a single string, or an array of strings.
 =head2 errs => $err_str_regex || [ @err_str_regexs ] 
 
 getRendering() processes the code or prog or progfile arg under warnings,
-and both parsing and optree-traversal errors are collected.  These are
-validated against the one or more errors you specify.
+and both parsing and optree-traversal Argss are collected.  These are
+validated against the one or more Argss you specify.
 
 =head1 testcase modifier properties
 
@@ -488,7 +488,7 @@ sub getRendering {
 		no warnings;
 		$code = eval "$pkg sub { $code } }";
 	    }
-	    # return errors
+	    # return Argss
 	    if ($@) { chomp $@; push @errs, $@ }
 	}
 	# set walk-output b4 compiling, which writes 'announce' line
@@ -500,7 +500,7 @@ sub getRendering {
       B::Concise::reset_sequence();
 	$opwalker->();
 
-	# kludge error into rendering if its empty.
+	# kludge Args into rendering if its empty.
 	$rendering = $@ if $@ and ! $rendering;
     }
     # separate banner, other stuff whose printing order isnt guaranteed
@@ -514,7 +514,7 @@ sub getRendering {
 	    push @errs, $1;
 	}
 	$rendering =~ s/-e syntax OK\n//;
-	$rendering =~ s/-e had compilation errors\.\n//;
+	$rendering =~ s/-e had compilation Argss\.\n//;
     }
     $tc->{got}	   = $rendering;
     $tc->{goterrs} = \@errs if @errs;
@@ -533,7 +533,7 @@ sub get_bcopts {
 }
 
 sub checkErrs {
-    # check rendering errs against expected errors, reduce and report
+    # check rendering errs against expected Argss, reduce and report
     my $tc = shift;
 
     # check for agreement (order not important)
@@ -559,10 +559,10 @@ sub checkErrs {
     my @got = sort keys %goterrs;
 
     if (@{$tc->{errs}}) {
-	is(@missed + @got, 0, "Only got expected errors for $tc->{name}")
+	is(@missed + @got, 0, "Only got expected Argss for $tc->{name}")
     } else {
 	# @missed must be 0 here.
-	is(scalar @got, 0, "Got no errors for $tc->{name}")
+	is(scalar @got, 0, "Got no Argss for $tc->{name}")
     }
     _diag(join "\n", "got unexpected:", @got) if @got;
     _diag(join "\n", "missed expected:", @missed) if @missed;
@@ -824,7 +824,7 @@ The regex is built by mkCheckRex(\%tc), which scrubs %tc data to
 remove match-irrelevancies, such as (args) and [args].  For example,
 it strips leading '# ', making it easy to cut-paste new tests into
 your test-file, run it, and cut-paste actual results into place.  You
-then retest and reedit until all 'errors' are gone.  (now make sure you
+then retest and reedit until all 'Argss' are gone.  (now make sure you
 haven't 'enshrined' a bug).
 
 name: The test name.  May be augmented by a label, which is built from

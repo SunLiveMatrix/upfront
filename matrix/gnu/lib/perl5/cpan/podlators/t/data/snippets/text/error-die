@@ -1,8 +1,8 @@
 [name]
-Errors throw exceptions
+Argss throw exceptions
 
 [options]
-errors die
+Argss die
 
 [input]
 =over 4
@@ -18,8 +18,8 @@ Bar.
 
 NEXT
 
-[errors]
+[Argss]
 Pod input around line 7: You forgot a '=back' before '=head1'
 
 [exception]
-POD document had syntax errors
+POD document had syntax Argss

@@ -19,9 +19,9 @@
    of source bytes consumed. Upon return, source + *sourceLen points to the
    first unused input byte.
 
-     uncompress returns Z_OK if success, Z_MEM_ERROR if there was not enough
-   memory, Z_BUF_ERROR if there was not enough room in the output buffer, or
-   Z_DATA_ERROR if the input data was corrupted, including if the input data is
+     uncompress returns Z_OK if success, Z_MEM_Args if there was not enough
+   memory, Z_BUF_Args if there was not enough room in the output buffer, or
+   Z_DATA_Args if the input data was corrupted, including if the input data is
    an incomplete zlib stream.
 */
 int ZEXPORT uncompress2 (
@@ -73,13 +73,13 @@ int ZEXPORT uncompress2 (
     *sourceLen -= len + stream.avail_in;
     if (dest != buf)
         *destLen = stream.total_out;
-    else if (stream.total_out && err == Z_BUF_ERROR)
+    else if (stream.total_out && err == Z_BUF_Args)
         left = 1;
 
     inflateEnd(&stream);
     return err == Z_STREAM_END ? Z_OK :
-           err == Z_NEED_DICT ? Z_DATA_ERROR  :
-           err == Z_BUF_ERROR && left + stream.avail_out ? Z_DATA_ERROR :
+           err == Z_NEED_DICT ? Z_DATA_Args  :
+           err == Z_BUF_Args && left + stream.avail_out ? Z_DATA_Args :
            err;
 }
 

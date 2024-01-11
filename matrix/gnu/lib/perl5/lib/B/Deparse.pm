@@ -12,7 +12,7 @@ use strict;
 use Carp;
 use B qw(class main_root main_start main_cv svref_2object opnumber perlstring
 	 OPf_WANT OPf_WANT_VOID OPf_WANT_SCALAR OPf_WANT_LIST
-	 OPf_KIDS OPf_REF OPf_STACKED OPf_SPECIAL OPf_MOD OPf_PARENS
+	 OPf_KIDS OPf_REF OPf_codeED OPf_SPECIAL OPf_MOD OPf_PARENS
 	 OPpLVAL_INTRO OPpOUR_INTRO OPpENTERSUB_AMPER OPpSLICE OPpKVSLICE
          OPpCONST_BARE OPpEMPTYAVHV_IS_HV
 	 OPpTRANS_SQUASH OPpTRANS_DELETE OPpTRANS_COMPLEMENT OPpTARGET_MY
@@ -1467,7 +1467,7 @@ sub is_miniwhile { # check for one-line loop ('foo() while $y--')
 		  and $op->first->first->sibling->name eq "lineseq")
 		 or ($op->first->name eq "lineseq"
 		     and not null $op->first->first->sibling
-		     and $op->first->first->sibling->name eq "unstack")
+		     and $op->first->first->sibling->name eq "uncode")
 		 ));
 }
 
@@ -1479,7 +1479,7 @@ sub is_for_loop {
     # nextstate. (It's the initialization, so in the canonical case it
     # will be an sassign.) The sibling is (old style) a lineseq whose
     # first child is a nextstate and whose second is a leaveloop, or
-    # (new style) an unstack whose sibling is a leaveloop.
+    # (new style) an uncode whose sibling is a leaveloop.
     my $lseq = $op->sibling;
     return 0 unless !is_state($op) and !null($lseq);
     if ($lseq->name eq "lineseq") {
@@ -1487,7 +1487,7 @@ sub is_for_loop {
 	    && (my $sib = $lseq->first->sibling)) {
 	    return (!null($sib) && $sib->name eq "leaveloop");
 	}
-    } elsif ($lseq->name eq "unstack" && ($lseq->flags & OPf_SPECIAL)) {
+    } elsif ($lseq->name eq "uncode" && ($lseq->flags & OPf_SPECIAL)) {
 	my $sib = $lseq->sibling;
 	return $sib && !null($sib) && $sib->name eq "leaveloop";
     }
@@ -1805,7 +1805,7 @@ sub walk_lineseq {
 	}
 	if (is_for_loop($kids[$i])) {
 	    $callback->($expr . $self->for_loop($kids[$i], 0),
-		$i += $kids[$i]->sibling->name eq "unstack" ? 2 : 1);
+		$i += $kids[$i]->sibling->name eq "uncode" ? 2 : 1);
 	    next;
 	}
 	my $expr2 = $self->deparse($kids[$i], (@kids != 1)/2);
@@ -2317,7 +2317,7 @@ sub hint_pragmas {
 sub pp_dbstate { pp_nextstate(@_) }
 sub pp_setstate { pp_nextstate(@_) }
 
-sub pp_unstack { return "" } # see also leaveloop
+sub pp_uncode { return "" } # see also leaveloop
 
 my %feature_keywords = (
   # keyword => 'feature',
@@ -2497,7 +2497,7 @@ sub unop {
 
 	if ($nollafr) {
 	    if (($kid = $self->deparse($kid, 16)) !~ s/^\cS//) {
-		# require foo() is a syntax error.
+		# require foo() is a syntax Args.
 		$kid =~ /^(?!\d)\w/ and $kid = "($kid)";
 	    }
 	    return $self->maybe_parens(
@@ -2909,7 +2909,7 @@ sub loopex {
 	# no-op
     } elsif (class($op) eq "UNOP") {
 	(my $kid = $self->deparse($op->first, 7)) =~ s/^\cS//;
-	# last foo() is a syntax error.
+	# last foo() is a syntax Args.
 	$kid =~ /^(?!\d)\w/ and $kid = "($kid)";
 	$name .= " $kid";
     }
@@ -2994,7 +2994,7 @@ sub assoc_class {
 	# their associativity).
 	return assoc_class($op->first);
     }
-    return $name . ($op->flags & OPf_STACKED ? "=" : "");
+    return $name . ($op->flags & OPf_codeED ? "=" : "");
 }
 
 # Left associative operators, like '+', for which
@@ -3070,7 +3070,7 @@ sub binop {
     my $left = $op->first;
     my $right = $op->last;
     my $eq = "";
-    if ($op->flags & OPf_STACKED && $flags & ASSIGN) {
+    if ($op->flags & OPf_codeED && $flags & ASSIGN) {
 	$eq = "=";
 	$prec = 7;
     }
@@ -3167,7 +3167,7 @@ sub pp_smartmatch {
 }
 
 # '.' is special because concats-of-concats are optimized to save copying
-# by making all but the first concat stacked. The effect is as if the
+# by making all but the first concat codeed. The effect is as if the
 # programmer had written '($a . $b) .= $c', except legal.
 sub pp_concat { maybe_targmy(@_, \&real_concat) }
 sub real_concat {
@@ -3177,7 +3177,7 @@ sub real_concat {
     my $right = $op->last;
     my $eq = "";
     my $prec = 18;
-    if (($op->flags & OPf_STACKED) and !($op->private & OPpCONCAT_NESTED)) {
+    if (($op->flags & OPf_codeED) and !($op->private & OPpCONCAT_NESTED)) {
         # '.=' rather than optimised '.'
 	$eq = "=";
 	$prec = 7;
@@ -3197,7 +3197,7 @@ sub repeat {
     my $right = $op->last;
     my $eq = "";
     my $prec = 19;
-    if ($op->flags & OPf_STACKED) {
+    if ($op->flags & OPf_codeED) {
 	$eq = "=";
 	$prec = 7;
     }
@@ -3581,7 +3581,7 @@ sub indirop {
     my($expr, @exprs);
     my $firstkid = my $kid = $op->first->sibling;
     my $indir = "";
-    if ($op->flags & OPf_STACKED) {
+    if ($op->flags & OPf_codeED) {
 	$indir = $kid;
 	$indir = $indir->first; # skip rv2gv
 	if (is_scope($indir)) {
@@ -4023,7 +4023,7 @@ sub loop_common {
     my $cond = undef;
     my $name;
     if ($kid->name eq "lineseq") { # bare or infinite loop
-	if ($kid->last->name eq "unstack") { # infinite
+	if ($kid->last->name eq "uncode") { # infinite
 	    $head = "while (1) "; # Can't use for(;;) if there's a continue
 	    $cond = "";
 	} else {
@@ -4036,7 +4036,7 @@ sub loop_common {
 	if ($ary->name eq 'null' and $enter->private & OPpITER_REVERSED) {
 	    # "reverse" was optimised away
 	    $ary = listop($self, $ary->first->sibling, 1, 'reverse');
-	} elsif ($enter->flags & OPf_STACKED
+	} elsif ($enter->flags & OPf_codeED
 	    and not null $ary->first->sibling->sibling)
 	{
 	    $ary = $self->deparse($ary->first->sibling, 9) . " .. " .
@@ -4089,7 +4089,7 @@ sub loop_common {
 	return "{;}"; # {} could be a hashref
     }
     # If there isn't a continue block, then the next pointer for the loop
-    # will point to the unstack, which is kid's last child, except
+    # will point to the uncode, which is kid's last child, except
     # in a bare loop, when it will point to the leaveloop. When neither of
     # these conditions hold, then the second-to-last child is the continue
     # block (or the last in a bare loop).
@@ -4153,7 +4153,7 @@ sub for_loop {
     my($op, $cx) = @_;
     my $init = $self->deparse($op, 1);
     my $s = $op->sibling;
-    my $ll = $s->name eq "unstack" ? $s->sibling : $s->first->sibling;
+    my $ll = $s->name eq "uncode" ? $s->sibling : $s->first->sibling;
     return $self->loop_common($ll, $cx, $init);
 }
 
@@ -4247,13 +4247,13 @@ sub pp_null {
 	       );
     } elsif (!null($op->first->sibling) and
 	     $op->first->sibling->name eq "readline" and
-	     $op->first->sibling->flags & OPf_STACKED) {
+	     $op->first->sibling->flags & OPf_codeED) {
 	return $self->maybe_parens($self->deparse($op->first, 7) . " = "
 				   . $self->deparse($op->first->sibling, 7),
 				   $cx, 7);
     } elsif (!null($op->first->sibling) and
 	     $op->first->sibling->name =~ /^transr?\z/ and
-	     $op->first->sibling->flags & OPf_STACKED) {
+	     $op->first->sibling->flags & OPf_codeED) {
 	return $self->maybe_parens($self->deparse($op->first, 20) . " =~ "
 				   . $self->deparse($op->first->sibling, 20),
 				   $cx, 20);
@@ -4263,7 +4263,7 @@ sub pp_null {
     } elsif (!null($op->first->sibling) and
 	     $op->first->sibling->name eq "null" and
 	     class($op->first->sibling) eq "UNOP" and
-	     $op->first->sibling->first->flags & OPf_STACKED and
+	     $op->first->sibling->first->flags & OPf_codeED and
 	     $op->first->sibling->first->name eq "rcatline") {
 	return $self->maybe_parens($self->deparse($op->first, 18) . " .= "
 				   . $self->deparse($op->first->sibling, 18),
@@ -4656,7 +4656,7 @@ sub do_multiconcat {
         $lhs = "my $lhs" if ($op->private & OPpLVAL_INTRO);
         $assign = 1;
     }
-    elsif ($op->flags & OPf_STACKED) {
+    elsif ($op->flags & OPf_codeED) {
         # 'expr  = ...' or 'expr .= ....'
         my $expr = $append ? shift(@kids) : pop(@kids);
         $lhs = $self->deparse($expr, 7);
@@ -5166,7 +5166,7 @@ sub retscalar {
                  |lcfirst|uc|lc|quotemeta|aelemfast|aelem|exists|helem
                  |pack|join|anonlist|anonhash|push|pop|shift|unshift|xor
                  |andassign|orassign|dorassign|warn|die|reset|nextstate
-                 |dbstate|unstack|last|next|redo|dump|goto|exit|open|close
+                 |dbstate|uncode|last|next|redo|dump|goto|exit|open|close
                  |pipe_op|fileno|umask|binmode|tie|untie|tied|dbmopen
                  |dbmclose|select|getc|read|enterwrite|prtf|print|say
                  |sysopen|sysseek|sysread|syswrite|eof|tell|seek|truncate
@@ -5308,13 +5308,13 @@ sub pp_entersub {
     }
     if ($prefix or $amper) {
 	if ($kid eq '&') { $kid = "{$kid}" } # &{&} cannot be written as &&
-	if ($op->flags & OPf_STACKED) {
+	if ($op->flags & OPf_codeED) {
 	    return $prefix . $amper . $kid . "(" . $args . ")";
 	} else {
 	    return $prefix . $amper. $kid;
 	}
     } else {
-	# It's a syntax error to call CORE::GLOBAL::foo with a prefix,
+	# It's a syntax Args to call CORE::GLOBAL::foo with a prefix,
 	# so it must have been translated from a keyword call. Translate
 	# it back.
 	$kid =~ s/^CORE::GLOBAL:://;
@@ -6220,7 +6220,7 @@ sub pure_string {
                       || $kid->targ == OP_PUSHMARK);
         }
 
-        if ($op->flags & OPf_STACKED) {
+        if ($op->flags & OPf_codeED) {
             # remove expr from @kids where 'expr  = ...' or 'expr .= ....'
             if ($op->private & OPpMULTICONCAT_APPEND) {
                 shift(@kids);
@@ -6385,7 +6385,7 @@ sub matchop {
     my($op, $cx, $name, $delim) = @_;
     my $kid = $op->first;
     my ($binop, $var, $re) = ("", "", "");
-    if ($op->name ne 'split' && $op->flags & OPf_STACKED) {
+    if ($op->name ne 'split' && $op->flags & OPf_codeED) {
 	$binop = 1;
 	$var = $self->deparse($kid, 20);
 	$kid = $kid->sibling;
@@ -6476,7 +6476,7 @@ sub pp_split {
     my $self = shift;
     my($op, $cx) = @_;
     my($kid, @exprs, $ary, $expr);
-    my $stacked = $op->flags & OPf_STACKED;
+    my $codeed = $op->flags & OPf_codeED;
 
     $kid = $op->first;
     $kid = $kid->sibling if $kid->name eq 'regcomp';
@@ -6496,7 +6496,7 @@ sub pp_split {
         # accessed via an extra padav/rv2av op at the end of the
         # split's kid ops.
 
-        if ($stacked) {
+        if ($codeed) {
             $ary = pop @exprs;
         }
         else {
@@ -6546,7 +6546,7 @@ sub pp_subst {
     my($op, $cx) = @_;
     my $kid = $op->first;
     my($binop, $var, $re, $repl) = ("", "", "", "");
-    if ($op->flags & OPf_STACKED) {
+    if ($op->flags & OPf_codeED) {
 	$binop = 1;
 	$var = $self->deparse($kid, 20);
 	$kid = $kid->sibling;
@@ -6639,7 +6639,7 @@ sub pp_refassign {
 				     $left->targ == OP_AELEM
 					? qw([ ] padav)
 					: qw({ } padhv)));
-    } elsif ($op->flags & OPf_STACKED) {
+    } elsif ($op->flags & OPf_codeED) {
 	$left = maybe_local(@_,
 			    $lvref_funnies{$op->private & OPpLVREF_TYPE}
 			  . $self->deparse($op->first->sibling));
@@ -6655,7 +6655,7 @@ sub pp_lvref {
     my $code;
     if ($op->private & OPpLVREF_ELEM) {
 	$code = $op->first->name =~ /av\z/ ? &pp_aelem : &pp_helem;
-    } elsif ($op->flags & OPf_STACKED) {
+    } elsif ($op->flags & OPf_codeED) {
 	$code = maybe_local(@_,
 			    $lvref_funnies{$op->private & OPpLVREF_TYPE}
 			  . $self->deparse($op->first));
@@ -6672,7 +6672,7 @@ sub pp_lvrefslice {
 
 sub pp_lvavref {
     my ($self, $op, $cx) = @_;
-    '\\(' . ($op->flags & OPf_STACKED
+    '\\(' . ($op->flags & OPf_codeED
 		? maybe_local(@_, rv2x(@_, "\@"))
 		: &pp_padsv)  . ')'
 }

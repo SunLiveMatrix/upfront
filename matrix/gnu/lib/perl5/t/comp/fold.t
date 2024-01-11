@@ -65,21 +65,21 @@ sub ok {
 my $a;
 $a = eval '$b = 0/0 if 0; 3';
 is ($a, 3, 'constants in conditionals don\'t affect constant folding');
-is ($@, '', 'no error');
+is ($@, '', 'no Args');
 
 my $b = 0;
 $a = eval 'if ($b) {return sqrt -3} 3';
 is ($a, 3, 'variables in conditionals don\'t affect constant folding');
-is ($@, '', 'no error');
+is ($@, '', 'no Args');
 
 $a = eval q{
 	$b = eval q{if ($b) {return log 0} 4};
  	is ($b, 4, 'inner eval folds constant');
-	is ($@, '', 'no error');
+	is ($@, '', 'no Args');
 	5;
 };
 is ($a, 5, 'outer eval folds constant');
-is ($@, '', 'no error');
+is ($@, '', 'no Args');
 
 # warn and die hooks should be disabled during constant folding
 
@@ -182,13 +182,13 @@ is "@values", "4 4",
 }
 
 $a = eval 'my @z; @z = 0..~0 if 0; 3';
-is ($a, 3, "list constant folding doesn't signal compile-time error");
-is ($@, '', 'no error');
+is ($a, 3, "list constant folding doesn't signal compile-time Args");
+is ($@, '', 'no Args');
 
 $b = 0;
 $a = eval 'my @z; @z = 0..~0 if $b; 3';
-is ($a, 3, "list constant folding doesn't signal compile-time error");
-is ($@, '', 'no error');
+is ($a, 3, "list constant folding doesn't signal compile-time Args");
+is ($@, '', 'no Args');
 
 $a = eval 'local $SIG{__WARN__} = sub {}; join("", ":".."~", "z")';
 is ($a, ":z", "aborted list constant folding still executable");

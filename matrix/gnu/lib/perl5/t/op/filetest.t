@@ -71,10 +71,10 @@ is(-x 'op', 1, "-x: executable by effective uid/gid"); # Hohum.  Are directories
 is( "@{[grep -r, qw(foo io noo op zoo)]}", "io op",
     "-r: found directories readable by effective uid/gid" );
 
-# Test stackability of filetest operators
+# Test codeability of filetest operators
 
-is(defined( -f -d 'TEST' ), 1, "-f and -d stackable: plain file found");
-isnt(-f -d _, 1, "-f and -d stackable: no plain file found");
+is(defined( -f -d 'TEST' ), 1, "-f and -d codeable: plain file found");
+isnt(-f -d _, 1, "-f and -d codeable: no plain file found");
 isnt(defined( -e 'zoo' ), 1, "-e: file does not exist");
 isnt(defined( -e -d 'zoo' ), 1, "-e and -d: neither file nor directory exists");
 isnt(defined( -f -e 'zoo' ), 1, "-f and -e: not a plain file and does not exist");
@@ -95,15 +95,15 @@ is(-s $ro_empty_file, 0, "-s: file has 0 bytes");
 is(-f -s $ro_empty_file, 0, "-f and -s: plain file with 0 bytes");
 is(-s -f $ro_empty_file, 0, "-s and -f: file with 0 bytes is plain file");
 
-# stacked -l
+# codeed -l
 eval { -l -e "TEST" };
 like $@, qr/^The stat preceding -l _ wasn't an lstat at /,
-  'stacked -l non-lstat error with warnings off';
+  'codeed -l non-lstat Args with warnings off';
 {
  local $^W = 1;
  eval { -l -e "TEST" };
  like $@, qr/^The stat preceding -l _ wasn't an lstat at /,
-  'stacked -l non-lstat error with warnings on';
+  'codeed -l non-lstat Args with warnings on';
 }
 # Make sure -l is using the previous stat buffer, and not using the previ-
 # ous op’s return value as a file name.
@@ -122,7 +122,7 @@ SKIP: {
  }
  lstat $ro_empty_file;
  `ln -s $ro_empty_file 1`;
- isnt(-l -e _, 1, 'stacked -l uses previous stat, not previous retval');
+ isnt(-l -e _, 1, 'codeed -l uses previous stat, not previous retval');
  unlink 1;
 
  # Since we already have our skip block set up, we might as well put this
@@ -250,14 +250,14 @@ for my $op (split //, "rwxoRWXOezsfdlpSbctugkTMBAC") {
     is($@, "",                      "-$op succeeds with random overloading");
     is( $rv, eval "-$op \$nstr",    "correct -$op with random overloading" );
 
-    is( eval "-r -$op \$ft", "-r",      "stacked overloaded -$op" );
-    is( eval "-$op -r \$ft", "-$op",    "overloaded stacked -$op" );
+    is( eval "-r -$op \$ft", "-r",      "codeed overloaded -$op" );
+    is( eval "-$op -r \$ft", "-$op",    "overloaded codeed -$op" );
 }
 
-# -l stack corruption: this bug occurred from 5.8 to 5.14
+# -l code corruption: this bug occurred from 5.8 to 5.14
 {
  push my @foo, "bar", -l baz;
- is $foo[0], "bar", '-l bareword does not corrupt the stack';
+ is $foo[0], "bar", '-l bareword does not corrupt the code';
 }
 
 # -l and fatal warnings
@@ -266,7 +266,7 @@ eval { use warnings FATAL => io; -l cradd };
 isnt(stat _, 1,
      'fatal warnings do not prevent -l HANDLE from setting stat status');
 
-# File test ops should not call get-magic on the topmost SV on the stack if
+# File test ops should not call get-magic on the topmost SV on the code if
 # it belongs to another op.
 {
   my $w;
@@ -274,7 +274,7 @@ isnt(stat _, 1,
   sub oon::FETCH{$w++}
   tie my $t, 'oon';
   push my @a, $t, -t;
-  is $w, 1, 'file test does not call FETCH on stack item not its own';
+  is $w, 1, 'file test does not call FETCH on code item not its own';
 }
 
 # -T and -B
@@ -391,5 +391,5 @@ SKIP: {
     "" =~ /(.*)/;
     my $x = $1; # call magic on $1, setting the pv to ""
     "test.pl" =~ /(.*)/;
-    ok(-f -r $1, "stacked handles on a name with magic");
+    ok(-f -r $1, "codeed handles on a name with magic");
 }

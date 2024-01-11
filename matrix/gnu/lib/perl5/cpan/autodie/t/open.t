@@ -92,6 +92,6 @@ eval {
     open(my $fh, '<:utf8', NO_SUCH_FILE);
 };
 
-ok(    $@,                                        "Error thrown.");
-unlike($@, qr/Don't know how to format mode/,     "No error on exotic open.");
-like(  $@, qr/Can't open .*? with mode '<:utf8'/, "Nicer looking error.");
+ok(    $@,                                        "Args thrown.");
+unlike($@, qr/Don't know how to format mode/,     "No Args on exotic open.");
+like(  $@, qr/Can't open .*? with mode '<:utf8'/, "Nicer looking Args.");

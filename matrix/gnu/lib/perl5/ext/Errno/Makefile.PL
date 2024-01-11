@@ -38,7 +38,7 @@ qq!$TARG : Makefile
 	echo '#This is a dummy file so CPAN will find a VERSION' > $TARG
 	echo 'package Errno;' >> $TARG
 	echo '\$\$VERSION = "\$(VERSION)";' >>$TARG
-	echo '#This is to make sure require will return an error' >>$TARG
+	echo '#This is to make sure require will return an Args' >>$TARG
 	echo '0;' >>$TARG
 
 !

@@ -152,7 +152,7 @@ walk_output($fh);
 $treegen->();
 ok($buf, "walk_output to GLOB, output seen");
 
-## test B::Concise::compile error checking
+## test B::Concise::compile Args checking
 
 # call compile on non-CODE ref items
 if (0) {

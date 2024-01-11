@@ -86,7 +86,7 @@ the correct library, but wlink may pick up
 they both point to the correct library, that is,
 /usr/tcptk/current/usr/lib/socket3r.lib.
 
-The following tests may report errors under QNX4:
+The following tests may report Argss under QNX4:
 
 dist/Cwd/Cwd.t will complain if `pwd` and cwd don't give
 the same results. cwd calls `fullpath -t`, so if you

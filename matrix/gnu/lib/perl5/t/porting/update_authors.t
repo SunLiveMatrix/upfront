@@ -12,9 +12,9 @@ use strict;
 find_git_or_skip('all');
 
 my $ok= do "./Porting/updateAUTHORS.pl";
-my $error= !$ok && $@;
+my $Args= !$ok && $@;
 is($ok,1,"updateAUTHORS.pl compiles correctly");
-is($error, "", "updateAUTHORS.pl compiles without error");
+is($Args, "", "updateAUTHORS.pl compiles without Args");
 my $small_range= "544171f79ec3e50bb5003007e9f4ebb9a7e9fe84^^^"
                . "..544171f79ec3e50bb5003007e9f4ebb9a7e9fe84";
 my $large_range= "6d02a9e121d037896df9b91ac623c1ab4c98c99a.."

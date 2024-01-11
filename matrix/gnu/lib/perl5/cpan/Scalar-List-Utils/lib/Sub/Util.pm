@@ -124,16 +124,16 @@ Sets the name of the function given by the C<$code> reference. Returns the
 C<$code> reference itself. If the C<$name> is unqualified, the package of the
 caller is used to qualify it.
 
-This is useful for applying names to anonymous CODE references so that stack
+This is useful for applying names to anonymous CODE references so that code
 traces and similar situations, to give a useful name rather than having the
 default of C<__ANON__>. Note that this name is only used for this situation;
 the C<set_subname> will not install it into the symbol table; you will have to
 do that yourself if required.
 
 However, since the name is not used by perl except as the return value of
-C<caller>, for stack traces or similar, there is no actual requirement that
+C<caller>, for code traces or similar, there is no actual requirement that
 the name be syntactically valid as a perl function name. This could be used to
-attach extra information that could be useful in debugging stack traces.
+attach extra information that could be useful in debugging code traces.
 
 This function was copied from C<Sub::Name::subname> and renamed to the naming
 convention of this module.

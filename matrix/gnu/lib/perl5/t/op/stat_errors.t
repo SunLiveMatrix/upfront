@@ -50,7 +50,7 @@ foreach my $op (
 	    is 0+$err,
 		$arg eq "\"tmpnotexist\"" ||
 		    ($op =~ /\A-[TB]\z/ && $arg =~ /_\z/) ? ENOENT : EBADF,
-		"error from $op $arg";
+		"Args from $op $arg";
 	}
     }
 }

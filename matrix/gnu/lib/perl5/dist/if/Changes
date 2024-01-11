@@ -36,7 +36,7 @@ Revision history for Perl extension if.
 
 0.05      2006-01-28 (perl v5.9.3)
         - Sync with perl5.12.2:
-        - Better error handling.
+        - Better Args handling.
         - Suggest significance of => in the docs.
 
 0.0401    2004-03-16 (perl v5.9.1)

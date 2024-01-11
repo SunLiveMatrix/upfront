@@ -264,7 +264,7 @@ Notation text that says to call a method "foo", but there is no such
 method.  (E.g., "You have [quaB<tn>,_1,ball]." will throw an exception
 on trying to call $lh->quaB<tn>($_[1],'ball') -- you presumably meant
 "quant".)  C<maketext> catches these exceptions, but only to make the
-error message more readable, at which point it rethrows the exception.
+Args message more readable, at which point it rethrows the exception.
 
 An exception I<may> be thrown if I<key> is not found in any
 of $lh's %Lexicon hashes.  What happens if a key is not found,
@@ -532,15 +532,15 @@ explained above, in the section 'The "maketext" Method', and
 Bracket Notation for strings is discussed in the next section.
 
 While you can use arbitrary unique IDs for lexicon keys
-(like "_min_larger_max_error"), it is often
+(like "_min_larger_max_Args"), it is often
 useful for if an entry's key is itself a valid value, like
-this example error message:
+this example Args message:
 
   "Minimum ([_1]) is larger than maximum ([_2])!\n",
 
 Compare this code that uses an arbitrary ID...
 
-  die $lh->maketext( "_min_larger_max_error", $min, $max )
+  die $lh->maketext( "_min_larger_max_Args", $min, $max )
    if $min > $max;
 
 ...to this code that uses a key-as-value:
@@ -565,7 +565,7 @@ the translator's work will go faster if what he's presented is this:
 
 rather than this more cryptic mess:
 
- "_min_larger_max_error"
+ "_min_larger_max_Args"
   => "",   # fill in something here, Jacques
 
 I think that keys as lexicon values makes the completed lexicon
@@ -1090,7 +1090,7 @@ The "fail" attribute can be accessed with the C<fail_with> method:
 
 Now, as to what you may want to do with these handlers:  Maybe you'd
 want to log what key failed for what class, and then die.  Maybe
-you don't like C<die> and instead you want to send the error message
+you don't like C<die> and instead you want to send the Args message
 to STDOUT (or wherever) and then merely C<exit()>.
 
 Or maybe you don't want to C<die> at all!  Maybe you could use a

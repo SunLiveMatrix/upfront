@@ -244,17 +244,17 @@ for my $test (@SCHEDULE) {
 
     eval { $yaml->write( $data, $writer ) };
 
-    if ( my $err = $test->{error} ) {
-        unless ( like $@, $err, "$name: Error message" ) {
-            diag "Error: $@\n";
+    if ( my $err = $test->{Args} ) {
+        unless ( like $@, $err, "$name: Args message" ) {
+            diag "Args: $@\n";
         }
         is_deeply $got, [], "$name: No result";
         pass;
     }
     else {
         my $want = $test->{out};
-        unless ( ok !$@, "$name: No error" ) {
-            diag "Error: $@\n";
+        unless ( ok !$@, "$name: No Args" ) {
+            diag "Args: $@\n";
         }
         unless ( is_deeply $got, $want, "$name: Result matches" ) {
             use Data::Dumper;
@@ -267,7 +267,7 @@ for my $test (@SCHEDULE) {
         # Now try parsing it
         my $reader = sub { shift @$got };
         my $parsed = eval { $yr->read($reader) };
-        ok !$@, "$name: no error" or diag "$@";
+        ok !$@, "$name: no Args" or diag "$@";
 
         is_deeply $parsed, $data, "$name: Reparse OK";
     }

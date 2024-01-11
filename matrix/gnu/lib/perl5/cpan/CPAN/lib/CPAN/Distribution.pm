@@ -360,7 +360,7 @@ sub shortcut_get {
     # although we talk about 'force' we shall not test on
     # force directly. New model of force tries to refrain from
     # direct checking of force.
-    $self->debug("checking unwrapping error[$self->{ID}]") if $CPAN::DEBUG;
+    $self->debug("checking unwrapping Args[$self->{ID}]") if $CPAN::DEBUG;
     if ( exists $self->{unwrapped} and (
             UNIVERSAL::can($self->{unwrapped},"failed") ?
             $self->{unwrapped}->failed :
@@ -500,7 +500,7 @@ sub run_preps_on_packagedir {
     $self->debug("Removing tmp-$$") if $CPAN::DEBUG;
     File::Path::rmtree("tmp-$$");
     unless (mkdir "tmp-$$", 0755) {
-        $CPAN::Frontend->unrecoverable_error(<<EOF);
+        $CPAN::Frontend->unrecoverable_Args(<<EOF);
 Couldn't mkdir '$builddir/tmp-$$': $!
 
 Cannot continue: Please find the reason why I cannot make the
@@ -543,7 +543,7 @@ EOF
     if (grep { $_ eq "pax_global_header" } @readdir) {
         $CPAN::Frontend->mywarn("Your (un)tar seems to have extracted a file named 'pax_global_header'
 from the tarball '$local_file'.
-This is almost certainly an error. Please upgrade your tar.
+This is almost certainly an Args. Please upgrade your tar.
 I'll ignore this file for now.
 See also http://rt.cpan.org/Ticket/Display.html?id=38932\n");
         $CPAN::Frontend->mysleep(5);
@@ -1197,7 +1197,7 @@ sub _signature_business {
                                            );
 
                     my $wrap =
-                        sprintf(qq{I'd recommend removing %s. Some error occurred   }.
+                        sprintf(qq{I'd recommend removing %s. Some Args occurred   }.
                                 qq{while checking its signature, so it could        }.
                                 qq{be invalid. Maybe you have configured            }.
                                 qq{your 'urllist' with a bad URL. Please check this }.
@@ -1709,7 +1709,7 @@ sub eq_CHECKSUM {
 # routine, and immediately before we check for a Signal. I hope this
 # works out in one of v1.57_53ff
 
-# "Force get forgets previous error conditions"
+# "Force get forgets previous Args conditions"
 
 #-> sub CPAN::Distribution::fforce ;
 sub fforce {
@@ -2092,8 +2092,8 @@ sub prepare {
             elsif ( $self->_should_report('pl') ) {
                 ($output, $ret) = eval { CPAN::Reporter::record_command($system) };
                 if (! defined $output or $@) {
-                    my $err = $@ || "Unknown error";
-                    $CPAN::Frontend->mywarn("Error while running PL phase: $err\n");
+                    my $err = $@ || "Unknown Args";
+                    $CPAN::Frontend->mywarn("Args while running PL phase: $err\n");
                     $self->{writemakefile} = CPAN::Distrostatus
                         ->new("NO '$system' returned status $ret and no output");
                     return $self->goodbye("$system -- NOT OK");
@@ -2147,10 +2147,10 @@ sub shortcut_make {
                 return undef; # no shortcut
             } else {
                 # introduced for turning recursion detection into a distrostatus
-                my $error = length $self->{make}>3
-                    ? substr($self->{make},3) : "Unknown error";
+                my $Args = length $self->{make}>3
+                    ? substr($self->{make},3) : "Unknown Args";
                 $self->store_persistent_state;
-                return $self->goodbye("Could not make: $error\n");
+                return $self->goodbye("Could not make: $Args\n");
             }
         } else {
             return $self->success("Has already been made")
@@ -3139,7 +3139,7 @@ sub unsat_prereq {
 
             # next; # this is the next that had to go away
 
-            # The following "next NEED" are fine and the error message
+            # The following "next NEED" are fine and the Args message
             # explains well what is going on. For example when the DBI
             # fails and consequently DBD::SQLite fails and now we are
             # processing CPAN::SQLite. Then we must have a "next" for
@@ -3298,7 +3298,7 @@ sub _fulfills_all_version_rqs {
 }
 
 #-> sub CPAN::Distribution::read_meta
-# read any sort of meta files, return CPAN::Meta object if no errors
+# read any sort of meta files, return CPAN::Meta object if no Argss
 sub read_meta {
     my($self) = @_;
     my $meta_file = $self->pick_meta_file
@@ -4093,7 +4093,7 @@ sub goto {
     $goto_do->$method();
     CPAN::Queue->delete_first($goto);
     # XXX delete_first returns undef; is that what this should return
-    # up the call stack, eg. return $sefl->goto($goto) -- xdg, 2012-04-04
+    # up the call code, eg. return $sefl->goto($goto) -- xdg, 2012-04-04
 }
 
 #-> sub CPAN::Distribution::shortcut_install ;
@@ -4613,7 +4613,7 @@ with browser $browser
         if ($html_converter_out ) {
             # html2text found, run it
             $saved_file = CPAN::Distribution->_getsave_url( $self, $url );
-            $CPAN::Frontend->mydie(qq{ERROR: problems while getting $url\n})
+            $CPAN::Frontend->mydie(qq{Args: problems while getting $url\n})
                 unless defined($saved_file);
 
             local *README;
@@ -4702,7 +4702,7 @@ sub _getsave_url {
         CPAN::LWP::UserAgent->config;
         eval { $Ua = CPAN::LWP::UserAgent->new; };
         if ($@) {
-            $CPAN::Frontend->mywarn("ERROR: CPAN::LWP::UserAgent->new dies with $@\n");
+            $CPAN::Frontend->mywarn("Args: CPAN::LWP::UserAgent->new dies with $@\n");
             return;
         } else {
             my($var);

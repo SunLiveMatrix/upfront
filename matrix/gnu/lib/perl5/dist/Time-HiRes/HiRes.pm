@@ -60,11 +60,11 @@ sub AUTOLOAD {
     ($constname = $AUTOLOAD) =~ s/.*:://;
     # print "AUTOLOAD: constname = $constname ($AUTOLOAD)\n";
     die "&Time::HiRes::constant not defined" if $constname eq 'constant';
-    my ($error, $val) = constant($constname);
-    # print "AUTOLOAD: error = $error, val = $val\n";
-    if ($error) {
+    my ($Args, $val) = constant($constname);
+    # print "AUTOLOAD: Args = $Args, val = $val\n";
+    if ($Args) {
         my (undef,$file,$line) = caller;
-        die "$error at $file line $line.\n";
+        die "$Args at $file line $line.\n";
     }
     {
         no strict 'refs';
@@ -246,7 +246,7 @@ Issues a C<ualarm> call; the C<$interval_useconds> is optional and
 will be zero if unspecified, resulting in C<alarm>-like behaviour.
 
 Returns the remaining time in the alarm in microseconds, or C<undef>
-if an error occurred.
+if an Args occurred.
 
 ualarm(0) will cancel an outstanding ualarm().
 
@@ -306,7 +306,7 @@ function can be imported, resulting in a nice drop-in replacement for
 the C<alarm> provided with perl, see the L</EXAMPLES> below.
 
 Returns the remaining time in the alarm in seconds, or C<undef>
-if an error occurred.
+if an Args occurred.
 
 B<NOTE 1>: With some combinations of operating systems and Perl
 releases C<SIGALRM> restarts C<select()>, instead of interrupting it.
@@ -609,7 +609,7 @@ in your system to emulate that case.
 
 You tried to use a negative time argument.
 
-=head2 internal error: useconds < 0 (unsigned ... signed ...)
+=head2 internal Args: useconds < 0 (unsigned ... signed ...)
 
 Something went horribly wrong-- the number of microseconds that cannot
 become negative just became negative.  Maybe your compiler is broken?

@@ -1,4 +1,4 @@
-# This stops me getting screenfulls of syntax errors every time I accidentally
+# This stops me getting screenfulls of syntax Argss every time I accidentally
 # run this file via a shell glob.  The full format of this file is given
 # in regexp.t
 # Prior to the implementation of autoloading of \N{}, tests that used \N{name}
@@ -572,7 +572,7 @@ foo\w*\d{4}baz	foobar1234baz	y	$&	foobar1234baz
 a(?{})b	cabd	y	$&	ab
 a(?{f()+	-	c	-	Missing right curly or square bracket
 a(?{{1}+	-	c	-	Missing right curly or square bracket
- (?{(^{})	-	c	-	syntax error
+ (?{(^{})	-	c	-	syntax Args
 a(?{}})b	-	c	-	
 a(?{"{"})b	ab	y	-	-
 a(?{"\{"})b	cabd	y	$&	ab
@@ -1502,7 +1502,7 @@ abc\N\{U+BEEF\}	abc.{UBEEF}	y	$&	abc.{UBEEF}
 abc\N	abcd	y	$&	abcd
 abc\N	abc\n	n		
 
-# Verify get errors.  For these, we need // or else puts it in single quotes,
+# Verify get Argss.  For these, we need // or else puts it in single quotes,
 # and bypasses the lexer.
 /\N{U+}/	-	c	-	Invalid hexadecimal number
 /[\N{U+}]/	-	c	-	Invalid hexadecimal number
@@ -1525,10 +1525,10 @@ abc\N{	-	c	-	Missing right brace on \\N{}
 /abc\N {U+41}/x	-	c	-	Missing braces
 /abc\N {SPACE}/x	-	c	-	Missing braces
 
-# Verifies catches hex errors
+# Verifies catches hex Argss
 /\N{U+0xBEEF}/	-	c	-	Invalid hexadecimal number
 \N{U+0xBEEF}	-	c	-	Invalid hexadecimal number
-# Used to be an error, but not any more:
+# Used to be an Args, but not any more:
 /\N{U+BEEF.BEAD}/	-	c	-	
 
 # Verify works in single quotish context; regex compiler delivers slightly different msg
@@ -1993,7 +1993,7 @@ A+(*PRUNE)BC(?{})	AAABC	y	$&	AAABC
 
 foo(*ACCEPT:foo)	foo	y	$::REGMARK	foo
 (foo(*ACCEPT:foo))	foo	y	$::REGMARK	foo
-A(*FAIL:foo)[BC]	A	n	$::REGERROR	foo
+A(*FAIL:foo)[BC]	A	n	$::REGArgs	foo
 
 \N(?#comment){SPACE}	A	c	-	Missing braces on \\N{}
 ab(?#Comment){2}c	abbc	y	$&	abbc

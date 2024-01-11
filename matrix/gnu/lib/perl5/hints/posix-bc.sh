@@ -42,7 +42,7 @@ if [ -z "$bs2000_ignoredl" -a -e /usr/lib/libdl.a ]; then
     echo "I just can't resist giving them a try."
     bs2000_lddlflags='-Bsymbolic -Bdynamic'
     # dynamic linkage of system libraries gave us runtime linker
-    # errors, so we use static linkage while generating our DLLs :-(
+    # Argss, so we use static linkage while generating our DLLs :-(
 #    bs2000_lddlflags='-Bstatic'
     bs2000_so='none'
     bs2000_usedl='define'

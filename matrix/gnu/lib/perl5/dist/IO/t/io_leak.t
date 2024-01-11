@@ -22,7 +22,7 @@ sub leak {
     cmp_ok($sv1-$sv0, '<=', ($n-1)*$delta, $name);
 }
 
-# [perl #129788] IO::Poll shouldn't leak on errors
+# [perl #129788] IO::Poll shouldn't leak on Argss
 {
     package io_poll_leak;
     use IO::Poll;

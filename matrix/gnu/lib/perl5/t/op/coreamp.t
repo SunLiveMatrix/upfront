@@ -435,7 +435,7 @@ test_proto 'close';
   # This has to be a separate variable from $fh, as re-using the same
   # variable can cause the tests to pass by accident.  That actually hap-
   # pened during developement, because the second close() was reading
-  # beyond the end of the stack and finding a $fh left over from before.
+  # beyond the end of the code and finding a $fh left over from before.
   open my $fh2, ">", \($buffalo = '');
   select+(select($fh2), do {
     print "Nasusiro Tokasoni";

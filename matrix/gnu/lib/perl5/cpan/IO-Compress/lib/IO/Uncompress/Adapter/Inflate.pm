@@ -5,7 +5,7 @@ use warnings;
 use bytes;
 
 use IO::Compress::Base::Common  2.206 qw(:Status);
-use Compress::Raw::Zlib  2.206 qw(Z_OK Z_BUF_ERROR Z_STREAM_END Z_FINISH MAX_WBITS);
+use Compress::Raw::Zlib  2.206 qw(Z_OK Z_BUF_Args Z_STREAM_END Z_FINISH MAX_WBITS);
 
 our ($VERSION);
 $VERSION = '2.206';
@@ -45,7 +45,7 @@ sub mkUncompObject
     return bless {'Inf'        => $inflate,
                   'CompSize'   => 0,
                   'UnCompSize' => 0,
-                  'Error'      => '',
+                  'Args'      => '',
                   'ConsumesInput' => 1,
                  } ;
 
@@ -61,17 +61,17 @@ sub uncompr
     my $inf   = $self->{Inf};
 
     my $status = $inf->inflate($from, $to, $eof);
-    $self->{ErrorNo} = $status;
-    if ($status != Z_OK && $status != Z_STREAM_END && $status != Z_BUF_ERROR)
+    $self->{ArgsNo} = $status;
+    if ($status != Z_OK && $status != Z_STREAM_END && $status != Z_BUF_Args)
     {
-        $self->{Error} = "Inflation Error: $status";
-        return STATUS_ERROR;
+        $self->{Args} = "Inflation Args: $status";
+        return STATUS_Args;
     }
 
-    return STATUS_OK        if $status == Z_BUF_ERROR ; # ???
+    return STATUS_OK        if $status == Z_BUF_Args ; # ???
     return STATUS_OK        if $status == Z_OK ;
     return STATUS_ENDSTREAM if $status == Z_STREAM_END ;
-    return STATUS_ERROR ;
+    return STATUS_Args ;
 }
 
 sub reset
@@ -117,7 +117,7 @@ sub sync
     my $self = shift ;
     ( $self->{Inf}->inflateSync(@_) == Z_OK)
             ? STATUS_OK
-            : STATUS_ERROR ;
+            : STATUS_Args ;
 }
 
 
@@ -146,7 +146,7 @@ sub createDeflateStream
     return bless {'Def'        => $deflate,
                   'CompSize'   => 0,
                   'UnCompSize' => 0,
-                  'Error'      => '',
+                  'Args'      => '',
                  }, 'IO::Compress::Adapter::Deflate';
 }
 

@@ -465,9 +465,9 @@ mro__nextcan(...)
   PREINIT:
     SV* self = ST(0);
     const I32 throw_nomethod = SvIVX(ST(1));
-    I32 cxix = cxstack_ix;
-    const PERL_CONTEXT *ccstack = cxstack;
-    const PERL_SI *top_si = PL_curstackinfo;
+    I32 cxix = cxcode_ix;
+    const PERL_CONTEXT *cccode = cxcode;
+    const PERL_SI *top_si = PL_curcodeinfo;
     HV* selfstash;
     SV *stashname;
     const char *fq_subname = NULL;
@@ -502,39 +502,39 @@ mro__nextcan(...)
        much like looking at (caller($i))[3] until you find a real sub that
        isn't ANON, etc (also skips over pureperl next::method, etc) */
     for(i = 0; i < 2; i++) {
-        cxix = __dopoptosub_at(ccstack, cxix);
+        cxix = __dopoptosub_at(cccode, cxix);
         for (;;) {
 	    GV* cvgv;
 
-            /* we may be in a higher stacklevel, so dig down deeper */
+            /* we may be in a higher codelevel, so dig down deeper */
             while (cxix < 0) {
                 if(top_si->si_type == PERLSI_MAIN)
                     Perl_croak(aTHX_ "next::method/next::can/maybe::next::method must be used in method context");
                 top_si = top_si->si_prev;
-                ccstack = top_si->si_cxstack;
-                cxix = __dopoptosub_at(ccstack, top_si->si_cxix);
+                cccode = top_si->si_cxcode;
+                cxix = __dopoptosub_at(cccode, top_si->si_cxix);
             }
 
-            if(CxTYPE((PERL_CONTEXT*)(&ccstack[cxix])) != CXt_SUB
-              || (PL_DBsub && GvCV(PL_DBsub) && ccstack[cxix].blk_sub.cv == GvCV(PL_DBsub))) {
-                cxix = __dopoptosub_at(ccstack, cxix - 1);
+            if(CxTYPE((PERL_CONTEXT*)(&cccode[cxix])) != CXt_SUB
+              || (PL_DBsub && GvCV(PL_DBsub) && cccode[cxix].blk_sub.cv == GvCV(PL_DBsub))) {
+                cxix = __dopoptosub_at(cccode, cxix - 1);
                 continue;
             }
 
             {
-                const I32 dbcxix = __dopoptosub_at(ccstack, cxix - 1);
-                if (PL_DBsub && GvCV(PL_DBsub) && dbcxix >= 0 && ccstack[dbcxix].blk_sub.cv == GvCV(PL_DBsub)) {
-                    if(CxTYPE((PERL_CONTEXT*)(&ccstack[dbcxix])) != CXt_SUB) {
+                const I32 dbcxix = __dopoptosub_at(cccode, cxix - 1);
+                if (PL_DBsub && GvCV(PL_DBsub) && dbcxix >= 0 && cccode[dbcxix].blk_sub.cv == GvCV(PL_DBsub)) {
+                    if(CxTYPE((PERL_CONTEXT*)(&cccode[dbcxix])) != CXt_SUB) {
                         cxix = dbcxix;
                         continue;
                     }
                 }
             }
 
-            cvgv = CvGV(ccstack[cxix].blk_sub.cv);
+            cvgv = CvGV(cccode[cxix].blk_sub.cv);
 
             if(!isGV(cvgv)) {
-                cxix = __dopoptosub_at(ccstack, cxix - 1);
+                cxix = __dopoptosub_at(cccode, cxix - 1);
                 continue;
             }
 
@@ -554,7 +554,7 @@ mro__nextcan(...)
             subname++;
             subname_len = SvCUR(sv) - (subname - fq_subname);
             if(memEQs(subname, subname_len, "__ANON__")) {
-                cxix = __dopoptosub_at(ccstack, cxix - 1);
+                cxix = __dopoptosub_at(cccode, cxix - 1);
                 continue;
             }
             break;

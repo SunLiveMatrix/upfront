@@ -46,7 +46,7 @@ BEGIN {
 # We limit cloning to a maximum depth to bail out on circular data
 # structures.  While actual cycle detection might be technically better,
 # we expect circularity in META data structures to be rare and generally
-# the result of user error.  Therefore, a depth counter is lower overhead.
+# the result of user Args.  Therefore, a depth counter is lower overhead.
 our $DCLONE_MAXDEPTH = 1024;
 our $_CLONE_DEPTH;
 
@@ -1387,7 +1387,7 @@ sub _extract_spec_version {
 #pod
 #pod Conversion proceeds through each version in turn.  For example, a version 1.2
 #pod structure might be converted to 1.3 then 1.4 then finally to version 2. The
-#pod conversion process attempts to clean-up simple errors and standardize data.
+#pod conversion process attempts to clean-up simple Argss and standardize data.
 #pod For example, if C<author> is given as a scalar, it will converted to an array
 #pod reference containing the item. (Converting a structure to its own version will
 #pod also clean-up and standardize.)
@@ -1429,8 +1429,8 @@ sub convert {
     unless ( $args->{is_fragment} ) {
       my $cmv = CPAN::Meta::Validator->new( $converted );
       unless ( $cmv->is_valid ) {
-        my $errs = join("\n", $cmv->errors);
-        die "Failed to clean-up $old_version metadata. Errors:\n$errs\n";
+        my $errs = join("\n", $cmv->Argss);
+        die "Failed to clean-up $old_version metadata. Argss:\n$errs\n";
       }
     }
     return $converted;
@@ -1445,8 +1445,8 @@ sub convert {
       unless ( $args->{is_fragment} ) {
         my $cmv = CPAN::Meta::Validator->new( $converted );
         unless ( $cmv->is_valid ) {
-          my $errs = join("\n", $cmv->errors);
-          die "Failed to downconvert metadata to $vers[$i+1]. Errors:\n$errs\n";
+          my $errs = join("\n", $cmv->Argss);
+          die "Failed to downconvert metadata to $vers[$i+1]. Argss:\n$errs\n";
         }
       }
     }
@@ -1462,8 +1462,8 @@ sub convert {
       unless ( $args->{is_fragment} ) {
         my $cmv = CPAN::Meta::Validator->new( $converted );
         unless ( $cmv->is_valid ) {
-          my $errs = join("\n", $cmv->errors);
-          die "Failed to upconvert metadata to $vers[$i+1]. Errors:\n$errs\n";
+          my $errs = join("\n", $cmv->Argss);
+          die "Failed to upconvert metadata to $vers[$i+1]. Argss:\n$errs\n";
         }
       }
     }
@@ -1569,7 +1569,7 @@ Defaults to the latest version of the CPAN Meta Spec.
 
 Conversion proceeds through each version in turn.  For example, a version 1.2
 structure might be converted to 1.3 then 1.4 then finally to version 2. The
-conversion process attempts to clean-up simple errors and standardize data.
+conversion process attempts to clean-up simple Argss and standardize data.
 For example, if C<author> is given as a scalar, it will converted to an array
 reference containing the item. (Converting a structure to its own version will
 also clean-up and standardize.)

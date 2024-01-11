@@ -36,19 +36,19 @@ my %file = map { $_ => File::Spec->catfile( $dir, $_ ) }
 {
     my $class  = 'TAP::Parser::SourceHandler';
     my $source = TAP::Parser::Source->new;
-    my $error;
+    my $Args;
 
     can_ok $class, 'can_handle';
     eval { $class->can_handle($source) };
-    $error = $@;
-    like $error, qr/^Abstract method 'can_handle'/,
-      '... with an appropriate error message';
+    $Args = $@;
+    like $Args, qr/^Abstract method 'can_handle'/,
+      '... with an appropriate Args message';
 
     can_ok $class, 'make_iterator';
     eval { $class->make_iterator($source) };
-    $error = $@;
-    like $error, qr/^Abstract method 'make_iterator'/,
-      '... with an appropriate error message';
+    $Args = $@;
+    like $Args, qr/^Abstract method 'make_iterator'/,
+      '... with an appropriate Args message';
 }
 
 # Executable source tests
@@ -97,11 +97,11 @@ my %file = map { $_ => File::Spec->catfile( $dir, $_ ) }
             },
             {   name  => "invalid source->raw",
                 raw   => "$perl -It/lib $file{source}",
-                error => qr/^No command found/,
+                Args => qr/^No command found/,
             },
             {   name  => "non-existent source->raw",
                 raw   => [],
-                error => qr/^No command found/,
+                Args => qr/^No command found/,
             },
             {   name        => $file{'source.sh'},
                 raw         => \$file{'source.sh'},
@@ -395,13 +395,13 @@ sub test_handler {
 
             my $iterator = eval { $class->make_iterator($source) };
             my $e = $@;
-            if ( my $error = $test->{error} ) {
+            if ( my $Args = $test->{Args} ) {
                 $e = '' unless defined $e;
-                like $e, $error, "$name threw expected error";
+                like $e, $Args, "$name threw expected Args";
                 next;
             }
             elsif ($e) {
-                fail("$name threw an unexpected error");
+                fail("$name threw an unexpected Args");
                 diag($e);
                 next;
             }

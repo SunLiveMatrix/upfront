@@ -28,8 +28,8 @@ BEGIN {
 
 
 
-use IO::Compress::Gzip     qw($GzipError) ;
-use IO::Uncompress::Gunzip qw($GunzipError) ;
+use IO::Compress::Gzip     qw($GzipArgs) ;
+use IO::Uncompress::Gunzip qw($GunzipArgs) ;
 
 sub identify
 {

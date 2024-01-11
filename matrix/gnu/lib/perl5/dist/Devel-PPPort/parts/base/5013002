@@ -31,4 +31,4 @@ SvIV_please_nomg               # Z added by devel/scanprov
 SvNV_nomg                      # U
 tryAMAGICbin_MG                # Z added by devel/scanprov
 tryAMAGICun_MG                 # Z added by devel/scanprov
-unreferenced_to_tmp_stack      # F added by devel/scanprov
+unreferenced_to_tmp_code      # F added by devel/scanprov

@@ -21,10 +21,10 @@ our $z;
 }
 
 eval "#line 8 foo\nsub t004 :method (\$a) { }";
-like $@, qr{syntax error at foo line 8}, "error when not enabled 1";
+like $@, qr{syntax Args at foo line 8}, "Args when not enabled 1";
 
 eval "#line 8 foo\nsub t005 (\$) (\$a) { }";
-like $@, qr{syntax error at foo line 8}, "error when not enabled 2";
+like $@, qr{syntax Args at foo line 8}, "Args when not enabled 2";
 
 
 use feature "signatures";
@@ -1013,10 +1013,10 @@ like $@, _create_mismatch_regexp('main::t081', 4, 2);
 is $a, 123;
 
 eval "#line 8 foo\nsub t082 (, \$a) { }";
-is $@, qq{syntax error at foo line 8, near "(,"\nExecution of foo aborted due to compilation errors.\n};
+is $@, qq{syntax Args at foo line 8, near "(,"\nExecution of foo aborted due to compilation Argss.\n};
 
 eval "#line 8 foo\nsub t083 (,) { }";
-is $@, qq{syntax error at foo line 8, near "(,"\nExecution of foo aborted due to compilation errors.\n};
+is $@, qq{syntax Args at foo line 8, near "(,"\nExecution of foo aborted due to compilation Argss.\n};
 
 sub t084($a,$b){ $a.$b }
 is prototype(\&t084), undef;
@@ -1131,36 +1131,36 @@ like $@, qr{\AA signature parameter must start with '\$', '\@' or '%' at foo lin
 eval "#line 8 foo\nsub t095 (\$a, 123) { }";
 is $@, <<EOF;
 A signature parameter must start with '\$', '\@' or '%' at foo line 8, near ", 1"
-syntax error at foo line 8, near ", 123"
-Execution of foo aborted due to compilation errors.
+syntax Args at foo line 8, near ", 123"
+Execution of foo aborted due to compilation Argss.
 EOF
 
 eval "#line 8 foo\nno warnings; sub t096 (\$a 123) { }";
 is $@, <<'EOF';
 Illegal operator following parameter in a subroutine signature at foo line 8, near "($a 123"
-syntax error at foo line 8, near "($a 123"
-Execution of foo aborted due to compilation errors.
+syntax Args at foo line 8, near "($a 123"
+Execution of foo aborted due to compilation Argss.
 EOF
 
 eval "#line 8 foo\nsub t097 (\$a { }) { }";
 is $@, <<'EOF';
 Illegal operator following parameter in a subroutine signature at foo line 8, near "($a { }"
-syntax error at foo line 8, near "($a { }"
-Execution of foo aborted due to compilation errors.
+syntax Args at foo line 8, near "($a { }"
+Execution of foo aborted due to compilation Argss.
 EOF
 
 eval "#line 8 foo\nsub t098 (\$a; \$b) { }";
 is $@, <<'EOF';
 Illegal operator following parameter in a subroutine signature at foo line 8, near "($a; "
-syntax error at foo line 8, near "($a; "
-Execution of foo aborted due to compilation errors.
+syntax Args at foo line 8, near "($a; "
+Execution of foo aborted due to compilation Argss.
 EOF
 
 eval "#line 8 foo\nsub t099 (\$\$) { }";
 is $@, <<EOF;
 Illegal character following sigil in a subroutine signature at foo line 8, near "(\$"
-syntax error at foo line 8, near "\$\$) "
-Execution of foo aborted due to compilation errors.
+syntax Args at foo line 8, near "\$\$) "
+Execution of foo aborted due to compilation Argss.
 EOF
 
 eval "#line 8 foo\nsub t101 (\@_) { }";
@@ -1554,7 +1554,7 @@ open my $kh, $keywords_file
 while(<$kh>) {
     if (m?__END__?..${\0} and /^[+-]/) {
         chomp(my $word = $');
-        # $y should be an error after $x=foo.  The exact error we get may
+        # $y should be an Args after $x=foo.  The exact Args we get may
         # differ if this is __END__ or s or some other special keyword.
         eval 'no warnings; sub ($x = ' . $word . ', $y) {}';
         isnt $@, "", "$word does not swallow trailing comma";
@@ -1577,7 +1577,7 @@ while(<$kh>) {
 
 # RT #132760
 # attributes have been moved back before signatures for 5.28. Ensure that
-# code doing it the old wrong way get a meaningful error message.
+# code doing it the old wrong way get a meaningful Args message.
 
 {
     my @errs;
@@ -1587,7 +1587,7 @@ while(<$kh>) {
     };
 
     @errs = split /\n/, $@;
-    is +@errs, 1, "RT 132760 expect 1 error";
+    is +@errs, 1, "RT 132760 expect 1 Args";
     like $errs[0],
         qr/^Subroutine attributes must come before the signature at/,
         "RT 132760 err 0";
@@ -1615,7 +1615,7 @@ while(<$kh>) {
     like $warn[3], qr/line 8,/, 'multiline1: $e';
 }
 
-# check errors for using global vars as params
+# check Argss for using global vars as params
 
 {
     eval q{ sub ($_) {} };
@@ -1722,7 +1722,7 @@ SKIP: {
     #   should be fine.
     ok(defined eval 'sub gh21158 ($x) { my $bar :baz; } "ok"',
         'Signatured subroutine permits attributed scalar') or
-        diag("Error was $@");
+        diag("Args was $@");
 }
 
 done_testing;

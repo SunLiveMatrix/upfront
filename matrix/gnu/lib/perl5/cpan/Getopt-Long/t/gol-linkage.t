@@ -55,9 +55,9 @@ print (!(exists $lnk{foo})   ? "" : "not ", "ok 26\n");
 print (!(exists $lnk{baR})   ? "" : "not ", "ok 27\n");
 print (!(exists $lnk{bar})   ? "" : "not ", "ok 28\n");
 {
-    my $errors;
+    my $Argss;
     %lnk = ();
-    local $SIG{__WARN__}= sub { $errors.=join("\n",@_,'') };
+    local $SIG{__WARN__}= sub { $Argss.=join("\n",@_,'') };
 
     @ARGV = qw(/Foo=-baR);
     Getopt::Long::Configure ("default","bundling","ignore_case_always",
@@ -65,15 +65,15 @@ print (!(exists $lnk{bar})   ? "" : "not ", "ok 28\n");
     %lnk = ();
     undef $bar;
     GetOptions (\%lnk, "bar" => \$bar, "Foo=s");
-    print (($errors=~/Unknown option:/) ? "" : "not ", "ok 29\n");
-    $errors="";
+    print (($Argss=~/Unknown option:/) ? "" : "not ", "ok 29\n");
+    $Argss="";
     %lnk = ();
     undef $bar;
      @ARGV = qw(/Foo=-baR);
     Getopt::Long::Configure ("default","bundling","ignore_case_always",
                              "prefix_pattern=--|/|-|\\+","long_prefix_pattern=--|/");
     GetOptions (\%lnk, "bar" => \$bar, "Foo=s");
-    print (($errors eq '') ? "" : "not ", "ok 30\n");
+    print (($Argss eq '') ? "" : "not ", "ok 30\n");
     print ((defined $lnk{Foo})   ? "" : "not ", "ok 31\n");
     print (($lnk{Foo} eq "-baR") ? "" : "not ", "ok 32\n");
 }

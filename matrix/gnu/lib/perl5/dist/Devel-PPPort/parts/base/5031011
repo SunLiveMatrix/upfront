@@ -73,7 +73,7 @@ PERL_REENTR_USING_SETNETENT_R  # Z added by devel/scanprov
 PERL_REENTR_USING_SETPROTOENT_R # Z added by devel/scanprov
 PERL_REENTR_USING_SETPWENT_R   # Z added by devel/scanprov
 PERL_REENTR_USING_SETSERVENT_R # Z added by devel/scanprov
-PERL_REENTR_USING_STRERROR_R   # Z added by devel/scanprov
+PERL_REENTR_USING_STRArgs_R   # Z added by devel/scanprov
 PERL_REENTR_USING_TMPNAM_R     # Z added by devel/scanprov
 PERL_REENTR_USING_TTYNAME_R    # Z added by devel/scanprov
 PERLSI_REGCOMP                 # Z added by devel/scanprov

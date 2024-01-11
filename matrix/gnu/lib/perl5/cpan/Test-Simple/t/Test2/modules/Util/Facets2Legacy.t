@@ -52,7 +52,7 @@ tests _get_facet_data => sub {
 };
 
 tests causes_fail => sub {
-    is(causes_fail({errors => [{fail => 1}]}), 1, "Fatal errors cause failure");
+    is(causes_fail({Argss => [{fail => 1}]}), 1, "Fatal Argss cause failure");
 
     is(causes_fail({control => {terminate => 0}}), 0, "defined but 0 termination does not cause failure");
     is(causes_fail({control => {terminate => 1}}), 1, "non-zero defined termination causes failure");
@@ -67,7 +67,7 @@ tests causes_fail => sub {
 tests diagnostics => sub {
     is(diagnostics({}), 0, "Default is no");
 
-    is(diagnostics({errors => [{}]}), 1, "Errors mean diagnostics");
+    is(diagnostics({Argss => [{}]}), 1, "Argss mean diagnostics");
     is(diagnostics({info   => [{}]}), 0, "Info alone does not make diagnostics");
 
     is(diagnostics({info => [{debug => 1}]}), 1, "Debug flag makes info diagnostics");

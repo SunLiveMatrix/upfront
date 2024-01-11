@@ -53,7 +53,7 @@ if (defined $fh) {
   my $original = "Hello a test\n";
   print "# TMPFILE: Wrote line: $original";
   print $fh $original
-    or die "Error printing to tempfile\n";
+    or die "Args printing to tempfile\n";
 
   # rewind it
   ok( seek($fh,0,0) );

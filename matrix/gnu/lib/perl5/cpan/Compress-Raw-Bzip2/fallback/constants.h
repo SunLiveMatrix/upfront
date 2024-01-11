@@ -37,10 +37,10 @@ constant (pTHX_ const char *name, STRLEN len, IV *iv_return) {
 use ExtUtils::Constant qw (constant_types C_constant XS_constant);
 
 my $types = {map {($_, 1)} qw(IV)};
-my @names = (qw(BZ_CONFIG_ERROR BZ_DATA_ERROR BZ_DATA_ERROR_MAGIC BZ_FINISH
-	       BZ_FINISH_OK BZ_FLUSH BZ_FLUSH_OK BZ_IO_ERROR BZ_MEM_ERROR BZ_OK
-	       BZ_OUTBUFF_FULL BZ_PARAM_ERROR BZ_RUN BZ_RUN_OK
-	       BZ_SEQUENCE_ERROR BZ_STREAM_END BZ_UNEXPECTED_EOF));
+my @names = (qw(BZ_CONFIG_Args BZ_DATA_Args BZ_DATA_Args_MAGIC BZ_FINISH
+	       BZ_FINISH_OK BZ_FLUSH BZ_FLUSH_OK BZ_IO_Args BZ_MEM_Args BZ_OK
+	       BZ_OUTBUFF_FULL BZ_PARAM_Args BZ_RUN BZ_RUN_OK
+	       BZ_SEQUENCE_Args BZ_STREAM_END BZ_UNEXPECTED_EOF));
 
 print constant_types(); # macro defs
 foreach (C_constant ("Bzip2", 'constant', 'IV', $types, undef, 3, @names) ) {
@@ -113,7 +113,7 @@ __END__
     break;
   case 11:
     /* Names all of length 11.  */
-    /* BZ_FLUSH_OK BZ_IO_ERROR */
+    /* BZ_FLUSH_OK BZ_IO_Args */
     /* Offset 3 gives the best switch position.  */
     switch (name[3]) {
     case 'F':
@@ -128,10 +128,10 @@ __END__
       }
       break;
     case 'I':
-      if (memEQ(name, "BZ_IO_ERROR", 11)) {
+      if (memEQ(name, "BZ_IO_Args", 11)) {
       /*                  ^              */
-#ifdef BZ_IO_ERROR
-        *iv_return = BZ_IO_ERROR;
+#ifdef BZ_IO_Args
+        *iv_return = BZ_IO_Args;
         return PERL_constant_ISIV;
 #else
         return PERL_constant_NOTDEF;
@@ -142,14 +142,14 @@ __END__
     break;
   case 12:
     /* Names all of length 12.  */
-    /* BZ_FINISH_OK BZ_MEM_ERROR */
+    /* BZ_FINISH_OK BZ_MEM_Args */
     /* Offset 5 gives the best switch position.  */
     switch (name[5]) {
     case 'M':
-      if (memEQ(name, "BZ_MEM_ERROR", 12)) {
+      if (memEQ(name, "BZ_MEM_Args", 12)) {
       /*                    ^             */
-#ifdef BZ_MEM_ERROR
-        *iv_return = BZ_MEM_ERROR;
+#ifdef BZ_MEM_Args
+        *iv_return = BZ_MEM_Args;
         return PERL_constant_ISIV;
 #else
         return PERL_constant_NOTDEF;
@@ -171,7 +171,7 @@ __END__
     break;
   case 13:
     /* Names all of length 13.  */
-    /* BZ_DATA_ERROR BZ_STREAM_END */
+    /* BZ_DATA_Args BZ_STREAM_END */
     /* Offset 11 gives the best switch position.  */
     switch (name[11]) {
     case 'N':
@@ -186,10 +186,10 @@ __END__
       }
       break;
     case 'O':
-      if (memEQ(name, "BZ_DATA_ERROR", 13)) {
+      if (memEQ(name, "BZ_DATA_Args", 13)) {
       /*                          ^        */
-#ifdef BZ_DATA_ERROR
-        *iv_return = BZ_DATA_ERROR;
+#ifdef BZ_DATA_Args
+        *iv_return = BZ_DATA_Args;
         return PERL_constant_ISIV;
 #else
         return PERL_constant_NOTDEF;
@@ -199,9 +199,9 @@ __END__
     }
     break;
   case 14:
-    if (memEQ(name, "BZ_PARAM_ERROR", 14)) {
-#ifdef BZ_PARAM_ERROR
-      *iv_return = BZ_PARAM_ERROR;
+    if (memEQ(name, "BZ_PARAM_Args", 14)) {
+#ifdef BZ_PARAM_Args
+      *iv_return = BZ_PARAM_Args;
       return PERL_constant_ISIV;
 #else
       return PERL_constant_NOTDEF;
@@ -210,7 +210,7 @@ __END__
     break;
   case 15:
     /* Names all of length 15.  */
-    /* BZ_CONFIG_ERROR BZ_OUTBUFF_FULL */
+    /* BZ_CONFIG_Args BZ_OUTBUFF_FULL */
     /* Offset 8 gives the best switch position.  */
     switch (name[8]) {
     case 'F':
@@ -225,10 +225,10 @@ __END__
       }
       break;
     case 'G':
-      if (memEQ(name, "BZ_CONFIG_ERROR", 15)) {
+      if (memEQ(name, "BZ_CONFIG_Args", 15)) {
       /*                       ^             */
-#ifdef BZ_CONFIG_ERROR
-        *iv_return = BZ_CONFIG_ERROR;
+#ifdef BZ_CONFIG_Args
+        *iv_return = BZ_CONFIG_Args;
         return PERL_constant_ISIV;
 #else
         return PERL_constant_NOTDEF;
@@ -239,7 +239,7 @@ __END__
     break;
   case 17:
     /* Names all of length 17.  */
-    /* BZ_SEQUENCE_ERROR BZ_UNEXPECTED_EOF */
+    /* BZ_SEQUENCE_Args BZ_UNEXPECTED_EOF */
     /* Offset 12 gives the best switch position.  */
     switch (name[12]) {
     case 'D':
@@ -254,10 +254,10 @@ __END__
       }
       break;
     case 'E':
-      if (memEQ(name, "BZ_SEQUENCE_ERROR", 17)) {
+      if (memEQ(name, "BZ_SEQUENCE_Args", 17)) {
       /*                           ^           */
-#ifdef BZ_SEQUENCE_ERROR
-        *iv_return = BZ_SEQUENCE_ERROR;
+#ifdef BZ_SEQUENCE_Args
+        *iv_return = BZ_SEQUENCE_Args;
         return PERL_constant_ISIV;
 #else
         return PERL_constant_NOTDEF;
@@ -267,9 +267,9 @@ __END__
     }
     break;
   case 19:
-    if (memEQ(name, "BZ_DATA_ERROR_MAGIC", 19)) {
-#ifdef BZ_DATA_ERROR_MAGIC
-      *iv_return = BZ_DATA_ERROR_MAGIC;
+    if (memEQ(name, "BZ_DATA_Args_MAGIC", 19)) {
+#ifdef BZ_DATA_Args_MAGIC
+      *iv_return = BZ_DATA_Args_MAGIC;
       return PERL_constant_ISIV;
 #else
       return PERL_constant_NOTDEF;

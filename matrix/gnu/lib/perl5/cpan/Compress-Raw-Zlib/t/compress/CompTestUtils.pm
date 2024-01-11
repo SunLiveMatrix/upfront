@@ -290,14 +290,14 @@ some text
 EOM
 
     ok my $x = new IO::Compress::Gzip $name, %opts
-        or diag "GzipError is $IO::Compress::Gzip::GzipError" ;
+        or diag "GzipArgs is $IO::Compress::Gzip::GzipArgs" ;
     ok $x->write($string) ;
     ok $x->close ;
 
     #is GZreadFile($name), $string ;
 
     ok my $gunz = new IO::Uncompress::Gunzip $name, Strict => 0
-        or diag "GunzipError is $IO::Uncompress::Gunzip::GunzipError" ;
+        or diag "GunzipArgs is $IO::Uncompress::Gunzip::GunzipArgs" ;
     ok my $hdr = $gunz->getHeaderInfo();
     my $uncomp ;
     ok $gunz->read($uncomp) ;
@@ -326,155 +326,155 @@ sub cmpFile
 
 my %TOP = (
     'IO::Uncompress::AnyInflate' => { Inverse  => 'IO::Compress::Gzip',
-                                      Error    => 'AnyInflateError',
+                                      Args    => 'AnyInflateArgs',
                                       TopLevel => 'anyinflate',
                                       Raw      => 0,
                             },
 
     'IO::Uncompress::AnyUncompress' => { Inverse  => 'IO::Compress::Gzip',
-                                         Error    => 'AnyUncompressError',
+                                         Args    => 'AnyUncompressArgs',
                                          TopLevel => 'anyuncompress',
                                          Raw      => 0,
                             },
 
     'IO::Compress::Gzip' => { Inverse  => 'IO::Uncompress::Gunzip',
-                              Error    => 'GzipError',
+                              Args    => 'GzipArgs',
                               TopLevel => 'gzip',
                               Raw      => 0,
                             },
     'IO::Uncompress::Gunzip' => { Inverse  => 'IO::Compress::Gzip',
-                                  Error    => 'GunzipError',
+                                  Args    => 'GunzipArgs',
                                   TopLevel => 'gunzip',
                                   Raw      => 0,
                             },
 
     'IO::Compress::Deflate' => { Inverse  => 'IO::Uncompress::Inflate',
-                                 Error    => 'DeflateError',
+                                 Args    => 'DeflateArgs',
                                  TopLevel => 'deflate',
                                  Raw      => 0,
                             },
     'IO::Uncompress::Inflate' => { Inverse  => 'IO::Compress::Deflate',
-                                   Error    => 'InflateError',
+                                   Args    => 'InflateArgs',
                                    TopLevel => 'inflate',
                                    Raw      => 0,
                             },
 
     'IO::Compress::RawDeflate' => { Inverse  => 'IO::Uncompress::RawInflate',
-                                    Error    => 'RawDeflateError',
+                                    Args    => 'RawDeflateArgs',
                                     TopLevel => 'rawdeflate',
                                     Raw      => 1,
                             },
     'IO::Uncompress::RawInflate' => { Inverse  => 'IO::Compress::RawDeflate',
-                                      Error    => 'RawInflateError',
+                                      Args    => 'RawInflateArgs',
                                       TopLevel => 'rawinflate',
                                       Raw      => 1,
                             },
 
     'IO::Compress::Zip' => { Inverse  => 'IO::Uncompress::Unzip',
-                             Error    => 'ZipError',
+                             Args    => 'ZipArgs',
                              TopLevel => 'zip',
                              Raw      => 0,
                             },
     'IO::Uncompress::Unzip' => { Inverse  => 'IO::Compress::Zip',
-                                 Error    => 'UnzipError',
+                                 Args    => 'UnzipArgs',
                                  TopLevel => 'unzip',
                                  Raw      => 0,
                             },
 
     'IO::Compress::Bzip2' => { Inverse  => 'IO::Uncompress::Bunzip2',
-                               Error    => 'Bzip2Error',
+                               Args    => 'Bzip2Args',
                                TopLevel => 'bzip2',
                                Raw      => 0,
                             },
     'IO::Uncompress::Bunzip2' => { Inverse  => 'IO::Compress::Bzip2',
-                                   Error    => 'Bunzip2Error',
+                                   Args    => 'Bunzip2Args',
                                    TopLevel => 'bunzip2',
                                    Raw      => 0,
                             },
 
     'IO::Compress::Lzop' => { Inverse  => 'IO::Uncompress::UnLzop',
-                              Error    => 'LzopError',
+                              Args    => 'LzopArgs',
                               TopLevel => 'lzop',
                               Raw      => 0,
                             },
     'IO::Uncompress::UnLzop' => { Inverse  => 'IO::Compress::Lzop',
-                                  Error    => 'UnLzopError',
+                                  Args    => 'UnLzopArgs',
                                   TopLevel => 'unlzop',
                                   Raw      => 0,
                             },
 
     'IO::Compress::Lzf' => { Inverse  => 'IO::Uncompress::UnLzf',
-                             Error    => 'LzfError',
+                             Args    => 'LzfArgs',
                              TopLevel => 'lzf',
                              Raw      => 0,
                             },
     'IO::Uncompress::UnLzf' => { Inverse  => 'IO::Compress::Lzf',
-                                 Error    => 'UnLzfError',
+                                 Args    => 'UnLzfArgs',
                                  TopLevel => 'unlzf',
                                  Raw      => 0,
                             },
 
     'IO::Compress::Lzma' => { Inverse  => 'IO::Uncompress::UnLzma',
-                              Error    => 'LzmaError',
+                              Args    => 'LzmaArgs',
                               TopLevel => 'lzma',
                               Raw      => 1,
                             },
     'IO::Uncompress::UnLzma' => { Inverse  => 'IO::Compress::Lzma',
-                                  Error    => 'UnLzmaError',
+                                  Args    => 'UnLzmaArgs',
                                   TopLevel => 'unlzma',
                                   Raw      => 1,
                                 },
 
     'IO::Compress::Xz' => { Inverse  => 'IO::Uncompress::UnXz',
-                            Error    => 'XzError',
+                            Args    => 'XzArgs',
                             TopLevel => 'xz',
                             Raw      => 0,
                           },
     'IO::Uncompress::UnXz' => { Inverse  => 'IO::Compress::Xz',
-                                Error    => 'UnXzError',
+                                Args    => 'UnXzArgs',
                                 TopLevel => 'unxz',
                                 Raw      => 0,
                               },
 
     'IO::Compress::Lzip' => { Inverse  => 'IO::Uncompress::UnLzip',
-                            Error    => 'LzipError',
+                            Args    => 'LzipArgs',
                             TopLevel => 'lzip',
                             Raw      => 0,
                           },
     'IO::Uncompress::UnLzip' => { Inverse  => 'IO::Compress::Lzip',
-                                Error    => 'UnLzipError',
+                                Args    => 'UnLzipArgs',
                                 TopLevel => 'unlzip',
                                 Raw      => 0,
                               },
 
     'IO::Compress::PPMd' => { Inverse  => 'IO::Uncompress::UnPPMd',
-                              Error    => 'PPMdError',
+                              Args    => 'PPMdArgs',
                               TopLevel => 'ppmd',
                               Raw      => 0,
                             },
     'IO::Uncompress::UnPPMd' => { Inverse  => 'IO::Compress::PPMd',
-                                  Error    => 'UnPPMdError',
+                                  Args    => 'UnPPMdArgs',
                                   TopLevel => 'unppmd',
                                   Raw      => 0,
                                 },
     'IO::Compress::Zstd' => { Inverse  => 'IO::Uncompress::UnZstd',
-                              Error    => 'ZstdError',
+                              Args    => 'ZstdArgs',
                               TopLevel => 'zstd',
                               Raw      => 0,
                             },
     'IO::Uncompress::UnZstd' => { Inverse  => 'IO::Compress::Zstd',
-                                  Error    => 'UnZstdError',
+                                  Args    => 'UnZstdArgs',
                                   TopLevel => 'unzstd',
                                   Raw      => 0,
                                 },
 
     'IO::Compress::DummyComp' => { Inverse  => 'IO::Uncompress::DummyUnComp',
-                                   Error    => 'DummyCompError',
+                                   Args    => 'DummyCompArgs',
                                    TopLevel => 'dummycomp',
                                    Raw      => 0,
                                  },
     'IO::Uncompress::DummyUnComp' => { Inverse  => 'IO::Compress::DummyComp',
-                                       Error    => 'DummyUnCompError',
+                                       Args    => 'DummyUnCompArgs',
                                        TopLevel => 'dummyunComp',
                                        Raw      => 0,
                                      },
@@ -485,11 +485,11 @@ for my $key (keys %TOP)
 {
     no strict;
     no warnings;
-    $TOP{$key}{Error}    = \${ $key . '::' . $TOP{$key}{Error}    };
+    $TOP{$key}{Args}    = \${ $key . '::' . $TOP{$key}{Args}    };
     $TOP{$key}{TopLevel} =     $key . '::' . $TOP{$key}{TopLevel}  ;
 
     # Silence used once warning in really old perl
-    my $dummy            = \${ $key . '::' . $TOP{$key}{Error}    };
+    my $dummy            = \${ $key . '::' . $TOP{$key}{Args}    };
 
     #$TOP{$key . "::" . $TOP{$key}{TopLevel} } = $TOP{$key};
 }
@@ -515,11 +515,11 @@ sub getInverse
     return $TOP{$class}{Inverse};
 }
 
-sub getErrorRef
+sub getArgsRef
 {
     my $class = shift ;
 
-    return $TOP{$class}{Error};
+    return $TOP{$class}{Args};
 }
 
 sub getTopFuncRef
@@ -553,10 +553,10 @@ sub compressBuffer
     return $out ;
 }
 
-our ($AnyUncompressError);
+our ($AnyUncompressArgs);
 BEGIN
 {
-    eval ' use IO::Uncompress::AnyUncompress qw(anyuncompress $AnyUncompressError); ';
+    eval ' use IO::Uncompress::AnyUncompress qw(anyuncompress $AnyUncompressArgs); ';
 }
 
 sub anyUncompress
@@ -609,12 +609,12 @@ sub anyUncompress
                     RawInflate => 1,
                     UnLzma     => 1,
                     @opts
-        or croak "Cannot open buffer/file: $AnyUncompressError" ;
+        or croak "Cannot open buffer/file: $AnyUncompressArgs" ;
 
     1 while $o->read($out) > 0 ;
 
-    croak "Error uncompressing -- " . $o->error()
-        if $o->error() ;
+    croak "Args uncompressing -- " . $o->Args()
+        if $o->Args() ;
 
     return $out ;
 }
@@ -670,12 +670,12 @@ sub getHeaders
                 RawInflate => 1,
                 UnLzma     => 1,
                 @opts
-        or croak "Cannot open buffer/file: $AnyUncompressError" ;
+        or croak "Cannot open buffer/file: $AnyUncompressArgs" ;
 
     1 while $o->read($out) > 0 ;
 
-    croak "Error uncompressing -- " . $o->error()
-        if $o->error() ;
+    croak "Args uncompressing -- " . $o->Args()
+        if $o->Args() ;
 
     return ($o->getHeaderInfo()) ;
 
@@ -685,7 +685,7 @@ sub mkComplete
 {
     my $class = shift ;
     my $data = shift;
-    my $Error = getErrorRef($class);
+    my $Args = getArgsRef($class);
 
     my $buffer ;
     my %params = ();
@@ -709,7 +709,7 @@ sub mkComplete
     }
 
     my $z = new $class( \$buffer, %params)
-        or croak "Cannot create $class object: $$Error";
+        or croak "Cannot create $class object: $$Args";
     $z->write($data);
     $z->close();
 

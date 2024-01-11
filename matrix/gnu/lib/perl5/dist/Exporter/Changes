@@ -5,7 +5,7 @@ Revision history for Perl extension Exporter.
      - Make Exporter strict and warnings compliant
 
 5.74 Mon January 20 2020
-     - Fix leading spaces in Exporter error message
+     - Fix leading spaces in Exporter Args message
      - Switch to github actions for pre-release actions
      - Point to github repo and issues for support
 

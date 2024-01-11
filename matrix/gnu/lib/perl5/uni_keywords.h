@@ -110,7 +110,7 @@ STATIC const unsigned char mph_blob[] =
     "lowleftchangeswhencasefoldedchangeswhencasemappedchangeswhenlower"
     "casedchangeswhentitlecasedchangeswhenuppercasedgraphemeclusterbre"
     "ak=identifiertype=notncientgreeknumbersountingrodnumeralsmeroitic"
-    "hieroglyphsantillationmarkinvisiblestackersyllablemodifierinscrip"
+    "hieroglyphsantillationmarkinvisiblecodeersyllablemodifierinscrip"
     "tionalparthianinsupplementalarrowsbnclosedalphanumsuphanguljamoex"
     "tendedamongoliansupplementsundanesesupplementissupplementalarrows"
     "clogicalorderexceptionnoncharactercodepointsinhalaarchaicnumbersv"
@@ -128,7 +128,7 @@ STATIC const unsigned char mph_blob[] =
     "nsportandmapsymbolshanifirohingyakinnayajoininggroup=malayalamfol"
     "ds_to_multi_charmeeteimayekextensionsdevanagariextendedachangeswh"
     "ennfkccasefoldeddefaultignorablecodepointfullcompositionexclusion"
-    "limitedusebyzantinemusicalsymbolsplaceholderwithstackermetricshap"
+    "limitedusebyzantinemusicalsymbolsplaceholderwithcodeermetricshap"
     "esextendederscriptsandsubscriptsymbolsforlegacycomputingcanonical"
     "combiningclass=2halfwidthandfullwidthformsrecommendeduncommonusei"
     "narabicpresentationformsbcombiningmarksforsymbolsprependedconcate"
@@ -1184,7 +1184,7 @@ STATIC const struct mph_struct mph_table[MPH_BUCKETS] = {
   {     0,  5876,     0,  12,   0, UNI_SUNDANESESUP }   /* sundanesesup */,
   {     3,  1726,  1505,   8,   4, UNI_ARABICEXTA }   /* isarabicexta */,
   {     1,   461,  1978,   2,   7, UNI_SOGD }   /* issogdian */,
-  {     1,  6163,  5746,   5,  16, UNI_INSC__INVISIBLESTACKER }   /* insc=invisiblestacker */,
+  {     1,  6163,  5746,   5,  16, UNI_INSC__INVISIBLEcodeER }   /* insc=invisiblecodeer */,
   {     0,    21,  7915,   1,  20, UNI_ENCLOSEDALPHANUM }   /* enclosedalphanumerics */,
   {     3,  1424,   582,   7,   2, UNI_CCC__22 }   /* ccc=ccc22 */,
   {     2,  4502,     0,  13,   0, UNI_LATINEXTE }   /* blk=latinexte */,
@@ -2895,7 +2895,7 @@ STATIC const struct mph_struct mph_table[MPH_BUCKETS] = {
   {     0,  1102,    94,   4,   4, UNI_GURU }   /* scx=guru */,
   {     5,  5658,  7287,  10,  17, UNI_IDENTIFIERSTATUS__RESTRICTED }   /* identifierstatus=restricted */,
   {     5,     2,   934,   3,   2, -UNI_CWL }   /* cwl=f */,
-  {     3,  8343,  6934,  31,  11, UNI_INSC__CONSONANTWITHSTACKER }   /* indicsyllabiccategory=consonantwithstacker */,
+  {     3,  8343,  6934,  31,  11, UNI_INSC__CONSONANTWITHcodeER }   /* indicsyllabiccategory=consonantwithcodeer */,
   {    32,  6450,  3191,  13,   3, UNI_SB__LE }   /* sentencebreak=le */,
   {     2,  4424,   172,  17,   4, UNI_RJNG }   /* scriptextensions=rjng */,
   {     2,  7274,   248,   9,   5, UNI_XPOSIXCNTRL }   /* category=cntrl */,
@@ -4139,7 +4139,7 @@ STATIC const struct mph_struct mph_table[MPH_BUCKETS] = {
   {     0,  4424,   739,  17,   7, UNI_MAND }   /* scriptextensions=mandaic */,
   {     7,    20,  1104,   2,   2, UNI_hex_values_index }   /* hex= */,
   {     0,  1667,  5283,   4,   9, UNI_HALFMARKS }   /* blk=halfmarks */,
-  {     0,  6163,  6934,  14,  11, UNI_INSC__CONSONANTWITHSTACKER }   /* insc=consonantwithstacker */,
+  {     0,  6163,  6934,  14,  11, UNI_INSC__CONSONANTWITHcodeER }   /* insc=consonantwithcodeer */,
   {     0,  3276,     0,  13,   0, UNI_ME }   /* enclosingmark */,
   {    35,   461,  1475,   3,   9, UNI_XPOSIXBLANK }   /* ishorizspace */,
   {     2,   517,  1805,   4,   5, UNI_NV__700000 }   /* nv=700000 */,
@@ -7011,7 +7011,7 @@ STATIC const struct mph_struct mph_table[MPH_BUCKETS] = {
   {    12,   461,  5857,   2,  12, UNI_MONGOLIANSUP }   /* ismongoliansup */,
   {     0,  3817,  1312,  15,   3, UNI_NV__1_SLASH_160 }   /* numericvalue=1/160 */,
   {     2,  2324,  1922,   7,  11, UNI_CHESSSYMBOLS }   /* block=chesssymbols */,
-  {     3,  8343,  5746,  22,  16, UNI_INSC__INVISIBLESTACKER }   /* indicsyllabiccategory=invisiblestacker */,
+  {     3,  8343,  5746,  22,  16, UNI_INSC__INVISIBLEcodeER }   /* indicsyllabiccategory=invisiblecodeer */,
   {     2,  1883,  6621,   4,   3, UNI_BIDIC }   /* bidic=t */,
   {    23,  4191,   584,   8,   6, UNI_XPOSIXLOWER }   /* lowercase=true */,
   {     0,   309,  1484,   2,   8, UNI_INBUGINESE }   /* inbuginese */,

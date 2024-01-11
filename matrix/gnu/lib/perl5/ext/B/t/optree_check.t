@@ -54,7 +54,7 @@ checkOptree ( name	=> 'test skip itself',
 
 # This test 'unexpectedly succeeds', but that is "expected".  Theres
 # no good way to expect a successful todo, and inducing a failure
-# causes the harness to print verbose errors, which is NOT helpful.
+# causes the harness to print verbose Argss, which is NOT helpful.
 
 checkOptree ( name	=> 'test todo itself',
 	      todo	=> "your excuse here ;-)",
@@ -74,7 +74,7 @@ checkOptree ( name	=> 'impossible match, remove skip to see failure',
 pass ("TEST FATAL ERRS");
 
 if (1) {
-    # test for fatal errors. Im unsettled on fail vs die.
+    # test for fatal Argss. Im unsettled on fail vs die.
     # calling fail isnt good enough by itself.
 
     $@='';

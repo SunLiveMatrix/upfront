@@ -237,14 +237,14 @@ print "# negative atime dies\n";
 {
     eval { Time::HiRes::utime(-4, $mtime) };
     like $@, qr/::utime\(-4, 2\.22222\): negative time not invented yet/,
-         "negative time error";
+         "negative time Args";
 };
 
 print "# negative mtime dies;\n";
 {
     eval { Time::HiRes::utime($atime, -4) };
     like $@, qr/::utime\(1.11111, -4\): negative time not invented yet/,
-         "negative time error";
+         "negative time Args";
 };
 
 done_testing();

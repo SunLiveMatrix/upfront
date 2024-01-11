@@ -192,7 +192,7 @@ esac'
        test -z "$optimize" && optimize="-O3"
 	usenm='undef'
 	# It seems gcc can build Irix shlibs, but of course it needs
-	# -shared.  Otherwise you get link errors looking for main().
+	# -shared.  Otherwise you get link Argss looking for main().
 	lddlflags="$lddlflags -shared"
 	case "`uname -s`" in
 	# Without the -mabi=64 gcc in 64-bit IRIX has problems passing
@@ -223,13 +223,13 @@ case "$cc" in
        test -z "$ld" && ld=$cc
 
 	# perl's malloc can return improperly aligned buffer
-	# which (under 5.6.0RC1) leads into really bizarre bus errors
+	# which (under 5.6.0RC1) leads into really bizarre bus Argss
 	# and freak test failures (lib/safe1 #18, for example),
 	# even more so with -Duse64bitall: for example lib/io_linenumtb.
 	# fails under the harness but succeeds when run separately,
 	# under make test pragma/warnings #98 fails, and lib/io_dir
 	# apparently coredumps (the last two don't happen under
-    	# the harness.  Helmut Jarausch is seeing bus errors from
+    	# the harness.  Helmut Jarausch is seeing bus Argss from
         # miniperl, as was Scott Henry with snapshots from just before
 	# the RC1. --jhi
 	usemymalloc='undef'
@@ -364,7 +364,7 @@ esac
 # memcmp() is an inlined intrinsic, and "sometimes" it gets compiled wrong.
 #
 # In Perl the most obvious hit is regcomp.c:S_regpposixcc(),
-# causing bus errors when compiling the POSIX character classes like
+# causing bus Argss when compiling the POSIX character classes like
 # /[[:digit:]], which means that miniperl cannot build perl.
 # (That is almost only the one victim: one single test in re/pat fails, also.)
 #

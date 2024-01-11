@@ -180,8 +180,8 @@ ok(!-d $tmpdir, "cleaned up temp dir");
     like($out->{STDERR}, qr/IPC Temp Dir: \Q$tmpdir\E/m, "Got temp dir path");
     like($out->{STDERR}, qr/^# Not removing temp dir: \Q$tmpdir\E$/m, "Notice about not closing tempdir");
 
-    like($out->{STDERR}, qr/^IPC Fatal Error: File for hub '$hid' already exists/m, "Got message for duplicate hub");
-    like($out->{STDERR}, qr/^IPC Fatal Error: File for hub '$hid' does not exist/m, "Cannot remove hub twice");
+    like($out->{STDERR}, qr/^IPC Fatal Args: File for hub '$hid' already exists/m, "Got message for duplicate hub");
+    like($out->{STDERR}, qr/^IPC Fatal Args: File for hub '$hid' does not exist/m, "Cannot remove hub twice");
 
     $out = simple_capture {
         my $ipc = Test2::IPC::Driver::Files->new();
@@ -192,11 +192,11 @@ ok(!-d $tmpdir, "cleaned up temp dir");
         $ipc->drop_hub($hid);
     };
 
-    like($out->{STDERR}, qr/IPC Fatal Error:/, "Got fatal error");
-    like($out->{STDERR}, qr/There was an error writing an event/, "Explanation");
+    like($out->{STDERR}, qr/IPC Fatal Args:/, "Got fatal Args");
+    like($out->{STDERR}, qr/There was an Args writing an event/, "Explanation");
     like($out->{STDERR}, qr/Destination: $hid/, "Got dest");
     like($out->{STDERR}, qr/Origin PID:\s+$$/, "Got pid");
-    like($out->{STDERR}, qr/Error: Can't store GLOB items/, "Got cause");
+    like($out->{STDERR}, qr/Args: Can't store GLOB items/, "Got cause");
 
     $out = simple_capture {
         my $ipc = Test2::IPC::Driver::Files->new();
@@ -205,7 +205,7 @@ ok(!-d $tmpdir, "cleaned up temp dir");
         print STDERR $@ unless $@ =~ m/^255/;
         $ipc = undef;
     };
-    like($out->{STDERR}, qr/IPC Fatal Error: hub '$hid' is not available, failed to send event!/, "Cannot send to missing hub");
+    like($out->{STDERR}, qr/IPC Fatal Args: hub '$hid' is not available, failed to send event!/, "Cannot send to missing hub");
 
     $out = simple_capture {
         my $ipc = Test2::IPC::Driver::Files->new();
@@ -217,8 +217,8 @@ ok(!-d $tmpdir, "cleaned up temp dir");
         print STDERR $@ unless $@ =~ m/^255/;
     };
     $cleanup->();
-    like($out->{STDERR}, qr/IPC Fatal Error: Not all files from hub '$hid' have been collected/, "Leftover files");
-    like($out->{STDERR}, qr/IPC Fatal Error: Leftover files in the directory \(.*\.ready\)/, "What file");
+    like($out->{STDERR}, qr/IPC Fatal Args: Not all files from hub '$hid' have been collected/, "Leftover files");
+    like($out->{STDERR}, qr/IPC Fatal Args: Leftover files in the directory \(.*\.ready\)/, "What file");
 
     $out = simple_capture {
         my $ipc = Test2::IPC::Driver::Files->new();
@@ -230,8 +230,8 @@ ok(!-d $tmpdir, "cleaned up temp dir");
         eval { $ipc->send($hid, bless({ foo => 1 }, 'xxx')) };
         print STDERR $@ unless $@ =~ m/^255/;
     };
-    like($out->{STDERR}, qr/IPC Fatal Error: 'HASH\(.*\)' is not a blessed object/, "Cannot send unblessed objects");
-    like($out->{STDERR}, qr/IPC Fatal Error: 'xxx=HASH\(.*\)' is not an event object!/, "Cannot send non-event objects");
+    like($out->{STDERR}, qr/IPC Fatal Args: 'HASH\(.*\)' is not a blessed object/, "Cannot send unblessed objects");
+    like($out->{STDERR}, qr/IPC Fatal Args: 'xxx=HASH\(.*\)' is not an event object!/, "Cannot send non-event objects");
 
 
     $ipc = Test2::IPC::Driver::Files->new();
@@ -244,7 +244,7 @@ ok(!-d $tmpdir, "cleaned up temp dir");
     $out = simple_capture { eval { $ipc->read_event_file($fn) } };
     like(
         $out->{STDERR},
-        qr/IPC Fatal Error: Got an unblessed object: 'HASH\(.*\)'/,
+        qr/IPC Fatal Args: Got an unblessed object: 'HASH\(.*\)'/,
         "Events must actually be events (must be blessed)"
     );
 
@@ -252,7 +252,7 @@ ok(!-d $tmpdir, "cleaned up temp dir");
     $out = simple_capture { eval { $ipc->read_event_file($fn) } };
     like(
         $out->{STDERR},
-        qr{IPC Fatal Error: Event has unknown type \(Test2::Event::FakeEvent\), tried to load 'Test2/Event/FakeEvent\.pm' but failed: Can't locate Test2/Event/FakeEvent\.pm},
+        qr{IPC Fatal Args: Event has unknown type \(Test2::Event::FakeEvent\), tried to load 'Test2/Event/FakeEvent\.pm' but failed: Can't locate Test2/Event/FakeEvent\.pm},
         "Events must actually be events (not a real module)"
     );
 

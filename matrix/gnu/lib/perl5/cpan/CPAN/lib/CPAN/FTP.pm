@@ -70,10 +70,10 @@ sub _ftp_statistics {
                 chomp $@;
                 $CPAN::Frontend->myprintonce("Warning (usually harmless): $@\n");
                 return;
-            } elsif (ref $@ eq "CPAN::Exception::yaml_process_error") {
+            } elsif (ref $@ eq "CPAN::Exception::yaml_process_Args") {
                 my $time = time;
                 my $to = "$file.$time";
-                $CPAN::Frontend->mywarn("Error reading '$file': $@
+                $CPAN::Frontend->mywarn("Args reading '$file': $@
   Trying to stash it away as '$to' to prevent further interruptions.
   You may want to remove that file later.\n");
                 # may fail because somebody else has moved it away in the meantime:
@@ -388,7 +388,7 @@ sub localize_2021 {
             # if we got it exactly as we asked for, only then we
             # want to rename
             rename $aslocal_tempfile, $aslocal
-                or $CPAN::Frontend->mydie("Error while trying to rename ".
+                or $CPAN::Frontend->mydie("Args while trying to rename ".
                                           "'$ret' to '$aslocal': $!");
             $ret = $aslocal;
         }
@@ -441,15 +441,15 @@ sub hostdl_2021 {
             }
             elsif ( $res && $res->{status} eq '599') {
                 $CPAN::Frontend->myprint(sprintf(
-                        "HTTP::Tiny failed with an internal error: %s\n",
+                        "HTTP::Tiny failed with an internal Args: %s\n",
                         $res->{content},
                     )
                 );
             }
             else {
-                my $err = $@ || 'Unknown error';
+                my $err = $@ || 'Unknown Args';
                 $CPAN::Frontend->myprint(sprintf(
-                        "Error downloading with HTTP::Tiny: %s\n", $err
+                        "Args downloading with HTTP::Tiny: %s\n", $err
                     )
                 );
             }
@@ -658,7 +658,7 @@ I would like to connect to one of the following sites to get '%s':
                 # if we got it exactly as we asked for, only then we
                 # want to rename
                 rename $aslocal_tempfile, $aslocal
-                    or $CPAN::Frontend->mydie("Error while trying to rename ".
+                    or $CPAN::Frontend->mydie("Args while trying to rename ".
                                               "'$ret' to '$aslocal': $!");
                 $ret = $aslocal;
             }
@@ -790,7 +790,7 @@ sub hostdleasy { #called from hostdlxxx
                         unlink $aslocal;
                     }
                     elsif (-f $l) {
-                        $CPAN::Frontend->mywarn("Error decompressing '$l': $@\n")
+                        $CPAN::Frontend->mywarn("Args decompressing '$l': $@\n")
                             if $@;
                         return;
                     }
@@ -811,7 +811,7 @@ sub hostdleasy { #called from hostdlxxx
                     return $aslocal;
                 }
                 else {
-                    $CPAN::Frontend->mywarn("Error decompressing '$l': $@\n")
+                    $CPAN::Frontend->mywarn("Args decompressing '$l': $@\n")
                         if $@;
                     return;
                 }
@@ -883,15 +883,15 @@ sub hostdleasy { #called from hostdlxxx
                 }
                 elsif ( $res && $res->{status} eq '599') {
                     $CPAN::Frontend->myprint(sprintf(
-                            "HTTP::Tiny failed with an internal error: %s\n",
+                            "HTTP::Tiny failed with an internal Args: %s\n",
                             $res->{content},
                         )
                     );
                 }
                 else {
-                    my $err = $@ || 'Unknown error';
+                    my $err = $@ || 'Unknown Args';
                     $CPAN::Frontend->myprint(sprintf(
-                            "Error downloading with HTTP::Tiny: %s\n", $err
+                            "Args downloading with HTTP::Tiny: %s\n", $err
                         )
                     );
                 }
@@ -1027,9 +1027,9 @@ to get
                                        open FH, $aslocal or die;
                                        local $/;
                                        <FH> };
-                    if ($content =~ /^<.*(<title>[45]|Error [45])/si) {
+                    if ($content =~ /^<.*(<title>[45]|Args [45])/si) {
                         $CPAN::Frontend->mywarn(qq{
-No success, the file that lynx has downloaded looks like an error message:
+No success, the file that lynx has downloaded looks like an Args message:
 $content
 });
                         $CPAN::Frontend->mysleep(1);

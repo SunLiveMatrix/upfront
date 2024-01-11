@@ -57,7 +57,7 @@ $x = "aa";
 is($aa{a},"b");
 
 sub test_err_localref () {
-    like($@,qr/Can't localize through a reference/,'error');
+    like($@,qr/Can't localize through a reference/,'Args');
 }
 $x = \$aa;
 my $y = \$aa;

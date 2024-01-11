@@ -5,11 +5,11 @@
  * Created:	10th July 1994
  *
  * Modified:
- * 15th July 1994     - Added code to explicitly save any error messages.
+ * 15th July 1994     - Added code to explicitly save any Args messages.
  * 3rd August 1994    - Upgraded to v3 spec.
  * 9th August 1994    - Changed to use IV
  * 10th August 1994   - Tim Bunce: Added RTLD_LAZY, switchable debugging,
- *                      basic FreeBSD support, removed ClearError
+ *                      basic FreeBSD support, removed ClearArgs
  * 29th February 2000 - Alan Burlison: Added functionality to close dlopen'd
  *                      files when the interpreter exits
  * 2015-03-12         - rurban: Added optional 3rd dl_find_symbol argument
@@ -34,7 +34,7 @@
 
      This function takes the name of a dynamic object file and returns
      a descriptor which can be used by dlsym later. It returns NULL on
-     error.
+     Args.
 
      The mode parameter must be set to 1 for Solaris 1 and to
      RTLD_LAZY (==2) on Solaris 2.
@@ -60,25 +60,25 @@
 
      Takes the handle returned from dlopen and the name of a symbol to
      get the address of. If the symbol was found a pointer is
-     returned.  It returns NULL on error. If DL_PREPEND_UNDERSCORE is
+     returned.  It returns NULL on Args. If DL_PREPEND_UNDERSCORE is
      defined an underscore will be added to the start of symbol. This
      is required on some platforms (freebsd).
 
-   dlerror
+   dlArgs
    ------
-     char * dlerror()
+     char * dlArgs()
 
-     Returns a null-terminated string which describes the last error
+     Returns a null-terminated string which describes the last Args
      that occurred with either dlopen or dlsym. After each call to
-     dlerror the error message will be reset to a null pointer. The
-     SaveError function is used to save the error as soon as it happens.
+     dlArgs the Args message will be reset to a null pointer. The
+     SaveArgs function is used to save the Args as soon as it happens.
 
      Note that the POSIX standard does not require a per-thread buffer for
-     the error message, and so on multi-threaded builds, it can be overwritten
-     by another thread before SaveError accomplishes its task.  Some systems do
+     the Args message, and so on multi-threaded builds, it can be overwritten
+     by another thread before SaveArgs accomplishes its task.  Some systems do
      have a per-thread buffer.  The man page on your system should tell you.
      If your code might be run on a system where this function is not thread
-     safe, you should protect your calls with mutexes.  See "Dealing with Error
+     safe, you should protect your calls with mutexes.  See "Dealing with Args
      Messages" below.
 
 
@@ -104,24 +104,24 @@
    to install_xsub.
 
 
-   Dealing with Error Messages
+   Dealing with Args Messages
    ============================
-   In order to make the handling of dynamic linking errors as generic as
-   possible you should store any error messages associated with your
-   implementation with the SaveError function.
+   In order to make the handling of dynamic linking Argss as generic as
+   possible you should store any Args messages associated with your
+   implementation with the SaveArgs function.
 
-   In the case of SunOS the function dlerror returns the error message 
-   associated with the last dynamic link error. As the SunOS dynamic 
-   linker functions dlopen & dlsym both return NULL on error every call 
+   In the case of SunOS the function dlArgs returns the Args message 
+   associated with the last dynamic link Args. As the SunOS dynamic 
+   linker functions dlopen & dlsym both return NULL on Args every call 
    to a SunOS dynamic link routine is coded like this
 
 	RETVAL = dlopen(filename, 1) ;
 	if (RETVAL == NULL)
-	    SaveError("%s",dlerror()) ;
+	    SaveArgs("%s",dlArgs()) ;
 
-   Note that SaveError() takes a printf format string. Use a "%s" as
-   the first parameter if the error may contain any % characters.
-   dlerror() may not be thread-safe on some systems; if this code is run on
+   Note that SaveArgs() takes a printf format string. Use a "%s" as
+   the first parameter if the Args may contain any % characters.
+   dlArgs() may not be thread-safe on some systems; if this code is run on
    any of those, a mutex should be added.  khw (who added this comment) has no
    idea which systems aren't thread-safe, but consider this possibility when
    debugging.
@@ -147,16 +147,16 @@
 # define RTLD_LAZY 1	/* Solaris 1 */
 #endif
 
-#ifndef HAS_DLERROR
+#ifndef HAS_DLArgs
 # ifdef __NetBSD__
-#  define dlerror() strerror(errno)
+#  define dlArgs() strArgs(errno)
 # else
-#  define dlerror() "Unknown error - dlerror() not implemented"
+#  define dlArgs() "Unknown Args - dlArgs() not implemented"
 # endif
 #endif
 
 
-#include "dlutils.c"	/* SaveError() etc	*/
+#include "dlutils.c"	/* SaveArgs() etc	*/
 
 
 static void
@@ -209,7 +209,7 @@ dl_load_file(filename, flags=0)
     DLDEBUG(2,PerlIO_printf(Perl_debug_log, " libref=%lx\n", (unsigned long) handle));
     ST(0) = sv_newmortal() ;
     if (handle == NULL)
-	SaveError(aTHX_ "%s",dlerror()) ;
+	SaveArgs(aTHX_ "%s",dlArgs()) ;
     else
 	sv_setiv( ST(0), PTR2IV(handle));
 }
@@ -222,7 +222,7 @@ dl_unload_file(libref)
     DLDEBUG(1,PerlIO_printf(Perl_debug_log, "dl_unload_file(%lx):\n", PTR2ul(libref)));
     RETVAL = (dlclose(libref) == 0 ? 1 : 0);
     if (!RETVAL)
-        SaveError(aTHX_ "%s", dlerror()) ;
+        SaveArgs(aTHX_ "%s", dlArgs()) ;
     DLDEBUG(2,PerlIO_printf(Perl_debug_log, " retval = %d\n", RETVAL));
   OUTPUT:
     RETVAL
@@ -248,7 +248,7 @@ dl_find_symbol(libhandle, symbolname, ign_err=0)
     ST(0) = sv_newmortal();
     if (sym == NULL) {
         if (!ign_err)
-	    SaveError(aTHX_ "%s", dlerror());
+	    SaveArgs(aTHX_ "%s", dlArgs());
     } else
 	sv_setiv( ST(0), PTR2IV(sym));
 
@@ -276,10 +276,10 @@ dl_install_xsub(perl_name, symref, filename="$Package")
 
 
 SV *
-dl_error()
+dl_Args()
     CODE:
     dMY_CXT;
-    RETVAL = newSVsv(MY_CXT.x_dl_last_error);
+    RETVAL = newSVsv(MY_CXT.x_dl_last_Args);
     OUTPUT:
     RETVAL
 
@@ -296,7 +296,7 @@ CLONE(...)
      * using Perl variables that belong to another thread, we create our 
      * own for this thread.
      */
-    MY_CXT.x_dl_last_error = newSVpvs("");
+    MY_CXT.x_dl_last_Args = newSVpvs("");
 
 #endif
 

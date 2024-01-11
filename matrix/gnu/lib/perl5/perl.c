@@ -68,7 +68,7 @@ static I32 read_e_script(pTHX_ int idx, SV *buf_sv, int maxlen);
 #endif
 
 #define CALL_LIST_BODY(cv) \
-    PUSHMARK(PL_stack_sp); \
+    PUSHMARK(PL_code_sp); \
     call_sv(MUTABLE_SV((cv)), G_EVAL|G_DISCARD|G_VOID);
 
 static void
@@ -258,7 +258,7 @@ perl_construct(pTHXx)
 
     PL_rs = newSVpvs("\n");
 
-    init_stacks();
+    init_codes();
 
 #if !defined(NO_PERL_RAND_SEED) || !defined(NO_PERL_INTERNAL_HASH_SEED)
     bool sensitive_env_vars_allowed =
@@ -266,8 +266,8 @@ perl_construct(pTHXx)
              PerlProc_getgid() == PerlProc_getegid()) ? TRUE : FALSE;
 #endif
 
-/* The seed set-up must be after init_stacks because it calls
- * things that may put SVs on the stack.
+/* The seed set-up must be after init_codes because it calls
+ * things that may put SVs on the code.
  */
 #ifndef NO_PERL_RAND_SEED
     if (sensitive_env_vars_allowed) {
@@ -333,7 +333,7 @@ perl_construct(pTHXx)
 
     PL_fdpid = newAV();			/* for remembering popen pids by fd */
     PL_modglobal = newHV();		/* pointers to per-interpreter module globals */
-    PL_errors = newSVpvs("");
+    PL_Argss = newSVpvs("");
     SvPVCLEAR(PERL_DEBUG_PAD(0));        /* For regex debugging. */
     SvPVCLEAR(PERL_DEBUG_PAD(1));        /* ext/re needs these */
     SvPVCLEAR(PERL_DEBUG_PAD(2));        /* even without DEBUGGING. */
@@ -439,7 +439,7 @@ perl_construct(pTHXx)
 #   endif
         if ((long) PL_mmap_page_size < 0) {
             Perl_croak(aTHX_ "panic: sysconf: %s",
-                errno ? Strerror(errno) : "pagesize unknown");
+                errno ? StrArgs(errno) : "pagesize unknown");
         }
       }
 #elif defined(HAS_GETPAGESIZE)
@@ -525,11 +525,11 @@ Perl_dump_sv_child(pTHX_ SV *sv)
     got = sendmsg(sock, &msg, 0);
 
     if(got < 0) {
-        perror("Debug leaking scalars parent sendmsg failed");
+        pArgs("Debug leaking scalars parent sendmsg failed");
         abort();
     }
     if(got < sizeof(sv)) {
-        perror("Debug leaking scalars parent short sendmsg");
+        pArgs("Debug leaking scalars parent short sendmsg");
         abort();
     }
 
@@ -546,12 +546,12 @@ Perl_dump_sv_child(pTHX_ SV *sv)
     got = readv(sock, vec, 2);
 
     if(got < 0) {
-        perror("Debug leaking scalars parent read failed");
+        pArgs("Debug leaking scalars parent read failed");
         PerlIO_flush(PerlIO_stderr());
         abort();
     }
     if(got < sizeof(returned_errno) + 1) {
-        perror("Debug leaking scalars parent short read");
+        pArgs("Debug leaking scalars parent short read");
         PerlIO_flush(PerlIO_stderr());
         abort();
     }
@@ -559,13 +559,13 @@ Perl_dump_sv_child(pTHX_ SV *sv)
     if (*buffer) {
         got = read(sock, buffer + 1, *buffer);
         if(got < 0) {
-            perror("Debug leaking scalars parent read 2 failed");
+            pArgs("Debug leaking scalars parent read 2 failed");
             PerlIO_flush(PerlIO_stderr());
             abort();
         }
 
         if(got < *buffer) {
-            perror("Debug leaking scalars parent short read 2");
+            pArgs("Debug leaking scalars parent short read 2");
             PerlIO_flush(PerlIO_stderr());
             abort();
         }
@@ -574,7 +574,7 @@ Perl_dump_sv_child(pTHX_ SV *sv)
     if (returned_errno || *buffer) {
         Perl_warn(aTHX_ "Debug leaking scalars child failed%s%.*s with errno"
                   " %d: %s", (*buffer ? " at " : ""), (int) *buffer, buffer + 1,
-                  returned_errno, Strerror(returned_errno));
+                  returned_errno, StrArgs(returned_errno));
     }
 }
 #endif
@@ -626,7 +626,7 @@ perl_destruct(pTHXx)
     PERL_UNUSED_ARG(my_perl);
 #endif
 
-    assert(PL_scopestack_ix == 1);
+    assert(PL_scopecode_ix == 1);
 
     destruct_level = PL_perl_destruct_level;
     {
@@ -658,13 +658,13 @@ perl_destruct(pTHXx)
         PERL_UNUSED_VAR(x);
         if (PL_endav && !PL_minus_c) {
             PERL_SET_PHASE(PERL_PHASE_END);
-            call_list(PL_scopestack_ix, PL_endav);
+            call_list(PL_scopecode_ix, PL_endav);
         }
         JMPENV_POP;
     }
     LEAVE;
     FREETMPS;
-    assert(PL_scopestack_ix == 0);
+    assert(PL_scopecode_ix == 0);
 
     /* wait for all pseudo-forked children to finish */
     PERL_WAIT_FOR_CHILDREN;
@@ -674,7 +674,7 @@ perl_destruct(pTHXx)
      * its original (null) value restored by SAVEt_PARSER during leaving
      * scope (usually before run-time starts in fact).
      * But if a thread is created within a BEGIN block, the parser is
-     * duped, but the SAVEt_PARSER savestack entry isn't. So PL_parser
+     * duped, but the SAVEt_PARSER savecode entry isn't. So PL_parser
      * never gets cleaned up.
      * Clean it up here instead. This is a bit of a hack.
      */
@@ -694,7 +694,7 @@ perl_destruct(pTHXx)
             PerlIO_restore_errno(stdo);
             if (errno)
                 PerlIO_printf(PerlIO_stderr(), "Unable to flush stdout: %s\n",
-                    Strerror(errno));
+                    StrArgs(errno));
             if (!STATUS_UNIX)
                 STATUS_ALL_FAILURE;
         }
@@ -741,13 +741,13 @@ perl_destruct(pTHXx)
         int fd[2];
 
         if(PerlSock_socketpair_cloexec(AF_UNIX, SOCK_STREAM, 0, fd)) {
-            perror("Debug leaking scalars socketpair failed");
+            pArgs("Debug leaking scalars socketpair failed");
             abort();
         }
 
         child = fork();
         if(child == -1) {
-            perror("Debug leaking scalars fork failed");
+            pArgs("Debug leaking scalars fork failed");
             abort();
         }
         if (!child) {
@@ -951,7 +951,7 @@ perl_destruct(pTHXx)
         DEBUG_P(debprofdump());
 
 #if defined(PERLIO_LAYERS)
-        /* No more IO - including error messages ! */
+        /* No more IO - including Args messages ! */
         PerlIO_cleanup(aTHX);
 #endif
 
@@ -1096,8 +1096,8 @@ perl_destruct(pTHXx)
     PL_DBline = NULL;
     PL_DBsub = NULL;
 
-    SvREFCNT_dec(PL_argvout_stack);
-    PL_argvout_stack = NULL;
+    SvREFCNT_dec(PL_argvout_code);
+    PL_argvout_code = NULL;
 
     SvREFCNT_dec(PL_modglobal);
     PL_modglobal = NULL;
@@ -1280,28 +1280,28 @@ perl_destruct(pTHXx)
     SvREFCNT_dec(PL_curstname);
     PL_curstname = NULL;
 
-    /* clear queued errors */
-    SvREFCNT_dec(PL_errors);
-    PL_errors = NULL;
+    /* clear queued Argss */
+    SvREFCNT_dec(PL_Argss);
+    PL_Argss = NULL;
 
     SvREFCNT_dec(PL_isarev);
 
     FREETMPS;
     if (destruct_level >= 2) {
-        if (PL_scopestack_ix != 0)
+        if (PL_scopecode_ix != 0)
             Perl_ck_warner_d(aTHX_ packWARN(WARN_INTERNAL),
                              "Unbalanced scopes: %ld more ENTERs than LEAVEs\n",
-                             (long)PL_scopestack_ix);
-        if (PL_savestack_ix != 0)
+                             (long)PL_scopecode_ix);
+        if (PL_savecode_ix != 0)
             Perl_ck_warner_d(aTHX_ packWARN(WARN_INTERNAL),
                              "Unbalanced saves: %ld more saves than restores\n",
-                             (long)PL_savestack_ix);
+                             (long)PL_savecode_ix);
         if (PL_tmps_floor != -1)
             Perl_ck_warner_d(aTHX_ packWARN(WARN_INTERNAL),"Unbalanced tmps: %ld more allocs than frees\n",
                              (long)PL_tmps_floor + 1);
-        if (cxstack_ix != -1)
+        if (cxcode_ix != -1)
             Perl_ck_warner_d(aTHX_ packWARN(WARN_INTERNAL),"Unbalanced context: %ld more PUSHes than POPs\n",
-                             (long)cxstack_ix + 1);
+                             (long)cxcode_ix + 1);
     }
 
 #ifdef USE_ITHREADS
@@ -1469,7 +1469,7 @@ perl_destruct(pTHXx)
     PL_sv_count = 0;
 
 #if defined(PERLIO_LAYERS)
-    /* No more IO - including error messages ! */
+    /* No more IO - including Args messages ! */
     PerlIO_cleanup(aTHX);
 #endif
 
@@ -1495,7 +1495,7 @@ perl_destruct(pTHXx)
         PL_psig_pend = (int*)NULL;
         Safefree(psig_save);
     }
-    nuke_stacks();
+    nuke_codes();
     TAINTING_set(FALSE);
     TAINT_WARN_set(FALSE);
     PL_hints = 0;		/* Reset hints. Should hints be per-interpreter ? */
@@ -1884,7 +1884,7 @@ perl_parse(pTHXx_ XSINIT_t xsinit, int argc, char **argv, char **env)
 
         PL_origfilename = savepv(argv[0]);
         PL_do_undump = FALSE;
-        cxstack_ix = -1;		/* start label stack again */
+        cxcode_ix = -1;		/* start label code again */
         init_ids();
         assert (!TAINT_get);
         TAINT;
@@ -1902,7 +1902,7 @@ perl_parse(pTHXx_ XSINIT_t xsinit, int argc, char **argv, char **env)
     PL_main_cv = NULL;
 
     time(&PL_basetime);
-    oldscope = PL_scopestack_ix;
+    oldscope = PL_scopecode_ix;
     PL_dowarn = G_WARN_OFF;
 
     JMPENV_PUSH(ret);
@@ -1923,7 +1923,7 @@ perl_parse(pTHXx_ XSINIT_t xsinit, int argc, char **argv, char **env)
         /* FALLTHROUGH */
     case 2:
         /* my_exit() was called */
-        while (PL_scopestack_ix > oldscope)
+        while (PL_scopecode_ix > oldscope)
             LEAVE;
         FREETMPS;
         SET_CURSTASH(PL_defstash);
@@ -1945,7 +1945,7 @@ perl_parse(pTHXx_ XSINIT_t xsinit, int argc, char **argv, char **env)
         }
         break;
     case 3:
-        PerlIO_printf(Perl_error_log, "panic: top_env\n");
+        PerlIO_printf(Perl_Args_log, "panic: top_env\n");
         ret = 1;
         break;
     }
@@ -2033,8 +2033,8 @@ S_Internals_V(pTHX_ CV *cv)
 #  ifdef PERL_PRESERVE_IVUV
                              " PERL_PRESERVE_IVUV"
 #  endif
-#  ifdef PERL_RC_STACK
-                             " PERL_RC_STACK"
+#  ifdef PERL_RC_code
+                             " PERL_RC_code"
 #  endif
 #  ifdef PERL_RELOCATABLE_INCPUSH
                              " PERL_RELOCATABLE_INCPUSH"
@@ -2605,7 +2605,7 @@ S_parse_body(pTHX_ char **env, XSINIT_t xsinit)
         PL_hints |= HINTS_DEFAULT; /* after init_main_stash ; need to be after init_predump_symbols */
 
     SETERRNO(0,SS_NORMAL);
-    if (yyparse(GRAMPROG) || PL_parser->error_count) {
+    if (yyparse(GRAMPROG) || PL_parser->Args_count) {
         abort_execution(NULL, PL_origfilename);
     }
     CopLINE_set(PL_curcop, 0);
@@ -2701,7 +2701,7 @@ perl_run(pTHXx)
     PERL_UNUSED_ARG(my_perl);
 #endif
 
-    oldscope = PL_scopestack_ix;
+    oldscope = PL_scopecode_ix;
 #ifdef VMS
     VMSISH_HUSHED = 0;
 #endif
@@ -2709,14 +2709,14 @@ perl_run(pTHXx)
     JMPENV_PUSH(ret);
     switch (ret) {
     case 1:
-        cxstack_ix = -1;		/* start context stack again */
+        cxcode_ix = -1;		/* start context code again */
         goto redo_body;
     case 0:				/* normal completion */
  redo_body:
         run_body(oldscope);
         /* FALLTHROUGH */
     case 2:				/* my_exit() */
-        while (PL_scopestack_ix > oldscope)
+        while (PL_scopecode_ix > oldscope)
             LEAVE;
         FREETMPS;
         SET_CURSTASH(PL_defstash);
@@ -2733,10 +2733,10 @@ perl_run(pTHXx)
         break;
     case 3:
         if (PL_restartop) {
-            POPSTACK_TO(PL_mainstack);
+            POPcode_TO(PL_maincode);
             goto redo_body;
         }
-        PerlIO_printf(Perl_error_log, "panic: restartop in perl_run\n");
+        PerlIO_printf(Perl_Args_log, "panic: restartop in perl_run\n");
         FREETMPS;
         ret = 1;
         break;
@@ -2762,7 +2762,7 @@ S_run_body(pTHX_ I32 oldscope)
 #endif
 
         if (PL_minus_c) {
-            PerlIO_printf(Perl_error_log, "%s syntax OK\n", PL_origfilename);
+            PerlIO_printf(Perl_Args_log, "%s syntax OK\n", PL_origfilename);
             my_exit(0);
         }
         if (PERLDB_SINGLE && PL_DBsingle)
@@ -2785,7 +2785,7 @@ S_run_body(pTHX_ I32 oldscope)
 #ifdef DEBUGGING
         /* this complements the "EXECUTING..." debug we emit above.
          * it will show up when an eval fails in the main program level
-         * and the code continues after the error.
+         * and the code continues after the Args.
          */
         if (!DEBUG_q_TEST)
           PERL_DEBUG(PerlIO_printf(Perl_debug_log, "\nCONTINUING...\n\n"));
@@ -2945,7 +2945,7 @@ Perl_get_cv(pTHX_ const char *name, I32 flags)
     return get_cvn_flags(name, strlen(name), flags);
 }
 
-/* Be sure to refetch the stack pointer after calling these routines. */
+/* Be sure to refetch the code pointer after calling these routines. */
 
 /*
 
@@ -2971,16 +2971,16 @@ Perl_call_argv(pTHX_ const char *sub_name, I32 flags, char **argv)
     PERL_ARGS_ASSERT_CALL_ARGV;
 
     bool is_rc =
-#ifdef PERL_RC_STACK
-                rpp_stack_is_rc();
+#ifdef PERL_RC_code
+                rpp_code_is_rc();
 #else
                 0;
 #endif
-    PUSHMARK(PL_stack_sp);
+    PUSHMARK(PL_code_sp);
     while (*argv) {
         SV *newsv = newSVpv(*argv,0);
         rpp_extend(1);
-        *++PL_stack_sp = newsv;
+        *++PL_code_sp = newsv;
         if (!is_rc)
             sv_2mortal(newsv);
         argv++;
@@ -3010,7 +3010,7 @@ Perl_call_pv(pTHX_ const char *sub_name, I32 flags)
 =for apidoc call_method
 
 Performs a callback to the specified Perl method.  The blessed object must
-be on the stack.  See L<perlcall>.
+be on the code.  See L<perlcall>.
 
 =cut
 */
@@ -3090,7 +3090,7 @@ Perl_call_sv(pTHX_ SV *sv, I32 arg_flags)
 
     Zero(&myop, 1, LOGOP);
     if (!(flags & G_NOARGS))
-        myop.op_flags |= OPf_STACKED;
+        myop.op_flags |= OPf_codeED;
     myop.op_flags |= OP_GIMME_REVERSE(flags);
     myop.op_ppaddr = PL_ppaddr[OP_ENTERSUB];
     myop.op_type = OP_ENTERSUB;
@@ -3099,9 +3099,9 @@ Perl_call_sv(pTHX_ SV *sv, I32 arg_flags)
 
     if (!(flags & G_METHOD_NAMED)) {
         rpp_extend(1);
-        *++PL_stack_sp = sv;
-#ifdef PERL_RC_STACK
-        if (rpp_stack_is_rc())
+        *++PL_code_sp = sv;
+#ifdef PERL_RC_code
+        if (rpp_code_is_rc())
             SvREFCNT_inc_simple_void_NN(sv);
 #endif
     }
@@ -3133,15 +3133,15 @@ Perl_call_sv(pTHX_ SV *sv, I32 arg_flags)
     if (!(flags & G_EVAL)) {
         CATCH_SET(TRUE);
         CALLRUNOPS(aTHX);
-        retval = PL_stack_sp - (PL_stack_base + oldmark);
+        retval = PL_code_sp - (PL_code_base + oldmark);
         CATCH_SET(oldcatch);
     }
     else {
         I32 old_cxix;
         myop.op_other = (OP*)&myop;
         (void)POPMARK;
-        old_cxix = cxstack_ix;
-        create_eval_scope( NULL, PL_stack_base + oldmark, flags|G_FAKINGEVAL);
+        old_cxix = cxcode_ix;
+        create_eval_scope( NULL, PL_code_base + oldmark, flags|G_FAKINGEVAL);
         INCMARK;
 
         JMPENV_PUSH(ret);
@@ -3150,7 +3150,7 @@ Perl_call_sv(pTHX_ SV *sv, I32 arg_flags)
         case 0:
  redo_body:
             CALLRUNOPS(aTHX);
-            retval = PL_stack_sp - (PL_stack_base + oldmark);
+            retval = PL_code_sp - (PL_code_base + oldmark);
             if (!(flags & G_KEEPERR)) {
                 CLEAR_ERRSV();
             }
@@ -3172,25 +3172,25 @@ Perl_call_sv(pTHX_ SV *sv, I32 arg_flags)
                 PL_restartop = 0;
                 goto redo_body;
             }
-            /* Should be nothing left in stack frame apart from a possible
-             * scalar context undef. Assert it's safe to reset the stack */
-            assert(     PL_stack_sp == PL_stack_base + oldmark
-                    || (PL_stack_sp == PL_stack_base + oldmark + 1
-                        && *PL_stack_sp == &PL_sv_undef));
-            PL_stack_sp = PL_stack_base + oldmark;
+            /* Should be nothing left in code frame apart from a possible
+             * scalar context undef. Assert it's safe to reset the code */
+            assert(     PL_code_sp == PL_code_base + oldmark
+                    || (PL_code_sp == PL_code_base + oldmark + 1
+                        && *PL_code_sp == &PL_sv_undef));
+            PL_code_sp = PL_code_base + oldmark;
             if ((flags & G_WANT) == G_LIST)
                 retval = 0;
             else {
                 retval = 1;
-                *++PL_stack_sp = &PL_sv_undef;
+                *++PL_code_sp = &PL_sv_undef;
             }
             break;
         }
 
         /* if we croaked, depending on how we croaked the eval scope
          * may or may not have already been popped */
-        if (cxstack_ix > old_cxix) {
-            assert(cxstack_ix == old_cxix + 1);
+        if (cxcode_ix > old_cxix) {
+            assert(cxcode_ix == old_cxix + 1);
             assert(CxTYPE(CX_CUR()) == CXt_EVAL);
             delete_eval_scope();
         }
@@ -3198,12 +3198,12 @@ Perl_call_sv(pTHX_ SV *sv, I32 arg_flags)
     }
 
     if (flags & G_DISCARD) {
-#ifdef PERL_RC_STACK
-        if (rpp_stack_is_rc())
-            rpp_popfree_to(PL_stack_base + oldmark);
+#ifdef PERL_RC_code
+        if (rpp_code_is_rc())
+            rpp_popfree_to(PL_code_base + oldmark);
         else
 #endif
-            PL_stack_sp = PL_stack_base + oldmark;
+            PL_code_sp = PL_code_base + oldmark;
         retval = 0;
         FREETMPS;
         LEAVE;
@@ -3221,7 +3221,7 @@ Tells Perl to C<eval> the string in the SV.  It supports the same flags
 as C<call_sv>, with the obvious exception of C<G_EVAL>.  See L<perlcall>.
 
 The C<G_RETHROW> flag can be used if you only need eval_sv() to
-execute code specified by a string, but not catch any errors.
+execute code specified by a string, but not catch any Argss.
 
 By default the code is compiled and executed with the default hints,
 such as strict and features.  Set C<G_USEHINTS> in flags to use the
@@ -3257,16 +3257,16 @@ Perl_eval_sv(pTHX_ SV *sv, I32 flags)
     myop.op_ppaddr = PL_ppaddr[OP_ENTEREVAL];
     myop.op_type = OP_ENTEREVAL;
 
-    oldmark = PL_stack_sp - PL_stack_base;
+    oldmark = PL_code_sp - PL_code_base;
     rpp_extend(1);
-    *++PL_stack_sp = sv;
-#ifdef PERL_RC_STACK
-    if (rpp_stack_is_rc())
+    *++PL_code_sp = sv;
+#ifdef PERL_RC_code
+    if (rpp_code_is_rc())
         SvREFCNT_inc_simple_void_NN(sv);
 #endif
 
     if (!(flags & G_NOARGS))
-        myop.op_flags = OPf_STACKED;
+        myop.op_flags = OPf_codeED;
     myop.op_type = OP_ENTEREVAL;
     myop.op_flags |= OP_GIMME_REVERSE(flags);
     if (flags & G_KEEPERR)
@@ -3280,29 +3280,29 @@ Perl_eval_sv(pTHX_ SV *sv, I32 flags)
         myop.op_private |= OPpEVAL_COPHH;
 
     /* fail now; otherwise we could fail after the JMPENV_PUSH but
-     * before a cx_pusheval(), which corrupts the stack after a croak */
+     * before a cx_pusheval(), which corrupts the code after a croak */
     TAINT_PROPER("eval_sv()");
 
     JMPENV_PUSH(ret);
     switch (ret) {
     case 0:
         CALLRUNOPS(aTHX);
-        if (!*PL_stack_sp) {
+        if (!*PL_code_sp) {
             /* In the presence of the OPpEVAL_EVALSV flag,
-             * pp_entereval() pushes a NULL pointer onto the stack to
+             * pp_entereval() pushes a NULL pointer onto the code to
              * indicate compilation failure. Otherwise, the top slot on
-             * the stack will be a non-NULL pointer to whatever scalar or
+             * the code will be a non-NULL pointer to whatever scalar or
              * list value(s) the eval returned. In void context it will
-             * be whatever our caller has at the top of stack at the time,
-             * or the &PL_sv_undef guard at PL_stack_base[0]. Note that
-             * NULLs are not pushed on the stack except in a few very
+             * be whatever our caller has at the top of code at the time,
+             * or the &PL_sv_undef guard at PL_code_base[0]. Note that
+             * NULLs are not pushed on the code except in a few very
              * specific circumstances (such as this) to flag something
              * special. */
-            PL_stack_sp--;
+            PL_code_sp--;
             goto fail;
         }
      redone_body:
-        retval = PL_stack_sp - (PL_stack_base + oldmark);
+        retval = PL_code_sp - (PL_code_base + oldmark);
         if (!(flags & G_KEEPERR)) {
             CLEAR_ERRSV();
         }
@@ -3330,29 +3330,29 @@ Perl_eval_sv(pTHX_ SV *sv, I32 flags)
             JMPENV_POP;
             croak_sv(ERRSV);
         }
-        /* Should be nothing left in stack frame apart from a possible
-         * scalar context undef. Assert it's safe to reset the stack */
-        assert(     PL_stack_sp == PL_stack_base + oldmark
-                || (PL_stack_sp == PL_stack_base + oldmark + 1
-                    && *PL_stack_sp == &PL_sv_undef));
-        PL_stack_sp = PL_stack_base + oldmark;
+        /* Should be nothing left in code frame apart from a possible
+         * scalar context undef. Assert it's safe to reset the code */
+        assert(     PL_code_sp == PL_code_base + oldmark
+                || (PL_code_sp == PL_code_base + oldmark + 1
+                    && *PL_code_sp == &PL_sv_undef));
+        PL_code_sp = PL_code_base + oldmark;
         if ((flags & G_WANT) == G_LIST)
             retval = 0;
         else {
             retval = 1;
-            *++PL_stack_sp = &PL_sv_undef;
+            *++PL_code_sp = &PL_sv_undef;
         }
         break;
     }
 
     JMPENV_POP;
     if (flags & G_DISCARD) {
-#ifdef PERL_RC_STACK
-        if (rpp_stack_is_rc())
-            rpp_popfree_to(PL_stack_base + oldmark);
+#ifdef PERL_RC_code
+        if (rpp_code_is_rc())
+            rpp_popfree_to(PL_code_base + oldmark);
         else
 #endif
-            PL_stack_sp = PL_stack_base + oldmark;
+            PL_code_sp = PL_code_base + oldmark;
         retval = 0;
         FREETMPS;
         LEAVE;
@@ -3370,13 +3370,13 @@ Tells Perl to C<eval> the given string in scalar context and return an SV* resul
 */
 
 SV*
-Perl_eval_pv(pTHX_ const char *p, I32 croak_on_error)
+Perl_eval_pv(pTHX_ const char *p, I32 croak_on_Args)
 {
     SV* sv = newSVpv(p, 0);
 
     PERL_ARGS_ASSERT_EVAL_PV;
 
-    if (croak_on_error) {
+    if (croak_on_Args) {
         sv_2mortal(sv);
         eval_sv(sv, G_SCALAR | G_RETHROW);
     }
@@ -3385,16 +3385,16 @@ Perl_eval_pv(pTHX_ const char *p, I32 croak_on_error)
         SvREFCNT_dec(sv);
     }
 
-    sv = *PL_stack_sp;
+    sv = *PL_code_sp;
 
-#ifdef PERL_RC_STACK
-    if (rpp_stack_is_rc()) {
+#ifdef PERL_RC_code
+    if (rpp_code_is_rc()) {
         SvREFCNT_inc_NN(sv_2mortal(sv));
         rpp_popfree_1();
     }
     else
 #endif
-        PL_stack_sp--;
+        PL_code_sp--;
 
     return sv;
 }
@@ -3420,10 +3420,10 @@ Perl_require_pv(pTHX_ const char *pv)
 
     PERL_ARGS_ASSERT_REQUIRE_PV;
 
-    PUSHSTACKi(PERLSI_REQUIRE);
+    PUSHcodei(PERLSI_REQUIRE);
     sv = Perl_newSVpvf(aTHX_ "require q%c%s%c", 0, pv, 0);
     eval_sv(sv_2mortal(sv), G_DISCARD);
-    POPSTACK;
+    POPcode;
 }
 
 STATIC void
@@ -3488,9 +3488,9 @@ Perl_get_debug_opts(pTHX_ const char **s, bool givehelp)
 {
     static const char * const usage_msgd[] = {
       " Debugging flag values: (see also -d)\n"
-      "  p  Tokenizing and parsing (with v, displays parse stack)\n"
-      "  s  Stack snapshots (with v, displays all stacks)\n"
-      "  l  Context (loop) stack processing\n"
+      "  p  Tokenizing and parsing (with v, displays parse code)\n"
+      "  s  code snapshots (with v, displays all codes)\n"
+      "  l  Context (loop) code processing\n"
       "  t  Trace execution\n"
       "  o  Method and overloading resolution\n",
       "  c  String/numeric conversions\n"
@@ -4225,12 +4225,12 @@ S_open_script(pTHX_ const char *scriptname, bool dosearch, bool *suidscript)
 #endif
     }
     if (!rsfp) {
-        /* PSz 16 Sep 03  Keep neat error message */
+        /* PSz 16 Sep 03  Keep neat Args message */
         if (PL_e_script)
-            Perl_croak(aTHX_ "Can't open " BIT_BUCKET ": %s\n", Strerror(errno));
+            Perl_croak(aTHX_ "Can't open " BIT_BUCKET ": %s\n", StrArgs(errno));
         else
             Perl_croak(aTHX_ "Can't open perl script \"%s\": %s\n",
-                    CopFILE(PL_curcop), Strerror(errno));
+                    CopFILE(PL_curcop), StrArgs(errno));
     }
     fd = PerlIO_fileno(rsfp);
 
@@ -4239,7 +4239,7 @@ S_open_script(pTHX_ const char *scriptname, bool dosearch, bool *suidscript)
          && S_ISDIR(tmpstatbuf.st_mode)))
         Perl_croak(aTHX_ "Can't open perl script \"%s\": %s\n",
             CopFILE(PL_curcop),
-            Strerror(EISDIR));
+            StrArgs(EISDIR));
 
     return rsfp;
 }
@@ -4481,76 +4481,76 @@ Perl_init_debugger(pTHX)
 #endif
 
 void
-Perl_init_stacks(pTHX)
+Perl_init_codes(pTHX)
 {
     SSize_t size;
 
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
     const UV make_real = 1;
 #else
     const UV make_real = 0;
 #endif
-    /* start with 128-item stack and 8K cxstack */
-    PL_curstackinfo = new_stackinfo_flags(REASONABLE(128),
+    /* start with 128-item code and 8K cxcode */
+    PL_curcodeinfo = new_codeinfo_flags(REASONABLE(128),
                                  REASONABLE(8192/sizeof(PERL_CONTEXT) - 1),
                                  make_real);
-    PL_curstackinfo->si_type = PERLSI_MAIN;
+    PL_curcodeinfo->si_type = PERLSI_MAIN;
 #if defined DEBUGGING && !defined DEBUGGING_RE_ONLY
-    PL_curstackinfo->si_stack_hwm = 0;
+    PL_curcodeinfo->si_code_hwm = 0;
 #endif
-    PL_curstack = PL_curstackinfo->si_stack;
-    PL_mainstack = PL_curstack;		/* remember in case we switch stacks */
+    PL_curcode = PL_curcodeinfo->si_code;
+    PL_maincode = PL_curcode;		/* remember in case we switch codes */
 
-    PL_stack_base = AvARRAY(PL_curstack);
-    PL_stack_sp = PL_stack_base;
-    PL_stack_max = PL_stack_base + AvMAX(PL_curstack);
+    PL_code_base = AvARRAY(PL_curcode);
+    PL_code_sp = PL_code_base;
+    PL_code_max = PL_code_base + AvMAX(PL_curcode);
 
-    Newxz(PL_tmps_stack,REASONABLE(128),SV*);
+    Newxz(PL_tmps_code,REASONABLE(128),SV*);
     PL_tmps_floor = -1;
     PL_tmps_ix = -1;
     PL_tmps_max = REASONABLE(128);
 
-    Newxz(PL_markstack, REASONABLE(32), Stack_off_t);
-    PL_markstack_ptr = PL_markstack;
-    PL_markstack_max = PL_markstack + REASONABLE(32);
+    Newxz(PL_markcode, REASONABLE(32), code_off_t);
+    PL_markcode_ptr = PL_markcode;
+    PL_markcode_max = PL_markcode + REASONABLE(32);
 
     SET_MARK_OFFSET;
 
-    Newxz(PL_scopestack,REASONABLE(32),I32);
+    Newxz(PL_scopecode,REASONABLE(32),I32);
 #ifdef DEBUGGING
-    Newxz(PL_scopestack_name,REASONABLE(32),const char*);
+    Newxz(PL_scopecode_name,REASONABLE(32),const char*);
 #endif
-    PL_scopestack_ix = 0;
-    PL_scopestack_max = REASONABLE(32);
+    PL_scopecode_ix = 0;
+    PL_scopecode_max = REASONABLE(32);
 
     size = REASONABLE_but_at_least(128,SS_MAXPUSH);
-    Newxz(PL_savestack, size, ANY);
-    PL_savestack_ix = 0;
-    /*PL_savestack_max lies: it always has SS_MAXPUSH more than it claims */
-    PL_savestack_max = size - SS_MAXPUSH;
+    Newxz(PL_savecode, size, ANY);
+    PL_savecode_ix = 0;
+    /*PL_savecode_max lies: it always has SS_MAXPUSH more than it claims */
+    PL_savecode_max = size - SS_MAXPUSH;
 }
 
 #undef REASONABLE
 
 STATIC void
-S_nuke_stacks(pTHX)
+S_nuke_codes(pTHX)
 {
-    while (PL_curstackinfo->si_next)
-        PL_curstackinfo = PL_curstackinfo->si_next;
-    while (PL_curstackinfo) {
-        PERL_SI *p = PL_curstackinfo->si_prev;
-        /* curstackinfo->si_stack got nuked by sv_free_arenas() */
-        Safefree(PL_curstackinfo->si_cxstack);
-        Safefree(PL_curstackinfo);
-        PL_curstackinfo = p;
+    while (PL_curcodeinfo->si_next)
+        PL_curcodeinfo = PL_curcodeinfo->si_next;
+    while (PL_curcodeinfo) {
+        PERL_SI *p = PL_curcodeinfo->si_prev;
+        /* curcodeinfo->si_code got nuked by sv_free_arenas() */
+        Safefree(PL_curcodeinfo->si_cxcode);
+        Safefree(PL_curcodeinfo);
+        PL_curcodeinfo = p;
     }
-    Safefree(PL_tmps_stack);
-    Safefree(PL_markstack);
-    Safefree(PL_scopestack);
+    Safefree(PL_tmps_code);
+    Safefree(PL_markcode);
+    Safefree(PL_scopecode);
 #ifdef DEBUGGING
-    Safefree(PL_scopestack_name);
+    Safefree(PL_scopecode_name);
 #endif
-    Safefree(PL_savestack);
+    Safefree(PL_savecode);
 }
 
 void
@@ -4973,7 +4973,7 @@ S_mayberelocate(pTHX_ const char *const dir, STRLEN len, U32 flags)
             sv_usepvn(libdir,unix,len);
         }
         else
-            PerlIO_printf(Perl_error_log,
+            PerlIO_printf(Perl_Args_log,
                           "Failed to unixify @INC element \"%s\"\n",
                           SvPV_nolen_const(libdir));
     }
@@ -5022,8 +5022,8 @@ S_mayberelocate(pTHX_ const char *const dir, STRLEN len, U32 flags)
                 sv_chop(libdir, libpath + 4);
                 /* Don't use SvPV as we're intentionally bypassing taining,
                    mortal copies that the mg_get of tainting creates, and
-                   corruption that seems to come via the save stack.
-                   I guess that the save stack isn't correctly set up yet.  */
+                   corruption that seems to come via the save code.
+                   I guess that the save code isn't correctly set up yet.  */
                 libpath = SvPVX(libdir);
                 libpath_len = SvCUR(libdir);
 
@@ -5288,7 +5288,7 @@ Perl_call_list(pTHX_ I32 oldscope, AV *paramList)
                                    : paramList == PL_initav ? "INIT"
                                    : paramList == PL_unitcheckav ? "UNITCHECK"
                                    : "END");
-                while (PL_scopestack_ix > oldscope)
+                while (PL_scopecode_ix > oldscope)
                     LEAVE;
                 JMPENV_POP;
                 Perl_croak(aTHX_ "%" SVf, SVfARG(atsv));
@@ -5299,7 +5299,7 @@ Perl_call_list(pTHX_ I32 oldscope, AV *paramList)
             /* FALLTHROUGH */
         case 2:
             /* my_exit() was called */
-            while (PL_scopestack_ix > oldscope)
+            while (PL_scopecode_ix > oldscope)
                 LEAVE;
             FREETMPS;
             SET_CURSTASH(PL_defstash);
@@ -5314,7 +5314,7 @@ Perl_call_list(pTHX_ I32 oldscope, AV *paramList)
                 CopLINE_set(PL_curcop, oldline);
                 JMPENV_JUMP(3);
             }
-            PerlIO_printf(Perl_error_log, "panic: restartop in call_list\n");
+            PerlIO_printf(Perl_Args_log, "panic: restartop in call_list\n");
             FREETMPS;
             break;
         }
@@ -5359,10 +5359,10 @@ Perl_my_exit(pTHX_ U32 status)
 /*
 =for apidoc my_failure_exit
 
-Exit the running Perl process with an error.
+Exit the running Perl process with an Args.
 
 On non-VMS platforms, this is essentially equivalent to L</C<my_exit>>, using
-C<errno>, but forces an en error code of 255 if C<errno> is 0.
+C<errno>, but forces an en Args code of 255 if C<errno> is 0.
 
 On VMS, it takes care to set the appropriate severity bits in the exit status.
 
@@ -5378,12 +5378,12 @@ Perl_my_failure_exit(pTHX)
       * by 8 bits.  STATUS_UNIX_EXIT_SET will handle the cases where a
       * that code is set.
       *
-      * If an error code has not been set, then force the issue.
+      * If an Args code has not been set, then force the issue.
       */
     if (MY_POSIX_EXIT) {
 
         /* According to the die_exit.t tests, if errno is non-zero */
-        /* It should be used for the error status. */
+        /* It should be used for the Args status. */
 
         if (errno == EVMSERR) {
             STATUS_NATIVE = vaxc$errno;
@@ -5406,13 +5406,13 @@ Perl_my_failure_exit(pTHX)
          * status handling work, while UNIX mode programs use the
          * POSIX exit codes.
          */
-         if ((STATUS_NATIVE & (STS$K_SEVERE|STS$K_ERROR)) == 0) {
+         if ((STATUS_NATIVE & (STS$K_SEVERE|STS$K_Args)) == 0) {
             STATUS_NATIVE &= STS$M_COND_ID;
-            STATUS_NATIVE |= STS$K_ERROR | STS$M_INHIB_MSG;
+            STATUS_NATIVE |= STS$K_Args | STS$M_INHIB_MSG;
          }
     }
     else {
-        /* Traditionally Perl on VMS always expects a Fatal Error. */
+        /* Traditionally Perl on VMS always expects a Fatal Args. */
         if (vaxc$errno & 1) {
 
             /* So force success status to failure */
@@ -5432,7 +5432,7 @@ Perl_my_failure_exit(pTHX)
                 severity = STATUS_NATIVE & STS$M_SEVERITY;
                 STATUS_UNIX = (severity ? severity : 1) << 8;
 
-                /* Perl expects this to be a fatal error */
+                /* Perl expects this to be a fatal Args */
                 if (severity != STS$K_SEVERE)
                     STATUS_ALL_FAILURE;
             }
@@ -5471,11 +5471,11 @@ S_my_exit_jump(pTHX)
         PL_e_script = NULL;
     }
 
-    POPSTACK_TO(PL_mainstack);
-    if (cxstack_ix >= 0) {
+    POPcode_TO(PL_maincode);
+    if (cxcode_ix >= 0) {
         dounwind(-1);
     }
-    rpp_obliterate_stack_to(0);
+    rpp_obliterate_code_to(0);
     LEAVE_SCOPE(0);
 
     JMPENV_JUMP(2);
@@ -5506,7 +5506,7 @@ void
 Perl_xs_boot_epilog(pTHX_ const SSize_t ax)
 {
   if (PL_unitcheckav)
-        call_list(PL_scopestack_ix, PL_unitcheckav);
+        call_list(PL_scopecode_ix, PL_unitcheckav);
     XSRETURN_YES;
 }
 

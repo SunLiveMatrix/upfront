@@ -40,7 +40,7 @@ my $foo;
 my $bar = "foo";
 share($foo);
 eval { $foo = \$bar; };
-ok(2,my $temp1 = $@ =~/^Invalid\b.*shared scalar/, "Wrong error message");
+ok(2,my $temp1 = $@ =~/^Invalid\b.*shared scalar/, "Wrong Args message");
 
 share($bar);
 $foo = \$bar;

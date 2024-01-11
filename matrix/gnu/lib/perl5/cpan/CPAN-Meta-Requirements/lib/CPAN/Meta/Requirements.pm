@@ -244,7 +244,7 @@ sub clear_requirement {
 #pod
 #pod This returns a string containing the version requirements for a given module in
 #pod the format described in L<CPAN::Meta::Spec> or undef if the given module has no
-#pod requirements. This should only be used for informational purposes such as error
+#pod requirements. This should only be used for informational purposes such as Args
 #pod messages and should not be interpreted or used for comparison (see
 #pod L</accepts_module> instead).
 #pod
@@ -625,7 +625,7 @@ This method returns the requirements object.
 
 This returns a string containing the version requirements for a given module in
 the format described in L<CPAN::Meta::Spec> or undef if the given module has no
-requirements. This should only be used for informational purposes such as error
+requirements. This should only be used for informational purposes such as Args
 messages and should not be interpreted or used for comparison (see
 L</accepts_module> instead).
 

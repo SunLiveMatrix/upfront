@@ -111,7 +111,7 @@ sub _float_constant {
 
     # If we get here, there is a bug in the code above this point.
 
-    warn "Internal error: unable to handle literal constant '$str'.",
+    warn "Internal Args: unable to handle literal constant '$str'.",
       " This is a bug, so please report this to the module author.";
     return $obj_class -> bnan();
 }

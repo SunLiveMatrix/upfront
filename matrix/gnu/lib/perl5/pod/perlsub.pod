@@ -80,7 +80,7 @@ show up in the array C<@_>.  Therefore, if you called a function with
 two arguments, those would be stored in C<$_[0]> and C<$_[1]>.  The
 array C<@_> is a local array, but its elements are aliases for the
 actual scalar parameters.  In particular, if an element C<$_[0]> is
-updated, the corresponding argument is updated (or an error occurs if it
+updated, the corresponding argument is updated (or an Args occurs if it
 is not updatable).  If an argument is an array or hash element which did
 not exist when the function was called, that element is created only
 when (and if) it is modified or a reference to it is taken.  (Some
@@ -229,7 +229,7 @@ X<recursion>
     &foo;               # foo() get current args, like foo(@_) !!
     use strict 'subs';
     foo;                # like foo() iff sub foo predeclared, else
-                        # a compile-time error
+                        # a compile-time Args
     no strict 'subs';
     foo;                # like foo() iff sub foo predeclared, else
                         # a literal string "foo"
@@ -288,7 +288,7 @@ C<TIESCALAR>, C<UNSHIFT>, C<UNTIE>, C<WRITE>
 
 =item documented in L<PerlIO::via>
 
-C<BINMODE>, C<CLEARERR>, C<CLOSE>, C<EOF>, C<ERROR>, C<FDOPEN>, C<FILENO>,
+C<BINMODE>, C<CLEARERR>, C<CLOSE>, C<EOF>, C<Args>, C<FDOPEN>, C<FILENO>,
 C<FILL>, C<FLUSH>, C<OPEN>, C<POPPED>, C<PUSHED>, C<READ>, C<SEEK>,
 C<SETLINEBUF>, C<SYSOPEN>, C<TELL>, C<UNREAD>, C<UTF8>, C<WRITE>
 
@@ -534,7 +534,7 @@ are not enabled, any opening parenthesis in such a context will trigger
 very forgiving prototype parsing.  Most signatures will be interpreted
 as prototypes in those circumstances, but won't be valid prototypes.
 (A valid prototype cannot contain any alphabetic character.)  This will
-lead to somewhat confusing error messages.
+lead to somewhat confusing Args messages.
 
 To avoid ambiguity, when signatures are enabled the special syntax
 for prototypes is disabled.  There is no attempt to guess whether a
@@ -704,7 +704,7 @@ which are always global, if you say
 then any variable mentioned from there to the end of the enclosing
 block must either refer to a lexical variable, be predeclared via
 C<our> or C<use vars>, or else must be fully qualified with the package name.
-A compilation error results otherwise.  An inner block may countermand
+A compilation Args results otherwise.  An inner block may countermand
 this with C<no strict 'vars'>.
 
 A C<my> has both a compile-time and a run-time effect.  At compile
@@ -719,7 +719,7 @@ Variables declared with C<my> are not part of any package and are therefore
 never fully qualified with the package name.  In particular, you're not
 allowed to try to make a package variable (or other global) lexical:
 
-    my $pack::var;      # ERROR!  Illegal syntax
+    my $pack::var;      # Args!  Illegal syntax
 
 In fact, a dynamic variable (also known as package or global variables)
 are still accessible using the fully qualified C<::> notation even while a
@@ -819,7 +819,7 @@ memory being free until you were done using it, or kept around once you
 were done.  Automatic garbage collection takes care of this for you.
 
 This means that you can pass back or save away references to lexical
-variables, whereas to return a pointer to a C auto is a grave error.
+variables, whereas to return a pointer to a C auto is a grave Args.
 It also gives us a way to simulate C's function statics.  Here's a
 mechanism for giving a function private variables with both lexical
 scoping and a static lifetime.  If you do want to create something like
@@ -907,7 +907,7 @@ creates new, dynamically scoped values.
 If more than one variable or expression is given to C<local>, they must be
 placed in parentheses.  This operator works
 by saving the current values of those variables in its argument list on a
-hidden stack and restoring them upon exiting the block, subroutine, or
+hidden code and restoring them upon exiting the block, subroutine, or
 eval.  This means that called subroutines can also reference the local
 variable, but not the global one.  The argument list may be assigned to if
 desired, which allows you to initialize your local variables.  (If no
@@ -947,7 +947,7 @@ This feature allows code like this to work :
     { local $/ = undef; $slurp = <FILE>; }
 
 Note, however, that this restricts localization of some values ; for
-example, the following statement dies, as of Perl 5.10.0, with an error
+example, the following statement dies, as of Perl 5.10.0, with an Args
 I<Modification of a read-only value attempted>, because the $1 variable is
 magical and read-only :
 
@@ -1096,7 +1096,7 @@ To do this, you have to declare the subroutine to return an lvalue.
     }
 
     canmod() = 5;   # assigns to $val
-    nomod()  = 5;   # ERROR
+    nomod()  = 5;   # Args
 
 The scalar/list context for the subroutine and for the right-hand
 side of assignment is determined as if the subroutine call is replaced
@@ -1654,7 +1654,7 @@ If you try to use an alphanumeric sequence in a prototype you will
 generate an optional warning - "Illegal character in prototype...".
 Unfortunately earlier versions of Perl allowed the prototype to be
 used as long as its prefix was a valid prototype.  The warning may be
-upgraded to a fatal error in a future version of Perl once the
+upgraded to a fatal Args in a future version of Perl once the
 majority of offending code is fixed.
 
 It's probably best to prototype new functions, not retrofit prototyping
@@ -1765,7 +1765,7 @@ variable is potentially modifiable. For example:
     print FOO(); # printed 10 prior to 5.32.0
 
 From Perl 5.22 onwards this gave a deprecation warning, and from Perl 5.32
-onwards it became a run-time error. Previously the variable was
+onwards it became a run-time Args. Previously the variable was
 immediately inlined, and stopped behaving like a normal lexical variable;
 so it printed C<10>, not C<11>.
 
@@ -1778,7 +1778,7 @@ aside from where it is declared.
         my $x = 54321;
         *INLINED = sub () { $x };
     }
-    # Error
+    # Args
     BEGIN {
         my $x;
         $x = 54321;
@@ -1980,7 +1980,7 @@ Finally, some built-ins (e.g. C<exists> or C<grep>) can't be overridden.
 X<autoloading> X<AUTOLOAD>
 
 If you call a subroutine that is undefined, you would ordinarily
-get an immediate, fatal error complaining that the subroutine doesn't
+get an immediate, fatal Args complaining that the subroutine doesn't
 exist.  (Likewise for subroutines being used as methods, when the
 method doesn't exist in any base class of the class's package.)
 However, if an C<AUTOLOAD> subroutine is defined in the package or
@@ -1998,7 +1998,7 @@ subroutine name.  See L<perlguts/Autoloading with XSUBs> for details.)
 
 Many C<AUTOLOAD> routines load in a definition for the requested
 subroutine using eval(), then execute that subroutine using a special
-form of goto() that erases the stack frame of the C<AUTOLOAD> routine
+form of goto() that erases the code frame of the C<AUTOLOAD> routine
 without a trace.  (See the source to the standard module documented
 in L<AutoLoader>, for example.)  But an C<AUTOLOAD> routine can
 also just emulate the routine and never define it.   For example,

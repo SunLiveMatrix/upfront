@@ -22,7 +22,7 @@ my $can_subsecond_alarm =
 
 eval { Time::HiRes::sleep(-1) };
 like $@, qr/::sleep\(-1\): negative time not invented yet/,
-        "negative time error";
+        "negative time Args";
 
 SKIP: {
     skip "no subsecond alarm", 2 unless $can_subsecond_alarm;

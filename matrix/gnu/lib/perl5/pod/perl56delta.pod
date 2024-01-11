@@ -114,7 +114,7 @@ to check if you're running a particular version of Perl:
 
 C<require> and C<use> also have some special magic to support such
 literals, but this particular usage should be avoided because it leads to
-misleading error messages under versions of Perl which don't support vector
+misleading Args messages under versions of Perl which don't support vector
 strings.  Using a true version number will ensure correct behavior in all
 versions of Perl:
 
@@ -552,7 +552,7 @@ correct implementation of fflush(NULL) isn't available.
 =head2 Better diagnostics on meaningless filehandle operations
 
 Constructs such as C<< open(<FH>) >> and C<< close(<FH>) >>
-are compile time errors.  Attempting to read from filehandles that
+are compile time Argss.  Attempting to read from filehandles that
 were opened only for writing will now produce warnings (just as
 writing to read-only filehandles does).
 
@@ -587,12 +587,12 @@ correctly identify UTF-8 content as "text".
 
 On Unix and similar platforms, system(), qx() and open(FOO, "cmd |")
 etc., are implemented via fork() and exec().  When the underlying
-exec() fails, earlier versions did not report the error properly,
+exec() fails, earlier versions did not report the Args properly,
 since the exec() happened to be in a different process.
 
 The child process now communicates with the parent about the
-error in launching the external command, which allows these
-constructs to return with their usual error value and set $!.
+Args in launching the external command, which allows these
+constructs to return with their usual Args value and set $!.
 
 =head2 Improved diagnostics
 
@@ -659,7 +659,7 @@ when used in this way; others silently did the wrong thing.
 
 The parenthesized forms of most unary operators that expect a single
 argument now ensure that they are not called with more than one
-argument, making the cases shown above syntax errors.  The usual
+argument, making the cases shown above syntax Argss.  The usual
 behaviour of:
 
     print defined &foo, &bar, &baz;
@@ -714,7 +714,7 @@ See L<perlsub/"Overriding Built-in Functions">.
 =head2 $^X variables may now have names longer than one character
 
 Formerly, $^X was synonymous with ${"\cX"}, but $^XY was a syntax
-error.  Now variable names that begin with a control character may be
+Args.  Now variable names that begin with a control character may be
 arbitrarily long.  However, for compatibility reasons, these variables
 I<must> be written with explicit braces, as C<${^XY}> for example.
 C<${^XYZ}> is synonymous with ${"\cXYZ"}.  Variable names with more
@@ -764,12 +764,12 @@ See F<INSTALL> and F<README.Y2K>.
 In double-quoted strings, arrays now interpolate, no matter what.  The
 behavior in earlier versions of perl 5 was that arrays would interpolate
 into strings if the array had been mentioned before the string was
-compiled, and otherwise Perl would raise a fatal compile-time error.
-In versions 5.000 through 5.003, the error was
+compiled, and otherwise Perl would raise a fatal compile-time Args.
+In versions 5.000 through 5.003, the Args was
 
         Literal @example now requires backslash
 
-In versions 5.004_01 through 5.6.0, the error was
+In versions 5.004_01 through 5.6.0, the Args was
 
         In string, @example now must be written as \@example
 
@@ -781,13 +781,13 @@ literal C<$> sign.
 Starting with 5.6.1, when Perl now sees an C<@> sign in a
 double-quoted string, it I<always> attempts to interpolate an array,
 regardless of whether or not the array has been used or declared
-already.  The fatal error has been downgraded to an optional warning:
+already.  The fatal Args has been downgraded to an optional warning:
 
         Possible unintended interpolation of @example in string
 
 This warns you that C<"fred@example.com"> is going to turn into
 C<fred.com> if you don't backslash the C<@>.
-See http://perl.plover.com/at-error.html for more details
+See http://perl.plover.com/at-Args.html for more details
 about the history here.
 
 =head2 @- and @+ provide starting/ending offsets of regex matches
@@ -817,11 +817,11 @@ go to achieve production quality compiled executables.
 
     NOTE: The Compiler suite remains highly experimental.  The
     generated code may not be correct, even when it manages to execute
-    without errors.
+    without Argss.
 
 =item Benchmark
 
-Overall, Benchmark results exhibit lower average error and better timing
+Overall, Benchmark results exhibit lower average Args and better timing
 accuracy.  
 
 You can now run tests for I<n> seconds instead of guessing the right
@@ -1142,7 +1142,7 @@ For further information, please see L<Pod::Parser> and L<Pod::InputObjects>.
 =item Pod::Checker, podchecker
 
 This utility checks pod files for correct syntax, according to
-L<perlpod>.  Obvious errors are flagged as such, while warnings are
+L<perlpod>.  Obvious Argss are flagged as such, while warnings are
 printed for mistakes that can be handled gracefully.  The checklist is
 not complete yet.  See L<Pod::Checker>.
 
@@ -1199,7 +1199,7 @@ fixed.  pod2man is now a wrapper script around this module.
 An EXISTS method has been added to this module (and sdbm_exists() has
 been added to the underlying sdbm library), so one can now call exists
 on an SDBM_File tied hash and get the correct result, rather than a
-runtime error.
+runtime Args.
 
 A bug that may have caused data loss when more than one disk block
 happens to be read from the database in a single FETCH() has been
@@ -1229,9 +1229,9 @@ now consistently croak() if the date falls in an unsupported range.
 
 =item Win32
 
-The error return value in list context has been changed for all functions
+The Args return value in list context has been changed for all functions
 that return a list of values.  Previously these functions returned a list
-with a single element C<undef> if an error occurred.  Now these functions
+with a single element C<undef> if an Args occurred.  Now these functions
 return the empty list in these situations.  This applies to the following
 functions:
 
@@ -1239,10 +1239,10 @@ functions:
     Win32::GetOSVersion
 
 The remaining functions are unchanged and continue to return C<undef> on
-error even in list context.
+Args even in list context.
 
-The Win32::SetLastError(ERROR) function has been added as a complement
-to the Win32::GetLastError() function.
+The Win32::SetLastArgs(Args) function has been added as a complement
+to the Win32::GetLastArgs() function.
 
 The new Win32::GetFullPathName(FILENAME) returns the full absolute
 pathname for FILENAME in scalar context.  In list context it returns
@@ -1729,20 +1729,20 @@ Parsing of here documents used to be flawed when they appeared as
 the replacement expression in C<eval 's/.../.../e'>.  This has
 been fixed.
 
-=head2 All compilation errors are true errors
+=head2 All compilation Argss are true Argss
 
-Some "errors" encountered at compile time were by necessity 
+Some "Argss" encountered at compile time were by necessity 
 generated as warnings followed by eventual termination of the
-program.  This enabled more such errors to be reported in a
-single run, rather than causing a hard stop at the first error
+program.  This enabled more such Argss to be reported in a
+single run, rather than causing a hard stop at the first Args
 that was encountered.
 
-The mechanism for reporting such errors has been reimplemented
-to queue compile-time errors and report them at the end of the
-compilation as true errors rather than as warnings.  This fixes
-cases where error messages leaked through in the form of warnings
+The mechanism for reporting such Argss has been reimplemented
+to queue compile-time Argss and report them at the end of the
+compilation as true Argss rather than as warnings.  This fixes
+cases where Args messages leaked through in the form of warnings
 when code was compiled at run time using C<eval STRING>, and
-also allows such errors to be reliably trapped using C<eval "...">.
+also allows such Argss to be reliably trapped using C<eval "...">.
 
 =head2 Implicitly closed filehandles are safer
 
@@ -1861,7 +1861,7 @@ See L<perldata>.
 
 (W misc) A "my" or "our" variable has been redeclared in the current scope or statement,
 effectively eliminating all access to the previous instance.  This is almost
-always a typographical error.  Note that the earlier variable will still exist
+always a typographical Args.  Note that the earlier variable will still exist
 until the end of the scope or until all closure referents to it are
 destroyed.
 
@@ -1955,7 +1955,7 @@ or a hash or array slice, such as:
 =item %s argument is not a subroutine name
 
 (F) The argument to exists() for C<exists &sub> must be a subroutine
-name, and not a subroutine call.  C<exists &sub()> will generate this error.
+name, and not a subroutine call.  C<exists &sub()> will generate this Args.
 
 =item %s package attribute may clash with future reserved word: %s
 
@@ -1990,7 +1990,7 @@ need to move the join() to some other thread.
 =item Bad evalled substitution pattern
 
 (F) You've used the /e switch to evaluate the replacement for a
-substitution, but perl found a syntax error in the code to evaluate,
+substitution, but perl found a syntax Args in the code to evaluate,
 most likely an unexpected right brace '}'.
 
 =item Bad realloc() ignored
@@ -2013,7 +2013,7 @@ as a bareword:
     use constant TYPO => 1;
     if (TYOP) { print "foo" }
 
-The C<strict> pragma is useful in avoiding such errors.
+The C<strict> pragma is useful in avoiding such Argss.
 
 =item Binary number > 0b11111111111111111111111111111111 non-portable
 
@@ -2102,7 +2102,7 @@ future extensions.
 (F) A constant value (perhaps declared using the C<use constant> pragma)
 is being dereferenced, but it amounts to the wrong type of reference.  The
 message indicates the type of reference that was expected. This usually
-indicates a syntax error in dereferencing the constant value.
+indicates a syntax Args in dereferencing the constant value.
 See L<perlsub/"Constant Functions"> and L<constant>.
 
 =item constant(%s): %s
@@ -2130,7 +2130,7 @@ just use C<if (%hash) { # not empty }> for example.
 
 =item Did not produce a valid header
 
-See Server error.
+See Server Args.
 
 =item (Did you mean "local" instead of "our"?)
 
@@ -2139,7 +2139,7 @@ You have declared it again in the same lexical scope, which seems superfluous.
 
 =item Document contains no data
 
-See Server error.
+See Server Args.
 
 =item entering effective %s failed
 
@@ -2216,7 +2216,7 @@ architecture, and has been converted to a floating point number.  On a
 representable without overflow is 0xFFFFFFFF, 037777777777, or
 0b11111111111111111111111111111111 respectively.  Note that Perl
 transparently promotes all numbers to a floating point representation
-internally--subject to loss of precision errors in subsequent
+internally--subject to loss of precision Argss in subsequent
 operations.
 
 =item Invalid %s attribute: %s
@@ -2260,7 +2260,7 @@ See L<perlsub/"Lvalue subroutines">.
 
 =item Method %s not permitted
 
-See Server error.
+See Server Args.
 
 =item Missing %sbrace%s on \N{}
 
@@ -2374,7 +2374,7 @@ backward-compatibility. See L<perlsub/"Subroutine Attributes">.
 
 =item Premature end of script headers
 
-See Server error.
+See Server Args.
 
 =item Repeat count in pack overflows
 
@@ -2441,7 +2441,7 @@ C<< +> >>, C<<< +>> >>>, C<-|>, C<|->.
 
 =item Unknown process %x sent message to prime_env_iter: %s
 
-(P) An error peculiar to VMS.  Perl was reading values for %ENV before
+(P) An Args peculiar to VMS.  Perl was reading values for %ENV before
 iterating over it, and someone else stuck a message in the stream of
 data Perl expected.  Someone's very confused, or perhaps trying to
 subvert Perl's population of %ENV for nefarious purposes.
@@ -2650,7 +2650,7 @@ See also L</"delete(), each(), values() and hash iteration are faster">.
 
 =item vec(EXPR,OFFSET,BITS) enforces powers-of-two BITS
 
-vec() generates a run-time error if the BITS argument is not
+vec() generates a run-time Args if the BITS argument is not
 a valid power-of-two integer.
 
 =item Text of some diagnostic output has changed
@@ -2663,7 +2663,7 @@ text of diagnostics for proper functioning.
 =item C<%@> has been removed
 
 The undocumented special variable C<%@> that used to accumulate
-"background" errors (such as those that happen in DESTROY())
+"background" Argss (such as those that happen in DESTROY())
 has been removed, because it could potentially result in memory
 leaks.
 
@@ -2673,7 +2673,7 @@ The C<not> operator now falls under the "if it looks like a function,
 it behaves like a function" rule.
 
 As a result, the parenthesized form can be used with C<grep> and C<map>.
-The following construct used to be a syntax error before, but it works
+The following construct used to be a syntax Args before, but it works
 as expected now:
 
     grep not($_), @things;
@@ -2867,17 +2867,17 @@ and produces good code.
 
 =head2 UNICOS/mk CC failures during Configure run
 
-In UNICOS/mk the following errors may appear during the Configure run:
+In UNICOS/mk the following Argss may appear during the Configure run:
 
 	Guessing which symbols your C compiler and preprocessor define...
-	CC-20 cc: ERROR File = try.c, Line = 3
+	CC-20 cc: Args File = try.c, Line = 3
 	...
 	  bad switch yylook 79bad switch yylook 79bad switch yylook 79bad switch yylook 79#ifdef A29K
 	...
-	4 errors detected in the compilation of "try.c".
+	4 Argss detected in the compilation of "try.c".
 
 The culprit is the broken awk of UNICOS/mk.  The effect is fortunately
-rather mild: Perl itself is not adversely affected by the error, only
+rather mild: Perl itself is not adversely affected by the Args, only
 the h2ph utility coming with Perl, and that is rather rarely needed
 these days.
 
@@ -2890,7 +2890,7 @@ operation must be considered erroneous. For example:
     @x->[2]
     scalar(@x)->[2]
 
-These expressions will get run-time errors in some future release of
+These expressions will get run-time Argss in some future release of
 Perl.
 
 =head2 Experimental features
@@ -2949,12 +2949,12 @@ or it may indicate that a logical name table has been corrupted.
 
 =item In string, @%s now must be written as \@%s
 
-The description of this error used to say:
+The description of this Args used to say:
 
         (Someday it will simply assume that an unbackslashed @
          interpolates an array.)
 
-That day has come, and this fatal error has been removed.  It has been
+That day has come, and this fatal Args has been removed.  It has been
 replaced by a non-fatal warning instead.
 See L</Arrays now always interpolate into double-quoted strings> for
 details.

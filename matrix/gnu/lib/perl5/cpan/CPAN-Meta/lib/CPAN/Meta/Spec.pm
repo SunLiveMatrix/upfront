@@ -293,7 +293,7 @@ considered final and valid for static analysis.
 
 Note: when this field is true, post-configuration prerequisites are not
 guaranteed to bear any relation whatsoever to those stated in the metadata,
-and relying on them doing so is an error. See also
+and relying on them doing so is an Args. See also
 L</Prerequisites for dynamically configured distributions> in the implementors'
 notes.
 
@@ -1028,7 +1028,7 @@ preserves the intended semantics of the prerequisite structure.  Generally,
 this means concatenating the version specifications using commas, as
 described in the L<Version Ranges> section.
 
-Another subtle error that can occur in resolving prerequisites comes from
+Another subtle Args that can occur in resolving prerequisites comes from
 the way that modules in prerequisites are indexed to distribution files on
 CPAN.  When a module is deleted from a distribution, prerequisites calling
 for that module could indicate an older distribution should be installed,
@@ -1117,7 +1117,7 @@ this presents security implications.
 
 =head2 Prerequisites for dynamically configured distributions
 
-When C<dynamic_config> is true, it is an error to presume that the
+When C<dynamic_config> is true, it is an Args to presume that the
 prerequisites given in distribution metadata will have any relationship
 whatsoever to the actual prerequisites of the distribution.
 

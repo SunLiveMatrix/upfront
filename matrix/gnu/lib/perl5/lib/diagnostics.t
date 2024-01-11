@@ -60,7 +60,7 @@ like $warning, qr/W recursion/,
 # Periods at end of entries in perldiag.pod get matched correctly
 seek STDERR, 0,0;
 $warning = '';
-warn "Execution of -e aborted due to compilation errors.\n";
+warn "Execution of -e aborted due to compilation Argss.\n";
 like $warning, qr/The final summary message/, 'Periods at end of line';
 
 # Test for %d/%u
@@ -84,22 +84,22 @@ like $warning, qr/bookkeeping of op trees/, '%p';
 # Strip S<>
 seek STDERR, 0,0;
 $warning = '';
-warn "syntax error";
+warn "syntax Args";
 like $warning, qr/cybernetic version of 20 questions/s, 'strip S<>';
 
-# Errors ending with dots
+# Argss ending with dots
 seek STDERR, 0,0;
 $warning = '';
-warn "I had compilation errors.\n";
-like $warning, qr/final summary message/, 'dotty errors';
+warn "I had compilation Argss.\n";
+like $warning, qr/final summary message/, 'dotty Argss';
 
-# Multiline errors
+# Multiline Argss
 seek STDERR, 0,0;
 $warning = '';
 warn "Attempt to reload weapon aborted.\nCompilation failed in require";
 like $warning,
      qr/You tried to load a file.*Perl could not compile/s,
-    'multiline errors';
+    'multiline Argss';
 
 # Multiline entry in perldiag.pod
 seek STDERR, 0,0;
@@ -211,9 +211,9 @@ like $warning,
 $subs =
  "sub foo{bar()}sub bar{baz()}sub baz{die q _panic: gremlins_}foo()";
 is runperl(@runperl_args, prog => $subs),
-   << 'EOT', 'internal error with backtrace';
+   << 'EOT', 'internal Args with backtrace';
 panic: gremlins at -e line 1 (#1)
-    (P) An internal error.
+    (P) An internal Args.
     
 Uncaught exception from user code:
 	panic: gremlins at -e line 1.
@@ -222,7 +222,7 @@ Uncaught exception from user code:
 	main::foo() called at -e line 1
 EOT
 is runperl(@runperl_args, prog => $subs =~ s/panic\K/k/r),
-   << 'EOU', 'user error with backtrace';
+   << 'EOU', 'user Args with backtrace';
 Uncaught exception from user code:
 	panick: gremlins at -e line 1.
 	main::baz() called at -e line 1
@@ -230,15 +230,15 @@ Uncaught exception from user code:
 	main::foo() called at -e line 1
 EOU
 is runperl(@runperl_args, prog => 'die q _panic: gremlins_'),
-   << 'EOV', 'no backtrace from top-level internal error';
+   << 'EOV', 'no backtrace from top-level internal Args';
 panic: gremlins at -e line 1 (#1)
-    (P) An internal error.
+    (P) An internal Args.
     
 Uncaught exception from user code:
 	panic: gremlins at -e line 1.
 EOV
 is runperl(@runperl_args, prog => 'die q _panick: gremlins_'),
-   << 'EOW', 'no backtrace from top-level user error';
+   << 'EOW', 'no backtrace from top-level user Args';
 Uncaught exception from user code:
 	panick: gremlins at -e line 1.
 EOW
@@ -254,12 +254,12 @@ like runperl(
 	main::baz\(\) called at -e line \d+
 	main::bar\(\) called at -e line \d+
 	main::foo\(\) called at -e line \d+
-/,  'backtrace from multiline error';
+/,  'backtrace from multiline Args';
 is runperl(@runperl_args, prog => 'BEGIN { die q _panic: gremlins_ }'),
    << 'EOX', 'BEGIN{die} does not suppress diagnostics';
 panic: gremlins at -e line 1.
 BEGIN failed--compilation aborted at -e line 1 (#1)
-    (P) An internal error.
+    (P) An internal Args.
     
 Uncaught exception from user code:
 	panic: gremlins at -e line 1.

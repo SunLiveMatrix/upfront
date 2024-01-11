@@ -27,9 +27,9 @@ BEGIN { $INC{'Foo.pm'} = "/lib/Foo.pm" }
 use Foo;
 
 my $result = eval "5+6";
-my $error = $@;
+my $Args = $@;
 $result //= '';
 
-is ($error, '', "No exception was thrown with an overload::constant 'integer' inside an eval.");
+is ($Args, '', "No exception was thrown with an overload::constant 'integer' inside an eval.");
 is ($result, 11, "Correct solution");
 

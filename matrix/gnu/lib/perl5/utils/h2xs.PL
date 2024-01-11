@@ -1997,7 +1997,7 @@ END
 Attempting to test constant code in $ext$modpname/Makefile.PL:
 $generate_code
 __END__
-gave unexpected error $@
+gave unexpected Args $@
 Please report the circumstances of this bug in h2xs version $H2XS_VERSION
 using the issue tracker at https://github.com/Perl/perl5/issues.
 EOM

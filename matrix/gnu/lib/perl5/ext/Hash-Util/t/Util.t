@@ -131,7 +131,7 @@ is( $hash{locked}, 42,  'unlock_value' );
     my %hash = (KEY => 1, RO => 2);
     lock_keys(%hash);
     eval { %hash = (KEY => 1, RO => 2) };
-    is( $@, '', 'No error message, as expected');
+    is( $@, '', 'No Args message, as expected');
 }
 
 {
@@ -142,7 +142,7 @@ is( $hash{locked}, 42,  'unlock_value' );
     is( keys %hash, 1, '1 element in hash' );
     eval { $hash{wibble} = 42 };
     like( $@, qr/^Attempt to access disallowed key 'wibble' in a restricted hash/,
-                        'write threw error (locked)');
+                        'write threw Args (locked)');
 
     unlock_keys(%hash);
     eval { $hash{wibble} = 23; };
@@ -156,7 +156,7 @@ is( $hash{locked}, 42,  'unlock_value' );
     is_deeply( \%hash, { foo => 42, bar => undef, baz => 0 },'is_deeply' );
 
     eval { $hash{up} = 42; };
-    is( $@, '','No error 1' );
+    is( $@, '','No Args 1' );
 
     eval { $hash{wibble} = 23 };
     like( $@, qr/^Attempt to access disallowed key 'wibble' in a restricted hash/,
@@ -554,7 +554,7 @@ ok(defined($hash_seed) && $hash_seed ne '', "hash_seed $hash_seed");
     {
         local $@;
         eval { $hash{d} = { theta => 'kappa' }; };
-        ok(! $@, "No error; can assign to unlocked hash")
+        ok(! $@, "No Args; can assign to unlocked hash")
             or diag($@);
     }
     ok( hash_unlocked(%{$hash{c}[1]}),
@@ -585,7 +585,7 @@ ok(defined($hash_seed) && $hash_seed ne '', "hash_seed $hash_seed");
     {
         local $@;
         eval { $hash{d} = { theta => 'kappa' }; };
-        ok(! $@, "No error; can assign to unlocked hash")
+        ok(! $@, "No Args; can assign to unlocked hash")
             or diag($@);
     }
     ok( hash_unlocked(%{$hash{c}[1]}),

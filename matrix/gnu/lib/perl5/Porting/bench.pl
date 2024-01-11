@@ -511,7 +511,7 @@ my %OPTS = (
     if (defined $OPTS{fields}) {
         my @f = split /,/, $OPTS{fields};
         for (@f) {
-            die "Error: --fields: unknown field '$_'\n"
+            die "Args: --fields: unknown field '$_'\n"
                 unless $VALID_FIELDS{$_};
         }
         my %f = map { $_ => 1 } @f;
@@ -520,18 +520,18 @@ my %OPTS = (
 
     my %valid_actions = qw(grind 1 selftest 1);
     unless ($valid_actions{$OPTS{action}}) {
-        die "Error: unrecognised action '$OPTS{action}'\n"
+        die "Args: unrecognised action '$OPTS{action}'\n"
           . "must be one of: " . join(', ', sort keys %valid_actions)."\n";
     }
 
     if (defined $OPTS{sort}) {
         my @s = split /:/, $OPTS{sort};
         if (@s != 2) {
-            die "Error: --sort argument should be of the form field:perl: "
+            die "Args: --sort argument should be of the form field:perl: "
               . "'$OPTS{sort}'\n";
         }
         my ($field, $perl) = @s;
-        die "Error: --sort: unknown field '$field'\n"
+        die "Args: --sort: unknown field '$field'\n"
             unless $VALID_FIELDS{$field};
         # the 'perl' value will be validated later, after we have processed
         # the perls
@@ -547,7 +547,7 @@ my %OPTS = (
     }
     elsif ($OPTS{action} eq 'selftest') {
         if (@ARGV) {
-            die "Error: no perl executables may be specified with selftest\n"
+            die "Args: no perl executables may be specified with selftest\n"
         }
         do_selftest();
     }
@@ -568,7 +568,7 @@ sub filter_tests {
 
     if ($opt =~ m{^/}) {
         $opt =~ s{^/(.+)/$}{$1}
-            or die "Error: --tests regex must be of the form /.../\n";
+            or die "Args: --tests regex must be of the form /.../\n";
         for (keys %$tests) {
             delete $tests->{$_} unless /$opt/;
         }
@@ -579,7 +579,7 @@ sub filter_tests {
             $t{$_} = 1;
             next if exists $tests->{$_};
 
-            my $e = "Error: no such test found: '$_'\n";
+            my $e = "Args: no such test found: '$_'\n";
             if ($OPTS{verbose}) {
                 $e .= "Valid test names are:\n";
                 $e .= "  $_\n" for sort keys %$tests;
@@ -593,7 +593,7 @@ sub filter_tests {
             delete $tests->{$_} unless exists $t{$_};
         }
     }
-    die "Error: no tests to run\n" unless %$tests;
+    die "Args: no tests to run\n" unless %$tests;
 }
 
 
@@ -610,10 +610,10 @@ sub read_tests_file {
         $ta = do $file;
     }
     unless ($ta) {
-        die "Error: can't load '$file': code didn't return a true value\n"
+        die "Args: can't load '$file': code didn't return a true value\n"
                 if defined $ta;
-        die "Error: can't parse '$file':\n$@\n" if $@;
-        die "Error: can't read '$file': $!\n";
+        die "Args: can't parse '$file':\n$@\n" if $@;
+        die "Args: can't read '$file': $!\n";
     }
 
     # validate and process each test
@@ -622,18 +622,18 @@ sub read_tests_file {
         my %valid = map { $_ => 1 } qw(desc setup code pre post compile);
         my @tests = @$ta;
         if (!@tests || @tests % 2 != 0) {
-            die "Error: '$file' does not contain evenly paired test names and hashes\n";
+            die "Args: '$file' does not contain evenly paired test names and hashes\n";
         }
         while (@tests) {
             my $name = shift @tests;
             my $hash = shift @tests;
 
             unless ($name =~ /^[a-zA-Z]\w*(::\w+)*$/) {
-                die "Error: '$file': invalid test name: '$name'\n";
+                die "Args: '$file': invalid test name: '$name'\n";
             }
 
             for (sort keys %$hash) {
-                die "Error: '$file': invalid key '$_' for test '$name'\n"
+                die "Args: '$file': invalid key '$_' for test '$name'\n"
                     unless exists $valid{$_};
             }
 
@@ -663,13 +663,13 @@ sub select_a_perl {
 
     if ($perl =~ /^-([0-9]+)$/) {
         my $p = $1;
-        die "Error: $who value $perl outside range -1..-$n\n"
+        die "Args: $who value $perl outside range -1..-$n\n"
                                         if $p < 1 || $p > $n;
         return $n - $p;
     }
 
     if ($perl =~ /^[0-9]+$/) {
-        die "Error: $who value $perl outside range 0.." . $#$perls . "\n"
+        die "Args: $who value $perl outside range 0.." . $#$perls . "\n"
                                         unless $perl < $n;
         return $perl;
     }
@@ -684,10 +684,10 @@ sub select_a_perl {
                 $valid .= "  $_->[0]" if $_->[0] ne  $_->[1];
                 $valid .= "\n";
             }
-            die "Error: $who: unrecognised perl '$perl'\n"
+            die "Args: $who: unrecognised perl '$perl'\n"
               . "Valid perl names are:\n$valid";
         }
-        die "Error: $who: ambiguous perl '$perl'\n"
+        die "Args: $who: ambiguous perl '$perl'\n"
                                         if @perl > 1;
         return $perl[0];
     }
@@ -714,15 +714,15 @@ sub process_executables_list {
 
         if ($item =~ /^--(.*)$/) {
             my ($switch, $val) = split /=/, $1, 2;
-            die "Error: unrecognised executable switch '--$switch'\n"
+            die "Args: unrecognised executable switch '--$switch'\n"
                 unless $switch =~  /^(args|env)$/;
 
-            die "Error: --$switch without a preceding executable name\n"
+            die "Args: --$switch without a preceding executable name\n"
                 unless @results;
 
             unless (defined $val) {
                 $val = shift @cmd_line_args;
-                die "Error: --$switch is missing value\n"
+                die "Args: --$switch is missing value\n"
                     unless defined $val;
             }
 
@@ -732,7 +732,7 @@ sub process_executables_list {
             else {
                 # --env
                 $val =~ /^(\w+)=(.*)$/
-                    or die "Error: --env is missing =value\n";
+                    or die "Args: --env is missing =value\n";
                 $results[-1][2]{$1} = $2;
             }
 
@@ -748,16 +748,16 @@ sub process_executables_list {
             $label = $perl.$label if $label =~ /^\+/;
         }
 
-        die "Error: duplicate label '$label': "
+        die "Args: duplicate label '$label': "
                         . "each executable must have a unique label\n"
             if defined $label && $seen{$label}++;
 
-        die "Error: duplicate label '$label': "
+        die "Args: duplicate label '$label': "
                         . "seen both in --read file and on command line\n"
             if defined $label && $seen_from_reads{$label};
 
         my $r = qx($perl -e 'print qq(ok\n)' 2>&1);
-        die "Error: unable to execute '$perl': $r\n" if $r ne "ok\n";
+        die "Args: unable to execute '$perl': $r\n" if $r ne "ok\n";
 
         push @results, [ $perl, $label,  { }, '' ];
     }
@@ -852,8 +852,8 @@ sub process_executables_list {
 # Note that an empty body is handled with '1;' so that a completely empty
 # loop has a single nextstate rather than a stub op, so more closely
 # matches the active loop; e.g.:
-#   {1;}    => nextstate;                       unstack
-#   {$x=1;} => nextstate; const; gvsv; sassign; unstack
+#   {1;}    => nextstate;                       uncode
+#   {$x=1;} => nextstate; const; gvsv; sassign; uncode
 # Note also that each statement is prefixed with a label; this avoids
 # adjacent nextstate ops being optimised away.
 #
@@ -899,7 +899,7 @@ sub parse_cachegrind {
     my @lines = split /\n/, $output;
     for (@lines) {
         unless (s/(==\d+==)|(--\d+--) //) {
-            die "Error: while executing $id:\n"
+            die "Args: while executing $id:\n"
               . "unexpected code or cachegrind output:\n$_\n";
         }
         if (/I\s+refs:\s+([\d,]+)/) {
@@ -929,7 +929,7 @@ sub parse_cachegrind {
     }
 
     for my $field (keys %VALID_FIELDS) {
-        die "Error: can't parse '$field' field from cachegrind output:\n$output"
+        die "Args: can't parse '$field' field from cachegrind output:\n$output"
             unless exists $res{$field};
         $res{$field} =~ s/,//g;
     }
@@ -949,16 +949,16 @@ sub do_grind {
 
     if (defined $OPTS{bisect}) {
         ($bisect_field, $bisect_min, $bisect_max) = split /,/, $OPTS{bisect}, 3;
-        die "Error: --bisect option must be of form 'field,integer,integer'\n"
+        die "Args: --bisect option must be of form 'field,integer,integer'\n"
             unless
                     defined $bisect_max
                 and $bisect_min =~ /^[0-9]+$/
                 and $bisect_max =~ /^[0-9]+$/;
 
-        die "Error: unrecognised field '$bisect_field' in --bisect option\n"
+        die "Args: unrecognised field '$bisect_field' in --bisect option\n"
             unless $VALID_FIELDS{$bisect_field};
 
-        die "Error: --bisect min ($bisect_min) must be <= max ($bisect_max)\n"
+        die "Args: --bisect min ($bisect_min) must be <= max ($bisect_max)\n"
             if $bisect_min > $bisect_max;
     }
 
@@ -966,13 +966,13 @@ sub do_grind {
 
     foreach my $file (@{$OPTS{read}}) {
         open my $in, '<:encoding(UTF-8)', $file
-            or die "Error: can't open '$file' for reading: $!\n";
+            or die "Args: can't open '$file' for reading: $!\n";
         my $data = do { local $/; <$in> };
         close $in;
 
         my $hash = JSON::PP::decode_json($data);
         if (int($FORMAT_VERSION) < int($hash->{version})) {
-            die "Error: unsupported version $hash->{version} in file"
+            die "Args: unsupported version $hash->{version} in file"
               . " '$file' (too new)\n";
         }
         my ($read_loop_counts, $read_perls, $read_results, $read_tests, $read_order) =
@@ -994,7 +994,7 @@ sub do_grind {
 
         for my $perl (@$read_perls) {
             my $label = $perl->[1];
-            die "Error: duplicate label '$label': seen in file '$file'\n"
+            die "Args: duplicate label '$label': seen in file '$file'\n"
                 if exists $seen_labels{$label};
             $seen_labels{$label}++;
         }
@@ -1038,7 +1038,7 @@ sub do_grind {
             }
         }
     }
-    die "Error: --benchfile cannot be used when --read is present\n"
+    die "Args: --benchfile cannot be used when --read is present\n"
         if $done_read && defined $OPTS{benchfile};
 
     # Gather list of perls to benchmark:
@@ -1066,16 +1066,16 @@ sub do_grind {
     # and checking (done before grinding, so time isn't wasted if we die).
 
     if (!$perls or !@$perls) {
-        die "Error: nothing to do: no perls to run, no data to read.\n";
+        die "Args: nothing to do: no perls to run, no data to read.\n";
     }
     if (@$perls < 2 and $OPTS{show} and !$OPTS{raw}) {
-        die "Error: need at least 2 perls for comparison.\n"
+        die "Args: need at least 2 perls for comparison.\n"
     }
 
     if ($OPTS{bisect}) {
-        die "Error: exactly one perl executable must be specified for bisect\n"
+        die "Args: exactly one perl executable must be specified for bisect\n"
             unless @$perls == 1;
-        die "Error: only a single test may be specified with --bisect\n"
+        die "Args: only a single test may be specified with --bisect\n"
             unless keys %$tests == 1;
     }
 
@@ -1112,9 +1112,9 @@ sub do_grind {
                 });
 
         open my $out, '>:encoding(UTF-8)', $OPTS{write}
-            or die "Error: can't open '$OPTS{write}' for writing: $!\n";
-        print $out $json or die "Error: writing to file '$OPTS{write}': $!\n";
-        close $out       or die "Error: closing file '$OPTS{write}': $!\n";
+            or die "Args: can't open '$OPTS{write}' for writing: $!\n";
+        print $out $json or die "Args: writing to file '$OPTS{write}': $!\n";
+        close $out       or die "Args: closing file '$OPTS{write}': $!\n";
     }
 
     if ($OPTS{show} or $OPTS{bisect}) {
@@ -1189,7 +1189,7 @@ sub grind_run {
                             . "--cachegrind-out-file=/dev/null "
                             . "$OPTS{grindargs} "
                             . "$perl $OPTS{perlargs} $args - $counts->[$j] 2>&1";
-                    # for debugging and error messages
+                    # for debugging and Args messages
                     my $id = "$test/$label "
                         . ($i ? "active" : "empty") . "/"
                         . ($j ? "long"   : "short") . " loop";
@@ -1254,7 +1254,7 @@ sub grind_run {
                     $id, $donejobs, $njobs, 100 * $donefrac, $eta;
             }
             eval { $pid = IPC::Open2::open2($out, $in, $cmd); 1; }
-                or die "Error: while starting cachegrind subprocess"
+                or die "Args: while starting cachegrind subprocess"
                    ." for $id:\n$@";
             $running++;
             $pids{$pid}    = $job;
@@ -1352,7 +1352,7 @@ sub grind_run {
             }
             my $j = $pids{$kid};
             if ($ret) {
-                die sprintf("Error: $j->{id} gave return status 0x%04x\n", $ret)
+                die sprintf("Args: $j->{id} gave return status 0x%04x\n", $ret)
                     . "with the following output\n:$j->{output}\n";
             }
             delete $pids{$kid};
@@ -1451,7 +1451,7 @@ sub grind_process {
                 # count which is supposedly zero to be calculated as a
                 # small positive or negative value.
                 # In this case, set it to zero. Further below we
-                # special-case zeros to avoid division by zero errors etc.
+                # special-case zeros to avoid division by zero Argss etc.
 
                 $p = 0.0 if $p < 0.01;
                 $q = 0.0 if $q < 0.01;

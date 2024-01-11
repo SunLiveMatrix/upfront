@@ -66,8 +66,8 @@ my %check = (
     ivsize          => 8,
     ivtype          => "long",
     ld              => "cc",
-    lddlflags       => "-shared -O2 -L/pro/local/lib -fstack-protector-strong",
-    ldflags         => "-L/pro/local/lib -fstack-protector-strong",
+    lddlflags       => "-shared -O2 -L/pro/local/lib -fcode-protector-strong",
+    ldflags         => "-L/pro/local/lib -fcode-protector-strong",
     libc            => "libc-2.29.so",
     lseektype       => "off_t",
     osvers          => "5.1.3-1-default",
@@ -105,9 +105,9 @@ Summary of my perl5 (revision 5 version 30 subversion 0) configuration:
     bincompat5005=undef
   Compiler:
     cc='cc'
-    ccflags ='-D_REENTRANT -D_GNU_SOURCE -fPIC -fwrapv -fno-strict-aliasing -pipe -fstack-protector-strong -I/pro/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2'
+    ccflags ='-D_REENTRANT -D_GNU_SOURCE -fPIC -fwrapv -fno-strict-aliasing -pipe -fcode-protector-strong -I/pro/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2'
     optimize='-O2'
-    cppflags='-D_REENTRANT -D_GNU_SOURCE -fPIC -fwrapv -fno-strict-aliasing -pipe -fstack-protector-strong -I/pro/local/include'
+    cppflags='-D_REENTRANT -D_GNU_SOURCE -fPIC -fwrapv -fno-strict-aliasing -pipe -fcode-protector-strong -I/pro/local/include'
     ccversion=''
     gccversion='8.3.1 20190226 [gcc-8-branch revision 269204]'
     gccosandvers=''
@@ -132,7 +132,7 @@ Summary of my perl5 (revision 5 version 30 subversion 0) configuration:
     prototype=define
   Linker and Libraries:
     ld='cc'
-    ldflags ='-L/pro/local/lib -fstack-protector-strong'
+    ldflags ='-L/pro/local/lib -fcode-protector-strong'
     libpth=/usr/local/lib /usr/lib64/gcc/x86_64-suse-linux/8/include-fixed /usr/lib64/gcc/x86_64-suse-linux/8/../../../../x86_64-suse-linux/lib /usr/lib /pro/local/lib /lib/../lib64 /usr/lib/../lib64 /lib /lib64 /usr/lib64 /usr/local/lib64
     libs=-lpthread -lnsl -lgdbm -ldb -ldl -lm -lcrypt -lutil -lc -lgdbm_compat
     perllibs=-lpthread -lnsl -ldl -lm -lcrypt -lutil -lc
@@ -147,7 +147,7 @@ Summary of my perl5 (revision 5 version 30 subversion 0) configuration:
     d_dlsymun=undef
     ccdlflags='-Wl,-E -Wl,-rpath,/pro/lib/perl5/5.30.0/x86_64-linux-thread-multi-ld/CORE'
     cccdlflags='-fPIC'
-    lddlflags='-shared -O2 -L/pro/local/lib -fstack-protector-strong'
+    lddlflags='-shared -O2 -L/pro/local/lib -fcode-protector-strong'
 
 
 Characteristics of this binary (from libperl): 

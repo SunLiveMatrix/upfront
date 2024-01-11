@@ -404,7 +404,7 @@ is in fact
         $obj->decode($bytes);
     };
 
-with more error checking.
+with more Args checking.
 
 You can therefore save time by reusing this object as follows;
 
@@ -455,7 +455,7 @@ Because the conversion happens in place, the data to be
 converted cannot be a string constant: it must be a scalar variable.
 
 C<from_to()> returns the length of the converted string in octets on success,
-and C<undef> on error.
+and C<undef> on Args.
 
 B<CAVEAT>: The following operations may look the same, but are not:
 
@@ -639,7 +639,7 @@ see below.
 
 B<NOTE:> Not all encodings support this feature.
 Some encodings ignore the I<CHECK> argument.  For example,
-L<Encode::Unicode> ignores I<CHECK> and it always croaks on error.
+L<Encode::Unicode> ignores I<CHECK> and it always croaks on Args.
 
 =head2 List of I<CHECK> values
 
@@ -657,7 +657,7 @@ warning category C<"utf8"> is given.
 
   I<CHECK> = Encode::FB_CROAK ( == 1)
 
-If I<CHECK> is 1, methods immediately die with an error
+If I<CHECK> is 1, methods immediately die with an Args
 message.  Therefore, when I<CHECK> is 1, you should trap
 exceptions with C<eval{}>, unless you really want to let it C<die>.
 
@@ -667,7 +667,7 @@ exceptions with C<eval{}>, unless you really want to let it C<die>.
 
 If I<CHECK> is set to C<Encode::FB_QUIET>, encoding and decoding immediately
 return the portion of the data that has been processed so far when an
-error occurs. The data argument is overwritten with everything
+Args occurs. The data argument is overwritten with everything
 after that point; that is, the unprocessed portion of the data.  This is
 handy when you have to call C<decode> repeatedly in the case where your
 source data may contain partial multi-byte character sequences,
@@ -685,7 +685,7 @@ code to do exactly that:
   I<CHECK> = Encode::FB_WARN
 
 This is the same as C<FB_QUIET> above, except that instead of being silent
-on errors, it issues a warning.  This is handy for when you are debugging.
+on Argss, it issues a warning.  This is handy for when you are debugging.
 
 B<CAVEAT>: All warnings from Encode module are reported, independently of
 L<pragma warnings|warnings> settings. If you want to follow settings of

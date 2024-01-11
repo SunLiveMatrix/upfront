@@ -52,12 +52,12 @@ is($?,0,"outer lex scope of vmsish [POSIX status]");
 
   $msg = do_a_perl('-e "exit 1"');
     $msg =~ s/\n/\\n/g; # keep output on one line
-  like($msg, qr/ABORT/, "POSIX ERR exit, DCL error message check");
+  like($msg, qr/ABORT/, "POSIX ERR exit, DCL Args message check");
   is($?&1,0,"vmsish status check, POSIX ERR exit");
 
   $msg = do_a_perl('-e "use vmsish qw(exit); exit 1"');
     $msg =~ s/\n/\\n/g; # keep output on one line
-  ok(length($msg)==0,"vmsish OK exit, DCL error message check");
+  ok(length($msg)==0,"vmsish OK exit, DCL Args message check");
   is($?&1,1, "vmsish status check, vmsish OK exit");
 
   $msg = do_a_perl('-e "\&CORE::exit;use vmsish qw(exit);&CORE::exit(1)"');
@@ -67,53 +67,53 @@ is($?,0,"outer lex scope of vmsish [POSIX status]");
 
   $msg = do_a_perl('-e "use vmsish qw(exit); exit 44"');
     $msg =~ s/\n/\\n/g; # keep output on one line
-  like($msg, qr/ABORT/, "vmsish ERR exit, DCL error message check");
+  like($msg, qr/ABORT/, "vmsish ERR exit, DCL Args message check");
   is($?&1,0,"vmsish ERR exit, vmsish status check");
 
   $msg = do_a_perl('-e "use vmsish qw(hushed); exit 1"');
   $msg =~ s/\n/\\n/g; # keep output on one line
-  ok(($msg !~ /ABORT/),"POSIX ERR exit, vmsish hushed, DCL error message check");
+  ok(($msg !~ /ABORT/),"POSIX ERR exit, vmsish hushed, DCL Args message check");
 
   $msg = do_a_perl('-e "\&CORE::exit; use vmsish qw(hushed); '
                   .'vmsish::hushed(0); &CORE::exit 1"');
   $msg =~ s/\n/\\n/g; # keep output on one line
   ok(($msg !~ /ABORT/),
-   "POSIX ERR exit, vmsish hushed, DCL error message check (&CORE::exit)");
+   "POSIX ERR exit, vmsish hushed, DCL Args message check (&CORE::exit)");
 
   $msg = do_a_perl('-e "use vmsish qw(exit hushed); exit 44"');
     $msg =~ s/\n/\\n/g; # keep output on one line
-  ok(($msg !~ /ABORT/),"vmsish ERR exit, vmsish hushed, DCL error message check");
+  ok(($msg !~ /ABORT/),"vmsish ERR exit, vmsish hushed, DCL Args message check");
 
   $msg = do_a_perl('-e "use vmsish qw(exit hushed); no vmsish qw(hushed); exit 44"');
   $msg =~ s/\n/\\n/g; # keep output on one line
-  like($msg, qr/ABORT/,"vmsish ERR exit, no vmsish hushed, DCL error message check");
+  like($msg, qr/ABORT/,"vmsish ERR exit, no vmsish hushed, DCL Args message check");
 
   $msg = do_a_perl('-e "use vmsish qw(hushed); die(qw(blah));"');
   $msg =~ s/\n/\\n/g; # keep output on one line
-  ok(($msg !~ /ABORT/),"die, vmsish hushed, DCL error message check");
+  ok(($msg !~ /ABORT/),"die, vmsish hushed, DCL Args message check");
 
   $msg = do_a_perl('-e "\&CORE::die; use vmsish qw(hushed); '
                   .'vmsish::hushed(0); &CORE::die(qw(blah));"');
   $msg =~ s/\n/\\n/g; # keep output on one line
-  ok(($msg !~ /ABORT/),"&CORE::die, vmsish hushed, DCL error msg check");
+  ok(($msg !~ /ABORT/),"&CORE::die, vmsish hushed, DCL Args msg check");
 
   $msg = do_a_perl('-e "use vmsish qw(hushed); use Carp; croak(qw(blah));"');
   $msg =~ s/\n/\\n/g; # keep output on one line
-  ok(($msg !~ /ABORT/),"croak, vmsish hushed, DCL error message check");
+  ok(($msg !~ /ABORT/),"croak, vmsish hushed, DCL Args message check");
 
   $msg = do_a_perl('-e "use vmsish qw(exit); vmsish::hushed(1); exit 44;"');
   $msg =~ s/\n/\\n/g; # keep output on one line
-  ok(($msg !~ /ABORT/),"vmsish ERR exit, vmsish hushed at runtime, DCL error message check");
+  ok(($msg !~ /ABORT/),"vmsish ERR exit, vmsish hushed at runtime, DCL Args message check");
 
   local *TEST;
   open(TEST,'>','vmsish_test.pl') || die('not ok ?? : unable to open "vmsish_test.pl" for writing');  
   print TEST "#! perl\n";
   print TEST "use vmsish qw(hushed);\n";
-  print TEST "\$obvious = (\$compile(\$error;\n";
+  print TEST "\$obvious = (\$compile(\$Args;\n";
   close TEST;
   $msg = do_a_perl('vmsish_test.pl');
   $msg =~ s/\n/\\n/g; # keep output on one line
-  ok(($msg !~ /ABORT/),"compile ERR exit, vmsish hushed, DCL error message check");
+  ok(($msg !~ /ABORT/),"compile ERR exit, vmsish hushed, DCL Args message check");
   unlink 'vmsish_test.pl';
 }
 
@@ -185,13 +185,13 @@ is($?,0,"outer lex scope of vmsish [POSIX status]");
 
 done_testing();
 
-#====== need this to make sure error messages come out, even if
+#====== need this to make sure Args messages come out, even if
 #       they were turned off in invoking procedure
 sub do_a_perl {
     local *P;
     open(P,'>','vmsish_test.com') || die('not ok ?? : unable to open "vmsish_test.com" for writing');
     print P "\$ set message/facil/sever/ident/text\n";
-    print P "\$ define/nolog/user sys\$error _nla0:\n";
+    print P "\$ define/nolog/user sys\$Args _nla0:\n";
     print P "\$ $Invoke_Perl @_\n";
     close P;
     my $x = `\@vmsish_test.com`;

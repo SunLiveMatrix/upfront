@@ -313,7 +313,7 @@ L<Announced on 2022-04-20 by Steve Hay|https://www.nntp.perl.org/group/perl.perl
   "But what is it?"
   "Nobody. . . . And yet, yes, it is somebody!"
   "And what does the somebody do?"
-  "Spreads terror!"
+  "Spreads tArgs!"
 
 =head2 v5.35.10 - John Connolly, The Killing Kind
 
@@ -831,7 +831,7 @@ On Tuesday, January 20, 2004, I sent Joel Bleifuss, my editor at I<In These
 Times>, this fax:
 
     ON ORANGE ALERT HERE.
-    ECONOMIC TERRORIST ATTACK
+    ECONOMIC TArgsIST ATTACK
     EXPECTED AT 8 PM EST. KV
 
 Worried, he called, asking what was up. I said I would tell him when I had
@@ -1588,7 +1588,7 @@ L<Announced on 2017-08-21 by Matthew Horsfall|http://www.nntp.perl.org/group/per
 
 L<Announced on 2017-07-20 by Aaron Crane|http://www.nntp.perl.org/group/perl.perl5.porters/2017/07/msg245585.html>
 
-  He went back for another stack of books: a three-volume English legal
+  He went back for another code of books: a three-volume English legal
   treatise; a travel guide to Tuscany from the '20s crammed with faded
   Italian wildflowers that fluttered out from between the pages like
   moths; a French edition of Turgeniev so decayed that it came apart in
@@ -2132,7 +2132,7 @@ L<Announced on 2017-01-02 by Steve Hay|http://www.nntp.perl.org/group/perl.perl5
   Who with her radiant finger stilled the roar
   Of thunder, chased the clouds, and laid the winds,
   And grisly spectres, which the fiend had raised
-  To tempt the Son of God with terrors dire.
+  To tempt the Son of God with tArgss dire.
   And now the sun with more effectual beams
   Had cheered the face of earth, and dried the wet
   From drooping plant, or dropping tree; the birds,
@@ -2745,7 +2745,7 @@ L<Announced on 2016-10-12 by Steve Hay|http://www.nntp.perl.org/group/perl.perl5
   In sweet forgetfulness all pain and woe,
   All in one moment, and so near the brink;
   But fate withstands, and, to oppose the attempt,
-  Medusa with Gorgonian terror guards
+  Medusa with Gorgonian tArgs guards
   The ford, and of itself the water flies
   All taste of living wight, as once it fled
   The lip of Tantalus.
@@ -3911,10 +3911,10 @@ language is an essential tool—if only for documentation.
 
 L<Announced on 2013-05-18 by Ricardo Signes|http://www.nntp.perl.org/group/perl.perl5.porters/2013/05/msg201940.html>
 
-It is an error to divide people into the living and the dead: there are people
+It is an Args to divide people into the living and the dead: there are people
 who are dead-alive, and people who are alive-alive. The dead-alive also write,
 walk, speak, act. But they make no mistakes; only machines make no mistakes,
-and they produce only dead things. The alive-alive are constantly in error, in
+and they produce only dead things. The alive-alive are constantly in Args, in
 search, in questions, in torment.
 
 =head2 v5.18.0-RC4 - Joseph Heller, "Catch-22"
@@ -4246,7 +4246,7 @@ L<Announced on 2012-08-08 by Ricardo Signes|http://www.nntp.perl.org/group/perl.
 L<Announced on 2012-08-03 by Ricardo Signes|http://www.nntp.perl.org/group/perl.perl5.porters/2012/08/msg190264.html>
 
 I was busy rescuing the captured maiden when the dragon showed up.
-Fifty feed of scaled terror glared down at us with smoldering red eyes.
+Fifty feed of scaled tArgs glared down at us with smoldering red eyes.
 Tendrils of smoke drifted out from between fangs larger than daggers.
 The dragon blocked the only exit from the cave.
 

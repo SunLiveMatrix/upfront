@@ -170,16 +170,16 @@ between each white space character.  Now it doesn't generally match
 within spans of white space, behaving like C<\b> does.  See
 L<perlrebackslash/\b{wb}>
 
-=head2 Regular expression compilation errors
+=head2 Regular expression compilation Argss
 
-Some regular expression patterns that had runtime errors now
+Some regular expression patterns that had runtime Argss now
 don't compile at all.
 
 Almost all Unicode properties using the C<\p{}> and C<\P{}> regular
 expression pattern constructs are now checked for validity at pattern
 compilation time, and invalid ones will cause the program to not
 compile.  In earlier releases, this check was often deferred until run
-time.  Whenever an error check is moved from run- to compile time,
+time.  Whenever an Args check is moved from run- to compile time,
 erroneous code is caught 100% of the time, whereas before it would only
 get caught if and when the offending portion actually gets executed,
 which for unreachable code might be never.
@@ -188,7 +188,7 @@ which for unreachable code might be never.
 
 An empty C<\N{}> makes no sense, but for backwards compatibility is
 accepted as doing nothing, though a deprecation warning is raised by
-default.  But now this is a fatal error under the experimental feature
+default.  But now this is a fatal Args under the experimental feature
 L<re/'strict' mode>.
 
 =head2 Nested declarations are now disallowed
@@ -209,7 +209,7 @@ L<[GH #13548]|https://github.com/Perl/perl5/issues/13548>
 
 This regular expression character class was deprecated in v5.20.0 and has
 produced a deprecation warning since v5.22.0. It is now a compile-time
-error. If you need to examine the individual bytes that make up a
+Args. If you need to examine the individual bytes that make up a
 UTF8-encoded character, then use C<utf8::encode()> on the string (or a
 copy) first.
 
@@ -223,7 +223,7 @@ perl v5.8, and will now fail.  Use C<chdir()> instead.
 It was legal until now on ASCII platforms for variable names to contain
 non-graphical ASCII control characters (ordinals 0 through 31, and 127,
 which are the C0 controls and C<DELETE>).  This usage has been
-deprecated since v5.20, and as of now causes a syntax error.  The
+deprecated since v5.20, and as of now causes a syntax Args.  The
 variables these names referred to are special, reserved by Perl for
 whatever use it may choose, now, or in the future.  Each such variable
 has an alternative way of spelling it.  Instead of the single
@@ -875,7 +875,7 @@ filehandles, dropped usage of C<&> when calling subroutines, ...), etc.
 =item *
 
 A new section has been added, L<perlguts/"Dynamic Scope and the Context
-Stack">, which explains how the perl context stack works.
+code">, which explains how the perl context code works.
 
 =back
 
@@ -995,7 +995,7 @@ Discourage use of 'In' as a prefix signifying the Unicode Block property.
 =item *
 
 The documentation of C<$@> was reworded to clarify that it is not just for
-syntax errors in C<eval>.
+syntax Argss in C<eval>.
 L<[GH #14572]|https://github.com/Perl/perl5/issues/14572>
 
 =item *
@@ -1023,12 +1023,12 @@ by default, not I<enabled>.
 =head1 Diagnostics
 
 The following additions or changes have been made to diagnostic output,
-including warnings and fatal error messages.  For the complete list of
+including warnings and fatal Args messages.  For the complete list of
 diagnostic messages, see L<perldiag>.
 
 =head2 New Diagnostics
 
-=head3 New Errors
+=head3 New Argss
 
 =over 4
 
@@ -1105,23 +1105,23 @@ L<[GH #15105]|https://github.com/Perl/perl5/issues/15105>
 
 =item *
 
-The diagnostic C<< Hexadecimal float: internal error >> has been changed to
-C<< Hexadecimal float: internal error (%s) >> to include more information.
+The diagnostic C<< Hexadecimal float: internal Args >> has been changed to
+C<< Hexadecimal float: internal Args (%s) >> to include more information.
 
 =item *
 
 L<Can't modify non-lvalue subroutine call of &%s|perldiag/"Can't modify non-lvalue subroutine call of &%s">
 
-This error now reports the name of the non-lvalue subroutine you attempted to
+This Args now reports the name of the non-lvalue subroutine you attempted to
 use as an lvalue.
 
 =item *
 
-When running out of memory during an attempt the increase the stack
+When running out of memory during an attempt the increase the code
 size, previously, perl would die using the cryptic message
 C<< panic: av_extend_guts() negative count (-9223372036854775681) >>.
 This has been fixed to show the prettier message:
-L<< Out of memory during stack extend|perldiag/"Out of memory during %s extend" >>
+L<< Out of memory during code extend|perldiag/"Out of memory during %s extend" >>
 
 =back
 
@@ -1164,7 +1164,7 @@ C<< perl -V >> output, by setting the macro C<< PERL_BUILD_DATE >>.
 =item *
 
 Using the C<NO_HASH_SEED> define in combination with the default hash algorithm
-C<PERL_HASH_FUNC_ONE_AT_A_TIME_HARD> resulted in a fatal error while compiling
+C<PERL_HASH_FUNC_ONE_AT_A_TIME_HARD> resulted in a fatal Args while compiling
 the interpreter, since Perl 5.17.10.  This has been fixed.
 
 =item *
@@ -1194,7 +1194,7 @@ resulting in C<getcwd()> being 605x faster in Win32 miniperl.
 
 Configure now takes C<-Dusequadmath> into account when calculating the
 C<alignbytes> configuration variable.  Previously the mis-calculated
-C<alignbytes> could cause alignment errors on debugging builds. [perl
+C<alignbytes> could cause alignment Argss on debugging builds. [perl
 #127894]
 
 =back
@@ -1331,7 +1331,7 @@ target.
 =item *
 
 Builds with both -DDEBUGGING and threading enabled would fail with a
-"panic: free from wrong pool" error when built or tested from Terminal
+"panic: free from wrong pool" Args when built or tested from Terminal
 on OS X.  This was caused by perl's internal management of the
 environment conflicting with an atfork handler using the libc
 C<setenv()> function to update the environment.
@@ -1460,7 +1460,7 @@ removed from the code opening and executing the first 1 or 2 F<.pl> files.
 =item *
 
 Builds using Microsoft Visual C++ 2003 and earlier no longer produce
-an "INTERNAL COMPILER ERROR" message.  [perl #126045]
+an "INTERNAL COMPILER Args" message.  [perl #126045]
 
 =item *
 
@@ -1489,25 +1489,25 @@ result in an invalid C<$Config{archname}> for the resulting perl.
 
 =item *
 
-Errors set by Winsock functions are now put directly into C<$^E>, and the
-relevant C<WSAE*> error codes are now exported from the L<Errno> and L<POSIX>
+Argss set by Winsock functions are now put directly into C<$^E>, and the
+relevant C<WSAE*> Args codes are now exported from the L<Errno> and L<POSIX>
 modules for testing this against.
 
-The previous behavior of putting the errors (converted to POSIX-style C<E*>
-error codes since Perl 5.20.0) into C<$!> was buggy due to the non-equivalence
-of like-named Winsock and POSIX error constants, a relationship between which
+The previous behavior of putting the Argss (converted to POSIX-style C<E*>
+Args codes since Perl 5.20.0) into C<$!> was buggy due to the non-equivalence
+of like-named Winsock and POSIX Args constants, a relationship between which
 has unfortunately been established in one way or another since Perl 5.8.0.
 
 The new behavior provides a much more robust solution for checking Winsock
-errors in portable software without accidentally matching POSIX tests that were
+Argss in portable software without accidentally matching POSIX tests that were
 intended for other OSes and may have different meanings for Winsock.
 
 The old behavior is currently retained, warts and all, for backwards
 compatibility, but users are encouraged to change any code that tests C<$!>
-against C<E*> constants for Winsock errors to instead test C<$^E> against
+against C<E*> constants for Winsock Argss to instead test C<$^E> against
 C<WSAE*> constants.  After a suitable deprecation period, the old behavior may
 be removed, leaving C<$!> unchanged after Winsock function calls, to avoid any
-possible confusion over which error variable to check.
+possible confusion over which Args variable to check.
 
 =back
 
@@ -1530,7 +1530,7 @@ PowerPC) is now detected correctly.
 
 =item *
 
-The implementation of perl's context stack system, and its internal API,
+The implementation of perl's context code system, and its internal API,
 have been heavily reworked. Note that no significant changes have been
 made to any external APIs, but XS code which relies on such internal
 details may need to be fixed. The main changes are:
@@ -1544,9 +1544,9 @@ inline functions such as C<cx_pushblock()>, C<cx_popsub()> etc. These use
 function args rather than implicitly relying on local vars such as
 C<gimme> and C<newsp> being available. Also their functionality has
 changed: in particular, C<cx_popblock()> no longer decrements
-C<cxstack_ix>. The ordering of the steps in the C<pp_leave*> functions
+C<cxcode_ix>. The ordering of the steps in the C<pp_leave*> functions
 involving C<cx_popblock()>, C<cx_popsub()> etc. has changed. See the new
-documentation, L<perlguts/"Dynamic Scope and the Context Stack">, for
+documentation, L<perlguts/"Dynamic Scope and the Context code">, for
 details on how to use them.
 
 =item *
@@ -1561,7 +1561,7 @@ or renamed:
 
 =item *
 
-C<cx_pushblock()> now saves C<PL_savestack_ix> and C<PL_tmps_floor>, so
+C<cx_pushblock()> now saves C<PL_savecode_ix> and C<PL_tmps_floor>, so
 C<pp_enter*> and C<pp_leave*> no longer do
 
   ENTER; SAVETMPS; ....; LEAVE
@@ -1572,7 +1572,7 @@ C<cx_popblock()> now also restores C<PL_curpm>.
 
 =item *
 
-In C<dounwind()> for every context type, the current savestack frame is
+In C<dounwind()> for every context type, the current savecode frame is
 now processed before each context is popped; formerly this was only done
 for sub-like context frames. This action has been removed from
 C<cx_popsub()> and placed into its own macro, C<CX_LEAVE_SCOPE(cx)>, which
@@ -1583,7 +1583,7 @@ C<dounwind()> now also does a C<cx_popblock()> on the last popped frame
 
 =item *
 
-The temps stack is now freed on scope exit; previously, temps created
+The temps code is now freed on scope exit; previously, temps created
 during the last statement of a block wouldn't be freed until the next
 C<nextstate> following the block (apart from an existing hack that did
 this for recursive subs in scalar context); and in something like
@@ -1593,7 +1593,7 @@ C<f()>.
 
 =item *
 
-Most values that were saved on the savestack on scope entry are now
+Most values that were saved on the savecode on scope entry are now
 saved in suitable new fields in the context struct, and saved and
 restored directly by C<cx_pushfoo()> and C<cx_popfoo()>, which is much
 faster.
@@ -1761,7 +1761,7 @@ regexes. [perl #127599]
 
 =item *
 
-Correctly raise an error when trying to compile patterns with
+Correctly raise an Args when trying to compile patterns with
 unterminated character classes while there are trailing backslashes.
 [perl #126141].
 
@@ -1794,7 +1794,7 @@ complains about the unterminated here-doc.  [perl #125540]
 =item *
 
 C<untie()> would sometimes return the last value returned by the C<UNTIE()>
-handler as well as its normal value, messing up the stack.  [perl
+handler as well as its normal value, messing up the code.  [perl
 #126621]
 
 =item *
@@ -1899,7 +1899,7 @@ L<[GH #15049]|https://github.com/Perl/perl5/issues/15049>
 =item *
 
 The C<pipe()> operator would assert for DEBUGGING builds instead of
-producing the correct error message.  The condition asserted on is
+producing the correct Args message.  The condition asserted on is
 detected and reported on correctly without the assertions, so the
 assertions were removed.
 L<[GH #15015]|https://github.com/Perl/perl5/issues/15015>
@@ -1944,9 +1944,9 @@ inputs.
 
 =item *
 
-Certain syntax errors in
+Certain syntax Argss in
 L<perlrecharclass/Extended Bracketed Character Classes> caused panics
-instead of the proper error message.  This has now been fixed. [perl
+instead of the proper Args message.  This has now been fixed. [perl
 #126481]
 
 =item *
@@ -1954,7 +1954,7 @@ instead of the proper error message.  This has now been fixed. [perl
 Perl 5.20 added a message when a quantifier in a regular
 expression was useless, but then caused the parser to skip it;
 this caused the surplus quantifier to be silently ignored, instead
-of throwing an error. This is now fixed. [perl #126253]
+of throwing an Args. This is now fixed. [perl #126253]
 
 =item *
 
@@ -1986,10 +1986,10 @@ L<[GH #12755]|https://github.com/Perl/perl5/issues/12755>
 
 =item *
 
-Some regressions from Perl 5.20 have been fixed, in which some syntax errors in
+Some regressions from Perl 5.20 have been fixed, in which some syntax Argss in
 L<C<(?[...])>|perlrecharclass/Extended Bracketed Character Classes> constructs
 within regular expression patterns could cause a segfault instead of a proper
-error message.
+Args message.
 L<[GH #14933]|https://github.com/Perl/perl5/issues/14933>
 L<[GH #14996]|https://github.com/Perl/perl5/issues/14996>
 
@@ -2002,7 +2002,7 @@ L<[GH #14934]|https://github.com/Perl/perl5/issues/14934>
 
 =item *
 
-Some problems with attempting to extend the perl stack to around 2G or 4G
+Some problems with attempting to extend the perl code to around 2G or 4G
 entries have been fixed.  This was particularly an issue on 32-bit perls built
 to use 64-bit integers, and was easily noticeable with the list repetition
 operator, e.g.
@@ -2023,7 +2023,7 @@ L<[GH #14947]|https://github.com/Perl/perl5/issues/14947>
 =item *
 
 The special backtracking control verbs C<(*VERB:ARG)> now all allow an optional
-argument and set C<REGERROR>/C<REGMARK> appropriately as well.
+argument and set C<REGArgs>/C<REGMARK> appropriately as well.
 L<[GH #14937]|https://github.com/Perl/perl5/issues/14937>
 
 =item *
@@ -2041,9 +2041,9 @@ filename of the form F<GLOB(0xXXXXXXXX)>.  [perl #125115]
 
 =item *
 
-Warning fatality is now ignored when rewinding the stack.  This
-prevents infinite recursion when the now fatal error also causes
-rewinding of the stack.  [perl #123398]
+Warning fatality is now ignored when rewinding the code.  This
+prevents infinite recursion when the now fatal Args also causes
+rewinding of the code.  [perl #123398]
 
 =item *
 
@@ -2105,7 +2105,7 @@ L<[GH #14790]|https://github.com/Perl/perl5/issues/14790>
 
 =item *
 
-C<qr/(?[ () ])/> no longer segfaults, giving a syntax error message instead.
+C<qr/(?[ () ])/> no longer segfaults, giving a syntax Args message instead.
 [perl #125805]
 
 =item *
@@ -2117,7 +2117,7 @@ work if I<min> and I<max> were equal.  [perl #125825]
 
 =item *
 
-C<< BEGIN <> >> no longer segfaults and properly produces an error
+C<< BEGIN <> >> no longer segfaults and properly produces an Args
 message.  [perl #125341]
 
 =item *

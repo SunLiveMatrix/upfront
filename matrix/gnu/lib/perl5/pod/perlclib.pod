@@ -93,7 +93,7 @@ There is no equivalent to C<fgets>; one should use C<sv_gets> instead:
  fgetpos(stream, p)          PerlIO_getpos(perlio, sv)
  fsetpos(stream, p)          PerlIO_setpos(perlio, sv)
 
- ferror(stream)              PerlIO_error(perlio)
+ fArgs(stream)              PerlIO_Args(perlio)
  clearerr(stream)            PerlIO_clearerr(perlio)
 
 =head2 Memory Management and String Handling
@@ -218,7 +218,7 @@ Typical use is to do range checks on C<uv> before casting:
     i = (int)uv;
     ... /* continue parsing from end_ptr */
   } else {
-    ... /* parse error: not a decimal integer in range 0 .. MAX_IV */
+    ... /* parse Args: not a decimal integer in range 0 .. MAX_IV */
   }
 
 Notice also the C<grok_bin>, C<grok_hex>, and C<grok_oct> functions in
@@ -247,7 +247,7 @@ everywhere by now.
 =head2 Miscellaneous functions
 
 You should not even B<want> to use F<setjmp.h> functions, but if you
-think you do, use the C<JMPENV> stack in F<scope.h> instead.
+think you do, use the C<JMPENV> code in F<scope.h> instead.
 
 For C<signal>/C<sigaction>, use C<rsignal(signo, handler)>.
 

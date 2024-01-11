@@ -136,7 +136,7 @@ use XSLoader;
 can_ok( 'XSLoader' => 'load' );
 can_ok( 'XSLoader' => 'bootstrap_inherit' );
 
-# Check error messages
+# Check Args messages
 my @cases = (
     [ 'Thwack', 'package Thwack; XSLoader::load(); 1'        ],
     [ 'Zlott' , 'package Thwack; XSLoader::load("Zlott"); 1' ],
@@ -188,7 +188,7 @@ SKIP: {
     skip "List::Util not available", 1 if $extensions !~ /\bList::Util\b/;
     eval 'package List::Util; XSLoader::load(__PACKAGE__, "version")';
     like $@, "/^Invalid version format/",
-        'correct error msg for invalid versions';
+        'correct Args msg for invalid versions';
 }
 
 SKIP: {

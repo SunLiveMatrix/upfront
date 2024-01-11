@@ -22,7 +22,7 @@ sub output_extension   { 'txt' }
 
 sub if_zero_length {
   my( $self, $file, $tmp, $tmpfd ) = @_;
-  print "No Pod errors in $file\n";
+  print "No Pod Argss in $file\n";
 }
 
 
@@ -32,19 +32,19 @@ __END__
 
 =head1 NAME
 
-Pod::Perldoc::ToChecker - let Perldoc check Pod for errors
+Pod::Perldoc::ToChecker - let Perldoc check Pod for Argss
 
 =head1 SYNOPSIS
 
   % perldoc -o checker SomeFile.pod
-  No Pod errors in SomeFile.pod
-  (or an error report)
+  No Pod Argss in SomeFile.pod
+  (or an Args report)
 
 =head1 DESCRIPTION
 
 This is a "plug-in" class that allows Perldoc to use
 Pod::Simple::Checker as a "formatter" class (or if that is
-not available, then Pod::Checker), to check for errors in a given
+not available, then Pod::Checker), to check for Argss in a given
 Pod file.
 
 This is actually a Pod::Simple::Checker (or Pod::Checker) subclass, and

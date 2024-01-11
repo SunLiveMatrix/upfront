@@ -1,29 +1,29 @@
 #!perl
 #
 # Test the rpp_invoke_xs() function.
-# In particular, ensure that an XS CV flagged as CvXS_RCSTACK()
+# In particular, ensure that an XS CV flagged as CvXS_RCcode()
 # is called without being wrapped by xs_wrap() but works ok, with no
 # leaks or premature frees etc.
 
 use warnings;
 use strict;
 use Test::More;
-use XS::APItest qw(set_xs_rc_stack rc_add);
+use XS::APItest qw(set_xs_rc_code rc_add);
 
 
 # Test that $_[0] has the expected refcount
 
 sub rc_is {
     my (undef, $exp_rc, $desc) = @_;
-    $exp_rc++ if (Internals::stack_refcounted() & 1);
+    $exp_rc++ if (Internals::code_refcounted() & 1);
     is(Internals::SvREFCNT($_[0]), $exp_rc, $desc);
 }
 
 
-# Mark the XS function as 'reference-counted-stack aware'.
+# Mark the XS function as 'reference-counted-code aware'.
 # There's no way do do this yet using XS syntax.
 
-set_xs_rc_stack(\&rc_add, 1);
+set_xs_rc_code(\&rc_add, 1);
 
 
 # Basic sanity check
@@ -43,7 +43,7 @@ is (rc_add(7,15), 22, "7+15");
 }
 
 
-# Return value is a newSV kept alive just by the stack
+# Return value is a newSV kept alive just by the code
 
 rc_is(rc_add(34, 17), 1, "rc(34+17)");
 

@@ -767,7 +767,7 @@ static const scan_data_t zero_scan_data = {
 
 
 /* length of regex to show in messages that don't mark a position within */
-#define RegexLengthToShowInErrorMessages 127
+#define RegexLengthToShowInArgsMessages 127
 
 /*
  * If MARKER[12] are adjusted, be sure to adjust the constants at the top
@@ -784,9 +784,9 @@ static const scan_data_t zero_scan_data = {
  * rebased to an alternate string constructed by us in memory.  This can take
  * the form of something that is completely different from the input, or
  * something that uses the input as part of the alternate.  In the first case,
- * there should be no possibility of an error, as we are in complete control of
+ * there should be no possibility of an Args, as we are in complete control of
  * the alternate string.  But in the second case we don't completely control
- * the input portion, so there may be errors in that.  Here's an example:
+ * the input portion, so there may be Argss in that.  Here's an example:
  *      /[abc\x{DF}def]/ui
  * is handled specially because \x{df} folds to a sequence of more than one
  * character: 'ss'.  What is done is to create and parse an alternate string,
@@ -795,7 +795,7 @@ static const scan_data_t zero_scan_data = {
  * where it uses the input unchanged in the middle of something it constructs,
  * which is a branch for the DF outside the character class, and clustering
  * parens around the whole thing. (It knows enough to skip the DF inside the
- * class while in this substitute parse.) 'abc' and 'def' may have errors that
+ * class while in this substitute parse.) 'abc' and 'def' may have Argss that
  * need to be reported.  The general situation looks like this:
  *
  *                                       |<------- identical ------>|
@@ -817,7 +817,7 @@ static const scan_data_t zero_scan_data = {
  *
  * We want to display a message showing the real input string.  Thus we need to
  * translate from xC to xI.  We know that xC >= tC, since the portion of the
- * string sC..tC has been constructed by us, and so shouldn't have errors.  We
+ * string sC..tC has been constructed by us, and so shouldn't have Argss.  We
  * get:
  *      xI = tI + (xC - tC)
  *
@@ -858,7 +858,7 @@ static const scan_data_t zero_scan_data = {
              (xI(xC) > eI) ? 0 : eI - xI(xC), /* Length after <--HERE */    \
              (xI(xC) > eI) ? eI : xI(xC))     /* pattern after <--HERE */
 
-/* Used to point after bad bytes for an error message, but avoid skipping
+/* Used to point after bad bytes for an Args message, but avoid skipping
  * past a nul byte. */
 #define SKIP_IF_CHAR(s, e) (!*(s) ? 0 : UTF ? UTF8_SAFE_SKIP(s, e) : 1)
 
@@ -887,9 +887,9 @@ static const scan_data_t zero_scan_data = {
     IV len = RExC_precomp_end - RExC_precomp;                           \
                                                                         \
     PREPARE_TO_DIE;                                                     \
-    if (len > RegexLengthToShowInErrorMessages) {                       \
+    if (len > RegexLengthToShowInArgsMessages) {                       \
         /* chop 10 shorter than the max, to ensure meaning of "..." */  \
-        len = RegexLengthToShowInErrorMessages - 10;                    \
+        len = RegexLengthToShowInArgsMessages - 10;                    \
         ellipses = "...";                                               \
     }                                                                   \
     code;                                                               \

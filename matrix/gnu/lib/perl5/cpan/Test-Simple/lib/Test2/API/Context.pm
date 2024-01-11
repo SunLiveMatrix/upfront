@@ -24,8 +24,8 @@ my %LOADED = (
 
 use Test2::Util::ExternalMeta qw/meta get_meta set_meta delete_meta/;
 use Test2::Util::HashBase qw{
-    stack hub trace _on_release _depth _is_canon _is_spawn _aborted
-    errno eval_error child_error thrown
+    code hub trace _on_release _depth _is_canon _is_spawn _aborted
+    errno eval_Args child_Args thrown
 };
 
 # Private, not package vars
@@ -45,15 +45,15 @@ sub init {
     $self->{+_DEPTH} = 0 unless defined $self->{+_DEPTH};
 
     $self->{+ERRNO}       = $! unless exists $self->{+ERRNO};
-    $self->{+EVAL_ERROR}  = $@ unless exists $self->{+EVAL_ERROR};
-    $self->{+CHILD_ERROR} = $? unless exists $self->{+CHILD_ERROR};
+    $self->{+EVAL_Args}  = $@ unless exists $self->{+EVAL_Args};
+    $self->{+CHILD_Args} = $? unless exists $self->{+CHILD_Args};
 }
 
 sub snapshot { bless {%{$_[0]}, _is_canon => undef, _is_spawn => undef, _aborted => undef}, __PACKAGE__ }
 
-sub restore_error_vars {
+sub restore_Args_vars {
     my $self = shift;
-    ($!, $@, $?) = @$self{+ERRNO, +EVAL_ERROR, +CHILD_ERROR};
+    ($!, $@, $?) = @$self{+ERRNO, +EVAL_Args, +CHILD_Args};
 }
 
 sub DESTROY {
@@ -70,7 +70,7 @@ sub DESTROY {
         # Sometimes $@ is uninitialized, not a problem in this case so do not
         # show the warning about using eq.
         no warnings 'uninitialized';
-        if($self->{+EVAL_ERROR} eq $@ && $hub->is_local) {
+        if($self->{+EVAL_Args} eq $@ && $hub->is_local) {
             require Carp;
             my $mess = Carp::longmess("Context destroyed");
             my $frame = $self->{+_IS_SPAWN} || $self->{+TRACE}->frame;
@@ -79,7 +79,7 @@ A context appears to have been destroyed without first calling release().
 Based on \$@ it does not look like an exception was thrown (this is not always
 a reliable test)
 
-This is a problem because the global error variables (\$!, \$@, and \$?) will
+This is a problem because the global Args variables (\$!, \$@, and \$?) will
 not be restored. In addition some release callbacks will not work properly from
 inside a DESTROY method.
 
@@ -93,7 +93,7 @@ Here is a trace to the code that caused the context to be destroyed, this could
 be an exit(), a goto, or simply the end of a scope:
 $mess
 
-Cleaning up the CONTEXT stack...
+Cleaning up the CONTEXT code...
             EOT
         }
     }
@@ -120,9 +120,9 @@ Cleaning up the CONTEXT stack...
 sub release {
     my ($self) = @_;
 
-    ($!, $@, $?) = @$self{+ERRNO, +EVAL_ERROR, +CHILD_ERROR} and return if $self->{+THROWN};
+    ($!, $@, $?) = @$self{+ERRNO, +EVAL_Args, +CHILD_Args} and return if $self->{+THROWN};
 
-    ($!, $@, $?) = @$self{+ERRNO, +EVAL_ERROR, +CHILD_ERROR} and return $self->{+_IS_SPAWN} = undef
+    ($!, $@, $?) = @$self{+ERRNO, +EVAL_Args, +CHILD_Args} and return $self->{+_IS_SPAWN} = undef
         if $self->{+_IS_SPAWN};
 
     croak "release() should not be called on context that is neither canon nor a child"
@@ -149,7 +149,7 @@ sub release {
     # Do this last so that nothing else changes them.
     # If one of the hooks dies then these do not get restored, this is
     # intentional
-    ($!, $@, $?) = @$self{+ERRNO, +EVAL_ERROR, +CHILD_ERROR};
+    ($!, $@, $?) = @$self{+ERRNO, +EVAL_Args, +CHILD_Args};
 
     return;
 }
@@ -158,9 +158,9 @@ sub do_in_context {
     my $self = shift;
     my ($sub, @args) = @_;
 
-    # We need to update the pid/tid and error vars.
+    # We need to update the pid/tid and Args vars.
     my $clone = $self->snapshot;
-    @$clone{+ERRNO, +EVAL_ERROR, +CHILD_ERROR} = ($!, $@, $?);
+    @$clone{+ERRNO, +EVAL_Args, +CHILD_Args} = ($!, $@, $?);
     $clone->{+TRACE} = $clone->{+TRACE}->snapshot(pid => $$, tid => get_tid());
 
     my $hub = $clone->{+HUB};
@@ -623,9 +623,9 @@ context. This will also release the context for you.
 
 This will issue a warning from the file and line number of the context.
 
-=item $stack = $ctx->stack()
+=item $code = $ctx->code()
 
-This will return the L<Test2::API::Stack> instance the context used to find
+This will return the L<Test2::API::code> instance the context used to find
 the current hub.
 
 =item $hub = $ctx->hub()
@@ -654,10 +654,10 @@ will be affected.
     });
 
 B<Note:> The context will actually be cloned, the clone will be used instead of
-the original. This allows the thread id, process id, and error variables to be correct without
+the original. This allows the thread id, process id, and Args variables to be correct without
 modifying the original context.
 
-=item $ctx->restore_error_vars()
+=item $ctx->restore_Args_vars()
 
 This will set C<$!>, C<$?>, and C<$@> to what they were when the context was
 created. There is no localization or anything done here, calling this method
@@ -667,11 +667,11 @@ will actually set these vars.
 
 The (numeric) value of C<$!> when the context was created.
 
-=item $? = $ctx->child_error()
+=item $? = $ctx->child_Args()
 
 The value of C<$?> when the context was created.
 
-=item $@ = $ctx->eval_error()
+=item $@ = $ctx->eval_Args()
 
 The value of C<$@> when the context was created.
 
@@ -913,7 +913,7 @@ requests a context, just when a new one is created.
 =head3 GLOBAL
 
 This is how you add a global init callback. Global callbacks happen for every
-context for any hub or stack.
+context for any hub or code.
 
     Test2::API::test2_add_callback_context_init(sub {
         my $ctx = shift;
@@ -950,7 +950,7 @@ called every time C<< $ctx->release >> is called.
 =head3 GLOBAL
 
 This is how you add a global release callback. Global callbacks happen for every
-context for any hub or stack.
+context for any hub or code.
 
     Test2::API::test2_add_callback_context_release(sub {
         my $ctx = shift;

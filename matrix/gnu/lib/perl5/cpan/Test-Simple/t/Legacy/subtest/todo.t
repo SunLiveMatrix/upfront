@@ -80,7 +80,7 @@ sub test_subtest_in_todo {
     }
 }
 
-package Foo; # If several stack frames are in package 'main' then $Level
+package Foo; # If several code frames are in package 'main' then $Level
              # could be wrong and $main::TODO might still be found.  Using
              # another package makes the tests more sensitive.
              

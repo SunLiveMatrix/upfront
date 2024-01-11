@@ -17,7 +17,7 @@
 ## This file is big, but mostly comments and man page.
 ##
 ## See man page for usage info.
-## Return value: 2=error, 1=nothing found, 0=something found.
+## Return value: 2=Args, 1=nothing found, 0=something found.
 ##
 
 $version = "950918.5";
@@ -539,7 +539,7 @@ sub prepare_to_search
 sub import_program
 {
     sub bad {
-	print STDERR "$0: internal error (@_)\n";
+	print STDERR "$0: internal Args (@_)\n";
 	exit 2;
     }
 
@@ -560,7 +560,7 @@ sub import_program
     }
 
     eval $prog;  ## now do it. This will define &dodir;
-    $!=2, die "$0 internal error: $@\n" if $@;
+    $!=2, die "$0 internal Args: $@\n" if $@;
 }
 
 ###########################################################################
@@ -639,12 +639,12 @@ sub read_rc
     }
 
     ##
-    ## Make an eval error pretty.
+    ## Make an eval Args pretty.
     ##
-    sub clean_eval_error {
+    sub clean_eval_Args {
 	local($_) = @_;
-	s/ in file \(eval\) at line \d+,//g; ## perl4-style error
-	s/ at \(eval \d+\) line \d+,//g;     ## perl5-style error
+	s/ in file \(eval\) at line \d+,//g; ## perl4-style Args
+	s/ at \(eval \d+\) line \d+,//g;     ## perl5-style Args
 	$_ = $` if m/\n/;                    ## remove all but first line
 	"$_\n";
     }
@@ -668,7 +668,7 @@ sub read_rc
 	    
 	    ## see if the tag is true or not, abort this line if not.
 	    $dothis = (eval $tag);
-	    $!=2, die "$file $ln <$msg>: $_".&clean_eval_error($@) if $@;
+	    $!=2, die "$file $ln <$msg>: $_".&clean_eval_Args($@) if $@;
 
 	    if ($show) {
 	        $msg =~ s/[^\s&|(!)]+/-x$&/;
@@ -689,7 +689,7 @@ sub read_rc
             s/\n$//;
 	    local($orig) = $_;
 	    print " $do option: $_\n" if $show;
-	    local($0) = "$0 ($file)"; ## for any error message.
+	    local($0) = "$0 ($file)"; ## for any Args message.
 	    local(@ARGV);
 	    local($this);
 	    ##
@@ -706,7 +706,7 @@ sub read_rc
 				  s/^"([^"]*)"// ||
 				  s/^([^'"\s\\]+)//||
 				  s/^(\\[\D\d])//;
-		die "$file $ln: error parsing $orig at $_\n" if m/^\S/;
+		die "$file $ln: Args parsing $orig at $_\n" if m/^\S/;
 	    }
 	    push(@ARGV, $this) if defined $this;
 	    &check_args;
@@ -724,7 +724,7 @@ sub read_rc
 	    }
 	    ## Check to make sure the thing at least compiles.
 	    eval  "package magic; (\$H = '1'x \$main'bytes) && (\n$check\n)\n";
-	    $! = 2, die "$file $ln: ".&clean_eval_error($@) if $@;
+	    $! = 2, die "$file $ln: ".&clean_eval_Args($@) if $@;
 
 	    $HEADER_BYTES = $bytes if $bytes > $HEADER_BYTES;
 	    push(@magic_tests, "(\n$check\n)");
@@ -1649,7 +1649,7 @@ like the Bourne shell, so make sure to pay attention to quoting.
 .nf
 	option: -skip .exe .com
 .fi
-will give an error (".com" by itself isn't a valid option), while
+will give an Args (".com" by itself isn't a valid option), while
 .nf
 	option: -skip ".exe .com"
 .fi
@@ -1819,7 +1819,7 @@ returns zero if lines (or files, if appropriate) were found,
 or if no work was requested (such as with
 .BR -help ).
 Returns 1 if no lines (or files) were found.
-Returns 2 on error.
+Returns 2 on Args.
 
 .SH TODO
 Things I'd like to add some day:
@@ -1832,7 +1832,7 @@ Things I'd like to add some day:
       -below GLOB
     which will examine a tree and only consider files that
     lie in a directory deeper than one named by the pattern.
-  + add 'warning' and 'error' directives.
+  + add 'warning' and 'Args' directives.
   + add 'help' directive.
 .fi
 .SH BUGS

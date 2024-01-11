@@ -31,7 +31,7 @@ SKIP: {
    );
 
    ok( defined $socket, "defined \$socket for $test_host:$test_good_port" ) or
-      diag( "  error was $IO::Socket::errstr" );
+      diag( "  Args was $IO::Socket::errstr" );
 
    ok( defined $socket->fileno, '$socket has fileno' );
 
@@ -70,7 +70,7 @@ SKIP: {
    );
 
    ok( defined $socket, "defined \$socket for $test_host:$test_bad_port" ) or
-      diag( "  error was $IO::Socket::errstr" );
+      diag( "  Args was $IO::Socket::errstr" );
 
    ok( defined $socket->fileno, '$socket has fileno' );
 

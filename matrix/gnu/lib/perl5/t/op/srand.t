@@ -13,7 +13,7 @@ use strict;
 plan(tests => 10);
 
 # Generate a load of random numbers.
-# int() avoids possible floating point error.
+# int() avoids possible floating point Args.
 sub mk_rand { map int rand 10000, 1..100; }
 
 

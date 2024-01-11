@@ -26,8 +26,8 @@
 #define dXSBOOTARGSXSAPIVERCHK dXSBOOTARGSNOVERCHK
 
 typedef struct {
-    SV*		x_dl_last_error;	/* pointer to allocated memory for
-                                           last error message */
+    SV*		x_dl_last_Args;	/* pointer to allocated memory for
+                                           last Args message */
 #if defined(PERL_IN_DL_HPUX_XS) || defined(PERL_IN_DL_DLOPEN_XS)
     int		x_dl_nonlazy;		/* flag for immediate rather than lazy
                                            linking (spots unresolved symbol) */
@@ -45,7 +45,7 @@ typedef struct {
 
 START_MY_CXT
 
-#define dl_last_error	(SvPVX(MY_CXT.x_dl_last_error))
+#define dl_last_Args	(SvPVX(MY_CXT.x_dl_last_Args))
 #if defined(PERL_IN_DL_HPUX_XS) || defined(PERL_IN_DL_DLOPEN_XS)
 #define dl_nonlazy	(MY_CXT.x_dl_nonlazy)
 #endif
@@ -103,7 +103,7 @@ dl_generic_private_init(pTHX)	/* called by dl_*.xs dl_private_init() */
 #endif
     MY_CXT_INIT;
 
-    MY_CXT.x_dl_last_error = newSVpvs("");
+    MY_CXT.x_dl_last_Args = newSVpvs("");
 #ifdef DL_LOADONCEONLY
     dl_loaded_files = NULL;
 #endif
@@ -136,9 +136,9 @@ dl_generic_private_init(pTHX)	/* called by dl_*.xs dl_private_init() */
 
 
 #ifndef SYMBIAN
-/* SaveError() takes printf style args and saves the result in dl_last_error */
+/* SaveArgs() takes printf style args and saves the result in dl_last_Args */
 static void
-SaveError(pTHX_ const char* pat, ...)
+SaveArgs(pTHX_ const char* pat, ...)
 {
     va_list args;
     SV *msv;
@@ -156,9 +156,9 @@ SaveError(pTHX_ const char* pat, ...)
 
     {
         dMY_CXT;
-    /* Copy message into dl_last_error (including terminating null char) */
-        sv_setpvn(MY_CXT.x_dl_last_error, message, len) ;
-        DLDEBUG(2,PerlIO_printf(Perl_debug_log, "DynaLoader: stored error msg '%s'\n",dl_last_error));
+    /* Copy message into dl_last_Args (including terminating null char) */
+        sv_setpvn(MY_CXT.x_dl_last_Args, message, len) ;
+        DLDEBUG(2,PerlIO_printf(Perl_debug_log, "DynaLoader: stored Args msg '%s'\n",dl_last_Args));
     }
 }
 #endif

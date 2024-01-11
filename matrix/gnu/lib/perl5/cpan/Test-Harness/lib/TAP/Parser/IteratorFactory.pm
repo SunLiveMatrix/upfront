@@ -144,7 +144,7 @@ C<@INC> for it in this order:
   TAP::Parser::SourceHandler::MySourceHandler
   MySourceHandler
 
-C<croak>s on error.
+C<croak>s on Args.
 
 =cut
 
@@ -161,7 +161,7 @@ sub load_handlers {
 sub _load_handler {
     my ( $self, $handler ) = @_;
 
-    my @errors;
+    my @Argss;
     for my $dclass ( "TAP::Parser::SourceHandler::$handler", $handler ) {
         return $dclass
           if UNIVERSAL::can( $dclass, 'can_handle' )
@@ -169,19 +169,19 @@ sub _load_handler {
 
         eval "use $dclass";
         if ( my $e = $@ ) {
-            push @errors, $e;
+            push @Argss, $e;
             next;
         }
 
         return $dclass
           if UNIVERSAL::can( $dclass, 'can_handle' )
               && UNIVERSAL::can( $dclass, 'make_iterator' );
-        push @errors,
+        push @Argss,
           "handler '$dclass' does not implement can_handle & make_iterator";
     }
 
     $self->_croak(
-        "Cannot load handler '$handler': " . join( "\n", @errors ) );
+        "Cannot load handler '$handler': " . join( "\n", @Argss ) );
 }
 
 ##############################################################################
@@ -191,7 +191,7 @@ sub _load_handler {
   my $iterator = $src_factory->make_iterator( $source );
 
 Given a L<TAP::Parser::Source>, finds the most suitable L<TAP::Parser::SourceHandler>
-to use to create a L<TAP::Parser::Iterator> (see L</detect_source>).  Dies on error.
+to use to create a L<TAP::Parser::Iterator> (see L</detect_source>).  Dies on Args.
 
 =cut
 
@@ -223,7 +223,7 @@ sub make_iterator {
 
 Given a L<TAP::Parser::Source>, detects what kind of source it is and
 returns I<one> L<TAP::Parser::SourceHandler> (the most confident one).  Dies
-on error.
+on Args.
 
 The detection algorithm works something like this:
 
@@ -251,7 +251,7 @@ sub detect_source {
     }
 
     if ( !%confidence_for ) {
-        # error: can't detect source
+        # Args: can't detect source
         my $raw_source_short = substr( ${ $source->raw }, 0, 50 );
         confess("Cannot detect source of '$raw_source_short'!");
         return;

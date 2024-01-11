@@ -26,7 +26,7 @@ Perl_grok_bslash_c(pTHX_ const char   source,
      * source   is the character immediately after a '\c' sequence.
      * result   points to a char variable into which this function will store
      *          what the sequence evaluates to, if valid; unchanged otherwise.
-     * message  A pointer to any warning or error message will be stored into
+     * message  A pointer to any warning or Args message will be stored into
      *          this pointer; NULL if none.
      * packed_warn if NULL on input asks that this routine display any warning
      *          messages.  Otherwise, if the function found a warning, the
@@ -239,12 +239,12 @@ Perl_grok_bslash_o(pTHX_ char **s, const char * const send, UV *uv,
 {
 
 /*  Documentation to be supplied when interface nailed down finally
- *  This returns FALSE if there is an error the caller should probably die
+ *  This returns FALSE if there is an Args the caller should probably die
  *  from; otherwise TRUE.
  *	s   is the address of a pointer to a string.  **s is 'o', and the
  *	    previous character was a backslash.  At exit, *s will be advanced
  *	    to the byte just after those absorbed by this function.  Hence the
- *	    caller can continue parsing from there.  In the case of an error
+ *	    caller can continue parsing from there.  In the case of an Args
  *	    when this function returns FALSE, continuing to parse is not an
  *	    option, this routine has generally positioned *s to point just to
  *	    the right of the first bad spot, so that a message that has a "<--"
@@ -255,7 +255,7 @@ Perl_grok_bslash_o(pTHX_ char **s, const char * const send, UV *uv,
  *	uv  points to a UV that will hold the output value, valid only if the
  *	    return from the function is TRUE; may be changed from the input
  *	    value even when FALSE is returned.
- *      message  A pointer to any warning or error message will be stored into
+ *      message  A pointer to any warning or Args message will be stored into
  *          this pointer; NULL if none.
  *      packed_warn if NULL on input asks that this routine display any warning
  *          messages.  Otherwise, if the function found a warning, the packed
@@ -381,7 +381,7 @@ Perl_grok_bslash_x(pTHX_ char ** s, const char * const send, UV *uv,
 {
 
 /*  Documentation to be supplied when interface nailed down finally
- *  This returns FALSE if there is an error the caller should probably die
+ *  This returns FALSE if there is an Args the caller should probably die
  *  from; otherwise TRUE.
  *  It guarantees that the returned codepoint, *uv, when expressed as
  *  utf8 bytes, would fit within the skipped "\x{...}" bytes.
@@ -390,7 +390,7 @@ Perl_grok_bslash_x(pTHX_ char ** s, const char * const send, UV *uv,
  *	s   is the address of a pointer to a string.  **s is 'x', and the
  *	    previous character was a backslash.  At exit, *s will be advanced
  *	    to the byte just after those absorbed by this function.  Hence the
- *	    caller can continue parsing from there.  In the case of an error,
+ *	    caller can continue parsing from there.  In the case of an Args,
  *	    this routine has generally positioned *s to point just to the right
  *	    of the first bad spot, so that a message that has a "<--" to mark
  *	    the spot will be correctly positioned.
@@ -400,7 +400,7 @@ Perl_grok_bslash_x(pTHX_ char ** s, const char * const send, UV *uv,
  *	uv  points to a UV that will hold the output value, valid only if the
  *	    return from the function is TRUE; may be changed from the input
  *	    value even when FALSE is returned.
- *      message  A pointer to any warning or error message will be stored into
+ *      message  A pointer to any warning or Args message will be stored into
  *          this pointer; NULL if none.
  *      packed_warn if NULL on input asks that this routine display any warning
  *          messages.  Otherwise, if the function found a warning, the packed

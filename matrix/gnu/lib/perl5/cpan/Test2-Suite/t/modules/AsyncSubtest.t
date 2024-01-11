@@ -7,7 +7,7 @@ ok($INC{'Test2/IPC.pm'}, "Loaded Test2::IPC");
 
 # Preserve the API
 can_ok $CLASS => qw{
-    name hub trace send_to events finished active stack id children pid tid
+    name hub trace send_to events finished active code id children pid tid
 
     context cleave attach detach ready pending run start stop finish wait fork
     run_fork run_thread
@@ -26,7 +26,7 @@ my %lines;
 intercept {
     $lines{one} = __LINE__ + 1;
     $one = $CLASS->new(name => 'one');
-    $hub = Test2::API::test2_stack()->top;
+    $hub = Test2::API::test2_code()->top;
 
     $one->run(sub {
         $lines{two} = __LINE__ + 1;
@@ -47,7 +47,7 @@ like(
         name     => 'one',
         send_to  => exact_ref($hub),
         trace    => {frame => [__PACKAGE__, __FILE__, $lines{one}]},
-        stack    => [],
+        code    => [],
         _in_use  => 2,
         tid      => get_tid,
         pid      => $$,
@@ -67,7 +67,7 @@ like(
         name     => 'two',
         send_to  => exact_ref($one->hub),
         trace    => {frame => [__PACKAGE__, __FILE__, $lines{two}]},
-        stack    => [exact_ref($one)],
+        code    => [exact_ref($one)],
         _in_use  => 1,
         tid      => get_tid,
         pid      => $$,
@@ -87,7 +87,7 @@ like(
         name     => 'three',
         send_to  => exact_ref($two->hub),
         trace    => {frame => [__PACKAGE__, __FILE__, $lines{three}]},
-        stack    => [exact_ref($one), exact_ref($two)],
+        code    => [exact_ref($one), exact_ref($two)],
         _in_use  => 0,
         tid      => get_tid,
         pid      => $$,

@@ -45,7 +45,7 @@ rsignal                        # E
 rsignal_state                  # E
 save_gp                        # U
 SAVEI16                        # U
-SAVESTACK_POS                  # U
+SAVEcode_POS                  # U
 sv_cmp_locale                  # U
 sv_derived_from                # U
 sv_magic_portable              # U

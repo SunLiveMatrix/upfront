@@ -26,14 +26,14 @@ while (defined($str = <DATA>))
 
     my @res;
     my $var = eval "\@res = $cmd";
-    is $@, '', 'no error';
+    is $@, '', 'no Args';
     debug "\t list got: [" . join("|",map {defined $_ ? $_ : '<undef>'} @res) . "]\n";
     debug "\t list left: [$str]\n";
     ($neg ? \&isnt : \&is)->(substr($str,pos($str)||0,1), ';', "$orig_str matched list");
 
     pos $str = 0;
     $var = eval $cmd;
-    is $@, '', 'no error';
+    is $@, '', 'no Args';
     $var = "<undef>" unless defined $var;
     debug "\t scalar got: [$var]\n";
     debug "\t scalar left: [$str]\n";

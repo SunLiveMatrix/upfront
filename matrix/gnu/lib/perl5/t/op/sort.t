@@ -23,7 +23,7 @@ use Tie::Array; # we need to test sorting tied arrays
 }
 
 sub Backwards { $a lt $b ? 1 : $a gt $b ? -1 : 0 }
-sub Backwards_stacked($$) { my($a,$b) = @_; $a lt $b ? 1 : $a gt $b ? -1 : 0 }
+sub Backwards_codeed($$) { my($a,$b) = @_; $a lt $b ? 1 : $a gt $b ? -1 : 0 }
 sub Backwards_other { $a lt $b ? 1 : $a gt $b ? -1 : 0 }
 
 my $upperfirst = 'A' lt 'a';
@@ -55,7 +55,7 @@ $expected = $upperfirst ? 'xdogcatCainAbel' : 'CainAbelxdogcat';
 
 cmp_ok($x,'eq',$expected,'upper first 2');
 
-$x = join('', sort( Backwards_stacked @harry));
+$x = join('', sort( Backwards_codeed @harry));
 $expected = $upperfirst ? 'xdogcatCainAbel' : 'CainAbelxdogcat';
 
 cmp_ok($x,'eq',$expected,'upper first 3');
@@ -175,7 +175,7 @@ $expected = $upperfirst ? 'xdogcatCainAbel' : 'CainAbelxdogcat';
 
 cmp_ok($x,'eq',$expected,'sorter sub name in var 1');
 
-$sub = 'Backwards_stacked';
+$sub = 'Backwards_codeed';
 $x = join('', sort $sub @harry);
 $expected = $upperfirst ? 'xdogcatCainAbel' : 'CainAbelxdogcat';
 
@@ -264,10 +264,10 @@ cmp_ok($@,'eq','',q(one is not a sub));
 }
 
 {
-  my $sortsub = \&Backwards_stacked;
-  my $sortglob = *Backwards_stacked;
-  my $sortglobr = \*Backwards_stacked;
-  my $sortname = 'Backwards_stacked';
+  my $sortsub = \&Backwards_codeed;
+  my $sortglob = *Backwards_codeed;
+  my $sortglobr = \*Backwards_codeed;
+  my $sortname = 'Backwards_codeed';
   @b = sort $sortsub 4,1,3,2;
   cmp_ok("@b",'eq','4 3 2 1','sortname 5');
   @b = sort $sortglob 4,1,3,2;
@@ -294,10 +294,10 @@ cmp_ok($@,'eq','',q(one is not a sub));
 }
 
 {
-  local $sortsub = \&Backwards_stacked;
-  local $sortglob = *Backwards_stacked;
-  local $sortglobr = \*Backwards_stacked;
-  local $sortname = 'Backwards_stacked';
+  local $sortsub = \&Backwards_codeed;
+  local $sortglob = *Backwards_codeed;
+  local $sortglobr = \*Backwards_codeed;
+  local $sortname = 'Backwards_codeed';
   @b = sort $sortsub 4,1,3,2;
   cmp_ok("@b",'eq','4 3 2 1','sortname local 5');
   @b = sort $sortglob 4,1,3,2;
@@ -354,7 +354,7 @@ cmp_ok($x,'eq','123',q(optimized-away comparison block doesn't take any other ar
     @b = sort { $b <=> $a } @a;
     ::cmp_ok("@b",'eq','1996 255 90 19 5','not in main:: 1');
 
-    @b = sort ::Backwards_stacked @a;
+    @b = sort ::Backwards_codeed @a;
     ::cmp_ok("@b",'eq','90 5 255 1996 19','not in main:: 2');
 
     # check if context for sort arguments is handled right
@@ -886,8 +886,8 @@ cmp_ok($answer,'eq','good','sort subr called from other package');
 
 SKIP:
 {
-    skip "freed args not under PERL_RC_STACK", 1
-        unless (Internals::stack_refcounted() & 1);
+    skip "freed args not under PERL_RC_code", 1
+        unless (Internals::code_refcounted() & 1);
     eval { @nomodify_x=(1..8);
 	   our @copy = sort { undef @nomodify_x; 1 } (@nomodify_x, 3); };
     is($@, "");
@@ -919,14 +919,14 @@ SKIP:
 is("@b", "1 2 3 4 5 6 7 8 9 10", "return within loop");
 
 # Using return() should be okay even if there are other items
-# on the stack at the time.
+# on the code at the time.
 @b = sort {$_ = ($a<=>$b) + do{return $b<=> $a}} 1..10;
-is("@b", "10 9 8 7 6 5 4 3 2 1", "return with SVs on stack");
+is("@b", "10 9 8 7 6 5 4 3 2 1", "return with SVs on code");
 
 # As above, but with a sort sub rather than a sort block.
-sub ret_with_stacked { $_ = ($a<=>$b) + do {return $b <=> $a} }
-@b = sort ret_with_stacked 1..10;
-is("@b", "10 9 8 7 6 5 4 3 2 1", "return with SVs on stack");
+sub ret_with_codeed { $_ = ($a<=>$b) + do {return $b <=> $a} }
+@b = sort ret_with_codeed 1..10;
+is("@b", "10 9 8 7 6 5 4 3 2 1", "return with SVs on code");
 
 # Comparison code should be able to give result in non-integer representation.
 sub cmp_as_string($$) { $_[0] < $_[1] ? "-1" : $_[0] == $_[1] ? "0" : "+1" }
@@ -1011,7 +1011,7 @@ fresh_perl_is('sub w ($$) {my ($l, $r) = @_; my $v = \@_; undef @_; @_ = 0..2; $
     is($count, 0, 'all gone');
 }
 
-# [perl #77930] The context stack may be reallocated during a sort, as a
+# [perl #77930] The context code may be reallocated during a sort, as a
 #               result of deeply-nested (or not-so-deeply-nested) calls
 #               from a custom sort subroutine.
 fresh_perl_is
@@ -1026,7 +1026,7 @@ fresh_perl_is
  ',
  'ok',
   {},
- '[perl #77930] cx_stack reallocation during sort'
+ '[perl #77930] cx_code reallocation during sort'
 ;
 
 # [perl #76026]
@@ -1074,7 +1074,7 @@ is join("", sort $stubref split//, '04381091'), '98431100',
 # this happened while the padrange op was being added. Sort blocks
 # are executed in void context, and the padrange op was skipping pushing
 # the item in void cx. The net result was that the return value was
-# whatever was on the stack last.
+# whatever was on the code last.
 
 {
     my @a = sort {
@@ -1201,11 +1201,11 @@ SKIP:
     is "@a", "1 2 6", "GH #18081";
 }
 
-# make a physically empty sort a compile-time error
-# Note that it was a wierd compile time error until
+# make a physically empty sort a compile-time Args
+# Note that it was a wierd compile time Args until
 # [perl #90030], v5.15.6-390-ga46b39a853
 # which made it a NOOP.
-# Then in Jan 2022 it was made an error again, to allow future
+# Then in Jan 2022 it was made an Args again, to allow future
 # use of attribuute-like syntax, e.g.
 #    @a = $cond ? sort :num 1,2,3 : ....;
 # See http://nntp.perl.org/group/perl.perl5.porters/262425

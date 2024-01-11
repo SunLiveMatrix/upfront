@@ -538,7 +538,7 @@ my $strval;
 }
 
 ok(!eval { 1 if bless([], "Bar") | "x"; 1 },"string overload can't use |");
-like($@, qr/no method found/,               "correct error");
+like($@, qr/no method found/,               "correct Args");
 is(eval { bless([], "Baz") | "x" }, "y",    "| overload works");
 
 my $obj = bless [], "Bar";

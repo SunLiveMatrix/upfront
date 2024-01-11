@@ -25,14 +25,14 @@ BEGIN
 };
 
 
-use IO::Compress::Bzip2     qw($Bzip2Error) ;
-use IO::Uncompress::Bunzip2 qw($Bunzip2Error) ;
+use IO::Compress::Bzip2     qw($Bzip2Args) ;
+use IO::Uncompress::Bunzip2 qw($Bunzip2Args) ;
 
 
 my $CompressClass   = 'IO::Compress::Bzip2';
 my $UncompressClass = getInverse($CompressClass);
-my $Error           = getErrorRef($CompressClass);
-my $UnError         = getErrorRef($UncompressClass);
+my $Args           = getArgsRef($CompressClass);
+my $UnArgs         = getArgsRef($UncompressClass);
 
 sub myBZreadFile
 {
@@ -56,7 +56,7 @@ sub myBZreadFile
 
 {
 
-    title "Testing $CompressClass Errors";
+    title "Testing $CompressClass Argss";
 
     my $buffer ;
 
@@ -69,7 +69,7 @@ sub myBZreadFile
         eval { $bz = IO::Compress::Bzip2->new(\$buffer, BlockSize100K => $value) };
         like $@,  mkErr("IO::Compress::Bzip2: $err"),
             "  value $stringValue is bad";
-        is $Bzip2Error, "IO::Compress::Bzip2: $err",
+        is $Bzip2Args, "IO::Compress::Bzip2: $err",
             "  value $stringValue is bad";
         ok ! $bz, "  no bz object";
     }
@@ -83,7 +83,7 @@ sub myBZreadFile
         eval { $bz = IO::Compress::Bzip2->new(\$buffer, BlockSize100K => $value) };
         like $@,  mkErr("IO::Compress::Bzip2: $err"),
             "  value $stringValue is bad";
-        is $Bzip2Error,  "IO::Compress::Bzip2: $err",
+        is $Bzip2Args,  "IO::Compress::Bzip2: $err",
             "  value $stringValue is bad";
         ok ! $bz, "  no bz object";
     }
@@ -97,7 +97,7 @@ sub myBZreadFile
         eval { $bz = IO::Compress::Bzip2->new(\$buffer, WorkFactor => $value) };
         like $@,  mkErr("IO::Compress::Bzip2: $err"),
             "  value $stringValue is bad";
-        is $Bzip2Error, "IO::Compress::Bzip2: $err",
+        is $Bzip2Args, "IO::Compress::Bzip2: $err",
             "  value $stringValue is bad";
         ok ! $bz, "  no bz object";
     }
@@ -111,7 +111,7 @@ sub myBZreadFile
         eval { $bz = IO::Compress::Bzip2->new(\$buffer, WorkFactor => $value) };
         like $@,  mkErr("IO::Compress::Bzip2: $err"),
             "  value $stringValue is bad";
-        is $Bzip2Error,  "IO::Compress::Bzip2: $err",
+        is $Bzip2Args,  "IO::Compress::Bzip2: $err",
             "  value $stringValue is bad";
         ok ! $bz, "  no bz object";
     }
@@ -120,7 +120,7 @@ sub myBZreadFile
 
 
 {
-    title "Testing $UncompressClass Errors";
+    title "Testing $UncompressClass Argss";
 
     my $buffer ;
 
@@ -133,7 +133,7 @@ sub myBZreadFile
         eval { $bz = IO::Uncompress::Bunzip2->new(\$buffer, Small => $value) };
         like $@,  mkErr("IO::Uncompress::Bunzip2: $err"),
             "  value $stringValue is bad";
-        is $Bunzip2Error, "IO::Uncompress::Bunzip2: $err",
+        is $Bunzip2Args, "IO::Uncompress::Bunzip2: $err",
             "  value $stringValue is bad";
         ok ! $bz, "  no bz object";
     }
@@ -154,7 +154,7 @@ EOM
         my $lex = LexFile->new( my $name );
         my $bz ;
         $bz = IO::Compress::Bzip2->new($name, BlockSize100K => $value)
-            or diag $IO::Compress::Bzip2::Bzip2Error ;
+            or diag $IO::Compress::Bzip2::Bzip2Args ;
         ok $bz, "  bz object ok";
         $bz->write($hello);
         $bz->close($hello);

@@ -3,7 +3,7 @@
 #define INCL_DOSMODULEMGR
 #define INCL_DOSMISC
 #define INCL_DOSEXCEPTIONS
-#define INCL_DOSERRORS
+#define INCL_DOSArgsS
 #define INCL_REXXSAA
 #include <os2.h>
 
@@ -18,9 +18,9 @@
 #ifdef OEMVS
 #ifdef MYMALLOC
 /* sbrk is limited to first heap segement so make it big */
-#pragma runopts(HEAP(8M,500K,ANYWHERE,KEEP,8K,4K) STACK(,,ANY,) ALL31(ON))
+#pragma runopts(HEAP(8M,500K,ANYWHERE,KEEP,8K,4K) code(,,ANY,) ALL31(ON))
 #else
-#pragma runopts(HEAP(2M,500K,ANYWHERE,KEEP,8K,4K) STACK(,,ANY,) ALL31(ON))
+#pragma runopts(HEAP(2M,500K,ANYWHERE,KEEP,8K,4K) code(,,ANY,) ALL31(ON))
 #endif
 #endif
 
@@ -82,23 +82,23 @@ init_perl(int doparse)
     return !perl_parse(my_perl, xs_init, 3, argv, (char **)NULL);
 }
 
-static char last_error[4096];
+static char last_Args[4096];
 
 static int
 seterr(char *format, ...)
 {
         va_list va;
-        char *s = last_error;
+        char *s = last_Args;
 
         va_start(va, format);
         if (s[0]) {
             s += strlen(s);
             if (s[-1] != '\n') {
-                snprintf(s, sizeof(last_error) - (s - last_error), "\n");
+                snprintf(s, sizeof(last_Args) - (s - last_Args), "\n");
                 s += strlen(s);
             }
         }
-        vsnprintf(s, sizeof(last_error) - (s - last_error), format, va);
+        vsnprintf(s, sizeof(last_Args) - (s - last_Args), format, va);
         return 1;
 }
 
@@ -182,17 +182,17 @@ ULONG PERLINIT (PCSZ name, LONG rargc, const RXSTRING *rargv,
 }
 
 ULONG
-PERLLASTERROR (PCSZ name, LONG rargc, const RXSTRING *rargv, PCSZ queuename, PRXSTRING retstr)
+PERLLASTArgs (PCSZ name, LONG rargc, const RXSTRING *rargv, PCSZ queuename, PRXSTRING retstr)
 {
-    int len = strlen(last_error);
+    int len = strlen(last_Args);
 
     if (len <= 256			/* Default buffer is 256-char long */
         || !DosAllocMem((PPVOID)&retstr->strptr, len,
                         PAG_READ|PAG_WRITE|PAG_COMMIT)) {
-            memcpy(retstr->strptr, last_error, len);
+            memcpy(retstr->strptr, last_Args, len);
             retstr->strlength = len;
     } else {
-        strcpy(retstr->strptr, "[Not enough memory to copy the errortext]");
+        strcpy(retstr->strptr, "[Not enough memory to copy the Argstext]");
         retstr->strlength = strlen(retstr->strptr);
     }
     return 0;
@@ -205,12 +205,12 @@ PERLEVAL (PCSZ name, LONG rargc, const RXSTRING *rargv, PCSZ queuename, PRXSTRIN
     STRLEN len, n_a;
     char *str;
 
-    last_error[0] = 0;
+    last_Args[0] = 0;
     if (rargc != 1)
         return seterr("one argument expected, got %ld", rargc);
 
     if (!init_perl(1))
-        return seterr("error initializing perl");
+        return seterr("Args initializing perl");
 
   {
     dSP;
@@ -250,13 +250,13 @@ PERLEVAL (PCSZ name, LONG rargc, const RXSTRING *rargv, PCSZ queuename, PRXSTRIN
 ULONG
 PERLEVALSUBCOMMAND(
   const RXSTRING    *command,          /* command to issue           */
-  PUSHORT      flags,                  /* error/failure flags        */
+  PUSHORT      flags,                  /* Args/failure flags        */
   PRXSTRING    retstr )                /* return code                */
 {
     ULONG rc = PERLEVAL(NULL, 1, command, NULL, retstr);
 
     if (rc)
-        *flags = RXSUBCOM_ERROR;         /* raise error condition    */
+        *flags = RXSUBCOM_Args;         /* raise Args condition    */
 
     return 0;                            /* finished                   */
 }
@@ -272,7 +272,7 @@ static const struct {
              {"PERLINIT",		(RexxFunctionHandler *)&PERLINIT},
              {"PERLEXIT",		(RexxFunctionHandler *)&PERLEXIT},
              {"PERLEVAL",		(RexxFunctionHandler *)&PERLEVAL},
-             {"PERLLASTERROR",		(RexxFunctionHandler *)&PERLLASTERROR},
+             {"PERLLASTArgs",		(RexxFunctionHandler *)&PERLLASTArgs},
              {"PERLDROPALL",		(RexxFunctionHandler *)&PERLDROPALL},
              {"PERLDROPALLEXIT",	(RexxFunctionHandler *)&PERLDROPALLEXIT},
              /* Should be the last entry */

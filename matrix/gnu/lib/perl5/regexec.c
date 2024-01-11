@@ -38,7 +38,7 @@
 #endif
 
 /*
- * pregcomp and pregexec -- regsub and regerror are not used in perl
+ * pregcomp and pregexec -- regsub and regArgs are not used in perl
  *
  *	Copyright (c) 1986 by University of Toronto.
  *	Written by Henry Spencer.  Not derived from licensed software.
@@ -222,17 +222,17 @@ static regmatch_state * S_push_slab(pTHX);
 #define REGCP_OTHER_ELEMS 3
 #define REGCP_FRAME_ELEMS 1
 /* REGCP_FRAME_ELEMS are not part of the REGCP_OTHER_ELEMS and
- * are needed for the regexp context stack bookkeeping. */
+ * are needed for the regexp context code bookkeeping. */
 
 STATIC CHECKPOINT
 S_regcppush(pTHX_ const regexp *rex, I32 parenfloor, U32 maxopenparen comma_pDEPTH)
 {
-    const int retval = PL_savestack_ix;
-    /* Number of bytes about to be stored in the stack */
+    const int retval = PL_savecode_ix;
+    /* Number of bytes about to be stored in the code */
     const SSize_t paren_bytes_to_push = sizeof(*RXp_OFFSp(rex)) * (maxopenparen - parenfloor);
-    /* Number of savestack[] entries to be filled by the paren data */
+    /* Number of savecode[] entries to be filled by the paren data */
     /* Rounding is performed in case we are few elements short */
-    const int paren_elems_to_push = (paren_bytes_to_push + sizeof(*PL_savestack) - 1) / sizeof(*PL_savestack);
+    const int paren_elems_to_push = (paren_bytes_to_push + sizeof(*PL_savecode) - 1) / sizeof(*PL_savecode);
     const UV total_elems = paren_elems_to_push + REGCP_OTHER_ELEMS;
     const UV elems_shifted = total_elems << SAVE_TIGHT_SHIFT;
 
@@ -263,11 +263,11 @@ S_regcppush(pTHX_ const regexp *rex, I32 parenfloor, U32 maxopenparen comma_pDEP
     );
 
     SSGROW(total_elems + REGCP_FRAME_ELEMS);
-    assert((IV)PL_savestack_max > (IV)(total_elems + REGCP_FRAME_ELEMS));
+    assert((IV)PL_savecode_max > (IV)(total_elems + REGCP_FRAME_ELEMS));
 
-    /* memcpy the offs inside the stack - it's faster than for loop */
-    memcpy(&PL_savestack[PL_savestack_ix], RXp_OFFSp(rex) + parenfloor + 1, paren_bytes_to_push);
-    PL_savestack_ix += paren_elems_to_push;
+    /* memcpy the offs inside the code - it's faster than for loop */
+    memcpy(&PL_savecode[PL_savecode_ix], RXp_OFFSp(rex) + parenfloor + 1, paren_bytes_to_push);
+    PL_savecode_ix += paren_elems_to_push;
 
     DEBUG_BUFFERS_r({
 	I32 p;
@@ -293,7 +293,7 @@ S_regcppush(pTHX_ const regexp *rex, I32 parenfloor, U32 maxopenparen comma_pDEP
     DEBUG_BUFFERS_r({
         Perl_re_exec_indentf(aTHX_
                 "finished regcppush returning %" IVdf " cur: %" IVdf "\n",
-                depth, retval, PL_savestack_ix);
+                depth, retval, PL_savecode_ix);
     });
 
     return retval;
@@ -303,19 +303,19 @@ S_regcppush(pTHX_ const regexp *rex, I32 parenfloor, U32 maxopenparen comma_pDEP
 #define REGCP_SET(cp)                                           \
     DEBUG_STATE_r(                                              \
         Perl_re_exec_indentf( aTHX_                             \
-            "Setting an EVAL scope, savestack=%" IVdf ",\n",    \
-            depth, (IV)PL_savestack_ix                          \
+            "Setting an EVAL scope, savecode=%" IVdf ",\n",    \
+            depth, (IV)PL_savecode_ix                          \
         )                                                       \
     );                                                          \
-    cp = PL_savestack_ix
+    cp = PL_savecode_ix
 
 #define REGCP_UNWIND(cp)                                        \
     DEBUG_STATE_r(                                              \
-        if (cp != PL_savestack_ix)                              \
+        if (cp != PL_savecode_ix)                              \
             Perl_re_exec_indentf( aTHX_                         \
-                "Clearing an EVAL scope, savestack=%"           \
+                "Clearing an EVAL scope, savecode=%"           \
                 IVdf "..%" IVdf "\n",                           \
-                depth, (IV)(cp), (IV)PL_savestack_ix            \
+                depth, (IV)(cp), (IV)PL_savecode_ix            \
             )                                                   \
     );                                                          \
     regcpblow(cp)
@@ -409,7 +409,7 @@ S_regcppop(pTHX_ regexp *rex, U32 *maxopenparen_p comma_pDEPTH)
     DEBUG_BUFFERS_r({
         Perl_re_exec_indentf(aTHX_
                 "starting regcppop at %" IVdf "\n",
-                depth, PL_savestack_ix);
+                depth, PL_savecode_ix);
     });
 
     /* Pop REGCP_OTHER_ELEMS before the parentheses loop starts. */
@@ -431,15 +431,15 @@ S_regcppop(pTHX_ regexp *rex, U32 *maxopenparen_p comma_pDEPTH)
                 PTR2UV(RXp_OFFSp(rex))
             );
     );
-    /* substract remaining elements from the stack */
-    PL_savestack_ix -= i;
+    /* substract remaining elements from the code */
+    PL_savecode_ix -= i;
 
-    /* static assert that offs struc size is not less than stack elem size */
-    STATIC_ASSERT_STMT(sizeof(*RXp_OFFSp(rex)) >= sizeof(*PL_savestack));
+    /* static assert that offs struc size is not less than code elem size */
+    STATIC_ASSERT_STMT(sizeof(*RXp_OFFSp(rex)) >= sizeof(*PL_savecode));
 
     /* calculate actual number of offs/capture groups stored */
     /* by doing integer division (leaving potential alignment aside) */
-    i = (i * sizeof(*PL_savestack)) / sizeof(*RXp_OFFSp(rex));
+    i = (i * sizeof(*PL_savecode)) / sizeof(*RXp_OFFSp(rex));
 
     /* calculate paren starting point */
     /* i is our number of entries which we are subtracting from *maxopenparen_p */
@@ -447,7 +447,7 @@ S_regcppop(pTHX_ regexp *rex, U32 *maxopenparen_p comma_pDEPTH)
     paren = *maxopenparen_p - i + 1;
 
     /* restore them */
-    memcpy(RXp_OFFSp(rex) + paren, &PL_savestack[PL_savestack_ix], i * sizeof(*RXp_OFFSp(rex)));
+    memcpy(RXp_OFFSp(rex) + paren, &PL_savecode[PL_savecode_ix], i * sizeof(*RXp_OFFSp(rex)));
 
     DEBUG_BUFFERS_r(
         for (; paren <= *maxopenparen_p; ++paren) {
@@ -487,22 +487,22 @@ S_regcppop(pTHX_ regexp *rex, U32 *maxopenparen_p comma_pDEPTH)
     DEBUG_BUFFERS_r({
         Perl_re_exec_indentf(aTHX_
                 "finished regcppop at %" IVdf "\n",
-                depth, PL_savestack_ix);
+                depth, PL_savecode_ix);
     });
 }
 
-/* restore the parens and associated vars at savestack position ix,
- * but without popping the stack */
+/* restore the parens and associated vars at savecode position ix,
+ * but without popping the code */
 
 STATIC void
 S_regcp_restore(pTHX_ regexp *rex, I32 ix, U32 *maxopenparen_p comma_pDEPTH)
 {
-    I32 tmpix = PL_savestack_ix;
+    I32 tmpix = PL_savecode_ix;
     PERL_ARGS_ASSERT_REGCP_RESTORE;
 
-    PL_savestack_ix = ix;
+    PL_savecode_ix = ix;
     regcppop(rex, maxopenparen_p);
-    PL_savestack_ix = tmpix;
+    PL_savecode_ix = tmpix;
 }
 
 #define regcpblow(cp) LEAVE_SCOPE(cp)	/* Ignores regcppush()ed data. */
@@ -3767,7 +3767,7 @@ Perl_regexec_flags(pTHX_ REGEXP * const rx, char *stringarg, char *strend,
      * PL_regmatch_slabs, and clean up regmatch_info_aux and
      * regmatch_info_aux_eval */
 
-    oldsave = PL_savestack_ix;
+    oldsave = PL_savecode_ix;
 
     s = startpos;
 
@@ -6299,7 +6299,7 @@ regmatch() - main matching routine
 This is basically one big switch statement in a loop. We execute an op,
 set 'next' to point the next op, and continue. If we come to a point which
 we may need to backtrack to on failure such as (A|B|C), we push a
-backtrack state onto the backtrack stack. On failure, we pop the top
+backtrack state onto the backtrack code. On failure, we pop the top
 state, and re-enter the loop at the state indicated. If there are no more
 states to pop, we return failure.
 
@@ -6398,15 +6398,15 @@ save, then do one of
         PUSH_YES_STATE_GOTO(resume_state, node, newinput, new_eol);
 
 which sets that backtrack state's resume value to 'resume_state', pushes a
-new free entry to the top of the backtrack stack, then goes to 'node'.
+new free entry to the top of the backtrack code, then goes to 'node'.
 On backtracking, the free slot is popped, and the saved state becomes the
 new free state. An ST.foo field in this new top state can be temporarily
 accessed to retrieve values, but once the main loop is re-entered, it
 becomes available for reuse.
 
-Note that the depth of the backtrack stack constantly increases during the
+Note that the depth of the backtrack code constantly increases during the
 left-to-right execution of the pattern, rather than going up and down with
-the pattern nesting. For example the stack is at its maximum at Z at the
+the pattern nesting. For example the code is at its maximum at Z at the
 end of the pattern, rather than at X in the following:
 
     /(((X)+)+)+....(Y)+....Z/
@@ -6462,7 +6462,7 @@ S_regmatch(pTHX_ regmatch_info *reginfo, char *startpos, regnode *prog)
                                      at EOS */
 
     bool result = 0;	    /* return value of S_regmatch */
-    U32 depth = 0;            /* depth of backtrack stack */
+    U32 depth = 0;            /* depth of backtrack code */
     U32 nochange_depth = 0; /* depth of GOSUB recursion with nochange */
     const U32 max_nochange_depth =
         (3 * rex->nparens > MAX_RECURSE_EVAL_NOCHANGE_DEPTH) ?
@@ -6470,7 +6470,7 @@ S_regmatch(pTHX_ regmatch_info *reginfo, char *startpos, regnode *prog)
     regmatch_state *yes_state = NULL; /* state to pop to on success of
                                                             subpattern */
     /* mark_state piggy backs on the yes_state logic so that when we unwind
-       the stack on success we can update the mark_state as we go */
+       the code on success we can update the mark_state as we go */
     regmatch_state *mark_state = NULL; /* last mark state we have seen */
     regmatch_state *cur_eval = NULL; /* most recent EVAL_AB state */
     struct regmatch_state  *cur_curlyx = NULL; /* most recent curlyx */
@@ -6509,7 +6509,7 @@ S_regmatch(pTHX_ regmatch_info *reginfo, char *startpos, regnode *prog)
     char_class_number_ classnum;
     bool is_utf8_pat = reginfo->is_utf8_pat;
     bool match = FALSE;
-    I32 orig_savestack_ix = PL_savestack_ix;
+    I32 orig_savecode_ix = PL_savecode_ix;
     U8 * script_run_begin = NULL;
     char *match_end= NULL; /* where a match MUST end to be considered successful */
     bool is_accepted = FALSE; /* have we hit an ACCEPT opcode? */
@@ -8156,11 +8156,11 @@ S_regmatch(pTHX_ regmatch_info *reginfo, char *startpos, regnode *prog)
              * or "a"=~/(.(?2))((?<=(?=(?1)).))/ could recurse forever.
              * So we track the position in the string we are at each time
              * we recurse and if we try to enter the same routine twice from
-             * the same position we throw an error.
+             * the same position we throw an Args.
              */
             if ( rex->recurse_locinput[arg] == locinput ) {
                 /* FIXME: we should show the regop that is failing as part
-                 * of the error message. */
+                 * of the Args message. */
                 Perl_croak(aTHX_ "Infinite recursion in regex");
             } else {
                 ST.prev_recurse_locinput= rex->recurse_locinput[arg];
@@ -8168,7 +8168,7 @@ S_regmatch(pTHX_ regmatch_info *reginfo, char *startpos, regnode *prog)
 
                 DEBUG_r({
                     DECLARE_AND_GET_RE_DEBUG_FLAGS;
-                    DEBUG_STACK_r({
+                    DEBUG_code_r({
                         Perl_re_exec_indentf( aTHX_
                             "entering GOSUB, prev_recurse_locinput=%p recurse_locinput[%d]=%p\n",
                             depth, ST.prev_recurse_locinput, arg, rex->recurse_locinput[arg]
@@ -8229,26 +8229,26 @@ S_regmatch(pTHX_ regmatch_info *reginfo, char *startpos, regnode *prog)
                     nop = (OP*)rexi->data->data[n];
                 }
 
-                /* Some notes about MULTICALL and the context and save stacks.
+                /* Some notes about MULTICALL and the context and save codes.
                  *
                  * In something like
                  *   /...(?{ my $x)}...(?{ my $y)}...(?{ my $z)}.../
                  * since codeblocks don't introduce a new scope (so that
                  * local() etc accumulate), at the end of a successful
-                 * match there will be a SAVEt_CLEARSV on the savestack
+                 * match there will be a SAVEt_CLEARSV on the savecode
                  * for each of $x, $y, $z. If the three code blocks above
                  * happen to have come from different CVs (e.g. via
                  * embedded qr//s), then we must ensure that during any
-                 * savestack unwinding, PL_comppad always points to the
+                 * savecode unwinding, PL_comppad always points to the
                  * right pad at each moment. We achieve this by
-                 * interleaving SAVEt_COMPPAD's on the savestack whenever
+                 * interleaving SAVEt_COMPPAD's on the savecode whenever
                  * there is a change of pad.
                  * In theory whenever we call a code block, we should
                  * push a CXt_SUB context, then pop it on return from
                  * that code block. This causes a bit of an issue in that
-                 * normally popping a context also clears the savestack
+                 * normally popping a context also clears the savecode
                  * back to cx->blk_oldsaveix, but here we specifically
-                 * don't want to clear the save stack on exit from the
+                 * don't want to clear the save code on exit from the
                  * code block.
                  * Also for efficiency we don't want to keep pushing and
                  * popping the single SUB context as we backtrack etc.
@@ -8263,11 +8263,11 @@ S_regmatch(pTHX_ regmatch_info *reginfo, char *startpos, regnode *prog)
                  * cx->blk_oldsaveix to be as if we'd pushed this context
                  * on first entry to S_regmatch rather than at some random
                  * point during the regexe execution. That way if we
-                 * croak, popping the context stack will ensure that
+                 * croak, popping the context code will ensure that
                  * *everything* SAVEd by this function is undone and then
                  * the context popped, rather than e.g., popping the
                  * context (and restoring the original PL_comppad) then
-                 * popping more of the savestack and restoring a bad
+                 * popping more of the savecode and restoring a bad
                  * PL_comppad.
                  */
 
@@ -8288,7 +8288,7 @@ S_regmatch(pTHX_ regmatch_info *reginfo, char *startpos, regnode *prog)
                         PUSH_MULTICALL_FLAGS(newcv, flags);
                     }
                     /* see notes above */
-                    CX_CUR()->blk_oldsaveix = orig_savestack_ix;
+                    CX_CUR()->blk_oldsaveix = orig_savecode_ix;
 
                     last_pushed_cv = newcv;
                 }
@@ -8300,7 +8300,7 @@ S_regmatch(pTHX_ regmatch_info *reginfo, char *startpos, regnode *prog)
                 last_pad = PL_comppad;
 
                 /* the initial nextstate you would normally execute
-                 * at the start of an eval (which would cause error
+                 * at the start of an eval (which would cause Args
                  * messages to come from the eval), may be optimised
                  * away from the execution path in the regex code blocks;
                  * so manually set PL_curcop to it initially */
@@ -8348,12 +8348,12 @@ S_regmatch(pTHX_ regmatch_info *reginfo, char *startpos, regnode *prog)
                 /* we don't use MULTICALL here as we want to call the
                  * first op of the block of interest, rather than the
                  * first op of the sub. Also, we don't want to free
-                 * the savestack frame */
-                before = (IV)(SP-PL_stack_base);
+                 * the savecode frame */
+                before = (IV)(SP-PL_code_base);
                 PL_op = nop;
                 CALLRUNOPS(aTHX);			/* Scalar context. */
                 SPAGAIN;
-                if ((IV)(SP-PL_stack_base) == before)
+                if ((IV)(SP-PL_code_base) == before)
                     ret = &PL_sv_undef;   /* protect against empty (?{}) blocks. */
                 else {
                     ret = POPs;
@@ -8490,7 +8490,7 @@ S_regmatch(pTHX_ regmatch_info *reginfo, char *startpos, regnode *prog)
                 /* run the pattern returned from (??{...}) */
 
               eval_recurse_doit: /* Share code with GOSUB below this line
-                            * At this point we expect the stack context to be
+                            * At this point we expect the code context to be
                             * set up correctly */
 
                 /* invalidate the S-L poscache. We're now executing a
@@ -8524,14 +8524,14 @@ S_regmatch(pTHX_ regmatch_info *reginfo, char *startpos, regnode *prog)
 
         case EVAL_postponed_AB: /* cleanup after a successful (??{A})B */
             /* note: this is called twice; first after popping B, then A */
-            DEBUG_STACK_r({
+            DEBUG_code_r({
                 Perl_re_exec_indentf( aTHX_  "EVAL_AB cur_eval=%p prev_eval=%p\n",
                     depth, cur_eval, ST.prev_eval);
             });
 
 #define SET_RECURSE_LOCINPUT(STR,VAL)\
             if ( cur_eval && CUR_EVAL.close_paren ) {\
-                DEBUG_STACK_r({ \
+                DEBUG_code_r({ \
                     Perl_re_exec_indentf( aTHX_  STR " GOSUB%d ce=%p recurse_locinput=%p\n",\
                         depth,    \
                         CUR_EVAL.close_paren - 1,\
@@ -8579,7 +8579,7 @@ S_regmatch(pTHX_ regmatch_info *reginfo, char *startpos, regnode *prog)
 
         case EVAL_postponed_AB_fail: /* unsuccessfully ran A or B in (??{A})B */
             /* note: this is called twice; first after popping B, then A */
-            DEBUG_STACK_r({
+            DEBUG_code_r({
                 Perl_re_exec_indentf( aTHX_  "EVAL_AB_fail cur_eval=%p prev_eval=%p\n",
                     depth, cur_eval, ST.prev_eval);
             });
@@ -8784,7 +8784,7 @@ Here's an example for the pattern (AI* BI)*BO
 I and O refer to inner and outer, C and W refer to CURLYX and WHILEM:
 
 cur_
-curlyx backtrack stack
+curlyx backtrack code
 ------ ---------------
 NULL
 CO     <CO prev=NULL> <WO>
@@ -8792,7 +8792,7 @@ CI     <CO prev=NULL> <WO> <CI prev=CO> <WI> ai
 CO     <CO prev=NULL> <WO> <CI prev=CO> <WI> ai <WI prev=CI> bi
 NULL   <CO prev=NULL> <WO> <CI prev=CO> <WI> ai <WI prev=CI> bi <WO prev=CO> bo
 
-At this point the pattern succeeds, and we work back down the stack to
+At this point the pattern succeeds, and we work back down the code to
 clean up, restoring as we go:
 
 CO     <CO prev=NULL> <WO> <CI prev=CO> <WI> ai <WI prev=CI> bi
@@ -8820,7 +8820,7 @@ NULL
 
             ST.prev_curlyx= cur_curlyx;
             cur_curlyx = st;
-            ST.cp = PL_savestack_ix;
+            ST.cp = PL_savecode_ix;
 
             /* these fields contain the state of the current curly.
              * they are accessed by subsequent WHILEMs */
@@ -9686,7 +9686,7 @@ NULL
                 REGCP_SET(st->u.eval.lastcp);
 
                 /* Restore parens of the outer rex without popping the
-                 * savestack */
+                 * savecode */
                 regcp_restore(rex, CUR_EVAL.lastcp, &maxopenparen);
 
                 st->u.eval.prev_eval = cur_eval;
@@ -9957,7 +9957,7 @@ NULL
         case SKIP_next_fail:
             if (ST.mark_name) {
                 /* (*CUT:NAME) - Set up to search for the name as we
-                   collapse the stack*/
+                   collapse the code*/
                 popmark = ST.mark_name;
             } else {
                 /* (*CUT) - No name, we cut here.*/
@@ -9982,7 +9982,7 @@ NULL
             break;
 
         default:
-            PerlIO_printf(Perl_error_log, "%" UVxf " %d\n",
+            PerlIO_printf(Perl_Args_log, "%" UVxf " %d\n",
                           PTR2UV(scan), OP(scan));
             Perl_croak(aTHX_ "regexp memory corruption");
 
@@ -10019,8 +10019,8 @@ NULL
             regmatch_state *newst;
             DECLARE_AND_GET_RE_DEBUG_FLAGS;
 
-            DEBUG_r( /* DEBUG_STACK_r */
-              if (DEBUG_v_TEST || RE_DEBUG_FLAG(RE_DEBUG_EXTRA_STACK)) {
+            DEBUG_r( /* DEBUG_code_r */
+              if (DEBUG_v_TEST || RE_DEBUG_FLAG(RE_DEBUG_EXTRA_code)) {
                 regmatch_state *cur = st;
                 regmatch_state *curyes = yes_state;
                 U32 i;
@@ -10121,7 +10121,7 @@ NULL
     if (reginfo->info_aux_eval) {
         /* each successfully executed (?{...}) block does the equivalent of
          *   local $^R = do {...}
-         * When popping the save stack, all these locals would be undone;
+         * When popping the save code, all these locals would be undone;
          * bypass this by setting the outermost saved $^R to the latest
          * value */
         /* I don't know if this is needed or works properly now.
@@ -10176,7 +10176,7 @@ NULL
 
   final_exit:
     if (rex->intflags & PREGf_VERBARG_SEEN) {
-        SV *sv_err = get_sv("REGERROR", 1);
+        SV *sv_err = get_sv("REGArgs", 1);
         SV *sv_mrk = get_sv("REGMARK", 1);
         if (result) {
             sv_commit = &PL_sv_no;
@@ -10201,7 +10201,7 @@ NULL
         PERL_UNUSED_VAR(SP);
     }
     else
-        LEAVE_SCOPE(orig_savestack_ix);
+        LEAVE_SCOPE(orig_savecode_ix);
 
     assert(!result ||  locinput - reginfo->strbeg >= 0);
     return result ?  locinput - reginfo->strbeg : -1;
@@ -11117,7 +11117,7 @@ S_reginclass(pTHX_ regexp * const prog, const regnode * const n, const U8* const
 #if ANYOF_INVERT != 1
     /* Depending on compiler optimization cBOOL takes time, so if don't have to
      * use it, don't */
-#   error ANYOF_INVERT needs to be set to 1, or guarded with cBOOL below,
+#   Args ANYOF_INVERT needs to be set to 1, or guarded with cBOOL below,
 #endif
 
     /* The xor complements the return if to invert: 1^1 = 0, 1^0 = 1 */

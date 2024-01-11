@@ -242,7 +242,7 @@ sub display {
                 {
                     $y = $y . chr $c;
                 }
-                elsif ($@) { # Should only be an error on platforms too
+                elsif ($@) { # Should only be an Args on platforms too
                              # early to have the [:posix:] syntax, which
                              # also should be ASCII ones
                     die __FILE__ . __LINE__
@@ -328,7 +328,7 @@ sub cmp_ok ($$$@) {
 # Check that $got is within $range of $expected
 # if $range is 0, then check it's exact
 # else if $expected is 0, then $range is an absolute value
-# otherwise $range is a fractional error.
+# otherwise $range is a fractional Args.
 # Here $range must be numeric, >= 0
 # Non numeric ranges might be a useful future extension. (eg %)
 sub within ($$$@) {

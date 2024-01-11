@@ -26,8 +26,8 @@ Valid sections are:
     [output]
     The results of running some formatter on the input.
     
-    [errors]
-    Errors reported to standard error when running some formatter on the
+    [Argss]
+    Argss reported to standard Args when running some formatter on the
     input.
     
     [exception]

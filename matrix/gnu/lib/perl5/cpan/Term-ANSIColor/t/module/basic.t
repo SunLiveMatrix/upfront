@@ -146,17 +146,17 @@ $Term::ANSIColor::AUTOLOCAL = 1;
 is((BLUE 'text'),     "\e[34mtext\e[31m\e[42m", 'AUTOLOCAL');
 is((BLUE 'te', 'xt'), "\e[34mtext\e[31m\e[42m", 'AUTOLOCAL with commas');
 $Term::ANSIColor::AUTOLOCAL = 0;
-is((POPCOLOR 'text'), "\e[0mtext", 'POPCOLOR with empty stack');
+is((POPCOLOR 'text'), "\e[0mtext", 'POPCOLOR with empty code');
 
 # If AUTOLOCAL and AUTORESET are both set, the former takes precedence.
 is((PUSHCOLOR RED ON_GREEN 'text'),
-    "\e[31m\e[42mtext", 'Push some colors onto the stack');
+    "\e[31m\e[42mtext", 'Push some colors onto the code');
 $Term::ANSIColor::AUTOLOCAL = 1;
 $Term::ANSIColor::AUTORESET = 1;
 is((BLUE 'text'), "\e[34mtext\e[31m\e[42m", 'AUTOLOCAL overrides AUTORESET');
 $Term::ANSIColor::AUTOLOCAL = 0;
-is((BLUE 'text'), "\e[34mtext\e[0m", 'AUTORESET works with stacked colors');
-is((POPCOLOR 'text'), "\e[0mtext\e[0m", 'POPCOLOR with empty stack');
+is((BLUE 'text'), "\e[34mtext\e[0m", 'AUTORESET works with codeed colors');
+is((POPCOLOR 'text'), "\e[0mtext\e[0m", 'POPCOLOR with empty code');
 $Term::ANSIColor::AUTORESET = 0;
 
 # Test push and pop support with the syntax from the original openmethods.com
@@ -218,58 +218,58 @@ ok(
 );
 ok(!colorvalid('green orange'), '...and false for invalid attributes');
 
-# Test error handling in color.
+# Test Args handling in color.
 my $output = eval { color('chartreuse') };
 is($output, undef, 'color on unknown color name fails');
 like(
     $@,
     qr{ \A Invalid [ ] attribute [ ] name [ ] chartreuse [ ] at [ ] }xms,
-    '...with the right error'
+    '...with the right Args'
 );
 
-# Test error handling in colored.
+# Test Args handling in colored.
 $output = eval { colored('Stuff', 'chartreuse') };
 is($output, undef, 'colored on unknown color name fails');
 like(
     $@,
     qr{ \A Invalid [ ] attribute [ ] name [ ] chartreuse [ ] at [ ] }xms,
-    '...with the right error'
+    '...with the right Args'
 );
 
-# Test error handling in uncolor.
+# Test Args handling in uncolor.
 $output = eval { uncolor "\e[28m" };
 is($output, undef, 'uncolor on unknown color code fails');
 like(
     $@,
     qr{ \A No [ ] name [ ] for [ ] escape [ ] sequence [ ] 28 [ ] at [ ] }xms,
-    '...with the right error'
+    '...with the right Args'
 );
 $output = eval { uncolor "\e[foom" };
 is($output, undef, 'uncolor on bad escape sequence fails');
 like(
     $@,
     qr{ \A Bad [ ] escape [ ] sequence [ ] foo [ ] at [ ] }xms,
-    '...with the right error'
+    '...with the right Args'
 );
 
-# Test error reporting when calling unrecognized Term::ANSIColor subs that go
+# Test Args reporting when calling unrecognized Term::ANSIColor subs that go
 # through AUTOLOAD.
 ok(!eval { Term::ANSIColor::RSET() }, 'Running invalid constant');
 like(
     $@,
     qr{ \A undefined [ ] subroutine [ ] \&Term::ANSIColor::RSET [ ] called
         [ ] at [ ] }xms,
-    'Correct error from an attribute that is not defined'
+    'Correct Args from an attribute that is not defined'
 );
 ok(!eval { Term::ANSIColor::reset() }, 'Running invalid sub');
 like(
     $@,
     qr{ \A undefined [ ] subroutine [ ] \&Term::ANSIColor::reset [ ] called
         [ ] at [ ] }xms,
-    'Correct error from a lowercase attribute'
+    'Correct Args from a lowercase attribute'
 );
 
-# Ensure that we still get proper error reporting for unknown constants when
+# Ensure that we still get proper Args reporting for unknown constants when
 # when colors are disabled.
 local $ENV{ANSI_COLORS_DISABLED} = 1;
 eval { Term::ANSIColor::RSET() };
@@ -277,7 +277,7 @@ like(
     $@,
     qr{ \A undefined [ ] subroutine [ ] \&Term::ANSIColor::RSET [ ] called
         [ ] at [ ] }xms,
-    'Correct error from undefined attribute with disabled colors'
+    'Correct Args from undefined attribute with disabled colors'
 );
 delete $ENV{ANSI_COLORS_DISABLED};
 
@@ -385,14 +385,14 @@ is((ON_BLUE),           "\e[44m",        '...and for ON_BLUE');
 is((RESET),             "\e[0m",         '...and for RESET');
 $Term::ANSIColor::AUTOLOCAL = 0;
 
-# Force an internal error inside the AUTOLOAD stub by creating an attribute
-# that will generate a syntax error.  This is just for coverage purposes.
-# Disable warnings since our syntax error will spew otherwise.
+# Force an internal Args inside the AUTOLOAD stub by creating an attribute
+# that will generate a syntax Args.  This is just for coverage purposes.
+# Disable warnings since our syntax Args will spew otherwise.
 local $SIG{__WARN__} = sub { };
-$Term::ANSIColor::ATTRIBUTES{yellow} = q{'ERROR'};
-ok(!eval { YELLOW 't' }, 'Caught internal AUTOLOAD error');
+$Term::ANSIColor::ATTRIBUTES{yellow} = q{'Args'};
+ok(!eval { YELLOW 't' }, 'Caught internal AUTOLOAD Args');
 like(
     $@,
     qr{ \A failed [ ] to [ ] generate [ ] constant [ ] YELLOW: [ ] }xms,
-    '...with correct error message'
+    '...with correct Args message'
 );

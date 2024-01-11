@@ -9,8 +9,8 @@ use lib qw(t t/compress);
 use strict;
 use warnings;
 
-use IO::Compress::Deflate   qw($DeflateError) ;
-use IO::Uncompress::Inflate qw($InflateError) ;
+use IO::Compress::Deflate   qw($DeflateArgs) ;
+use IO::Uncompress::Inflate qw($InflateArgs) ;
 
 sub identify
 {

@@ -14,7 +14,7 @@
 # Column 3 contains the expected result:
 # 	y	expect a match
 # 	n	expect no match
-# 	c	expect an error
+# 	c	expect an Args
 #	T	the test is a TODO (can be combined with y/n/c)
 #	M	skip test on miniperl (combine with y/n/c/T)
 #	B	test exposes a known bug in Perl, should be skipped
@@ -30,7 +30,7 @@
 # Column 4 contains a string, usually C<$&>.
 #
 # Column 5 contains the expected result of double-quote
-# interpolating that string after the match, or start of error message.
+# interpolating that string after the match, or start of Args message.
 #
 # Column 6, if present, contains a reason why the test is skipped.
 # This is printed with "skipped", for harness to pick up.
@@ -296,7 +296,7 @@ foreach (@tests) {
                             last unless $in_brackets;
                             if ($result eq 'c') {
                                 $skip++;
-                                $reason = "Can't handle compilation errors with unmatched '{'";
+                                $reason = "Can't handle compilation Argss with unmatched '{'";
                             }
                             else {
                                 print "not ok $testname # Problem in $0; original = '$pat'; mod = '$modified'\n";
@@ -310,7 +310,7 @@ foreach (@tests) {
 
                         # \x without brackets is supposed to be followed by 2
                         # hex digits.  Take up to 2, and then add a blank
-                        # after the last one.  This avoids getting errors from
+                        # after the last one.  This avoids getting Argss from
                         # (?[ ]) for run-ons, like \xabc
                         my $j = $i + 1;
                         for (; $j < $i + 3 && $j < $pat_len; $j++) {
@@ -426,7 +426,7 @@ foreach (@tests) {
             if ($in_brackets && ! $skip) {
                 if ($result eq 'c') {
                     $skip++;
-                    $reason = "Can't figure out where to put the (?[ and ]) since is a compilation error";
+                    $reason = "Can't figure out where to put the (?[ and ]) since is a compilation Args";
                 }
                 else {
                     print "not ok $testname # Problem in $0; original = '$pat'; mod = '$modified'\n";
@@ -524,14 +524,14 @@ EOFCODE
 	chomp( my $err = $@ );
 	if ($result eq 'c') {
 	    if ($err !~ m!^\Q$expect!) { print "not ok $testname$todo (compile) $input => '$err'\n"; next TEST }
-	    last;  # no need to study a syntax error
+	    last;  # no need to study a syntax Args
 	}
 	elsif ( $todo_qr ) {
 	    print "not ok $testname # TODO", length($reason) ? " - $reason" : '', "\n";
 	    next TEST;
 	}
 	elsif ($@) {
-	    print "not ok $testname$todo $input => error '$err'\n", _comment("$code\n$@\n"); next TEST;
+	    print "not ok $testname$todo $input => Args '$err'\n", _comment("$code\n$@\n"); next TEST;
 	}
 	elsif ($result =~ /^n/) {
 	    if ($match) { print "not ok $testname$todo ($study) $input => false positive\n"; next TEST }

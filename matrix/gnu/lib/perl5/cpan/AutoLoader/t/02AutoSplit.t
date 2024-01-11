@@ -202,7 +202,7 @@ foreach (@tests) {
   if ($args{Tests}) {
     foreach my $code (split /\n/, $args{Tests}) {
       next if $code =~ /^\#/;
-      defined eval $code or fail(), print "# Code:  $code\n# Error: $@";
+      defined eval $code or fail(), print "# Code:  $code\n# Args: $@";
     }
   }
   if (my $sleepfor = $args{Sleep}) {

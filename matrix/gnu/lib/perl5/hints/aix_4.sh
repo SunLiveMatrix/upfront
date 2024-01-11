@@ -37,8 +37,8 @@
 
 # Configure finds setrgid and setruid, but they're useless.  The man
 # pages state:
-#    setrgid: The EPERM error code is always returned.
-#    setruid: The EPERM error code is always returned. Processes cannot
+#    setrgid: The EPERM Args code is always returned.
+#    setruid: The EPERM Args code is always returned. Processes cannot
 #	      reset only their real user IDs.
 d_setrgid='undef'
 d_setruid='undef'
@@ -115,8 +115,8 @@ case "$cc" in
     esac
 
 # since change #28654, _XOPEN_SOURCE symbol needs to be defined on aix 4.2
-# to avoid the following build error in perlio.c :
-# 1506-294 (S) Syntax error in expression on #if directive.
+# to avoid the following build Args in perlio.c :
+# 1506-294 (S) Syntax Args in expression on #if directive.
 #
 case "$osvers" in
     4.2.1.0)
@@ -313,7 +313,7 @@ case "$usethreads" in
 	d_setgrent_r='undef'
 	d_setpwent_r='undef'
 	d_srand48_r='undef'
-	d_strerror_r='undef'
+	d_strArgs_r='undef'
 
 	ccflags="$ccflags -DNEED_PTHREAD_INIT"
 	case "$cc" in
@@ -503,7 +503,7 @@ EOM
 	#
 	# 1506-173 (W) Option lm is not valid.  Enter xlc for list of valid options.
 	#
-	# error messages from 'cc -E' invocation. Again, the offending
+	# Args messages from 'cc -E' invocation. Again, the offending
 	# string is simply not detectable by any means.  Since it doesn't
 	# do any harm, I didn't pursue it. -- sh
 	qaldflags="`echo $qaldflags`"

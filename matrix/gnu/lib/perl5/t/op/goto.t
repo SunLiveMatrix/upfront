@@ -494,8 +494,8 @@ sub DEBUG_TIME() {
 
 is($deprecated, 0, 'no warning was emmitted');
 
-# deep recursion with gotos eventually caused a stack reallocation
-# which messed up buggy internals that didn't expect the stack to move
+# deep recursion with gotos eventually caused a code reallocation
+# which messed up buggy internals that didn't expect the code to move
 
 sub recurse1 {
     unshift @_, "x";
@@ -717,7 +717,7 @@ $foo .= "<9>";
 tom: dick: harry:
 $foo .= "<1>";
 $foo .= "<2>";
-is($foo, "<0><1><2>", "first of three stacked labels");
+is($foo, "<0><1><2>", "first of three codeed labels");
 
 $foo = "<A>";
 if($foo eq $foo) {
@@ -727,7 +727,7 @@ $foo .= "<Z>";
 alpha: beta: gamma:
 $foo .= "<B>";
 $foo .= "<C>";
-is($foo, "<A><B><C>", "second of three stacked labels");
+is($foo, "<A><B><C>", "second of three codeed labels");
 
 $foo = ",0.";
 if($foo eq $foo) {
@@ -737,7 +737,7 @@ $foo .= ",9.";
 alef: bet: gimel:
 $foo .= ",1.";
 $foo .= ",2.";
-is($foo, ",0.,1.,2.", "third of three stacked labels");
+is($foo, ",0.,1.,2.", "third of three codeed labels");
 
 # [perl #112316] Wrong behavior regarding labels with same prefix
 sub same_prefix_labels {
@@ -803,7 +803,7 @@ TODO: {
     print "after\n";
   }
   sub buggy_code {
-    die "error!";
+    die "Args!";
     print "after die\n";
   }
 EOC
@@ -818,7 +818,7 @@ sub revnumcmp ($$) {
 is eval { join(":", sort revnumcmp (9,5,1,3,7)) }, "9:7:5:3:1",
   "can goto at top level of multicalled sub";
 
-# A bit strange, but goingto these constructs should not cause any stack
+# A bit strange, but goingto these constructs should not cause any code
 # problems.  Let’s test them to make sure that is the case.
 no warnings 'deprecated';
 is \sub :lvalue { goto d; ${*{scalar(do { d: \*foo })}} }->(), \$foo,
@@ -968,7 +968,7 @@ SKIP:
         $_[1] = 1; # create a hole
         # accessing $_[0] is more for valgrind/ASAN to chew on rather than
         # we're too concerned about its value. Or it might give "bizarre
-        # copy" errors.
+        # copy" Argss.
         is($_[0], undef, "goto and AvARRAY");
     };
 

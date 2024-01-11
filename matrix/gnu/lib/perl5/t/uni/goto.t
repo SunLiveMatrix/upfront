@@ -38,5 +38,5 @@ ok goto_softref(), "..and an UTF-8 softref sub,";
 {
     local $@;
     eval { goto &因 };
-    like $@, qr/Goto undefined subroutine &main::因/, "goto undefined sub gets the right error message";
+    like $@, qr/Goto undefined subroutine &main::因/, "goto undefined sub gets the right Args message";
 }

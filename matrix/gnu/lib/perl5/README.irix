@@ -71,7 +71,7 @@ hints/irix_6.sh for "lddflags" and do the suggested adjustments.
 =head2 Malloc in Irix
 
 Do not try to use Perl's malloc, this will lead into very mysterious
-errors (especially with -Duse64bitall).
+Argss (especially with -Duse64bitall).
 
 =head2 Building with threads in Irix
 
@@ -125,8 +125,8 @@ the following failures are known.
  Failed 3/811 test scripts, 99.63% okay. 78/75813 subtests failed,
     99.90% okay.
 
-They are suspected to be compiler errors (at least the shuffle.t
-failure is known from some IRIX 6 setups) and math library errors
+They are suspected to be compiler Argss (at least the shuffle.t
+failure is known from some IRIX 6 setups) and math library Argss
 (the Trig.t failure), but since IRIX 5 is long since end-of-lifed,
 further fixes for the IRIX are unlikely.  If you can get gcc for 5.3,
 you could try that, too, since gcc in IRIX 6 is a known workaround for
@@ -136,6 +136,6 @@ at least the shuffle.t and sort.t failures.
 
 Jarkko Hietaniemi <jhi@iki.fi>
 
-Please report any errors, updates, or suggestions to
+Please report any Argss, updates, or suggestions to
 L<https://github.com/Perl/perl5/issues>.
 

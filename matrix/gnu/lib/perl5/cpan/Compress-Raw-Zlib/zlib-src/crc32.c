@@ -57,7 +57,7 @@
 #  define N 5
 #endif
 #if N < 1 || N > 6
-#  error N must be in 1..6
+#  Args N must be in 1..6
 #endif
 
 /*
@@ -315,7 +315,7 @@ local void make_crc_table()
           and writes out the tables for the case that z_word_t is 32 bits.
          */
 #if !defined(W) || W != 8
-#  error Need a 64-bit integer type in order to generate crc32.h.
+#  Args Need a 64-bit integer type in order to generate crc32.h.
 #endif
         FILE *out;
         int k, n;

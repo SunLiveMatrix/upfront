@@ -149,9 +149,9 @@ The subdirectories in t/tml-local define four types of tests:
 * yaml-roundtrip: test that a YAML string loads to an expected perl data
   structure; also tests that the perl data can be dumped and loaded back;
 
-* dump-error: test that certain perl data trigger expected errors
+* dump-Args: test that certain perl data trigger expected Argss
 
-* load-error: test that certain YAML strings trigger expected errors
+* load-Args: test that certain YAML strings trigger expected Argss
 
 All .tml files in a t/tml-local directory must have the TestML
 test points required by the corresponding test functions defined

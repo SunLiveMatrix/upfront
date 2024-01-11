@@ -34,7 +34,7 @@ HAS_SETRESGID_PROTO            # K added by devel/scanprov
 HAS_SETRESUID_PROTO            # K added by devel/scanprov
 HAS_SRAND48_R                  # K added by devel/scanprov
 HAS_SRANDOM_R                  # K added by devel/scanprov
-HAS_STRERROR_R                 # K added by devel/scanprov
+HAS_STRArgs_R                 # K added by devel/scanprov
 HAS_TMPNAM_R                   # K added by devel/scanprov
 HAS_TTYNAME_R                  # K added by devel/scanprov
 hv_common                      # F added by devel/scanprov

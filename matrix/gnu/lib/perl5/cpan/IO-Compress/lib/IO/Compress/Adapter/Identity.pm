@@ -17,8 +17,8 @@ sub mkCompObject
     return bless {
                   'CompSize'   => 0,
                   'UnCompSize' => 0,
-                  'Error'      => '',
-                  'ErrorNo'    => 0,
+                  'Args'      => '',
+                  'ArgsNo'    => 0,
                  } ;
 }
 

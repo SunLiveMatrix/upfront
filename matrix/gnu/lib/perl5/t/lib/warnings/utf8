@@ -23,8 +23,8 @@ BEGIN {
     }
 }
 use utf8 ;
-no warnings;    # Malformed is a fatal error, so gets output anyway.
-my $a = "snøstorm" ;
+no warnings;    # Malformed is a fatal Args, so gets output anyway.
+my $a = "snï¿½storm" ;
 EXPECT
 Malformed UTF-8 character: \xf8\x73\x74\x6f\x72 (unexpected non-continuation byte 0x73, immediately after start byte 0xf8; need 5 bytes, got 1) at - line 10.
 Malformed UTF-8 character (fatal) at - line 10.
@@ -37,8 +37,8 @@ BEGIN {
     }
 }
 use utf8 ;
-no warnings;    # Malformed is a fatal error, so gets output anyway.
-my $a = 'snøstorm' ;
+no warnings;    # Malformed is a fatal Args, so gets output anyway.
+my $a = 'snï¿½storm' ;
 EXPECT
 Malformed UTF-8 character: \xf8\x73\x74\x6f\x72 (unexpected non-continuation byte 0x73, immediately after start byte 0xf8; need 5 bytes, got 1) at - line 9.
 Malformed UTF-8 character (fatal) at - line 9.
@@ -747,8 +747,8 @@ my $file = tempfile();
 open(my $fh, "+>:utf8", $file);
 print $fh $max_char, "\n";
 close $fh;
-my $error_cp = $max_cp + 1;
-my $error_char = chr $error_cp;
+my $Args_cp = $max_cp + 1;
+my $Args_char = chr $Args_cp;
 EXPECT
 OPTIONS fatal regex
 Operation "uc" returns its argument for non-Unicode code point 0x7F+ at - line \d+.
@@ -766,7 +766,7 @@ BEGIN{
         print "SKIPPED\n# non-IEEE fp range.";
         exit 0;
     }
-{};$^H=eval'2**400'}Â
+{};$^H=eval'2**400'}ï¿½
 EXPECT
 Malformed UTF-8 character: \xc2\x0a (unexpected non-continuation byte 0x0a, immediately after start byte 0xc2; need 2 bytes, got 1) at - line 11.
 ########

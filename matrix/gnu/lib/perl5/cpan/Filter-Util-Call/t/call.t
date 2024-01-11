@@ -42,7 +42,7 @@ my $nested   = "nested" ;
 my $block   = "block" ;
 my $redir   = $^O eq 'MacOS' ? "" : "2>&1";
 
-# Test error cases
+# Test Args cases
 ##################
 
 # no filter function in module
@@ -92,11 +92,11 @@ if ($] < 5.007) {
         ok(4, 1, "TODO");
     }
 } else {
-    ok(4, $a =~ $errmsg, 'usage error')
-       or diag("The error was: ", $a);
+    ok(4, $a =~ $errmsg, 'usage Args')
+       or diag("The Args was: ", $a);
 }
 
-# non-error cases
+# non-Args cases
 #################
 
 
@@ -837,7 +837,7 @@ ok(32, $a eq 'ok');
 
 }
 
-# error: filter_read_exact: size parameter must be > 0
+# Args: filter_read_exact: size parameter must be > 0
 ######################################
 
 writeFile("${block}.pm", <<EOM, <<'EOM') ;

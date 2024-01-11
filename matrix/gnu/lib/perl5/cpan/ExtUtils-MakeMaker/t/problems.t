@@ -50,7 +50,7 @@ ok( chdir $DIRNAME, "chdir'd to Problem-Module" ) ||
 
     is( $stdout->read, qq{\@INC has .\n}, 'cwd in @INC' );
     like( $@,
-          qr{^ERROR from evaluation of .*subdir.*Makefile.PL: YYYAaaaakkk},
+          qr{^Args from evaluation of .*subdir.*Makefile.PL: YYYAaaaakkk},
           'Makefile.PL death in subdir warns' );
 
     untie *STDOUT;

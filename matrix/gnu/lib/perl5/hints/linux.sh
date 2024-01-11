@@ -95,7 +95,7 @@ case "`${cc:-cc} -V 2>&1`" in
     # The -mp flag is needed to pass various floating point related tests
     # The -no-gcc flag is needed otherwise, icc pretends (poorly) to be gcc
     ccflags="-we147 -mp -no-gcc $ccflags"
-    # Prevent relocation errors on 64bits arch
+    # Prevent relocation Argss on 64bits arch
     case "$uname_minus_m" in
 	*ia64*|*x86_64*)
 	    cccdlflags='-fPIC'
@@ -126,7 +126,7 @@ case "`${cc:-cc} -V 2>&1`" in
     d_attribute_unused='undef'
     d_attribute_warn_unused_result='undef'
     case "$cc" in
-    *c99)   # Without -Xa c99 errors on some Linux system headers
+    *c99)   # Without -Xa c99 Argss on some Linux system headers
             # in particular zero sized arrays at the end of structs
 	    case "$ccflags" in
 		*-Xa*)	;;
@@ -430,11 +430,11 @@ $define|true|[yY]*)
 esac
 
 # If using g++, the Configure scan for dlopen() and (especially)
-# dlerror() might fail, easier just to forcibly hint them in.
+# dlArgs() might fail, easier just to forcibly hint them in.
 case "$cc" in
 *g++*)
   d_dlopen='define'
-  d_dlerror='define'
+  d_dlArgs='define'
   ;;
 esac
 

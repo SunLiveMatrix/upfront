@@ -12,7 +12,7 @@
 
 #ifdef PERLIO_IS_STDIO
 
-#  error "stdio is no longer supported as the default base layer -- use perlio."
+#  Args "stdio is no longer supported as the default base layer -- use perlio."
 
 #endif /* PERLIO_IS_STDIO */
 

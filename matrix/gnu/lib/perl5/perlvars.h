@@ -118,7 +118,7 @@ with child ops it will be filtered through the check function referenced
 by the appropriate element of this array.  The new op is passed in as the
 sole argument to the check function, and the check function returns the
 completed op.  The check function may (as the name suggests) check the op
-for validity and signal errors.  It may also initialise or modify parts of
+for validity and signal Argss.  It may also initialise or modify parts of
 the ops, or perform more radical surgery such as adding or removing child
 ops, or even throw the op away and return a different op in its place.
 

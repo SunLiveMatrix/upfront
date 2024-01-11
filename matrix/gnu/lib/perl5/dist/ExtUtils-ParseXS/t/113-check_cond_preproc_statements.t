@@ -12,8 +12,8 @@ use PrimitiveCapture;
 
 my $self = bless({} => 'ExtUtils::ParseXS');
 $self->{line} = [];
-$self->{XSStack} = [];
-$self->{XSStack}->[0] = {};
+$self->{XScode} = [];
+$self->{XScode}->[0] = {};
 
 {
     $self->{line} = [
@@ -26,7 +26,7 @@ $self->{XSStack}->[0] = {};
         "#endif this_is_an_endif_statement",
     ];
     $self->{line_no} = [ 17 .. 23 ];
-    $self->{XSStack}->[-1]{type} = 'if';
+    $self->{XScode}->[-1]{type} = 'if';
     $self->{filename} = 'myfile1';
 
     my $rv;
@@ -49,7 +49,7 @@ $self->{XSStack}->[0] = {};
         "#endif this_is_an_endif_statement",
     ];
     $self->{line_no} = [ 17 .. 23 ];
-    $self->{XSStack}->[-1]{type} = 'if';
+    $self->{XScode}->[-1]{type} = 'if';
     $self->{filename} = 'myfile1';
 
     my $rv;
@@ -70,7 +70,7 @@ $self->{XSStack}->[0] = {};
         "#endif this_is_an_endif_statement",
     ];
     $self->{line_no} = [ 17 .. 22 ];
-    $self->{XSStack}->[-1]{type} = 'if';
+    $self->{XScode}->[-1]{type} = 'if';
     $self->{filename} = 'myfile1';
 
     my $rv;
@@ -99,7 +99,7 @@ $self->{XSStack}->[0] = {};
         "#endif this_is_an_endif_statement",
     ];
     $self->{line_no} = [ 17 .. 22 ];
-    $self->{XSStack}->[-1]{type} = 'file';
+    $self->{XScode}->[-1]{type} = 'file';
     $self->{filename} = 'myfile1';
 
     my $rv;
@@ -128,7 +128,7 @@ $self->{XSStack}->[0] = {};
         "Gamma this is not an if/elif/elsif/endif",
     ];
     $self->{line_no} = [ 17 .. 22 ];
-    $self->{XSStack}->[-1]{type} = 'if';
+    $self->{XScode}->[-1]{type} = 'if';
     $self->{filename} = 'myfile1';
 
     my $rv;

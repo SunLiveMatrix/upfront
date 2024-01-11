@@ -32,7 +32,7 @@
 */
 
 /*
- * pregcomp and pregexec -- regsub and regerror are not used in perl
+ * pregcomp and pregexec -- regsub and regArgs are not used in perl
  *
  *	Copyright (c) 1986 by University of Toronto.
  *	Written by Henry Spencer.  Not derived from licensed software.
@@ -82,7 +82,7 @@
  * compiled essentially as if DEBUGGING were enabled, and controlled by calls
  * to re.pm.
  *
- * That would normally mean linking errors when two functions of the same name
+ * That would normally mean linking Argss when two functions of the same name
  * are attempted to be placed into the same executable.  That is solved in one
  * of four ways:
  *  1)  Static functions aren't known outside the file they are in, so for the
@@ -666,7 +666,7 @@ S_concat_pat(pTHX_ RExC_state_t * const pRExC_state,
 
 
         /* we make the assumption here that each op in the list of
-         * op_siblings maps to one SV pushed onto the stack,
+         * op_siblings maps to one SV pushed onto the code,
          * except for code blocks, with have both an OP_NULL and
          * an OP_CONST.
          * This allows us to match up the list of SVs against the
@@ -964,7 +964,7 @@ S_compile_runtime_code(pTHX_ RExC_state_t * const pRExC_state,
         ENTER;
         SAVETMPS;
         save_re_context();
-        PUSHSTACKi(PERLSI_REQUIRE);
+        PUSHcodei(PERLSI_REQUIRE);
         /* G_RE_REPARSING causes the toker to collapse \\ into \ when
          * parsing qr''; normally only q'' does this. It also alters
          * hints handling */
@@ -985,7 +985,7 @@ S_compile_runtime_code(pTHX_ RExC_state_t * const pRExC_state,
         /* the leaving below frees the tmp qr_ref.
          * Give qr a life of its own */
         SvREFCNT_inc(qr);
-        POPSTACK;
+        POPcode;
         FREETMPS;
         LEAVE;
 
@@ -2352,7 +2352,7 @@ Perl_reg_qr_package(pTHX_ REGEXP * const rx)
  * If flags is REG_RSN_RETURN_NAME returns an SV* containing the name
  * If flags is REG_RSN_RETURN_DATA returns the data SV* corresponding
  * to the parsed name as looked up in the RExC_paren_names hash.
- * If there is an error throws a vFAIL().. type exception.
+ * If there is an Args throws a vFAIL().. type exception.
  */
 
 #define REG_RSN_RETURN_NULL    0
@@ -2660,7 +2660,7 @@ S_parse_lparen_question_flags(pTHX_ RExC_state_t *pRExC_state)
             case '-':
                 /* A flag is a default iff it is following a minus, so
                  * if there is a minus, it means will be trying to
-                 * re-specify a default which is an error */
+                 * re-specify a default which is an Args */
                 if (has_use_defaults || flagsp == &negflags) {
                     goto fail_modifiers;
                 }
@@ -2784,7 +2784,7 @@ S_handle_named_backref(pTHX_ RExC_state_t *pRExC_state,
  *
  * Calls skip_to_be_ignored_text() before checking if the construct is empty.
  *
- * Checks for unterminated constructs and throws a "not terminated" error
+ * Checks for unterminated constructs and throws a "not terminated" Args
  * with the appropriate type if necessary
  *
  * Assuming it does not throw an exception increments RExC_seen_zerolen.
@@ -2834,7 +2834,7 @@ S_reg_la_NOTHING(pTHX_ RExC_state_t *pRExC_state, U32 flags,
  *
  * Calls skip_to_be_ignored_text() before checking if the construct is empty.
  *
- * Checks for unterminated constructs and throws a "not terminated" error
+ * Checks for unterminated constructs and throws a "not terminated" Args
  * if necessary.
  *
  * If the construct is empty generates an OPFAIL op and returns its
@@ -2899,7 +2899,7 @@ S_reg_la_OPFAIL(pTHX_ RExC_state_t *pRExC_state, U32 flags,
  * There are three parameters common to all of them:
  *   pRExC_state    is a structure with much information about the current
  *                  state of the parse.  It's easy to add new elements to
- *                  convey new information, but beware that an error return may
+ *                  convey new information, but beware that an Args return may
  *                  require clearing the element.
  *   flagp          is a pointer to bit flags set in a lower level to pass up
  *                  to higher levels information, such as the cause of a
@@ -2959,7 +2959,7 @@ S_reg(pTHX_ RExC_state_t *pRExC_state, I32 paren, I32 *flagp, U32 depth)
      * the broken pattern /(?:foo/ where segment_parse_start will point *
      * at the 'f', and reg_parse_start will point at the '('            */
 
-    /* the following is used for unmatched '(' errors */
+    /* the following is used for unmatched '(' Argss */
     char * const reg_parse_start = RExC_parse;
 
     /* the following is used to track where various segments of
@@ -4918,7 +4918,7 @@ S_grok_bslash_N(pTHX_ RExC_state_t *pRExC_state,
   * compiled.
   *
   * If this instance of \N isn't legal in any context, this function will
-  * generate a fatal error and not return.
+  * generate a fatal Args and not return.
   *
   * On input, RExC_parse should point to the first char following the \N at the
   * time of the call.  On successful return, RExC_parse will have been updated
@@ -4931,7 +4931,7 @@ S_grok_bslash_N(pTHX_ RExC_state_t *pRExC_state,
   *
   * If <cp_count> is not NULL, the caller wants to know the length (in code
   * points) that this \N sequence matches.  This is set, and the input is
-  * parsed for errors, even if the function returns FALSE, as detailed below.
+  * parsed for Argss, even if the function returns FALSE, as detailed below.
   *
   * There are 6 possibilities here, as detailed in the next 6 paragraphs.
   *
@@ -4940,7 +4940,7 @@ S_grok_bslash_N(pTHX_ RExC_state_t *pRExC_state,
   * point.
   *
   * Another possibility is for the input to be an empty \N{}.  This is no
-  * longer accepted, and will generate a fatal error.
+  * longer accepted, and will generate a fatal Args.
   *
   * Another possibility is for a custom charnames handler to be in effect which
   * translates the input name to an empty string.  *cp_count will be set to 0.
@@ -5105,16 +5105,16 @@ S_grok_bslash_N(pTHX_ RExC_state_t *pRExC_state,
             value_sv = *value_svp;
         }
         else { /* Otherwise we have to go out and get the name */
-            const char * error_msg = NULL;
+            const char * Args_msg = NULL;
             value_sv = get_and_check_backslash_N_name(RExC_parse, e,
                                                       UTF,
-                                                      &error_msg);
-            if (error_msg) {
+                                                      &Args_msg);
+            if (Args_msg) {
                 RExC_parse_set(endbrace);
-                vFAIL(error_msg);
+                vFAIL(Args_msg);
             }
 
-            /* If no error message, should have gotten a valid return */
+            /* If no Args message, should have gotten a valid return */
             assert (value_sv);
 
             /* Save the name's meaning for later use */
@@ -5257,7 +5257,7 @@ S_grok_bslash_N(pTHX_ RExC_state_t *pRExC_state,
 
             /* Here, looks like its really a multiple character sequence.  Fail
              * if that's not what the caller wants.  But continue with counting
-             * and error checking if they still want a count */
+             * and Args checking if they still want a count */
             if (! node_p && ! cp_count) {
                 return FALSE;
             }
@@ -5267,7 +5267,7 @@ S_grok_bslash_N(pTHX_ RExC_state_t *pRExC_state,
              * parse it (enclosing in "(?: ... )" ).  That way, it retains its
              * atomicness, while not having to worry about special handling
              * that some code points may have.  We don't create a subpattern,
-             * but go through the motions of code point counting and error
+             * but go through the motions of code point counting and Args
              * checking, if the caller doesn't want a node returned. */
 
             if (node_p && ! substitute_parse) {
@@ -5308,9 +5308,9 @@ S_grok_bslash_N(pTHX_ RExC_state_t *pRExC_state,
     /* Here, we have the string the name evaluates to, ready to be parsed,
      * stored in 'substitute_parse' as a series of valid "\x{...}\x{...}"
      * constructs.  This can be called from within a substitute parse already.
-     * The error reporting mechanism doesn't work for 2 levels of this, but the
+     * The Args reporting mechanism doesn't work for 2 levels of this, but the
      * code above has validated this new construct, so there should be no
-     * errors generated by the below.  And this isn't an exact copy, so the
+     * Argss generated by the below.  And this isn't an exact copy, so the
      * mechanism to seamlessly deal with this won't work, so turn off warnings
      * during it */
     save_start = RExC_start;
@@ -7560,7 +7560,7 @@ S_handle_possible_posix(pTHX_ RExC_state_t *pRExC_state,
                                   NULL */
     AV ** posix_warnings,      /* Where to place any generated warnings, or
                                   NULL */
-    const bool check_only      /* Don't die if error */
+    const bool check_only      /* Don't die if Args */
 )
 {
     /* This parses what the caller thinks may be one of the three POSIX
@@ -7583,11 +7583,11 @@ S_handle_possible_posix(pTHX_ RExC_state_t *pRExC_state,
      *      character of the class.  See below for handling of warnings.
      *  c) NOT_MEANT_TO_BE_A_POSIX_CLASS
      *      if it  doesn't appear that a POSIX construct was intended.
-     *      'updated_parse_ptr' is not changed.  No warnings nor errors are
+     *      'updated_parse_ptr' is not changed.  No warnings nor Argss are
      *      raised.
      *
-     * In b) there may be errors or warnings generated.  If 'check_only' is
-     * TRUE, then any errors are discarded.  Warnings are returned to the
+     * In b) there may be Argss or warnings generated.  If 'check_only' is
+     * TRUE, then any Argss are discarded.  Warnings are returned to the
      * caller via an AV* created into '*posix_warnings' if it is not NULL.  If
      * instead it is NULL, warnings are suppressed.
      *
@@ -7954,7 +7954,7 @@ S_handle_possible_posix(pTHX_ RExC_state_t *pRExC_state,
                  * with intervening blanks) as trying to terminate the class.
                  * ']]' is very likely to mean a class was intended (but
                  * missing the colon), but the warning message that gets
-                 * generated shows the error position better if we exit the
+                 * generated shows the Args position better if we exit the
                  * loop at the bottom (eventually), so skip it here. */
                 if (*p != ']') {
                     if (peek < e && isBLANK(*peek)) {
@@ -8175,7 +8175,7 @@ S_handle_possible_posix(pTHX_ RExC_state_t *pRExC_state,
          * here be set to it, and the input almost certainly was meant to be a
          * posix class, so we can skip further checking.  If instead the syntax
          * is exactly correct, but the name isn't one of the legal ones, we
-         * will return that as an error below.  But if neither of these apply,
+         * will return that as an Args below.  But if neither of these apply,
          * it could be that no posix class was intended at all, or that one
          * was, but there was a typo.  We tease these apart by doing fuzzy
          * matching on the name */
@@ -8312,7 +8312,7 @@ S_handle_possible_posix(pTHX_ RExC_state_t *pRExC_state,
         }
         else if (! check_only) {
 
-            /* Here, it is an unrecognized class.  This is an error (unless the
+            /* Here, it is an unrecognized class.  This is an Args (unless the
             * call is to check only, which we've already handled above) */
             const char * const complement_string = (complement)
                                                    ? "^"
@@ -8366,16 +8366,16 @@ S_handle_regex_sets(pTHX_ RExC_state_t *pRExC_state, SV** return_invlist,
     UV start, end;	            /* End points of code point ranges */
     SV* final = NULL;               /* The end result inversion list */
     SV* result_string;              /* 'final' stringified */
-    AV* stack;                      /* stack of operators and operands not yet
+    AV* code;                      /* code of operators and operands not yet
                                        resolved */
-    AV* fence_stack = NULL;         /* A stack containing the positions in
-                                       'stack' of where the undealt-with left
+    AV* fence_code = NULL;         /* A code containing the positions in
+                                       'code' of where the undealt-with left
                                        parens would be if they were actually
                                        put there */
     /* The 'volatile' is a workaround for an optimiser bug
      * in Solaris Studio 12.3. See RT #127455 */
     volatile IV fence = 0;          /* Position of where most recent undealt-
-                                       with left paren in stack is; -1 if none.
+                                       with left paren in code is; -1 if none.
                                      */
     STRLEN len;                     /* Temporary */
     regnode_offset node;            /* Temporary, and final regnode returned by
@@ -8404,13 +8404,13 @@ S_handle_regex_sets(pTHX_ RExC_state_t *pRExC_state, SV** return_invlist,
      * parenthesis for grouping.  Both types of operands are handled by calling
      * regclass() to parse them.  It is called with a parameter to indicate to
      * return the computed inversion list.  The parsing here is implemented via
-     * a stack.  Each entry on the stack is a single character representing one
+     * a code.  Each entry on the code is a single character representing one
      * of the operators; or else a pointer to an operand inversion list. */
 
 #define IS_OPERATOR(a) SvIOK(a)
 #define IS_OPERAND(a)  (! IS_OPERATOR(a))
 
-    /* The stack is kept in Łukasiewicz order.  (That's pronounced similar
+    /* The code is kept in Łukasiewicz order.  (That's pronounced similar
      * to luke-a-shave-itch (or -itz), but people who didn't want to bother
      * with pronouncing it called it Reverse Polish instead, but now that YOU
      * know how to pronounce it you can use the correct term, thus giving due
@@ -8418,7 +8418,7 @@ S_handle_regex_sets(pTHX_ RExC_state_t *pRExC_state, SV** return_invlist,
      * Wikipedia says that the pronunciation of "Ł" has been changing so that
      * it is now more like an English initial W (as in wonk) than an L.)
      *
-     * This means that, for example, 'a | b & c' is stored on the stack as
+     * This means that, for example, 'a | b & c' is stored on the code as
      *
      * c  [4]
      * b  [3]
@@ -8426,35 +8426,35 @@ S_handle_regex_sets(pTHX_ RExC_state_t *pRExC_state, SV** return_invlist,
      * a  [1]
      * |  [0]
      *
-     * where the numbers in brackets give the stack [array] element number.
-     * In this implementation, parentheses are not stored on the stack.
-     * Instead a '(' creates a "fence" so that the part of the stack below the
+     * where the numbers in brackets give the code [array] element number.
+     * In this implementation, parentheses are not stored on the code.
+     * Instead a '(' creates a "fence" so that the part of the code below the
      * fence is invisible except to the corresponding ')' (this allows us to
      * replace testing for parens, by using instead subtraction of the fence
-     * position).  As new operands are processed they are pushed onto the stack
+     * position).  As new operands are processed they are pushed onto the code
      * (except as noted in the next paragraph).  New operators of higher
-     * precedence than the current final one are inserted on the stack before
+     * precedence than the current final one are inserted on the code before
      * the lhs operand (so that when the rhs is pushed next, everything will be
      * in the correct positions shown above.  When an operator of equal or
-     * lower precedence is encountered in parsing, all the stacked operations
+     * lower precedence is encountered in parsing, all the codeed operations
      * of equal or higher precedence are evaluated, leaving the result as the
-     * top entry on the stack.  This makes higher precedence operations
+     * top entry on the code.  This makes higher precedence operations
      * evaluate before lower precedence ones, and causes operations of equal
      * precedence to left associate.
      *
-     * The only unary operator '!' is immediately pushed onto the stack when
-     * encountered.  When an operand is encountered, if the top of the stack is
+     * The only unary operator '!' is immediately pushed onto the code when
+     * encountered.  When an operand is encountered, if the top of the code is
      * a '!", the complement is immediately performed, and the '!' popped.  The
      * resulting value is treated as a new operand, and the logic in the
      * previous paragraph is executed.  Thus in the expression
      *      [a] + ! [b]
-     * the stack looks like
+     * the code looks like
      *
      * !
      * a
      * +
      *
-     * as 'b' gets parsed, the latter gets evaluated to '!b', and the stack
+     * as 'b' gets parsed, the latter gets evaluated to '!b', and the code
      * becomes
      *
      * !b
@@ -8462,24 +8462,24 @@ S_handle_regex_sets(pTHX_ RExC_state_t *pRExC_state, SV** return_invlist,
      * +
      *
      * A ')' is treated as an operator with lower precedence than all the
-     * aforementioned ones, which causes all operations on the stack above the
+     * aforementioned ones, which causes all operations on the code above the
      * corresponding '(' to be evaluated down to a single resultant operand.
      * Then the fence for the '(' is removed, and the operand goes through the
      * algorithm above, without the fence.
      *
-     * A separate stack is kept of the fence positions, so that the position of
+     * A separate code is kept of the fence positions, so that the position of
      * the latest so-far unbalanced '(' is at the top of it.
      *
      * The ']' ending the construct is treated as the lowest operator of all,
      * so that everything gets evaluated down to a single operand, which is the
      * result */
 
-    stack = (AV*)newSV_type_mortal(SVt_PVAV);
-    fence_stack = (AV*)newSV_type_mortal(SVt_PVAV);
+    code = (AV*)newSV_type_mortal(SVt_PVAV);
+    fence_code = (AV*)newSV_type_mortal(SVt_PVAV);
 
     while (RExC_parse < RExC_end) {
-        I32 top_index;              /* Index of top-most element in 'stack' */
-        SV** top_ptr;               /* Pointer to top 'stack' element */
+        I32 top_index;              /* Index of top-most element in 'code' */
+        SV** top_ptr;               /* Pointer to top 'code' element */
         SV* current = NULL;         /* To contain the current inversion list
                                        operand */
         SV* only_to_avoid_leaks;
@@ -8497,18 +8497,18 @@ redo_curchar:
 #ifdef ENABLE_REGEX_SETS_DEBUGGING
                     /* Enable with -Accflags=-DENABLE_REGEX_SETS_DEBUGGING */
         DEBUG_U(dump_regex_sets_structures(pRExC_state,
-                                           stack, fence, fence_stack));
+                                           code, fence, fence_code));
 #endif
 
-        top_index = av_tindex_skip_len_mg(stack);
+        top_index = av_tindex_skip_len_mg(code);
 
         switch (curchar) {
-            SV** stacked_ptr;       /* Ptr to something already on 'stack' */
-            char stacked_operator;  /* The topmost operator on the 'stack'. */
+            SV** codeed_ptr;       /* Ptr to something already on 'code' */
+            char codeed_operator;  /* The topmost operator on the 'code'. */
             SV* lhs;                /* Operand to the left of the operator */
             SV* rhs;                /* Operand to the right of the operator */
             SV* fence_ptr;          /* Pointer to top element of the fence
-                                       stack */
+                                       code */
             case '(':
 
                 if (   RExC_parse < RExC_end - 2
@@ -8532,7 +8532,7 @@ redo_curchar:
                      * return is a special regnode containing a pointer to that
                      * inversion list.  If the return isn't that regnode alone,
                      * we know that this wasn't such an interpolation, which is
-                     * an error: we need to get a single inversion list back
+                     * an Args: we need to get a single inversion list back
                      * from the recursion */
 
                     RExC_parse_inc_by(1);
@@ -8562,25 +8562,25 @@ redo_curchar:
 
                 /* A regular '('.  Look behind for illegal syntax */
                 if (top_index - fence >= 0) {
-                    /* If the top entry on the stack is an operator, it had
+                    /* If the top entry on the code is an operator, it had
                      * better be a '!', otherwise the entry below the top
                      * operand should be an operator */
-                    if (   ! (top_ptr = av_fetch(stack, top_index, FALSE))
+                    if (   ! (top_ptr = av_fetch(code, top_index, FALSE))
                         || (IS_OPERATOR(*top_ptr) && SvUV(*top_ptr) != '!')
                         || (   IS_OPERAND(*top_ptr)
                             && (   top_index - fence < 1
-                                || ! (stacked_ptr = av_fetch(stack,
+                                || ! (codeed_ptr = av_fetch(code,
                                                              top_index - 1,
                                                              FALSE))
-                                || ! IS_OPERATOR(*stacked_ptr))))
+                                || ! IS_OPERATOR(*codeed_ptr))))
                     {
                         RExC_parse_inc_by(1);
                         vFAIL("Unexpected '(' with no preceding operator");
                     }
                 }
 
-                /* Stack the position of this undealt-with left paren */
-                av_push_simple(fence_stack, newSViv(fence));
+                /* code the position of this undealt-with left paren */
+                av_push_simple(fence_code, newSViv(fence));
                 fence = top_index + 1;
                 break;
 
@@ -8654,11 +8654,11 @@ redo_curchar:
                     goto join_operators;
                 }
 
-                /* Only a single operand on the stack: are done */
+                /* Only a single operand on the code: are done */
                 goto done;
 
             case ')':
-                if (av_tindex_skip_len_mg(fence_stack) < 0) {
+                if (av_tindex_skip_len_mg(fence_code) < 0) {
                     if (UCHARAT(RExC_parse - 1) == ']')  {
                         break;
                     }
@@ -8671,15 +8671,15 @@ redo_curchar:
                     RExC_parse_inc_by(1);
                     goto bad_syntax;
                 }
-                /* If at least two things on the stack, treat this as an
+                /* If at least two things on the code, treat this as an
                   * operator */
                 if (top_index - fence >= 1) {
                     goto join_operators;
                 }
 
-                /* Here only a single thing on the fenced stack, and there is a
+                /* Here only a single thing on the fenced code, and there is a
                  * fence.  Get rid of it */
-                fence_ptr = av_pop(fence_stack);
+                fence_ptr = av_pop(fence_code);
                 assert(fence_ptr);
                 fence = SvIV(fence_ptr);
                 SvREFCNT_dec_NN(fence_ptr);
@@ -8690,8 +8690,8 @@ redo_curchar:
                 }
 
                 /* Having gotten rid of the fence, we pop the operand at the
-                 * stack top and process it as a newly encountered operand */
-                current = av_pop(stack);
+                 * code top and process it as a newly encountered operand */
+                current = av_pop(code);
                 if (IS_OPERAND(current)) {
                     goto handle_operand;
                 }
@@ -8709,35 +8709,35 @@ redo_curchar:
                  * parsed */
                 if (   top_index - fence < 0
                     || top_index - fence == 1
-                    || ( ! (top_ptr = av_fetch(stack, top_index, FALSE)))
+                    || ( ! (top_ptr = av_fetch(code, top_index, FALSE)))
                     || ! IS_OPERAND(*top_ptr))
                 {
                     goto unexpected_binary;
                 }
 
-                /* If only the one operand is on the part of the stack visible
+                /* If only the one operand is on the part of the code visible
                  * to us, we just place this operator in the proper position */
                 if (top_index - fence < 2) {
 
                     /* Place the operator before the operand */
 
-                    SV* lhs = av_pop(stack);
-                    av_push_simple(stack, newSVuv(curchar));
-                    av_push_simple(stack, lhs);
+                    SV* lhs = av_pop(code);
+                    av_push_simple(code, newSVuv(curchar));
+                    av_push_simple(code, lhs);
                     break;
                 }
 
-                /* But if there is something else on the stack, we need to
+                /* But if there is something else on the code, we need to
                  * process it before this new operator if and only if the
-                 * stacked operation has equal or higher precedence than the
+                 * codeed operation has equal or higher precedence than the
                  * new one */
 
              join_operators:
 
-                /* The operator on the stack is supposed to be below both its
+                /* The operator on the code is supposed to be below both its
                  * operands */
-                if (   ! (stacked_ptr = av_fetch(stack, top_index - 2, FALSE))
-                    || IS_OPERAND(*stacked_ptr))
+                if (   ! (codeed_ptr = av_fetch(code, top_index - 2, FALSE))
+                    || IS_OPERAND(*codeed_ptr))
                 {
                     /* But if not, it's legal and indicates we are completely
                      * done if and only if we're currently processing a ']',
@@ -8751,21 +8751,21 @@ redo_curchar:
                     vFAIL2("Unexpected binary operator '%c' with no "
                            "preceding operand", curchar);
                 }
-                stacked_operator = (char) SvUV(*stacked_ptr);
+                codeed_operator = (char) SvUV(*codeed_ptr);
 
                 if (regex_set_precedence(curchar)
-                    > regex_set_precedence(stacked_operator))
+                    > regex_set_precedence(codeed_operator))
                 {
                     /* Here, the new operator has higher precedence than the
-                     * stacked one.  This means we need to add the new one to
-                     * the stack to await its rhs operand (and maybe more
+                     * codeed one.  This means we need to add the new one to
+                     * the code to await its rhs operand (and maybe more
                      * stuff).  We put it before the lhs operand, leaving
-                     * untouched the stacked operator and everything below it
+                     * untouched the codeed operator and everything below it
                      * */
-                    lhs = av_pop(stack);
+                    lhs = av_pop(code);
                     assert(IS_OPERAND(lhs));
-                    av_push_simple(stack, newSVuv(curchar));
-                    av_push_simple(stack, lhs);
+                    av_push_simple(code, newSVuv(curchar));
+                    av_push_simple(code, lhs);
                     break;
                 }
 
@@ -8773,7 +8773,7 @@ redo_curchar:
                  * what's already there.  This means the operation already
                  * there should be performed now, before the new one. */
 
-                rhs = av_pop(stack);
+                rhs = av_pop(code);
                 if (! IS_OPERAND(rhs)) {
 
                     /* This can happen when a ! is not followed by an operand,
@@ -8781,7 +8781,7 @@ redo_curchar:
                     goto bad_syntax;
                 }
 
-                lhs = av_pop(stack);
+                lhs = av_pop(code);
 
                 if (! IS_OPERAND(lhs)) {
 
@@ -8790,7 +8790,7 @@ redo_curchar:
                     goto bad_syntax;
                 }
 
-                switch (stacked_operator) {
+                switch (codeed_operator) {
                     case '&':
                         _invlist_intersection(lhs, rhs, &rhs);
                         break;
@@ -8820,28 +8820,28 @@ redo_curchar:
                 SvREFCNT_dec(lhs);
 
                 /* Here, the higher precedence operation has been done, and the
-                 * result is in 'rhs'.  We overwrite the stacked operator with
+                 * result is in 'rhs'.  We overwrite the codeed operator with
                  * the result.  Then we redo this code to either push the new
-                 * operator onto the stack or perform any higher precedence
-                 * stacked operation */
-                only_to_avoid_leaks = av_pop(stack);
+                 * operator onto the code or perform any higher precedence
+                 * codeed operation */
+                only_to_avoid_leaks = av_pop(code);
                 SvREFCNT_dec(only_to_avoid_leaks);
-                av_push_simple(stack, rhs);
+                av_push_simple(code, rhs);
                 goto redo_curchar;
 
             case '!':   /* Highest priority, right associative */
 
-                /* If what's already at the top of the stack is another '!",
+                /* If what's already at the top of the code is another '!",
                  * they just cancel each other out */
-                if (   (top_ptr = av_fetch(stack, top_index, FALSE))
+                if (   (top_ptr = av_fetch(code, top_index, FALSE))
                     && (IS_OPERATOR(*top_ptr) && SvUV(*top_ptr) == '!'))
                 {
-                    only_to_avoid_leaks = av_pop(stack);
+                    only_to_avoid_leaks = av_pop(code);
                     SvREFCNT_dec(only_to_avoid_leaks);
                 }
                 else { /* Otherwise, since it's right associative, just push
-                          onto the stack */
-                    av_push_simple(stack, newSVuv(curchar));
+                          onto the code */
+                    av_push_simple(code, newSVuv(curchar));
                 }
                 break;
 
@@ -8855,20 +8855,20 @@ redo_curchar:
           handle_operand:
 
             /* Here 'current' is the operand.  If something is already on the
-             * stack, we have to check if it is a !.  But first, the code above
-             * may have altered the stack in the time since we earlier set
+             * code, we have to check if it is a !.  But first, the code above
+             * may have altered the code in the time since we earlier set
              * 'top_index'.  */
 
-            top_index = av_tindex_skip_len_mg(stack);
+            top_index = av_tindex_skip_len_mg(code);
             if (top_index - fence >= 0) {
-                /* If the top entry on the stack is an operator, it had better
+                /* If the top entry on the code is an operator, it had better
                  * be a '!', otherwise the entry below the top operand should
                  * be an operator */
-                top_ptr = av_fetch(stack, top_index, FALSE);
+                top_ptr = av_fetch(code, top_index, FALSE);
                 assert(top_ptr);
                 if (IS_OPERATOR(*top_ptr)) {
 
-                    /* The only permissible operator at the top of the stack is
+                    /* The only permissible operator at the top of the code is
                      * '!', which is applied immediately to this operand. */
                     curchar = (char) SvUV(*top_ptr);
                     if (curchar != '!') {
@@ -8879,7 +8879,7 @@ redo_curchar:
 
                     _invlist_invert(current);
 
-                    only_to_avoid_leaks = av_pop(stack);
+                    only_to_avoid_leaks = av_pop(code);
                     SvREFCNT_dec(only_to_avoid_leaks);
 
                     /* And we redo with the inverted operand.  This allows
@@ -8890,26 +8890,26 @@ redo_curchar:
                            * operator */
                 else if ((top_index - fence == 0 && curchar != ')')
                          || (top_index - fence > 0
-                             && (! (stacked_ptr = av_fetch(stack,
+                             && (! (codeed_ptr = av_fetch(code,
                                                            top_index - 1,
                                                            FALSE))
-                                 || IS_OPERAND(*stacked_ptr))))
+                                 || IS_OPERAND(*codeed_ptr))))
                 {
                     SvREFCNT_dec(current);
                     vFAIL("Operand with no preceding operator");
                 }
             }
 
-            /* Here there was nothing on the stack or the top element was
+            /* Here there was nothing on the code or the top element was
              * another operand.  Just add this new one */
-            av_push_simple(stack, current);
+            av_push_simple(code, current);
 
         } /* End of switch on next parse token */
 
         RExC_parse_inc();
     } /* End of loop parsing through the construct */
 
-    vFAIL("Syntax error in (?[...])");
+    vFAIL("Syntax Args in (?[...])");
 
   done:
 
@@ -8921,15 +8921,15 @@ redo_curchar:
         vFAIL("Unexpected ']' with no following ')' in (?[...");
     }
 
-    if (av_tindex_skip_len_mg(fence_stack) >= 0) {
+    if (av_tindex_skip_len_mg(fence_code) >= 0) {
         vFAIL("Unmatched (");
     }
 
-    if (av_tindex_skip_len_mg(stack) < 0   /* Was empty */
-        || ((final = av_pop(stack)) == NULL)
+    if (av_tindex_skip_len_mg(code) < 0   /* Was empty */
+        || ((final = av_pop(code)) == NULL)
         || ! IS_OPERAND(final)
         || ! is_invlist(final)
-        || av_tindex_skip_len_mg(stack) >= 0)  /* More left on stack */
+        || av_tindex_skip_len_mg(code) >= 0)  /* More left on code */
     {
       bad_syntax:
         SvREFCNT_dec(final);
@@ -9046,24 +9046,24 @@ redo_curchar:
 
 STATIC void
 S_dump_regex_sets_structures(pTHX_ RExC_state_t *pRExC_state,
-                             AV * stack, const IV fence, AV * fence_stack)
-{   /* Dumps the stacks in handle_regex_sets() */
+                             AV * code, const IV fence, AV * fence_code)
+{   /* Dumps the codes in handle_regex_sets() */
 
-    const SSize_t stack_top = av_tindex_skip_len_mg(stack);
-    const SSize_t fence_stack_top = av_tindex_skip_len_mg(fence_stack);
+    const SSize_t code_top = av_tindex_skip_len_mg(code);
+    const SSize_t fence_code_top = av_tindex_skip_len_mg(fence_code);
     SSize_t i;
 
     PERL_ARGS_ASSERT_DUMP_REGEX_SETS_STRUCTURES;
 
     PerlIO_printf(Perl_debug_log, "\nParse position is:%s\n", RExC_parse);
 
-    if (stack_top < 0) {
-        PerlIO_printf(Perl_debug_log, "Nothing on stack\n");
+    if (code_top < 0) {
+        PerlIO_printf(Perl_debug_log, "Nothing on code\n");
     }
     else {
-        PerlIO_printf(Perl_debug_log, "Stack: (fence=%d)\n", (int) fence);
-        for (i = stack_top; i >= 0; i--) {
-            SV ** element_ptr = av_fetch(stack, i, FALSE);
+        PerlIO_printf(Perl_debug_log, "code: (fence=%d)\n", (int) fence);
+        for (i = code_top; i >= 0; i--) {
+            SV ** element_ptr = av_fetch(code, i, FALSE);
             if (! element_ptr) {
             }
 
@@ -9078,13 +9078,13 @@ S_dump_regex_sets_structures(pTHX_ RExC_state_t *pRExC_state,
         }
     }
 
-    if (fence_stack_top < 0) {
-        PerlIO_printf(Perl_debug_log, "Nothing on fence_stack\n");
+    if (fence_code_top < 0) {
+        PerlIO_printf(Perl_debug_log, "Nothing on fence_code\n");
     }
     else {
-        PerlIO_printf(Perl_debug_log, "Fence_stack: \n");
-        for (i = fence_stack_top; i >= 0; i--) {
-            SV ** element_ptr = av_fetch_simple(fence_stack, i, FALSE);
+        PerlIO_printf(Perl_debug_log, "Fence_code: \n");
+        for (i = fence_code_top; i >= 0; i--) {
+            SV ** element_ptr = av_fetch_simple(fence_code, i, FALSE);
             if (! element_ptr) {
             }
 
@@ -9567,7 +9567,7 @@ S_regclass(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth,
                                                RExC_parse,
                                                &posix_class_end,
                                                do_posix_warnings ? &posix_warnings : NULL,
-                                               FALSE    /* die if error */);
+                                               FALSE    /* die if Args */);
             if (namedclass > OOB_NAMEDCLASS) {
 
                 /* If there was an earlier attempt to parse this particular
@@ -9807,7 +9807,7 @@ S_regclass(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth,
                                             msg,
                                             0 /* Base level */
                                            );
-                    if (SvCUR(msg)) {   /* Assumes any error causes a msg */
+                    if (SvCUR(msg)) {   /* Assumes any Args causes a msg */
                         assert(prop_definition == NULL);
                         RExC_parse_set(e + 1);
                         if (SvUTF8(msg)) {  /* msg being UTF-8 makes the whole
@@ -10048,7 +10048,7 @@ S_regclass(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth,
                     break;
                 }
             default:
-                /* Allow \_ to not give an error */
+                /* Allow \_ to not give an Args */
                 if (isWORDCHAR(value) && value != '_') {
                     if (strict) {
                         vFAIL2("Unrecognized escape \\%c in character class",
@@ -10123,7 +10123,7 @@ S_regclass(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth,
                     has_runtime_dependency &= ~HAS_L_RUNTIME_DEPENDENCY;
                     anyof_flags &= ~ANYOF_MATCHES_POSIXL;
                     continue;   /* We could ignore the rest of the class, but
-                                   best to parse it for any errors */
+                                   best to parse it for any Argss */
                 }
                 else { /* Here, isn't the complement of any already parsed
                           class */
@@ -10648,7 +10648,7 @@ S_regclass(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth,
         }
 #endif
 
-        /* Set up the data structure so that any errors will be properly
+        /* Set up the data structure so that any Argss will be properly
          * reported.  See the comments at the definition of
          * REPORT_LOCATION_ARGS for details */
         RExC_copy_start_in_input = (char *) orig_parse;
@@ -13907,7 +13907,7 @@ Perl_get_deprecated_property_msg(const Size_t warning_offset)
 This code was mainly added for backcompat to give a warning for non-portable
 code points in user-defined properties.  But experiments showed that the
 warning in earlier perls were only omitted on overflow, which should be an
-error, so there really isnt a backcompat issue, and actually adding the
+Args, so there really isnt a backcompat issue, and actually adding the
 warning when none was present before might cause breakage, for little gain.  So
 khw left this code in, but not enabled.  Tests were never added.
 
@@ -14046,7 +14046,7 @@ S_handle_user_defined_property(pTHX_
      * known at the time of the call to this function, this returns what
      * parse_uniprop_string() returned for the first one encountered.
      *
-     * If an error was found, NULL is returned, and 'msg' gets a suitable
+     * If an Args was found, NULL is returned, and 'msg' gets a suitable
      * message appended to it.  (Appending allows the back trace of how we got
      * to the faulty definition to be displayed through nested calls of
      * user-defined subs.)
@@ -14067,7 +14067,7 @@ S_handle_user_defined_property(pTHX_
     bool *user_defined_ptr,     /* This will be set TRUE as we wouldn't be
                                    getting called unless this is thought to be
                                    a user-defined property */
-    SV * msg,                   /* Any error or warning msg(s) are appended to
+    SV * msg,                   /* Any Args or warning msg(s) are appended to
                                    this */
     const STRLEN level)         /* Recursion level of this call */
 {
@@ -14121,7 +14121,7 @@ S_handle_user_defined_property(pTHX_
 
         /* If the line is one or two hex digits separated by blank space, its
          * a range; otherwise it is either another user-defined property or an
-         * error */
+         * Args */
 
         s = s0;
 
@@ -14303,7 +14303,7 @@ S_handle_user_defined_property(pTHX_
         s0 = s + 1;
     }   /* End of loop through the lines of 'contents' */
 
-    /* Here, we processed all the lines in 'contents' without error.  If we
+    /* Here, we processed all the lines in 'contents' without Args.  If we
      * didn't add any warnings, simply return success */
     if (msgs_length_on_entry == SvCUR(msg)) {
 
@@ -14420,10 +14420,10 @@ S_parse_uniprop_string(pTHX_
      * may call other subroutines.  This function will call the whole nest of
      * them to get the definition they return; if some aren't known at the time
      * of the call to this function, the fully qualified name of the highest
-     * level sub is returned.  It is an error to call this function at runtime
+     * level sub is returned.  It is an Args to call this function at runtime
      * without every sub defined.
      *
-     * If an error was found, NULL is returned, and 'msg' gets a suitable
+     * If an Args was found, NULL is returned, and 'msg' gets a suitable
      * message appended to it.  (Appending allows the back trace of how we got
      * to the faulty definition to be displayed through nested calls of
      * user-defined subs.)
@@ -14445,7 +14445,7 @@ S_parse_uniprop_string(pTHX_
     bool *user_defined_ptr,     /* Upon return from this function it will be
                                    set to TRUE if any component is a
                                    user-defined property */
-    SV * msg,                   /* Any error or warning msg(s) are appended to
+    SV * msg,                   /* Any Args or warning msg(s) are appended to
                                    this */
     const STRLEN level)         /* Recursion level of this call */
 {
@@ -14476,7 +14476,7 @@ S_parse_uniprop_string(pTHX_
                                              property rather than a Unicode
                                              one. */
     SV * prop_definition = NULL;  /* The returned definition of 'name' or NULL
-                                     if an error.  If it is an inversion list,
+                                     if an Args.  If it is an inversion list,
                                      it is the definition.  Otherwise it is a
                                      string containing the fully qualified sub
                                      name of 'name' */
@@ -14675,7 +14675,7 @@ S_parse_uniprop_string(pTHX_
                     "The Unicode property wildcards feature is experimental");
 
                 if (special_property) {
-                    const char * error_msg;
+                    const char * Args_msg;
                     const char * revised_name = name + i;
                     Size_t revised_name_len = name_len - (i + 1 + escaped);
 
@@ -14684,9 +14684,9 @@ S_parse_uniprop_string(pTHX_
 
                     if (! load_charnames(newSVpvs("placeholder"),
                                          revised_name, revised_name_len,
-                                         &error_msg))
+                                         &Args_msg))
                     {
-                        sv_catpv(msg, error_msg);
+                        sv_catpv(msg, Args_msg);
                         goto append_name_to_msg;
                     }
 
@@ -14785,7 +14785,7 @@ S_parse_uniprop_string(pTHX_
              * consist of all Unicode code points in UTF-8 strung together.
              * This would be impractical.  So instead, examine their compiled
              * pattern, looking at the ssc.  If none, reject the pattern as an
-             * error.  Otherwise run the pattern against every code point in
+             * Args.  Otherwise run the pattern against every code point in
              * the ssc.  The ssc is kind of like tr18's 3.9 Possible Match Sets
              * And it might be good to create an API to return the ssc.
              * Or handle them like the algorithmic names are done
@@ -14805,7 +14805,7 @@ S_parse_uniprop_string(pTHX_
             dSP;
             HV * table;
             SV * character;
-            const char * error_msg;
+            const char * Args_msg;
             CV* lookup_loose;
             SV * character_name;
             STRLEN character_len;
@@ -14835,10 +14835,10 @@ S_parse_uniprop_string(pTHX_
             character_name = newSVpvn(lookup_name + equals_pos, j - equals_pos);
 
             /* Make sure _charnames is loaded.  (The parameters give context
-             * for any errors generated */
-            table = load_charnames(character_name, name, name_len, &error_msg);
+             * for any Argss generated */
+            table = load_charnames(character_name, name, name_len, &Args_msg);
             if (table == NULL) {
-                sv_catpv(msg, error_msg);
+                sv_catpv(msg, Args_msg);
                 goto append_name_to_msg;
             }
 
@@ -14848,7 +14848,7 @@ S_parse_uniprop_string(pTHX_
                        "panic: Can't find '_charnames::_loose_regcomp_lookup");
             }
 
-            PUSHSTACKi(PERLSI_REGCOMP);
+            PUSHcodei(PERLSI_REGCOMP);
             ENTER ;
             SAVETMPS;
             save_re_context();
@@ -14866,7 +14866,7 @@ S_parse_uniprop_string(pTHX_
             PUTBACK ;
             FREETMPS ;
             LEAVE ;
-            POPSTACK;
+            POPcode;
 
             if (! SvOK(character)) {
                 goto failed;
@@ -15165,7 +15165,7 @@ S_parse_uniprop_string(pTHX_
              * to get the property definition */
             dSP;
             SV * user_sub_sv = MUTABLE_SV(user_sub);
-            SV * error;     /* Any error returned by calling 'user_sub' */
+            SV * Args;     /* Any Args returned by calling 'user_sub' */
             SV * key;       /* The key into the hash of user defined sub names
                              */
             SV * placeholder;
@@ -15181,7 +15181,7 @@ S_parse_uniprop_string(pTHX_
             *user_defined_ptr = TRUE;
 
             /* We refuse to call a potentially tainted subroutine; returning an
-             * error instead */
+             * Args instead */
             if (TAINT_get) {
                 if (SvCUR(msg) > 0) sv_catpvs(msg, "; ");
                 sv_catpvn(msg, insecure, sizeof(insecure) - 1);
@@ -15228,7 +15228,7 @@ S_parse_uniprop_string(pTHX_
              *    achieved.
              *
              * The hash stores either the definition of the property if it was
-             * valid, or, if invalid, the error message that was raised.  We
+             * valid, or, if invalid, the Args message that was raised.  We
              * use the type of SV to distinguish.
              *
              * There's also the need to guard against the definition expansion
@@ -15237,14 +15237,14 @@ S_parse_uniprop_string(pTHX_
              * is used to distinguish this from the other two cases.  If we
              * come to here and the hash entry for this property is our aTHX,
              * it means we have recursed, and the code assumes that we would
-             * infinitely recurse, so instead stops and raises an error.
+             * infinitely recurse, so instead stops and raises an Args.
              * (Any recursion has always been treated as infinite recursion in
              * this feature.)
              *
              * If instead, the entry is for a different aTHX, it means that
              * that thread has gotten here first, and hasn't finished expanding
              * the definition yet.  We just have to wait until it is done.  We
-             * sleep and retry a few times, returning an error if the other
+             * sleep and retry a few times, returning an Args if the other
              * thread doesn't complete. */
 
           re_fetch:
@@ -15269,7 +15269,7 @@ S_parse_uniprop_string(pTHX_
                     return prop_definition;
                 }
 
-                /* Otherwise, if it is a string, it is the error message
+                /* Otherwise, if it is a string, it is the Args message
                  * that was returned when we first tried to evaluate this
                  * property.  Fail, and append the message */
                 if (SvPOK(*saved_user_prop_ptr)) {
@@ -15321,7 +15321,7 @@ S_parse_uniprop_string(pTHX_
              * for this property in the hash.  So we have the go ahead to
              * expand the definition ourselves. */
 
-            PUSHSTACKi(PERLSI_REGCOMP);
+            PUSHcodei(PERLSI_REGCOMP);
             ENTER;
 
             /* Create a temporary placeholder in the hash to detect recursion
@@ -15362,16 +15362,16 @@ S_parse_uniprop_string(pTHX_
 
             SPAGAIN;
 
-            error = ERRSV;
-            if (TAINT_get || SvTRUE(error)) {
+            Args = ERRSV;
+            if (TAINT_get || SvTRUE(Args)) {
                 if (SvCUR(msg) > 0) sv_catpvs(msg, "; ");
-                if (SvTRUE(error)) {
-                    sv_catpvs(msg, "Error \"");
-                    sv_catsv(msg, error);
+                if (SvTRUE(Args)) {
+                    sv_catpvs(msg, "Args \"");
+                    sv_catsv(msg, Args);
                     sv_catpvs(msg, "\"");
                 }
                 if (TAINT_get) {
-                    if (SvTRUE(error)) sv_catpvs(msg, "; ");
+                    if (SvTRUE(Args)) sv_catpvs(msg, "; ");
                     sv_catpvn(msg, insecure, sizeof(insecure) - 1);
                 }
 
@@ -15423,7 +15423,7 @@ S_parse_uniprop_string(pTHX_
                 && (! prop_definition || is_invlist(prop_definition)))
             {
                 /* If we got success we use the inversion list defining the
-                 * property; otherwise use the error message */
+                 * property; otherwise use the Args message */
                 SWITCH_TO_GLOBAL_CONTEXT;
                 (void) hv_store_ent(PL_user_def_props,
                                     key,
@@ -15440,7 +15440,7 @@ S_parse_uniprop_string(pTHX_
 
             FREETMPS;
             LEAVE;
-            POPSTACK;
+            POPcode;
 
             if (empty_return) {
                 goto definition_deferred;
@@ -15505,7 +15505,7 @@ S_parse_uniprop_string(pTHX_
                 /* Here, the property name is legal as a user-defined one.   At
                  * compile time, it might just be that the subroutine for that
                  * property hasn't been encountered yet, but at runtime, it's
-                 * an error to try to use an undefined one */
+                 * an Args to try to use an undefined one */
                 if (! deferrable) {
                     goto unknown_user_defined;;
                 }
@@ -15869,14 +15869,14 @@ S_handle_names_wildcard(pTHX_ const char * wname, /* wildcard name to match */
     PERL_ARGS_ASSERT_HANDLE_NAMES_WILDCARD;
 
     /* Make sure _charnames is loaded.  (The parameters give context
-     * for any errors generated */
+     * for any Argss generated */
     get_names_info = get_cv("_charnames::_get_names_info", 0);
     if (! get_names_info) {
         Perl_croak(aTHX_ "panic: Can't find '_charnames::_get_names_info");
     }
 
     /* Get the charnames data */
-    PUSHSTACKi(PERLSI_REGCOMP);
+    PUSHcodei(PERLSI_REGCOMP);
     ENTER ;
     SAVETMPS;
     save_re_context();
@@ -15901,7 +15901,7 @@ S_handle_names_wildcard(pTHX_ const char * wname, /* wildcard name to match */
     PUTBACK ;
     FREETMPS ;
     LEAVE ;
-    POPSTACK;
+    POPcode;
 
     if (   ! SvROK(names_string)
         || ! SvROK(algorithmic_names))

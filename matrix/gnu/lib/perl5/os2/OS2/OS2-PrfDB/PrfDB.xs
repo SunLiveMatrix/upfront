@@ -11,8 +11,8 @@ extern "C" {
 }
 #endif
 
-#define Prf_Open(pszFileName) SaveWinError(pPrfOpenProfile(Perl_hab, (pszFileName)))
-#define Prf_Close(hini) (!CheckWinError(pPrfCloseProfile(hini)))
+#define Prf_Open(pszFileName) SaveWinArgs(pPrfOpenProfile(Perl_hab, (pszFileName)))
+#define Prf_Close(hini) (!CheckWinArgs(pPrfCloseProfile(hini)))
 
 BOOL (*pPrfCloseProfile) (HINI hini);
 HINI (*pPrfOpenProfile) (HAB hab, PCSZ pszFileName);
@@ -42,10 +42,10 @@ Prf_Get(pTHX_ HINI hini, PSZ app, PSZ key) {
     BOOL rc;
     SV *sv;
 
-    if (CheckWinError(pPrfQueryProfileSize(hini, app, key, &len))) return &PL_sv_undef;
+    if (CheckWinArgs(pPrfQueryProfileSize(hini, app, key, &len))) return &PL_sv_undef;
     sv = newSVpv("", 0);
     SvGROW(sv, len + 1);
-    if (CheckWinError(pPrfQueryProfileData(hini, app, key, SvPVX(sv), &len))
+    if (CheckWinArgs(pPrfQueryProfileData(hini, app, key, SvPVX(sv), &len))
 	|| (len == 0 && (app == NULL || key == NULL))) { /* Somewhy needed. */
 	SvREFCNT_dec(sv);
 	return &PL_sv_undef;
@@ -59,12 +59,12 @@ I32
 Prf_GetLength(HINI hini, PSZ app, PSZ key) {
     U32 len;
 
-    if (CheckWinError(pPrfQueryProfileSize(hini, app, key, &len))) return -1;
+    if (CheckWinArgs(pPrfQueryProfileSize(hini, app, key, &len))) return -1;
     return len;
 }
 
 #define Prf_Set(hini, app, key, s, l)			\
-	 (!(CheckWinError(pPrfWriteProfileData(hini, app, key, s, l))))
+	 (!(CheckWinArgs(pPrfWriteProfileData(hini, app, key, s, l))))
 
 #define Prf_System(key)					\
 	( (key) ? ( (key) == 1  ? HINI_USERPROFILE	\
@@ -81,7 +81,7 @@ Prf_Profiles(pTHX)
     char system[257];
     PRFPROFILE info = { 257, user, 257, system};
     
-    if (CheckWinError(pPrfQueryProfile(Perl_hab, &info))) return &PL_sv_undef;
+    if (CheckWinArgs(pPrfQueryProfile(Perl_hab, &info))) return &PL_sv_undef;
     if (info.cchUserName > 257 || info.cchSysName > 257)
 	die("Panic: Profile names too long");
     av_push(av, newSVpv(user, info.cchUserName - 1));
@@ -100,12 +100,12 @@ Prf_SetUser(pTHX_ SV *sv)
     
     if (!SvPOK(sv)) die("User profile name not defined");
     if (SvCUR(sv) > 256) die("User profile name too long");
-    if (CheckWinError(pPrfQueryProfile(Perl_hab, &info))) return 0;
+    if (CheckWinArgs(pPrfQueryProfile(Perl_hab, &info))) return 0;
     if (info.cchSysName > 257)
 	die("Panic: System profile name too long");
     info.cchUserName = SvCUR(sv) + 1;
     info.pszUserName = SvPVX(sv);
-    return !CheckWinError(pPrfReset(Perl_hab, &info));
+    return !CheckWinArgs(pPrfReset(Perl_hab, &info));
 }
 
 MODULE = OS2::PrfDB		PACKAGE = OS2::Prf PREFIX = Prf_

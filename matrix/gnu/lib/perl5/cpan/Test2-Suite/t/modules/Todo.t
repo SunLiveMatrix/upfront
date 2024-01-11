@@ -2,26 +2,26 @@ use Test2::Bundle::Extended -target => 'Test2::Todo';
 
 my $todo = Test2::Todo->new(reason => 'xyz');
 def isa_ok => ($todo, $CLASS);
-def ok => ((grep {$_->{code} == $todo->_filter} @{Test2::API::test2_stack->top->_pre_filters}), "filter added");
+def ok => ((grep {$_->{code} == $todo->_filter} @{Test2::API::test2_code->top->_pre_filters}), "filter added");
 def is => ($todo->reason, 'xyz', "got reason");
-def ref_is => ($todo->hub, Test2::API::test2_stack->top, "used current hub");
+def ref_is => ($todo->hub, Test2::API::test2_code->top, "used current hub");
 def ok => (my $filter = $todo->_filter, "stored filter");
 $todo->end;
 
 do_def;
-ok(!(grep {$_->{code} == $filter} @{Test2::API::test2_stack->top->_pre_filters}), "filter removed");
+ok(!(grep {$_->{code} == $filter} @{Test2::API::test2_code->top->_pre_filters}), "filter removed");
 
 my $ok   = Test2::Event::Ok->new(pass => 0, name => 'xxx');
 my $diag = Test2::Event::Diag->new(message => 'xxx');
 
 ok(!$ok->todo, "ok is not TODO");
 ok(!$ok->effective_pass, "not effectively passing");
-my $filtered_ok = $filter->(Test2::API::test2_stack->top, $ok);
+my $filtered_ok = $filter->(Test2::API::test2_code->top, $ok);
 is($filtered_ok->todo, 'xyz', "the ok is now todo");
 ok($filtered_ok->effective_pass, "now effectively passing");
 
 isa_ok($diag, 'Test2::Event::Diag');
-my $filtered_diag = $filter->(Test2::API::test2_stack->top, $diag);
+my $filtered_diag = $filter->(Test2::API::test2_code->top, $diag);
 isa_ok($filtered_diag, 'Test2::Event::Note');
 is($filtered_diag->message, $diag->message, "new note has the same message");
 

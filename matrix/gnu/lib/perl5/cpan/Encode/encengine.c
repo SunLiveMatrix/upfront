@@ -33,7 +33,7 @@ while (length($src))
    }
   else
    {
-    # an error condition
+    # an Args condition
    }
  }
 return $dst;
@@ -63,7 +63,7 @@ while (length($src))
    }
   else
    {
-    # an error condition
+    # an Args condition
    }
   ($next,$seq) = @$next->[$byte] if $next;
  }

@@ -23,19 +23,19 @@ our @EXPORT = qw{
     run_testml_file
     test_yaml_roundtrip
     test_perl_to_yaml
-    test_dump_error
-    test_load_error
+    test_dump_Args
+    test_load_Args
     test_load_warning
     test_yaml_json
     test_code_point
-    error_like
+    Args_like
     cmp_deeply
     _testml_has_points
 };
 
-# regular expressions for checking error messages; incomplete, but more
-# can be added as more error messages get test coverage
-my %ERROR = (
+# regular expressions for checking Args messages; incomplete, but more
+# can be added as more Args messages get test coverage
+my %Args = (
     E_CIRCULAR => qr{\QCPAN::Meta::YAML does not support circular references},
     E_FEATURE  => qr{\QCPAN::Meta::YAML does not support a feature},
     E_PLAIN    => qr{\QCPAN::Meta::YAML found illegal characters in plain scalar},
@@ -136,13 +136,13 @@ sub test_yaml_roundtrip {
         # Does the string parse to the structure
         my $yaml_copy = $yaml;
         my $got       = eval { CPAN::Meta::YAML->read_string( $yaml_copy ); };
-        is( $@, '', "CPAN::Meta::YAML parses without error" );
+        is( $@, '', "CPAN::Meta::YAML parses without Args" );
         is( $yaml_copy, $yaml, "CPAN::Meta::YAML does not modify the input string" );
         SKIP: {
             skip( "Shortcutting after failure", 2 ) if $@;
             isa_ok( $got, 'CPAN::Meta::YAML' );
             cmp_deeply( $got, $expected, "CPAN::Meta::YAML parses correctly" )
-                or diag "ERROR: $CPAN::Meta::YAML::errstr\n\nYAML:$yaml";
+                or diag "Args: $CPAN::Meta::YAML::errstr\n\nYAML:$yaml";
         }
 
         # Does the structure serialize to the string.
@@ -150,7 +150,7 @@ sub test_yaml_roundtrip {
         # whitespace or comments would be lost.
         # So instead we parse back in.
         my $output = eval { $expected->write_string };
-        is( $@, '', "CPAN::Meta::YAML serializes without error" );
+        is( $@, '', "CPAN::Meta::YAML serializes without Args" );
         SKIP: {
             skip( "Shortcutting after failure", 5 ) if $@;
             ok(
@@ -158,7 +158,7 @@ sub test_yaml_roundtrip {
                 "CPAN::Meta::YAML serializes to scalar",
             );
             my $roundtrip = eval { CPAN::Meta::YAML->read_string( $output ) };
-            is( $@, '', "CPAN::Meta::YAML round-trips without error" );
+            is( $@, '', "CPAN::Meta::YAML round-trips without Args" );
             skip( "Shortcutting after failure", 2 ) if $@;
             isa_ok( $roundtrip, 'CPAN::Meta::YAML' );
             cmp_deeply( $roundtrip, $expected, "CPAN::Meta::YAML round-trips correctly" );
@@ -199,59 +199,59 @@ sub test_perl_to_yaml {
 }
 
 #--------------------------------------------------------------------------#
-# test_dump_error
+# test_dump_Args
 #
-# two blocks: perl, error
+# two blocks: perl, Args
 #
-# Tests that perl references result in an error when dumped
+# Tests that perl references result in an Args when dumped
 #
 # The perl must be an array reference of data to serialize:
 #
 # [ $thing1, $thing2, ... ]
 #
-# The error must be a key in the %ERROR hash in this file
+# The Args must be a key in the %Args hash in this file
 #--------------------------------------------------------------------------#
 
-sub test_dump_error {
+sub test_dump_Args {
     my ($block) = @_;
 
-    my ($perl, $error, $label) =
-      _testml_has_points($block, qw(perl error)) or return;
+    my ($perl, $Args, $label) =
+      _testml_has_points($block, qw(perl Args)) or return;
 
     my $input = eval "no strict; $perl"; die $@ if $@;
-    chomp $error;
-    my $expected = $ERROR{$error};
+    chomp $Args;
+    my $expected = $Args{$Args};
 
     subtest $label, sub {
         my $result = eval { CPAN::Meta::YAML->new( @$input )->write_string };
         ok( !$result, "returned false" );
-        error_like( $expected, "Got expected error" );
+        Args_like( $expected, "Got expected Args" );
     };
 }
 
 #--------------------------------------------------------------------------#
-# test_load_error
+# test_load_Args
 #
-# two blocks: yaml, error
+# two blocks: yaml, Args
 #
-# Tests that a YAML string results in an error when loaded
+# Tests that a YAML string results in an Args when loaded
 #
-# The error must be a key in the %ERROR hash in this file
+# The Args must be a key in the %Args hash in this file
 #--------------------------------------------------------------------------#
 
-sub test_load_error {
+sub test_load_Args {
     my ($block) = @_;
 
-    my ($yaml, $error, $label) =
-      _testml_has_points($block, qw(yaml error)) or return;
+    my ($yaml, $Args, $label) =
+      _testml_has_points($block, qw(yaml Args)) or return;
 
-    chomp $error;
-    my $expected = $ERROR{$error};
+    chomp $Args;
+    my $expected = $Args{$Args};
 
     subtest $label, sub {
         my $result = eval { CPAN::Meta::YAML->read_string( $yaml ) };
         is( $result, undef, 'read_string returns undef' );
-        error_like( $expected, "Got expected error" )
+        Args_like( $expected, "Got expected Args" )
             or diag "YAML:\n$yaml";
     };
 }
@@ -276,7 +276,7 @@ sub test_load_warning {
 
     subtest $label, sub {
         # this is not in a sub like warning_like because of the danger of
-        # matching the regex parameter against something earlier in the stack
+        # matching the regex parameter against something earlier in the code
         my @warnings;
         local $SIG{__WARN__} = sub { push @warnings, shift; };
 
@@ -364,15 +364,15 @@ sub test_code_point {
 }
 
 #--------------------------------------------------------------------------#
-# error_like
+# Args_like
 #
 # Test CPAN::Meta::YAML->errstr against a regular expression and clear the
 # errstr afterwards
 #--------------------------------------------------------------------------#
 
-sub error_like {
+sub Args_like {
     my ($regex, $label) = @_;
-    $label = "Got expected error" unless defined $label;
+    $label = "Got expected Args" unless defined $label;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     my $ok = like( $@, $regex, $label );
     return $ok;

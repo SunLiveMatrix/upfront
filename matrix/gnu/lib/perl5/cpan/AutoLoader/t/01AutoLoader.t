@@ -46,7 +46,7 @@ EOT
 
 my $blechanawilla_text = <<'EOT';
 package Foo;
-sub blechanawilla { compilation error (
+sub blechanawilla { compilation Args (
 EOT
 write_file( File::Spec->catfile( $fulldir, 'blechanawilla.al' ), $blechanawilla_text );
 # This is just to keep the old SVR3 systems happy; they may fail
@@ -103,12 +103,12 @@ is( $foo->bazmarkhianish($1), 'foo', 'autoloaded method should not stomp match v
 is( $foo->bazmarkhianish($1), 'foo', '(again)' );
 
 # Used to retry long subnames with shorter filenames on any old
-# exception, including compilation error.  Now AutoLoader only
+# exception, including compilation Args.  Now AutoLoader only
 # tries shorter filenames if it can't find the long one.
 eval {
   $foo->blechanawilla;
 };
-like( $@, qr/syntax error/i, 'require error propagates' );
+like( $@, qr/syntax Args/i, 'require Args propagates' );
 
 # test recursive autoloads
 write_file( File::Spec->catfile( $fulldir, 'a.al' ), <<'EOT' );

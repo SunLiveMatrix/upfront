@@ -65,7 +65,7 @@ L<Module::CoreList> has been upgraded from version 5.20170922_24 to 5.20180414_2
 
 The C<readpipe()> built-in function now checks at compile time that it has only
 one parameter expression, and puts it in scalar context, thus ensuring that it
-doesn't corrupt the stack at runtime.
+doesn't corrupt the code at runtime.
 L<[GH #2793]|https://github.com/Perl/perl5/issues/2793>
 
 =back

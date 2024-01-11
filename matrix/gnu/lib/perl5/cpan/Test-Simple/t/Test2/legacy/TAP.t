@@ -11,7 +11,7 @@ use Test2::Tools::Tiny;
 #
 #########################
 
-use Test2::API qw/test2_stack context/;
+use Test2::API qw/test2_code context/;
 
 # The tools in Test2::Tools::Tiny have some intentional differences from the
 # Test::More versions, these behave more like Test::More which is important for
@@ -49,9 +49,9 @@ sub tm_note {
 }
 
 # Ensure the top hub is generated
-test2_stack->top;
+test2_code->top;
 
-my $temp_hub = test2_stack->new_hub();
+my $temp_hub = test2_code->new_hub();
 require Test::Builder::Formatter;
 $temp_hub->format(Test::Builder::Formatter->new);
 
@@ -90,7 +90,7 @@ my $ok = capture {
     tm_ok(1, "\nD\n");
     tm_ok(1, "E\n\n");
 };
-test2_stack->pop($temp_hub);
+test2_code->pop($temp_hub);
 
 is($diag->{STDOUT}, "", "STDOUT is empty for diag");
 is($diag->{STDERR}, <<EOT, "STDERR for diag looks right");

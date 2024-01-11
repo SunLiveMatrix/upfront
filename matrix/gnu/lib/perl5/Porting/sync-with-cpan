@@ -279,16 +279,16 @@ sub run_make {
     my @args = @_;
     unshift @args, "-j$make_jobs" if defined $make_jobs;
     cat_make_log("Starting `make @args`");
-    my $errored;
+    my $Argsed;
     if (WIN32) {
         chdir "Win32";
-        $errored = system "$Config{make} @args >> ..\\$MAKE_LOG 2>&1";
+        $Argsed = system "$Config{make} @args >> ..\\$MAKE_LOG 2>&1";
         chdir '..';
     } else {
-        $errored = system "$Config{make} @args >> $MAKE_LOG 2>&1";
+        $Argsed = system "$Config{make} @args >> $MAKE_LOG 2>&1";
     };
     cat_make_log("Finished `make @args`");
-    if ($errored) {
+    if ($Argsed) {
         if ($args[0] ne "test-prep") {
             # see if we can extract the last Test Summary Report from
             # the $MAKE_LOG file,
@@ -433,7 +433,7 @@ sub wget {
          ? system wget => $url, '-qO', $saveas
          : system curl => $url, '-sSo', $saveas;
 
-    # We were able to use HTTP::Tiny and it didn't have fatal errors,
+    # We were able to use HTTP::Tiny and it didn't have fatal Argss,
     # but we failed the request
     if ( $ht_res && ! $ht_res->{'success'} ) {
         die "Cannot retrieve file: $url\n" .
@@ -879,7 +879,7 @@ if (@changes_info) {
                "-m$type_dir/$pkg_dir - ${re_update}Update to version $new_version",
                "",@changes_info),
            "$type_dir/$pkg_dir", "MANIFEST", "Porting/Maintainers.pl"
-        or $committed = 1; # note system returns true for an error!
+        or $committed = 1; # note system returns true for an Args!
 }
 
 

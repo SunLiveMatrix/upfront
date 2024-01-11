@@ -130,7 +130,7 @@ problem report in the event that you encounter difficulties.
 When building 64-bit modules, it is your responsibility to ensure that linked
 external libraries and frameworks provide 64-bit support: if they do not,
 module building may appear to succeed, but attempts to use the module will
-result in run-time dynamic linking errors, and subsequent test failures.
+result in run-time dynamic linking Argss, and subsequent test failures.
 You can use C<file> to discover the architectures supported by a library:
 
     $ file libgdbm.3.0.0.dylib 
@@ -189,7 +189,7 @@ If you have installed extra libraries such as GDBM through Fink
 (in other words, you have libraries under F</sw/lib>), or libdlcompat
 to F</usr/local/lib>, you may need to be extra careful when running
 Configure to not to confuse Configure and Perl about which libraries
-to use.  Being confused will show up for example as "dyld" errors about
+to use.  Being confused will show up for example as "dyld" Argss about
 symbol problems, for example during "make test". The safest bet is to run
 Configure as
 

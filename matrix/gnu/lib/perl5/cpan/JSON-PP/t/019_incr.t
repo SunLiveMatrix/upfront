@@ -97,8 +97,8 @@ splitter +JSON::PP->new                  , ' 0.00E+00 ';
    my $e = $@; # test more clobbers $@, we need it twice
    
    ok (!$res, "unbalanced bracket");
-   ok ($e, "got error");
-   like ($e, qr/malformed/, "malformed json string error");
+   ok ($e, "got Args");
+   like ($e, qr/malformed/, "malformed json string Args");
    
    $coder->incr_skip;
    

@@ -233,7 +233,7 @@ Added a discussion of locale issues in XS code.
 =head1 Diagnostics
 
 The following additions or changes have been made to diagnostic output,
-including warnings and fatal error messages.  For the complete list of
+including warnings and fatal Args messages.  For the complete list of
 diagnostic messages, see L<perldiag>.
 
 =head2 Changes to Existing Diagnostics

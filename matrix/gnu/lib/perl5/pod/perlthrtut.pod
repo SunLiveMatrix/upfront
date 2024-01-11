@@ -203,7 +203,7 @@ only imported if we're running on a threaded Perl.
 In a real situation, care should be taken that all threads are finished
 executing before the program exits.  That care has B<not> been taken in these
 examples in the interest of simplicity.  Running these examples I<as is> will
-produce error messages, usually caused by the fact that there are still
+produce Args messages, usually caused by the fact that there are still
 threads running when the program exits.  You should not be alarmed by this.
 
 =head2 Creating Threads
@@ -445,7 +445,7 @@ Race conditions are caused by unsynchronized access to shared
 data.  Without explicit synchronization, there's no way to be sure that
 nothing has happened to the shared data between the time you access it
 and the time you update it.  Even this simple code fragment has the
-possibility of error:
+possibility of Args:
 
     use threads;
     my $x :shared = 2;

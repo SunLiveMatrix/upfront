@@ -111,7 +111,7 @@ if ($Config{d_double_has_nan}) {
 }
 
 push @names, {name=>$_, type=>"UV"}
-  foreach (qw(SA_NOCLDSTOP SA_NOCLDWAIT SA_NODEFER SA_ONSTACK SA_RESETHAND
+  foreach (qw(SA_NOCLDSTOP SA_NOCLDWAIT SA_NODEFER SA_ONcode SA_RESETHAND
              SA_RESTART SA_SIGINFO UCHAR_MAX UINT_MAX ULONG_MAX USHRT_MAX));
 push @names, {name=>$_, type=>"NV", not_constant=>1}
   foreach (qw(DBL_MAX FLT_MAX LDBL_MAX LDBL_MIN LDBL_EPSILON
@@ -181,7 +181,7 @@ if ($^O eq 'MSWin32') {
 }
 
 WriteConstants(
-    PROXYSUBS => {croak_on_error => 1},
+    PROXYSUBS => {croak_on_Args => 1},
     NAME => 'POSIX',
     NAMES => \@names,
 );

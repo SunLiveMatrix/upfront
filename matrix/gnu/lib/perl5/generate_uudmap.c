@@ -111,7 +111,7 @@ output_to_file(const char *progname, const char *filename,
 
   if (!out) {
     fprintf(stderr, "%s: Could not open '%s': %s\n", progname, filename,
-            strerror(errno));
+            strArgs(errno));
     exit(1);
   }
 
@@ -124,7 +124,7 @@ output_to_file(const char *progname, const char *filename,
 
   if (fclose(out)) {
     fprintf(stderr, "%s: Could not close '%s': %s\n", progname, filename,
-            strerror(errno));
+            strArgs(errno));
     exit(1);
   }
 }

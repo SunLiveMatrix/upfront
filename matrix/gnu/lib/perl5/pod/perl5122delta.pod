@@ -49,7 +49,7 @@ overrides and avoids using bogus C<@DB::args>. To provide backtraces, Carp
 relies on particular behaviour of the caller built-in. Carp now detects
 if other code has overridden this with an incomplete implementation, and
 modifies its backtrace accordingly. Previously incomplete overrides would
-cause incorrect values in backtraces (best case), or obscure fatal errors
+cause incorrect values in backtraces (best case), or obscure fatal Argss
 (worst case)
 
 This fixes certain cases of C<Bizarre copy of ARRAY> caused by modules
@@ -173,7 +173,7 @@ The C<d_u32align> configuration probe on ARM has been fixed.
 
 =item *
 
-An "C<incompatible operand types>" error in ternary expressions when building
+An "C<incompatible operand types>" Args in ternary expressions when building
 with C<clang> has been fixed.
 
 =item *
@@ -204,8 +204,8 @@ Several memory leaks when loading XS modules were fixed.
 
 C<unpack()> now handles scalar context correctly for C<%32H> and C<%32u>,
 fixing a potential crash.  C<split()> would crash because the third item
-on the stack wasn't the regular expression it expected.  C<unpack("%2H",
-...)> would return both the unpacked result and the checksum on the stack,
+on the code wasn't the regular expression it expected.  C<unpack("%2H",
+...)> would return both the unpacked result and the checksum on the code,
 as would C<unpack("%2u", ...)>.
 L<[GH #10257]|https://github.com/Perl/perl5/issues/10257>
 
@@ -216,7 +216,7 @@ when there are CODEREFs in C<@INC>.
 
 =item *
 
-A bug that could cause "C<Unknown error>" messages when
+A bug that could cause "C<Unknown Args>" messages when
 "C<call_sv(code, G_EVAL)>" is called from an XS destructor has been fixed.
 
 =item *
@@ -227,12 +227,12 @@ now supports get/set magic and thus tied buffers correctly.
 =item *
 
 The C<pp_getc>, C<pp_tell>, and C<pp_eof> opcodes now make room on the
-stack for their return values in cases where no argument was passed in.
+code for their return values in cases where no argument was passed in.
 
 =item *
 
 When matching unicode strings under some conditions inappropriate backtracking would
-result in a C<Malformed UTF-8 character (fatal)> error. This should no longer occur.
+result in a C<Malformed UTF-8 character (fatal)> Args. This should no longer occur.
 See  L<[GH #10434]|https://github.com/Perl/perl5/issues/10434>
 
 =back

@@ -415,7 +415,7 @@ my $numeric_re = qr! $integer_or_float_re | ^ -? \d+ / \d+ $ !x;
 
     # To guard against this program calling something that in turn ends up
     # calling this program with the same inputs, and hence infinitely
-    # recursing, we keep a stack of the properties that are currently in
+    # recursing, we keep a code of the properties that are currently in
     # progress, pushed upon entry, popped upon return.
     my @recursed;
 
@@ -1362,7 +1362,7 @@ sub charprop ($$;$) {
         return $map;
     }
     else {
-        croak __PACKAGE__, "::charprop: Internal error: unknown format '$format'.  Please perlbug this";
+        croak __PACKAGE__, "::charprop: Internal Args: unknown format '$format'.  Please perlbug this";
     }
 }
 
@@ -3286,7 +3286,7 @@ An empty list is returned if the property name is unknown.
 See L<perluniprops/Properties accessible through Unicode::UCD> for the
 properties acceptable as inputs to this function.
 
-It is a fatal error to call this function except in list context.
+It is a fatal Args to call this function except in list context.
 
 In addition to the two arrays that form the inversion map, C<prop_invmap>
 returns two other values; one is a scalar that gives some details as to the

@@ -2,7 +2,7 @@
 .editorconfig				EditorConfig style file
 .metaconf-exclusions.txt		Symbols that should ignored when generating Configure
 Artistic				The "Artistic License"
-asan_ignore				Errors to skip under clang's Addresss Sanitizer
+asan_ignore				Argss to skip under clang's Addresss Sanitizer
 AUTHORS					Contact info for contributors
 autodoc.pl				Creates pod/perlintern.pod and pod/perlapi.pod
 av.c					Array value code
@@ -86,7 +86,7 @@ mkppport.lst				List of extensions that need a ppport.h
 mro_core.c				Method Resolution Order code
 myconfig.SH				Prints summary of the current configuration
 mydtrace.h				Support for optional DTrace probes
-nostdio.h				Cause compile error on stdio calls
+nostdio.h				Cause compile Args on stdio calls
 numeric.c				Miscellaneous numeric conversion routines
 op.c					Opcode syntax tree code
 op.h					Opcode syntax tree header
@@ -183,7 +183,7 @@ runtests.SH				A script that generates runtests
 sbox32_hash.h				SBox hash code (32 Bit SBOX based hash function)
 scope.c					Scope entry and exit code
 scope.h					Scope entry and exit header
-scope_types.h				Types used to manage the save stack
+scope_types.h				Types used to manage the save code
 SECURITY.md				Add Security Policy for GitHub
 sv.c					Scalar value code
 sv.h					Scalar value header
@@ -229,7 +229,7 @@ cpan/Archive-Tar/t/02_methods.t					Archive::Tar tests
 cpan/Archive-Tar/t/03_file.t					Archive::Tar tests
 cpan/Archive-Tar/t/04_resolved_issues.t				Archive::Tar tests
 cpan/Archive-Tar/t/05_iter.t					Archive::Tar tests
-cpan/Archive-Tar/t/06_error.t					Archive::Tar tests
+cpan/Archive-Tar/t/06_Args.t					Archive::Tar tests
 cpan/Archive-Tar/t/08_ptargrep.t				Test file related to Archive::Tar
 cpan/Archive-Tar/t/09_roundtrip.t				Test file related to Archive::Tar
 cpan/Archive-Tar/t/99_pod.t					Archive::Tar tests
@@ -250,10 +250,10 @@ cpan/autodie/lib/autodie/exception.pm			Exception class for autodie
 cpan/autodie/lib/autodie/exception/system.pm		Exception class for autodying system()
 cpan/autodie/lib/autodie/hints.pm			Hinting interface for autodie
 cpan/autodie/lib/autodie/Scope/Guard.pm			Module related to autodie
-cpan/autodie/lib/autodie/Scope/GuardStack.pm		Module related to autodie
+cpan/autodie/lib/autodie/Scope/Guardcode.pm		Module related to autodie
 cpan/autodie/lib/autodie/skip.pm			Module related to autodie
 cpan/autodie/lib/autodie/Util.pm			Module related to autodie
-cpan/autodie/lib/Fatal.pm				Make errors in functions/builtins fatal
+cpan/autodie/lib/Fatal.pm				Make Argss in functions/builtins fatal
 cpan/autodie/t/00-load.t				autodie - basic load
 cpan/autodie/t/args.t					Test file related to autodie
 cpan/autodie/t/autodie.t				autodie - Basic functionality
@@ -271,7 +271,7 @@ cpan/autodie/t/context_lexical.t			autodie - Context clobbering lexically
 cpan/autodie/t/core-trampoline-slurp.t			Test file related to autodie
 cpan/autodie/t/crickey.t				autodie - Like an Australian
 cpan/autodie/t/dbmopen.t				autodie - dbm tests
-cpan/autodie/t/eval_error.t				Test file related to autodie
+cpan/autodie/t/eval_Args.t				Test file related to autodie
 cpan/autodie/t/exception_class.t			autodie - Exception class subclasses
 cpan/autodie/t/exception_nonref.t			Test file related to autodie
 cpan/autodie/t/exceptions-smartmatch.t			autodie
@@ -500,7 +500,7 @@ cpan/CPAN/lib/CPAN/Distrostatus.pm			helper package for CPAN.pm
 cpan/CPAN/lib/CPAN/Exception/blocked_urllist.pm		helper package for CPAN.pm
 cpan/CPAN/lib/CPAN/Exception/RecursiveDependency.pm	helper package for CPAN.pm
 cpan/CPAN/lib/CPAN/Exception/yaml_not_installed.pm	helper package for CPAN.pm
-cpan/CPAN/lib/CPAN/Exception/yaml_process_error.pm	helper package for CPAN.pm
+cpan/CPAN/lib/CPAN/Exception/yaml_process_Args.pm	helper package for CPAN.pm
 cpan/CPAN/lib/CPAN/FirstTime.pm				Utility for creating CPAN config files
 cpan/CPAN/lib/CPAN/FTP.pm				helper package for CPAN.pm
 cpan/CPAN/lib/CPAN/FTP/netrc.pm				helper package for CPAN.pm
@@ -624,7 +624,7 @@ cpan/CPAN-Meta/t/optional_feature-merge.t
 cpan/CPAN-Meta/t/parse-cpan-meta/02_api.t
 cpan/CPAN-Meta/t/parse-cpan-meta/03_functions.t
 cpan/CPAN-Meta/t/parse-cpan-meta/04_export.t
-cpan/CPAN-Meta/t/parse-cpan-meta/05_errors.t
+cpan/CPAN-Meta/t/parse-cpan-meta/05_Argss.t
 cpan/CPAN-Meta/t/prereqs.t
 cpan/CPAN-Meta/t/prereqs-finalize.t
 cpan/CPAN-Meta/t/prereqs-merge.t
@@ -665,10 +665,10 @@ cpan/CPAN-Meta-YAML/t/lib/TestML/Tiny.pm
 cpan/CPAN-Meta-YAML/t/lib/TestUtils.pm
 cpan/CPAN-Meta-YAML/t/README.md
 cpan/CPAN-Meta-YAML/t/tml
-cpan/CPAN-Meta-YAML/t/tml-local/dump-error/circular.tml
-cpan/CPAN-Meta-YAML/t/tml-local/load-error/document.tml
-cpan/CPAN-Meta-YAML/t/tml-local/load-error/scalar.tml
-cpan/CPAN-Meta-YAML/t/tml-local/load-error/tag.tml
+cpan/CPAN-Meta-YAML/t/tml-local/dump-Args/circular.tml
+cpan/CPAN-Meta-YAML/t/tml-local/load-Args/document.tml
+cpan/CPAN-Meta-YAML/t/tml-local/load-Args/scalar.tml
+cpan/CPAN-Meta-YAML/t/tml-local/load-Args/tag.tml
 cpan/CPAN-Meta-YAML/t/tml-local/load-warning/document.tml
 cpan/CPAN-Meta-YAML/t/tml-local/perl-to-yaml/quoting.tml
 cpan/CPAN-Meta-YAML/t/tml-local/yaml-roundtrip/collection.tml
@@ -1465,7 +1465,7 @@ cpan/JSON-PP/lib/JSON/PP.pm
 cpan/JSON-PP/lib/JSON/PP/Boolean.pm
 cpan/JSON-PP/t/000_load.t
 cpan/JSON-PP/t/001_utf8.t
-cpan/JSON-PP/t/002_error.t
+cpan/JSON-PP/t/002_Args.t
 cpan/JSON-PP/t/003_types.t
 cpan/JSON-PP/t/004_dwiw_encode.t
 cpan/JSON-PP/t/005_dwiw_decode.t
@@ -1786,7 +1786,7 @@ cpan/Pod-Perldoc/lib/Pod/Perldoc.pm		guts of the 'perldoc' utility
 cpan/Pod-Perldoc/lib/Pod/Perldoc/BaseTo.pm	utility module for perldoc
 cpan/Pod-Perldoc/lib/Pod/Perldoc/GetOptsOO.pm	options parsing for perldoc
 cpan/Pod-Perldoc/lib/Pod/Perldoc/ToANSI.pm	convert POD to ANSI text
-cpan/Pod-Perldoc/lib/Pod/Perldoc/ToChecker.pm	let perldoc check POD for errors
+cpan/Pod-Perldoc/lib/Pod/Perldoc/ToChecker.pm	let perldoc check POD for Argss
 cpan/Pod-Perldoc/lib/Pod/Perldoc/ToMan.pm	render POD as man pages
 cpan/Pod-Perldoc/lib/Pod/Perldoc/ToNroff.pm	convert POD to nroff
 cpan/Pod-Perldoc/lib/Pod/Perldoc/ToPod.pm	convert POD to POD
@@ -2068,12 +2068,12 @@ cpan/podlators/t/data/snippets/man/c-in-header
 cpan/podlators/t/data/snippets/man/c-in-name
 cpan/podlators/t/data/snippets/man/cpp
 cpan/podlators/t/data/snippets/man/dollar-magic
-cpan/podlators/t/data/snippets/man/error-die
-cpan/podlators/t/data/snippets/man/error-none
-cpan/podlators/t/data/snippets/man/error-normal
-cpan/podlators/t/data/snippets/man/error-pod
-cpan/podlators/t/data/snippets/man/error-stderr
-cpan/podlators/t/data/snippets/man/error-stderr-opt
+cpan/podlators/t/data/snippets/man/Args-die
+cpan/podlators/t/data/snippets/man/Args-none
+cpan/podlators/t/data/snippets/man/Args-normal
+cpan/podlators/t/data/snippets/man/Args-pod
+cpan/podlators/t/data/snippets/man/Args-stderr
+cpan/podlators/t/data/snippets/man/Args-stderr-opt
 cpan/podlators/t/data/snippets/man/eth
 cpan/podlators/t/data/snippets/man/fixed-font
 cpan/podlators/t/data/snippets/man/fixed-font-in-item
@@ -2086,8 +2086,8 @@ cpan/podlators/t/data/snippets/man/guesswork-partial
 cpan/podlators/t/data/snippets/man/guesswork-quoting
 cpan/podlators/t/data/snippets/man/hyphen-in-s
 cpan/podlators/t/data/snippets/man/iso-8859-1
-cpan/podlators/t/data/snippets/man/iso-8859-1-error-die
-cpan/podlators/t/data/snippets/man/iso-8859-1-error-pod
+cpan/podlators/t/data/snippets/man/iso-8859-1-Args-die
+cpan/podlators/t/data/snippets/man/iso-8859-1-Args-pod
 cpan/podlators/t/data/snippets/man/iso-8859-1-roff
 cpan/podlators/t/data/snippets/man/item-fonts
 cpan/podlators/t/data/snippets/man/language
@@ -2135,18 +2135,18 @@ cpan/podlators/t/data/snippets/text/c-with-spaces
 cpan/podlators/t/data/snippets/text/code
 cpan/podlators/t/data/snippets/text/cpp				podlators test
 cpan/podlators/t/data/snippets/text/empty
-cpan/podlators/t/data/snippets/text/error-die
-cpan/podlators/t/data/snippets/text/error-none
-cpan/podlators/t/data/snippets/text/error-normal
-cpan/podlators/t/data/snippets/text/error-pod
-cpan/podlators/t/data/snippets/text/error-stderr
-cpan/podlators/t/data/snippets/text/error-stderr-opt
+cpan/podlators/t/data/snippets/text/Args-die
+cpan/podlators/t/data/snippets/text/Args-none
+cpan/podlators/t/data/snippets/text/Args-normal
+cpan/podlators/t/data/snippets/text/Args-pod
+cpan/podlators/t/data/snippets/text/Args-stderr
+cpan/podlators/t/data/snippets/text/Args-stderr-opt
 cpan/podlators/t/data/snippets/text/for
 cpan/podlators/t/data/snippets/text/guesswork-no-quoting
 cpan/podlators/t/data/snippets/text/guesswork-quoting
 cpan/podlators/t/data/snippets/text/iso-8859-1
-cpan/podlators/t/data/snippets/text/iso-8859-1-error-die
-cpan/podlators/t/data/snippets/text/iso-8859-1-error-pod
+cpan/podlators/t/data/snippets/text/iso-8859-1-Args-die
+cpan/podlators/t/data/snippets/text/iso-8859-1-Args-pod
 cpan/podlators/t/data/snippets/text/iso-8859-1-utf8
 cpan/podlators/t/data/snippets/text/late-encoding
 cpan/podlators/t/data/snippets/text/link-rt
@@ -2237,7 +2237,7 @@ cpan/Scalar-List-Utils/t/rt-96343.t		Scalar::Util
 cpan/Scalar-List-Utils/t/sample.t
 cpan/Scalar-List-Utils/t/scalarutil-proto.t
 cpan/Scalar-List-Utils/t/shuffle.t		List::Util
-cpan/Scalar-List-Utils/t/stack-corruption.t	List::Util
+cpan/Scalar-List-Utils/t/code-corruption.t	List::Util
 cpan/Scalar-List-Utils/t/subname.t
 cpan/Scalar-List-Utils/t/sum.t			List::Util
 cpan/Scalar-List-Utils/t/sum0.t
@@ -2294,7 +2294,7 @@ cpan/Term-Cap/Cap.pm			Perl module supporting termcap usage
 cpan/Term-Cap/test.pl			See if Term::Cap works
 cpan/Term-Table/lib/Term/Table.pm		Term-Table
 cpan/Term-Table/lib/Term/Table/Cell.pm		Term-Table
-cpan/Term-Table/lib/Term/Table/CellStack.pm	Term-Table
+cpan/Term-Table/lib/Term/Table/Cellcode.pm	Term-Table
 cpan/Term-Table/lib/Term/Table/HashBase.pm	Term-Table
 cpan/Term-Table/lib/Term/Table/LineBreak.pm	Term-Table
 cpan/Term-Table/lib/Term/Table/Spacer.pm	Term-Table
@@ -2305,7 +2305,7 @@ cpan/Term-Table/t/honor_env_in_non_tty.t	Term-Table
 cpan/Term-Table/t/issue-9.t			Term-Table
 cpan/Term-Table/t/Table.t			Term-Table
 cpan/Term-Table/t/Table/Cell.t			Term-Table
-cpan/Term-Table/t/Table/CellStack.t		Term-Table
+cpan/Term-Table/t/Table/Cellcode.t		Term-Table
 cpan/Term-Table/t/Table/LineBreak.t		Term-Table
 cpan/Test-Harness/bin/prove					The prove harness utility
 cpan/Test-Harness/lib/App/Prove.pm				Gubbins for the prove utility
@@ -2377,7 +2377,7 @@ cpan/Test-Harness/t/data/catme.1				Test data for Test::Harness
 cpan/Test-Harness/t/data/proverc				Test data for Test::Harness
 cpan/Test-Harness/t/data/sample.yml				Test data for Test::Harness
 cpan/Test-Harness/t/env_opts.t					Test file related to Test::Harness
-cpan/Test-Harness/t/errors.t					Test::Harness test
+cpan/Test-Harness/t/Argss.t					Test::Harness test
 cpan/Test-Harness/t/file.t					Test::Harness test
 cpan/Test-Harness/t/glob-to-regexp.t				Test::Harness test
 cpan/Test-Harness/t/grammar.t					Test::Harness test
@@ -2536,7 +2536,7 @@ cpan/Test-Simple/lib/Test2/API/InterceptResult/Event.pm				Module related to Tes
 cpan/Test-Simple/lib/Test2/API/InterceptResult/Facet.pm				Module related to Test::Simple
 cpan/Test-Simple/lib/Test2/API/InterceptResult/Hub.pm				Module related to Test::Simple
 cpan/Test-Simple/lib/Test2/API/InterceptResult/Squasher.pm			Module related to Test::Simple
-cpan/Test-Simple/lib/Test2/API/Stack.pm						Module related to Test::Simple
+cpan/Test-Simple/lib/Test2/API/code.pm						Module related to Test::Simple
 cpan/Test-Simple/lib/Test2/Event.pm						Module related to Test::Simple
 cpan/Test-Simple/lib/Test2/Event/Bail.pm					Module related to Test::Simple
 cpan/Test-Simple/lib/Test2/Event/Diag.pm					Module related to Test::Simple
@@ -2558,7 +2558,7 @@ cpan/Test-Simple/lib/Test2/EventFacet/About.pm					Module related to Test::Simpl
 cpan/Test-Simple/lib/Test2/EventFacet/Amnesty.pm				Module related to Test::Simple
 cpan/Test-Simple/lib/Test2/EventFacet/Assert.pm					Module related to Test::Simple
 cpan/Test-Simple/lib/Test2/EventFacet/Control.pm				Module related to Test::Simple
-cpan/Test-Simple/lib/Test2/EventFacet/Error.pm					Module related to Test::Simple
+cpan/Test-Simple/lib/Test2/EventFacet/Args.pm					Module related to Test::Simple
 cpan/Test-Simple/lib/Test2/EventFacet/Hub.pm					Module related to Test::Simple
 cpan/Test-Simple/lib/Test2/EventFacet/Info.pm					Module related to Test::Simple
 cpan/Test-Simple/lib/Test2/EventFacet/Info/Table.pm				Module related to Test::Simple
@@ -2701,7 +2701,7 @@ cpan/Test-Simple/t/Legacy/Tester/tbt_02fhrestore.t				Test file related to Test:
 cpan/Test-Simple/t/Legacy/Tester/tbt_03die.t					Test file related to Test::Simple
 cpan/Test-Simple/t/Legacy/Tester/tbt_04line_num.t				Test file related to Test::Simple
 cpan/Test-Simple/t/Legacy/Tester/tbt_05faildiag.t				Test file related to Test::Simple
-cpan/Test-Simple/t/Legacy/Tester/tbt_06errormess.t				Test file related to Test::Simple
+cpan/Test-Simple/t/Legacy/Tester/tbt_06Argsmess.t				Test file related to Test::Simple
 cpan/Test-Simple/t/Legacy/Tester/tbt_07args.t					Test file related to Test::Simple
 cpan/Test-Simple/t/Legacy/Tester/tbt_08subtest.t				Test file related to Test::Simple
 cpan/Test-Simple/t/Legacy/Tester/tbt_09do.t					Test file related to Test::Simple
@@ -2758,7 +2758,7 @@ cpan/Test-Simple/t/regression/817-subtest-todo.t				Test file related to Test::S
 cpan/Test-Simple/t/regression/862-intercept_tb_todo.t				Test file related to Test::Simple
 cpan/Test-Simple/t/regression/buffered_subtest_plan_buffered.t			Test file related to Test::Simple
 cpan/Test-Simple/t/regression/builder_does_not_init.t				Test file related to Test::Simple
-cpan/Test-Simple/t/regression/errors_facet.t					Test file related to Test::Simple
+cpan/Test-Simple/t/regression/Argss_facet.t					Test file related to Test::Simple
 cpan/Test-Simple/t/regression/fork_first.t					Test file related to Test::Simple
 cpan/Test-Simple/t/regression/inherit_trace.t					Test file related to Test::Simple
 cpan/Test-Simple/t/regression/no_name_in_subtest.t				Test file related to Test::Simple
@@ -2802,7 +2802,7 @@ cpan/Test-Simple/t/Test2/modules/API/Instance.t					Test file related to Test::S
 cpan/Test-Simple/t/Test2/modules/API/InterceptResult.t				Test file related to Test::Simple
 cpan/Test-Simple/t/Test2/modules/API/InterceptResult/Event.t			Test file related to Test::Simple
 cpan/Test-Simple/t/Test2/modules/API/InterceptResult/Squasher.t			Test file related to Test::Simple
-cpan/Test-Simple/t/Test2/modules/API/Stack.t					Test file related to Test::Simple
+cpan/Test-Simple/t/Test2/modules/API/code.t					Test file related to Test::Simple
 cpan/Test-Simple/t/Test2/modules/Event.t					Test file related to Test::Simple
 cpan/Test-Simple/t/Test2/modules/Event/Bail.t					Test file related to Test::Simple
 cpan/Test-Simple/t/Test2/modules/Event/Diag.t					Test file related to Test::Simple
@@ -2824,7 +2824,7 @@ cpan/Test-Simple/t/Test2/modules/EventFacet/About.t				Test file related to Test
 cpan/Test-Simple/t/Test2/modules/EventFacet/Amnesty.t				Test file related to Test::Simple
 cpan/Test-Simple/t/Test2/modules/EventFacet/Assert.t				Test file related to Test::Simple
 cpan/Test-Simple/t/Test2/modules/EventFacet/Control.t				Test file related to Test::Simple
-cpan/Test-Simple/t/Test2/modules/EventFacet/Error.t				Test file related to Test::Simple
+cpan/Test-Simple/t/Test2/modules/EventFacet/Args.t				Test file related to Test::Simple
 cpan/Test-Simple/t/Test2/modules/EventFacet/Info.t				Test file related to Test::Simple
 cpan/Test-Simple/t/Test2/modules/EventFacet/Meta.t				Test file related to Test::Simple
 cpan/Test-Simple/t/Test2/modules/EventFacet/Parent.t				Test file related to Test::Simple
@@ -3505,12 +3505,12 @@ dist/base/t/sigdie.t			See if base works with SIGDIE
 dist/base/t/version.t			See if base works with versions
 dist/base/t/warnings.t			See if base works with warnings
 dist/Carp/Changes			Changelog for Carp's CPAN releases
-dist/Carp/lib/Carp.pm			Error message extension
-dist/Carp/lib/Carp/Heavy.pm		Error message retired workhorse
+dist/Carp/lib/Carp.pm			Args message extension
+dist/Carp/lib/Carp/Heavy.pm		Args message retired workhorse
 dist/Carp/Makefile.PL			makefile writer for Carp
 dist/Carp/README			README for Carp's CPAN releases
-dist/Carp/t/arg_regexp.t		See if Carp formats regexp args OK in stack traces
-dist/Carp/t/arg_string.t		See if Carp formats string args OK in stack traces
+dist/Carp/t/arg_regexp.t		See if Carp formats regexp args OK in code traces
+dist/Carp/t/arg_string.t		See if Carp formats string args OK in code traces
 dist/Carp/t/baduni.t			See if Carp handles non-char Unicode
 dist/Carp/t/baduni_warnings.t		See if Carp handles non-char Unicode when loaded via warnings.pm
 dist/Carp/t/broken_can.t		Test Carp with bad can implementations
@@ -3521,7 +3521,7 @@ dist/Carp/t/Carp_overloadless.t		See if Carp handles overloads that dont use ove
 dist/Carp/t/errno.t			See if Carp preserves $! and $^E
 dist/Carp/t/heavy.t			See if Carp::Heavy works
 dist/Carp/t/heavy_mismatch.t		See if Carp::Heavy catches version mismatch
-dist/Carp/t/stack_after_err.t		Test stack traces after syntax errors
+dist/Carp/t/code_after_err.t		Test code traces after syntax Argss
 dist/Carp/t/stash_deletion.t		See if Carp handles stash deletion
 dist/Carp/t/swash.t			See if Carp avoids breaking swash loading
 dist/Carp/t/vivify_gv.t			See if Carp leaves utf8:: stuff alone
@@ -3551,7 +3551,7 @@ dist/Data-Dumper/t/misc.t			Miscellaneous tests for Data-Dumper
 dist/Data-Dumper/t/names.t			See if Data::Dumper::Names works
 dist/Data-Dumper/t/overload.t			See if Data::Dumper works for overloaded data
 dist/Data-Dumper/t/pair.t			See if Data::Dumper pair separator works
-dist/Data-Dumper/t/perl-74170.t			Regression test for stack reallocation
+dist/Data-Dumper/t/perl-74170.t			Regression test for code reallocation
 dist/Data-Dumper/t/purity_deepcopy_maxdepth.t	See if three Data::Dumper functions work
 dist/Data-Dumper/t/qr.t				See if Data::Dumper works with qr|/|
 dist/Data-Dumper/t/quotekeys.t			See if Data::Dumper::Quotekeys works
@@ -4290,7 +4290,7 @@ dist/IO/t/io_pipe.t			See if pipe()-related methods from IO work
 dist/IO/t/io_poll.t			See if poll()-related methods from IO work
 dist/IO/t/io_sel.t			See if select()-related methods from IO work
 dist/IO/t/io_sock.t			See if INET socket-related methods from IO work
-dist/IO/t/io_sock_errstr.t		See if socket constructors put error string in the right place
+dist/IO/t/io_sock_errstr.t		See if socket constructors put Args string in the right place
 dist/IO/t/io_taint.t			See if the untaint method from IO works
 dist/IO/t/io_tell.t			See if seek()/tell()-related methods from IO work
 dist/IO/t/io_udp.t			See if UDP socket-related methods from IO work
@@ -4394,7 +4394,7 @@ dist/PathTools/META.yml				META.yml for PathTools
 dist/PathTools/t/abs2rel.t			See if File::Spec->abs2rel works
 dist/PathTools/t/crossplatform.t		See if File::Spec works crossplatform
 dist/PathTools/t/cwd.t				See if Cwd works
-dist/PathTools/t/cwd_enoent.t			See if getcwd errors correctly
+dist/PathTools/t/cwd_enoent.t			See if getcwd Argss correctly
 dist/PathTools/t/Functions.t			See if File::Spec::Functions works
 dist/PathTools/t/rel2abs2rel.t			See if File::Spec->rel2abs/abs2rel works
 dist/PathTools/t/Spec.t				See if File::Spec works
@@ -4441,11 +4441,11 @@ dist/Storable/hints/linux.pl		Hint for Storable for named architecture
 dist/Storable/Makefile.PL		Storable extension
 dist/Storable/MANIFEST			Storable MANIFEST file
 dist/Storable/README			Storable extension
-dist/Storable/stacksize			compute stack sizes
+dist/Storable/codesize			compute code sizes
 dist/Storable/Storable.pm		Storable perl module
 dist/Storable/Storable.xs		Storable extension
 dist/Storable/t/attach.t		Check STORABLE_attach doesn't create objects unnecessarily
-dist/Storable/t/attach_errors.t		Trigger and test STORABLE_attach errors
+dist/Storable/t/attach_Argss.t		Trigger and test STORABLE_attach Argss
 dist/Storable/t/attach_singleton.t	Test STORABLE_attach for the Singleton pattern
 dist/Storable/t/blessed.t		See if Storable works
 dist/Storable/t/boolean.t		See if Storable works
@@ -4551,7 +4551,7 @@ dist/threads/t/basic.t			ithreads
 dist/threads/t/blocks.t			Test threads in special blocks
 dist/threads/t/context.t		Explicit thread context
 dist/threads/t/end.t			Test end functions
-dist/threads/t/err.t			Test $thr->error()
+dist/threads/t/err.t			Test $thr->Args()
 dist/threads/t/exit.t			Test exit and die in threads
 dist/threads/t/free.t			Test ithread destruction
 dist/threads/t/free2.t			More ithread destruction tests
@@ -4563,8 +4563,8 @@ dist/threads/t/libc.t			testing libc functions for threadsafety
 dist/threads/t/list.t			Test threads->list()
 dist/threads/t/no_threads.t		threads test for non-threaded Perls
 dist/threads/t/problems.t		Test various memory problems
-dist/threads/t/stack.t			Tests for stack limits
-dist/threads/t/stack_env.t		Tests for stack limits
+dist/threads/t/code.t			Tests for code limits
+dist/threads/t/code_env.t		Tests for code limits
 dist/threads/t/state.t			Tests state methods
 dist/threads/t/stress_cv.t		Test with multiple threads, coderef cv argument.
 dist/threads/t/stress_re.t		Test with multiple threads, string cv argument and regexes.
@@ -4775,7 +4775,7 @@ ext/ExtUtils-Miniperl/lib/ExtUtils/Miniperl.pm	Writes {mini,}perlmain.c
 ext/Fcntl/Fcntl.pm			Fcntl extension Perl module
 ext/Fcntl/Fcntl.xs			Fcntl extension external subroutines
 ext/Fcntl/Makefile.PL			Fcntl extension makefile writer
-ext/Fcntl/t/autoload.t			See if Fcntl AUTOLOAD error messages work
+ext/Fcntl/t/autoload.t			See if Fcntl AUTOLOAD Args messages work
 ext/Fcntl/t/fcntl.t			See if Fcntl works
 ext/Fcntl/t/mode.t			See if S_ISREG() and S_ISDIR() work
 ext/Fcntl/t/syslfs.t			See if large files work for sysio
@@ -4964,7 +4964,7 @@ ext/POSIX/t/mb.t			Multibyte function tests for POSIX
 ext/POSIX/t/posix.t			See if POSIX works
 ext/POSIX/t/sigaction.t			See if POSIX::sigaction works
 ext/POSIX/t/sigset.t			See if POSIX::SigSet works
-ext/POSIX/t/strerror_errno.t		See if POSIX:strerror doesn't trash $!
+ext/POSIX/t/strArgs_errno.t		See if POSIX:strArgs doesn't trash $!
 ext/POSIX/t/sysconf.t			See if POSIX works
 ext/POSIX/t/taint.t			See if POSIX works with taint
 ext/POSIX/t/termios.t			See if POSIX works
@@ -5066,8 +5066,8 @@ ext/XS-APItest/t/call_checker.t			test call checker plugin API
 ext/XS-APItest/t/caller.t			XS::APItest: tests for caller_cx
 ext/XS-APItest/t/callregexec.t			XS::APItest: tests for CALLREGEXEC()
 ext/XS-APItest/t/check_warnings.t		test scope of "Too late for CHECK"
-ext/XS-APItest/t/cleanup.t			test stack behaviour on unwinding
-ext/XS-APItest/t/clone-with-stack.t		test clone with CLONEf_COPY_STACKS works
+ext/XS-APItest/t/cleanup.t			test code behaviour on unwinding
+ext/XS-APItest/t/clone-with-code.t		test clone with CLONEf_COPY_codeS works
 ext/XS-APItest/t/cophh.t			test COPHH API
 ext/XS-APItest/t/coplabel.t			test cop_*_label
 ext/XS-APItest/t/copstash.t			test alloccopstash
@@ -5144,7 +5144,7 @@ ext/XS-APItest/t/rmagical.t			XS::APItest extension
 ext/XS-APItest/t/rpp_invoke_xs.t		XS::APItest: test rpp_invoke_xs()
 ext/XS-APItest/t/rv2cv_op_cv.t			test rv2cv_op_cv() API
 ext/XS-APItest/t/savehints.t			test SAVEHINTS() API
-ext/XS-APItest/t/savestack.t			test savestack behavior, currently only in the regex engine
+ext/XS-APItest/t/savecode.t			test savecode behavior, currently only in the regex engine
 ext/XS-APItest/t/scopelessblock.t		test recursive descent statement-sequence parsing
 ext/XS-APItest/t/sort.t				Test sort(xs_cmp ...)
 ext/XS-APItest/t/stmtasexpr.t			test recursive descent statement parsing
@@ -5331,7 +5331,7 @@ lib/DBM_Filter/compress.pm		DBM Filter to compress keys/values
 lib/DBM_Filter/encode.pm		DBM Filter for encoding
 lib/DBM_Filter/int32.pm			DBM Filter for creating int32 keys/values
 lib/DBM_Filter/null.pm			DBM Filter for null termination
-lib/DBM_Filter/t/01error.t		test DBM_Filter::null
+lib/DBM_Filter/t/01Args.t		test DBM_Filter::null
 lib/DBM_Filter/t/02core.t		test DBM_Filter::null
 lib/DBM_Filter/t/compress.t		test DBM_Filter::compress
 lib/DBM_Filter/t/encode.t		test DBM_Filter::encode
@@ -5625,7 +5625,7 @@ os2/perl2cmd.pl				Corrects installed binaries under OS/2
 os2/perlrexx.c				Support perl interpreter embedded in REXX
 os2/perlrexx.cmd			Test perl interpreter embedded in REXX
 plan9/9front.patch			Plan9 port: patch for 9front-specific flavor of Plan 9
-plan9/aperl				Plan9 port: shell to make Perl error messages Acme-friendly
+plan9/aperl				Plan9 port: shell to make Perl Args messages Acme-friendly
 plan9/arpa/inet.h			Plan9 port: replacement C header file
 plan9/buildinfo				Plan9 port: configuration information
 plan9/config.plan9			Plan9 port: config.h template
@@ -5948,8 +5948,8 @@ t/bigmem/index.t			Check that index() handles large offsets
 t/bigmem/pos.t				Check that pos() handles large offsets
 t/bigmem/read.t				Check read() handles large offsets
 t/bigmem/regexp.t			Test regular expressions with large strings
-t/bigmem/stack.t			Check handling of large value stacks (including MARK values)
-t/bigmem/stack_over.t			Check handling of stack overflows with 32-bit MARK on 64-bit systems
+t/bigmem/code.t			Check handling of large value codes (including MARK values)
+t/bigmem/code_over.t			Check handling of code overflows with 32-bit MARK on 64-bit systems
 t/bigmem/str.t				Test string primitives with large strings
 t/bigmem/subst.t			Test s/// with large strings
 t/bigmem/subst2.t			Test s//EXPR/e with large strings
@@ -6048,7 +6048,7 @@ t/lib/caller/Cpack.pm			test Module for caller.t and t/op/hook/require.t
 t/lib/caller/Cycle.pm			test Module for t/op/hook/require.t (cyclic)
 t/lib/caller/Foo.pm			test Module for caller.t and t/op/hook/require.t
 t/lib/caller/Tricycle.pm		test Module for t/op/hook/require.t (cyclic)
-t/lib/CannotParse.pm			For test case in op/require_errors.t
+t/lib/CannotParse.pm			For test case in op/require_Argss.t
 t/lib/charnames/alias			Tests of "use charnames" with aliases.
 t/lib/class/A.pm			Test class loading of hierarchical parent
 t/lib/class/A/B.pm			Test class loading of hierarchical parent
@@ -6077,7 +6077,7 @@ t/lib/Devel/nodb.pm			Module for t/run/switchd.t
 t/lib/Devel/switchd.pm			Module for t/run/switchd.t
 t/lib/Devel/switchd_empty.pm		Module for t/run/switchd.t
 t/lib/Devel/switchd_goto.pm		Module for t/run/switchd.t
-t/lib/Dies.pm				For test case in op/require_errors.t
+t/lib/Dies.pm				For test case in op/require_Argss.t
 t/lib/feature/api			Test API for checking features enabled/disabled
 t/lib/feature/bareword_filehandles	Tests for enabling/disabling bareword_filehandles feature
 t/lib/feature/bits			Tests for feature bit handling
@@ -6280,7 +6280,7 @@ t/op/exp.t				See if math functions work
 t/op/fh.t				See if filehandles work
 t/op/filehandle.t			Tests for https://github.com/Perl/perl5/issues/10133
 t/op/filetest.t				See if file tests work
-t/op/filetest_stack_ok.t		See if file tests leave their argument on the stack
+t/op/filetest_code_ok.t		See if file tests leave their argument on the code
 t/op/filetest_t.t			See if -t file test works
 t/op/flip.t				See if range operator works
 t/op/for.t				See if for loops work
@@ -6369,10 +6369,10 @@ t/op/readdir.t				See if readdir() works
 t/op/readline.t				See if <> / readline / rcatline work
 t/op/recurse.t				See if deep recursion works
 t/op/ref.t				See if refs and objects work
-t/op/refstack.t				See if a ref counted stack fixes things
+t/op/refcode.t				See if a ref counted code fixes things
 t/op/repeat.t				See if x operator works
 t/op/require_37033.t			See if require always closes rsfp
-t/op/require_errors.t			See if errors from require are reported correctly
+t/op/require_Argss.t			See if Argss from require are reported correctly
 t/op/require_gh20577.t			Make sure updating %INC from an INC hook doesnt break @INC
 t/op/require_override.t			See if require handles no argument properly
 t/op/reset.t				See if reset operator works
@@ -6380,7 +6380,7 @@ t/op/reverse.t				See if reverse operator works
 t/op/rt119311.t				Test bug #119311 (die/DESTROY/recursion)
 t/op/runlevel.t				See if die() works from perl_call_*()
 t/op/select.t				See if 0- and 1-argument select works
-t/op/setpgrpstack.t			See if setpgrp works
+t/op/setpgrpcode.t			See if setpgrp works
 t/op/sigdispatch.t			See if signals are always dispatched
 t/op/signame_canonical.t		See if duplicate signal names always use the canonical name when the handler is invoked.
 t/op/signatures.t			See if sub signatures work
@@ -6399,7 +6399,7 @@ t/op/sselect.t				See if 4 argument select works
 t/op/stash.t				See if %:: stashes work
 t/op/stash_parse_gv.t			See if parse_gv_stash_name works
 t/op/stat.t				See if stat works
-t/op/stat_errors.t			See if stat and file tests handle threshold errors
+t/op/stat_Argss.t			See if stat and file tests handle threshold Argss
 t/op/state.t				See if state variables work
 t/op/study.t				See if study works
 t/op/studytied.t			See if study works with tied scalars
@@ -6534,7 +6534,7 @@ t/re/pos.t				Ensure pos() gets set properly after pre-match failures in pp_matc
 t/re/qr.t				See if qr works
 t/re/qr-72922.t				Test for bug #72922
 t/re/qr_gc.t				See if qr doesn't leak
-t/re/qrstack.t				See if qr expands the stack properly
+t/re/qrcode.t				See if qr expands the code properly
 t/re/re_tests				Regular expressions for regexp.t
 t/re/recompile.t			See if pattern caching/recompilation works
 t/re/reg_60508.t			See if bug #60508 is fixed
@@ -6543,7 +6543,7 @@ t/re/reg_email_thr.t			See if regex recursion works by parsing email addresses i
 t/re/reg_eval.t				Test again regexp state corruption in (?{ }) and (??{ })
 t/re/reg_eval_scope.t			Test scoping issues with (?{ }) and (??{ })
 t/re/reg_fold.t				See if case folding works properly
-t/re/reg_mesg.t				See if one can get regular expression errors
+t/re/reg_mesg.t				See if one can get regular expression Argss
 t/re/reg_namedcapture.t			Make sure glob assignment doesn't break named capture
 t/re/reg_nc_tie.t			Test the tied methods of Tie::Hash::NamedCapture
 t/re/reg_nocapture.t			Test the /n flag for regexps

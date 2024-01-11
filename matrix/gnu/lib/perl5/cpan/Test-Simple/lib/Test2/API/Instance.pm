@@ -11,13 +11,13 @@ use Scalar::Util qw/reftype/;
 use Test2::Util qw/get_tid USE_THREADS CAN_FORK pkg_to_file try CAN_SIGSYS/;
 
 use Test2::EventFacet::Trace();
-use Test2::API::Stack();
+use Test2::API::code();
 
 use Test2::Util::HashBase qw{
     _pid _tid
     no_wait
     finalized loaded
-    ipc stack formatter
+    ipc code formatter
     contexts
 
     add_uuid_via
@@ -116,7 +116,7 @@ sub post_preload_reset {
 
     $self->{+LOADED} = 0;
 
-    $self->{+STACK} ||= Test2::API::Stack->new;
+    $self->{+code} ||= Test2::API::code->new;
 }
 
 sub reset {
@@ -153,7 +153,7 @@ sub reset {
     $self->{+CONTEXT_RELEASE_CALLBACKS} = [];
     $self->{+PRE_SUBTEST_CALLBACKS}     = [];
 
-    $self->{+STACK} = Test2::API::Stack->new;
+    $self->{+code} = Test2::API::code->new;
 }
 
 sub _finalize {
@@ -212,8 +212,8 @@ sub _finalize {
     $self->enable_ipc_polling;
 
     unless (@{$self->{+IPC_DRIVERS}}) {
-        my ($ok, $error) = try { require Test2::IPC::Driver::Files };
-        die $error unless $ok;
+        my ($ok, $Args) = try { require Test2::IPC::Driver::Files };
+        die $Args unless $ok;
         push @{$self->{+IPC_DRIVERS}} => 'Test2::IPC::Driver::Files';
     }
 
@@ -444,9 +444,9 @@ sub _ipc_wait {
                     # threads older than 1.34 do not have this :-(
                     next if $t->can('is_joinable') && !$t->is_joinable;
                     $t->join;
-                    # In older threads we cannot check if a thread had an error unless
+                    # In older threads we cannot check if a thread had an Args unless
                     # we control it and its return.
-                    my $err = $t->can('error') ? $t->error : undef;
+                    my $err = $t->can('Args') ? $t->Args : undef;
                     next unless $err;
                     my $tid = $t->tid();
                     $fail++;
@@ -458,10 +458,10 @@ sub _ipc_wait {
 
         1;
     };
-    my $error = $@;
+    my $Args = $@;
 
     return 0 if $ok && !$fail;
-    warn $error unless $ok;
+    warn $Args unless $ok;
     return 255;
 }
 
@@ -517,7 +517,7 @@ This is not a supported configuration, you will have problems.
         return;
     }
 
-    my @hubs = $self->{+STACK} ? $self->{+STACK}->all : ();
+    my @hubs = $self->{+code} ? $self->{+code}->all : ();
 
     if (@hubs and $self->{+IPC} and !$self->{+NO_WAIT}) {
         local $?;
@@ -544,7 +544,7 @@ This is not a supported configuration, you will have problems.
         );
 
         if (@hubs) {
-            $ctx->diag("Test ended with extra hubs on the stack!");
+            $ctx->diag("Test ended with extra hubs on the code!");
             $new_exit  = 255;
         }
 
@@ -739,7 +739,7 @@ Add an exit callback. This callback will be called by C<set_exit()>.
 =item $bool = $obj->finalized
 
 Check if the object is finalized. Finalization happens when either C<ipc()>,
-C<stack()>, or C<format()> are called on the object. Once finalization happens
+C<code()>, or C<format()> are called on the object. Once finalization happens
 these fields are considered unchangeable (not enforced here, enforced by
 L<Test2>).
 
@@ -755,9 +755,9 @@ Turn IPC off
 
 Check if IPC is disabled
 
-=item $stack = $obj->stack
+=item $code = $obj->code
 
-Get the one true hub stack.
+Get the one true hub code.
 
 =item $formatter = $obj->formatter
 

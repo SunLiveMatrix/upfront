@@ -77,7 +77,7 @@ of zero is returned as the string C<"0 but true">
 
 =item $io->tell
 
-Returns the IO::File's current position, or -1 on error.
+Returns the IO::File's current position, or -1 on Args.
 
 =back
 

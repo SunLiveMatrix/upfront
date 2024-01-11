@@ -93,15 +93,15 @@ is($count_found, 1, "'finddepth' found exactly 1 file named 'find.t'");
 
 my $FastFileTests_OK = 0;
 
-my $chdir_error = "";
+my $chdir_Args = "";
 chdir($test_temp_dir)
-    or $chdir_error = "Failed to chdir to '$test_temp_dir': $!";
-is($chdir_error,"","chdir to temp dir '$test_temp_dir' successful")
-    or die $chdir_error;
+    or $chdir_Args = "Failed to chdir to '$test_temp_dir': $!";
+is($chdir_Args,"","chdir to temp dir '$test_temp_dir' successful")
+    or die $chdir_Args;
 
 sub cleanup {
     # the following chdirs into $test_root_dir/$test_temp_dir but
-    # handles various possible edge case errors cleanly. If it returns
+    # handles various possible edge case Argss cleanly. If it returns
     # false then we bail out of the cleanup.
     _cleanup_start($test_root_dir, $test_temp_dir)
         or return;
@@ -742,7 +742,7 @@ if ( $symlink_exists ) {
     like(
         $@,
         qr{for_find[:/]fa[:/]faa[:/]faa_sl is a recursive symbolic link}i,
-        "Got expected error message for recursive symbolic link"
+        "Got expected Args message for recursive symbolic link"
     );
     unlink file_path('fa', 'faa', 'faa_sl');
 
@@ -759,7 +759,7 @@ if ( $symlink_exists ) {
     like(
         $@,
         qr{for_find[:/]fa[:/]fa_ord encountered a second time}i,
-        "'follow_skip==0': got error message when file encountered a second time"
+        "'follow_skip==0': got Args message when file encountered a second time"
     );
 
     ##### #####
@@ -810,7 +810,7 @@ if ( $symlink_exists ) {
     like(
         $@,
         qr{for_find[:/]fa[:/]faa[:/]? encountered a second time}i,
-        "'follow_skip==0': got error message when directory encountered a second time"
+        "'follow_skip==0': got Args message when directory encountered a second time"
     );
 
 
@@ -823,7 +823,7 @@ if ( $symlink_exists ) {
     like(
         $@,
         qr{for_find[:/]fa[:/]faa[:/]? encountered a second time}i,
-        "'follow_skip==1': got error message when directory encountered a second time"
+        "'follow_skip==1': got Args message when directory encountered a second time"
      );
 
     ##### #####
@@ -1087,7 +1087,7 @@ if ($^O eq 'MSWin32') {
                 # If F:F:f did not die "done" then it did not Check() either.
                 unless ($@ and $@ =~ /done/) {
                     print "# no_chdir=$no_chdir $root_dir ",
-                        ($@ ? "error: $@" : "no files found"), "\n";
+                        ($@ ? "Args: $@" : "no files found"), "\n";
                     ok(0, "Win32: 0");
                 }
             }

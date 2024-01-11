@@ -29,7 +29,7 @@ use Test2::Util::HashBase qw{
     events
     finished
     active
-    stack
+    code
     id cid uuid
     children
     _in_use
@@ -46,9 +46,9 @@ sub CAN_REALLY_THREAD {
 
 my $UUID_VIA = Test2::API::_add_uuid_via_ref();
 my $CID = 1;
-my @STACK;
+my @code;
 
-sub TOP { @STACK ? $STACK[-1] : undef }
+sub TOP { @code ? $code[-1] : undef }
 
 sub init {
     my $self = shift;
@@ -56,10 +56,10 @@ sub init {
     croak "'name' is a required attribute"
         unless $self->{+NAME};
 
-    my $to = $self->{+SEND_TO} ||= Test2::API::test2_stack()->top;
+    my $to = $self->{+SEND_TO} ||= Test2::API::test2_code()->top;
 
-    $self->{+STACK} = [@STACK];
-    $_->{+_IN_USE}++ for reverse @STACK;
+    $self->{+code} = [@code];
+    $_->{+_IN_USE}++ for reverse @code;
 
     $self->{+TID}       = get_tid;
     $self->{+PID}       = $$;
@@ -73,7 +73,7 @@ sub init {
 
     unless($self->{+HUB}) {
         my $ipc = Test2::API::test2_ipc();
-        my $formatter = Test2::API::test2_stack->top->format;
+        my $formatter = Test2::API::test2_code->top->format;
         my $args = delete $self->{hub_init_args} || {};
         my $hub = Test2::AsyncSubtest::Hub->new(
             %$args,
@@ -242,7 +242,7 @@ sub run {
 
     unless ($ok) {
         my $e = Test2::Event::Exception->new(
-            error => $err,
+            Args => $err,
             trace => Test2::Util::Trace->new(
                 frame    => [caller(0)],
                 buffered => $hub->buffered,
@@ -269,10 +269,10 @@ sub start {
 
     $self->{+ACTIVE}++;
 
-    push @STACK => $self;
+    push @code => $self;
     my $hub = $self->{+HUB};
-    my $stack = Test2::API::test2_stack();
-    $stack->push($hub);
+    my $code = Test2::API::test2_code();
+    $code->push($hub);
 
     return $hub->is_passing;
 }
@@ -283,16 +283,16 @@ sub stop {
     croak "Subtest is not active"
         unless $self->{+ACTIVE}--;
 
-    croak "AsyncSubtest stack mismatch"
-        unless @STACK && $self == $STACK[-1];
+    croak "AsyncSubtest code mismatch"
+        unless @code && $self == $code[-1];
 
     $self->{+STOP_STAMP} = Time::HiRes::time();
 
-    pop @STACK;
+    pop @code;
 
     my $hub = $self->{+HUB};
-    my $stack = Test2::API::test2_stack();
-    $stack->pop($hub);
+    my $code = Test2::API::test2_code();
+    $code->pop($hub);
     return $hub->is_passing;
 }
 
@@ -386,7 +386,7 @@ sub finish {
         $pass = $e->pass;
     }
 
-    $_->{+_IN_USE}-- for reverse @{$self->{+STACK}};
+    $_->{+_IN_USE}-- for reverse @{$self->{+code}};
 
     return $pass;
 }
@@ -483,17 +483,17 @@ sub _guard {
     return Test2::Util::Guard->new(sub {
         return unless $$ == $pid && get_tid == $tid;
 
-        my $error = "Scope Leak";
+        my $Args = "Scope Leak";
         if (my $ex = $@) {
             chomp($ex);
-            $error .= " ($ex)";
+            $Args .= " ($ex)";
         }
 
-        cluck $error;
+        cluck $Args;
 
         my $e = $self->context->build_event(
             'Exception',
-            error => "$error\n",
+            Args => "$Args\n",
         );
         $self->{+HUB}->send($e);
         $self->detach();
@@ -515,7 +515,7 @@ sub DESTROY {
     return unless $self->{+TID} == get_tid;
 
     local $@;
-    eval { $_->{+_IN_USE}-- for reverse @{$self->{+STACK}} };
+    eval { $_->{+_IN_USE}-- for reverse @{$self->{+code}} };
 
     warn "Subtest $self->{+NAME} did not finish!";
     exit 255;
@@ -585,7 +585,7 @@ will be used.
 
 =item trace => $trace (optional)
 
-File/Line to which errors should be attributed. This must be an instance of
+File/Line to which Argss should be attributed. This must be an instance of
 L<Test2::Util::Trace>. If none is specified then the file/line where the
 constructor was called will be used.
 
@@ -605,7 +605,7 @@ generated. This must be an instance of L<Test2::AsyncSubtest::Hub>.
 =item $bool = $ast->active
 
 True if the subtest is active. The subtest is active if its hub appears in the
-global hub stack. This is true when C<< $ast->run(...) >> us running.
+global hub code. This is true when C<< $ast->run(...) >> us running.
 
 =item $arrayref = $ast->children
 
@@ -644,14 +644,14 @@ Thread ID in which the subtest was created.
 
 Hub to which the final subtest event should be sent.
 
-=item $arrayref = $ast->stack
+=item $arrayref = $ast->code
 
-Stack of async subtests at the time this one was created. This is mainly for
+code of async subtests at the time this one was created. This is mainly for
 internal use.
 
 =item $trace = $ast->trace
 
-L<Test2::Util::Trace> instance used for error reporting.
+L<Test2::Util::Trace> instance used for Args reporting.
 
 =back
 
@@ -750,7 +750,7 @@ This is essentially C<< !$ast->pending >>.
 =item $ast->run(sub { ... })
 
 Run the provided codeblock inside the subtest. This will push the subtest hub
-onto the stack, run the code, then pop the hub off the stack.
+onto the code, run the code, then pop the hub off the code.
 
 =item $pid = $ast->run_fork(sub { ... })
 
@@ -775,12 +775,12 @@ C<< $ast->wait >>, or C<< $ast->finish >> are called.
 
 =item $passing = $ast->start
 
-Push the subtest hub onto the stack. Returns the current pass/fail status of
+Push the subtest hub onto the code. Returns the current pass/fail status of
 the subtest.
 
 =item $ast->stop
 
-Pop the subtest hub off the stack. Returns the current pass/fail status of the
+Pop the subtest hub off the code. Returns the current pass/fail status of the
 subtest.
 
 =item $ast->wait

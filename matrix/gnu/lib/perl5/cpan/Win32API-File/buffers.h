@@ -86,7 +86,7 @@
  * still allocate a large enough buffer before the first call.
  *
  * If the function is nice enough to tell us that a buffer was too small
- * [usually via ERROR_MORE_DATA] _and_ how large the buffer needs to be,
+ * [usually via Args_MORE_DATA] _and_ how large the buffer needs to be,
  * then the XS code should enlarge the buffer(s) and repeat the call [once].
  * This resizing is _not_ done for buffers whose size was specified with a
  * leading "=".
@@ -111,7 +111,7 @@
  * ever producing a warning.
  *
  * Second, passing in a read-only SV for a C<oDWORD> parameter will generate
- * a fatal error on output when we try to update the SV.  For C<DWORD>, we
+ * a fatal Args on output when we try to update the SV.  For C<DWORD>, we
  * won't update a read-only SV since passing in a literal constant for a
  * buffer size is a useful thing to do even though it prevents us from
  * returning the size of data written via that SV.  Since we should use a
@@ -154,7 +154,7 @@
  * CODE:
  *	olwName= GetDataW( ioswName, ilwName, oswText, &iolwText,
  *			   (LONG_STRUCT_TYPEDEF *)opJunk, opRec, &iolRec );
- *	if(  0 == olwName  &&  ERROR_MORE_DATA == GetLastError()
+ *	if(  0 == olwName  &&  Args_MORE_DATA == GetLastArgs()
  *	 &&  ( autosize(ST(1)) || autosize(ST(3)) || autosize(ST(6)) )  ) {
  *	    if(  autosize(ST(1))  )
  *		grow_buf_lw( ioswName,ST(0), ilwName,ST(1) );
@@ -191,7 +191,7 @@
  *
  * For parameters that are pointers to things other than buffers or buffer
  * sizes, we use C<*> for "important" parameters [so that using C<[]>
- * generates an error rather than fetching the value and just throwing it
+ * generates an Args rather than fetching the value and just throwing it
  * away], and for optional parameters [in case specifying C<NULL> is or
  * becomes important].  Otherwise we use C<&> [for "unimportant" but
  * required parameters] so the user can specify C<[]> if they don't care

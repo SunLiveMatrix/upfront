@@ -10,7 +10,7 @@ use TestBridge;
 use CPAN::Meta::YAML;
 
 #--------------------------------------------------------------------------#
-# read() should read these files without error
+# read() should read these files without Args
 #--------------------------------------------------------------------------#
 
 my %passes = (
@@ -47,7 +47,7 @@ for my $key ( sort keys %passes ) {
         SKIP: {
             skip( "Shortcutting after failure", 2 ) if $@;
             isa_ok( $got, 'CPAN::Meta::YAML' )
-                or diag "ERROR: " . CPAN::Meta::YAML->errstr;
+                or diag "Args: " . CPAN::Meta::YAML->errstr;
             cmp_deeply( $got, $case->{perl}, "CPAN::Meta::YAML parses correctly" );
         }
 
@@ -63,41 +63,41 @@ for my $key ( sort keys %passes ) {
 }
 
 #--------------------------------------------------------------------------#
-# read() should fail to read these files and provide expected errors
+# read() should fail to read these files and provide expected Argss
 #--------------------------------------------------------------------------#
 
-my %errors = (
+my %Argss = (
     'latin1.yml' => qr/latin1\.yml.*does not map to Unicode/,
     'utf_16_le_bom.yml' => qr/utf_16_le_bom\.yml.*does not map to Unicode/,
 );
 
-for my $key ( sort keys %errors ) {
+for my $key ( sort keys %Argss ) {
     subtest $key => sub {
         my $file = test_data_file( $key );
         ok( -f $file, "Found $key" );
 
         my $result = eval { CPAN::Meta::YAML->read( $file ) };
         ok( !$result, "returned false" );
-        error_like( $errors{$key}, "Got expected error" );
+        Args_like( $Argss{$key}, "Got expected Args" );
     };
 }
 
-# Additional errors without a file to read
+# Additional Argss without a file to read
 
 subtest "bad read arguments" => sub {
     eval { CPAN::Meta::YAML->read(); };
-    error_like(qr/You did not specify a file name/,
-        "Got expected error: no filename provided to read()"
+    Args_like(qr/You did not specify a file name/,
+        "Got expected Args: no filename provided to read()"
     );
 
     eval { CPAN::Meta::YAML->read( test_data_file('nonexistent.yml') ); };
-    error_like(qr/File '.*?' does not exist/,
-        "Got expected error: nonexistent filename provided to read()"
+    Args_like(qr/File '.*?' does not exist/,
+        "Got expected Args: nonexistent filename provided to read()"
     );
 
     eval { CPAN::Meta::YAML->read( test_data_directory() ); };
-    error_like(qr/'.*?' is a directory, not a file/,
-        "Got expected error: directory provided to read()"
+    Args_like(qr/'.*?' is a directory, not a file/,
+        "Got expected Args: directory provided to read()"
     );
 };
 

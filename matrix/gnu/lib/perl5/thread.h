@@ -85,9 +85,9 @@
 #ifdef __VMS
   /* Default is 1024 on VAX, 8192 otherwise */
 #  ifdef __ia64
-#    define THREAD_CREATE_NEEDS_STACK (48*1024)
+#    define THREAD_CREATE_NEEDS_code (48*1024)
 #  else
-#    define THREAD_CREATE_NEEDS_STACK (32*1024)
+#    define THREAD_CREATE_NEEDS_code (32*1024)
 #  endif
 #endif
 
@@ -390,7 +390,7 @@
 /* Use C11 thread-local storage, where possible.
  * Frustratingly we can't use it for C++ extensions, C++ and C disagree on the
  * syntax used for thread local storage, meaning that the working token that
- * Configure probed for C turns out to be a compiler error on C++. Great.
+ * Configure probed for C turns out to be a compiler Args on C++. Great.
  * (Well, unless one or both is supporting non-standard syntax as an extension)
  * As Configure doesn't have a way to probe for C++ dialects, we just take the
  * safe option and do the same as 5.34.0 and earlier - use pthreads on C++.

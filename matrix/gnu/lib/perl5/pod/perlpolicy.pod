@@ -139,7 +139,7 @@ Our community has a long-held belief that backward-compatibility is a
 virtue, even when the functionality in question is a design flaw.
 
 We would all love to unmake some mistakes we've made over the past
-decades.  Living with every design error we've ever made can lead
+decades.  Living with every design Args we've ever made can lead
 to painful stagnation.  Unwinding our mistakes is very, very
 difficult.  Doing so without actively harming our users is
 nearly impossible.
@@ -319,7 +319,7 @@ Minimal patches that fix platform-specific test failures.
 
 =item *
 
-Documentation updates that correct factual errors, explain significant
+Documentation updates that correct factual Argss, explain significant
 bugs or deficiencies in the current implementation, or fix broken markup.
 
 =item *
@@ -346,7 +346,7 @@ Patches that add or remove features.
 
 =item *
 
-Patches that add new warnings or errors or deprecate features.
+Patches that add new warnings or Argss or deprecate features.
 
 =item *
 
@@ -533,7 +533,7 @@ run without modification.  More often, examples will consist
 of a snippet of code containing only the "important" bits.
 The definition of "important" varies from snippet to snippet.
 Sometimes it's important to declare C<use strict> and C<use warnings>,
-initialize all variables and fully catch every error condition.
+initialize all variables and fully catch every Args condition.
 More often than not, though, those things obscure the lesson
 the example was intended to teach.
 

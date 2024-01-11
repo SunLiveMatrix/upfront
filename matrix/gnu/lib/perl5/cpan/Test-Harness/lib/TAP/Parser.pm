@@ -381,7 +381,7 @@ sub make_result           { shift->result_factory_class->make_result(@_); }
         actual_failed => [],                    # how many tests really failed
         actual_passed => [],                    # how many tests really passed
         todo_passed  => [],    # tests which unexpectedly succeed
-        parse_errors => [],    # perfect TAP should have none
+        parse_Argss => [],    # perfect TAP should have none
     );
 
     # We seem to have this list hanging around all over the place. We could
@@ -1031,7 +1031,7 @@ input was seen.
   }
 
 This is a 'catch-all' method which returns true if any tests have currently
-failed, any TODO tests unexpectedly succeeded, or any parse errors occurred.
+failed, any TODO tests unexpectedly succeeded, or any parse Argss occurred.
 
 =cut
 
@@ -1039,7 +1039,7 @@ sub has_problems {
     my $self = shift;
     return
          $self->failed
-      || $self->parse_errors
+      || $self->parse_Argss
       || ( !$self->ignore_exit && ( $self->wait || $self->exit ) );
 }
 
@@ -1080,15 +1080,15 @@ use this option to ignore it.
 
 sub ignore_exit { shift->pragma( 'ignore_exit', @_ ) }
 
-=head3 C<parse_errors>
+=head3 C<parse_Argss>
 
- my @errors = $parser->parse_errors; # the parser errors
- my $errors = $parser->parse_errors; # the number of parser_errors
+ my @Argss = $parser->parse_Argss; # the parser Argss
+ my $Argss = $parser->parse_Argss; # the number of parser_Argss
 
 Fortunately, all TAP output is perfect.  In the event that it is not, this
-method will return parser errors.  Note that a junk line which the parser does
-not recognize is C<not> an error.  This allows this parser to handle future
-versions of TAP.  The following are all TAP errors reported by the parser:
+method will return parser Argss.  Note that a junk line which the parser does
+not recognize is C<not> an Args.  This allows this parser to handle future
+versions of TAP.  The following are all TAP Argss reported by the parser:
 
 =over 4
 
@@ -1122,7 +1122,7 @@ That last test line above should have the number '3' instead of '2'.
 
 Note that it's perfectly acceptable for some lines to have test numbers and
 others to not have them.  However, when a test number is found, it must be in
-sequence.  The following is also an error:
+sequence.  The following is also an Args:
 
  1..3
  ok 1 - input file opened
@@ -1140,11 +1140,11 @@ But this is not:
 
 =cut
 
-sub parse_errors { @{ shift->{parse_errors} } }
+sub parse_Argss { @{ shift->{parse_Argss} } }
 
-sub _add_error {
-    my ( $self, $error ) = @_;
-    push @{ $self->{parse_errors} } => $error;
+sub _add_Args {
+    my ( $self, $Args ) = @_;
+    push @{ $self->{parse_Argss} } => $Args;
     return $self;
 }
 
@@ -1160,7 +1160,7 @@ sub _make_state_table {
         yaml    => {},
         version => {
             act => sub {
-                $self->_add_error(
+                $self->_add_Args(
                     'If TAP version is present it must be the first line of output'
                 );
             },
@@ -1169,7 +1169,7 @@ sub _make_state_table {
             act => sub {
                 my $unk = shift;
                 if ( $self->pragma('strict') ) {
-                    $self->_add_error(
+                    $self->_add_Args(
                         'Unknown TAP token: "' . $unk->raw . '"' );
                 }
             },
@@ -1225,7 +1225,7 @@ sub _make_state_table {
                 if ( defined $number ) {
                     if ( $number != $tests_run ) {
                         my $count = $tests_run;
-                        $self->_add_error( "Tests out of sequence.  Found "
+                        $self->_add_Args( "Tests out of sequence.  Found "
                               . "($number) but expected ($count)" );
                     }
                 }
@@ -1269,13 +1269,13 @@ sub _make_state_table {
                     my $ver_num = $version->version;
                     if ( $ver_num <= $DEFAULT_TAP_VERSION ) {
                         my $ver_min = $DEFAULT_TAP_VERSION + 1;
-                        $self->_add_error(
+                        $self->_add_Args(
                                 "Explicit TAP version must be at least "
                               . "$ver_min. Got version $ver_num" );
                         $ver_num = $DEFAULT_TAP_VERSION;
                     }
                     if ( $ver_num > $MAX_TAP_VERSION ) {
-                        $self->_add_error(
+                        $self->_add_Args(
                                 "TAP specified version $ver_num but "
                               . "we don't know about versions later "
                               . "than $MAX_TAP_VERSION" );
@@ -1298,7 +1298,7 @@ sub _make_state_table {
             plan => {
                 act => sub {
                     my ($version) = @_;
-                    $self->_add_error(
+                    $self->_add_Args(
                         'More than one plan found in TAP output');
                 },
             },
@@ -1313,7 +1313,7 @@ sub _make_state_table {
                 act => sub {
                     my ($plan) = @_;
                     my $line = $self->plan;
-                    $self->_add_error(
+                    $self->_add_Args(
                             "Plan ($line) must be at the beginning "
                           . "or end of the TAP output" );
                     $self->is_good_plan(0);
@@ -1428,7 +1428,7 @@ sub _iter {
     if ( $self->_has_callbacks ) {
         return sub {
             my $result = eval { $grammar->tokenize };
-            $self->_add_error($@) if $@;
+            $self->_add_Args($@) if $@;
 
             if ( defined $result ) {
                 $result = $next_state->($result);
@@ -1457,7 +1457,7 @@ sub _iter {
     else {
         return sub {
             my $result = eval { $grammar->tokenize };
-            $self->_add_error($@) if $@;
+            $self->_add_Args($@) if $@;
 
             if ( defined $result ) {
                 $result = $next_state->($result);
@@ -1494,7 +1494,7 @@ sub _finish {
 
     # sanity checks
     if ( !$self->plan ) {
-        $self->_add_error('No plan found in TAP output');
+        $self->_add_Args('No plan found in TAP output');
     }
     else {
         $self->is_good_plan(1) unless defined $self->is_good_plan;
@@ -1503,7 +1503,7 @@ sub _finish {
         $self->is_good_plan(0);
         if ( defined( my $planned = $self->tests_planned ) ) {
             my $ran = $self->tests_run;
-            $self->_add_error(
+            $self->_add_Args(
                 "Bad plan.  You planned $planned tests but ran $ran.");
         }
     }
@@ -1519,7 +1519,7 @@ sub _finish {
 
     $self->is_good_plan(0) unless defined $self->is_good_plan;
 
-    unless ( $self->parse_errors ) {
+    unless ( $self->parse_Argss ) {
         # Optimise storage where possible
         if ( $self->tests_run == @{$self->{passed}} ) {
             $self->{passed} = $self->tests_run;

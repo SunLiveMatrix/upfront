@@ -77,7 +77,7 @@ EOM
 my $len   = length $hello ;
 
 {
-    title "Error Cases" ;
+    title "Args Cases" ;
 
     eval { new Compress::Raw::Bzip2(1,2,3,4,5,6) };
     like $@,  mkErr "Usage: Compress::Raw::Bzip2::new(className, appendOut=1, blockSize100k=1, workfactor=0, verbosity=0)";

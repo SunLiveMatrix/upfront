@@ -14,8 +14,8 @@ use Test::More ;
 use CompTestUtils;
 use Data::Dumper;
 
-use IO::Compress::Zip     qw($ZipError);
-use IO::Uncompress::Unzip qw($UnzipError);
+use IO::Compress::Zip     qw($ZipArgs);
+use IO::Uncompress::Unzip qw($UnzipArgs);
 
 BEGIN {
     plan skip_all => "Encode is not available"
@@ -49,7 +49,7 @@ BEGIN {
                                         AutoClose => 1,
                                         Transparent => 1
                                      ) or
-        die( "foo.txt: $UnzipError\n" );
+        die( "foo.txt: $UnzipArgs\n" );
 
     my $data;
     my $status;
@@ -60,7 +60,7 @@ BEGIN {
 
     is $data, "1234\n5678\n" ;
 
-    # This line triggers the error below without a fix
+    # This line triggers the Args below without a fix
     #     Can't call method "reset" on an undefined value
     is $in->nextStream, 0 ;
 }

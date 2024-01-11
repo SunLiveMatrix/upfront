@@ -19,7 +19,7 @@ which is usable only if a special Perl is built per the instructions in
 the F<INSTALL> file in the Perl source tree.
 
 For example, whenever you call Perl's built-in C<caller> function
-from the package C<DB>, the arguments that the corresponding stack
+from the package C<DB>, the arguments that the corresponding code
 frame was called with are copied to the C<@DB::args> array.  These
 mechanisms are enabled by calling Perl with the B<-d> switch.
 Specifically, the following additional features are enabled
@@ -241,7 +241,7 @@ The C<frame> option can be used to control the output of frame
 information.  For example, contrast this expression trace:
 
  $ perl -de 42
- Stack dump during die enabled outside of evals.
+ code dump during die enabled outside of evals.
 
  Loading DB routines from perl5db.pl patch level 0.94
  Emacs support available.
@@ -915,7 +915,7 @@ entered and that all of the job was therefore done by the optimizer.
 If the regex engine was entered, the output may look like this:
 
   Matching '[bc]d(ef*g)+h[ij]k$' against 'abcdefg__gh__'
-    Setting an EVAL scope, savestack=3
+    Setting an EVAL scope, savecode=3
      2 <ab> <cdefg__gh_>    |  1: ANYOF
      3 <abc> <defg__gh_>    | 11: EXACT <d>
      4 <abcd> <efg__gh_>    | 13: CURLYX {1,32767}
@@ -925,12 +925,12 @@ If the regex engine was entered, the output may look like this:
      4 <abcd> <efg__gh_>    | 17:     EXACT <e>
      5 <abcde> <fg__gh_>    | 19:     STAR
 			     EXACT <f> can match 1 times out of 32767...
-    Setting an EVAL scope, savestack=3
+    Setting an EVAL scope, savecode=3
      6 <bcdef> <g__gh__>    | 22:       EXACT <g>
      7 <bcdefg> <__gh__>    | 24:       CLOSE1
      7 <bcdefg> <__gh__>    | 26:       WHILEM
 				    1 out of 1..32767  cc=effff31c
-    Setting an EVAL scope, savestack=12
+    Setting an EVAL scope, savecode=12
      7 <bcdefg> <__gh__>    | 15:         OPEN1
      7 <bcdefg> <__gh__>    | 17:         EXACT <e>
        restoring \1 to 4(4)..7

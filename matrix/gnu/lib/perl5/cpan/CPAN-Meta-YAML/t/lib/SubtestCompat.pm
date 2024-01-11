@@ -40,7 +40,7 @@ unless ( Test::More->can("subtest") ) {
         eval {
             no warnings 'redefine';
             local *Test::Builder::plan = \&_fake_plan;
-            # only want subtest error reporting to look up to the code ref
+            # only want subtest Args reporting to look up to the code ref
             # for where test was called, not further up to *our* callers,
             # so we *reset* the Level, rather than increment it
             local $Test::Builder::Level = 1;

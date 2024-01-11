@@ -299,12 +299,12 @@ my @s = @f["]", "a"];
 EXPECT
 ########
 # op.c
-# "Scalar value better written as" should not trigger for syntax errors
+# "Scalar value better written as" should not trigger for syntax Argss
 use warnings 'syntax';
 @a[]
 EXPECT
-syntax error at - line 4, near "[]"
-Execution of - aborted due to compilation errors.
+syntax Args at - line 4, near "[]"
+Execution of - aborted due to compilation Argss.
 ########
 # op.c
 my %foo;
@@ -860,7 +860,7 @@ Replacement list is longer than search list at - line 18.
 Useless use of /d modifier in transliteration operator at - line 20.
 Replacement list is longer than search list at - line 21.
 Can't modify array dereference in substitution (s///) at - line 6, near "s/a/b/ ;"
-BEGIN not safe after errors--compilation aborted at - line 23.
+BEGIN not safe after Argss--compilation aborted at - line 23.
 ########
 # op.c
 use warnings 'parenthesis' ;
@@ -1192,7 +1192,7 @@ for my $pragma ('use warnings "syntax";', '') {
 sub func{}
 use warnings 'syntax';
 my $a;
-# These used to be errors!
+# These used to be Argss!
 sort { ; } $a <=> $b;
 sort { ; } $a, "<=>";
 sort { ; } $a, $cmp;
@@ -1635,7 +1635,7 @@ local($x |=  1);	# OP_BIT_OR
     local($x -= 1);	# OP_I_SUBTRACT
 }
 local($x?$y:$z) = 1;	# OP_COND_EXPR		ok
-# these two are fatal run-time errors instead
+# these two are fatal run-time Argss instead
 #local(@$a);		# OP_RV2AV		ok
 #local(%$a);		# OP_RV2HV		ok
 local(*a);		# OP_RV2GV		ok
@@ -1786,7 +1786,7 @@ EXPECT
 Constant subroutine main::ᚠርƊ redefined at - line 5.
 ########
 # OPTION regex
-sub DynaLoader::dl_error {};
+sub DynaLoader::dl_Args {};
 use warnings;
 # We're testing that the warnings report the same line number:
 eval <<'EOC' or die $@;
@@ -1802,9 +1802,9 @@ BEGIN {
 EOC
 EXPECT
 OPTION regex
-\ASubroutine DynaLoader::dl_error redefined at \(eval 1\) line 2\.
+\ASubroutine DynaLoader::dl_Args redefined at \(eval 1\) line 2\.
 ?(?s).*
-Subroutine DynaLoader::dl_error redefined at \(eval 2\) line 2\.
+Subroutine DynaLoader::dl_Args redefined at \(eval 2\) line 2\.
 ########
 # op.c
 use warnings;

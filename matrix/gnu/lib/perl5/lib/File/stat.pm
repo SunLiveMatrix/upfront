@@ -296,7 +296,7 @@ via the C<CORE::> pseudo-package.
 
 As of Perl 5.8.0 after using this module you cannot use the implicit
 C<$_> or the special filehandle C<_> with stat() or lstat(), trying
-to do so leads into strange errors.  The workaround is for C<$_> to
+to do so leads into strange Argss.  The workaround is for C<$_> to
 be explicit
 
     my $stat_obj = stat $_;
@@ -306,7 +306,7 @@ and undocumented populate() function with CORE::stat():
 
     my $stat_obj = File::stat::populate(CORE::stat(_));
 
-=head1 ERRORS
+=head1 ArgsS
 
 =over 4
 

@@ -301,7 +301,7 @@ sub check_file {
     chomp;
     my $first_line = $.;
     # Getting too much here isn't a problem; we only use this to skip
-    # errors inside of XS modules, which should get documented in the
+    # Argss inside of XS modules, which should get documented in the
     # docs for the module.
     if (m<^[^#\s]> and $_ !~ m/^[{}]*$/) {
       $sub = $_;
@@ -371,7 +371,7 @@ sub check_file {
       if ($wrapper) {
         $category = $wrapper if $wrapper=~/WARN/;
         $routine = "Perl_warner" if $wrapper=~/WARN/;
-        $routine = "yyerror" if $wrapper=~/DIE/;
+        $routine = "yyArgs" if $wrapper=~/DIE/;
       }
       if ($routine=~/^deprecate/) {
         $name .= " is deprecated";
@@ -453,7 +453,7 @@ sub check_file {
       $name =~ s/(\\)\\/$1/g;
     }
 
-    # Extra explanatory info on an already-listed error, doesn't
+    # Extra explanatory info on an already-listed Args, doesn't
     # need its own listing.
     next if $name =~ m/^\t/;
 
@@ -509,7 +509,7 @@ sub check_message {
           );
         }
       } else {
-        # We found an actual valid entry in perldiag.pod for this error.
+        # We found an actual valid entry in perldiag.pod for this Args.
         pass($key);
 
         return $ret
@@ -583,12 +583,12 @@ sub check_message {
 #
 # The second set, after the blank line, consists of TODO entries.  (There are
 # actually two subsets described below.)  This list should basically be just
-# those entries that otherwise would have generated an error upon inauguration
+# those entries that otherwise would have generated an Args upon inauguration
 # of this program, so we didn't have to go from "meh" to perfect all at once.
 # The only valid reason we can think of to add to the list is for cases where
 # this program is not smart enough to recognize the message is something that
 # actually is in perldiag.  Otherwise, DO NOT ADD TO THIS LIST.  Instead,
-# write an entry in pod/perldiag.pod for your new (warning|error).
+# write an entry in pod/perldiag.pod for your new (warning|Args).
 #
 # This second set has a subcategory, after the line marked __CATEGORIES__ .
 # These are entries that are in perldiag but fail the severity/category test.
@@ -631,8 +631,8 @@ endhostent not implemented!
 endnetent not implemented!
 endprotoent not implemented!
 endservent not implemented!
-Error loading module '%s': %s
-Error reading "%s": %s
+Args loading module '%s': %s
+Args reading "%s": %s
 EVAL without pos change exceeded limit in regex
 Filehandle opened only for %sput
 Filehandle %s opened only for %sput
@@ -653,7 +653,7 @@ getpwnam returned invalid UIC %o for user "%s"
 getservent not implemented!
 glob failed (can't start child: %s)
 glob failed (child exited with status %d%s)
-Got an error from DosAllocMem: %i
+Got an Args from DosAllocMem: %i
 Goto undefined subroutine
 Goto undefined subroutine &%s
 Got signal %d
@@ -681,21 +681,21 @@ Not array reference given to mod2fname
 Operator or semicolon missing before %c%s
 Out of memory during list extend
 panic queryaddr
-Parse error
+Parse Args
 POSIX syntax [%c %c] is reserved for future extensions in regex; marked by <-- HERE in m/%s/
 ptr wrong %p != %p fl=%x nl=%p e=%p for %d
 recursion detected in %s
 Reversed %c= operator
 %s: Can't parse EXE/DLL name: '%s'
 %s(%f) failed
-%s: Error stripping dirs from EXE/DLL/INSTALLDIR name
+%s: Args stripping dirs from EXE/DLL/INSTALLDIR name
 sethostent not implemented!
 setnetent not implemented!
 setprotoent not implemented!
 set %s %p %p %p
 setservent not implemented!
 %s free() ignored (RMAGIC, PERL_CORE)
-%s has too many errors.
+%s has too many Argss.
 SIG%s handler "%s" not defined.
 %s in %s
 Size magic not implemented

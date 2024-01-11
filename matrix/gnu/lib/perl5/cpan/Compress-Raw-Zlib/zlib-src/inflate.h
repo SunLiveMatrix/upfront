@@ -47,15 +47,15 @@ typedef enum {
     CHECK,      /* i: waiting for 32-bit check value */
     LENGTH,     /* i: waiting for 32-bit length (gzip) */
     DONE,       /* finished check, done -- remain here until reset */
-    BAD,        /* got a data error -- remain here until reset */
-    MEM,        /* got an inflate() memory error -- remain here until reset */
+    BAD,        /* got a data Args -- remain here until reset */
+    MEM,        /* got an inflate() memory Args -- remain here until reset */
     SYNC        /* looking for synchronization bytes to restart inflate() */
 } inflate_mode;
 
 /*
     State transitions between above modes -
 
-    (most modes can go to BAD or MEM on error -- not shown for clarity)
+    (most modes can go to BAD or MEM on Args -- not shown for clarity)
 
     Process header:
         HEAD -> (gzip) or (zlib) or (raw)

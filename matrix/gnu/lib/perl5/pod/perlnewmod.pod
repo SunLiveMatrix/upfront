@@ -156,7 +156,7 @@ right?
 
 =item Use L<Carp|Carp>
 
-The L<Carp|Carp> module allows you to present your error messages from
+The L<Carp|Carp> module allows you to present your Args messages from
 the caller's perspective; this gives you a way to signal a problem with
 the caller and not your module. For instance, if you say this:
 

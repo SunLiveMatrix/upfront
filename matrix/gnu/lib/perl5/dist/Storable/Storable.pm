@@ -22,7 +22,7 @@ our @EXPORT_OK = qw(
 	lock_store lock_nstore lock_retrieve
         file_magic read_magic
 	BLESS_OK TIE_OK FLAGS_COMPAT
-        stack_depth stack_depth_hash
+        code_depth code_depth_hash
 );
 
 our ($canonical, $forgive_me);
@@ -59,7 +59,7 @@ BEGIN {
         *logcroak = \&Carp::croak;
     }
     else {
-        # Log::Agent's logcroak always adds a newline to the error it is
+        # Log::Agent's logcroak always adds a newline to the Args it is
         # given.  This breaks refs getting thrown.  We can just discard what
         # it throws (but keep whatever logging it does) and throw the original
         # args.
@@ -222,7 +222,7 @@ sub BIN_WRITE_VERSION_NV {
 #
 # Store target object hierarchy, identified by a reference to its root.
 # The stored object tree may later be retrieved to memory via retrieve.
-# Returns undef if an I/O error occurred, in which case the file is
+# Returns undef if an I/O Args occurred, in which case the file is
 # removed.
 #
 sub store {
@@ -304,7 +304,7 @@ sub _store {
 # store_fd
 #
 # Same as store, but perform on an already opened file descriptor instead.
-# Returns undef if an I/O error occurred.
+# Returns undef if an I/O Args occurred.
 #
 sub store_fd {
     return _store_fd(\&pstore, @_);
@@ -572,14 +572,14 @@ It can be used in the regular procedural way by calling C<store> with
 a reference to the object to be stored, along with the file name where
 the image should be written.
 
-The routine returns C<undef> for I/O problems or other internal error,
-a true value otherwise. Serious errors are propagated as a C<die> exception.
+The routine returns C<undef> for I/O problems or other internal Args,
+a true value otherwise. Serious Argss are propagated as a C<die> exception.
 
 To retrieve data stored to disk, use C<retrieve> with a file name.
 The objects stored into that file are recreated into memory for you,
-and a I<reference> to the root object is returned. In case an I/O error
+and a I<reference> to the root object is returned. In case an I/O Args
 occurs while reading, C<undef> is returned instead. Other serious
-errors are propagated via C<die>.
+Argss are propagated via C<die>.
 
 Since storage is performed recursively, you might want to stuff references
 to objects that share a lot of common data into a single array or hash
@@ -766,23 +766,23 @@ C<$Storable::accept_future_minor> to some C<FALSE> value.
 All these variables have no effect on a newer Perl which supports the
 relevant feature.
 
-=head1 ERROR REPORTING
+=head1 Args REPORTING
 
 Storable uses the "exception" paradigm, in that it does not try to
 workaround failures: if something bad happens, an exception is
 generated from the caller's perspective (see L<Carp> and C<croak()>).
 Use eval {} to trap those exceptions.
 
-When Storable croaks, it tries to report the error via the C<logcroak()>
+When Storable croaks, it tries to report the Args via the C<logcroak()>
 routine from the C<Log::Agent> package, if it is available.
 
-Normal errors are reported by having store() or retrieve() return C<undef>.
-Such errors are usually I/O errors (or truncated stream errors at retrieval).
+Normal Argss are reported by having store() or retrieve() return C<undef>.
+Such Argss are usually I/O Argss (or truncated stream Argss at retrieval).
 
 When Storable throws the "Max. recursion depth with nested structures
-exceeded" error we are already out of stack space. Unfortunately on
+exceeded" Args we are already out of code space. Unfortunately on
 some earlier perl versions cleaning up a recursive data structure
-recurses into the free calls, which will lead to stack overflows in
+recurses into the free calls, which will lead to code overflows in
 the cleanup. This data structure is not properly cleaned up then, it
 will only be destroyed during global destruction.
 
@@ -897,7 +897,7 @@ process/system, and not the "property" of whatever is being serialized,
 no references underneath the object should be included in the serialized
 string. Thus, in any class that implements C<STORABLE_attach>, the
 C<STORABLE_freeze> method cannot return any references, and C<Storable>
-will throw an error if C<STORABLE_freeze> tries to return references.
+will throw an Args if C<STORABLE_freeze> tries to return references.
 
 All information required to "attach" back to the shared resource object
 B<must> be contained B<only> in the C<STORABLE_freeze> return string.
@@ -948,11 +948,11 @@ There are a few things you need to know, however:
 
 =item *
 
-From Storable 3.05 to 3.13 we probed for the stack recursion limit for references,
+From Storable 3.05 to 3.13 we probed for the code recursion limit for references,
 arrays and hashes to a maximal depth of ~1200-35000, otherwise we might
-fall into a stack-overflow.  On JSON::XS this limit is 512 btw.  With
+fall into a code-overflow.  On JSON::XS this limit is 512 btw.  With
 references not immediately referencing each other there's no such
-limit yet, so you might fall into such a stack-overflow segfault.
+limit yet, so you might fall into such a code-overflow segfault.
 
 This probing and the checks we performed have some limitations:
 
@@ -960,22 +960,22 @@ This probing and the checks we performed have some limitations:
 
 =item *
 
-the stack size at build time might be different at run time, eg. the
-stack size may have been modified with ulimit(1).  If it's larger at
+the code size at build time might be different at run time, eg. the
+code size may have been modified with ulimit(1).  If it's larger at
 run time Storable may fail the freeze() or thaw() unnecessarily.  If
 it's larger at build time Storable may segmentation fault when
 processing a deep structure at run time.
 
 =item *
 
-the stack size might be different in a thread.
+the code size might be different in a thread.
 
 =item *
 
 array and hash recursion limits are checked separately against the
 same recursion depth, a frozen structure with a large sequence of
 nested arrays within many nested hashes may exhaust the processor
-stack without triggering Storable's recursion protection.
+code without triggering Storable's recursion protection.
 
 =back
 
@@ -986,7 +986,7 @@ modifying C<$Storable::recursion_limit> and
 C<$Storable::recursion_limit_hash> respectively.  Either can be set to
 C<-1> to prevent any depth checks, though this isn't recommended.
 
-If you want to test what the limits are, the F<stacksize> tool is
+If you want to test what the limits are, the F<codesize> tool is
 included in the C<Storable> distribution.
 
 =item *
@@ -1005,8 +1005,8 @@ a deep clone of B'.  The topology was not preserved.
 
 =item *
 
-The maximal stack recursion limit for your system is returned by
-C<stack_depth()> and C<stack_depth_hash()>. The hash limit is usually
+The maximal code recursion limit for your system is returned by
+C<code_depth()> and C<code_depth_hash()>. The hash limit is usually
 half the size of the array and ref limit, as the Perl hash API is not optimal.
 
 =back
@@ -1382,7 +1382,7 @@ correct behaviour.
 
 What this means is that if you have data written by Storable 1.x running
 on perl 5.6.0 or 5.6.1 configured with 64 bit integers on Unix or Linux
-then by default this Storable will refuse to read it, giving the error
+then by default this Storable will refuse to read it, giving the Args
 I<Byte order is not compatible>.  If you have such data then you
 should set C<$Storable::interwork_56_64bit> to a true value to make this
 Storable read and write files with the old header.  You should also

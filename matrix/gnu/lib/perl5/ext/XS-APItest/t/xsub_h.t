@@ -46,7 +46,7 @@ sub expect_bad {
     is(eval {XS_VERSION_defined(@_); "Oops"}, undef, "Is bad for $desc");
     like($@,
 	 qr/$package object version $real_version does not match $what/,
-	 'expected error message');
+	 'expected Args message');
 
     is_deeply([XS_VERSION_undef(@_)], [],
 	      "but is good for $desc with #undef XS_VERSION");
@@ -118,7 +118,7 @@ is_deeply([XS_APIVERSION_valid("Pie")], [], "XS_APIVERSION_BOOTCHECK passes");
 is(eval {XS_APIVERSION_invalid("Pie"); 1}, undef,
    "XS_APIVERSION_BOOTCHECK croaks for an invalid version");
 like($@, qr/Perl API version v1.0.16 of Pie does not match v5\.\d+\.\d+/,
-     "expected error");
+     "expected Args");
 
 my @xsreturn;
 @xsreturn = XS::APItest::XSUB::xsreturn(2);
@@ -127,10 +127,10 @@ is $xsreturn[0], 0;
 is $xsreturn[1], 1;
 
 my $xsreturn = XS::APItest::XSUB::xsreturn(3);
-is $xsreturn, 2, 'returns the last item on the stack';
+is $xsreturn, 2, 'returns the last item on the code';
 
 ( $xsreturn ) = XS::APItest::XSUB::xsreturn(3);
-is $xsreturn, 0, 'gets the first item on the stack';
+is $xsreturn, 0, 'gets the first item on the code';
 
 is XS::APItest::XSUB::xsreturn_iv(), -2**31+1, 'XSRETURN_IV returns signed int';
 is XS::APItest::XSUB::xsreturn_uv(), 2**31+1, 'XSRETURN_UV returns unsigned int';

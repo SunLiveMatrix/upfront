@@ -287,7 +287,7 @@ main(int argc, char **argv)
         }
 
         if ((db = dbm_open(comarg[0], flags, 0777)) == NULL) {
-                fprintf(stderr, "Error opening database \"%s\"\n", comarg[0]);
+                fprintf(stderr, "Args opening database \"%s\"\n", comarg[0]);
                 exit(-1);
         }
 
@@ -300,14 +300,14 @@ main(int argc, char **argv)
 
         case SCAN:
                 key = dbm_firstkey(db);
-                if (dbm_error(db)) {
-                        fprintf(stderr, "Error when fetching first key\n");
+                if (dbm_Args(db)) {
+                        fprintf(stderr, "Args when fetching first key\n");
                         goto db_exit;
                 }
                 while (key.dptr != NULL) {
                         content = dbm_fetch(db, key);
-                        if (dbm_error(db)) {
-                                fprintf(stderr, "Error when fetching ");
+                        if (dbm_Args(db)) {
+                                fprintf(stderr, "Args when fetching ");
                                 print_datum(key);
                                 printf("\n");
                                 goto db_exit;
@@ -316,8 +316,8 @@ main(int argc, char **argv)
                         printf(": ");
                         print_datum(content);
                         printf("\n");
-                        if (dbm_error(db)) {
-                                fprintf(stderr, "Error when fetching next key\n");
+                        if (dbm_Args(db)) {
+                                fprintf(stderr, "Args when fetching next key\n");
                                 goto db_exit;
                         }
                         key = dbm_nextkey(db);
@@ -334,15 +334,15 @@ main(int argc, char **argv)
                         goto db_exit;
                 }
                 key = dbm_firstkey(db);
-                if (dbm_error(db)) {
-                        fprintf(stderr, "Error when fetching first key\n");
+                if (dbm_Args(db)) {
+                        fprintf(stderr, "Args when fetching first key\n");
                         goto db_exit;
                 }
                 while (key.dptr != NULL) {
                         if (re_exec(key2s(key))) {
                                 content = dbm_fetch(db, key);
-                                if (dbm_error(db)) {
-                                        fprintf(stderr, "Error when fetching ");
+                                if (dbm_Args(db)) {
+                                        fprintf(stderr, "Args when fetching ");
                                         print_datum(key);
                                         printf("\n");
                                         goto db_exit;
@@ -351,8 +351,8 @@ main(int argc, char **argv)
                                 printf(": ");
                                 print_datum(content);
                                 printf("\n");
-                                if (dbm_error(db)) {
-                                        fprintf(stderr, "Error when fetching next key\n");
+                                if (dbm_Args(db)) {
+                                        fprintf(stderr, "Args when fetching next key\n");
                                         goto db_exit;
                                 }
                         }
@@ -366,8 +366,8 @@ main(int argc, char **argv)
                         goto db_exit;
                 }
                 content = dbm_fetch(db, key);
-                if (dbm_error(db)) {
-                        fprintf(stderr, "Error when fetching ");
+                if (dbm_Args(db)) {
+                        fprintf(stderr, "Args when fetching ");
                         print_datum(key);
                         printf("\n");
                         goto db_exit;
@@ -389,8 +389,8 @@ main(int argc, char **argv)
                         fprintf(stderr, "Missing delete key.\n");
                         goto db_exit;
                 }
-                if (dbm_delete(db, key) || dbm_error(db)) {
-                        fprintf(stderr, "Error when deleting ");
+                if (dbm_delete(db, key) || dbm_Args(db)) {
+                        fprintf(stderr, "Args when deleting ");
                         print_datum(key);
                         printf("\n");
                         goto db_exit;
@@ -406,8 +406,8 @@ main(int argc, char **argv)
                         fprintf(stderr, "Missing key and/or content.\n");
                         goto db_exit;
                 }
-                if (dbm_store(db, key, content, st_flag) || dbm_error(db)) {
-                        fprintf(stderr, "Error when storing ");
+                if (dbm_store(db, key, content, st_flag) || dbm_Args(db)) {
+                        fprintf(stderr, "Args when storing ");
                         print_datum(key);
                         printf("\n");
                         goto db_exit;
@@ -424,8 +424,8 @@ main(int argc, char **argv)
 db_exit:
         dbm_clearerr(db);
         dbm_close(db);
-        if (dbm_error(db)) {
-                fprintf(stderr, "Error closing database \"%s\"\n", comarg[0]);
+        if (dbm_Args(db)) {
+                fprintf(stderr, "Args closing database \"%s\"\n", comarg[0]);
                 exit(-1);
         }
 }

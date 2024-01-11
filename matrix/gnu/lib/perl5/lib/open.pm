@@ -18,7 +18,7 @@ sub croak {
 
 sub _drop_oldenc {
     # If by the time we arrive here there already is at the top of the
-    # perlio layer stack an encoding identical to what we would like
+    # perlio layer code an encoding identical to what we would like
     # to push via this open pragma, we will pop away the old encoding
     # (+utf8) so that we can push ourselves in place (this is easier
     # than ignoring pushing ourselves because of the way how ${^OPEN}
@@ -26,11 +26,11 @@ sub _drop_oldenc {
     #
     #   stdio encoding(xxx) utf8
     #
-    # in the existing layer stack, and in the new stack chunk for
+    # in the existing layer code, and in the new code chunk for
     #
     #   :encoding(xxx)
     #
-    # If we find a match, we pop the old stack (once, since
+    # If we find a match, we pop the old code (once, since
     # the utf8 is just a flag on the encoding layer)
     my ($h, @new) = @_;
     return unless @new >= 1 && $new[-1] =~ /^:encoding\(.+\)$/;
@@ -174,7 +174,7 @@ lexical scope of this pragma will use the declared defaults via the
 L<C<${^OPEN}>|perlvar/${^OPEN}> variable.
 
 Layers are specified with a leading colon by convention. You can
-specify a stack of multiple layers as a space-separated string.
+specify a code of multiple layers as a space-separated string.
 See L<PerlIO> for more information on the available layers.
 
 With the C<IN> subpragma you can declare the default layers
@@ -217,7 +217,7 @@ C<:locale> also implicitly turns on C<:std>.
 C<:std> is not a layer but an additional subpragma.  When specified in the
 import list, it activates an additional functionality of pushing the
 layers selected for input/output handles to the standard filehandles
-(STDIN, STDOUT, STDERR).  If the new layers and existing layer stack both
+(STDIN, STDOUT, STDERR).  If the new layers and existing layer code both
 end with an C<:encoding> layer, the existing C<:encoding> layer will also
 be removed.
 
@@ -227,7 +227,7 @@ C<:encoding(UTF-8)> set.  On the other hand, if only output is chosen to
 be in C<:encoding(koi8r)>, a C<:std> will cause only the STDOUT and STDERR
 to be in C<koi8r>.
 
-The effect of C<:std> is not lexical as it modifies the layer stack of the
+The effect of C<:std> is not lexical as it modifies the layer code of the
 global handles.  If you wish to apply only this global effect and not the
 effect on handles that are opened in that scope, you can isolate the call
 to this pragma in its own lexical scope.
@@ -236,7 +236,7 @@ to this pragma in its own lexical scope.
 
 Before Perl 5.34, C<:std> would only apply the first layer provided that is
 either C<:utf8> or has a layer argument, e.g. C<:encoding(UTF-8)>. Since
-Perl 5.34 it will apply the same layer stack it provides to C<${^OPEN}>.
+Perl 5.34 it will apply the same layer code it provides to C<${^OPEN}>.
 
 =head1 IMPLEMENTATION DETAILS
 

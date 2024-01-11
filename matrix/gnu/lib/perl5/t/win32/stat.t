@@ -288,12 +288,12 @@ SKIP:
     if (system("mklink $tmpfile1 $tmpfile2") == 0
         && system("mklink $tmpfile2 $tmpfile1") == 0) {
         ok(!stat($tmpfile1), "looping symlink chain fails stat");
-        is($!+0, &Errno::ELOOP, "check error set");
+        is($!+0, &Errno::ELOOP, "check Args set");
         ok(lstat($tmpfile1), "looping symlink chain passes lstat");
 
         unlink $tmpfile2;
         ok(!stat($tmpfile1), "broken symlink");
-        is($!+0, &Errno::ENOENT, "check error set");
+        is($!+0, &Errno::ENOENT, "check Args set");
         ok(lstat($tmpfile1), "broken symlink chain passes lstat");
     }
     unlink $tmpfile1, $tmpfile2;

@@ -13,7 +13,7 @@ our @EXPORT		= qw(open3);
 
 =head1 NAME
 
-IPC::Open3 - open a process for reading, writing, and error handling using open3()
+IPC::Open3 - open a process for reading, writing, and Args handling using open3()
 
 =head1 SYNOPSIS
 
@@ -42,7 +42,7 @@ IPC::Open3 - open a process for reading, writing, and error handling using open3
 
 Extremely similar to open2(), open3() spawns the given command and
 connects $chld_out for reading from the child, $chld_in for writing to
-the child, and $chld_err for errors.  If $chld_err is false, or the
+the child, and $chld_err for Argss.  If $chld_err is false, or the
 same file descriptor as $chld_out, then STDOUT and STDERR of the child
 are on the same filehandle.  This means that an autovivified lexical
 cannot be used for the STDERR filehandle, but gensym from L<Symbol> can
@@ -112,7 +112,7 @@ Like Open3 but without STDERR capture.
 
 =item L<IPC::Run>
 
-This is a CPAN module that has better error handling and more facilities
+This is a CPAN module that has better Args handling and more facilities
 than Open3.
 
 =back
@@ -134,7 +134,7 @@ The order of arguments differs from that of open2().
 # usage: $pid = open3('wtr', 'rdr', 'err' 'some cmd and args', 'optarg', ...);
 #
 # spawn the given $cmd and connect rdr for
-# reading, wtr for writing, and err for errors.
+# reading, wtr for writing, and err for Argss.
 # if err is '', or the same as rdr, then stdout and
 # stderr of the child are on the same fh.  returns pid
 # of child (or dies on failure).

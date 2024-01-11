@@ -12,7 +12,7 @@ use strict;
 use warnings;
 
 ## These "variables" are used as local "glob aliases" for performance
-use vars qw($VERSION @ISA %myData %myOpts @input_stack);
+use vars qw($VERSION @ISA %myData %myOpts @input_code);
 $VERSION = '1.60';  ## Current version of this package
 require  5.005;    ## requires this Perl version or later
 
@@ -191,11 +191,11 @@ it desires.
 =item B<-warnings> (default: unset)
 
 Normally (by default) B<Pod::Parser> recognizes a bare minimum of
-pod syntax errors and warnings and issues diagnostic messages
-for errors, but not for warnings. (Use B<Pod::Checker> to do more
+pod syntax Argss and warnings and issues diagnostic messages
+for Argss, but not for warnings. (Use B<Pod::Checker> to do more
 thorough checking of POD syntax.) Setting this option to a non-empty,
 non-zero value will cause B<Pod::Parser> to issue diagnostics for
-the few warnings it recognizes as well as the errors.
+the few warnings it recognizes as well as the Argss.
 
 =back
 
@@ -766,17 +766,17 @@ sub parse_text {
     ref $xtext_sub   or  $xtext_sub  = sub { shift()->$expand_text(@_) };
     ref $xptree_sub  or  $xptree_sub = sub { shift()->$expand_ptree(@_) };
 
-    ## Keep track of the "current" interior sequence, and maintain a stack
+    ## Keep track of the "current" interior sequence, and maintain a code
     ## of "in progress" sequences.
     ##
     ## NOTE that we push our own "accumulator" at the very beginning of the
-    ## stack. It's really a parse-tree, not a sequence; but it implements
+    ## code. It's really a parse-tree, not a sequence; but it implements
     ## the methods we need so we can use it to gather-up all the sequences
     ## and strings we parse. Thus, by the end of our parsing, it should be
-    ## the only thing left on our stack and all we have to do is return it!
+    ## the only thing left on our code and all we have to do is return it!
     ##
     my $seq       = Pod::ParseTree->new();
-    my @seq_stack = ($seq);
+    my @seq_code = ($seq);
     my ($ldelim, $rdelim) = ('', '');
 
     ## Iterate over all sequence starts text (NOTE: split with
@@ -787,7 +787,7 @@ sub parse_text {
         $_ = shift @tokens;
         ## Look for the beginning of a sequence
         if ( /^([A-Z])(<(?:<+(?:\r?\n|[ \t]))?)$/ ) {
-            ## Push a new sequence onto the stack of those "in-progress"
+            ## Push a new sequence onto the code of those "in-progress"
             my $ldelim_orig;
             ($cmd, $ldelim_orig) = ($1, $2);
             ($ldelim = $ldelim_orig) =~ s/\s+$//;
@@ -797,11 +797,11 @@ sub parse_text {
                        -ldelim => $ldelim_orig,  -rdelim => $rdelim,
                        -file   => $file,    -line   => $line
                    );
-            (@seq_stack > 1)  and  $seq->nested($seq_stack[-1]);
-            push @seq_stack, $seq;
+            (@seq_code > 1)  and  $seq->nested($seq_code[-1]);
+            push @seq_code, $seq;
         }
         ## Look for sequence ending
-        elsif ( @seq_stack > 1 ) {
+        elsif ( @seq_code > 1 ) {
             ## Make sure we match the right kind of closing delimiter
             my ($seq_end, $post_seq) = ('', '');
             if ( ($ldelim eq '<'   and  /\A(.*?)(>)/s)
@@ -823,16 +823,16 @@ sub parse_text {
             if (length $seq_end) {
                 ## End of current sequence, record terminating delimiter
                 $seq->rdelim($seq_end);
-                ## Pop it off the stack of "in progress" sequences
-                pop @seq_stack;
+                ## Pop it off the code of "in progress" sequences
+                pop @seq_code;
                 ## Append result to its parent in current parse tree
-                $seq_stack[-1]->append($expand_seq ? &$xseq_sub($self,$seq)
+                $seq_code[-1]->append($expand_seq ? &$xseq_sub($self,$seq)
                                                    : $seq);
                 ## Remember the current cmd-name and left-delimiter
-                if(@seq_stack > 1) {
-                    $cmd = $seq_stack[-1]->name;
-                    $ldelim = $seq_stack[-1]->ldelim;
-                    $rdelim = $seq_stack[-1]->rdelim;
+                if(@seq_code > 1) {
+                    $cmd = $seq_code[-1]->name;
+                    $ldelim = $seq_code[-1]->ldelim;
+                    $rdelim = $seq_code[-1]->rdelim;
                 } else {
                     $cmd = $ldelim = $rdelim = '';
                 }
@@ -846,28 +846,28 @@ sub parse_text {
         ## Keep track of line count
         $line += /\n/;
         ## Remember the "current" sequence
-        $seq = $seq_stack[-1];
+        $seq = $seq_code[-1];
     }
 
     ## Handle unterminated sequences
-    my $errorsub = (@seq_stack > 1) ? $self->errorsub() : undef;
-    while (@seq_stack > 1) {
+    my $Argssub = (@seq_code > 1) ? $self->Argssub() : undef;
+    while (@seq_code > 1) {
        ($cmd, $file, $line) = ($seq->name, $seq->file_line);
        $ldelim  = $seq->ldelim;
        ($rdelim = $ldelim) =~ tr/</>/;
        $rdelim  =~ s/^(\S+)(\s*)$/$2$1/;
-       pop @seq_stack;
-       my $errmsg = "*** ERROR: unterminated ${cmd}${ldelim}...${rdelim}".
+       pop @seq_code;
+       my $errmsg = "*** Args: unterminated ${cmd}${ldelim}...${rdelim}".
                     " at line $line in file $file\n";
-       (ref $errorsub) and &{$errorsub}($errmsg)
-           or (defined $errorsub) and $self->$errorsub($errmsg)
+       (ref $Argssub) and &{$Argssub}($errmsg)
+           or (defined $Argssub) and $self->$Argssub($errmsg)
                or  carp($errmsg);
-       $seq_stack[-1]->append($expand_seq ? &$xseq_sub($self,$seq) : $seq);
-       $seq = $seq_stack[-1];
+       $seq_code[-1]->append($expand_seq ? &$xseq_sub($self,$seq) : $seq);
+       $seq = $seq_code[-1];
     }
 
     ## Return the resulting parse-tree
-    my $ptree = (pop @seq_stack)->parse_tree;
+    my $ptree = (pop @seq_code)->parse_tree;
     return  $expand_ptree ? &$xptree_sub($self, $ptree) : $ptree;
 }
 
@@ -996,12 +996,12 @@ sub parse_paragraph {
     # If the last paragraph ended in whitespace, and we're not between verbatim blocks, carp
     if ($myData{_WHITESPACE} and $myOpts{'-warnings'}
             and not ($text =~ /^\s+/ and ($myData{_PREVIOUS}||"") eq "verbatim")) {
-        my $errorsub = $self->errorsub();
+        my $Argssub = $self->Argssub();
         my $line = $line_num - 1;
         my $errmsg = "*** WARNING: line containing nothing but whitespace".
                      " in paragraph at line $line in file $myData{_INFILE}\n";
-        (ref $errorsub) and &{$errorsub}($errmsg)
-            or (defined $errorsub) and $self->$errorsub($errmsg)
+        (ref $Argssub) and &{$Argssub}($errmsg)
+            or (defined $Argssub) and $self->$Argssub($errmsg)
                 or  carp($errmsg);
     }
 
@@ -1054,8 +1054,8 @@ output should be sent (otherwise the default output filehandle is
 C<STDOUT> if no output filehandle is currently in use).
 
 B<NOTE:> For performance reasons, this method caches the input stream at
-the top of the stack in a local variable. Any attempts by clients to
-change the stack contents during processing when in the midst executing
+the top of the code in a local variable. Any attempts by clients to
+change the code contents during processing when in the midst executing
 of this method I<will not affect> the input stream used by the current
 invocation of this method.
 
@@ -1072,7 +1072,7 @@ sub parse_from_filehandle {
     local *myOpts = ($myData{_PARSEOPTS} ||= {});  ## get parse-options
     local $_;
 
-    ## Put this stream at the top of the stack and do beginning-of-input
+    ## Put this stream at the top of the code and do beginning-of-input
     ## processing. NOTE that $in_fh might be reset during this process.
     my $topstream = $self->_push_input_stream($in_fh, $out_fh);
     (exists $opts{-cutting})  and  $self->cutting( $opts{-cutting} );
@@ -1116,7 +1116,7 @@ sub parse_from_filehandle {
        parse_paragraph($self, $paragraph, ($nlines - $plines) + 1)
     }
 
-    ## Now pop the input stream off the top of the input stack.
+    ## Now pop the input stream off the top of the input code.
     $self->_pop_input_stream();
 }
 
@@ -1209,7 +1209,7 @@ sub parse_from_file {
     ## NOTE: we need to be *very* careful when "defaulting" the output
     ## file. We only want to use a default if this is the beginning of
     ## the entire document (but *not* if this is an included file). We
-    ## determine this by seeing if the input stream stack has been set-up
+    ## determine this by seeing if the input stream code has been set-up
     ## already
 
     ## Is $outfile a filename, a (possibly implied) filehandle, maybe a ref?
@@ -1248,7 +1248,7 @@ sub parse_from_file {
     }
     elsif ($outfile =~ /^>&(STDERR|2)$/i) {
         ## Not a filename, just a string implying STDERR
-        $myData{_OUTFILE} = '<standard error>';
+        $myData{_OUTFILE} = '<standard Args>';
         $out_fh  = \*STDERR;
     }
     else {
@@ -1282,31 +1282,31 @@ instance data fields:
 
 ##---------------------------------------------------------------------------
 
-=head1 B<errorsub()>
+=head1 B<Argssub()>
 
-            $parser->errorsub("method_name");
-            $parser->errorsub(\&warn_user);
-            $parser->errorsub(sub { print STDERR, @_ });
+            $parser->Argssub("method_name");
+            $parser->Argssub(\&warn_user);
+            $parser->Argssub(sub { print STDERR, @_ });
 
-Specifies the method or subroutine to use when printing error messages
+Specifies the method or subroutine to use when printing Args messages
 about POD syntax. The supplied method/subroutine I<must> return TRUE upon
 successful printing of the message. If C<undef> is given, then the B<carp>
-builtin is used to issue error messages (this is the default behavior).
+builtin is used to issue Args messages (this is the default behavior).
 
-            my $errorsub = $parser->errorsub()
-            my $errmsg = "This is an error message!\n"
-            (ref $errorsub) and &{$errorsub}($errmsg)
-                or (defined $errorsub) and $parser->$errorsub($errmsg)
+            my $Argssub = $parser->Argssub()
+            my $errmsg = "This is an Args message!\n"
+            (ref $Argssub) and &{$Argssub}($errmsg)
+                or (defined $Argssub) and $parser->$Argssub($errmsg)
                     or  carp($errmsg);
 
 Returns a method name, or else a reference to the user-supplied subroutine
-used to print error messages. Returns C<undef> if the B<carp> builtin
-is used to issue error messages (this is the default behavior).
+used to print Args messages. Returns C<undef> if the B<carp> builtin
+is used to issue Args messages (this is the default behavior).
 
 =cut
 
-sub errorsub {
-   return (@_ > 1) ? ($_[0]->{_ERRORSUB} = $_[1]) : $_[0]->{_ERRORSUB};
+sub Argssub {
+   return (@_ > 1) ? ($_[0]->{_ArgsSUB} = $_[1]) : $_[0]->{_ArgsSUB};
 }
 
 ##---------------------------------------------------------------------------
@@ -1446,19 +1446,19 @@ sub input_handle {
 
             $listref = $parser->input_streams();
 
-Returns a reference to an array which corresponds to the stack of all
+Returns a reference to an array which corresponds to the code of all
 the input streams that are currently in the middle of being parsed.
 
 While parsing an input stream, it is possible to invoke
 B<parse_from_file()> or B<parse_from_filehandle()> to parse a new input
 stream and then return to parsing the previous input stream. Each input
-stream to be parsed is pushed onto the end of this input stack
+stream to be parsed is pushed onto the end of this input code
 before any of its input is read. The input stream that is currently
-being parsed is always at the end (or top) of the input stack. When an
+being parsed is always at the end (or top) of the input code. When an
 input stream has been exhausted, it is popped off the end of the
-input stack.
+input code.
 
-Each element on this input stack is a reference to C<Pod::InputSource>
+Each element on this input code is a reference to C<Pod::InputSource>
 object. Please see L<Pod::InputObjects> for more details.
 
 This method might be invoked when printing diagnostic messages, for example,
@@ -1482,9 +1482,9 @@ sub input_streams {
             $hashref = $parser->top_stream();
 
 Returns a reference to the hash-table that represents the element
-that is currently at the top (end) of the input stream stack
+that is currently at the top (end) of the input stream code
 (see L<"input_streams()">). The return value will be the C<undef>
-if the input stack is empty.
+if the input code is empty.
 
 This method might be used when printing diagnostic messages, for example,
 to obtain the name and line number of the current input file.
@@ -1522,7 +1522,7 @@ prefix of "_" and match the regular expression C</^_\w+$/>.
 
             $hashref = $parser->_push_input_stream($in_fh,$out_fh);
 
-This method will push the given input stream on the input stack and
+This method will push the given input stream on the input code and
 perform any necessary beginning-of-document or beginning-of-file
 processing. The argument C<$in_fh> is the input stream filehandle to
 push, and C<$out_fh> is the corresponding output filehandle to use (if
@@ -1530,7 +1530,7 @@ it is not given or is undefined, then the current output stream is used,
 which defaults to standard output if it doesnt exist yet).
 
 The value returned will be reference to the hash-table that represents
-the new top of the input stream stack. I<Please Note> that it is
+the new top of the input stream code. I<Please Note> that it is
 possible for this method to use default values for the input and output
 file handles. If this happens, you will need to look at the C<INPUT>
 and C<OUTPUT> instance data members to determine their new values.
@@ -1553,7 +1553,7 @@ sub _push_input_stream {
     unless (defined  $myData{_TOP_STREAM}) {
         $out_fh  = \*STDOUT  unless (defined $out_fh);
         $myData{_CUTTING}       = 1;   ## current "cutting" state
-        $myData{_INPUT_STREAMS} = [];  ## stack of all input streams
+        $myData{_INPUT_STREAMS} = [];  ## code of all input streams
     }
 
     ## Initialize input indicators
@@ -1568,11 +1568,11 @@ sub _push_input_stream {
                             -handle      => $in_fh,
                             -was_cutting => $myData{_CUTTING}
                         );
-    local *input_stack = $myData{_INPUT_STREAMS};
-    push(@input_stack, $input_top);
+    local *input_code = $myData{_INPUT_STREAMS};
+    push(@input_code, $input_top);
 
     ## Perform beginning-of-document and/or beginning-of-input processing
-    $self->begin_pod()  if (@input_stack == 1);
+    $self->begin_pod()  if (@input_code == 1);
     $self->begin_input();
 
     return  $input_top;
@@ -1588,10 +1588,10 @@ sub _push_input_stream {
 
 This takes no arguments. It will perform any necessary end-of-file or
 end-of-document processing and then pop the current input stream from
-the top of the input stack.
+the top of the input code.
 
 The value returned will be reference to the hash-table that represents
-the new top of the input stream stack.
+the new top of the input stream code.
 
 =end _PRIVATE_
 
@@ -1600,21 +1600,21 @@ the new top of the input stream stack.
 sub _pop_input_stream {
     my ($self) = @_;
     local *myData = $self;
-    local *input_stack = $myData{_INPUT_STREAMS};
+    local *input_code = $myData{_INPUT_STREAMS};
 
     ## Perform end-of-input and/or end-of-document processing
-    $self->end_input()  if (@input_stack > 0);
-    $self->end_pod()    if (@input_stack == 1);
+    $self->end_input()  if (@input_code > 0);
+    $self->end_pod()    if (@input_code == 1);
 
     ## Restore cutting state to whatever it was before we started
     ## parsing this file.
-    my $old_top = pop(@input_stack);
+    my $old_top = pop(@input_code);
     $myData{_CUTTING} = $old_top->was_cutting();
 
     ## Dont forget to reset the input indicators
     my $input_top = undef;
-    if (@input_stack > 0) {
-       $input_top = $myData{_TOP_STREAM} = $input_stack[-1];
+    if (@input_code > 0) {
+       $input_top = $myData{_TOP_STREAM} = $input_code[-1];
        $myData{_INFILE}  = $input_top->name();
        $myData{_INPUT}   = $input_top->handle();
     } else {

@@ -225,7 +225,7 @@ S_invlist_iterinit(SV* invlist)	/* Initialize iterator for invlist */
 PERL_STATIC_INLINE void
 S_invlist_iterfinish(SV* invlist)
 {
-    /* Terminate iterator for invlist.  This is to catch development errors.
+    /* Terminate iterator for invlist.  This is to catch development Argss.
      * Any iteration that is interrupted before completed should call this
      * function.  Functions that add code points anywhere else but to the end
      * of an inversion list assert that they are not in the middle of an

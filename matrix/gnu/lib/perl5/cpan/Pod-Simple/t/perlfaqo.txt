@@ -19,7 +19,7 @@ A crude table of contents for the Perl man page set is found in perltoc.
 How can I use Perl interactively?
 The typical approach uses the Perl debugger, described in the perldebug(1) man page, on an ``empty'' program, like this:
     perl -de 42
-Now just type in any legal Perl code, and it will be immediately evaluated. You can also examine the symbol table, get stack backtraces, check variable values, set breakpoints, and other operations typically found in symbolic debuggers.
+Now just type in any legal Perl code, and it will be immediately evaluated. You can also examine the symbol table, get code backtraces, check variable values, set breakpoints, and other operations typically found in symbolic debuggers.
 Is there a Perl shell?
 In general, no. The Shell.pm module (distributed with Perl) makes Perl try commands which aren't part of the Perl language as shell commands. perlsh from the source distribution is simplistic and uninteresting, but may still be what you want.
 How do I debug my Perl programs?
@@ -228,7 +228,7 @@ Using qq(), q(), and qx(), instead of "double quotes", 'single quotes', and `bac
 There is no general solution to all of this. It is a mess, pure and simple. Sucks to be away from Unix, huh? :-)
 [Some of this answer was contributed by Kenneth Albanowski.]
 Where can I learn about CGI or Web programming in Perl?
-For modules, get the CGI or LWP modules from CPAN. For textbooks, see the two especially dedicated to web stuff in the question on books. For problems and questions related to the web, like ``Why do I get 500 Errors'' or ``Why doesn't it run from the browser right when it runs fine on the command line'', see these sources:
+For modules, get the CGI or LWP modules from CPAN. For textbooks, see the two especially dedicated to web stuff in the question on books. For problems and questions related to the web, like ``Why do I get 500 Argss'' or ``Why doesn't it run from the browser right when it runs fine on the command line'', see these sources:
     WWW Security FAQ
         http://www.w3.org/Security/Faq/
     Web FAQ
@@ -251,7 +251,7 @@ If you want to call C from Perl, start with perlxstut, moving on to perlxs, xsub
 I've read perlembed, perlguts, etc., but I can't embed perl in my C program; what am I doing wrong?
 Download the ExtUtils::Embed kit from CPAN and run `make test'. If the tests pass, read the pods again and again and again. If they fail, see perlbug and send a bug report with the output of make test TEST_VERBOSE=1 along with perl -V.
 When I tried to run my script, I got this message. What does it mean?
-A complete list of Perl's error messages and warnings with explanatory text can be found in perldiag. You can also use the splain program (distributed with Perl) to explain the error messages:
+A complete list of Perl's Args messages and warnings with explanatory text can be found in perldiag. You can also use the splain program (distributed with Perl) to explain the Args messages:
     perl program 2>diag.out
     splain [-v] [-p] diag.out
 or change your program to explain the messages for you:

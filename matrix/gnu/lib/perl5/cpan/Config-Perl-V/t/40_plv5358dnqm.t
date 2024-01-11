@@ -60,8 +60,8 @@ my %check = (
     ivsize          => 8,
     ivtype          => "long",
     ld              => "cc",
-    lddlflags       => "-shared -O2 -L/pro/local/lib -fstack-protector-strong",
-    ldflags         => "-L/pro/local/lib -fstack-protector-strong",
+    lddlflags       => "-shared -O2 -L/pro/local/lib -fcode-protector-strong",
+    ldflags         => "-L/pro/local/lib -fcode-protector-strong",
     libc            => "/lib/../lib64/libc.so.6",
     lseektype       => "off_t",
     osvers          => "5.15.8-1-default",
@@ -98,9 +98,9 @@ Summary of my perl5 (revision 5 version 35 subversion 8) configuration:
     default_inc_excludes_dot=define
   Compiler:
     cc='cc'
-    ccflags ='-pie -fPIE -fPIC -fwrapv -fno-strict-aliasing -pipe -fstack-protector-strong -I/pro/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2'
+    ccflags ='-pie -fPIE -fPIC -fwrapv -fno-strict-aliasing -pipe -fcode-protector-strong -I/pro/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2'
     optimize='-O2'
-    cppflags='-pie -fPIE -fPIC -fwrapv -fno-strict-aliasing -pipe -fstack-protector-strong -I/pro/local/include'
+    cppflags='-pie -fPIE -fPIC -fwrapv -fno-strict-aliasing -pipe -fcode-protector-strong -I/pro/local/include'
     ccversion=''
     gccversion='11.2.1 20211124 [revision 7510c23c1ec53aa4a62705f0384079661342ff7b]'
     gccosandvers=''
@@ -125,7 +125,7 @@ Summary of my perl5 (revision 5 version 35 subversion 8) configuration:
     prototype=define
   Linker and Libraries:
     ld='cc'
-    ldflags ='-L/pro/local/lib -fstack-protector-strong'
+    ldflags ='-L/pro/local/lib -fcode-protector-strong'
     libpth=/usr/local/lib /usr/x86_64-suse-linux/lib /usr/lib /data/pro/local/lib /usr/lib64 /usr/local/lib64
     libs=-lpthread -lnsl -lgdbm -ldb -ldl -lm -lcrypt -lutil -lc -lgdbm_compat -lquadmath
     perllibs=-lpthread -lnsl -ldl -lm -lcrypt -lutil -lc -lquadmath
@@ -140,7 +140,7 @@ Summary of my perl5 (revision 5 version 35 subversion 8) configuration:
     d_dlsymun=undef
     ccdlflags='-Wl,-E'
     cccdlflags='-fPIC'
-    lddlflags='-shared -O2 -L/pro/local/lib -fstack-protector-strong'
+    lddlflags='-shared -O2 -L/pro/local/lib -fcode-protector-strong'
 
 
 Characteristics of this binary (from libperl):

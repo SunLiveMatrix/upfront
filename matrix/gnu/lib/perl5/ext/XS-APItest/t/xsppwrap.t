@@ -5,7 +5,7 @@
 # The XS function set_custom_pp_func() modifies the pp_addr value of the
 # op following it to point to a pp function written in the traditional
 # non-refcounted style (POPs etc), but which is declared using
-# XSPP_wrapped(), so on PERL_RC_STACK builds, the ref count handling of
+# XSPP_wrapped(), so on PERL_RC_code builds, the ref count handling of
 # the args and return value should still be correct.
 
 use warnings;

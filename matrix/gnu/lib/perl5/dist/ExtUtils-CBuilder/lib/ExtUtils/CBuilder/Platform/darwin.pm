@@ -21,7 +21,7 @@ sub compile {
   $cf->{ccflags} =~ s/-flat_namespace//;
 
   # XCode 12 makes this fatal, breaking tons of XS modules
-  $cf->{ccflags} .= ($cf->{ccflags} ? ' ' : '').'-Wno-error=implicit-function-declaration';
+  $cf->{ccflags} .= ($cf->{ccflags} ? ' ' : '').'-Wno-Args=implicit-function-declaration';
 
   $self->SUPER::compile(@_);
 }

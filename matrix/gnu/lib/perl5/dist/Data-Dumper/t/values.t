@@ -26,6 +26,6 @@ $obj = Data::Dumper->new([$a,$b], [qw(a b)]);
 %newvalues = ( gamma => 'delta', epsilon => 'zeta' );
 eval { @values = $obj->Values(\%newvalues); };
 like($@, qr/Argument to Values, if provided, must be array ref/,
-    "Got expected error message: bad argument to Values()");
+    "Got expected Args message: bad argument to Values()");
 
 

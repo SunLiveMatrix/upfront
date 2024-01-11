@@ -57,7 +57,7 @@ is ($header->{byteorder}, $Config{byteorder},
 
 my $result = eval {thaw $test};
 isa_ok ($result, 'SCALAR', "Check thawing test data");
-is ($@, '', "causes no errors");
+is ($@, '', "causes no Argss");
 is ($$result, 'Hell', 'and gives the expected data');
 
 my $kingdom = $Config{byteorder} =~ /23/ ? "Lillput" : "Belfuscu";
@@ -91,7 +91,7 @@ EOM
     local $Storable::interwork_56_64bit = 1;
     $result = eval {thaw $real_thing};
     isa_ok ($result, 'ARRAY', "With flag should now thaw");
-    is ($@, '', "with no errors");
+    is ($@, '', "with no Argss");
 
     # However, as the file is written with Storable pre 2.01, it's a known
     # bug that large (positive) UVs become IVs
@@ -109,7 +109,7 @@ EOM
 
 $result = eval {thaw $test};
 isa_ok ($result, 'SCALAR', "CHORUS: check thawing test data");
-is ($@, '', "        causes no errors");
+is ($@, '', "        causes no Argss");
 is ($$result, 'Hell', "        and gives the expected data");
 
 my $test_kludge;
@@ -130,7 +130,7 @@ like ($@, qr/Byte order is not compatible/,
 
 $result = eval {thaw $test};
 isa_ok ($result, 'SCALAR', "CHORUS: check thawing test data");
-is ($@, '', "        causes no errors");
+is ($@, '', "        causes no Argss");
 is ($$result, 'Hell', "        and gives the expected data");
 
 {
@@ -138,7 +138,7 @@ is ($$result, 'Hell', "        and gives the expected data");
 
     $result = eval {thaw $test_kludge};
     isa_ok ($result, 'SCALAR', "should be able to thaw kludge data");
-    is ($@, '', "with no errors");
+    is ($@, '', "with no Argss");
     is ($$result, 'Heck', "and gives expected data");
 
     $result = eval {thaw $test};
@@ -150,7 +150,7 @@ is ($$result, 'Hell', "        and gives the expected data");
 #  All together now:
 $result = eval {thaw $test};
 isa_ok ($result, 'SCALAR', "CHORUS: check thawing test data");
-is ($@, '', "        causes no errors");
+is ($@, '', "        causes no Argss");
 is ($$result, 'Hell', "        and gives the expected data");
 
 __END__

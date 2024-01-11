@@ -220,7 +220,7 @@ sub cmp_ok($$$;$@) {
 
     my $ctx = context();
 
-    # Warnings and syntax errors should report to the cmp_ok call, not the test
+    # Warnings and syntax Argss should report to the cmp_ok call, not the test
     # context. They may not be the same.
     my ($pkg, $file, $line) = caller;
 
@@ -238,8 +238,8 @@ sub cmp_ok($$$;$@) {
 \$test = (\$got $op \$exp);
 1;
     EOT
-    my $error = $@;
-    $ctx->send_event('Exception', error => $error) unless $lived;
+    my $Args = $@;
+    $ctx->send_event('Exception', Args => $Args) unless $lived;
 
     if ($test && $lived) {
         $ctx->ok(1, $name);

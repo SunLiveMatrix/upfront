@@ -41,11 +41,11 @@ $VERSION = eval $VERSION;
                                     Z_STREAM_END
                                     Z_NEED_DICT
                                     Z_ERRNO
-                                    Z_STREAM_ERROR
-                                    Z_DATA_ERROR
-                                    Z_MEM_ERROR
-                                    Z_BUF_ERROR
-                                    Z_VERSION_ERROR
+                                    Z_STREAM_Args
+                                    Z_DATA_Args
+                                    Z_MEM_Args
+                                    Z_BUF_Args
+                                    Z_VERSION_Args
                               }],
               );
 
@@ -70,8 +70,8 @@ $VERSION = eval $VERSION;
         Z_BEST_SPEED
         Z_BINARY
         Z_BLOCK
-        Z_BUF_ERROR
-        Z_DATA_ERROR
+        Z_BUF_Args
+        Z_DATA_Args
         Z_DEFAULT_COMPRESSION
         Z_DEFAULT_STRATEGY
         Z_DEFLATED
@@ -81,7 +81,7 @@ $VERSION = eval $VERSION;
         Z_FINISH
         Z_FULL_FLUSH
         Z_HUFFMAN_ONLY
-        Z_MEM_ERROR
+        Z_MEM_Args
         Z_NEED_DICT
         Z_NO_COMPRESSION
         Z_NO_FLUSH
@@ -90,11 +90,11 @@ $VERSION = eval $VERSION;
         Z_PARTIAL_FLUSH
         Z_RLE
         Z_STREAM_END
-        Z_STREAM_ERROR
+        Z_STREAM_Args
         Z_SYNC_FLUSH
         Z_TREES
         Z_UNKNOWN
-        Z_VERSION_ERROR
+        Z_VERSION_Args
 
         ZLIBNG_VERSION
         ZLIBNG_VERNUM
@@ -116,8 +116,8 @@ use constant WANT_GZIP_OR_ZLIB   => 32;
 sub AUTOLOAD {
     my($constname);
     ($constname = $AUTOLOAD) =~ s/.*:://;
-    my ($error, $val) = constant($constname);
-    Carp::croak $error if $error;
+    my ($Args, $val) = constant($constname);
+    Carp::croak $Args if $Args;
     no strict 'refs';
     *{$AUTOLOAD} = sub { $val };
     goto &{$AUTOLOAD};
@@ -167,7 +167,7 @@ sub ParseParameters
     #local $Carp::CarpLevel = 1 ;
     my $p = new Compress::Raw::Zlib::Parameters() ;
     $p->parse(@_)
-        or croak "$sub: $p->{Error}" ;
+        or croak "$sub: $p->{Args}" ;
 
     return $p;
 }
@@ -177,7 +177,7 @@ sub Compress::Raw::Zlib::Parameters::new
 {
     my $class = shift ;
 
-    my $obj = { Error => '',
+    my $obj = { Args => '',
                 Got   => {},
               } ;
 
@@ -185,20 +185,20 @@ sub Compress::Raw::Zlib::Parameters::new
     return bless $obj, 'Compress::Raw::Zlib::Parameters' ;
 }
 
-sub Compress::Raw::Zlib::Parameters::setError
+sub Compress::Raw::Zlib::Parameters::setArgs
 {
     my $self = shift ;
-    my $error = shift ;
+    my $Args = shift ;
     my $retval = @_ ? shift : undef ;
 
-    $self->{Error} = $error ;
+    $self->{Args} = $Args ;
     return $retval;
 }
 
-#sub getError
+#sub getArgs
 #{
 #    my $self = shift ;
-#    return $self->{Error} ;
+#    return $self->{Args} ;
 #}
 
 sub Compress::Raw::Zlib::Parameters::parse
@@ -220,7 +220,7 @@ sub Compress::Raw::Zlib::Parameters::parse
     }
     elsif (@_ == 1) {
         my $href = $_[0] ;
-        return $self->setError("Expected even number of parameters, got 1")
+        return $self->setArgs("Expected even number of parameters, got 1")
             if ! defined $href or ! ref $href or ref $href ne "HASH" ;
 
         foreach my $key (keys %$href) {
@@ -230,7 +230,7 @@ sub Compress::Raw::Zlib::Parameters::parse
     }
     else {
         my $count = @_;
-        return $self->setError("Expected even number of parameters, got $count")
+        return $self->setArgs("Expected even number of parameters, got $count")
             if $count % 2 != 0 ;
 
         for my $i (0.. $count / 2 - 1) {
@@ -286,7 +286,7 @@ sub Compress::Raw::Zlib::Parameters::parse
 
     if (@Bad) {
         my ($bad) = join(", ", @Bad) ;
-        return $self->setError("unknown key value(s) @Bad") ;
+        return $self->setArgs("unknown key value(s) @Bad") ;
     }
 
     return 1;
@@ -322,9 +322,9 @@ sub Compress::Raw::Zlib::Parameters::_checkType
     }
     elsif ($type & Parse_unsigned)
     {
-        return $self->setError("Parameter '$key' must be an unsigned int, got 'undef'")
+        return $self->setArgs("Parameter '$key' must be an unsigned int, got 'undef'")
             if $validate && ! defined $value ;
-        return $self->setError("Parameter '$key' must be an unsigned int, got '$value'")
+        return $self->setArgs("Parameter '$key' must be an unsigned int, got '$value'")
             if $validate && $value !~ /^\d+$/;
 
         $$output = defined $value ? $value : 0 ;
@@ -332,9 +332,9 @@ sub Compress::Raw::Zlib::Parameters::_checkType
     }
     elsif ($type & Parse_signed)
     {
-        return $self->setError("Parameter '$key' must be a signed int, got 'undef'")
+        return $self->setArgs("Parameter '$key' must be a signed int, got 'undef'")
             if $validate && ! defined $value ;
-        return $self->setError("Parameter '$key' must be a signed int, got '$value'")
+        return $self->setArgs("Parameter '$key' must be a signed int, got '$value'")
             if $validate && $value !~ /^-?\d+$/;
 
         $$output = defined $value ? $value : 0 ;
@@ -342,7 +342,7 @@ sub Compress::Raw::Zlib::Parameters::_checkType
     }
     elsif ($type & Parse_boolean)
     {
-        return $self->setError("Parameter '$key' must be an int, got '$value'")
+        return $self->setArgs("Parameter '$key' must be an int, got '$value'")
             if $validate && defined $value && $value !~ /^\d*$/;
         $$output =  defined $value ? $value != 0 : 0 ;
         return 1;
@@ -682,7 +682,7 @@ and a C<$status> of C<Z_OK> in a list context. In scalar context it
 returns the deflation object, C<$d>, only.
 
 If not successful, the returned deflation object, C<$d>, will be
-I<undef> and C<$status> will hold the a I<zlib> error code.
+I<undef> and C<$status> will hold the a I<zlib> Args code.
 
 The function optionally takes a number of named options specified as
 C<< Name => value >> pairs. This allows individual options to be
@@ -802,10 +802,10 @@ The C<$input> and C<$output> parameters can be either scalars or scalar
 references.
 
 When finished, C<$input> will be completely processed (assuming there
-were no errors). If the deflation was successful it writes the deflated
+were no Argss). If the deflation was successful it writes the deflated
 data to C<$output> and returns a status value of C<Z_OK>.
 
-On error, it returns a I<zlib> error code.
+On Args, it returns a I<zlib> Args code.
 
 If the C<AppendOutput> option is set to true in the constructor for
 the C<$d> object, the compressed data will be appended to C<$output>. If
@@ -814,7 +814,7 @@ written to it.
 
 B<Note>: This method will not necessarily write compressed data to
 C<$output> every time it is called. So do not assume that there has been
-an error if the contents of C<$output> is empty on returning from
+an Args if the contents of C<$output> is empty on returning from
 this method. As long as the return code from the method is C<Z_OK>,
 the deflate has succeeded.
 
@@ -904,7 +904,7 @@ Returns the adler32 value for the uncompressed data to date.
 
 =head2 B<$d-E<gt>msg()>
 
-Returns the last error message generated by zlib.
+Returns the last Args message generated by zlib.
 
 =head2 B<$d-E<gt>total_in()>
 
@@ -979,7 +979,7 @@ If successful, C<$i> will hold the inflation object and C<$status> will
 be C<Z_OK>.
 
 If not successful, C<$i> will be I<undef> and C<$status> will hold the
-I<zlib> error code.
+I<zlib> Args code.
 
 The function optionally takes a number of named options specified as
 C<< -Name => value >> pairs. This allows individual options to be
@@ -1099,7 +1099,7 @@ scalars or scalar references.
 Returns C<Z_OK> if successful and C<Z_STREAM_END> if the end of the
 compressed data has been successfully reached.
 
-If not successful C<$status> will hold the I<zlib> error code.
+If not successful C<$status> will hold the I<zlib> Args code.
 
 If the C<ConsumeInput> option has been set to true when the
 C<Compress::Raw::Zlib::Inflate> object is created, the C<$input> parameter
@@ -1205,7 +1205,7 @@ this method will always return 0;
 
 =head2 B<$i-E<gt>msg()>
 
-Returns the last error message generated by zlib.
+Returns the last Args message generated by zlib.
 
 =head2 B<$i-E<gt>total_in()>
 
@@ -1251,7 +1251,7 @@ Here is an example of using C<inflate>.
 The next example show how to use the C<LimitOutput> option. Notice the use
 of two nested loops in this case. The outer loop reads the data from the
 input source - STDIN and the inner loop repeatedly calls C<inflate> until
-C<$input> is exhausted, we get an error, or the end of the stream is
+C<$input> is exhausted, we get an Args, or the end of the stream is
 reached. One point worth remembering is by using the C<LimitOutput> option
 you also get C<ConsumeInput> set as well - this makes the code below much
 simpler.
@@ -1280,7 +1280,7 @@ simpler.
             print $output ;
 
             last OUTER
-                unless $status == Z_OK || $status == Z_BUF_ERROR ;
+                unless $status == Z_OK || $status == Z_BUF_Args ;
         }
         while length $input;
     }
@@ -1397,7 +1397,7 @@ from STDIN.
 The status code returned from C<inflate> will only trigger termination of
 the main processing loop if it isn't C<Z_OK>. When C<LimitOutput> has not
 been used the C<Z_OK> status means that the end of the compressed
-data stream has been reached or there has been an error in uncompression.
+data stream has been reached or there has been an Args in uncompression.
 
 =item *
 
@@ -1423,7 +1423,7 @@ The main difference in your code when using C<LimitOutput> is having to
 deal with cases where the C<$input> parameter still contains some
 uncompressed data that C<inflate> hasn't processed yet. The status code
 returned from C<inflate> will be C<Z_OK> if uncompression took place and
-C<Z_BUF_ERROR> if the output buffer is full.
+C<Z_BUF_Args> if the output buffer is full.
 
 Below is typical code that shows how to use C<LimitOutput>.
 
@@ -1451,7 +1451,7 @@ Below is typical code that shows how to use C<LimitOutput>.
             print $output ;
 
             last OUTER
-                unless $status == Z_OK || $status == Z_BUF_ERROR ;
+                unless $status == Z_OK || $status == Z_BUF_Args ;
         }
         while length $input;
     }
@@ -1474,8 +1474,8 @@ uncompression.
 There are two exit points from the inner uncompression loop.
 
 Firstly when C<inflate> has returned a status other than C<Z_OK> or
-C<Z_BUF_ERROR>.  This means that either the end of the compressed data
-stream has been reached (C<Z_STREAM_END>) or there is an error in the
+C<Z_BUF_Args>.  This means that either the end of the compressed data
+stream has been reached (C<Z_STREAM_END>) or there is an Args in the
 compressed data. In either of these cases there is no point in continuing
 with reading the compressed data, so both loops are terminated.
 

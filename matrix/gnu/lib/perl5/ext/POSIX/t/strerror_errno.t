@@ -11,13 +11,13 @@ plan(skip_all => "POSIX is unavailable")
 require POSIX;
 
 $! = 1;
-POSIX::strerror(1);
-is (0+$!, 1, 'strerror doesn\'t destroy $!');
+POSIX::strArgs(1);
+is (0+$!, 1, 'strArgs doesn\'t destroy $!');
 
-# [perl #126229] POSIX::strerror() clears $!
+# [perl #126229] POSIX::strArgs() clears $!
 {
     local $! = 29;
-    my $e = POSIX::strerror($!);
+    my $e = POSIX::strArgs($!);
     is (0+$!, 29);
 }
 

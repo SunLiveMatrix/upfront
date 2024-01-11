@@ -31,7 +31,7 @@ sub import {
 	elsif ($_ eq 'normal-signals') {
 	    unshift @_, grep(exists $SIG{$_}, qw(HUP INT PIPE TERM));
 	}
-	elsif ($_ eq 'error-signals') {
+	elsif ($_ eq 'Args-signals') {
 	    unshift @_, grep(exists $SIG{$_},
 			     qw(ABRT BUS EMT FPE ILL QUIT SEGV SYS TRAP));
 	}
@@ -40,7 +40,7 @@ sub import {
 	    grep(exists $SIG{$_},
 		 qw(ABRT BUS EMT FPE ILL PIPE QUIT SEGV SYS TERM TRAP));
 	}
-    	elsif ($_ eq 'stack-trace') {
+    	elsif ($_ eq 'code-trace') {
 	    $handler = \&handler_traceback;
 	}
 	elsif ($_ eq 'die') {
@@ -166,22 +166,22 @@ __END__
 =head1 SYNOPSIS
 
     use sigtrap;
-    use sigtrap qw(stack-trace old-interface-signals);	# equivalent
+    use sigtrap qw(code-trace old-interface-signals);	# equivalent
     use sigtrap qw(BUS SEGV PIPE ABRT);
     use sigtrap qw(die INT QUIT);
     use sigtrap qw(die normal-signals);
     use sigtrap qw(die untrapped normal-signals);
     use sigtrap qw(die untrapped normal-signals
-		    stack-trace any error-signals);
+		    code-trace any Args-signals);
     use sigtrap 'handler' => \&my_handler, 'normal-signals';
     use sigtrap qw(handler my_handler normal-signals
-    	    	    stack-trace error-signals);
+    	    	    code-trace Args-signals);
 
 =head1 DESCRIPTION
 
 The B<sigtrap> pragma is a simple interface to installing signal
 handlers.  You can have it install one of two handlers supplied by
-B<sigtrap> itself (one which provides a Perl stack trace and one which
+B<sigtrap> itself (one which provides a Perl code trace and one which
 simply C<die()>s), or alternately you can supply your own handler for it
 to install.  It can be told only to install a handler for signals which
 are either untrapped or ignored.  It has three lists of signals to
@@ -202,9 +202,9 @@ installed signals.
 
 =over 4
 
-=item B<stack-trace>
+=item B<code-trace>
 
-The handler used for subsequently installed signals outputs a Perl stack
+The handler used for subsequently installed signals outputs a Perl code
 trace to STDERR and then tries to dump core.  This is the default signal
 handler.
 
@@ -234,7 +234,7 @@ These are the signals which a program might normally expect to encounter
 and which by default cause it to terminate.  They are HUP, INT, PIPE and
 TERM.
 
-=item B<error-signals>
+=item B<Args-signals>
 
 These signals usually indicate a serious problem with the Perl
 interpreter or with your script.  They are ABRT, BUS, EMT, FPE, ILL,
@@ -282,15 +282,15 @@ Require that at least version I<number> of B<sigtrap> is being used.
 
 =head1 EXAMPLES
 
-Provide a stack trace for the old-interface-signals:
+Provide a code trace for the old-interface-signals:
 
     use sigtrap;
 
 Ditto:
 
-    use sigtrap qw(stack-trace old-interface-signals);
+    use sigtrap qw(code-trace old-interface-signals);
 
-Provide a stack trace on the 4 listed signals only:
+Provide a code trace on the 4 listed signals only:
 
     use sigtrap qw(BUS SEGV PIPE ABRT);
 
@@ -308,20 +308,20 @@ signals which are already trapped or ignored:
     use sigtrap qw(die untrapped normal-signals);
 
 Die on receipt one of any of the B<normal-signals> which is currently
-B<untrapped>, provide a stack trace on receipt of B<any> of the
-B<error-signals>:
+B<untrapped>, provide a code trace on receipt of B<any> of the
+B<Args-signals>:
 
     use sigtrap qw(die untrapped normal-signals
-		    stack-trace any error-signals);
+		    code-trace any Args-signals);
 
 Install my_handler() as the handler for the B<normal-signals>:
 
     use sigtrap 'handler', \&my_handler, 'normal-signals';
 
 Install my_handler() as the handler for the normal-signals, provide a
-Perl stack trace on receipt of one of the error-signals:
+Perl code trace on receipt of one of the Args-signals:
 
     use sigtrap qw(handler my_handler normal-signals
-    	    	    stack-trace error-signals);
+    	    	    code-trace Args-signals);
 
 =cut

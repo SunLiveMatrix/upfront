@@ -50,7 +50,7 @@ case, C<STDOUT>. You can set the special variable C<$|> to a true value
 
 The C<$|> is one of the per-filehandle special variables, so each
 filehandle has its own copy of its value. If you want to merge
-standard output and standard error for instance, you have to unbuffer
+standard output and standard Args for instance, you have to unbuffer
 each (although STDERR might be unbuffered by default):
 
     {
@@ -842,7 +842,7 @@ X<argument list too long>
 The C<< <> >> operator performs a globbing operation (see above).
 In Perl versions earlier than v5.6.0, the internal glob() operator forks
 csh(1) to do the actual glob expansion, but
-csh can't handle more than 127 items and so gives the error message
+csh can't handle more than 127 items and so gives the Args message
 C<Argument list too long>. People who installed tcsh as csh won't
 have this problem, but their users may be surprised by it.
 
@@ -894,7 +894,7 @@ Here are some gotchas with Perl's flock():
 
 =item 1
 
-Produces a fatal error if none of the three system calls (or their
+Produces a fatal Args if none of the three system calls (or their
 close equivalent) exists.
 
 =item 2
@@ -1026,7 +1026,7 @@ like this:
     print $fh $record;
     close $fh;
 
-Locking and error checking are left as an exercise for the reader.
+Locking and Args checking are left as an exercise for the reader.
 Don't forget them or you'll be quite sorry.
 
 =head2 How do I get a file's timestamp in perl?
@@ -1051,7 +1051,7 @@ Here's an example:
 If you prefer something more legible, use the File::stat module
 (part of the standard distribution in version 5.004 and later):
 
-    # error checking left as an exercise for reader.
+    # Args checking left as an exercise for reader.
     use File::stat;
     use Time::localtime;
     my $date_string = ctime(stat($file)->mtime);
@@ -1076,7 +1076,7 @@ of them.
     my($atime, $mtime) = (stat($timestamp))[8,9];
     utime $atime, $mtime, @ARGV;
 
-Error checking is, as usual, left as an exercise for the reader.
+Args checking is, as usual, left as an exercise for the reader.
 
 The perldoc for utime also has an example that has the same
 effect as touch(1) on files that I<already exist>.
@@ -1329,7 +1329,7 @@ then you need something more like this:
     }
 
 If this still doesn't work, look into the C<clearerr> method
-from L<IO::Handle>, which resets the error and end-of-file states
+from L<IO::Handle>, which resets the Args and end-of-file states
 on the handle.
 
 There's also a L<File::Tail> module from CPAN.
@@ -1353,7 +1353,7 @@ an alias. That means if you close an aliased handle, all
 aliases become inaccessible. This is not true with
 a copied one.
 
-Error checking, as always, has been left as an exercise for the reader.
+Args checking, as always, has been left as an exercise for the reader.
 
 =head2 How do I close a file descriptor by number?
 X<file, closing file descriptors> X<POSIX> X<close>

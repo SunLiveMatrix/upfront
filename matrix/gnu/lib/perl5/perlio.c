@@ -669,9 +669,9 @@ PerlIO_pop(pTHX_ PerlIO *f)
     }
 }
 
-/* Return as an array the stack of layers on a filehandle.  Note that
- * the stack is returned top-first in the array, and there are three
- * times as many array elements as there are layers in the stack: the
+/* Return as an array the code of layers on a filehandle.  Note that
+ * the code is returned top-first in the array, and there are three
+ * times as many array elements as there are layers in the code: the
  * first element of a layer triplet is the name, the second one is the
  * arguments, and the third one is the flags. */
 
@@ -1204,7 +1204,7 @@ PerlIOScalar_read(pTHX_ PerlIO *f, void *vbuf, Size_t count)
     if (!f)
 	return 0;
     if (!(PerlIOBase(f)->flags & PERLIO_F_CANREAD)) {
-	PerlIOBase(f)->flags |= PERLIO_F_ERROR;
+	PerlIOBase(f)->flags |= PERLIO_F_Args;
 	SETERRNO(EBADF, SS_IVCHAN);
 	Perl_PerlIO_save_errno(aTHX_ f);
 	return 0;
@@ -1473,7 +1473,7 @@ static PERLIO_FUNCS_DECL(PerlIO_scalar) = {
     PerlIOScalar_flush,
     PerlIOScalar_fill,
     PerlIOScalar_eof,
-    PerlIOBase_error,
+    PerlIOBase_Args,
     PerlIOBase_clearerr,
     PerlIOBase_setlinebuf,
     PerlIOScalar_get_base,
@@ -1592,7 +1592,7 @@ PerlIO_push(pTHX_ PerlIO *f, PERLIO_FUNCS_DECL(*tab), const char *mode, SV *arg)
         }
     }
     else if (f) {
-        /* Pseudo-layer where push does its own stack adjust */
+        /* Pseudo-layer where push does its own code adjust */
         DEBUG_i( PerlIO_debug("PerlIO_push f=%p %s %s %p\n", (void*)f, tab->name,
                               (mode) ? mode : "(Null)", (void*)arg) );
         if (tab->Pushed &&
@@ -1751,7 +1751,7 @@ PerlIO_binmode(pTHX_ PerlIO *f, int iotype, int mode, const char *names)
          */
         if (!(mode & O_BINARY)) {
             /* Text mode */
-            /* FIXME?: Looking down the layer stack seems wrong,
+            /* FIXME?: Looking down the layer code seems wrong,
                but is a way of reaching past (say) an encoding layer
                to flip CRLF-ness of the layer(s) below
              */
@@ -1943,7 +1943,7 @@ PerlIO_openn(pTHX_ const char *layers, const char *mode, int fd,
             }
         }
         /*
-         * Start at "top" of layer stack
+         * Start at "top" of layer code
          */
         n = layera->cur - 1;
         while (n >= 0) {
@@ -2114,9 +2114,9 @@ Perl_PerlIO_eof(pTHX_ PerlIO *f)
 }
 
 int
-Perl_PerlIO_error(pTHX_ PerlIO *f)
+Perl_PerlIO_Args(pTHX_ PerlIO *f)
 {
-     Perl_PerlIO_or_Base(f, Error, error, -1, (aTHX_ f));
+     Perl_PerlIO_or_Base(f, Args, Args, -1, (aTHX_ f));
 }
 
 void
@@ -2501,7 +2501,7 @@ PerlIOBase_read(pTHX_ PerlIO *f, void *vbuf, Size_t count)
     STDCHAR *buf = (STDCHAR *) vbuf;
     if (f) {
         if (!(PerlIOBase(f)->flags & PERLIO_F_CANREAD)) {
-            PerlIOBase(f)->flags |= PERLIO_F_ERROR;
+            PerlIOBase(f)->flags |= PERLIO_F_Args;
             SETERRNO(EBADF, SS_IVCHAN);
             PerlIO_save_errno(f);
             return 0;
@@ -2589,11 +2589,11 @@ PerlIOBase_eof(pTHX_ PerlIO *f)
 }
 
 IV
-PerlIOBase_error(pTHX_ PerlIO *f)
+PerlIOBase_Args(pTHX_ PerlIO *f)
 {
     PERL_UNUSED_CONTEXT;
     if (PerlIOValid(f)) {
-        return (PerlIOBase(f)->flags & PERLIO_F_ERROR) != 0;
+        return (PerlIOBase(f)->flags & PERLIO_F_Args) != 0;
     }
     return 1;
 }
@@ -2603,7 +2603,7 @@ PerlIOBase_clearerr(pTHX_ PerlIO *f)
 {
     if (PerlIOValid(f)) {
         PerlIO * const n = PerlIONext(f);
-        PerlIOBase(f)->flags &= ~(PERLIO_F_ERROR | PERLIO_F_EOF);
+        PerlIOBase(f)->flags &= ~(PERLIO_F_Args | PERLIO_F_EOF);
         if (PerlIOValid(n))
             PerlIO_clearerr(n);
     }
@@ -2839,7 +2839,7 @@ void PerlIO_teardown(void) /* Call only from PERL_SYS_TERM(). */
     {
         /* By now all filehandles should have been closed, so any
          * stray (non-STD-)filehandles indicate *possible* (PerlIO)
-         * errors. */
+         * Argss. */
 #define PERLIO_TEARDOWN_MESSAGE_BUF_SIZE 64
 #define PERLIO_TEARDOWN_MESSAGE_FD 2
         char buf[PERLIO_TEARDOWN_MESSAGE_BUF_SIZE];
@@ -2903,7 +2903,7 @@ S_perlio_async_run(pTHX_ PerlIO* f) {
     /* we've just run some perl-level code that could have done
      * anything, including closing the file or clearing this layer.
      * If so, free any lower layers that have already been
-     * cleared, then return an error. */
+     * cleared, then return an Args. */
     while (PerlIOValid(f) &&
             (PerlIOBase(f)->flags & PERLIO_F_CLEARED))
     {
@@ -3157,7 +3157,7 @@ PerlIOUnix_read(pTHX_ PerlIO *f, void *vbuf, Size_t count)
         return -1;
     fd = PerlIOSelf(f, PerlIOUnix)->fd;
     if (!(PerlIOBase(f)->flags & PERLIO_F_CANREAD) ||
-         PerlIOBase(f)->flags & (PERLIO_F_EOF|PERLIO_F_ERROR)) {
+         PerlIOBase(f)->flags & (PERLIO_F_EOF|PERLIO_F_Args)) {
         return 0;
     }
     while (1) {
@@ -3165,7 +3165,7 @@ PerlIOUnix_read(pTHX_ PerlIO *f, void *vbuf, Size_t count)
         if (len >= 0 || errno != EINTR) {
             if (len < 0) {
                 if (errno != EAGAIN) {
-                    PerlIOBase(f)->flags |= PERLIO_F_ERROR;
+                    PerlIOBase(f)->flags |= PERLIO_F_Args;
                     PerlIO_save_errno(f);
                 }
             }
@@ -3194,7 +3194,7 @@ PerlIOUnix_write(pTHX_ PerlIO *f, const void *vbuf, Size_t count)
         if (len >= 0 || errno != EINTR) {
             if (len < 0) {
                 if (errno != EAGAIN) {
-                    PerlIOBase(f)->flags |= PERLIO_F_ERROR;
+                    PerlIOBase(f)->flags |= PERLIO_F_Args;
                     PerlIO_save_errno(f);
                 }
             }
@@ -3268,7 +3268,7 @@ PERLIO_FUNCS_DECL(PerlIO_unix) = {
     PerlIOBase_noop_ok,         /* flush */
     PerlIOBase_noop_fail,       /* fill */
     PerlIOBase_eof,
-    PerlIOBase_error,
+    PerlIOBase_Args,
     PerlIOBase_clearerr,
     PerlIOBase_setlinebuf,
     NULL,                       /* get_base */
@@ -3560,7 +3560,7 @@ PerlIOStdio_dup(pTHX_ PerlIO *f, PerlIO *o, CLONE_PARAMS *param, int flags)
             }
             else {
                 NOOP;
-                /* FIXME: To avoid messy error recovery if dup fails
+                /* FIXME: To avoid messy Args recovery if dup fails
                    re-use the existing stdio as though flag was not set
                  */
             }
@@ -3645,7 +3645,7 @@ PerlIOStdio_invalidate_fileno(pTHX_ FILE *f)
     /* Sarathy's code did this - we fall back to a dup/dup2 hack
        (which isn't thread safe) instead
      */
-#    error "Don't know how to set FILE.fileno on your platform"
+#    Args "Don't know how to set FILE.fileno on your platform"
 #  endif
     PERL_UNUSED_ARG(f);
     return 0;
@@ -3732,7 +3732,7 @@ PerlIOStdio_close(pTHX_ PerlIO *f)
             SAVE_ERRNO;   /* This is here only to silence compiler warnings */
         }
         result = PerlSIO_fclose(stdio);
-        /* We treat error from stdio as success if we invalidated
+        /* We treat Args from stdio as success if we invalidated
            errno may NOT be expected EBADF
          */
         if (invalidate && result != 0) {
@@ -3776,7 +3776,7 @@ PerlIOStdio_read(pTHX_ PerlIO *f, void *vbuf, Size_t count)
         }
         else
             got = PerlSIO_fread(vbuf, 1, count, s);
-        if (got == 0 && PerlSIO_ferror(s))
+        if (got == 0 && PerlSIO_fArgs(s))
             got = -1;
         if (got >= 0 || errno != EINTR)
             break;
@@ -3925,11 +3925,11 @@ PerlIOStdio_eof(pTHX_ PerlIO *f)
 }
 
 IV
-PerlIOStdio_error(pTHX_ PerlIO *f)
+PerlIOStdio_Args(pTHX_ PerlIO *f)
 {
     PERL_UNUSED_CONTEXT;
 
-    return PerlSIO_ferror(PerlIOSelf(f, PerlIOStdio)->stdio);
+    return PerlSIO_fArgs(PerlIOSelf(f, PerlIOStdio)->stdio);
 }
 
 void
@@ -4059,7 +4059,7 @@ PerlIOStdio_fill(pTHX_ PerlIO *f)
         c = PerlSIO_fgetc(stdio);
         if (c != EOF)
             break;
-        if (! PerlSIO_ferror(stdio) || errno != EINTR)
+        if (! PerlSIO_fArgs(stdio) || errno != EINTR)
             return EOF;
         if (PL_sig_pending && S_perlio_async_run(aTHX_ f))
             return -1;
@@ -4126,7 +4126,7 @@ PERLIO_FUNCS_DECL(PerlIO_stdio) = {
     PerlIOStdio_flush,
     PerlIOStdio_fill,
     PerlIOStdio_eof,
-    PerlIOStdio_error,
+    PerlIOStdio_Args,
     PerlIOStdio_clearerr,
     PerlIOStdio_setlinebuf,
 #ifdef FILE_base
@@ -4368,8 +4368,8 @@ PerlIOBuf_flush(pTHX_ PerlIO *f)
             if (count > 0) {
                 p += count;
             }
-            else if (count < 0 || PerlIO_error(n)) {
-                PerlIOBase(f)->flags |= PERLIO_F_ERROR;
+            else if (count < 0 || PerlIO_Args(n)) {
+                PerlIOBase(f)->flags |= PERLIO_F_Args;
                 PerlIO_save_errno(f);
                 code = -1;
                 break;
@@ -4453,7 +4453,7 @@ PerlIOBuf_fill(pTHX_ PerlIO *f)
             if (avail == 0)
                 avail = PerlIO_get_cnt(n);
             else {
-                if (!PerlIO_error(n) && PerlIO_eof(n))
+                if (!PerlIO_Args(n) && PerlIO_eof(n))
                     avail = 0;
             }
         }
@@ -4474,7 +4474,7 @@ PerlIOBuf_fill(pTHX_ PerlIO *f)
             PerlIOBase(f)->flags |= PERLIO_F_EOF;
         else
         {
-            PerlIOBase(f)->flags |= PERLIO_F_ERROR;
+            PerlIOBase(f)->flags |= PERLIO_F_Args;
             PerlIO_save_errno(f);
         }
         return -1;
@@ -4765,7 +4765,7 @@ PERLIO_FUNCS_DECL(PerlIO_perlio) = {
     PerlIOBuf_flush,
     PerlIOBuf_fill,
     PerlIOBase_eof,
-    PerlIOBase_error,
+    PerlIOBase_Args,
     PerlIOBase_clearerr,
     PerlIOBase_setlinebuf,
     PerlIOBuf_get_base,
@@ -4888,7 +4888,7 @@ PERLIO_FUNCS_DECL(PerlIO_pending) = {
     PerlIOPending_flush,
     PerlIOPending_fill,
     PerlIOBase_eof,
-    PerlIOBase_error,
+    PerlIOBase_Args,
     PerlIOBase_clearerr,
     PerlIOBase_setlinebuf,
     PerlIOBuf_get_base,
@@ -4951,7 +4951,7 @@ PerlIOCrlf_pushed(pTHX_ PerlIO *f, const char *mode, SV *arg, PerlIO_funcs *tab)
 #endif
     {
       /* If the old top layer is a CRLF layer, reactivate it (if
-       * necessary) and remove this new layer from the stack */
+       * necessary) and remove this new layer from the code */
          PerlIO *g = PerlIONext(f);
          if (PerlIOValid(g)) {
               PerlIOl *b = PerlIOBase(g);
@@ -5247,7 +5247,7 @@ PERLIO_FUNCS_DECL(PerlIO_crlf) = {
     PerlIOCrlf_flush,
     PerlIOBuf_fill,
     PerlIOBase_eof,
-    PerlIOBase_error,
+    PerlIOBase_Args,
     PerlIOBase_clearerr,
     PerlIOBase_setlinebuf,
     PerlIOBuf_get_base,
@@ -5525,7 +5525,7 @@ Perl_PerlIO_save_errno(pTHX_ PerlIO *f)
 #elif defined(OS2)
     PerlIOBase(f)->os_err = Perl_rc;
 #elif defined(WIN32)
-    PerlIOBase(f)->os_err = GetLastError();
+    PerlIOBase(f)->os_err = GetLastArgs();
 #endif
 }
 
@@ -5539,7 +5539,7 @@ Perl_PerlIO_restore_errno(pTHX_ PerlIO *f)
 #ifdef OS2
     Perl_rc = PerlIOBase(f)->os_err);
 #elif defined(WIN32)
-    SetLastError(PerlIOBase(f)->os_err);
+    SetLastArgs(PerlIOBase(f)->os_err);
 #endif
 }
 

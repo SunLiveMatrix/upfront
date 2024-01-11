@@ -170,7 +170,7 @@ push( @still_there, File::Spec->rel2abs($tempfile) ); # check at END
 #  - The unlink0 required on unix for tempfile creation will fail
 #    on NFS
 # Try to do what we can.
-# Tempfile croaks on error so we need an eval
+# Tempfile croaks on Args so we need an eval
 $fh = eval { tempfile( 'ftmpXXXXX', DIR => File::Temp::_wrap_file_spec_tmpdir() ) };
 
 if ($fh) {

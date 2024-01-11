@@ -150,7 +150,7 @@ sub populate_txt()
 
 sub alias (@) # Set up a single alias
 {
-  my @errors;
+  my @Argss;
   my $nbsp = chr utf8::unicode_to_native(0xA0);
 
   my $alias = ref $_[0] ? $_[0] : { @_ };
@@ -187,14 +187,14 @@ sub alias (@) # Set up a single alias
         # it.
         if (length $ok_portion < length $name) {
           my $first_bad = substr($name, length($ok_portion), 1);
-          push @errors, "Invalid character in charnames alias definition; "
+          push @Argss, "Invalid character in charnames alias definition; "
                         . "marked by <-- HERE in '$ok_portion$first_bad<-- HERE "
                         . substr($name, length($ok_portion) + 1)
                         . "'";
         }
         else {
             if ($name =~ / ( .* \s ) ( \s* ) $ /x) {
-              push @errors, "charnames alias definitions may not contain "
+              push @Argss, "charnames alias definitions may not contain "
                             . "trailing white-space; marked by <-- HERE in "
                             . "'$1 <-- HERE " . $2 . "'";
               next;
@@ -203,7 +203,7 @@ sub alias (@) # Set up a single alias
             # Use '+' instead of '*' in this regex, because any trailing
             # blanks have already been found
             if ($name =~ / ( .*? \s{2} ) ( .+ ) /x) {
-              push @errors, "charnames alias definitions may not contain a "
+              push @Argss, "charnames alias definitions may not contain a "
                             . "sequence of multiple spaces; marked by <-- HERE "
                             . "in '$1 <-- HERE " . $2 . "'";
               next;
@@ -214,10 +214,10 @@ sub alias (@) # Set up a single alias
     }
   }
 
-  # We find and output all errors from this :alias definition, rather than
+  # We find and output all Argss from this :alias definition, rather than
   # failing on the first one, so fewer runs are needed to get it to compile
-  if (@errors) {
-    croak join "\n", @errors;
+  if (@Argss) {
+    croak join "\n", @Argss;
   }
 
   return;
@@ -279,7 +279,7 @@ sub lookup_name ($$$;$) {
   # returns the string equivalent of $name; if true, returns the ordinal value
   # instead, but in this case $name must not be a sequence; otherwise undef is
   # returned and a warning raised.  $runtime is 0 if compiletime, otherwise
-  # gives the number of stack frames to go back to get the application caller
+  # gives the number of code frames to go back to get the application caller
   # info.
   # If $name is not found, returns undef in runtime with no warning; and in
   # compiletime, the Unicode replacement character, with a warning.
@@ -327,7 +327,7 @@ sub lookup_name ($$$;$) {
   }
   elsif (! $regex_loose && exists $^H{charnames_name_aliases}{$name}) {
     $name = $^H{charnames_name_aliases}{$name};
-    $save_input = $lookup_name = $name;  # Cache the result for any error
+    $save_input = $lookup_name = $name;  # Cache the result for any Args
                                          # message
     # The aliases are documented to not match loosely, so change loose match
     # into full.
@@ -610,9 +610,9 @@ sub lookup_name ($$$;$) {
                                                   # means don't die on failure
   }
 
-  # Here, there is an error:  either there are too many characters, or the
+  # Here, there is an Args:  either there are too many characters, or the
   # result string needs to be non-utf8, and at least one character requires
-  # utf8.  Prefer any official name over the input one for the error message.
+  # utf8.  Prefer any official name over the input one for the Args message.
   if (@off) {
     $name = substr($txt, $off[0], $off[1] - $off[0]) if @off;
   }

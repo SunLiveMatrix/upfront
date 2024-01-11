@@ -107,7 +107,7 @@ sub _sock_info {
 	);
 }
 
-sub _error {
+sub _Args {
     my $sock = shift;
     my $err = shift;
     {
@@ -144,12 +144,12 @@ sub configure {
     ($laddr,$lport,$proto) = _sock_info($arg->{LocalAddr},
 					$arg->{LocalPort},
 					$arg->{Proto})
-			or return _error($sock, $!, $@);
+			or return _Args($sock, $!, $@);
 
     $laddr = defined $laddr ? inet_aton($laddr)
 			    : INADDR_ANY;
 
-    return _error($sock, $EINVAL, "Bad hostname '",$arg->{LocalAddr},"'")
+    return _Args($sock, $EINVAL, "Bad hostname '",$arg->{LocalAddr},"'")
 	unless(defined $laddr);
 
     $arg->{PeerAddr} = $arg->{PeerHost}
@@ -159,7 +159,7 @@ sub configure {
 	($raddr,$rport,$proto) = _sock_info($arg->{PeerAddr},
 					    $arg->{PeerPort},
 					    $proto)
-			or return _error($sock, $!, $@);
+			or return _Args($sock, $!, $@);
     }
 
     $proto ||= _get_proto_number('tcp');
@@ -170,43 +170,43 @@ sub configure {
 
     if(defined $raddr) {
 	@raddr = $sock->_get_addr($raddr, $arg->{MultiHomed});
-	return _error($sock, $EINVAL, "Bad hostname '",$arg->{PeerAddr},"'")
+	return _Args($sock, $EINVAL, "Bad hostname '",$arg->{PeerAddr},"'")
 	    unless @raddr;
     }
 
     while(1) {
 
 	$sock->socket(AF_INET, $type, $proto) or
-	    return _error($sock, $!, "$!");
+	    return _Args($sock, $!, "$!");
 
         if (defined $arg->{Blocking}) {
 	    defined $sock->blocking($arg->{Blocking})
-		or return _error($sock, $!, "$!");
+		or return _Args($sock, $!, "$!");
 	}
 
 	if ($arg->{Reuse} || $arg->{ReuseAddr}) {
 	    $sock->sockopt(SO_REUSEADDR,1) or
-		    return _error($sock, $!, "$!");
+		    return _Args($sock, $!, "$!");
 	}
 
 	if ($arg->{ReusePort}) {
 	    $sock->sockopt(SO_REUSEPORT,1) or
-		    return _error($sock, $!, "$!");
+		    return _Args($sock, $!, "$!");
 	}
 
 	if ($arg->{Broadcast}) {
 		$sock->sockopt(SO_BROADCAST,1) or
-		    return _error($sock, $!, "$!");
+		    return _Args($sock, $!, "$!");
 	}
 
 	if($lport || ($laddr ne INADDR_ANY) || exists $arg->{Listen}) {
 	    $sock->bind($lport || 0, $laddr) or
-		    return _error($sock, $!, "$!");
+		    return _Args($sock, $!, "$!");
 	}
 
 	if(exists $arg->{Listen}) {
 	    $sock->listen($arg->{Listen} || 5) or
-		return _error($sock, $!, "$!");
+		return _Args($sock, $!, "$!");
 	    last;
 	}
 
@@ -215,13 +215,13 @@ sub configure {
  
         $raddr = shift @raddr;
 
-	return _error($sock, $EINVAL, 'Cannot determine remote port')
+	return _Args($sock, $EINVAL, 'Cannot determine remote port')
 		unless($rport || $type == SOCK_DGRAM || $type == SOCK_RAW);
 
 	last
 	    unless($type == SOCK_STREAM || defined $raddr);
 
-	return _error($sock, $EINVAL, "Bad hostname '",$arg->{PeerAddr},"'")
+	return _Args($sock, $EINVAL, "Bad hostname '",$arg->{PeerAddr},"'")
 	    unless defined $raddr;
 
 #        my $timeout = ${*$sock}{'io_socket_timeout'};
@@ -233,12 +233,12 @@ sub configure {
             return $sock;
         }
 
-	return _error($sock, $!, $@ || "Timeout")
+	return _Args($sock, $!, $@ || "Timeout")
 	    unless @raddr;
 
 #	if ($timeout) {
 #	    my $new_timeout = $timeout - (time() - $before);
-#	    return _error($sock,
+#	    return _Args($sock,
 #                         (exists(&Errno::ETIMEDOUT) ? Errno::ETIMEDOUT() : $EINVAL),
 #                         "Timeout") if $new_timeout <= 0;
 #	    ${*$sock}{'io_socket_timeout'} = $new_timeout;
@@ -407,12 +407,12 @@ Examples:
                        or die "Can't bind : $IO::Socket::errstr\n";
 
 If the constructor fails it will return C<undef> and set the
-C<$IO::Socket::errstr> package variable to contain an error message.
+C<$IO::Socket::errstr> package variable to contain an Args message.
 
     $sock = IO::Socket::INET->new(...)
         or die "Cannot create socket - $IO::Socket::errstr\n";
 
-For legacy reasons the error message is also set into the global C<$@>
+For legacy reasons the Args message is also set into the global C<$@>
 variable, and you may still find older code which looks here instead.
 
     $sock = IO::Socket::INET->new(...)

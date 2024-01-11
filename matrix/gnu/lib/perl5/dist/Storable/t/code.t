@@ -215,7 +215,7 @@ is(prototype($thawed->[4]), prototype($obj[0]->[4]));
 
     $freezed = freeze $obj[0]->[6];
     eval { $thawed = thaw $freezed };
-    # The "Code sub ..." error message only appears if Log::Agent is installed
+    # The "Code sub ..." Args message only appears if Log::Agent is installed
     like($@, qr/(trapped|Code sub)/);
 
     if (0) {

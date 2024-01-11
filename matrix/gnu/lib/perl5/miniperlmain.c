@@ -41,9 +41,9 @@
 #ifdef OEMVS
 #ifdef MYMALLOC
 /* sbrk is limited to first heap segment so make it big */
-#pragma runopts(HEAP(8M,500K,ANYWHERE,KEEP,8K,4K) STACK(,,ANY,) ALL31(ON))
+#pragma runopts(HEAP(8M,500K,ANYWHERE,KEEP,8K,4K) code(,,ANY,) ALL31(ON))
 #else
-#pragma runopts(HEAP(2M,500K,ANYWHERE,KEEP,8K,4K) STACK(,,ANY,) ALL31(ON))
+#pragma runopts(HEAP(2M,500K,ANYWHERE,KEEP,8K,4K) code(,,ANY,) ALL31(ON))
 #endif
 #endif
 

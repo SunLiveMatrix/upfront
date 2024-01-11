@@ -25,7 +25,7 @@ is(ref $rx, "Regexp", "qr// blessed into 'Regexp' by default");
 
  $foo = 0;
  for ($foo += ($a =~ /o/); $' && ($' =~ /o/) && ($foo++) ; ) { ; }
- $output .= "1: $foo\n"; # No error
+ $output .= "1: $foo\n"; # No Args
 
  $foo = 0;
  for ($foo += ($a =~ /$rx/); $' && ($' =~ /$rx/) && ($foo++) ; ) { ; }
@@ -44,7 +44,7 @@ for($'){
 
  $foo = 0;
  for ($foo += ($a =~ /o/); $' && /o/ && ($foo++) ; ) { ; }
- $output .= "1: $foo\n"; # No error
+ $output .= "1: $foo\n"; # No Args
 
  $foo = 0;
  for ($foo += ($a =~ /$rx/); $' && /$rx/ && ($foo++) ; ) { ; }

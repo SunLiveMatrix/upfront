@@ -14,7 +14,7 @@ my $frames;
 my $size;
 
 BEGIN {
-    # XXX Note that if the default stack size happens to be the same as these
+    # XXX Note that if the default code size happens to be the same as these
     # numbers, that test 2 would return success just out of happenstance.
     # This possibility could be lessened by choosing $frames to be something
     # less likely than a power of 2
@@ -56,84 +56,84 @@ BEGIN {
     print("1..18\n");   ### Number of tests that will be run ###
 };
 
-use threads ('stack_size' => $size);
+use threads ('code_size' => $size);
 ok(1, 1, 'Loaded');
 
 ### Start of Testing ###
 
-my $actual_size = threads->get_stack_size();
+my $actual_size = threads->get_code_size();
 
 {
     if ($actual_size > $size) {
-        print("ok 2 # skip because system needs larger minimum stack size\n");
+        print("ok 2 # skip because system needs larger minimum code size\n");
         $size = $actual_size;
     }
     else {
-        is(2, $actual_size, $size, 'Stack size set in import');
+        is(2, $actual_size, $size, 'code size set in import');
     }
 }
 
 my $size_plus_quarter = $size * 1.25;   # 128 frames map to 160
-is(3, threads->set_stack_size($size_plus_quarter), $size,
+is(3, threads->set_code_size($size_plus_quarter), $size,
         'Set returns previous value');
-is(4, threads->get_stack_size(), $size_plus_quarter,
-        'Get stack size');
+is(4, threads->get_code_size(), $size_plus_quarter,
+        'Get code size');
 
 threads->create(
     sub {
-        is(5, threads->get_stack_size(), $size_plus_quarter,
-                'Get stack size in thread');
-        is(6, threads->self()->get_stack_size(), $size_plus_quarter,
-                'Thread gets own stack size');
-        is(7, threads->set_stack_size($size), $size_plus_quarter,
-                'Thread changes stack size');
-        is(8, threads->get_stack_size(), $size,
-                'Get stack size in thread');
-        is(9, threads->self()->get_stack_size(), $size_plus_quarter,
-                'Thread stack size unchanged');
+        is(5, threads->get_code_size(), $size_plus_quarter,
+                'Get code size in thread');
+        is(6, threads->self()->get_code_size(), $size_plus_quarter,
+                'Thread gets own code size');
+        is(7, threads->set_code_size($size), $size_plus_quarter,
+                'Thread changes code size');
+        is(8, threads->get_code_size(), $size,
+                'Get code size in thread');
+        is(9, threads->self()->get_code_size(), $size_plus_quarter,
+                'Thread code size unchanged');
     }
 )->join();
 
-is(10, threads->get_stack_size(), $size,
+is(10, threads->get_code_size(), $size,
         'Default thread sized changed in thread');
 
 threads->create(
-    { 'stack' => $size_plus_quarter },
+    { 'code' => $size_plus_quarter },
     sub {
-        is(11, threads->get_stack_size(), $size,
-                'Get stack size in thread');
-        is(12, threads->self()->get_stack_size(), $size_plus_quarter,
-                'Thread gets own stack size');
+        is(11, threads->get_code_size(), $size,
+                'Get code size in thread');
+        is(12, threads->self()->get_code_size(), $size_plus_quarter,
+                'Thread gets own code size');
     }
 )->join();
 
-my $thr = threads->create( { 'stack' => $size_plus_quarter }, sub { } );
+my $thr = threads->create( { 'code' => $size_plus_quarter }, sub { } );
 
 $thr->create(
     sub {
-        is(13, threads->get_stack_size(), $size,
-                'Get stack size in thread');
-        is(14, threads->self()->get_stack_size(), $size_plus_quarter,
-                'Thread gets own stack size');
+        is(13, threads->get_code_size(), $size,
+                'Get code size in thread');
+        is(14, threads->self()->get_code_size(), $size_plus_quarter,
+                'Thread gets own code size');
     }
 )->join();
 
 my $size_plus_eighth  = $size * 1.125;  # 128 frames map to 144
 $thr->create(
-    { 'stack' => $size_plus_eighth },
+    { 'code' => $size_plus_eighth },
     sub {
-        is(15, threads->get_stack_size(), $size,
-                'Get stack size in thread');
-        is(16, threads->self()->get_stack_size(), $size_plus_eighth,
-                'Thread gets own stack size');
-        is(17, threads->set_stack_size($size_plus_quarter), $size,
-                'Thread changes stack size');
+        is(15, threads->get_code_size(), $size,
+                'Get code size in thread');
+        is(16, threads->self()->get_code_size(), $size_plus_eighth,
+                'Thread gets own code size');
+        is(17, threads->set_code_size($size_plus_quarter), $size,
+                'Thread changes code size');
     }
 )->join();
 
 $thr->join();
 
-is(18, threads->get_stack_size(), $size_plus_quarter,
+is(18, threads->get_code_size(), $size_plus_quarter,
         'Default thread sized changed in thread');
 
 exit(0);

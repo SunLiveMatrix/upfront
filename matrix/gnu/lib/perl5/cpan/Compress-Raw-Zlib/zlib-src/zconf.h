@@ -59,9 +59,9 @@
 #  define deflate_copyright     Perl_crz_deflate_copyright
 #  define get_crc_table         Perl_crz_get_crc_table
 #  ifndef Z_SOLO
-#    define gz_error              z_gz_error
+#    define gz_Args              z_gz_Args
 #    define gz_intmax             z_gz_intmax
-#    define gz_strwinerror        z_gz_strwinerror
+#    define gz_strwinArgs        z_gz_strwinArgs
 #    define gzbuffer              z_gzbuffer
 #    define gzclearerr            z_gzclearerr
 #    define gzclose               z_gzclose
@@ -70,7 +70,7 @@
 #    define gzdirect              z_gzdirect
 #    define gzdopen               z_gzdopen
 #    define gzeof                 z_gzeof
-#    define gzerror               z_gzerror
+#    define gzArgs               z_gzArgs
 #    define gzflush               z_gzflush
 #    define gzfread               z_gzfread
 #    define gzfwrite              z_gzfwrite
@@ -129,7 +129,7 @@
 #    define uncompress            z_uncompress
 #    define uncompress2           z_uncompress2
 #  endif
-#  define zError                Perl_crz_zError
+#  define zArgs                Perl_crz_zArgs
 #  ifndef Z_SOLO
 #    define zcalloc               z_zcalloc
 #    define zcfree                z_zcfree

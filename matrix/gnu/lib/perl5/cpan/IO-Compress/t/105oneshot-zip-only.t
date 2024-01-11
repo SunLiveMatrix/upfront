@@ -26,9 +26,9 @@ BEGIN {
 
     plan tests => 230 + $extra ;
 
-    #use_ok('IO::Compress::Zip', qw(zip $ZipError :zip_method)) ;
+    #use_ok('IO::Compress::Zip', qw(zip $ZipArgs :zip_method)) ;
     use_ok('IO::Compress::Zip', qw(:all)) ;
-    use_ok('IO::Uncompress::Unzip', qw(unzip $UnzipError)) ;
+    use_ok('IO::Uncompress::Unzip', qw(unzip $UnzipArgs)) ;
 }
 
 
@@ -43,11 +43,11 @@ sub zipGetHeader
 
     ok zip($in, \$out, %opts), "  zip ok" ;
     ok unzip(\$out, \$got), "  unzip ok"
-        or diag $UnzipError ;
+        or diag $UnzipArgs ;
     is $got, $content, "  got expected content" ;
 
     my $gunz = IO::Uncompress::Unzip->new( \$out, Strict => 0 )
-        or diag "UnzipError is $IO::Uncompress::Unzip::UnzipError" ;
+        or diag "UnzipArgs is $IO::Uncompress::Unzip::UnzipArgs" ;
     ok $gunz, "  Created IO::Uncompress::Unzip object";
     my $hdr = $gunz->getHeaderInfo();
     ok $hdr, "  got Header info";
@@ -173,10 +173,10 @@ sub zipGetHeader
     my $output;
 
     ok ! unzip "$files/encrypt-standard.zip" => \$output ;
-    like $UnzipError, qr/Encrypted content not supported/ ;
+    like $UnzipArgs, qr/Encrypted content not supported/ ;
 
     ok ! unzip "$files/encrypt-aes.zip" => \$output ;
-    like $UnzipError, qr/Encrypted content not supported/ ;
+    like $UnzipArgs, qr/Encrypted content not supported/ ;
 }
 
 {
@@ -233,16 +233,16 @@ for my $stream (0, 1)
                                Zip64  => $zip64);
 
              ok $status, "  zip ok"
-                or diag $ZipError ;
+                or diag $ZipArgs ;
 
             my $got ;
             ok unzip($file1 => \$got), "  unzip ok"
-                or diag $UnzipError ;
+                or diag $UnzipArgs ;
 
             is $got, $content, "  content ok";
 
             my $u = IO::Uncompress::Unzip->new( $file1 )
-                or diag $ZipError ;
+                or diag $ZipArgs ;
 
             my $hdr = $u->getHeaderInfo();
             ok $hdr, "  got header";
@@ -281,13 +281,13 @@ for my $stream (0, 1)
             ok zip([$file1, $file2] => $zipfile , Method => $method,
                                                   Zip64  => $zip64,
                                                   Stream => $stream), " zip ok"
-                or diag $ZipError ;
+                or diag $ZipArgs ;
 
             for my $file ($file1, $file2)
             {
                 my $got ;
                 ok unzip($zipfile => \$got, Name => $file), "  unzip $file ok"
-                    or diag $UnzipError ;
+                    or diag $UnzipArgs ;
 
                 is $got, $content{$file}, "  content ok";
             }
@@ -322,7 +322,7 @@ SKIP: {
     my $got;
 
     ok unzip($zipfile => \$got, Name => $file), "  unzip $file ok"
-        or diag $UnzipError ;
+        or diag $UnzipArgs ;
 
     my $meta = '<?xml version="1.0" encoding="UTF-8"?>
 <office:document-meta xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:grddl="http://www.w3.org/2003/g/data-view#" office:version="1.2"><office:meta><meta:creation-date>2018-12-25T11:36:11.437260543</meta:creation-date><dc:date>2018-12-25T11:36:55.657945697</dc:date><meta:editing-duration>PT54S</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:document-statistic meta:table-count="1" meta:cell-count="3" meta:object-count="0"/><meta:generator>LibreOffice/6.0.7.3$Linux_X86_64 LibreOffice_project/00m0$Build-3</meta:generator></office:meta></office:document-meta>';
@@ -350,7 +350,7 @@ SKIP: {
     my $got;
 
     ok unzip($zipfile => \$got, Name => $file), "  unzip $file ok"
-        or diag $UnzipError ;
+        or diag $UnzipArgs ;
 
     my $meta = <<'EOM';
 <?xml version="1.0" encoding="utf-8"?>
@@ -363,4 +363,4 @@ EOM
     is $got, $meta, "  content ok";
 }
 
-# TODO add more error cases
+# TODO add more Args cases

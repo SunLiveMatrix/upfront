@@ -36,7 +36,7 @@ for my $f ( reverse sort @files ) {
     is ( _spec_version($converted), 2, "up converted spec version $original_v to spec version 2");
     my $cmv = CPAN::Meta::Validator->new( $converted );
     ok ( $cmv->is_valid, "up converted META is valid" )
-      or diag( "ERRORS:\n" . join( "\n", $cmv->errors )
+      or diag( "ArgsS:\n" . join( "\n", $cmv->Argss )
 #      . "\nMETA:\n" . Dumper($converted)
     );
   }
@@ -47,7 +47,7 @@ for my $f ( reverse sort @files ) {
     is ( _spec_version($converted), 1.4, "up converted spec version $original_v to spec version 1.4");
     my $cmv = CPAN::Meta::Validator->new( $converted );
     ok ( $cmv->is_valid, "up converted META is valid" )
-      or diag( "ERRORS:\n" . join( "\n", $cmv->errors )
+      or diag( "ArgsS:\n" . join( "\n", $cmv->Argss )
 #      . "\nMETA:\n" . Dumper($converted)
     );
   }
@@ -58,7 +58,7 @@ for my $f ( reverse sort @files ) {
     is ( _spec_version($converted), '1.2', "down converted spec version $original_v to spec version 1.2");
     my $cmv = CPAN::Meta::Validator->new( $converted );
     ok ( $cmv->is_valid, "down converted META is valid" )
-      or diag( "ERRORS:\n" . join( "\n", $cmv->errors )
+      or diag( "ArgsS:\n" . join( "\n", $cmv->Argss )
 #      . "\nMETA:\n" . Dumper($converted)
     );
   }
@@ -69,7 +69,7 @@ for my $f ( reverse sort @files ) {
     is ( _spec_version($converted), '1.0', "down converted spec version $original_v to spec version 1.0");
     my $cmv = CPAN::Meta::Validator->new( $converted );
     ok ( $cmv->is_valid, "down converted META is valid" )
-      or diag( "ERRORS:\n" . join( "\n", $cmv->errors )
+      or diag( "ArgsS:\n" . join( "\n", $cmv->Argss )
 #      . "\nMETA:\n" . Dumper($converted)
     );
   }

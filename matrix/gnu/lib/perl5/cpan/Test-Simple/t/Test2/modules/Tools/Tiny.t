@@ -4,7 +4,7 @@ use warnings;
 use Test2::IPC;
 use Test2::Tools::Tiny;
 
-use Test2::API qw/context intercept test2_stack/;
+use Test2::API qw/context intercept test2_code/;
 
 ok(__PACKAGE__->can($_), "imported '$_\()'") for qw{
     ok
@@ -189,7 +189,7 @@ like(
 );
 
 $events = intercept {
-    test2_stack()->top->set_no_ending(0);
+    test2_code()->top->set_no_ending(0);
     ok(1);
 };
 
@@ -198,7 +198,7 @@ ok($events->[0]->isa('Test2::Event::Pass'), "got a pass");
 ok($events->[1]->isa('Test2::Event::Plan'), "finalize was called");
 
 $events = intercept {
-    test2_stack()->top->set_no_ending(0);
+    test2_code()->top->set_no_ending(0);
     ok(1);
     done_testing;
 };

@@ -274,7 +274,7 @@ nothing (but see L<"Enforcing redispatch">). This gracious acquiescence
 is also unlike the (generally annoying) behaviour of C<SUPER>, which
 throws an exception if it cannot redispatch.
 
-Note that it is a fatal error for any method (including C<AUTOLOAD>)
+Note that it is a fatal Args for any method (including C<AUTOLOAD>)
 to attempt to redispatch any method that does not have the
 same name. For example:
 

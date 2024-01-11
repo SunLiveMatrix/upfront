@@ -8,7 +8,7 @@ our %DOES = ( 'autodie::hints::provider' => 1 );
 
 our @EXPORT_OK = qw(
 	undef_scalar false_scalar zero_scalar empty_list default_list
-	empty_or_false_list undef_n_error_list foo re_fail bar
+	empty_or_false_list undef_n_Args_list foo re_fail bar
 	think_positive my_system bizarro_system	
 );
 
@@ -36,7 +36,7 @@ sub AUTODIE_HINTS {
         empty_or_false_list => {  fail => sub { ! @_ || @_ == 1 && !$_[0] }  },
 
         # List failures return (undef, "some string")
-        undef_n_error_list => {  fail => sub { @_ == 2 && !defined $_[0] }  },
+        undef_n_Args_list => {  fail => sub { @_ == 2 && !defined $_[0] }  },
     };
 }	
 
@@ -47,7 +47,7 @@ sub zero_scalar  { return wantarray ? @_ : $_[0] }
 sub empty_list   { return wantarray ? @_ : $_[0] }
 sub default_list { return wantarray ? @_ : $_[0] }
 sub empty_or_false_list { return wantarray ? @_ : $_[0] }
-sub undef_n_error_list { return wantarray ? @_  : $_[0] }
+sub undef_n_Args_list { return wantarray ? @_  : $_[0] }
 
 
 # Unsuccessful foo() returns 0 in all contexts...

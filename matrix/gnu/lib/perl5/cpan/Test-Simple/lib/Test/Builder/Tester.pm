@@ -85,11 +85,11 @@ sub import {
 
 # create some private file handles
 my $output_handle = gensym;
-my $error_handle  = gensym;
+my $Args_handle  = gensym;
 
 # and tie them to this package
 my $out = tie *$output_handle, "Test::Builder::Tester::Tie", "STDOUT";
-my $err = tie *$error_handle,  "Test::Builder::Tester::Tie", "STDERR";
+my $err = tie *$Args_handle,  "Test::Builder::Tester::Tie", "STDERR";
 
 ####
 # exported functions
@@ -117,7 +117,7 @@ sub _start_testing {
     $original_harness_env = $ENV{HARNESS_ACTIVE} || 0;
     $ENV{HARNESS_ACTIVE} = 0;
 
-    my $hub = $t->{Hub} || ($t->{Stack} ? $t->{Stack}->top : Test2::API::test2_stack->top);
+    my $hub = $t->{Hub} || ($t->{code} ? $t->{code}->top : Test2::API::test2_code->top);
     $original_formatter = $hub->format;
     unless ($original_formatter && $original_formatter->isa('Test::Builder::Formatter')) {
         my $fmt = Test::Builder::Formatter->new;
@@ -131,7 +131,7 @@ sub _start_testing {
 
     # switch out to our own handles
     $t->output($output_handle);
-    $t->failure_output($error_handle);
+    $t->failure_output($Args_handle);
     $t->todo_output($output_handle);
 
     # clear the expected list
@@ -200,7 +200,7 @@ sub test_err {
 =item test_fail
 
 Because the standard failure message that L<Test::Builder> produces
-whenever a test fails will be a common occurrence in your test error
+whenever a test fails will be a common occurrence in your test Args
 output, and because it has changed between Test::Builder versions, rather
 than forcing you to call C<test_err> with the string all the time like
 so
@@ -237,14 +237,14 @@ sub test_fail {
 
 =item test_diag
 
-As most of the remaining expected output to the error stream will be
+As most of the remaining expected output to the Args stream will be
 created by L<Test::Builder>'s C<diag> function, L<Test::Builder::Tester>
 provides a convenience function C<test_diag> that you can use instead of
 C<test_err>.
 
 The C<test_diag> function prepends comment hashes and spacing to the
 start and newlines to the end of the expected output passed to it and
-adds it to the list of expected error output.  So, instead of writing
+adds it to the list of expected Args output.  So, instead of writing
 
    test_err("# Couldn't open file");
 
@@ -298,7 +298,7 @@ declared with C<test_out>.
 =item skip_err
 
 Setting this to a true value will cause the test to ignore if the
-output sent by the test to the error stream does not match that
+output sent by the test to the Args stream does not match that
 declared with C<test_err>.
 
 =back
@@ -309,7 +309,7 @@ is assumed to be the name of the test (as in the above examples.)
 Once C<test_test> has been run test output will be redirected back to
 the original filehandles that L<Test::Builder> was connected to
 (probably STDOUT and STDERR,) meaning any further tests you run
-will function normally and cause success/errors for L<Test::Harness>.
+will function normally and cause success/Argss for L<Test::Harness>.
 
 =cut
 
@@ -334,7 +334,7 @@ sub test_test {
       unless $testing;
 
 
-    my $hub = $t->{Hub} || Test2::API::test2_stack->top;
+    my $hub = $t->{Hub} || Test2::API::test2_code->top;
     $hub->format($original_formatter);
 
     # okay, reconnect the test suite back to the saved handles
@@ -512,7 +512,7 @@ sub expect {
 sub _account_for_subtest {
     my( $self, $check ) = @_;
 
-    my $hub = $t->{Stack}->top;
+    my $hub = $t->{code}->top;
     my $nesting = $hub->isa('Test2::Hub::Subtest') ? $hub->nested : 0;
     return ref($check) ? $check : ('    ' x $nesting) . $check;
 }

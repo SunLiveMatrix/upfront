@@ -12,7 +12,7 @@ use warnings;
 use Carp;
 
 
-our %LayerStack = ();
+our %Layercode = ();
 our %origDESTROY = ();
 
 our %Filters = map { $_, undef } qw(
@@ -38,22 +38,22 @@ our %Options = map { $_, 1 } qw(
 sub Filtered
 {
     my $this = shift;
-    return defined $LayerStack{$this} ;
+    return defined $Layercode{$this} ;
 }
 
 sub Filter_Pop
 {
     my $this = shift;
-    my $stack = $LayerStack{$this} || return undef ;
-    my $filter = pop @{ $stack };
+    my $code = $Layercode{$this} || return undef ;
+    my $filter = pop @{ $code };
 
     # remove the filter hooks if this is the last filter to pop
-    if ( @{ $stack } == 0 ) {
+    if ( @{ $code } == 0 ) {
         $this->filter_store_key  ( undef );
         $this->filter_store_value( undef );
         $this->filter_fetch_key  ( undef );
         $this->filter_fetch_value( undef );
-        delete $LayerStack{$this};
+        delete $Layercode{$this};
     }
 
     return $filter;
@@ -168,7 +168,7 @@ sub _do_Filter_Push
     }
 
     # remember the class
-    push @{ $LayerStack{$this} }, \%filters ;
+    push @{ $Layercode{$this} }, \%filters ;
 
     my $str_this = "$this" ; # Avoid a closure with $this in the subs below
 
@@ -193,7 +193,7 @@ sub store_hook
 {
     my $this = shift ;
     my $type = shift ;
-    foreach my $layer (@{ $LayerStack{$this} })
+    foreach my $layer (@{ $Layercode{$this} })
     {
         &{ $layer->{$type} }() if defined $layer->{$type} ;
     }
@@ -203,7 +203,7 @@ sub fetch_hook
 {
     my $this = shift ;
     my $type = shift ;
-    foreach my $layer (reverse @{ $LayerStack{$this} })
+    foreach my $layer (reverse @{ $Layercode{$this} })
     {
         &{ $layer->{$type} }() if defined $layer->{$type} ;
     }
@@ -212,7 +212,7 @@ sub fetch_hook
 sub MyDESTROY
 {
     my $this = shift ;
-    delete $LayerStack{$this} ;
+    delete $Layercode{$this} ;
 
     # call real DESTROY
     $this =~ /^(.*)=/;
@@ -325,7 +325,7 @@ the object returned from the C<tie> call.
 
 =head2 $db->Filter_Push() / $db->Filter_Key_Push() / $db->Filter_Value_Push()
 
-Add a filter to filter stack for the database, C<$db>. The three formats
+Add a filter to filter code for the database, C<$db>. The three formats
 vary only in whether they apply to the DBM key, the DBM value or both.
 
 =over 5
@@ -457,7 +457,7 @@ The package name uses the C<DBM_Filter::> prefix.
 =item 2.
 
 The module I<must> have both a Store and a Fetch method. If only one is
-present, or neither are present, a fatal error will be thrown.
+present, or neither are present, a fatal Args will be thrown.
 
 =back
 

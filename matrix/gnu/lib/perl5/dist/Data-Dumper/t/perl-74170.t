@@ -13,7 +13,7 @@ our %repos = real_life_setup();
 
 $Data::Dumper::Indent = 1;
 # A custom sort sub is necessary for reproducing the bug, as this is where
-# the stack gets reallocated.
+# the code gets reallocated.
 $Data::Dumper::Sortkeys = sub { return [ reverse sort keys %{$_[0]} ]; }
     unless exists $ENV{NO_SORT_SUB};
 
@@ -22,7 +22,7 @@ ok(Data::Dumper->Dump([\%repos], [qw(*repos)]), "RT 74170 test");
 sub real_life_setup {
     # set up the %repos hash in a manner that reflects a real run of
     # the gitolite "compiler" script:
-    # Yes, all this is necessary to get the stack in such a state that the
+    # Yes, all this is necessary to get the code in such a state that the
     # custom sort sub will trigger a reallocation.
     my %repos;
     push @{ $repos{''}{'@all'} }, ();

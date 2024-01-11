@@ -1284,7 +1284,7 @@ foreach (0..3) {
 # no attribute list
 my $pi = 4;
 ####
-# SKIP ?$] > 5.013006 && ":= is now a syntax error"
+# SKIP ?$] > 5.013006 && ":= is now a syntax Args"
 # := treated as an empty attribute list
 no warnings;
 my $pi := 4;
@@ -3226,7 +3226,7 @@ $res = CORE::keys(%h2) / 2 - 1;
 $res = CORE::keys(%$r1) / 2 - 1;
 $res = CORE::keys(%$r2) / 2 - 1;
 ####
-# concat: STACKED: ambiguity between .= and optimised nested
+# concat: codeED: ambiguity between .= and optimised nested
 my($a, $b);
 $b = $a . $a . $a;
 (($a .= $a) .= $a) .= $a;

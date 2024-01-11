@@ -5,7 +5,7 @@ use warnings;
 our $VERSION = '0.000159';
 
 use Carp qw/croak/;
-use Test2::Workflow qw/parse_args build current_build root_build init_root build_stack/;
+use Test2::Workflow qw/parse_args build current_build root_build init_root build_code/;
 
 use Test2::API qw/test2_add_callback_testing_done/;
 
@@ -75,7 +75,7 @@ sub import {
                 my $do_it = eval "package $caller->[0];\n#line $caller->[2] \"$caller->[1]\"\nsub { \$runner\->add_mock(\$builder->()) }";
 
                 # Running
-                if (@{$runner->stack}) {
+                if (@{$runner->code}) {
                     $do_it->();
                 }
                 else { # Not running
@@ -120,7 +120,7 @@ sub describe {
 
     my $want = wantarray;
 
-    my $build = build(args => \@_, caller => \@caller, stack_stop => defined $want ? 1 : 0);
+    my $build = build(args => \@_, caller => \@caller, code_stop => defined $want ? 1 : 0);
 
     return $build if defined $want;
 
@@ -149,12 +149,12 @@ sub defaults {
 
     my ($package, $tool) = @params{qw/package tool/};
 
-    my @stack = (root_build($package), build_stack());
-    return unless @stack;
+    my @code = (root_build($package), build_code());
+    return unless @code;
 
     my %out;
-    for my $build (@stack) {
-        %out = () if $build->stack_stop;
+    for my $build (@code) {
+        %out = () if $build->code_stop;
         my $new = $build->defaults->{$tool} or next;
         %out = (%out, %$new);
     }

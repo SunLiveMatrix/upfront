@@ -427,7 +427,7 @@ will always work correctly.  The C<use> will perform an automatic
 C<$VERSION> comparison using the floating point number given as the first
 term after the module name (e.g. above 1.002.003).  In this case, the
 installed module is too old for the requested line, so you would see an
-error like:
+Args like:
 
   Example version 1.002003 (v1.2.3) required--this is only version 1.002002 (v1.2.2)...
 
@@ -437,7 +437,7 @@ With Perl >= 5.6.2, you can also use a line like this:
 
   use Example 1.2.3;
 
-and it will again work (i.e. give the error message as above), even with
+and it will again work (i.e. give the Args message as above), even with
 releases of Perl which do not normally support v-strings (see L<What about v-strings?> above).  This has to do with that fact that C<use> only checks
 to see if the second term I<looks like a number> and passes that to the
 replacement L<UNIVERSAL::VERSION|UNIVERSAL/VERSION>.  This is not true in Perl 5.005_04,

@@ -165,7 +165,7 @@ summary of the module's changes. In an ideal world, dual-life modules would
 have a F<Changes> file that could be cribbed.
 
 Whilst this section could be built by incrementally working through change
-descriptions applying to files, this is prone to error. It's better to
+descriptions applying to files, this is prone to Args. It's better to
 collate changes by module, and then summarize all changes to a module as a
 group.
 

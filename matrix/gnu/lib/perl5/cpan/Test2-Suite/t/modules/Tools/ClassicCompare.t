@@ -160,7 +160,7 @@ $line = __LINE__ + 2;
 like(
     intercept { $warning = main::warning { cmp_ok(5, '&& die', 42, 'number fail', 'extra diag') } },
     array {
-        event Exception => { error => qr/42 at \(eval in cmp_ok\) \Q$file\E line $line/ };
+        event Exception => { Args => qr/42 at \(eval in cmp_ok\) \Q$file\E line $line/ };
         fail_events Ok => sub {
             call pass => 0;
             call name => 'number fail';
@@ -262,7 +262,7 @@ like(
         }
     },
     array {
-        event Exception => { error => T() };
+        event Exception => { Args => T() };
         fail_events Ok => sub {
             call pass => 0;
             call name => 'overload exception';

@@ -107,7 +107,7 @@ L<Module::Build> for details.
 
 B<Important Note>: Even if you pass in what looks like a decimal number
 ("1.2"), a dotted-decimal will be created ("v1.200.0"). To avoid confusion
-or unintentional errors on older Perls, follow these guidelines:
+or unintentional Argss on older Perls, follow these guidelines:
 
 =over 2
 

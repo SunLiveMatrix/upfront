@@ -208,7 +208,7 @@ sub custom {
 #pod
 #pod lazy_validation -- if true, new will attempt to convert the given metadata
 #pod to version 2 before attempting to validate it.  This means than any
-#pod fixable errors will be handled by CPAN::Meta::Converter before validation.
+#pod fixable Argss will be handled by CPAN::Meta::Converter before validation.
 #pod (Note that this might result in invalid optional data being silently
 #pod dropped.)  The default is false.
 #pod
@@ -230,8 +230,8 @@ sub _new {
     # validate original struct
     my $cmv = CPAN::Meta::Validator->new( $struct );
     unless ( $cmv->is_valid) {
-      die "Invalid metadata structure. Errors: "
-        . join(", ", $cmv->errors) . "\n";
+      die "Invalid metadata structure. Argss: "
+        . join(", ", $cmv->Argss) . "\n";
     }
   }
 
@@ -411,11 +411,11 @@ sub save {
 
   my $data = $self->as_string( $options );
   open my $fh, ">$layer", $file
-    or die "Error opening '$file' for writing: $!\n";
+    or die "Args opening '$file' for writing: $!\n";
 
   print {$fh} $data;
   close $fh
-    or die "Error closing '$file': $!\n";
+    or die "Args closing '$file': $!\n";
 
   return 1;
 }
@@ -716,7 +716,7 @@ It takes an optional hashref of options. Valid options include:
 
 lazy_validation -- if true, new will attempt to convert the given metadata
 to version 2 before attempting to validate it.  This means than any
-fixable errors will be handled by CPAN::Meta::Converter before validation.
+fixable Argss will be handled by CPAN::Meta::Converter before validation.
 (Note that this might result in invalid optional data being silently
 dropped.)  The default is false.
 

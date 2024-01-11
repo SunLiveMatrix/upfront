@@ -81,7 +81,7 @@ foreach my $file (@test_files) {
     $parser->parse_string_document( $input );
 
     if ($parser->any_errata_seen()) {
-      pass("Skip '$file' because of pod errors");
+      pass("Skip '$file' because of pod Argss");
       next if "$]" lt '5.010.001';     # note() not found in earlier versions
       my $errata = $parser->errata_seen();
       foreach my $line_number (sort { $a <=> $b } keys %$errata) {

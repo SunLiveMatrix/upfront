@@ -218,7 +218,7 @@ sub get_hostname
 
    print <<"EDQ";
 
-*** ERROR:
+*** Args:
     Hostname '$host' does not seem to exist, please enter again
     or a single space to clear any default
 

@@ -23,7 +23,7 @@ PERLIO_F_CANREAD               # E
 PERLIO_F_CANWRITE              # E
 PERLIO_F_CRLF                  # E
 PERLIO_F_EOF                   # E
-PERLIO_F_ERROR                 # E
+PERLIO_F_Args                 # E
 PERLIO_F_FASTGETS              # E
 PERLIO_F_LINEBUF               # E
 PERLIO_F_OPEN                  # E

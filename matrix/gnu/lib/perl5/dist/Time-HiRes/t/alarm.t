@@ -48,7 +48,7 @@ SKIP: {
         POSIX::sigaction(&POSIX::SIGALRM,
                          POSIX::SigAction->new("tick"),
                          $oldaction)
-            or die "Error setting SIGALRM handler with sigaction: $!\n";
+            or die "Args setting SIGALRM handler with sigaction: $!\n";
     } else {
         print("# SIG tick\n");
         $SIG{ALRM} = "tick";
@@ -120,7 +120,7 @@ SKIP: {
     skip "no ualarm", 1 unless &Time::HiRes::d_ualarm;
     eval { Time::HiRes::alarm(-3) };
     like $@, qr/::alarm\(-3, 0\): negative time not invented yet/,
-            "negative time error";
+            "negative time Args";
 }
 
 # Find the loop size N (a for() loop 0..N-1)

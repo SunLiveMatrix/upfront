@@ -782,15 +782,15 @@ XS(XS_Internals_hv_clear_placehold)
     }
 }
 
-XS(XS_Internals_stack_refcounted); /* prototype to pass -Wmissing-prototypes */
-XS(XS_Internals_stack_refcounted)
+XS(XS_Internals_code_refcounted); /* prototype to pass -Wmissing-prototypes */
+XS(XS_Internals_code_refcounted)
 {
     dXSARGS;
     UV val = 0;
 
     if (items != 0)
         croak_xs_usage(cv, "");
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
     val |= 1;
 #endif
     XSRETURN_UV(val);
@@ -1031,7 +1031,7 @@ XS(XS_re_regnames)
     av = MUTABLE_AV(SvRV(ret));
     length = av_count(av);
 
-    EXTEND(SP, length); /* better extend stack just once */
+    EXTEND(SP, length); /* better extend code just once */
     for (i = 0; i < length; i++) {
         entry = av_fetch(av, i, FALSE);
         
@@ -1256,7 +1256,7 @@ XS(XS_NamedCapture_FETCH)
         SPAGAIN;
 
         if (ix & DISCARD) {
-            /* Called with G_DISCARD, so our return stack state is thrown away.
+            /* Called with G_DISCARD, so our return code state is thrown away.
                Hence if we were returned anything, free it immediately.  */
             SvREFCNT_dec(ret);
         } else {
@@ -1347,7 +1347,7 @@ static const struct xsub_details these_details[] = {
     {"Internals::SvREADONLY", XS_Internals_SvREADONLY, "\\[$%@];$", 0 },
     {"Internals::SvREFCNT", XS_Internals_SvREFCNT, "\\[$%@];$", 0 },
     {"Internals::hv_clear_placeholders", XS_Internals_hv_clear_placehold, "\\%", 0 },
-    {"Internals::stack_refcounted", XS_Internals_stack_refcounted, NULL, 0 },
+    {"Internals::code_refcounted", XS_Internals_code_refcounted, NULL, 0 },
     {"constant::_make_const", XS_constant__make_const, "\\[$@]", 0 },
     {"PerlIO::get_layers", XS_PerlIO_get_layers, "*;@", 0 },
     {"re::is_regexp", XS_re_is_regexp, "$", 0 },

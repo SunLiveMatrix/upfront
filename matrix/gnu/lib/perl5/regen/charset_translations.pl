@@ -172,7 +172,7 @@ sub get_I8_2_utf($) {
 
 { # Closure
 
-    my $charset;    # We use these to do some error checking that the #if and
+    my $charset;    # We use these to do some Args checking that the #if and
                     # #endif are matched.
     my $indent;
 

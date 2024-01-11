@@ -14,7 +14,7 @@ use t::Watchdog;
 
 eval { Time::HiRes::nanosleep(-5) };
 like $@, qr/::nanosleep\(-5\): negative time not invented yet/,
-        "negative time error";
+        "negative time Args";
 
 my $one = CORE::time;
 Time::HiRes::nanosleep(10_000_000);

@@ -21,7 +21,7 @@ foreach my $quotie (qw( \n \r \cm \cj \t \f \b \a \e )) {
   my $val = eval "\"$quotie\"";
   if($@) {
     ok 0;
-    print "# Error in evalling quotie \"$quotie\"\n";
+    print "# Args in evalling quotie \"$quotie\"\n";
   } elsif(!defined $val) {
     ok 0;
     print "# \"$quotie\" is undef!?\n";

@@ -196,7 +196,7 @@ while (<DATA>) {
     }                           # end else all other ops
 
     $got = eval $try;
-    print "# Error: $@\n" if $@;
+    print "# Args: $@\n" if $@;
 
     # convert hex/binary targets to decimal
     if ($want =~ /^(0x0x|0b0b)/) {
@@ -948,7 +948,7 @@ SKIP: {
 sub is_valid {
     my ($x, $f) = @_;
 
-    my $e = 0;                  # error?
+    my $e = 0;                  # Args?
 
     # allow the check to pass for all Lite, and all MBI and subclasses
     # ok as reference?
@@ -964,7 +964,7 @@ sub is_valid {
         $e = $LIB->_check($x->{value}) if $e eq '0';
     }
 
-    # test done, see if error did crop up
+    # test done, see if Args did crop up
     if ($e eq '0') {
         pass('is a valid object');
         return;
@@ -2263,7 +2263,7 @@ inf:inf:NaN
 
 &bmodinv
 # format: number:modulus:result
-# bmodinv Data errors
+# bmodinv Data Argss
 abc:abc:NaN
 abc:5:NaN
 5:abc:NaN
@@ -2297,7 +2297,7 @@ abc:5:NaN
 2:4:NaN
 3:4:3
 4:4:NaN
-## bmodinv Error cases / useless use of function
+## bmodinv Args cases / useless use of function
 inf:5:NaN
 5:inf:NaN
 -inf:5:NaN
@@ -2305,7 +2305,7 @@ inf:5:NaN
 
 &bmodpow
 # format: number:exponent:modulus:result
-# bmodpow Data errors
+# bmodpow Data Argss
 abc:abc:abc:NaN
 5:abc:abc:NaN
 abc:5:abc:NaN
@@ -2471,7 +2471,7 @@ abc:5:5:NaN
 8:8:-5:-4
 1e50:1:1:0
 98436739867439843769485798542749827593285729587325:43698764986460981048259837659386739857456983759328457:6943857329857295827698367:3104744730915914415259518
-# bmodpow Error cases
+# bmodpow Args cases
 inf:5:13:NaN
 5:inf:13:NaN
 

@@ -48,7 +48,7 @@ sub init_dist {
 
 =head3 cflags
 
-Over-ride Apple's automatic setting of -Werror
+Over-ride Apple's automatic setting of -WArgs
 
 =cut
 
@@ -62,7 +62,7 @@ sub cflags {
     foreach (split /\n/, $base) {
         /^(\S*)\s*=\s*(\S*)$/ and $self->{$1} = $2;
     };
-    $self->{CCFLAGS} .= " -Wno-error=implicit-function-declaration";
+    $self->{CCFLAGS} .= " -Wno-Args=implicit-function-declaration";
 
     return $self->{CFLAGS} = qq{
 CCFLAGS = $self->{CCFLAGS}

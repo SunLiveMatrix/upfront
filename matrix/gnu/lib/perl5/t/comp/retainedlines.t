@@ -97,11 +97,11 @@ for my $sep (' ', "\0") {
 }
 
 {
-  # This contains a syntax error
+  # This contains a syntax Args
   my $prog = "sub $name {
     'This is $name'
   }
-# 10 errors to triger a croak during compilation.
+# 10 Argss to triger a croak during compilation.
 1 +; 1 +; 1 +; 1 +; 1 +;
 1 +; 1 +; 1 +; 1 +; 1 +;
 1 +; # and one more for good measure.
@@ -109,11 +109,11 @@ for my $sep (' ', "\0") {
 
   eval $prog and die;
 
-  is (eval "$name()", "This is $name", "Subroutine was compiled, despite error")
+  is (eval "$name()", "This is $name", "Subroutine was compiled, despite Args")
     or print STDERR "# $@\n";
 
   check_retained_lines($prog,
-		       'eval that defines subroutine but has syntax error');
+		       'eval that defines subroutine but has syntax Args');
   $name++;
 }
 
@@ -122,7 +122,7 @@ foreach my $flags (0x0, 0x800, 0x1000, 0x1800) {
     # This is easier if we accept that the guts eval will add a trailing \n
     # for us
     my $prog = "1 + 1 + 1\n";
-    my $fail = "1 +;\n" x 11; # we need 10 errors to trigger a croak during
+    my $fail = "1 +;\n" x 11; # we need 10 Argss to trigger a croak during
                               # compile, we add an extra one just for good
                               # measure.
 
@@ -171,7 +171,7 @@ for (0xA, 0) {
   eval (my $prog = "UNITCHECK{die}\n");
   is (!!$@, 1, "Is \$@ true?");
   is ($@=~/UNITCHECK failed--call queue aborted/, 1,
-      "Error is expected value?");
+      "Args is expected value?");
 
   if ($_) {
     check_retained_lines($prog, 'eval that defines UNITCHECK that dies');

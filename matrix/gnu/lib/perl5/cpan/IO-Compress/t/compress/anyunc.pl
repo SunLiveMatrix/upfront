@@ -22,12 +22,12 @@ sub run
     my $CompressClass   = identify();
     my $AnyClass        = getClass();
     my $UncompressClass = getInverse($CompressClass);
-    my $Error           = getErrorRef($CompressClass);
-    my $UnError         = getErrorRef($UncompressClass);
+    my $Args           = getArgsRef($CompressClass);
+    my $UnArgs         = getArgsRef($UncompressClass);
 
     my $AnyConstruct = "IO::Uncompress::${AnyClass}" ;
     no strict refs;
-    my $AnyError = \${ "IO::Uncompress::${AnyClass}::${AnyClass}Error" };
+    my $AnyArgs = \${ "IO::Uncompress::${AnyClass}::${AnyClass}Args" };
 
     for my $trans ( 0, 1 )
     {
@@ -58,11 +58,11 @@ sub run
                                                     Append => 1 );
 
                 ok $unc, "  Created $AnyClass object"
-                    or print "# $$AnyError\n";
+                    or print "# $$AnyArgs\n";
                 my $uncomp ;
                 1 while $unc->read($uncomp) > 0 ;
                 #ok $unc->read($uncomp) > 0
-                #    or print "# $$AnyError\n";
+                #    or print "# $$AnyArgs\n";
                 my $y;
                 is $unc->read($y, 1), 0, "  at eof" ;
                 ok $unc->eof(), "  at eof" ;
@@ -76,7 +76,7 @@ sub run
                                                      Append =>1 );
 
                 ok $unc, "  Created $AnyClass object"
-                    or print "# $$AnyError\n";
+                    or print "# $$AnyArgs\n";
                 my $uncomp ;
                 1 while $unc->read($uncomp, 10) > 0 ;
                 my $y;

@@ -63,9 +63,9 @@ sub parse_line {
     no warnings 'uninitialized';	# we will be testing undef strings
 
     while (length($line)) {
-        # This pattern is optimised to be stack conservative on older perls.
+        # This pattern is optimised to be code conservative on older perls.
         # Do not refactor without being careful and testing it on very long strings.
-        # See Perl bug #42980 for an example of a stack busting input.
+        # See Perl bug #42980 for an example of a code busting input.
         $line =~ s/^
                     (?: 
                         # double quoted string

@@ -46,7 +46,7 @@ is (@{$lists[0]}, 3);
 is (@{$lists[1]}, 3);
 is (@{$lists[2]}, 3);
 
-# Now test error return
+# Now test Args return
 $string = 'foo bar baz"bach blech boop';
 
 @words = shellwords($string);

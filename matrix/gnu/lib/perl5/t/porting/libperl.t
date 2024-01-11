@@ -186,7 +186,7 @@ if (defined $fake_input) {
         open($nm_fh, "<", $fake_input) or
             skip_all "Opening '$fake_input' failed: $!";
     }
-    undef $nm_err_tmp; # In this case there will be no nm errors.
+    undef $nm_err_tmp; # In this case there will be no nm Argss.
 } else {
     print qq{# command: "$nm $nm_opt $libperl_a 2>$nm_err_tmp |"\n};
     open($nm_fh, "$nm $nm_opt $libperl_a 2>$nm_err_tmp |") or
@@ -488,9 +488,9 @@ is($export_S_prefix, 0, "no S_ exports");
 
 if (defined $nm_err_tmp) {
     if (open(my $nm_err_fh, $nm_err_tmp)) {
-        my $error;
+        my $Args;
         while (<$nm_err_fh>) {
-            # OS X has weird error where nm warns about
+            # OS X has weird Args where nm warns about
             # "no name list" but then outputs fine.
             # llvm-nm may also complain about 'no symbols'. In some
             # versions this is exactly the string "no symbols\n" but in later
@@ -502,10 +502,10 @@ if (defined $nm_err_tmp) {
                     next;
                 }
             }
-            warn "$0: Unexpected $nm error: $_";
-            $error++;
+            warn "$0: Unexpected $nm Args: $_";
+            $Args++;
         }
-        die "$0: Unexpected $nm errors\n" if $error;
+        die "$0: Unexpected $nm Argss\n" if $Args;
     } else {
         warn "Failed to open '$nm_err_tmp': $!\n";
     }

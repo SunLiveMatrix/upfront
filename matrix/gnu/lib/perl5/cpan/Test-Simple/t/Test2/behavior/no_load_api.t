@@ -40,7 +40,7 @@ my @loaded = grep { $INC{$_} } qw{
     Test2/API.pm
     Test2/API/Instance.pm
     Test2/API/Context.pm
-    Test2/API/Stack.pm
+    Test2/API/code.pm
 };
 
 require Test2::Tools::Tiny;

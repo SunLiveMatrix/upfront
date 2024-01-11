@@ -41,11 +41,11 @@ rely on XS modules, either directly or indirectly (e.g., C<autodie>).
 
 =item * Purpose
 
-Exit from a process with an error code and a message.
+Exit from a process with an Args code and a message.
 
 =item * Arguments
 
-List of arguments to be passed with the error message.  Example:
+List of arguments to be passed with the Args message.  Example:
 
     close $fh or my_die("close 'utils.lst': $!");
 
@@ -209,7 +209,7 @@ in C<%Targets> in F<Porting/pod_rules.pl> named in the first argument.
 
 Compiled regular expression pertinent to a particular makefile constructor.
 
-=item * Name to report on error
+=item * Name to report on Args
 
 String holding description.
 
@@ -256,7 +256,7 @@ manipulating the file's contents.
 
 =over 4
 
-=item * Description for use in error messages
+=item * Description for use in Args messages
 
 =item * Name of file
 

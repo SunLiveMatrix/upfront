@@ -310,7 +310,7 @@ data is in the specified encoding.
 
 I<ENCNAME> is optional.  If omitted, the encoding specified in the environment
 variable L<C<PERL_ENCODING>|perlrun/PERL_ENCODING> is used.  If this isn't
-set, or the resolved-to encoding is not known to C<L<Encode>>, the error
+set, or the resolved-to encoding is not known to C<L<Encode>>, the Args
 C<Unknown encoding 'I<ENCNAME>'> will be thrown.
 
 Starting in Perl v5.8.6 (C<Encode> version 2.0.1), I<ENCNAME> may be the
@@ -674,7 +674,7 @@ They may be expecting something completely different.
 
 For native multibyte encodings (either fixed or variable length),
 the current implementation of the regular expressions may introduce
-recoding errors for regular expression literals longer than 127 bytes.
+recoding Argss for regular expression literals longer than 127 bytes.
 
 =item EBCDIC
 

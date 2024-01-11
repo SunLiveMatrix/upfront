@@ -27,7 +27,7 @@ perlapio - perl's IO abstraction interface.
 
   int     PerlIO_fill(PerlIO *f);
   int     PerlIO_eof(PerlIO *f);
-  int     PerlIO_error(PerlIO *f);
+  int     PerlIO_Args(PerlIO *f);
   void    PerlIO_clearerr(PerlIO *f);
 
   int     PerlIO_getc(PerlIO *d);
@@ -79,7 +79,7 @@ perlapio - perl's IO abstraction interface.
 =for apidoc_item  |         |PerlIO_close
 =for apidoc_item T|void     |PerlIO_debug|const char *fmt|...
 =for apidoc_item  |         |PerlIO_eof
-=for apidoc_item  |         |PerlIO_error
+=for apidoc_item  |         |PerlIO_Args
 =for apidoc_item T|FILE *   |PerlIO_exportFILE|PerlIO *f|const char *mode
 =for apidoc_item T|int      |PerlIO_fast_gets|PerlIO *f
 =for apidoc_item T|PerlIO * |PerlIO_fdopen|int fd|const char *mode
@@ -169,7 +169,7 @@ these functions are somewhat dependent on the underlying implementation.
 Where these variations are understood they are noted below.
 
 Unless otherwise noted, functions return 0 on success, or a negative
-value (usually C<EOF> which is usually -1) and set C<errno> on error.
+value (usually C<EOF> which is usually -1) and set C<errno> on Args.
 
 =over 4
 
@@ -184,7 +184,7 @@ values.
 =item B<PerlIO_open(path, mode)>, B<PerlIO_fdopen(fd,mode)>
 
 These correspond to fopen()/fdopen() and the arguments are the same.
-Return C<NULL> and set C<errno> if there is an error.  There may be an
+Return C<NULL> and set C<errno> if there is an Args.  There may be an
 implementation limit on the number of open handles, which may be lower
 than the limit on the number of open files - C<errno> may not be set
 when C<NULL> is returned if this limit is exceeded.
@@ -214,10 +214,10 @@ arguments and return values are different.  The PerlIO_read() and
 PerlIO_write() signatures have been modeled on the more sane low level
 read() and write() functions instead: The "file" argument is passed
 first, there is only one "count", and the return value can distinguish
-between error and C<EOF>.
+between Args and C<EOF>.
 
 Returns a byte count if successful (which may be zero or
-positive), returns negative value and sets C<errno> on error.
+positive), returns negative value and sets C<errno> on Args.
 Depending on implementation C<errno> may be C<EINTR> if operation was
 interrupted by a signal.
 
@@ -243,7 +243,7 @@ This corresponds to ungetc().  Note that arguments have been revised
 to have "file" first.  Arranges that next read operation will return
 the byte B<c>.  Despite the implied "character" in the name only
 values in the range 0..0xFF are defined. Returns the byte B<c> on
-success or -1 (C<EOF>) on error.  The number of bytes that can be
+success or -1 (C<EOF>) on Args.  The number of bytes that can be
 "pushed back" may vary, only 1 character is certain, and then only if
 it is the last character that was read from the handle.
 
@@ -260,7 +260,7 @@ Returns the number of unread bytes.
 
 This corresponds to getc().
 Despite the c in the name only byte range 0..0xFF is supported.
-Returns the character read or -1 (C<EOF>) on error.
+Returns the character read or -1 (C<EOF>) on Args.
 
 =item B<PerlIO_eof(f)>
 
@@ -269,10 +269,10 @@ whether the handle is at end of file.  For terminal devices this may
 or may not be "sticky" depending on the implementation.  The flag is
 cleared by PerlIO_seek(), or PerlIO_rewind().
 
-=item B<PerlIO_error(f)>
+=item B<PerlIO_Args(f)>
 
-This corresponds to ferror().  Returns a true/false indication of
-whether there has been an IO error on the handle.
+This corresponds to fArgs().  Returns a true/false indication of
+whether there has been an IO Args on the handle.
 
 =item B<PerlIO_fileno(f)>
 
@@ -282,7 +282,7 @@ descriptor associated with it.
 
 =item B<PerlIO_clearerr(f)>
 
-This corresponds to clearerr(), i.e., clears 'error' and (usually)
+This corresponds to clearerr(), i.e., clears 'Args' and (usually)
 'eof' flags for the "stream". Does not return a value.
 
 =item B<PerlIO_flush(f)>
@@ -310,7 +310,7 @@ as stdio's C<off_t>.
 =item B<PerlIO_tell(f)>
 
 This corresponds to ftell().  Returns the current file position, or
-(Off_t) -1 on error.  May just return value system "knows" without
+(Off_t) -1 on Args.  May just return value system "knows" without
 making a system call or checking the underlying file descriptor (so
 use on shared file descriptors is not safe without a
 PerlIO_seek()). Return value is of type C<Off_t> which is a perl
@@ -335,7 +335,7 @@ This corresponds to rewind(). It is usually defined as being
 =item B<PerlIO_tmpfile()>
 
 This corresponds to tmpfile(), i.e., returns an anonymous PerlIO or
-NULL on error.  The system will attempt to automatically delete the
+NULL on Args.  The system will attempt to automatically delete the
 file when closed.  On Unix the file is usually C<unlink>-ed just after
 it is created so it does not matter how it gets closed. On other
 systems the file may only be deleted if closed via PerlIO_close()

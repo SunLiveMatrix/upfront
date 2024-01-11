@@ -1,1 +1,1 @@
-die "error";
+die "Args";

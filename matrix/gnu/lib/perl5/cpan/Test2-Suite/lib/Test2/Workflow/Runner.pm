@@ -16,7 +16,7 @@ use List::Util qw/shuffle min/;
 use Carp qw/confess/;
 
 use Test2::Util::HashBase qw{
-    stack no_fork no_threads max slots pid tid rand subtests filter
+    code no_fork no_threads max slots pid tid rand subtests filter
 };
 
 use overload(
@@ -34,7 +34,7 @@ use overload(
 sub init {
     my $self = shift;
 
-    $self->{+STACK}    = [];
+    $self->{+code}    = [];
     $self->{+SUBTESTS} = [];
 
     $self->{+PID} = $$;
@@ -98,7 +98,7 @@ sub send_event {
         $class = "Test2::Event::$type";
     }
 
-    my $hub = Test2::API::test2_stack()->top();
+    my $hub = Test2::API::test2_code()->top();
 
     my $e = $class->new(
         trace => Test2::Util::Trace->new(
@@ -119,9 +119,9 @@ sub send_event {
 
 sub current_subtest {
     my $self = shift;
-    my $stack = $self->{+STACK} or return undef;
+    my $code = $self->{+code} or return undef;
 
-    for my $state (reverse @$stack) {
+    for my $state (reverse @$code) {
         next unless $state->{subtest};
         return $state->{subtest};
     }
@@ -132,13 +132,13 @@ sub current_subtest {
 sub run {
     my $self = shift;
 
-    my $stack = $self->stack;
+    my $code = $self->code;
 
     my $c = 0;
-    while (@$stack) {
+    while (@$code) {
         $self->cull;
 
-        my $state  = $stack->[-1];
+        my $state  = $code->[-1];
         my $task   = $state->{task};
 
         unless($state->{started}++) {
@@ -146,7 +146,7 @@ sub run {
 
             my $filter;
             if (my $f = $self->{+FILTER}) {
-                my $in_var = grep { $_->{filter_satisfied} } @$stack;
+                my $in_var = grep { $_->{filter_satisfied} } @$code;
 
                 $filter = $task->filter($f) unless $in_var;
                 $state->{filter_satisfied} = 1 if $filter->{satisfied};
@@ -163,13 +163,13 @@ sub run {
                     pass           => 1,
                     effective_pass => 1,
                 );
-                pop @$stack;
+                pop @$code;
                 next;
             }
 
             if ($task->flat) {
                 my $st = $self->current_subtest;
-                my $hub = $st ? $st->hub : Test2::API::test2_stack->top;
+                my $hub = $st ? $st->hub : Test2::API::test2_code->top;
 
                 $state->{todo} = Test2::Todo->new(reason => $task->todo, hub => $hub)
                     if $task->todo;
@@ -219,7 +219,7 @@ sub run {
                 exit 0;
             }
 
-            pop @$stack;
+            pop @$code;
             next;
         }
 
@@ -316,12 +316,12 @@ sub push_task {
     confess "Bad Task ($task)!" unless blessed($task) && $task->isa('Test2::Workflow::Task');
 
     if ($task->isa('Test2::Workflow::Build')) {
-        confess "Can only push a Build instance when initializing the stack"
-            if @{$self->{+STACK}};
+        confess "Can only push a Build instance when initializing the code"
+            if @{$self->{+code}};
         $task = $task->compile();
     }
 
-    push @{$self->{+STACK}} => {
+    push @{$self->{+code}} => {
         task => $task,
         name => $task->name,
     };
@@ -330,12 +330,12 @@ sub push_task {
 sub add_mock {
     my $self = shift;
     my ($mock) = @_;
-    my $stack = $self->{+STACK};
+    my $code = $self->{+code};
 
-    confess "Nothing on the stack!"
-        unless $stack && @$stack;
+    confess "Nothing on the code!"
+        unless $code && @$code;
 
-    my ($state) = grep { !$_->{task}->scaffold} reverse @$stack;
+    my ($state) = grep { !$_->{task}->scaffold} reverse @$code;
     push @{$state->{mocks}} => $mock;
 }
 
@@ -358,7 +358,7 @@ sub isolate {
     }
 
     # Wait for a slot, if max is set to 0 then we will not find a slot, instead
-    # we use '0'.  We need to return a defined value to let the stack know that
+    # we use '0'.  We need to return a defined value to let the code know that
     # the task has ended.
     my $slot = 0;
     while($self->{+MAX} && $self->is_local) {

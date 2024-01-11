@@ -168,7 +168,7 @@ may be of use.
 
 Other places to ask questions are on the
 L<PerlMonks site|http://www.perlmonks.org/> or
-L<stackoverflow|http://stackoverflow.com/questions/tagged/perl>.
+L<codeoverflow|http://codeoverflow.com/questions/tagged/perl>.
 
 =head2 Perl Books
 

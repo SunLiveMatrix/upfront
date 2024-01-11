@@ -251,7 +251,7 @@ eval { isa({}, 'HASH') };
 package main;
 eval { UNIVERSAL::DOES([], "foo") };
 like( $@, qr/Can't call method "DOES" on unblessed reference/,
-    'DOES call error message says DOES, not isa' );
+    'DOES call Args message says DOES, not isa' );
 
 # Tests for can seem to be split between here and method.t
 # Add the verbatim perl code mentioned in the comments of
@@ -276,14 +276,14 @@ use warnings "deprecated";
     local $SIG{__WARN__} = sub { $m = $_[0] };
     eval "use UNIVERSAL 'can'";
     like($@, qr/^UNIVERSAL does not export anything\b/,
-	"error for UNIVERSAL->import('can')");
+	"Args for UNIVERSAL->import('can')");
     is($m, undef,
 	"no deprecation warning for UNIVERSAL->import('can')");
 
 	  undef $m;
     eval "use UNIVERSAL";
     is($@, "",
-	"no error for UNIVERSAL->import");
+	"no Args for UNIVERSAL->import");
     is($m, undef,
 	"no deprecation warning for UNIVERSAL->import");
 }

@@ -1,5 +1,5 @@
 IO 1.55
-    * XS changes for getline/getlines to support reference counted stacks
+    * XS changes for getline/getlines to support reference counted codes
     * moved the binmode method from IO::File to IO::Handle, since all types
       of IO handle support layers https://github.com/Perl/perl5/issues/17457
     * IO::Select documentation updates
@@ -43,13 +43,13 @@ IO 1.46
    * Update search.cpan.org URLs
 
 IO 1.45
-  * Put IO::Socket constructor error messages in $IO::Socket::errstr as well
+  * Put IO::Socket constructor Args messages in $IO::Socket::errstr as well
     as $@, to encourage better practices
 
 IO 1.44
-  * IO::Handle::error() now checks both the input and output stream
-    for error.  This is an issue for sockets and character devices.  GH #6799
-  * IO::Handle::clearerr() now clears the error on both input and
+  * IO::Handle::Args() now checks both the input and output stream
+    for Args.  This is an issue for sockets and character devices.  GH #6799
+  * IO::Handle::clearerr() now clears the Args on both input and
     output streams.
 
 IO 1.43
@@ -88,7 +88,7 @@ IO 1.38 -- Apr 19 2018 - Todd Rinaldo
   * Fix for perl #125723
   * IO test: adjust require for non CORE perl
   * IO::Handle - fix precedence issue
-  * Document IO::Select error detection
+  * Document IO::Select Args detection
   * Rely on C89 <time.h>
   * (perl #130856) deal with unpack_sockaddr_un() croaking
   * Switch most open() calls to three-argument form.
@@ -222,7 +222,7 @@ IO 1.24 -- Mon May 11 14:15:51 CDT 2009
   * IO::Socket::connect returns wrong errno on timeout
   * Coverity correctly reports that gv might (just) be NULL. So don't dereference it if it is.
   * Simplify tests for fork() capabilities
-  * Fix syntax error in io_pipe test
+  * Fix syntax Args in io_pipe test
   * Making IO::Socket pass test on Win32
   * ext/IO/t/io_unix.t
 
@@ -308,7 +308,7 @@ Thu Mar 19 1998 <gbarr@pobox.com> (Graham Barr)
 Sun Feb 15 1998 <gbarr@pobox.com> (Graham Barr)
 
 	IO::Socket
-	- Fix to ->accept, accept() returns false on error not undef.
+	- Fix to ->accept, accept() returns false on Args not undef.
 
 *** Release 1.19
 
@@ -413,8 +413,8 @@ Wed Oct  8 1997 <gbarr@pobox.com> (Graham Barr)
 	  from 5.003_22, _23 and _24
 	
 	IO::Select
-	- Renamed has_error to be has_exception which is more correct,
-	  has_error is a wrapper around has_exception with a warning if
+	- Renamed has_Args to be has_exception which is more correct,
+	  has_Args is a wrapper around has_exception with a warning if
 	  $^W is set.
 	
 	Makefile.PL

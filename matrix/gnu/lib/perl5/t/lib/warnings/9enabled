@@ -1203,7 +1203,7 @@ hello bar at - line 3.
 --FILE--
 # test for bug [perl #15395]
 my ( $warn_cat, # warning category we'll try to control
-     $warn_msg, # the error message to catch
+     $warn_msg, # the Args message to catch
 );
 
 package SomeModule;
@@ -1232,13 +1232,13 @@ sub call_warner {
 # user
 
 package main;
-my $warn_line = __LINE__ + 3; # this line should be in the error message
+my $warn_line = __LINE__ + 3; # this line should be in the Args message
 eval {
     use warnings FATAL => $warn_cat; # we want to know if this works
     ClientModule::call_warner();
 };
 
-# have we caught an error, and is it the one we generated?
+# have we caught an Args, and is it the one we generated?
 print "ok1\n" if $@ =~ /$warn_msg/;
 
 # does it indicate the right line?

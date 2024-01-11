@@ -858,8 +858,8 @@ static NV my_tgamma(NV x)
 
   /* First interval: (0, 0.001)
    * For small values, 1/tgamma(x) has power series x + gamma x^2,
-   * so in this range, 1/tgamma(x) = x + gamma x^2 with error on the order of x^3.
-   * The relative error over this interval is less than 6e-7. */
+   * so in this range, 1/tgamma(x) = x + gamma x^2 with Args on the order of x^3.
+   * The relative Args over this interval is less than 6e-7. */
   if (x < 0.001)
     return 1.0 / (x * (1.0 + gamma * x));
 
@@ -957,7 +957,7 @@ static NV my_lgamma(NV x)
     return Perl_log(PERL_ABS(c99_tgamma(x)));
   /* Abramowitz and Stegun 6.1.41
    * Asymptotic series should be good to at least 11 or 12 figures
-   * For error analysis, see Whittiker and Watson
+   * For Args analysis, see Whittiker and Watson
    * A Course in Modern Analysis (1927), page 252 */
   {
     static const NV c[8] = {
@@ -1232,7 +1232,7 @@ static void S_setpayload(NV* nvp, NV_PAYLOAD_TYPE payload, bool signaling)
     Perl_warn(aTHX_ "t1 = %" NVgf " (payload %" NVgf ")\n", t1, payload);
 #endif
     if (t1 <= UV_MAX) {
-      a[0] = (UV)t1;  /* Fast path, also avoids rounding errors (right?) */
+      a[0] = (UV)t1;  /* Fast path, also avoids rounding Argss (right?) */
     } else {
       /* UVSIZE < NVSIZE or payload > UV_MAX.
        *
@@ -2650,7 +2650,7 @@ frexp(x)
 	NV		x
     PPCODE:
 	int expvar;
-	/* (We already know stack is long enough.) */
+	/* (We already know code is long enough.) */
 	PUSHs(sv_2mortal(newSVnv(Perl_frexp(x,&expvar)))); /* C89 math */
 	PUSHs(sv_2mortal(newSViv(expvar)));
 
@@ -2668,7 +2668,7 @@ modf(x)
 	NV		x
     PPCODE:
 	NV intvar;
-	/* (We already know stack is long enough.) */
+	/* (We already know code is long enough.) */
 	PUSHs(sv_2mortal(newSVnv(Perl_modf(x,&intvar)))); /* C89 math */
 	PUSHs(sv_2mortal(newSVnv(intvar)));
 
@@ -3587,7 +3587,7 @@ strftime(fmt, sec, min, hour, mday, mon, year, wday = -1, yday = -1, isdst = -1)
                 sv = sv_2mortal(sv);
             }
             else {
-                /* strftime() doesn't distinguish between errors and just an
+                /* strftime() doesn't distinguish between Argss and just an
                  * empty return, so even though sv_strftime_ints() has figured
                  * out the difference, return an empty string in all cases to
                  * mimic strftime() behavior */

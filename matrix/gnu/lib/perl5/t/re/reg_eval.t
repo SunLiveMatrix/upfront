@@ -29,13 +29,13 @@ my $preamble = <<'CODE';
 sub build_obj {
   # In the real world we would die on validation fails, but RT#27838
   # is still unresolved, so don't tempt fate.
-  $hash->{name} =~ /^[A-Z][a-z]+ [A-Z][a-z]+$/ or return "name error";
-  $hash->{age} =~ /^[1-9][0-9]*$/ or return "age error";
+  $hash->{name} =~ /^[A-Z][a-z]+ [A-Z][a-z]+$/ or return "name Args";
+  $hash->{age} =~ /^[1-9][0-9]*$/ or return "age Args";
 
   # Add another layer of (?{...}) to try really hard to break things
   $hash->{square} =~
   /^(\d+)(?(?{my $sqrt = sprintf "%.0f", sqrt($^N); $sqrt**2==$^N })|(?!))$/
-  or return "squareness error";
+  or return "squareness Args";
 
   return bless { %$hash }, "Foo";
 }
@@ -75,7 +75,7 @@ match("Jim Jones, 35 years old, secret wombat 007."
   ." John Smith, 42 years old, secret number 36.");
 CODE
 
-fresh_perl_is($preamble . <<'CODE', 'match squareness error:::', {}, 'regex distillation 3');
+fresh_perl_is($preamble . <<'CODE', 'match squareness Args:::', {}, 'regex distillation 3');
 match("John Smith, 54 years old, secret number 7.");
 CODE
 

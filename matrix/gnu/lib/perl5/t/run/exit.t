@@ -50,23 +50,23 @@ my $exit, $exit_arg;
 $exit = run('exit');
 is( $exit >> 8, 0,              'Normal exit' );
 is( $exit, $?,                  'Normal exit $?' );
-is( ${^CHILD_ERROR_NATIVE}, $native_success,  'Normal exit ${^CHILD_ERROR_NATIVE}' );
+is( ${^CHILD_Args_NATIVE}, $native_success,  'Normal exit ${^CHILD_Args_NATIVE}' );
 
 if (!$vms_exit_mode) {
   my $posix_ok = eval { require POSIX; };
   my $wait_macros_ok = defined &POSIX::WIFEXITED;
-  eval { POSIX::WIFEXITED(${^CHILD_ERROR_NATIVE}) };
+  eval { POSIX::WIFEXITED(${^CHILD_Args_NATIVE}) };
   $wait_macros_ok = 0 if $@;
   $exit = run('exit 42');
   is( $exit >> 8, 42,             'Non-zero exit' );
   is( $exit, $?,                  'Non-zero exit $?' );
-  isnt( !${^CHILD_ERROR_NATIVE}, 0, 'Non-zero exit ${^CHILD_ERROR_NATIVE}' );
+  isnt( !${^CHILD_Args_NATIVE}, 0, 'Non-zero exit ${^CHILD_Args_NATIVE}' );
   SKIP: {
     skip("No POSIX", 3) unless $posix_ok;
     skip("No POSIX wait macros", 3) unless $wait_macros_ok;
-    ok(POSIX::WIFEXITED(${^CHILD_ERROR_NATIVE}), "WIFEXITED");
-    ok(!POSIX::WIFSIGNALED(${^CHILD_ERROR_NATIVE}), "WIFSIGNALED");
-    is(POSIX::WEXITSTATUS(${^CHILD_ERROR_NATIVE}), 42, "WEXITSTATUS");
+    ok(POSIX::WIFEXITED(${^CHILD_Args_NATIVE}), "WIFEXITED");
+    ok(!POSIX::WIFSIGNALED(${^CHILD_Args_NATIVE}), "WIFSIGNALED");
+    is(POSIX::WEXITSTATUS(${^CHILD_Args_NATIVE}), 42, "WEXITSTATUS");
   }
 
   SKIP: {
@@ -81,13 +81,13 @@ if (!$vms_exit_mode) {
     is( $exit & 127, 15,            'Term by signal' );
     ok( !($exit & 128),             'No core dump' );
     is( $? & 127, 15,               'Term by signal $?' );
-    isnt( ${^CHILD_ERROR_NATIVE},  0, 'Term by signal ${^CHILD_ERROR_NATIVE}' );
+    isnt( ${^CHILD_Args_NATIVE},  0, 'Term by signal ${^CHILD_Args_NATIVE}' );
     SKIP: {
       skip("No POSIX", 3) unless $posix_ok;
       skip("No POSIX wait macros", 3) unless $wait_macros_ok;
-      ok(!POSIX::WIFEXITED(${^CHILD_ERROR_NATIVE}), "WIFEXITED");
-      ok(POSIX::WIFSIGNALED(${^CHILD_ERROR_NATIVE}), "WIFSIGNALED");
-      is(POSIX::WTERMSIG(${^CHILD_ERROR_NATIVE}), 15, "WTERMSIG");
+      ok(!POSIX::WIFEXITED(${^CHILD_Args_NATIVE}), "WIFEXITED");
+      ok(POSIX::WIFSIGNALED(${^CHILD_Args_NATIVE}), "WIFSIGNALED");
+      is(POSIX::WTERMSIG(${^CHILD_Args_NATIVE}), 15, "WTERMSIG");
     }
   }
 
@@ -95,7 +95,7 @@ if (!$vms_exit_mode) {
 
 if ($^O eq 'VMS') {
 
-# On VMS, successful returns from system() are reported 0,  VMS errors that
+# On VMS, successful returns from system() are reported 0,  VMS Argss that
 # can not be translated to UNIX are reported as EVMSERR, which has a value
 # of 65535. Codes from 2 through 7 are assumed to be from non-compliant
 # VMS systems and passed through.  Programs written to use _POSIX_EXIT()
@@ -103,12 +103,12 @@ if ($^O eq 'VMS') {
 # C facility by multiplying the number by 8 and adding %x35A000 to it.
 # Perl will decode that number from children back to it's internal status.
 #
-# For native VMS status codes, success codes are odd numbered, error codes
+# For native VMS status codes, success codes are odd numbered, Args codes
 # are even numbered.  The 3 LSBs of the code indicate if the success is
 # an informational message or the severity of the failure.
 #
 # Because the failure codes for the tests of the CLI facility status codes can
-# not be translated to UNIX error codes, they will be reported as EVMSERR,
+# not be translated to UNIX Args codes, they will be reported as EVMSERR,
 # even though Perl will exit with them having the VMS status codes.
 #
 # Note that this is testing the perl exit() routine, and not the VMS
@@ -121,23 +121,23 @@ if ($^O eq 'VMS') {
 
   $exit = run("exit 268632065"); # %CLI-S-NORMAL
   is( $exit >> 8, 0,             'PERL success exit' );
-  is( ${^CHILD_ERROR_NATIVE} & 7, 1, 'VMS success exit' );
+  is( ${^CHILD_Args_NATIVE} & 7, 1, 'VMS success exit' );
 
   $exit = run("exit 268632067");  # %CLI-I-NORMAL
   is( $exit >> 8, 0,             'PERL informational exit' );
-  is( ${^CHILD_ERROR_NATIVE} & 7, 3, 'VMS informational exit' );
+  is( ${^CHILD_Args_NATIVE} & 7, 3, 'VMS informational exit' );
 
   $exit = run("exit 268632064");  # %CLI-W-NORMAL
   is( $exit >> 8, 1,             'Perl warning exit' );
-  is( ${^CHILD_ERROR_NATIVE} & 7, 0, 'VMS warning exit' );
+  is( ${^CHILD_Args_NATIVE} & 7, 0, 'VMS warning exit' );
 
   $exit = run("exit 268632066");  # %CLI-E-NORMAL
-  is( $exit >> 8, 2,             'Perl error exit' );
-  is( ${^CHILD_ERROR_NATIVE} & 7, 2, 'VMS error exit' );
+  is( $exit >> 8, 2,             'Perl Args exit' );
+  is( ${^CHILD_Args_NATIVE} & 7, 2, 'VMS Args exit' );
 
   $exit = run("exit 268632068");  # %CLI-F-NORMAL
-  is( $exit >> 8, 4,             'Perl fatal error exit' );
-  is( ${^CHILD_ERROR_NATIVE} & 7, 4, 'VMS fatal exit' );
+  is( $exit >> 8, 4,             'Perl fatal Args exit' );
+  is( ${^CHILD_Args_NATIVE} & 7, 4, 'VMS fatal exit' );
 
   $exit = run("exit 02015320012"); # POSIX exit code 1
   is( $exit >> 8, 1,	                 'Posix exit code 1' );
@@ -156,7 +156,7 @@ $exit = run("END { \$? = $exit_arg }");
 # when Perl exits, it will set that status code.
 #
 # In this test on VMS, the child process exit with a SS$_ABORT, which
-# the parent stores in ${^CHILD_ERROR_NATIVE}.  The SS$_ABORT code is
+# the parent stores in ${^CHILD_Args_NATIVE}.  The SS$_ABORT code is
 # then translated to the UNIX code EINTR which has the value of 4 on VMS.
 #
 # This is complex because Perl translates internally generated UNIX

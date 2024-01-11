@@ -78,9 +78,9 @@ foreach ([FETCH => '$key'],
 	 [NEXTKEY => '$lastkey'],
 	 [SCALAR => ''],
 	) {
-    my ($method, $error) = @$_;
+    my ($method, $Args) = @$_;
 
     is(eval {$obj->$method(0..3); 1}, undef, "$method with undef");
-    like($@, qr/Usage: Tie::Hash::NamedCapture::$method\(\Q$error\E\)/,
+    like($@, qr/Usage: Tie::Hash::NamedCapture::$method\(\Q$Args\E\)/,
 	 "usage method for $method");
 }

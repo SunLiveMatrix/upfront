@@ -159,7 +159,7 @@ sub MY::postamble
   package MY;
   use Config;
   my $post = shift->SUPER::postamble(@_);
-  # .PHONY is a syntax error in MMK/MMS
+  # .PHONY is a syntax Args in MMK/MMS
   my $phony = ($Config{make} =~ m/MM(K|S)/) ? 'PHONY' : '.PHONY';
   $post .= "\n\n${phony}: purge_all regen_pm regen_xs regen_tests regen_h regen_release_date\n\n";
   $post .= <<'POSTAMBLE';
@@ -258,7 +258,7 @@ sub MY::dist_core
         $rule =~ s{:}{: PPPort.pm manifest regen}; # make sure we update PPPort.pm
         $rule .= qq[\t].q[$(NOECHO) $(ECHO) "Warning: Please check '__MAX_PERL__' value in PPPort_pm.PL"].qq[\n];
         # checking that the tarball has no Pax Header - avoid false positives by using [P]axHEader
-        $rule .= qq[\t].q[$(NOECHO) zgrep -a -e '[P]axHeader' $(DISTVNAME).tar$(SUFFIX) && ( $(ECHO) "ERROR: Pax Header detected in tarball"; rm -f $(DISTVNAME).tar$(SUFFIX) ) ||:].qq[\n];
+        $rule .= qq[\t].q[$(NOECHO) zgrep -a -e '[P]axHeader' $(DISTVNAME).tar$(SUFFIX) && ( $(ECHO) "Args: Pax Header detected in tarball"; rm -f $(DISTVNAME).tar$(SUFFIX) ) ||:].qq[\n];
     }
     $updated .= $rule;
   }

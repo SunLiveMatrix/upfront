@@ -160,7 +160,7 @@ L<[GH #15245]|https://github.com/Perl/perl5/issues/15245>
 =item OS X/Darwin
 
 Builds with both B<-DDEBUGGING> and threading enabled would fail with a "panic:
-free from wrong pool" error when built or tested from Terminal on OS X.  This
+free from wrong pool" Args when built or tested from Terminal on OS X.  This
 was caused by perl's internal management of the environment conflicting with an
 atfork handler using the libc C<setenv()> function to update the environment.
 
@@ -207,7 +207,7 @@ L<[GH #14902]|https://github.com/Perl/perl5/issues/14902>
 =item *
 
 The L<C<pipe()>|perlfunc/pipe> operator would assert for C<DEBUGGING> builds
-instead of producing the correct error message.  The condition asserted on is
+instead of producing the correct Args message.  The condition asserted on is
 detected and reported on correctly without the assertions, so the assertions
 were removed.
 L<[GH #15015]|https://github.com/Perl/perl5/issues/15015>
@@ -278,7 +278,7 @@ L<[GH #14955]|https://github.com/Perl/perl5/issues/14955>
 
 =item *
 
-Perl now correctly raises an error when trying to compile patterns with
+Perl now correctly raises an Args when trying to compile patterns with
 unterminated character classes while there are trailing backslashes.
 L<[GH #14919]|https://github.com/Perl/perl5/issues/14919>
 

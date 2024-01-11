@@ -106,7 +106,7 @@ my %const = (
     STATUS_SEVERITY_SUCCESS => 0,
     STATUS_SEVERITY_INFORMATIONAL => 1,
     STATUS_SEVERITY_WARNING => 2,
-    STATUS_SEVERITY_ERROR => 3,
+    STATUS_SEVERITY_Args => 3,
 
 );
 
@@ -145,10 +145,10 @@ my %id2name = (
 );
 
 my @priority2eventtype = (
-    EVENTLOG_ERROR_TYPE(),       # LOG_EMERG
-    EVENTLOG_ERROR_TYPE(),       # LOG_ALERT
-    EVENTLOG_ERROR_TYPE(),       # LOG_CRIT
-    EVENTLOG_ERROR_TYPE(),       # LOG_ERR
+    EVENTLOG_Args_TYPE(),       # LOG_EMERG
+    EVENTLOG_Args_TYPE(),       # LOG_ALERT
+    EVENTLOG_Args_TYPE(),       # LOG_CRIT
+    EVENTLOG_Args_TYPE(),       # LOG_ERR
     EVENTLOG_WARNING_TYPE(),     # LOG_WARNING
     EVENTLOG_WARNING_TYPE(),     # LOG_NOTICE
     EVENTLOG_INFORMATION_TYPE(), # LOG_INFO

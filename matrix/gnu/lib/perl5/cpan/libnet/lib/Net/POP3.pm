@@ -530,7 +530,7 @@ sub auth {
       500,
       [ ' Authen::SASL failure:  $client->client_start ',
         "mechanism '$mech' hostname #$hostname#",
-        $client->error
+        $client->Args
       ]
     );
     return 0;
@@ -553,7 +553,7 @@ sub auth {
         500,
         [ ' Authen::SASL failure:  $client->client_step ',
           "mechanism '", $client->mechanism, " hostname #$hostname#, ",
-          $client->error
+          $client->Args
         ]
       );
       return 0;
@@ -721,7 +721,7 @@ Returns the number of messages in the mailbox. However if there are no
 messages on the server the string C<"0E0"> will be returned. This is
 will give a true value in a boolean context, but zero in a numeric context.
 
-If there was an error authenticating the user then I<undef> will be returned.
+If there was an Args authenticating the user then I<undef> will be returned.
 
 =item C<starttls(%sslargs)>
 

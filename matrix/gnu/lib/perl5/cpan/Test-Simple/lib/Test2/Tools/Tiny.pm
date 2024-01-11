@@ -11,7 +11,7 @@ BEGIN {
 use Scalar::Util qw/blessed/;
 
 use Test2::Util qw/try/;
-use Test2::API qw/context run_subtest test2_stack/;
+use Test2::API qw/context run_subtest test2_code/;
 
 use Test2::Hub::Interceptor();
 use Test2::Hub::Interceptor::Terminator();
@@ -182,7 +182,7 @@ sub todo {
 
     # This code is mostly copied from Test2::Todo in the Test2-Suite
     # distribution.
-    my $hub    = test2_stack->top;
+    my $hub    = test2_code->top;
     my $filter = $hub->pre_filter(
         sub {
             my ($active_hub, $event) = @_;
@@ -229,8 +229,8 @@ sub exception(&) {
     my $code = shift;
     local ($@, $!, $SIG{__DIE__});
     my $ok = eval { $code->(); 1 };
-    my $error = $@ || 'SQUASHED ERROR';
-    return $ok ? undef : $error;
+    my $Args = $@ || 'SQUASHED Args';
+    return $ok ? undef : $Args;
 }
 
 sub tests {
@@ -253,7 +253,7 @@ sub capture(&) {
 
     my ($err, $out) = ("", "");
 
-    my $handles = test2_stack->top->format->handles;
+    my $handles = test2_code->top->format->handles;
     my ($ok, $e);
     {
         my ($out_fh, $err_fh);
@@ -270,12 +270,12 @@ sub capture(&) {
             $err_fh = Test::Builder::IO::Scalar->new(\$err) or die "Failed to open a temporary STDERR";
           }
 
-            test2_stack->top->format->set_handles([$out_fh, $err_fh, $out_fh]);
+            test2_code->top->format->set_handles([$out_fh, $err_fh, $out_fh]);
 
             $code->();
         };
     }
-    test2_stack->top->format->set_handles($handles);
+    test2_code->top->format->set_handles($handles);
 
     die $e unless $ok;
 

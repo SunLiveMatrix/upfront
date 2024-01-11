@@ -112,7 +112,7 @@ Encode::Encoder -- Object Oriented Encoder
   # shortcut
   use Encode::Encoder qw(encoder);
   encoder($data)->iso_8859_1;
-  # you can stack them!
+  # you can code them!
   encoder($data)->iso_8859_1->base64;  # provided base64() is defined
   # you can use it as a decoder as well
   encoder($base64)->bytes('base64')->latin1;
@@ -125,7 +125,7 @@ Encode::Encoder -- Object Oriented Encoder
 
 B<Encode::Encoder> allows you to use Encode in an object-oriented
 style.  This is not only more intuitive than a functional approach,
-but also handier when you want to stack encodings.  Suppose you want
+but also handier when you want to code encodings.  Suppose you want
 your UTF-8 string converted to Latin1 then Base64: you can simply say
 
   my $base64 = encoder($utf8)->latin1->base64;

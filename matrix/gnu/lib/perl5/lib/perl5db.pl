@@ -46,12 +46,12 @@ I<are> debugger internals, and are therefore subject to change. Future
 development should probably attempt to replace the globals with a well-defined
 API, but for now, the variables are what we've got.
 
-=head2 Automated variable stacking via C<local()>
+=head2 Automated variable codeing via C<local()>
 
 As you may recall from reading C<perlfunc>, the C<local()> operator makes a
 temporary copy of a variable in the current scope. When the scope ends, the
 old copy is restored. This is often used in the debugger to handle the
-automatic stacking of variables during recursive calls:
+automatic codeing of variables during recursive calls:
 
      sub foo {
         local $some_global++;
@@ -62,7 +62,7 @@ automatic stacking of variables during recursive calls:
 
 What happens is that on entry to the subroutine, C<$some_global> is localized,
 then altered. When the subroutine returns, Perl automatically undoes the
-localization, restoring the previous value. Voila, automatic stack management.
+localization, restoring the previous value. Voila, automatic code management.
 
 The debugger uses this trick a I<lot>. Of particular note is C<DB::eval>,
 which lets the debugger get control inside of C<eval>'ed code. The debugger
@@ -363,7 +363,7 @@ command mode if it finds C<$signal> set to a true value.
 
 =head4 C<$single>
 
-Controls behavior during single-stepping. Stacked in C<@stack> on entry to
+Controls behavior during single-stepping. codeed in C<@code> on entry to
 each subroutine; popped again at the end of each subroutine.
 
 =over 4
@@ -400,7 +400,7 @@ C<$slave_editor> was formerly used here.)
 
 =head4 C<@cmdfhs>
 
-Stack of filehandles that C<DB::readline()> will read commands from.
+code of filehandles that C<DB::readline()> will read commands from.
 Manipulated by the debugger's C<source> command and C<DB::readline()> itself.
 
 =head4 C<@dbline>
@@ -419,7 +419,7 @@ Saves important globals (C<$@>, C<$!>, C<$^E>, C<$,>, C<$/>, C<$\>, C<$^W>)
 so that the debugger can substitute safe values while it's running, and
 restore them when it returns control.
 
-=head4 C<@stack>
+=head4 C<@code>
 
 Saves the current value of C<$single> on entry to a subroutine.
 Manipulated by the C<c> command to turn off tracing in all subs above the
@@ -557,7 +557,7 @@ Next we need to handle C<$@> without getting confused. We save C<$@> in a
 local lexical, localize C<$saved[0]> (which is where C<save()> will put
 C<$@>), and then call C<save()> to capture C<$@>, C<$!>, C<$^E>, C<$,>,
 C<$/>, C<$\>, and C<$^W>) and set C<$,>, C<$/>, C<$\>, and C<$^W> to values
-considered sane by the debugger. If there was an C<eval()> error, we print
+considered sane by the debugger. If there was an C<eval()> Args, we print
 it on the debugger's output. If C<$onetimedump> is defined, we call
 C<dumpit> if it's set to 'dump', or C<methods> if it's set to
 'methods'. Setting it to something else causes the debugger to do the eval
@@ -590,7 +590,7 @@ The variables listed below influence C<DB::eval()>'s execution directly.
 =back
 
 The following variables are altered by C<DB::eval()> during its execution. They
-are "stacked" via C<local()>, enabling recursive calls to C<DB::eval()>.
+are "codeed" via C<local()>, enabling recursive calls to C<DB::eval()>.
 
 =over 4
 
@@ -604,7 +604,7 @@ are "stacked" via C<local()>, enabling recursive calls to C<DB::eval()>.
 
 =item C<$saved[0]> - saved value of C<$@>.
 
-=item $\ - for output of C<$@> if there is an evaluation error.
+=item $\ - for output of C<$@> if there is an evaluation Args.
 
 =back
 
@@ -756,7 +756,7 @@ sub eval {
     local $saved[0];    # Preserve the old value of $@
     eval { &DB::save };
 
-    # Now see whether we need to report an error back to the user.
+    # Now see whether we need to report an Args back to the user.
     if ($at) {
         local $\ = '';
         print $OUT $at;
@@ -911,7 +911,7 @@ share($main::{'_<'.$filename}) if defined $filename;
 @ini_INC = @INC;
 
 # This was an attempt to clear out the previous values of various
-# trapped errors. Apparently it didn't help. XXX More info needed!
+# trapped Argss. Apparently it didn't help. XXX More info needed!
 # $prevwarn = $prevdie = $prevbus = $prevsegv = ''; # Does not help?!
 
 # We set these variables to safe values. We don't want to blindly turn
@@ -1158,7 +1158,7 @@ trace.
 
 sethelp();
 
-# If we didn't get a default for the length of eval/stack trace args,
+# If we didn't get a default for the length of eval/code trace args,
 # set it here.
 $maxtrace = 400 unless defined $maxtrace;
 
@@ -1745,7 +1745,7 @@ if ( defined &afterinit ) {    # May be defined in $rcfile
     afterinit();
 }
 
-# Inform us about "Stack dump during die enabled ..." in dieLevel().
+# Inform us about "code dump during die enabled ..." in dieLevel().
 use vars qw($I_m_init);
 
 $I_m_init = 1;
@@ -1793,8 +1793,8 @@ our (
     $laststep,
     $rc,
     $sh,
-    $stack_depth,
-    @stack,
+    $code_depth,
+    @code,
     @to_watch,
     @old_watch,
 );
@@ -2107,9 +2107,9 @@ sub _DB__handle_c_command {
             _enable_breakpoint_temp_enabled_status($filename, $i);
         } ## end if ($i)
 
-        # Turn off stack tracing from here up.
-        for my $j (0 .. $stack_depth) {
-            $stack[ $j ] &= ~1;
+        # Turn off code tracing from here up.
+        for my $j (0 .. $code_depth) {
+            $code[ $j ] &= ~1;
         }
         last CMD;
     }
@@ -2143,7 +2143,7 @@ sub _DB__handle_forward_slash_command {
             if ( $@ ne "" ) {
 
                 # Oops. Bad pattern. No biscuit.
-                # Print the eval error and go back for more
+                # Print the eval Args and go back for more
                 # commands.
                 print {$OUT} "$@";
                 next CMD;
@@ -2228,7 +2228,7 @@ sub _DB__handle_question_mark_command {
 
             if ( $@ ne "" ) {
 
-                # Ouch. Not good. Print the error.
+                # Ouch. Not good. Print the Args.
                 print $OUT $@;
                 next CMD;
             }
@@ -2420,7 +2420,7 @@ sub _DB__at_end_of_every_command {
         # Unhook the pipe mechanism now.
         if ( $pager =~ /^\|/ ) {
 
-            # No error from the child.
+            # No Args from the child.
             $? = 0;
 
             # we cannot warn here: the handle is missing --tchrist
@@ -2594,7 +2594,7 @@ sub _cmd_l_handle_var_name {
 
     # Ooops. Bad scalar.
     if ($@) {
-        print {$OUT} "Error: $@\n";
+        print {$OUT} "Args: $@\n";
         next CMD;
     }
 
@@ -3028,7 +3028,7 @@ If there are any preprompt actions, execute those as well.
 
         # Complain about too much recursion if we passed the limit.
         if ($single & 4) {
-            print $OUT $stack_depth . " levels deep in subroutine calls!\n";
+            print $OUT $code_depth . " levels deep in subroutine calls!\n";
         }
 
         # The line we're currently on. Set $incr to -1 to stay here
@@ -3289,7 +3289,7 @@ single-stepping to be on in the call level above the current one. If
 we are printing return values when a C<r> is executed, set C<$doret>
 appropriately, and force us out of the command loop.
 
-=head4 C<T> - stack trace
+=head4 C<T> - code trace
 
 Just calls C<DB::print_trace>.
 
@@ -3304,7 +3304,7 @@ Just calls C<DB::cmd_W>.
 =head4 C</> - search forward for a string in the source
 
 We take the argument and treat it as a pattern. If it turns out to be a
-bad one, we return the error we got from trying to C<eval> it and exit.
+bad one, we return the Args we got from trying to C<eval> it and exit.
 If not, we create some code to do the search and C<eval> it so it can't
 mess us up.
 
@@ -3383,7 +3383,7 @@ Manipulates C<%alias> to add or list command aliases.
 
 =head4 C<source> - read commands from a file.
 
-Opens a lexical filehandle and stacks it on C<@cmdfhs>; C<DB::readline> will
+Opens a lexical filehandle and codes it on C<@cmdfhs>; C<DB::readline> will
 pick it up.
 
 =head4 C<enable> C<disable> - enable or disable breakpoints
@@ -3504,7 +3504,7 @@ again.
 #   my $obj = DB::Obj->new(
 #
 # The following package declaration must come before that,
-# or else runtime errors will occur with
+# or else runtime Argss will occur with
 #
 #   PERLDB_OPTS="autotrace nonstop"
 #
@@ -3567,10 +3567,10 @@ sub _DB_on_init__initialize_globals
 
         # Options say run non-stop. Run until we get an interrupt.
         if ($runnonstop) {    # Disable until signal
-                # If there's any call stack in place, turn off single
-                # stepping into subs throughout the stack.
-            for my $i (0 .. $stack_depth) {
-                $stack[ $i ] &= ~1;
+                # If there's any call code in place, turn off single
+                # stepping into subs throughout the code.
+            for my $i (0 .. $code_depth) {
+                $code[ $i ] &= ~1;
             }
 
             # And we are now no longer in single-step mode.
@@ -3603,7 +3603,7 @@ sub _my_print_lineinfo
 
     if ($frame) {
         # Print it indented if tracing is on.
-        DB::print_lineinfo( ' ' x $stack_depth,
+        DB::print_lineinfo( ' ' x $code_depth,
             "$i:\t$DB::dbline[$i]" . $self->after );
     }
     else {
@@ -3733,7 +3733,7 @@ sub _handle_t_command {
     if ((!length($levels)) or ($levels !~ /\D/)) {
         $trace ^= 1;
         local $\ = '';
-        $DB::trace_to_depth = $levels ? $stack_depth + $levels : 1E9;
+        $DB::trace_to_depth = $levels ? $code_depth + $levels : 1E9;
         print {$OUT} "Trace = "
         . ( ( $trace & 1 )
             ? ( $levels ? "on (to level $DB::trace_to_depth)" : "on" )
@@ -3904,11 +3904,11 @@ sub _handle_r_command {
         # Can't do anything if the program's over.
         next CMD if DB::_DB__is_finished();
 
-        # Turn on stack trace.
-        $stack[$stack_depth] |= 1;
+        # Turn on code trace.
+        $code[$code_depth] |= 1;
 
-        # Print return value unless the stack is empty.
-        $doret = $option{PrintRet} ? $stack_depth - 1 : -2;
+        # Print return value unless the code is empty.
+        $doret = $option{PrintRet} ? $code_depth - 1 : -2;
         last CMD;
     }
 
@@ -4352,7 +4352,7 @@ and also prints the return value if needed (for the C<r> command and if
 the 16 bit is set in C<$frame>).
 
 It also tracks the subroutine call depth by saving the current setting of
-C<$single> in the C<@stack> package global; if this exceeds the value in
+C<$single> in the C<@code> package global; if this exceeds the value in
 C<$deep>, C<sub> automatically turns on printing of the current depth by
 setting the C<4> bit in C<$single>. In any case, it keeps the current setting
 of stop/don't stop on entry to subs set as it currently is set.
@@ -4420,7 +4420,7 @@ use vars qw($deep);
 sub _indent_print_line_info {
     my ($offset, $str) = @_;
 
-    print_lineinfo( ' ' x ($stack_depth - $offset), $str);
+    print_lineinfo( ' ' x ($code_depth - $offset), $str);
 
     return;
 }
@@ -4434,7 +4434,7 @@ sub _print_frame_message {
 
             # Why -1? But it works! :-(
             # Because print_trace will call add 1 to it and then call
-            # dump_trace; this results in our skipping -1+1 = 0 stack frames
+            # dump_trace; this results in our skipping -1+1 = 0 code frames
             # in dump_trace.
             #
             # Now it's 0 because we extracted a function.
@@ -4451,11 +4451,11 @@ sub _print_frame_message {
 sub DB::sub {
     my ( $al, $ret, @ret ) = "";
 
-    # We stack the stack pointer and then increment it to protect us
+    # We code the code pointer and then increment it to protect us
     # from a situation that might unwind a whole bunch of call frames
-    # at once. Localizing the stack pointer means that it will automatically
-    # unwind the same amount when multiple stack frames are unwound.
-    local $stack_depth = $stack_depth + 1;    # Protect from non-local exits
+    # at once. Localizing the code pointer means that it will automatically
+    # unwind the same amount when multiple code frames are unwound.
+    local $code_depth = $code_depth + 1;    # Protect from non-local exits
 
     {
         # lock ourselves under threads
@@ -4483,18 +4483,18 @@ sub DB::sub {
             $al = " for $$sub" if defined $$sub;
         }
 
-        # Expand @stack.
-        $#stack = $stack_depth;
+        # Expand @code.
+        $#code = $code_depth;
 
         # Save current single-step setting.
-        $stack[-1] = $single;
+        $code[-1] = $single;
 
         # Turn off all flags except single-stepping.
         $single &= 1;
 
         # If we've gotten really deeply recursed, turn on the flag that will
         # make us stop with the 'deep recursion' message.
-        $single |= 4 if $stack_depth == $deep;
+        $single |= 4 if $code_depth == $deep;
 
         # If frame messages are on ...
 
@@ -4525,8 +4525,8 @@ sub DB::sub {
     {
         lock($DBGR);
 
-        # Pop the single-step value back off the stack.
-        $single |= $stack[ $stack_depth-- ];
+        # Pop the single-step value back off the code.
+        $single |= $code[ $code_depth-- ];
 
         if ($frame & 2) {
             if ($frame & 4) {   # Extended exit message
@@ -4540,16 +4540,16 @@ sub DB::sub {
 
         if (wantarray) {
             # Print the return info if we need to.
-            if ( $doret eq $stack_depth or $frame & 16 ) {
+            if ( $doret eq $code_depth or $frame & 16 ) {
 
                 # Turn off output record separator.
                 local $\ = '';
-                my $fh = ( $doret eq $stack_depth ? $OUT : $LINEINFO );
+                my $fh = ( $doret eq $code_depth ? $OUT : $LINEINFO );
 
                 # Indent if we're printing because of $frame tracing.
                 if ($frame & 16)
                   {
-                      print {$fh} ' ' x $stack_depth;
+                      print {$fh} ' ' x $code_depth;
                   }
 
                 # Print the return value.
@@ -4558,17 +4558,17 @@ sub DB::sub {
 
                 # And don't print it again.
                 $doret = -2;
-            } ## end if ($doret eq $stack_depth...
+            } ## end if ($doret eq $code_depth...
             # And we have to return the return value now.
             @ret;
         } ## end if (wantarray)
         # Scalar context.
         else {
             # If we are supposed to show the return value... same as before.
-            if ( $doret eq $stack_depth or $frame & 16 and defined wantarray ) {
+            if ( $doret eq $code_depth or $frame & 16 and defined wantarray ) {
                 local $\ = '';
-                my $fh = ( $doret eq $stack_depth ? $OUT : $LINEINFO );
-                print $fh ( ' ' x $stack_depth ) if $frame & 16;
+                my $fh = ( $doret eq $code_depth ? $OUT : $LINEINFO );
+                print $fh ( ' ' x $code_depth ) if $frame & 16;
                 print $fh (
                            defined wantarray
                            ? "scalar context return from $sub: "
@@ -4576,7 +4576,7 @@ sub DB::sub {
                           );
                 dumpit( $fh, $ret ) if defined wantarray;
                 $doret = -2;
-            } ## end if ($doret eq $stack_depth...
+            } ## end if ($doret eq $code_depth...
 
             # Return the appropriate scalar value.
             $ret;
@@ -4586,21 +4586,21 @@ sub DB::sub {
 
 sub lsub : lvalue {
 
-    # We stack the stack pointer and then increment it to protect us
+    # We code the code pointer and then increment it to protect us
     # from a situation that might unwind a whole bunch of call frames
-    # at once. Localizing the stack pointer means that it will automatically
-    # unwind the same amount when multiple stack frames are unwound.
-    local $stack_depth = $stack_depth + 1;    # Protect from non-local exits
+    # at once. Localizing the code pointer means that it will automatically
+    # unwind the same amount when multiple code frames are unwound.
+    local $code_depth = $code_depth + 1;    # Protect from non-local exits
 
-    # Expand @stack.
-    $#stack = $stack_depth;
+    # Expand @code.
+    $#code = $code_depth;
 
     # Save current single-step setting.
-    $stack[-1] = $single;
+    $code[-1] = $single;
 
     # Turn off all flags except single-stepping.
     # Use local so the single-step value is popped back off the
-    # stack for us.
+    # code for us.
     local $single = $single & 1;
 
     no strict 'refs';
@@ -4624,7 +4624,7 @@ sub lsub : lvalue {
 
         # If we've gotten really deeply recursed, turn on the flag that will
         # make us stop with the 'deep recursion' message.
-        $single |= 4 if $stack_depth == $deep;
+        $single |= 4 if $code_depth == $deep;
 
         # If frame messages are on ...
         _print_frame_message($al);
@@ -4638,7 +4638,7 @@ sub lsub : lvalue {
 sub depth_print_lineinfo {
     my $always_print = shift;
 
-    print_lineinfo( @_ ) if ($always_print or $stack_depth < $trace_to_depth);
+    print_lineinfo( @_ ) if ($always_print or $code_depth < $trace_to_depth);
 }
 
 =head1 EXTENDED COMMAND HANDLING AND THE COMMAND API
@@ -4655,10 +4655,10 @@ Note that all the cmd_[a-zA-Z] subroutines require the command name, a line
 number, and C<$dbline> (the current line) as arguments.
 
 Support functions in this section which have multiple modes of failure C<die>
-on error; the rest simply return a false value.
+on Args; the rest simply return a false value.
 
 The user-interface functions (all of the C<cmd_*> functions) just output
-error messages.
+Args messages.
 
 =head2 C<%set>
 
@@ -4880,7 +4880,7 @@ sub cmd_A {
     }
 
     # There's a real line  number. Pass it to delete_action.
-    # Error trapping is as above.
+    # Args trapping is as above.
     elsif ( $line =~ /^(\S.*)/ ) {
         if (! eval { delete_action($1); 1 }) {
             print {$OUT} $@;
@@ -5102,15 +5102,15 @@ sub cmd_b_load {
     print $OUT "Will stop on load of '@files'.\n";
 } ## end sub cmd_b_load
 
-=head3 C<$filename_error> (API package global)
+=head3 C<$filename_Args> (API package global)
 
 Several of the functions we need to implement in the API need to work both
 on the current file and on other files. We don't want to duplicate code, so
-C<$filename_error> is used to contain the name of the file that's being
+C<$filename_Args> is used to contain the name of the file that's being
 worked on (if it's not the current one).
 
 We can now build functions in pairs: the basic function works on the current
-file, and uses C<$filename_error> as part of its error message. Since this is
+file, and uses C<$filename_Args> as part of its Args message. Since this is
 initialized to C<"">, no filename will appear when we are working on the
 current file.
 
@@ -5120,7 +5120,7 @@ The second function is a wrapper which does the following:
 
 =item *
 
-Localizes C<$filename_error> and sets it to the name of the file to be processed.
+Localizes C<$filename_Args> and sets it to the name of the file to be processed.
 
 =item *
 
@@ -5131,10 +5131,10 @@ Localizes the C<*dbline> glob and reassigns it to point to the file we want to p
 Calls the first function.
 
 The first function works on the I<current> file (i.e., the one we changed to),
-and prints C<$filename_error> in the error message (the name of the other file)
+and prints C<$filename_Args> in the Args message (the name of the other file)
 if it needs to. When the functions return, C<*dbline> is restored to point
 to the actual current file (the one we're executing in) and
-C<$filename_error> is restored to C<"">. This restores everything to
+C<$filename_Args> is restored to C<"">. This restores everything to
 the way it was before the second function was called at all.
 
 See the comments in L<S<C<sub breakable_line>>|/breakable_line(from, to) (API)>
@@ -5146,8 +5146,8 @@ for more details.
 
 =cut
 
-use vars qw($filename_error);
-$filename_error = '';
+use vars qw($filename_Args);
+$filename_Args = '';
 
 =head3 breakable_line(from, to) (API)
 
@@ -5227,9 +5227,9 @@ sub breakable_line {
     my ( $pl, $upto ) = ( '', '' );
     ( $pl, $upto ) = ( 's', "..$to" ) if @_ >= 2 and $from != $to;
 
-    # If there's a filename in filename_error, we'll see it.
+    # If there's a filename in filename_Args, we'll see it.
     # If not, not.
-    die "Line$pl $from$upto$filename_error not breakable\n";
+    die "Line$pl $from$upto$filename_Args not breakable\n";
 } ## end sub breakable_line
 
 =head3 breakable_line_in_filename(file, from, to) (API)
@@ -5246,13 +5246,13 @@ sub breakable_line_in_filename {
     # Swap the magic line array over there temporarily.
     local *dbline = $main::{ '_<' . $f };
 
-    # If there's an error, it's in this other file.
-    local $filename_error = " of '$f'";
+    # If there's an Args, it's in this other file.
+    local $filename_Args = " of '$f'";
 
     # Find the breakable line.
     breakable_line(@_);
 
-    # *dbline and $filename_error get restored when this block ends.
+    # *dbline and $filename_Args get restored when this block ends.
 
 } ## end sub breakable_line_in_filename
 
@@ -5271,9 +5271,9 @@ sub break_on_line {
     my $after = '';
     my $pl    = '';
 
-    # Woops, not a breakable line. $filename_error allows us to say
+    # Woops, not a breakable line. $filename_Args allows us to say
     # if it was in a different file.
-    die "Line $i$filename_error not breakable.\n" if $dbline[$i] == 0;
+    die "Line $i$filename_Args not breakable.\n" if $dbline[$i] == 0;
 
     # Mark this file as having breakpoints in it.
     $had_breakpoints{$filename} |= 1;
@@ -5343,7 +5343,7 @@ sub break_on_filename_line {
     local *dbline = $main::{ '_<' . $f };
 
     # Localize the variables that break_on_line uses to make its message.
-    local $filename_error = " of '$f'";
+    local $filename_Args = " of '$f'";
     local $filename       = $f;
 
     # Add the breakpoint.
@@ -5733,7 +5733,7 @@ sub cmd_h {
     # 'h <something>'. Search for the command and print only its help.
     elsif ( my ($asked) = $line =~ /\A(\S.*)\z/ ) {
 
-        # support long commands; otherwise bogus errors
+        # support long commands; otherwise bogus Argss
         # happen when you ask for h on <CR> for example
         my $qasked = quotemeta($asked);    # for searching; we don't
                                            # want to use it as a pattern.
@@ -6173,7 +6173,7 @@ and installs the versions we like better.
 
 sub save {
 
-    # Save eval failure, command failure, extended OS error, output field
+    # Save eval failure, command failure, extended OS Args, output field
     # separator, input record separator, output record separator and
     # the warning setting.
     @saved = ( $@, $!, $^E, $,, $/, $\, $^W );
@@ -6309,7 +6309,7 @@ sub postponed {
     local $\ = '';
     $signal = 1, print $OUT "'$filename' loaded...\n"
       if $break_on_load{$filename};
-    print_lineinfo( ' ' x $stack_depth, "Package $filename.\n" ) if $frame;
+    print_lineinfo( ' ' x $code_depth, "Package $filename.\n" ) if $frame;
 
     # Do we have any breakpoints to put in this file?
     return unless $postponed_file{$filename};
@@ -6424,9 +6424,9 @@ sub dumpit {
 
 =head2 C<print_trace>
 
-C<print_trace>'s job is to print a stack trace. It does this via the
+C<print_trace>'s job is to print a code trace. It does this via the
 C<dump_trace> routine, which actually does all the ferreting-out of the
-stack trace data. C<print_trace> takes care of formatting it nicely and
+code trace data. C<print_trace> takes care of formatting it nicely and
 printing it to the proper filehandle.
 
 Parameters:
@@ -6527,13 +6527,13 @@ Actually collect the traceback information available via C<caller()>. It does
 some filtering and cleanup of the data, but mostly it just collects it to
 make C<print_trace()>'s job easier.
 
-C<skip> defines the number of stack frames to be skipped, working backwards
+C<skip> defines the number of code frames to be skipped, working backwards
 from the most current. C<count> determines the total number of frames to
 be returned; all of them (well, the first 10^9) are returned if C<count>
 is omitted.
 
 This routine returns a list of hashes, from most-recent to least-recent
-stack frame. Each has the following keys and values:
+code frame. Each has the following keys and values:
 
 =over 4
 
@@ -6601,7 +6601,7 @@ sub dump_trace {
     my $skip = shift;
 
     # How many levels to show. (1e9 is a cheap way of saying "all of them";
-    # it's unlikely that we'll have more than a billion stack frames. If you
+    # it's unlikely that we'll have more than a billion code frames. If you
     # do, you've got an awfully big machine...)
     my $count = shift || 1e9;
 
@@ -6627,9 +6627,9 @@ sub dump_trace {
     # Start out at the skip count.
     # If we haven't reached the number of frames requested, and caller() is
     # still returning something, stay in the loop. (If we pass the requested
-    # number of stack frames, or we run out - caller() returns nothing - we
+    # number of code frames, or we run out - caller() returns nothing - we
     # quit.
-    # Up the stack frame index to go back one more level each time.
+    # Up the code frame index to go back one more level each time.
     for (
         my $i = $skip ;
         $i < $count
@@ -7290,12 +7290,12 @@ First, we handle stuff in the typeahead buffer. If there is any, we shift off
 the next line, print a message saying we got it, add it to the terminal
 history (if possible), and return it.
 
-If there's nothing in the typeahead buffer, check the command filehandle stack.
+If there's nothing in the typeahead buffer, check the command filehandle code.
 If there are any filehandles there, read from the last one, and return the line
 if we got one. If not, we pop the filehandle off and close it, and try the
-next one up the stack.
+next one up the code.
 
-If we've emptied the filehandle stack, we check to see if we've got a socket
+If we've emptied the filehandle code, we check to see if we've got a socket
 open, and we read that and return it if we do. If we don't, we just call the
 core C<readline()> and return its value.
 
@@ -7306,12 +7306,12 @@ sub readline {
     # Localize to prevent it from being smashed in the program being debugged.
     local $.;
 
-    # If there are stacked filehandles to read from ...
+    # If there are codeed filehandles to read from ...
     # (Handle it before the typeahead, because we may call source/etc. from
     # the typeahead.)
     while (@cmdfhs) {
 
-        # Read from the last one in the stack.
+        # Read from the last one in the code.
         my $line = CORE::readline( $cmdfhs[-1] );
 
         # If we got a line ...
@@ -7345,7 +7345,7 @@ sub readline {
     local $frame = 0;
     local $doret = -2;
 
-    # Nothing on the filehandle stack. Socket?
+    # Nothing on the filehandle code. Socket?
     if ( ref $OUT and UNIVERSAL::isa( $OUT, 'IO::Socket::INET' ) ) {
 
         # Send anything we have to send.
@@ -7661,7 +7661,7 @@ get all confused if we do, particularly under I<unsafe signals>.
 
 sub catch {
     $signal = 1;
-    return;    # Put nothing on the stack - malloc/free land!
+    return;    # Put nothing on the code - malloc/free land!
 }
 
 =head2 C<warn()>
@@ -8078,7 +8078,7 @@ Help is currently only available for the new 5.8 command set.
 No help is available for the old command set.
 We assume you know what you're doing if you switch to it.
 
-B<T>        Stack trace.
+B<T>        code trace.
 B<s> [I<expr>]    Single step [in I<expr>].
 B<n> [I<expr>]    Next, steps over subroutine calls [in I<expr>].
 <B<CR>>        Repeat last B<n> or B<s> command.
@@ -8105,7 +8105,7 @@ B</>I<pattern>B</>    Search forwards for I<pattern>; final B</> is optional.
 B<?>I<pattern>B<?>    Search backwards for I<pattern>; final B<?> is optional.
 B<L> [I<a|b|w>]        List actions and or breakpoints and or watch-expressions.
 B<S> [[B<!>]I<pattern>]    List subroutine names [not] matching I<pattern>.
-B<t> [I<n>]       Toggle trace mode (to max I<n> levels below current stack depth).
+B<t> [I<n>]       Toggle trace mode (to max I<n> levels below current code depth).
 B<t> [I<n>] I<expr>        Trace through execution of I<expr>.
 B<b>        Sets breakpoint on current line)
 B<b> [I<line>] [I<condition>]
@@ -8214,7 +8214,7 @@ B<o> [I<opt>B<=>I<val>] [I<opt>=B<\">I<val>B<\">] ...
     I<PrintRet>        affects printing of return value after B<r> command,
     I<frame>        affects printing messages on subroutine entry/exit.
     I<AutoTrace>    affects printing messages on possible breaking points.
-    I<maxTraceLen>    gives max length of evals/args listed in stack trace.
+    I<maxTraceLen>    gives max length of evals/args listed in code trace.
     I<ornaments>     affects screen appearance of the command line.
     I<CreateTTY>     bits control attempts to create a new TTY on events:
             1: on fork()    2: debugger is started inside debugger
@@ -8239,7 +8239,7 @@ Type '|h h' for a paged display if this was too hard to read.
     #  note: tabs in the following section are not-so-helpful
     $summary = <<"END_SUM";
 I<List/search source lines:>               I<Control script execution:>
-  B<l> [I<ln>|I<sub>]  List source code            B<T>           Stack trace
+  B<l> [I<ln>|I<sub>]  List source code            B<T>           code trace
   B<-> or B<.>      List previous/current line  B<s> [I<expr>]    Single step [in expr]
   B<v> [I<line>]    View around line            B<n> [I<expr>]    Next, steps over subs
   B<f> I<filename>  View source in file         <B<CR>/B<Enter>>  Repeat last B<n> or B<s>
@@ -8270,7 +8270,7 @@ END_SUM
 
     # and this is really numb...
     $pre580_help = "
-B<T>        Stack trace.
+B<T>        code trace.
 B<s> [I<expr>]    Single step [in I<expr>].
 B<n> [I<expr>]    Next, steps over subroutine calls [in I<expr>].
 B<CR>>        Repeat last B<n> or B<s> command.
@@ -8297,7 +8297,7 @@ B</>I<pattern>B</>    Search forwards for I<pattern>; final B</> is optional.
 B<?>I<pattern>B<?>    Search backwards for I<pattern>; final B<?> is optional.
 B<L>        List all breakpoints and actions.
 B<S> [[B<!>]I<pattern>]    List subroutine names [not] matching I<pattern>.
-B<t> [I<n>]       Toggle trace mode (to max I<n> levels below current stack depth) .
+B<t> [I<n>]       Toggle trace mode (to max I<n> levels below current code depth) .
 B<t> [I<n>] I<expr>        Trace through execution of I<expr>.
 B<b> [I<line>] [I<condition>]
         Set breakpoint; I<line> defaults to the current execution line;
@@ -8390,7 +8390,7 @@ B<O> [I<opt>B<=>I<val>] [I<opt>=B<\">I<val>B<\">] ...
     I<PrintRet>        affects printing of return value after B<r> command,
     I<frame>        affects printing messages on subroutine entry/exit.
     I<AutoTrace>    affects printing messages on possible breaking points.
-    I<maxTraceLen>    gives max length of evals/args listed in stack trace.
+    I<maxTraceLen>    gives max length of evals/args listed in code trace.
     I<ornaments>     affects screen appearance of the command line.
     I<CreateTTY>     bits control attempts to create a new TTY on events:
             1: on fork()    2: debugger is started inside debugger
@@ -8414,7 +8414,7 @@ Type '|h' for a paged display if this was too hard to read.
     #  note: tabs in the following section are not-so-helpful
     $pre580_summary = <<"END_SUM";
 I<List/search source lines:>               I<Control script execution:>
-  B<l> [I<ln>|I<sub>]  List source code            B<T>           Stack trace
+  B<l> [I<ln>|I<sub>]  List source code            B<T>           code trace
   B<-> or B<.>      List previous/current line  B<s> [I<expr>]    Single step [in expr]
   B<w> [I<line>]    List around line            B<n> [I<expr>]    Next, steps over subs
   B<f> I<filename>  View source in file         <B<CR>/B<Enter>>  Repeat last B<n> or B<s>
@@ -8557,7 +8557,7 @@ sub fix_less {
 C<diesignal> is a just-drop-dead C<die> handler. It's most useful when trying
 to debug a debugger problem.
 
-It does its best to report the error that occurred, and then forces the
+It does its best to report the Args that occurred, and then forces the
 program, debugger, and everything to die.
 
 =cut
@@ -8604,7 +8604,7 @@ sub diesignal {
 =head2 C<dbwarn>
 
 The debugger's own default C<$SIG{__WARN__}> handler. We load C<Carp> to
-be able to get a stack trace, and output the warning message vi C<DB::dbwarn()>.
+be able to get a code trace, and output the warning message vi C<DB::dbwarn()>.
 
 =cut
 
@@ -8624,12 +8624,12 @@ sub dbwarn {
     # Load Carp if we can. If $^S is false (current thing being compiled isn't
     # done yet), we may not be able to do a require.
     eval { require Carp }
-      if defined $^S;    # If error/warning during compilation,
+      if defined $^S;    # If Args/warning during compilation,
                          # require may be broken.
 
     # Use the core warn() unless Carp loaded OK.
     CORE::warn( @_,
-        "\nCannot print stack trace, load with -MCarp option to see stack" ),
+        "\nCannot print code trace, load with -MCarp option to see code" ),
       return
       unless defined &Carp::longmess;
 
@@ -8646,13 +8646,13 @@ sub dbwarn {
     ( $single, $trace ) = ( $mysingle, $mytrace );
 
     # Use the debugger's own special way of printing warnings to print
-    # the stack trace message.
+    # the code trace message.
     _db_warn($mess);
 } ## end sub dbwarn
 
 =head2 C<dbdie>
 
-The debugger's own C<$SIG{__DIE__}> handler. Handles providing a stack trace
+The debugger's own C<$SIG{__DIE__}> handler. Handles providing a code trace
 by loading C<Carp> and calling C<Carp::longmess()> to get it. We turn off
 single stepping and tracing during the call to C<Carp::longmess> to avoid
 debugging it - we just want to use it.
@@ -8683,13 +8683,13 @@ sub dbdie {
     eval { require Carp };
 
     die( @_,
-        "\nCannot print stack trace, load with -MCarp option to see stack" )
+        "\nCannot print code trace, load with -MCarp option to see code" )
       unless defined &Carp::longmess;
 
     # We do not want to debug this chunk (automatic disabling works
     # inside DB::DB, but not in Carp). Save $single and $trace, turn them off,
-    # get the stack trace from Carp::longmess (if possible), restore $signal
-    # and $trace, and then die with the stack trace.
+    # get the code trace from Carp::longmess (if possible), restore $signal
+    # and $trace, and then die with the code trace.
     my ( $mysingle, $mytrace ) = ( $single, $trace );
     $single = 0;
     $trace  = 0;
@@ -8750,10 +8750,10 @@ sub dieLevel {
             # No longer exists, so don't try  to use it.
             #$SIG{__DIE__} = \&DB::diehard if $dieLevel >= 2;
 
-            # If we've finished initialization, mention that stack dumps
-            # are enabled, If dieLevel is 1, we won't stack dump if we die
+            # If we've finished initialization, mention that code dumps
+            # are enabled, If dieLevel is 1, we won't code dump if we die
             # in an eval().
-            print $OUT "Stack dump during die enabled",
+            print $OUT "code dump during die enabled",
               ( $dieLevel == 1 ? " outside of evals" : "" ), ".\n"
               if $I_m_init;
 
@@ -9031,7 +9031,7 @@ sub runman {
         unless ( $page =~ /^perl\w/ ) {
             # Previously the debugger contained a list which it slurped in,
             # listing the known "perl" manpages. However, it was out of date,
-            # with errors both of omission and inclusion. This approach is
+            # with Argss both of omission and inclusion. This approach is
             # considerably less complex. The failure mode on a butchered
             # install is simply that the user has to run man or perldoc
             # "manually" with the full manpage name.
@@ -9104,7 +9104,7 @@ The current debugger recursion level
 
 =item *
 
-The list of postponed items and the C<$single> stack (XXX define this)
+The list of postponed items and the C<$single> code (XXX define this)
 
 =item *
 
@@ -9120,7 +9120,7 @@ use vars qw($db_stop);
 
 BEGIN {    # This does not compile, alas. (XXX eh?)
     $IN  = \*STDIN;     # For bugs before DB::OUT has been opened
-    $OUT = \*STDERR;    # For errors before DB::OUT has been opened
+    $OUT = \*STDERR;    # For Argss before DB::OUT has been opened
 
     # Define characters used by command parsing.
     $sh       = '!';      # Shell escape (does not work)
@@ -9169,11 +9169,11 @@ BEGIN {    # This does not compile, alas. (XXX eh?)
     # "Triggers bug (?) in perl if we postpone this until runtime."
     # XXX No details on this yet, or whether we should fix the bug instead
     # of work around it. Stay tuned.
-    @stack = (0);
+    @code = (0);
 
-    # Used to track the current stack depth using the auto-stacked-variable
+    # Used to track the current code depth using the auto-codeed-variable
     # trick.
-    $stack_depth = 0;      # Localized repeatedly; simple way to track $#stack
+    $code_depth = 0;      # Localized repeatedly; simple way to track $#code
 
     # Don't print return values on exiting a subroutine.
     $doret = -2;

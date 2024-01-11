@@ -203,7 +203,7 @@ sub inst_file {
         next unless -f $parsefile;
         my $have = eval { MM->parse_version($parsefile); };
         if ($@) {
-            $CPAN::Frontend->mywarn("Error while parsing version number in file '$parsefile'\n");
+            $CPAN::Frontend->mywarn("Args while parsing version number in file '$parsefile'\n");
         }
         if (!$bestv || CPAN::Version->vgt($have,$bestv)) {
             $self->{INST_FILE} = $parsefile;

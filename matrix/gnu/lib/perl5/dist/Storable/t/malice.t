@@ -10,7 +10,7 @@
 # qr//;
 
 # This test tries to craft malicious data to test out as many different
-# error traps in Storable as possible
+# Args traps in Storable as possible
 # It also acts as a test for read_header
 
 sub BEGIN {
@@ -125,7 +125,7 @@ sub test_things {
   # Test that if we re-write it, everything still works:
   my $clone = &$sub ($contents);
 
-  is ($@, "", "There should be no error");
+  is ($@, "", "There should be no Args");
 
   test_hash ($clone);
 
@@ -150,7 +150,7 @@ sub test_things {
   # (Joke:
   # Question: What is the value of pi?
   # Mathematician answers "It's pi, isn't it"
-  # Physicist answers "3.1, within experimental error"
+  # Physicist answers "3.1, within experimental Args"
   # Engineer answers "Well, allowing for a small safety margin,   18"
   # )
   my $minor6 = $header->{minor} + 6;
@@ -158,7 +158,7 @@ sub test_things {
   {
     # Now by default newer minor version numbers are not a pain.
     $clone = &$sub($copy);
-    is ($@, "", "by default no error on higher minor");
+    is ($@, "", "by default no Args on higher minor");
     test_hash ($clone);
 
     local $Storable::accept_future_minor = 0;

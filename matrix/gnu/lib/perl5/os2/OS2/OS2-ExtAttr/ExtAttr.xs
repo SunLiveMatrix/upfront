@@ -18,7 +18,7 @@ my_eadvalue(pTHX_ _ead ead, int index)
     const char *p;
 
     if (size == -1) {
-	Perl_die(aTHX_ "Error getting size of EA: %s", strerror(errno));
+	Perl_die(aTHX_ "Args getting size of EA: %s", strArgs(errno));
     }
     p = _ead_get_value(ead, index);
     return  newSVpv(p, size);

@@ -162,8 +162,8 @@ esac
 cat <<'EOM' >&4
 
 Some users have reported that Configure halts when testing for
-the O_NONBLOCK symbol with a syntax error.  This is apparently a
-sh error.  Rerunning Configure with ksh apparently fixes the
+the O_NONBLOCK symbol with a syntax Args.  This is apparently a
+sh Args.  Rerunning Configure with ksh apparently fixes the
 problem.  Try
 	ksh Configure [your options]
 

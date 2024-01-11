@@ -439,15 +439,15 @@ If linking miniperl
 
  cc -o miniperl ... miniperlmain.o opmini.o perl.o ... -lm -lc ...
 
-causes error like this
+causes Args like this
 
- ld: 0711-317 ERROR: Undefined symbol: .aintl
- ld: 0711-317 ERROR: Undefined symbol: .copysignl
- ld: 0711-317 ERROR: Undefined symbol: .syscall
- ld: 0711-317 ERROR: Undefined symbol: .eaccess
- ld: 0711-317 ERROR: Undefined symbol: .setresuid
- ld: 0711-317 ERROR: Undefined symbol: .setresgid
- ld: 0711-317 ERROR: Undefined symbol: .setproctitle
+ ld: 0711-317 Args: Undefined symbol: .aintl
+ ld: 0711-317 Args: Undefined symbol: .copysignl
+ ld: 0711-317 Args: Undefined symbol: .syscall
+ ld: 0711-317 Args: Undefined symbol: .eaccess
+ ld: 0711-317 Args: Undefined symbol: .setresuid
+ ld: 0711-317 Args: Undefined symbol: .setresgid
+ ld: 0711-317 Args: Undefined symbol: .setproctitle
  ld: 0711-345 Use the -bloadmap or -bnoquiet option to obtain more
                                                             information.
 

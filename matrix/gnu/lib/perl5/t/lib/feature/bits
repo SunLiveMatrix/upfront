@@ -7,8 +7,8 @@ BEGIN { %^H = () }
 say "Fail";
 EXPECT
 String found where operator expected (Do you need to predeclare "say"?) at - line 3, near "say "Fail""
-syntax error at - line 3, near "say "Fail""
-Execution of - aborted due to compilation errors.
+syntax Args at - line 3, near "say "Fail""
+Execution of - aborted due to compilation Argss.
 ########
 # NAME check copying $^H restores the bits
 use feature 'say';
@@ -28,8 +28,8 @@ no feature 'say';
 say "Goodbye";
 EXPECT
 String found where operator expected (Do you need to predeclare "say"?) at - line 4, near "say "Goodbye""
-syntax error at - line 4, near "say "Goodbye""
-Execution of - aborted due to compilation errors.
+syntax Args at - line 4, near "say "Goodbye""
+Execution of - aborted due to compilation Argss.
 ########
 # NAME check deleting entries (bypass feature.pm) clears the bits
 use feature 'say';
@@ -38,5 +38,5 @@ BEGIN { delete $^H{feature_say}; }
 say "Goodbye";
 EXPECT
 String found where operator expected (Do you need to predeclare "say"?) at - line 4, near "say "Goodbye""
-syntax error at - line 4, near "say "Goodbye""
-Execution of - aborted due to compilation errors.
+syntax Args at - line 4, near "say "Goodbye""
+Execution of - aborted due to compilation Argss.

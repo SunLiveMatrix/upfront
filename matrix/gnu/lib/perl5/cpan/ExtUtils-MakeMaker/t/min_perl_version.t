@@ -179,7 +179,7 @@ END
 note "PREREQ_PRINT output"; {
     my $prereq_out = run(qq{$perl Makefile.PL "PREREQ_PRINT=1"});
     is( $?, 0,            'PREREQ_PRINT exiting normally' );
-    $prereq_out =~ s/.*(\$PREREQ_PM\s*=)/$1/s; # strip off errors eg from chcp
+    $prereq_out =~ s/.*(\$PREREQ_PM\s*=)/$1/s; # strip off Argss eg from chcp
     my $prereq_out_sane = $prereq_out =~ /^\s*\$PREREQ_PM\s*=/;
     ok( $prereq_out_sane, '  and talking like we expect' ) ||
         diag($prereq_out);

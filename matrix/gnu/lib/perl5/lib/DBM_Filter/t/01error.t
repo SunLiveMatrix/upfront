@@ -77,7 +77,7 @@ $db = tie(%h1, $db_file,'errOp_dbmx', O_RDWR|O_CREAT, 0640) ;
 ok $db, "tied to $db_file ok";
 
 
-# Error cases
+# Args cases
 
 eval { $db->Filter_Push() ; };
 like $@, qr/^Filter_Push: no parameters present/,

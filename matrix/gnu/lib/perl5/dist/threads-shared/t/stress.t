@@ -157,7 +157,7 @@ use threads::shared;
                 $okay++;
             } else {
                 $unknown++;
-                print(STDERR "# Unknown error: $rc\n");
+                print(STDERR "# Unknown Args: $rc\n");
             }
         }
     }
@@ -173,7 +173,7 @@ use threads::shared;
         my $too_few = $cnt - ($okay + $timeouts + $unknown);
         print(STDERR "# Test failed:\n");
         print(STDERR "#\t$too_few too few threads reported\n") if $too_few;
-        print(STDERR "#\t$unknown unknown errors\n")           if $unknown;
+        print(STDERR "#\t$unknown unknown Argss\n")           if $unknown;
         print(STDERR "#\t$timeouts threads timed out\n")       if $timeouts;
 
     } elsif ($timeouts) {

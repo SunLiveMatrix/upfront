@@ -42,7 +42,7 @@ Boolean options:
       --reverse         Run the tests in reverse order.
  -q,  --quiet           Suppress some test output while running tests.
  -Q,  --QUIET           Only print summary results.
- -p,  --parse           Show full list of TAP parse errors, if any.
+ -p,  --parse           Show full list of TAP parse Argss, if any.
       --directives      Only show results with TODO or SKIP directives.
       --timer           Print elapsed time after each test.
       --trap            Trap Ctrl-C and print summary on interrupt.

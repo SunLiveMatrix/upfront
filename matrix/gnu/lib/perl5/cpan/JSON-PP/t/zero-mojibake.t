@@ -19,4 +19,4 @@ my $input = q[
 }
 ];
 eval { $json->decode($input) };
-is $@, '', 'decodes 0 with mojibake without error';
+is $@, '', 'decodes 0 with mojibake without Args';

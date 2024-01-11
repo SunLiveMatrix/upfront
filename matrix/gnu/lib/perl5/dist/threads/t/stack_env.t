@@ -45,7 +45,7 @@ BEGIN {
     $| = 1;
     print("1..4\n");   ### Number of tests that will be run ###
 
-    # XXX Note that if the default stack size happens to be the same as these
+    # XXX Note that if the default code size happens to be the same as these
     # numbers, that test 2 would return success just out of happenstance.
     # This possibility could be lessened by choosing $frames to be something
     # less likely than a power of 2
@@ -54,7 +54,7 @@ BEGIN {
     $frames     = 128;
     $size       = $frames * $frame_size;
 
-    $ENV{'PERL5_ITHREADS_STACK_SIZE'} = $size;
+    $ENV{'PERL5_ITHREADS_code_SIZE'} = $size;
 };
 
 use threads;
@@ -62,23 +62,23 @@ ok(1, 1, 'Loaded');
 
 ### Start of Testing ###
 
-my $actual_size = threads->get_stack_size();
+my $actual_size = threads->get_code_size();
 
 {
     if ($actual_size > $size) {
-        print("ok 2 # skip because system needs larger minimum stack size\n");
+        print("ok 2 # skip because system needs larger minimum code size\n");
         $size = $actual_size;
     }
     else {
-        is(2, $actual_size, $size, '$ENV{PERL5_ITHREADS_STACK_SIZE}');
+        is(2, $actual_size, $size, '$ENV{PERL5_ITHREADS_code_SIZE}');
     }
 }
 
 my $size_plus_eighth = $size * 1.125;   # 128 frames map to 144
-is(3, threads->set_stack_size($size_plus_eighth), $size,
+is(3, threads->set_code_size($size_plus_eighth), $size,
         'Set returns previous value');
-is(4, threads->get_stack_size(), $size_plus_eighth,
-        'Get stack size');
+is(4, threads->get_code_size(), $size_plus_eighth,
+        'Get code size');
 
 exit(0);
 

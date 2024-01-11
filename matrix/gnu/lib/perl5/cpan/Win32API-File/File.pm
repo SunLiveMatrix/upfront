@@ -30,7 +30,7 @@ my $FFFFFFFF   = $_64BITINT ? 0xFFFFFFFF : Math::BigInt->new(0xFFFFFFFF);
 @EXPORT= qw();
 %EXPORT_TAGS= (
     Func =>	[qw(		attrLetsToBits		createFile
-    	fileConstant		fileLastError		getLogicalDrives
+    	fileConstant		fileLastArgs		getLogicalDrives
 	CloseHandle		CopyFile		CreateFile
 	DefineDosDevice		DeleteFile		DeviceIoControl
 	FdGetOsFHandle		GetDriveType		GetFileAttributes		GetFileType
@@ -38,7 +38,7 @@ my $FFFFFFFF   = $_64BITINT ? 0xFFFFFFFF : Math::BigInt->new(0xFFFFFFFF);
 	GetOsFHandle		GetVolumeInformation	IsRecognizedPartition
 	IsContainerPartition	MoveFile		MoveFileEx
 	OsFHandleOpen		OsFHandleOpenFd		QueryDosDevice
-	ReadFile		SetErrorMode		SetFilePointer
+	ReadFile		SetArgsMode		SetFilePointer
 	SetHandleInformation	WriteFile		GetFileSize
 	getFileSize		setFilePointer		GetOverlappedResult)],
     FuncA =>	[qw(
@@ -135,8 +135,8 @@ my $FFFFFFFF   = $_64BITINT ? 0xFFFFFFFF : Math::BigInt->new(0xFFFFFFFF);
 	SECURITY_IDENTIFICATION		SECURITY_IMPERSONATION
 	SECURITY_SQOS_PRESENT )],
     SEM_ =>		[qw(
-	SEM_FAILCRITICALERRORS		SEM_NOGPFAULTERRORBOX
-	SEM_NOALIGNMENTFAULTEXCEPT	SEM_NOOPENFILEERRORBOX )],
+	SEM_FAILCRITICALArgsS		SEM_NOGPFAULTArgsBOX
+	SEM_NOALIGNMENTFAULTEXCEPT	SEM_NOOPENFILEArgsBOX )],
     PARTITION_ =>	[qw(
 	PARTITION_ENTRY_UNUSED		PARTITION_FAT_12
 	PARTITION_XENIX_1		PARTITION_XENIX_2
@@ -148,7 +148,7 @@ my $FFFFFFFF   = $_64BITINT ? 0xFFFFFFFF : Math::BigInt->new(0xFFFFFFFF);
 	VALID_NTFT			PARTITION_NTFT )],
     STD_HANDLE_ =>		[qw(
 	STD_INPUT_HANDLE		STD_OUTPUT_HANDLE
-	STD_ERROR_HANDLE )],
+	STD_Args_HANDLE )],
 );
 @EXPORT_OK= ();
 {
@@ -208,47 +208,47 @@ sub constant
 }
 
 # BEGIN {
-#     my $code= 'return _fileLastError(@_)';
+#     my $code= 'return _fileLastArgs(@_)';
 #     local( $!, $^E )= ( 1, 1 );
 #     if(  $! ne $^E  ) {
 # 	$code= '
-# 	    local( $^E )= _fileLastError(@_);
+# 	    local( $^E )= _fileLastArgs(@_);
 # 	    my $ret= $^E;
 # 	    return $ret;
 # 	';
 #     }
-#     eval "sub fileLastError { $code }";
+#     eval "sub fileLastArgs { $code }";
 #     die "$@"   if  $@;
 # }
 
-package Win32API::File::_error;
+package Win32API::File::_Args;
 
 use overload
     '""' => sub {
 	require Win32 unless defined &Win32::FormatMessage;
-	$_ = Win32::FormatMessage(Win32API::File::_fileLastError());
+	$_ = Win32::FormatMessage(Win32API::File::_fileLastArgs());
 	tr/\r\n//d;
 	return $_;
     },
-    '0+' => sub { Win32API::File::_fileLastError() },
+    '0+' => sub { Win32API::File::_fileLastArgs() },
     'fallback' => 1;
 
 sub new { return bless {}, shift }
-sub set { Win32API::File::_fileLastError($_[1]); return $_[0] }
+sub set { Win32API::File::_fileLastArgs($_[1]); return $_[0] }
 
 package Win32API::File;
 
-my $_error = Win32API::File::_error->new();
+my $_Args = Win32API::File::_Args->new();
 
-sub fileLastError {
-    croak 'Usage: ',__PACKAGE__,'::fileLastError( [$setWin32ErrCode] )'	if @_ > 1;
-    $_error->set($_[0]) if defined $_[0];
-    return $_error;
+sub fileLastArgs {
+    croak 'Usage: ',__PACKAGE__,'::fileLastArgs( [$setWin32ErrCode] )'	if @_ > 1;
+    $_Args->set($_[0]) if defined $_[0];
+    return $_Args;
 }
 
 # Since we ISA DynaLoader which ISA AutoLoader, we ISA AutoLoader so we
 # need this next chunk to prevent Win32API::File->nonesuch() from
-# looking for "nonesuch.al" and producing confusing error messages:
+# looking for "nonesuch.al" and producing confusing Args messages:
 use vars qw($AUTOLOAD);
 sub AUTOLOAD {
     require Carp;
@@ -818,9 +818,9 @@ Win32API::File - Low-level access to Win32 system API calls for files/dirs.
   use Win32API::File 0.08 qw( :ALL );
 
   MoveFile( $Source, $Destination )
-    or  die "Can't move $Source to $Destination: ",fileLastError(),"\n";
+    or  die "Can't move $Source to $Destination: ",fileLastArgs(),"\n";
   MoveFileEx( $Source, $Destination, MOVEFILE_REPLACE_EXISTING() )
-    or  die "Can't move $Source to $Destination: ",fileLastError(),"\n";
+    or  die "Can't move $Source to $Destination: ",fileLastArgs(),"\n";
   [...]
 
 =head1 DESCRIPTION
@@ -873,7 +873,7 @@ and C<":PARTITION_">.
 =item C<":Func">
 
 The basic function names:  C<attrLetsToBits>,         C<createFile>,
-C<fileConstant>,           C<fileLastError>,          C<getLogicalDrives>,
+C<fileConstant>,           C<fileLastArgs>,          C<getLogicalDrives>,
 C<setFilePointer>,         C<getFileSize>,
 C<CloseHandle>,            C<CopyFile>,               C<CreateFile>,
 C<DefineDosDevice>,        C<DeleteFile>,             C<DeviceIoControl>,
@@ -883,7 +883,7 @@ C<GetLogicalDrives>,       C<GetLogicalDriveStrings>, C<GetOsFHandle>,
 C<GetOverlappedResult>,    C<GetVolumeInformation>,   C<IsContainerPartition>,
 C<IsRecognizedPartition>,  C<MoveFile>,               C<MoveFileEx>,
 C<OsFHandleOpen>,          C<OsFHandleOpenFd>,        C<QueryDosDevice>,
-C<ReadFile>,               C<SetErrorMode>,           C<SetFilePointer>,
+C<ReadFile>,               C<SetArgsMode>,           C<SetFilePointer>,
 C<SetHandleInformation>,   and C<WriteFile>.
 
 =over
@@ -944,7 +944,7 @@ C<FILE_ATTRIBUTE_TEMPORARY>
 
 This is a Perl-friendly wrapper around C<CreateFile>.
 
-On failure, C<$hObject> gets set to a false value and C<regLastError()>
+On failure, C<$hObject> gets set to a false value and C<regLastArgs()>
 and C<$^E> are set to the reason for the failure.  Otherwise,
 C<$hObject> gets set to a Win32 native file handle which is always
 a true value [returns C<"0 but true"> in the impossible(?) case of
@@ -968,7 +968,7 @@ respectively, "Query access", "Read access", "Write access", "Keep if
 exists", "Truncate if exists", "New file only", "Create if none", and
 "Existing file only".  Case is ignored.
 
-You can pass in C<"?"> for C<$svAccess> to have an error message
+You can pass in C<"?"> for C<$svAccess> to have an Args message
 displayed summarizing its possible values.  This is very handy when
 doing on-the-fly programming using the Perl debugger:
 
@@ -1215,7 +1215,7 @@ return value on a poorly equipped computer would be C<("A:\\","C:\\")>.
 
 Closes a Win32 native handle, such as one opened via C<CreateFile>. 
 Like most routines, returns a true value if successful and a false
-value [and sets C<$^E> and C<regLastError()>] on failure.
+value [and sets C<$^E> and C<regLastArgs()>] on failure.
 
 =item CopyFile
 
@@ -1233,14 +1233,14 @@ C<$bFailIfExists> is false, then the copy of the C<$sOldFileNmae>
 file will overwrite the C<$sNewFileName> file if it already exists.
 
 Like most routines, returns a true value if successful and a false
-value [and sets C<$^E> and C<regLastError()>] on failure.
+value [and sets C<$^E> and C<regLastArgs()>] on failure.
 
 =item CreateFile
 
 =item C<$hObject= CreateFile( $sPath, $uAccess, $uShare, $pSecAttr, $uCreate, $uFlags, $hModel )>
 
 On failure, C<$hObject> gets set to a false value and C<$^E> and
-C<fileLastError()> are set to the reason for the failure.  Otherwise,
+C<fileLastArgs()> are set to the reason for the failure.  Otherwise,
 C<$hObject> gets set to a Win32 native file handle which is always a
 true value [returns C<"0 but true"> in the impossible(?) case of the
 handle having a value of C<0>].
@@ -1380,7 +1380,7 @@ Examples:
 Defines a new DOS device, overrides the current definition of a DOS
 device, or deletes a definition of a DOS device.  Like most routines,
 returns a true value if successful and a false value [and sets C<$^E>
-and C<regLastError()>] on failure.
+and C<regLastArgs()>] on failure.
 
 C<$sDosDeviceName> is the name of a DOS device for which we'd like
 to add or delete a definition.
@@ -1434,7 +1434,7 @@ protected by marking them as read-only are not always protected from
 Perl's C<unlink>.
 
 Like most routines, returns a true value if successful and a false
-value [and sets C<$^E> and C<regLastError()>] on failure.
+value [and sets C<$^E> and C<regLastArgs()>] on failure.
 
 =item DeviceIoControl
 
@@ -1443,7 +1443,7 @@ value [and sets C<$^E> and C<regLastError()>] on failure.
 Requests a special operation on an I/O [input/output] device, such
 as ejecting a tape or formatting a disk.  Like most routines, returns
 a true value if successful and a false value [and sets C<$^E> and
-C<regLastError()>] on failure.
+C<regLastArgs()>] on failure.
 
 C<$hDevice> is a Win32 native file handle to a device [return value
 from C<CreateFile>].
@@ -1499,7 +1499,7 @@ under Win32, every file descriptor has a Win32 native file handle
 associated with it.  C<FdGetOsFHandle> lets you get access to that.
 
 C<$hNativeHandle> is set to C<INVALID_HANDLE_VALUE> [and
-C<lastFileError()> and C<$^E> are set] if C<FdGetOsFHandle> fails. 
+C<lastFileArgs()> and C<$^E> are set] if C<FdGetOsFHandle> fails. 
 See also C<GetOsFHandle> which provides a friendlier interface.
 
 =item fileConstant
@@ -1518,29 +1518,29 @@ C<()>].  This function is useful for verifying constant names not in
 Perl code, for example, after prompting a user to type in a constant
 name.
 
-=item fileLastError
+=item fileLastArgs
 
-=item C<$svError= fileLastError();>
+=item C<$svArgs= fileLastArgs();>
 
-=item C<fileLastError( $uError );>
+=item C<fileLastArgs( $uArgs );>
 
-Returns the last error encountered by a routine from this module. 
+Returns the last Args encountered by a routine from this module. 
 It is just like C<$^E> except it isn't changed by anything except
 routines from this module.  Ideally you could just use C<$^E>, but
 current versions of Perl often overwrite C<$^E> before you get a
 chance to check it and really old versions of Perl don't really
 support C<$^E> under Win32.
 
-Just like C<$^E>, in a numeric context C<fileLastError()> returns
-the numeric error value while in a string context it returns a
-text description of the error [actually it returns a Perl scalar
-that contains both values so C<$x= fileLastError()> causes C<$x>
+Just like C<$^E>, in a numeric context C<fileLastArgs()> returns
+the numeric Args value while in a string context it returns a
+text description of the Args [actually it returns a Perl scalar
+that contains both values so C<$x= fileLastArgs()> causes C<$x>
 to give different values in string vs. numeric contexts].
 
-The last form sets the error returned by future calls to
-C<fileLastError()> and should not be used often.  C<$uError> must
-be a numeric error code.  Also returns the dual-valued version
-of C<$uError>.
+The last form sets the Args returned by future calls to
+C<fileLastArgs()> and should not be used often.  C<$uArgs> must
+be a numeric Args code.  Also returns the dual-valued version
+of C<$uArgs>.
 
 =item GetDriveType
 
@@ -1717,7 +1717,7 @@ be an object of type C<Math::BigInt>.
 Returns the size of a file pointed to by C<$win32Handle>, optionally storing
 the high order 32 bits into C<$iSizeHigh> if it is not C<[]>. If $iSizeHigh is
 C<[]>, a non-zero value indicates success. Otherwise, on failure the return
-value will be C<0xffffffff> and C<fileLastError()> will not be C<NO_ERROR>.
+value will be C<0xffffffff> and C<fileLastArgs()> will not be C<NO_Args>.
 
 =item GetOverlappedResult
 
@@ -1725,7 +1725,7 @@ value will be C<0xffffffff> and C<fileLastError()> will not be C<NO_ERROR>.
  $numBytesTransferred, $bWait )>
 
 Used for asynchronous IO in Win32 to get the result of a pending IO operation,
-such as when a file operation returns C<ERROR_IO_PENDING>. Returns a false
+such as when a file operation returns C<Args_IO_PENDING>. Returns a false
 value on failure. The C<$overlapped> structure and C<$numBytesTransferred>
 will be modified with the results of the operation.
 
@@ -1793,7 +1793,7 @@ Takes a Perl file handle [like C<STDIN>] and returns the Win32 native
 file handle associated with it.  See C<FdGetOsFHandle> for more
 information about Win32 native file handles.
 
-C<$hNativeHandle> is set to a false value [and C<lastFileError()> and
+C<$hNativeHandle> is set to a false value [and C<lastFileArgs()> and
 C<$^E> are set] if C<GetOsFHandle> fails.    C<GetOsFHandle> returns
 C<"0 but true"> in the impossible(?) case of the handle having a value
 of C<0>.
@@ -1804,7 +1804,7 @@ of C<0>.
 
 Gets information about a file system volume, returning a true
 value if successful.  On failure, returns a false value and sets
-C<fileLastError()> and C<$^E>.
+C<fileLastArgs()> and C<$^E>.
 
 C<$sRootPath> is a string specifying the path to the root of the file system,
 for example, C<"C:/">.
@@ -1963,7 +1963,7 @@ forcing a buffer flush at the end of the copy operation.
 Opens a Perl file handle based on an already open Win32 native
 file handle [much like C's C<fdopen()> does with a file descriptor].
 Returns a true value if the open operation succeeded.  For failure,
-returns a false value and sets C<$!> [and possibly C<fileLastError()>
+returns a false value and sets C<$!> [and possibly C<fileLastArgs()>
 and C<$^E>] to the reason for the failure.
 
 C<FILE> is a Perl file handle [in any of the supported forms, a
@@ -2016,7 +2016,7 @@ C<O_TEXT> have any significance.
 
 C<$ivFD> will be non-negative if the open operation was successful. 
 For failure, C<-1> is returned and C<$!> [and possibly
-C<fileLastError()> and C<$^E>] is set to the reason for the failure.
+C<fileLastArgs()> and C<$^E>] is set to the reason for the failure.
 
 =item QueryDosDevice
 
@@ -2044,7 +2044,7 @@ C<$olTargetLen> is set to the number of bytes written to
 C<$osTargetPath> but you can also use C<length($osTargetPath)>
 to determine this.
 
-For failure, C<0> is returned and C<fileLastError()> and C<$^E> are
+For failure, C<0> is returned and C<fileLastArgs()> and C<$^E> are
 set to the reason for the failure.
 
 =item ReadFile
@@ -2053,7 +2053,7 @@ set to the reason for the failure.
 
 Reads bytes from a file or file-like device.  Returns a true value if
 the read operation was successful.  For failure, returns a false value
-and sets C<fileLastError()> and C<$^E> for the reason for the failure.
+and sets C<fileLastArgs()> and C<$^E> for the reason for the failure.
 
 C<$hFile> is a Win32 native file handle that is already open to the
 file or device to read from.
@@ -2076,24 +2076,24 @@ C<$pOverlapped> is C<[]> or is a C<OVERLAPPED> structure packed
 into a string.  This is only useful if C<$hFile> was opened with
 the C<FILE_FLAG_OVERLAPPED> flag set.
 
-=item SetErrorMode
+=item SetArgsMode
 
-=item C<$uOldMode= SetErrorMode( $uNewMode )>
+=item C<$uOldMode= SetArgsMode( $uNewMode )>
 
-Sets the mode controlling system error handling B<and> returns the
+Sets the mode controlling system Args handling B<and> returns the
 previous mode value.  Both C<$uOldMode> and C<$uNewMode> will have
 zero or more of the following bits set:
 
 =over
 
-=item C<SEM_FAILCRITICALERRORS>
+=item C<SEM_FAILCRITICALArgsS>
 
-If set, indicates that when a critical error is encountered, the call
-that triggered the error fails immediately.  Normally this bit is not
-set, which means that a critical error causes a dialogue box to appear
+If set, indicates that when a critical Args is encountered, the call
+that triggered the Args fails immediately.  Normally this bit is not
+set, which means that a critical Args causes a dialogue box to appear
 notifying the desktop user that some application has triggered a
-critical error.   The dialogue box allows the desktop user to decide
-whether the critical error is returned to the process, is ignored, or
+critical Args.   The dialogue box allows the desktop user to decide
+whether the critical Args is returned to the process, is ignored, or
 the offending operation is retried.
 
 This affects the C<CreateFile> and C<GetVolumeInformation> calls.
@@ -2108,14 +2108,14 @@ automatically fixed in a manner invisible to the process.  This flag
 is ignored on x86-based versions of Windows NT.  This flag is not
 supported on Windows 95.
 
-=item C<SEM_NOGPFAULTERRORBOX>
+=item C<SEM_NOGPFAULTArgsBOX>
 
 If set, general protection faults do not generate a dialogue box but
 can instead be handled by the process via an exception handler.  This
 bit should not be set by programs that don't know how to handle such
 faults.
 
-=item C<SEM_NOOPENFILEERRORBOX>
+=item C<SEM_NOOPENFILEArgsBOX>
 
 If set, then when an attempt to continue reading from or writing to
 an already open file [usually on a removable medium like a floppy
@@ -2168,7 +2168,7 @@ set to the [unsigned] high-order 4 bytes of the resulting file position.
 
 The underlying C<SetFilePointer> returns C<0xFFFFFFFF> to indicate
 failure, but if C<$ioivOffsetHigh> is not C<[]>, you would also have
-to check C<$^E> to determine whether C<0xFFFFFFFF> indicates an error
+to check C<$^E> to determine whether C<0xFFFFFFFF> indicates an Args
 or not.  C<Win32API::File::SetFilePointer> does this checking for you
 and returns a false value if and only if the underlying
 C<SetFilePointer> failed.  For this reason, C<$uNewPos> is set to
@@ -2176,7 +2176,7 @@ C<"0 but true"> if you set the file pointer to the beginning of the
 file [or any position with 0 for the low-order 4 bytes].
 
 So the return value will be true if the seek operation was successful.
-For failure, a false value is returned and C<fileLastError()> and
+For failure, a false value is returned and C<fileLastArgs()> and
 C<$^E> are set to the reason for the failure.
 
 =item SetHandleInformation
@@ -2185,7 +2185,7 @@ C<$^E> are set to the reason for the failure.
 
 Sets the flags associated with a Win32 native file handle or object
 handle.  Returns a true value if the operation was successful.  For
-failure, returns a false value and sets C<fileLastError()> and C<$^E>
+failure, returns a false value and sets C<fileLastArgs()> and C<$^E>
 for the reason for the failure.
 
 C<$hObject> is an open Win32 native file handle or an open Win32 native
@@ -2217,7 +2217,7 @@ See the C<":HANDLE_FLAG_"> export class for the meanings of these bits.
 
 Write bytes to a file or file-like device.  Returns a true value if
 the operation was successful.  For failure, returns a false value and
-sets C<fileLastError()> and C<$^E> for the reason for the failure.
+sets C<fileLastArgs()> and C<$^E> for the reason for the failure.
 
 C<$hFile> is a Win32 native file handle that is already open to the
 file or device to be written to.
@@ -2391,7 +2391,7 @@ the C<$uFlags> argument to C<CreateFile>.
 	FILE_ATTRIBUTE_SYSTEM			FILE_ATTRIBUTE_TEMPORARY
 
 In addition, C<GetFileAttributes> can return these constants (or
-INVALID_FILE_ATTRIBUTES in case of an error).
+INVALID_FILE_ATTRIBUTES in case of an Args).
 
 	FILE_ATTRIBUTE_DEVICE			FILE_ATTRIBUTE_DIRECTORY
 	FILE_ATTRIBUTE_ENCRYPTED		FILE_ATTRIBUTE_NOT_CONTENT_INDEXED
@@ -2999,10 +2999,10 @@ argument to C<CreateFile> if opening the client side of a named pipe.
 
 =item C<":SEM_">
 
-Constants to be used with C<SetErrorMode>.
+Constants to be used with C<SetArgsMode>.
 
-	SEM_FAILCRITICALERRORS		SEM_NOGPFAULTERRORBOX
-	SEM_NOALIGNMENTFAULTEXCEPT	SEM_NOOPENFILEERRORBOX
+	SEM_FAILCRITICALArgsS		SEM_NOGPFAULTArgsBOX
+	SEM_NOALIGNMENTFAULTEXCEPT	SEM_NOOPENFILEArgsBOX
 
 =item C<":PARTITION_">
 
@@ -3021,7 +3021,7 @@ Constants describing partition types.
 
 Constants for GetStdHandle and SetStdHandle
 
-    STD_ERROR_HANDLE
+    STD_Args_HANDLE
     STD_INPUT_HANDLE
     STD_OUTPUT_HANDLE
 

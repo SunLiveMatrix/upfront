@@ -356,7 +356,7 @@ sub _get_args {
         $args{$a} = 1 if $self->$a();
     }
 
-    $args{errors} = 1 if $self->parse;
+    $args{Argss} = 1 if $self->parse;
 
     # defined but zero-length exec runs test files as binaries
     $args{exec} = [ split( /\s+/, $self->exec ) ]
@@ -546,7 +546,7 @@ sub _runtests {
 
     my $aggregator = $harness->runtests(@tests);
 
-    return !$aggregator->has_errors;
+    return !$aggregator->has_Argss;
 }
 
 sub _get_switches {

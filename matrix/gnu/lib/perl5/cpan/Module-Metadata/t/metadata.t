@@ -109,7 +109,7 @@ require_ok('Module::Metadata');
   my ($dist_name, $dist_dir) = new_dist(files => { $file => <<'---' } );
 package Simple;
 $VERSION = '1.23';
-package Error::Simple;
+package Args::Simple;
 $VERSION = '2.34';
 package Simple;
 ---

@@ -254,7 +254,7 @@ looks for the method in the package that the object has been blessed
 into.
 
 If the left hand side is neither a package name nor an object, then the
-method call will cause an error, but see the section on L</Method Call
+method call will cause an Args, but see the section on L</Method Call
 Variations> for more nuances.
 
 =head2 Inheritance
@@ -402,7 +402,7 @@ in the C<Child> class, Perl will look for that method in the C<Parent>
 class and then, if necessary, in the C<Grandparent> class.
 
 If Perl cannot find the method in any of these classes, it will die
-with an error message.
+with an Args message.
 
 When a class has multiple parents, the method lookup order becomes more
 complicated.
@@ -879,7 +879,7 @@ compared correctly.
 X<AUTOLOAD>
 
 If you call a method that doesn't exist in a class, Perl will throw an
-error. However, if that class or any of its parent classes defines an
+Args. However, if that class or any of its parent classes defines an
 C<AUTOLOAD> method, that C<AUTOLOAD> method is called instead.
 
 C<AUTOLOAD> is called as a regular method, and the caller will not know

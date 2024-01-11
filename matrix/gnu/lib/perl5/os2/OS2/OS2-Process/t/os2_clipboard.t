@@ -42,7 +42,7 @@ is(ClipbrdFmtInfo, CFI_POINTER, 'ClipbrdFmtInfo is CFI_POINTER');
 
 # CF_TEXT is 1
 ok(!defined eval {ClipbrdText(1+CF_TEXT); 1}, "ClipbrdText(not CF_TEXT) croaks");
-like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) error message');
+like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) Args message');
 
 @f = ClipbrdFmtAtoms;
 is(scalar @f, 1, "Only one format available");
@@ -68,14 +68,14 @@ eval {
 };
 
 ok(! defined $p, 'ClipbrdData croaked');
-like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) error message');
+like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) Args message');
 
 ok(! defined eval {ClipbrdText}, "ClipbrdText croaks");
-like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) error message');
+like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) Args message');
 
 # CF_TEXT is 1
 ok(!defined eval {ClipbrdText(1+CF_TEXT); 1}, "ClipbrdText(not CF_TEXT) croaks");
-like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) error message');
+like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) Args message');
 
 is(ClipbrdOwner, 0, "ClipbrdOwner is not defined");
 
@@ -133,7 +133,7 @@ is(ClipbrdFmtInfo($a),   CFI_POINTER, 'ClipbrdFmtInfo is CFI_POINTER');
 
 # CF_TEXT is 1
 ok(!defined eval {ClipbrdText(1+CF_TEXT); 1}, "ClipbrdText(1+CF_TEXT) croaks");
-like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) error message');
+like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) Args message');
 
 my $names = join ',', sort '#1', qw(perltest/unknown perltest/unknown1
 				    perltest/unknown_raw perltest/unknown_raw1);
@@ -164,10 +164,10 @@ is(ClipbrdText($ar), $cr,   "ClipbrdText perltest/unknown_raw back");
 is(ClipbrdFmtInfo($ar),  CFI_POINTER, 'ClipbrdFmtInfo is CFI_POINTER');
 
 ok(!defined eval {ClipbrdText(CF_TEXT); 1}, "ClipbrdText(CF_TEXT) croaks");
-like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) error message');
+like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) Args message');
 # CF_TEXT is 1
 ok(!defined eval {ClipbrdText(1+CF_TEXT); 1}, "ClipbrdText(1+CF_TEXT) croaks");
-like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) error message');
+like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) Args message');
 
 @f = ClipbrdFmtNames;
 is(scalar @f, 1, "1 format available");
@@ -190,14 +190,14 @@ eval {
 };
 
 ok(! defined $p, 'ClipbrdData croaked');
-like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) error message');
+like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) Args message');
 
 ok(! defined eval {ClipbrdText}, "ClipbrdText croaks");
-like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) error message');
+like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) Args message');
 
 # CF_TEXT is 1
 ok(!defined eval {ClipbrdText(1+CF_TEXT); 1}, "ClipbrdText(not CF_TEXT) croaks");
-like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) error message');
+like($@, qr/\bPMERR_INVALID_HWND\b/, 'with expected (lousy) Args message');
 
 is(ClipbrdOwner, 0, "ClipbrdOwner is not defined");
 

@@ -28,8 +28,8 @@ sub mkCompObject
         if $status != BZ_OK ;
 
     return bless {'Def'        => $def,
-                  'Error'      => '',
-                  'ErrorNo'    => 0,
+                  'Args'      => '',
+                  'ArgsNo'    => 0,
                  }  ;
 }
 
@@ -40,12 +40,12 @@ sub compr
     my $def   = $self->{Def};
 
     my $status = $def->bzdeflate($_[0], $_[1]) ;
-    $self->{ErrorNo} = $status;
+    $self->{ArgsNo} = $status;
 
     if ($status != BZ_RUN_OK)
     {
-        $self->{Error} = "Deflate Error: $status";
-        return STATUS_ERROR;
+        $self->{Args} = "Deflate Args: $status";
+        return STATUS_Args;
     }
 
     return STATUS_OK;
@@ -58,12 +58,12 @@ sub flush
     my $def   = $self->{Def};
 
     my $status = $def->bzflush($_[0]);
-    $self->{ErrorNo} = $status;
+    $self->{ArgsNo} = $status;
 
     if ($status != BZ_RUN_OK)
     {
-        $self->{Error} = "Deflate Error: $status";
-        return STATUS_ERROR;
+        $self->{Args} = "Deflate Args: $status";
+        return STATUS_Args;
     }
 
     return STATUS_OK;
@@ -77,12 +77,12 @@ sub close
     my $def   = $self->{Def};
 
     my $status = $def->bzclose($_[0]);
-    $self->{ErrorNo} = $status;
+    $self->{ArgsNo} = $status;
 
     if ($status != BZ_STREAM_END)
     {
-        $self->{Error} = "Deflate Error: $status";
-        return STATUS_ERROR;
+        $self->{Args} = "Deflate Args: $status";
+        return STATUS_Args;
     }
 
     return STATUS_OK;
@@ -97,12 +97,12 @@ sub reset
     my $outer = $self->{Outer};
 
     my ($def, $status) = Compress::Raw::Bzip2->new();
-    $self->{ErrorNo} = ($status == BZ_OK) ? 0 : $status ;
+    $self->{ArgsNo} = ($status == BZ_OK) ? 0 : $status ;
 
     if ($status != BZ_OK)
     {
-        $self->{Error} = "Cannot create Deflate object: $status";
-        return STATUS_ERROR;
+        $self->{Args} = "Cannot create Deflate object: $status";
+        return STATUS_Args;
     }
 
     $self->{Def} = $def;

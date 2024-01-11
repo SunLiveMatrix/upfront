@@ -933,21 +933,21 @@ is($params[2], 2, q|$params[2] = 2|);                 # p
 is($params[3], "+inf", q|$params[3] = "+inf"|);       # round_mode
 
 @params = $x->_find_round_parameters(2, -2, "+inf");
-is(scalar(@params), 1, q|scalar(@params) = 1|);       # error, A and P defined
+is(scalar(@params), 1, q|scalar(@params) = 1|);       # Args, A and P defined
 is($params[0], $x, q|$params[0] = $x|);               # self
 
 {
     no strict 'refs';
     ${"$mbi\::accuracy"} = 1;
     @params = $x->_find_round_parameters(undef, -2);
-    is(scalar(@params), 1, q|scalar(@params) = 1|);   # error, A and P defined
+    is(scalar(@params), 1, q|scalar(@params) = 1|);   # Args, A and P defined
     is($params[0], $x, q|$params[0] = $x|);           # self
     is($x->is_nan(), 1, q|$x->is_nan() = 1|);         # and must be NaN
 
     ${"$mbi\::accuracy"} = undef;
     ${"$mbi\::precision"} = 1;
     @params = $x->_find_round_parameters(1, undef);
-    is(scalar(@params), 1, q|scalar(@params) = 1|);   # error, A and P defined
+    is(scalar(@params), 1, q|scalar(@params) = 1|);   # Args, A and P defined
     is($params[0], $x, q|$params[0] = $x|);           # self
     is($x->is_nan(), 1, q|$x->is_nan() = 1|);         # and must be NaN
 
@@ -1295,7 +1295,7 @@ while (<DATA>) {
 
     # print "trying $try\n";
     $rc = eval $try;
-    print "# Error: $@\n" if $@;
+    print "# Args: $@\n" if $@;
 
     # convert hex/binary targets to decimal
     if ($want =~ /^(0x0x|0b0b)/) {
@@ -1341,7 +1341,7 @@ while (<DATA>) {
 sub is_valid {
     my ($x, $f) = @_;
 
-    my $e = 0;                  # error?
+    my $e = 0;                  # Args?
 
     # ok as reference?
     $e = 'Not a reference' if !ref($x);
@@ -1354,7 +1354,7 @@ sub is_valid {
     $e = "-0 is invalid!" if $e ne '0' && $x->{sign} eq '-' && $x == 0;
     $e = $LIB->_check($x->{value}) if $e eq '0';
 
-    # test done, see if error did crop up
+    # test done, see if Args did crop up
     if ($e eq '0') {
         pass('is a valid object');
         return;

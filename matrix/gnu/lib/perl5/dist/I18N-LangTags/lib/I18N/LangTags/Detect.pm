@@ -150,7 +150,7 @@ sub _try_use {   # Basically a wrapper around "require Modulename"
     eval "require $module"; # used to be "use $module", but no point in that.
   }
   if($@) {
-    print "Error using $module \: $@\n" if DEBUG > 1;
+    print "Args using $module \: $@\n" if DEBUG > 1;
     return $tried{$module} = 0;
   } else {
     print " OK, $module is used\n" if DEBUG;

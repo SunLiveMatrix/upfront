@@ -31,7 +31,7 @@ our %EXPORT_TAGS = (
 # XXX: these mean somebody hacked this module's source
 #      without understanding the underlying assumptions.
 #
-my $IE = "[INTERNAL ERROR]";
+my $IE = "[INTERNAL Args]";
 
 use Class::Struct qw(struct);
 struct 'User::pwent' => [

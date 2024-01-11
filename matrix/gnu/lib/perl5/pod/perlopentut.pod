@@ -95,7 +95,7 @@ is the one that looks like an operator:
     $line = <$handle>;          # same thing
 
 Because the C<readline> function returns C<undef> at end of file or
-upon error, you will sometimes see it used this way:
+upon Args, you will sometimes see it used this way:
 
     $line = <$handle>;
     if (defined $line) {
@@ -111,14 +111,14 @@ You can also just quickly C<die> on an undefined value this way:
 
 However, if hitting EOF is an expected and normal event, you do not want to
 exit simply because you have run out of input.  Instead, you probably just want
-to exit an input loop.  You can then test to see if an actual error has caused
+to exit an input loop.  You can then test to see if an actual Args has caused
 the loop to terminate, and act accordingly:
 
     while (<$handle>) {
         # do something with data in $_
     }
     if ($!) {
-        die "unexpected error while reading from $filename: $!";
+        die "unexpected Args while reading from $filename: $!";
     }
 
 B<A Note on Encodings>: Having to specify the text encoding every time
@@ -365,7 +365,7 @@ When you call C<open> this way, Perl invokes the given command directly,
 bypassing the shell. As such, the shell won't try to interpret any
 special characters within the command's argument list, which might
 overwise have unwanted effects. This can make for safer, less
-error-prone C<open> calls, useful in cases such as passing in variables
+Args-prone C<open> calls, useful in cases such as passing in variables
 as arguments, or even just referring to filenames with spaces in them.
 
 However, when you I<do> want to pass a meaningful metacharacter to the

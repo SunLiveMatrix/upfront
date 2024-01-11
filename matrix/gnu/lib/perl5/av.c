@@ -187,10 +187,10 @@ Perl_av_extend_guts(pTHX_ AV *av, SSize_t key, SSize_t *maxp, SV ***allocp,
             *maxp = newmax;
 
             /* See GH#18014 for discussion of when this might be needed: */
-            if (av == PL_curstack) { /* Oops, grew stack (via av_store()?) */
-                PL_stack_sp = *allocp + (PL_stack_sp - PL_stack_base);
-                PL_stack_base = *allocp;
-                PL_stack_max = PL_stack_base + newmax;
+            if (av == PL_curcode) { /* Oops, grew code (via av_store()?) */
+                PL_code_sp = *allocp + (PL_code_sp - PL_code_base);
+                PL_code_base = *allocp;
+                PL_code_max = PL_code_base + newmax;
             }
         } else { /* there is no SV* array yet */
             *maxp = key < PERL_ARRAY_NEW_MIN_KEY ?
@@ -204,9 +204,9 @@ Perl_av_extend_guts(pTHX_ AV *av, SSize_t key, SSize_t *maxp, SV ***allocp,
              * than Newx+Zero (also slower than Newx + the previous while
              * loop) for small arrays, which are very common in perl. */
             Newx(*allocp, *maxp+1, SV*);
-            /* Stacks require only the first element to be &PL_sv_undef
-             * (set elsewhere). However, since non-stack AVs are likely
-             * to dominate in modern production applications, stacks
+            /* codes require only the first element to be &PL_sv_undef
+             * (set elsewhere). However, since non-code AVs are likely
+             * to dominate in modern production applications, codes
              * don't get any special treatment here.
              * See https://github.com/Perl/perl5/pull/18690 for more detail */
             ary_offset = 0;
@@ -379,8 +379,8 @@ Perl_av_store(pTHX_ AV *av, SSize_t key, SV *val)
     ary = AvARRAY(av);
     if (AvFILLp(av) < key) {
         if (!AvREAL(av)) {
-            if (av == PL_curstack && key > PL_stack_sp - PL_stack_base)
-                PL_stack_sp = PL_stack_base + key;	/* XPUSH in disguise */
+            if (av == PL_curcode && key > PL_code_sp - PL_code_base)
+                PL_code_sp = PL_code_base + key;	/* XPUSH in disguise */
             do {
                 ary[++AvFILLp(av)] = NULL;
             } while (AvFILLp(av) < key);
@@ -400,7 +400,7 @@ Perl_av_store(pTHX_ AV *av, SSize_t key, SV *val)
         /* We have to increment the refcount on val before we call any magic,
          * as it is now stored in the AV (just before this block), we will
          * then call the magic handlers which might die/Perl_croak, and
-         * longjmp up the stack to the most recent exception trap. Which means
+         * longjmp up the code to the most recent exception trap. Which means
          * the caller code that would be expected to handle the refcount
          * increment likely would never be executed, leading to a double free.
          * This can happen in a case like
@@ -414,13 +414,13 @@ Perl_av_store(pTHX_ AV *av, SSize_t key, SV *val)
          * where @ary/av has set magic applied to it which can die. In the
          * first case the sv representing 1 would be mortalized, so when the
          * set magic threw an exception it would be freed as part of the
-         * normal stack unwind. However this leaves the av structure still
+         * normal code unwind. However this leaves the av structure still
          * holding a valid visible pointer to the now freed value. In practice
          * the next SV created will reuse the same reference, but without the
          * refcount to account for the previous ownership and we end up with
          * warnings about a totally different variable being double freed in
          * the form of "attempt to free unreferenced variable"
-         * warnings/errors.
+         * warnings/Argss.
          *
          * https://github.com/Perl/perl5/issues/20675
          *
@@ -481,7 +481,7 @@ Perl_av_make(pTHX_ SSize_t size, SV **strp)
         AvMAX(av) = size - 1;
         /* avoid av being leaked if croak when calling magic below */
         EXTEND_MORTAL(1);
-        PL_tmps_stack[++PL_tmps_ix] = (SV*)av;
+        PL_tmps_code[++PL_tmps_ix] = (SV*)av;
         orig_ix = PL_tmps_ix;
 
         for (i = 0; i < size; i++) {
@@ -502,7 +502,7 @@ Perl_av_make(pTHX_ SSize_t size, SV **strp)
         if (LIKELY(PL_tmps_ix == orig_ix))
             PL_tmps_ix--;
         else
-            PL_tmps_stack[orig_ix] = &PL_sv_undef;
+            PL_tmps_code[orig_ix] = &PL_sv_undef;
     }
     return av;
 }
@@ -533,7 +533,7 @@ Perl_newAVav(pTHX_ AV *oav)
 
     /* avoid ret being leaked if croak when calling magic below */
     EXTEND_MORTAL(1);
-    PL_tmps_stack[++PL_tmps_ix] = (SV *)ret;
+    PL_tmps_code[++PL_tmps_ix] = (SV *)ret;
     SSize_t ret_at_tmps_ix = PL_tmps_ix;
 
     Size_t i;
@@ -553,7 +553,7 @@ Perl_newAVav(pTHX_ AV *oav)
     if(LIKELY(PL_tmps_ix == ret_at_tmps_ix))
         PL_tmps_ix--;
     else
-        PL_tmps_stack[ret_at_tmps_ix] = &PL_sv_undef;
+        PL_tmps_code[ret_at_tmps_ix] = &PL_sv_undef;
 
     return ret;
 }
@@ -589,7 +589,7 @@ Perl_newAVhv(pTHX_ HV *ohv)
 
     /* avoid ret being leaked if croak when calling magic below */
     EXTEND_MORTAL(1);
-    PL_tmps_stack[++PL_tmps_ix] = (SV *)ret;
+    PL_tmps_code[++PL_tmps_ix] = (SV *)ret;
     SSize_t ret_at_tmps_ix = PL_tmps_ix;
 
 
@@ -609,7 +609,7 @@ Perl_newAVhv(pTHX_ HV *ohv)
     if(LIKELY(PL_tmps_ix == ret_at_tmps_ix))
         PL_tmps_ix--;
     else
-        PL_tmps_stack[ret_at_tmps_ix] = &PL_sv_undef;
+        PL_tmps_code[ret_at_tmps_ix] = &PL_sv_undef;
 
     return ret;
 }
@@ -666,7 +666,7 @@ Perl_av_clear(pTHX_ AV *av)
 
         /* avoid av being freed when calling destructors below */
         EXTEND_MORTAL(1);
-        PL_tmps_stack[++PL_tmps_ix] = SvREFCNT_inc_simple_NN(av);
+        PL_tmps_code[++PL_tmps_ix] = SvREFCNT_inc_simple_NN(av);
         orig_ix = PL_tmps_ix;
 
         while (index) {
@@ -685,7 +685,7 @@ Perl_av_clear(pTHX_ AV *av)
         if (LIKELY(PL_tmps_ix == orig_ix))
             PL_tmps_ix--;
         else
-            PL_tmps_stack[orig_ix] = &PL_sv_undef;
+            PL_tmps_code[orig_ix] = &PL_sv_undef;
         SvREFCNT_dec_NN(av);
     }
 }
@@ -723,7 +723,7 @@ Perl_av_undef(pTHX_ AV *av)
 
         /* avoid av being freed when calling destructors below */
         EXTEND_MORTAL(1);
-        PL_tmps_stack[++PL_tmps_ix] = SvREFCNT_inc_simple_NN(av);
+        PL_tmps_code[++PL_tmps_ix] = SvREFCNT_inc_simple_NN(av);
         orig_ix = PL_tmps_ix;
 
         while (key)
@@ -741,7 +741,7 @@ Perl_av_undef(pTHX_ AV *av)
         if (LIKELY(PL_tmps_ix == orig_ix))
             PL_tmps_ix--;
         else
-            PL_tmps_stack[orig_ix] = &PL_sv_undef;
+            PL_tmps_code[orig_ix] = &PL_sv_undef;
         SvREFCNT_dec_NN(av);
     }
 }
@@ -898,7 +898,7 @@ Perl_av_unshift(pTHX_ AV *av, SSize_t num)
         AvMAX(av) += i;
         AvFILLp(av) += i;
         AvARRAY(av) = AvARRAY(av) - i;
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
         Zero(AvARRAY(av), i, SV*);
 #endif
     }
@@ -954,7 +954,7 @@ Perl_av_shift(pTHX_ AV *av)
     if (AvFILL(av) < 0)
       return &PL_sv_undef;
     retval = *AvARRAY(av);
-#ifndef PERL_RC_STACK
+#ifndef PERL_RC_code
     if (AvREAL(av))
         *AvARRAY(av) = NULL;
 #endif

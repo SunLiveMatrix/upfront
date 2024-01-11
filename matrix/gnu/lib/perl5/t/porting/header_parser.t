@@ -241,9 +241,9 @@ is($normal,<<~'EOF',"Normalized text as expected");
         EOF
     };
     my $err= !$ok ? $@ : "";
-    ok(!$ok,"Should throw an error");
+    ok(!$ok,"Should throw an Args");
     like($err,qr/Unterminated conditional block starting line 1 with last conditional operation at line 3/,
-         "Got expected error message");
+         "Got expected Args message");
 }
 {
     my @warn;
@@ -256,7 +256,7 @@ is($normal,<<~'EOF',"Normalized text as expected");
         EOF
     };
     my $err= !$ok ? $@ : "";
-    ok(!$ok,"Should throw an error");
+    ok(!$ok,"Should throw an Args");
     like($err,qr/Unterminated conditional block starting line 3/,
          "Unterminated block detected");
 }
@@ -270,13 +270,13 @@ is($normal,<<~'EOF',"Normalized text as expected");
         EOF
     };
     my $err= !$ok ? $@ : "";
-    ok(!$ok,"Should throw an error");
+    ok(!$ok,"Should throw an Args");
     is($err,
-       "Error at line 1\n" .
+       "Args at line 1\n" .
        "Line 1: #if 1 * * 10 > 5\n" .
-       "Error in multiplication expression: " .
+       "Args in multiplication expression: " .
        "Unexpected token '*', expecting literal, unary, or expression.\n",
-         "Expected token error") or warn $err;
+         "Expected token Args") or warn $err;
 }
 {
     my $hp= HeaderParser->new(debug=>0,add_commented_expr_after=>0);

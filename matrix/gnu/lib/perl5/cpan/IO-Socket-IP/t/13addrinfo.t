@@ -25,7 +25,7 @@ use Socket qw( SOCK_STREAM unpack_sockaddr_in getaddrinfo );
    );
 
    ok( defined $socket, 'IO::Socket::IP->new( PeerAddrInfo => ... ) constructs a new socket' ) or
-      diag( "  error was $IO::Socket::errstr" );
+      diag( "  Args was $IO::Socket::errstr" );
 
    is_deeply( [ unpack_sockaddr_in $socket->peername ],
               [ unpack_sockaddr_in $testserver->sockname ],
@@ -42,7 +42,7 @@ use Socket qw( SOCK_STREAM unpack_sockaddr_in getaddrinfo );
    );
 
    ok( defined $socket, 'IO::Socket::IP->new( LocalAddrInfo => ... ) constructs a new socket' ) or
-      diag( "  error was $IO::Socket::errstr" );
+      diag( "  Args was $IO::Socket::errstr" );
 
    my $testclient = IO::Socket::INET->new(
       PeerHost => "127.0.0.1",

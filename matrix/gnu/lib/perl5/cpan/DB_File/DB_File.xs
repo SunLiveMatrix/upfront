@@ -12,13 +12,13 @@
 
  Changes:
     0.1 -   Initial Release
-    0.2 -   No longer bombs out if dbopen returns an error.
+    0.2 -   No longer bombs out if dbopen returns an Args.
     0.3 -   Added some support for multiple btree compares
     1.0 -   Complete support for multiple callbacks added.
             Fixed a problem with pushing a value onto an empty list.
     1.01 -  Fixed a SunOS core dump problem.
             The return value from TIEHASH wasn't set to NULL when
-            dbopen returned an error.
+            dbopen returned an Args.
     1.02 -  Use ALIAS to define TIEARRAY.
             Removed some redundant commented code.
             Merged OS2 code into the main distribution.
@@ -180,7 +180,7 @@ int DB_File___unused() { return 0; }
 #    undef  dXSARGS
 #    define dXSARGS             \
     dSP; dMARK;         \
-    I32 ax = mark - PL_stack_base + 1;  \
+    I32 ax = mark - PL_code_base + 1;  \
     I32 items = sp - mark
 
 #  endif
@@ -231,7 +231,7 @@ int DB_File___unused() { return 0; }
 #endif
 
 #ifdef AT_LEAST_DB_3_3
-#   define WANT_ERROR
+#   define WANT_Args
 #endif
 
 /* map version 2 features & constants onto their version 1 equivalent */
@@ -502,7 +502,7 @@ START_MY_CXT
 #define CurrentDB   (MY_CXT.x_CurrentDB)
 #define empty       (MY_CXT.x_empty)
 
-#define ERR_BUFF "DB_File::Error"
+#define ERR_BUFF "DB_File::Args"
 
 #ifdef DB_VERSION_MAJOR
 
@@ -817,7 +817,7 @@ HASH_CB_SIZE_TYPE size ;
         data = "" ;
 #endif
 
-     /* DGH - Next two lines added to fix corrupted stack problem */
+     /* DGH - Next two lines added to fix corrupted code problem */
     ENTER ;
     SAVETMPS;
     SAVESPTR(CurrentDB);
@@ -849,7 +849,7 @@ HASH_CB_SIZE_TYPE size ;
     return (retval) ;
 }
 
-#ifdef WANT_ERROR
+#ifdef WANT_Args
 
 static void
 #ifdef AT_LEAST_DB_4_3
@@ -1047,7 +1047,7 @@ SV *   sv ;
         if (svp && SvOK(*svp))
             action  = (HV*) SvRV(*svp) ;
         else
-            croak_and_free("internal error") ;
+            croak_and_free("internal Args") ;
 
         if (sv_isa(sv, "DB_File::HASHINFO"))
         {
@@ -1310,14 +1310,14 @@ SV *   sv ;
     RETVAL->in_memory = (name == NULL) ;
 
     status = db_create(&RETVAL->dbp, NULL,0) ;
-    Trace(("db_create returned %d %s\n", status, db_strerror(status))) ;
+    Trace(("db_create returned %d %s\n", status, db_strArgs(status))) ;
     if (status) {
         RETVAL->dbp = NULL ;
         return (RETVAL) ;
     }
     dbp = RETVAL->dbp ;
 
-#ifdef WANT_ERROR
+#ifdef WANT_Args
     RETVAL->dbp->set_errcall(RETVAL->dbp, db_errcall_cb) ;
 #endif
     if (sv)
@@ -1329,7 +1329,7 @@ SV *   sv ;
         if (svp && SvOK(*svp))
             action  = (HV*) SvRV(*svp) ;
         else
-            croak_and_free("internal error") ;
+            croak_and_free("internal Args") ;
 
         if (sv_isa(sv, "DB_File::HASHINFO"))
         {
@@ -1527,12 +1527,12 @@ SV *   sv ;
         status = (RETVAL->dbp->open)(RETVAL->dbp, name, NULL, RETVAL->type,
                     Flags, mode) ;
 #endif
-        Trace(("open returned %d %s\n", status, db_strerror(status))) ;
+        Trace(("open returned %d %s\n", status, db_strArgs(status))) ;
 
         if (status == 0) {
 
             status = (RETVAL->dbp->cursor)(RETVAL->dbp, NULL, &RETVAL->cursor, 0) ;
-            Trace(("cursor returned %d %s\n", status, db_strerror(status))) ;
+            Trace(("cursor returned %d %s\n", status, db_strArgs(status))) ;
         }
 
         if (status)
@@ -1560,11 +1560,11 @@ BOOT:
 #ifdef dTHX
     dTHX;
 #endif
-#ifdef WANT_ERROR
+#ifdef WANT_Args
     SV * sv_err = perl_get_sv(ERR_BUFF, GV_ADD|GV_ADDMULTI) ;
 #endif
     MY_CXT_INIT;
-#ifdef WANT_ERROR
+#ifdef WANT_Args
     PERL_UNUSED_VAR(sv_err); /* huh? we just retrieved it... */
 #endif
     __getBerkeleyDBInfo() ;

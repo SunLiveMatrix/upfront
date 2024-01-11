@@ -16,8 +16,8 @@ run_test('{"one": 1}', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok ($res, "curly braces okay -- '$input'");
-    ok (!$e, "no error -- '$input'");
-    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string error");
+    ok (!$e, "no Args -- '$input'");
+    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string Args");
 });
 
 run_test('{"one": 1]', sub {
@@ -26,8 +26,8 @@ run_test('{"one": 1]', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok (!$res, "unbalanced curly braces -- '$input'");
-    ok ($e, "got error -- '$input'");
-    like ($e, qr/, or \} expected while parsing object\/hash/, "'} expected' json string error");
+    ok ($e, "got Args -- '$input'");
+    like ($e, qr/, or \} expected while parsing object\/hash/, "'} expected' json string Args");
 });
 
 run_test('"', sub {
@@ -36,8 +36,8 @@ run_test('"', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok (!$res, "truncated input='$input'");
-    ok (!$e, "no error for input='$input'");
-    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string error for input='$input'");
+    ok (!$e, "no Args for input='$input'");
+    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string Args for input='$input'");
 });
 
 run_test('{', sub {
@@ -46,8 +46,8 @@ run_test('{', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok (!$res, "truncated input='$input'");
-    ok (!$e, "no error for input='$input'");
-    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string error for input='$input'");
+    ok (!$e, "no Args for input='$input'");
+    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string Args for input='$input'");
 });
 
 run_test('[', sub {
@@ -56,8 +56,8 @@ run_test('[', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok (!$res, "truncated input='$input'");
-    ok (!$e, "no error for input='$input'");
-    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string error for input='$input'");
+    ok (!$e, "no Args for input='$input'");
+    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string Args for input='$input'");
 });
 
 run_test('}', sub {
@@ -66,8 +66,8 @@ run_test('}', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok (!$res, "truncated input='$input'");
-    ok ($e, "no error for input='$input'");
-    like ($e, qr/malformed JSON string/, "'malformed JSON string' json string error for input='$input'");
+    ok ($e, "no Args for input='$input'");
+    like ($e, qr/malformed JSON string/, "'malformed JSON string' json string Args for input='$input'");
 });
 
 run_test(']', sub {
@@ -76,8 +76,8 @@ run_test(']', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok (!$res, "truncated input='$input'");
-    ok ($e, "no error for input='$input'");
-    like ($e, qr/malformed JSON string/, "'malformed JSON string' json string error for input='$input'");
+    ok ($e, "no Args for input='$input'");
+    like ($e, qr/malformed JSON string/, "'malformed JSON string' json string Args for input='$input'");
 });
 
 run_test('1', sub {
@@ -86,8 +86,8 @@ run_test('1', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok ($res, "truncated input='$input'");
-    ok (!$e, "no error for input='$input'");
-    unlike ($e, qr/malformed JSON string/, "'malformed JSON string' json string error for input='$input'");
+    ok (!$e, "no Args for input='$input'");
+    unlike ($e, qr/malformed JSON string/, "'malformed JSON string' json string Args for input='$input'");
 });
 
 run_test('1', sub {
@@ -96,8 +96,8 @@ run_test('1', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok (!$res, "truncated input='$input'");
-    ok ($e, "no error for input='$input'");
-    like ($e, qr/JSON text must be an object or array/, "'JSON text must be an object or array' json string error for input='$input'");
+    ok ($e, "no Args for input='$input'");
+    like ($e, qr/JSON text must be an object or array/, "'JSON text must be an object or array' json string Args for input='$input'");
 });
 
 run_test('"1', sub {
@@ -106,8 +106,8 @@ run_test('"1', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok (!$res, "truncated input='$input'");
-    ok (!$e, "no error for input='$input'");
-    unlike ($e, qr/malformed JSON string/, "'malformed JSON string' json string error for input='$input'");
+    ok (!$e, "no Args for input='$input'");
+    unlike ($e, qr/malformed JSON string/, "'malformed JSON string' json string Args for input='$input'");
 });
 
 run_test('\\', sub {
@@ -116,8 +116,8 @@ run_test('\\', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok (!$res, "truncated input='$input'");
-    ok ($e, "no error for input='$input'");
-    like ($e, qr/malformed JSON string/, "'malformed JSON string' json string error for input='$input'");
+    ok ($e, "no Args for input='$input'");
+    like ($e, qr/malformed JSON string/, "'malformed JSON string' json string Args for input='$input'");
 });
 
 run_test('{"one": "', sub {
@@ -126,8 +126,8 @@ run_test('{"one": "', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok (!$res, "truncated input='$input'");
-    ok (!$e, "no error for input='$input'");
-    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string error for input='$input'");
+    ok (!$e, "no Args for input='$input'");
+    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string Args for input='$input'");
 });
 
 run_test('{"one": {', sub {
@@ -136,8 +136,8 @@ run_test('{"one": {', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok (!$res, "truncated input='$input'");
-    ok (!$e, "no error for input='$input'");
-    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string error for input='$input'");
+    ok (!$e, "no Args for input='$input'");
+    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string Args for input='$input'");
 });
 
 run_test('{"one": [', sub {
@@ -146,8 +146,8 @@ run_test('{"one": [', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok (!$res, "truncated input='$input'");
-    ok (!$e, "no error for input='$input'");
-    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string error for input='$input'");
+    ok (!$e, "no Args for input='$input'");
+    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string Args for input='$input'");
 });
 
 run_test('{"one": t', sub {
@@ -156,8 +156,8 @@ run_test('{"one": t', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok (!$res, "truncated input='$input'");
-    ok (!$e, "no error for input='$input'");
-    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string error for input='$input'");
+    ok (!$e, "no Args for input='$input'");
+    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string Args for input='$input'");
 });
 
 run_test('{"one": \\', sub {
@@ -166,8 +166,8 @@ run_test('{"one": \\', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok (!$res, "truncated input='$input'");
-    ok (!$e, "no error for input='$input'");
-    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string error for input='$input'");
+    ok (!$e, "no Args for input='$input'");
+    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string Args for input='$input'");
 });
 
 run_test('{"one": ', sub {
@@ -176,8 +176,8 @@ run_test('{"one": ', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok (!$res, "truncated input='$input'");
-    ok (!$e, "no error for input='$input'");
-    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string error for input='$input'");
+    ok (!$e, "no Args for input='$input'");
+    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string Args for input='$input'");
 });
 
 run_test('{"one": 1', sub {
@@ -186,8 +186,8 @@ run_test('{"one": 1', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok (!$res, "truncated input='$input'");
-    ok (!$e, "no error for input='$input'");
-    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string error for input='$input'");
+    ok (!$e, "no Args for input='$input'");
+    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string Args for input='$input'");
 });
 
 run_test('{"one": {"two": 2', sub {
@@ -196,8 +196,8 @@ run_test('{"one": {"two": 2', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok (!$res, "truncated '$input'");
-    ok (!$e, "no error -- '$input'");
-    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string error -- $input");
+    ok (!$e, "no Args -- '$input'");
+    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string Args -- $input");
 });
 
 # Test Appending Closing '}' Curly Bracket
@@ -207,12 +207,12 @@ run_test('{"one": 1', sub {
     my $res = eval { $coder->incr_parse($input) };
     my $e = $@; # test more clobbers $@, we need it twice
     ok (!$res, "truncated input='$input'");
-    ok (!$e, "no error for input='$input'");
-    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string error for input='$input'");
+    ok (!$e, "no Args for input='$input'");
+    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string Args for input='$input'");
 
     $res = eval { $coder->incr_parse('}') };
     $e = $@; # test more clobbers $@, we need it twice
     ok ($res, "truncated input='$input' . '}'");
-    ok (!$e, "no error for input='$input' . '}'");
-    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string error for input='$input' . '}'");
+    ok (!$e, "no Args for input='$input' . '}'");
+    unlike ($e, qr/, or \} expected while parsing object\/hash/, "No '} expected' json string Args for input='$input' . '}'");
 });

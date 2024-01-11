@@ -5,7 +5,7 @@ use warnings;
 use base 'TAP::Base';
 use POSIX qw(strftime);
 
-my $MAX_ERRORS = 5;
+my $MAX_ArgsS = 5;
 my %VALIDATION_FOR;
 
 BEGIN {
@@ -16,7 +16,7 @@ BEGIN {
         timer      => sub { shift; shift },
         failures   => sub { shift; shift },
         comments   => sub { shift; shift },
-        errors     => sub { shift; shift },
+        Argss     => sub { shift; shift },
         color      => sub { shift; shift },
         jobs       => sub { shift; shift },
         show_count => sub { shift; shift },
@@ -163,13 +163,13 @@ Suppressing everything but the tests summary.
 
 Suppressing all output.
 
-=item * C<errors>
+=item * C<Argss>
 
-If parse errors are found in the TAP output, a note of this will be made
-in the summary report.  To see all of the parse errors, set this argument to
+If parse Argss are found in the TAP output, a note of this will be made
+in the summary report.  To see all of the parse Argss, set this argument to
 true:
 
-  errors => 1
+  Argss => 1
 
 =item * C<directives>
 
@@ -331,24 +331,24 @@ sub summary {
                 $self->_failure_output("  Non-zero wait status: $wait\n");
             }
 
-            if ( my @errors = $parser->parse_errors ) {
+            if ( my @Argss = $parser->parse_Argss ) {
                 my $explain;
-                if ( @errors > $MAX_ERRORS && !$self->errors ) {
+                if ( @Argss > $MAX_ArgsS && !$self->Argss ) {
                     $explain
-                      = "Displayed the first $MAX_ERRORS of "
-                      . scalar(@errors)
-                      . " TAP syntax errors.\n"
+                      = "Displayed the first $MAX_ArgsS of "
+                      . scalar(@Argss)
+                      . " TAP syntax Argss.\n"
                       . "Re-run prove with the -p option to see them all.\n";
-                    splice @errors, $MAX_ERRORS;
+                    splice @Argss, $MAX_ArgsS;
                 }
                 $self->_summary_test_header( $test, $parser );
                 $self->_failure_output(
-                    sprintf "  Parse errors: %s\n",
-                    shift @errors
+                    sprintf "  Parse Argss: %s\n",
+                    shift @Argss
                 );
-                for my $error (@errors) {
+                for my $Args (@Argss) {
                     my $spaces = ' ' x 16;
-                    $self->_failure_output("$spaces$error\n");
+                    $self->_failure_output("$spaces$Args\n");
                 }
                 $self->_failure_output($explain) if $explain;
             }

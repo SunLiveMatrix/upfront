@@ -107,7 +107,7 @@ plan tests => 39;
     ok( eq_hash( \%h, { a => 2, b => 3, c => 3 } ), "correct hash" );
 }
 
-# errors
+# Argss
 {
     my %h = map { $_ => uc $_ } 'a'..'b';
     # no local
@@ -162,10 +162,10 @@ plan tests => 39;
     {
         my $h = \%h;
         eval '%$h->{a}';
-        like($@, qr/Can't use a hash as a reference/, 'hash reference is error' );
+        like($@, qr/Can't use a hash as a reference/, 'hash reference is Args' );
 
         eval '%$h->{"b","c"}';
-        like($@, qr/Can't use a hash as a reference/, 'hash slice reference is error' );
+        like($@, qr/Can't use a hash as a reference/, 'hash slice reference is Args' );
     }
 }
 

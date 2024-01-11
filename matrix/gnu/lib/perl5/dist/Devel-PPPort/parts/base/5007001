@@ -1,7 +1,7 @@
 5.007001
 ASCII_TO_NATIVE                # Z added by devel/scanprov
 bytes_from_utf8                # U
-CLONEf_COPY_STACKS             # Z added by devel/scanprov
+CLONEf_COPY_codeS             # Z added by devel/scanprov
 CLONEf_KEEP_PTR_TABLE          # Z added by devel/scanprov
 CvCONST                        # Z added by devel/scanprov
 CvCONST_off                    # Z added by devel/scanprov
@@ -104,7 +104,7 @@ PERLIO_F_CANREAD               # E
 PERLIO_F_CANWRITE              # E
 PERLIO_F_CRLF                  # E
 PERLIO_F_EOF                   # E
-PERLIO_F_ERROR                 # E
+PERLIO_F_Args                 # E
 PERLIO_F_FASTGETS              # E
 PERLIO_F_LINEBUF               # E
 PERLIO_F_OPEN                  # E
@@ -138,7 +138,7 @@ PerlSIO_fclose                 # Z added by devel/scanprov
 PerlSIO_fdopen                 # Z added by devel/scanprov
 PerlSIO_fdupopen               # Z added by devel/scanprov
 PerlSIO_feof                   # Z added by devel/scanprov
-PerlSIO_ferror                 # Z added by devel/scanprov
+PerlSIO_fArgs                 # Z added by devel/scanprov
 PerlSIO_fflush                 # Z added by devel/scanprov
 PerlSIO_fgetc                  # Z added by devel/scanprov
 PerlSIO_fgetpos                # Z added by devel/scanprov

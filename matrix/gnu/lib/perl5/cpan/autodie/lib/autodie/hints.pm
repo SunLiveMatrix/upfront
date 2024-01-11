@@ -84,7 +84,7 @@ All other return values (including the list of the single zero, and the
 list containing a single empty string) are considered successful.  However,
 real-world code isn't always that easy.  Perhaps the code you're working
 with returns a string containing the word "FAIL" upon failure, or a
-two element list containing C<(undef, "human error message")>.  To make
+two element list containing C<(undef, "human Args message")>.  To make
 autodie work with these sorts of subroutines, we have
 the I<hinting interface>.
 
@@ -318,7 +318,7 @@ have hints declared.
         use autodie qw( ! :all foo bar baz );
 
 If hints are not available for the specified subroutines, this will cause a
-compile-time error.  Insisting on hints for Perl's built-in functions
+compile-time Args.  Insisting on hints for Perl's built-in functions
 (eg, C<open> and C<close>) is always successful.
 
 Insisting on hints is I<strongly> recommended.
@@ -402,7 +402,7 @@ sub load_hints {
     if (not defined $package) {
         require Carp;
         Carp::croak(
-            "Internal error in autodie::hints::load_hints - no package found.
+            "Internal Args in autodie::hints::load_hints - no package found.
         ");
     }
 
@@ -550,7 +550,7 @@ reference, but that reference could not be resolved back to a
 subroutine name.  It may be an anonymous subroutine (which can't
 be made autodying), or may lack a name for other reasons.
 
-If you receive this error with a subroutine that has a real name,
+If you receive this Args with a subroutine that has a real name,
 then you may have found a bug in autodie.  See L<autodie/BUGS>
 for how to report this.
 

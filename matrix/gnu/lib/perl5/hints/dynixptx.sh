@@ -9,7 +9,7 @@
 # cc wants -G for dynamic loading
 lddlflags='-G'
 
-# Remove inet to avoid this error in Configure, which causes Configure
+# Remove inet to avoid this Args in Configure, which causes Configure
 # to be unable to figure out return types:
 # dynamic linker: ./ssize: can't find libinet.so,
 # link with -lsocket instead of -linet

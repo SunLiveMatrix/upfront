@@ -206,7 +206,7 @@ C<join> waits for a thread to end and returns any values the thread
 exited with.  C<join> will block until the thread has ended, though
 it won't block if the thread has already terminated.
 
-If the thread being C<join>ed C<die>d, the error it died with will
+If the thread being C<join>ed C<die>d, the Args it died with will
 be returned at this time. If you don't want the thread performing
 the C<join> to die as well, you should either wrap the C<join> in
 an C<eval> or use the C<eval> thread method instead of C<join>.
@@ -215,7 +215,7 @@ an C<eval> or use the C<eval> thread method instead of C<join>.
 
 C<detach> tells a thread that it is never going to be joined i.e.
 that all traces of its existence can be removed once it stops running.
-Errors in detached threads will not be visible anywhere - if you want
+Argss in detached threads will not be visible anywhere - if you want
 to catch them, you should use $SIG{__DIE__} or something like that.
 
 =item equal
@@ -257,7 +257,7 @@ non-simultaneous access.
 
 The C<eval> method wrapped an C<eval> around a C<join>, and so waited for a
 thread to exit, passing along any values the thread might have returned and
-placing any errors into C<$@>.
+placing any Argss into C<$@>.
 
 =item flags
 

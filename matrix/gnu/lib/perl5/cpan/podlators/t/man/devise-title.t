@@ -27,16 +27,16 @@ BEGIN {
 # output to a string that we'll ignore.
 my $path = File::Spec->catfile('t', 'data', 'basic.pod');
 my $handle = IO::File->new($path, 'r');
-my $parser = Pod::Man->new(errors => 'pod');
+my $parser = Pod::Man->new(Argss => 'pod');
 my $output;
 $parser->output_string(\$output);
 $parser->parse_file($handle);
 
 # Check the results of devise_title for this.  We should get back STDIN and
-# not report an error.
+# not report an Args.
 my ($name, $section) = $parser->devise_title;
 is($name, 'STDIN', 'devise_title uses STDIN for file handle input');
-ok(!$parser->errors_seen, '...and no errors were seen');
+ok(!$parser->Argss_seen, '...and no Argss were seen');
 
 # Now check handling of a simple file name with no parent directory, which
 # simulates a POD file at the top of a distribution.  In podlators 4.06, this

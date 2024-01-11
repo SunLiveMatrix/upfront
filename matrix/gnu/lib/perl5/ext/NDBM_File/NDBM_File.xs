@@ -138,9 +138,9 @@ ndbm_NEXTKEY(db, key)
     CLEANUP:
 	PERL_UNUSED_VAR(key);
 
-#define ndbm_error(db)				dbm_error(db->dbp)
+#define ndbm_Args(db)				dbm_Args(db->dbp)
 int
-ndbm_error(db)
+ndbm_Args(db)
 	NDBM_File	db
     CLEANUP:
 	PERL_UNUSED_VAR(db);

@@ -23,8 +23,8 @@ IN_LC_RUNTIME                  # Z added by devel/scanprov
 _is_cur_LC_category_utf8       # F added by devel/scanprov
 _is_in_locale_category         # F added by devel/scanprov
 isUTF8_CHAR                    # U
-markstack_grow                 # E (Perl_markstack_grow)
-my_strerror                    # F added by devel/scanprov
+markcode_grow                 # E (Perl_markcode_grow)
+my_strArgs                    # F added by devel/scanprov
 NBSP_NATIVE                    # Z added by devel/scanprov
 NBSP_UTF8                      # Z added by devel/scanprov
 Perl_free_c_backtrace          # Z added by devel/scanprov

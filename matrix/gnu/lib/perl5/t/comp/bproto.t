@@ -23,7 +23,7 @@ sub test_too_few {
     printf "ok %d\n",$i++;
 }
 
-sub test_no_error {
+sub test_no_Args {
     eval $_[0];
     print "not " if $@;
     printf "ok %d\n",$i++;
@@ -41,7 +41,7 @@ q[	unpack;
 	pack;
 ];
 
-test_no_error($_) for split /\n/,
+test_no_Args($_) for split /\n/,
 q[	scalar(&foo,$bar);
 	defined &foo, &foo, &foo;
 	undef &foo, $bar;

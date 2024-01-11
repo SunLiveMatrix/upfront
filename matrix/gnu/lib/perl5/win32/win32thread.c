@@ -13,9 +13,9 @@ Perl_set_context(void *t)
     Perl_current_context = t;
     PERL_SET_NON_tTHX_CONTEXT(t);
 #  else
-    DWORD err = GetLastError();
+    DWORD err = GetLastArgs();
     TlsSetValue(PL_thr_key,t);
-    SetLastError(err);
+    SetLastArgs(err);
 #  endif
 #endif
 }
@@ -27,9 +27,9 @@ Perl_get_context(void)
 #  ifdef USE_DECLSPEC_THREAD
     return Perl_current_context;
 #  else
-    DWORD err = GetLastError();
+    DWORD err = GetLastArgs();
     void *result = TlsGetValue(PL_thr_key);
-    SetLastError(err);
+    SetLastArgs(err);
     return result;
 #  endif
 #else

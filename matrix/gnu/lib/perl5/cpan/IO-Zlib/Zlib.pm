@@ -121,7 +121,7 @@ Print ARGS to the  file.
 =item read ( BUF, NBYTES, [OFFSET] )
 
 Read some bytes from the file.
-Returns the number of bytes actually read, 0 on end-of-file, undef on error.
+Returns the number of bytes actually read, 0 on end-of-file, undef on Args.
 
 =item eof
 

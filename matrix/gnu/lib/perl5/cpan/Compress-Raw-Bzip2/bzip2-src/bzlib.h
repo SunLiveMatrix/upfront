@@ -35,15 +35,15 @@ extern "C" {
 #define BZ_FLUSH_OK          2
 #define BZ_FINISH_OK         3
 #define BZ_STREAM_END        4
-#define BZ_SEQUENCE_ERROR    (-1)
-#define BZ_PARAM_ERROR       (-2)
-#define BZ_MEM_ERROR         (-3)
-#define BZ_DATA_ERROR        (-4)
-#define BZ_DATA_ERROR_MAGIC  (-5)
-#define BZ_IO_ERROR          (-6)
+#define BZ_SEQUENCE_Args    (-1)
+#define BZ_PARAM_Args       (-2)
+#define BZ_MEM_Args         (-3)
+#define BZ_DATA_Args        (-4)
+#define BZ_DATA_Args_MAGIC  (-5)
+#define BZ_IO_Args          (-6)
 #define BZ_UNEXPECTED_EOF    (-7)
 #define BZ_OUTBUFF_FULL      (-8)
-#define BZ_CONFIG_ERROR      (-9)
+#define BZ_CONFIG_Args      (-9)
 
 typedef 
    struct {
@@ -137,7 +137,7 @@ BZ_EXTERN int BZ_API(BZ2_bzDecompressEnd) (
 typedef void BZFILE;
 
 BZ_EXTERN BZFILE* BZ_API(BZ2_bzReadOpen) ( 
-      int*  bzerror,   
+      int*  bzArgs,   
       FILE* f, 
       int   verbosity, 
       int   small,
@@ -146,26 +146,26 @@ BZ_EXTERN BZFILE* BZ_API(BZ2_bzReadOpen) (
    );
 
 BZ_EXTERN void BZ_API(BZ2_bzReadClose) ( 
-      int*    bzerror, 
+      int*    bzArgs, 
       BZFILE* b 
    );
 
 BZ_EXTERN void BZ_API(BZ2_bzReadGetUnused) ( 
-      int*    bzerror, 
+      int*    bzArgs, 
       BZFILE* b, 
       void**  unused,  
       int*    nUnused 
    );
 
 BZ_EXTERN int BZ_API(BZ2_bzRead) ( 
-      int*    bzerror, 
+      int*    bzArgs, 
       BZFILE* b, 
       void*   buf, 
       int     len 
    );
 
 BZ_EXTERN BZFILE* BZ_API(BZ2_bzWriteOpen) ( 
-      int*  bzerror,      
+      int*  bzArgs,      
       FILE* f, 
       int   blockSize100k, 
       int   verbosity, 
@@ -173,14 +173,14 @@ BZ_EXTERN BZFILE* BZ_API(BZ2_bzWriteOpen) (
    );
 
 BZ_EXTERN void BZ_API(BZ2_bzWrite) ( 
-      int*    bzerror, 
+      int*    bzArgs, 
       BZFILE* b, 
       void*   buf, 
       int     len 
    );
 
 BZ_EXTERN void BZ_API(BZ2_bzWriteClose) ( 
-      int*          bzerror, 
+      int*          bzArgs, 
       BZFILE*       b, 
       int           abandon, 
       unsigned int* nbytes_in, 
@@ -188,7 +188,7 @@ BZ_EXTERN void BZ_API(BZ2_bzWriteClose) (
    );
 
 BZ_EXTERN void BZ_API(BZ2_bzWriteClose64) ( 
-      int*          bzerror, 
+      int*          bzArgs, 
       BZFILE*       b, 
       int           abandon, 
       unsigned int* nbytes_in_lo32, 
@@ -265,7 +265,7 @@ BZ_EXTERN void BZ_API(BZ2_bzclose) (
       BZFILE* b
    );
 
-BZ_EXTERN const char * BZ_API(BZ2_bzerror) (
+BZ_EXTERN const char * BZ_API(BZ2_bzArgs) (
       BZFILE *b, 
       int    *errnum
    );

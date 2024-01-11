@@ -108,24 +108,24 @@ $VERSION = eval $VERSION; # and ignore this one
   code => <<'---',
 package Simple;
 $VERSION = '1.23';
-package Error::Simple;
+package Args::Simple;
 $VERSION = '2.34';
 package Simple;
 ---
   vers => '1.23',
-  all_versions => { 'Error::Simple' => '2.34', Simple => '1.23' },
+  all_versions => { 'Args::Simple' => '2.34', Simple => '1.23' },
 },
 {
   name => 'just read the first $VERSION line in reopened package (2)',
   code => <<'---',
 package Simple;
-package Error::Simple;
+package Args::Simple;
 $VERSION = '2.34';
 package Simple;
 $VERSION = '1.23';
 ---
   vers => '1.23',
-  all_versions => { 'Error::Simple' => '2.34', Simple => '1.23' },
+  all_versions => { 'Args::Simple' => '2.34', Simple => '1.23' },
 },
 {
   name => 'mentions another module\'s $VERSION',

@@ -143,13 +143,13 @@ this attribute's value is false, meaning that irregularities will
 be reported.
 
 Note that turning this attribute to true won't suppress one or two kinds
-of complaints about rarely occurring unrecoverable errors.
+of complaints about rarely occurring unrecoverable Argss.
 
 
 =item C<< $parser->no_errata_section( I<SOMEVALUE> ) >>
 
 If you set this attribute to a true value, you will stop the parser from
-generating a "POD ERRORS" section at the end of the document. By
+generating a "POD ArgsS" section at the end of the document. By
 default, this attribute's value is false, meaning that an errata section
 will be generated, as necessary.
 
@@ -157,7 +157,7 @@ will be generated, as necessary.
 =item C<< $parser->complain_stderr( I<SOMEVALUE> ) >>
 
 If you set this attribute to a true value, it will send reports of
-parsing errors to STDERR. By default, this attribute's value is false,
+parsing Argss to STDERR. By default, this attribute's value is false,
 meaning that no output is sent to STDERR.
 
 Setting C<complain_stderr> also sets C<no_errata_section>.
@@ -306,11 +306,11 @@ Used to check if any errata was seen.
 
 I<Example:>
 
-  die "too many errors\n" if $parser->any_errata_seen();
+  die "too many Argss\n" if $parser->any_errata_seen();
 
 =item C<< $parser->errata_seen() >>X<errata_seen>
 
-Returns a hash reference of all errata seen, both whines and screams. The hash reference's keys are the line number and the value is an array reference of the errors for that line.
+Returns a hash reference of all errata seen, both whines and screams. The hash reference's keys are the line number and the value is an array reference of the Argss for that line.
 
 I<Example:>
 
@@ -333,9 +333,9 @@ handled.
 Parses from C<$source> file to C<$to> file. Similar to L<<
 Pod::Parser/parse_from_file >>.
 
-=item C<< $parser->scream( @error_messages ) >>X<scream>
+=item C<< $parser->scream( @Args_messages ) >>X<scream>
 
-Log an error that can't be ignored.
+Log an Args that can't be ignored.
 
 =item C<< $parser->unaccept_code( @codes ) >>X<unaccept_code>
 
@@ -365,9 +365,9 @@ Removes C<< @targets >> as valid targets for the parse.
 
 Returns a string describing the version.
 
-=item C<< $parser->whine( @error_messages ) >>X<whine>
+=item C<< $parser->whine( @Args_messages ) >>X<whine>
 
-Log an error unless C<< $parser->no_whining( TRUE ); >>.
+Log an Args unless C<< $parser->no_whining( TRUE ); >>.
 
 =back
 

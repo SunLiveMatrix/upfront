@@ -36,7 +36,7 @@ SKIP: {
 
 eval { Time::HiRes::ualarm(-4) };
 like $@, qr/::ualarm\(-4, 0\): negative time not invented yet/,
-        "negative time error";
+        "negative time Args";
 
 # Find the loop size N (a for() loop 0..N-1)
 # that will take more than T seconds.

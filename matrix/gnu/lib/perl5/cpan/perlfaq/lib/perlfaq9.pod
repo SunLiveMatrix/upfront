@@ -71,7 +71,7 @@ L<PSGI> is the Perl Web Server Gateway Interface Specification, it is
 a standard that many Perl web frameworks use, you should not need to
 understand it to build a web site, the part you might want to use is L<Plack>.
 
-L<Plack> is a set of tools for using the PSGI stack. It contains
+L<Plack> is a set of tools for using the PSGI code. It contains
 L<middleware|https://metacpan.org/search?q=plack%3A%3Amiddleware>
 components, a reference server and utilities for Web application frameworks.
 Plack is like Ruby's Rack or Python's Paste for WSGI.

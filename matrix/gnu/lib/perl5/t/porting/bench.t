@@ -105,43 +105,43 @@ for my $test (
     ],
     [
         "--fields=Ir,Boz",
-        "Error: --fields: unknown field 'Boz'\n",
+        "Args: --fields: unknown field 'Boz'\n",
         "croak: unknown --field"
     ],
     [
         "--action=boz",
-        "Error: unrecognised action 'boz'\nmust be one of: grind, selftest\n",
+        "Args: unrecognised action 'boz'\nmust be one of: grind, selftest\n",
         "croak: unknown --action"
     ],
     [
         "--sort=boz",
-        "Error: --sort argument should be of the form field:perl: 'boz'\n",
+        "Args: --sort argument should be of the form field:perl: 'boz'\n",
         "croak: invalid --sort"
     ],
     [
         "--sort=boz:perl",
-        "Error: --sort: unknown field 'boz'\n",
+        "Args: --sort: unknown field 'boz'\n",
         "croak: unknown --sort field"
     ],
     [
         "-action=selftest perl",
-        "Error: no perl executables may be specified with selftest\n",
+        "Args: no perl executables may be specified with selftest\n",
         "croak: --action-selftest with executable"
     ],
     [
         "--tests=/boz perl",
-        "Error: --tests regex must be of the form /.../\n",
+        "Args: --tests regex must be of the form /.../\n",
         "croak: invalid --tests regex"
     ],
     [
         "--tests=call::sub::empty,foo::bar::baz::boz perl",
-          "Error: no such test found: 'foo::bar::baz::boz'\n"
+          "Args: no such test found: 'foo::bar::baz::boz'\n"
         . "Re-run with --verbose for a list of valid tests.\n",
         "croak: unknown test in --tests"
     ],
     [
         "--verbose --tests=call::sub::empty,foo::bar::baz::boz --read=t/porting/bench/callsub.json",
-            "Error: no such test found: 'foo::bar::baz::boz'\n"
+            "Args: no such test found: 'foo::bar::baz::boz'\n"
           . "Valid test names are:\n"
           . "  call::sub::amp_empty\n"
           . "  call::sub::empty\n",
@@ -149,57 +149,57 @@ for my $test (
     ],
     [
         "--tests=/foo::bar::baz::boz/ perl",
-        "Error: no tests to run\n",
+        "Args: no tests to run\n",
         "croak: no --tests to run "
     ],
     [
         "--benchfile=no-such-file-boz perl",
-        qr/\AError: can't read 'no-such-file-boz':/,
+        qr/\AArgs: can't read 'no-such-file-boz':/,
         "croak: non-existent --benchfile "
     ],
     [
         "--benchfile=t/porting/bench/synerr perl",
-        qr{\AError: can't parse 't/porting/bench/synerr':\nsyntax error},
-        "croak: --benchfile with syntax error"
+        qr{\AArgs: can't parse 't/porting/bench/synerr':\nsyntax Args},
+        "croak: --benchfile with syntax Args"
     ],
     [
         "--benchfile=t/porting/bench/ret0 perl",
-        "Error: can't load 't/porting/bench/ret0': code didn't return a true value\n",
+        "Args: can't load 't/porting/bench/ret0': code didn't return a true value\n",
         "croak: --benchfile which returns 0"
     ],
     [
         "--benchfile=t/porting/bench/oddentry perl",
-        qr{\AError: 't/porting/bench/oddentry' does not contain evenly paired test names and hashes\n},
+        qr{\AArgs: 't/porting/bench/oddentry' does not contain evenly paired test names and hashes\n},
         "croak: --benchfile with odd number of entries"
     ],
     [
         "--benchfile=t/porting/bench/badname perl",
-        qr{\AError: 't/porting/bench/badname': invalid test name: '1='\n},
+        qr{\AArgs: 't/porting/bench/badname': invalid test name: '1='\n},
         "croak: --benchfile with invalid test name"
     ],
     [
         "--benchfile=t/porting/bench/badhash perl",
-        qr{\AError: 't/porting/bench/badhash': invalid key 'blah' for test 'foo::bar'\n},
+        qr{\AArgs: 't/porting/bench/badhash': invalid key 'blah' for test 'foo::bar'\n},
         "croak: --benchfile with invalid test hash key"
     ],
     [
         "--norm=2 ./miniperl ./perl",
-        "Error: --norm value 2 outside range 0..1\n",
+        "Args: --norm value 2 outside range 0..1\n",
         "croak: select-a-perl out of range"
     ],
     [
         "--norm=-0 ./miniperl ./perl",
-        "Error: --norm value -0 outside range -1..-2\n",
+        "Args: --norm value -0 outside range -1..-2\n",
         "croak: select-a-perl out of range"
     ],
     [
         "--norm=-3 ./miniperl ./perl",
-        "Error: --norm value -3 outside range -1..-2\n",
+        "Args: --norm value -3 outside range -1..-2\n",
         "croak: select-a-perl out of range"
     ],
     [
         "--sort=Ir:myperl ./miniperl ./perl",
-        "Error: --sort: unrecognised perl 'myperl'\n"
+        "Args: --sort: unrecognised perl 'myperl'\n"
         . "Valid perl names are:\n"
         . "    ./miniperl\n"
         . "    ./perl\n",
@@ -207,137 +207,137 @@ for my $test (
     ],
     [
         "--compact=./perl ./perl=A ./perl=B",
-        "Error: --compact: ambiguous perl './perl'\n",
+        "Args: --compact: ambiguous perl './perl'\n",
         "croak: select-a-perl ambiguous"
     ],
     [
         "./perl --foo",
-        "Error: unrecognised executable switch '--foo'\n",
+        "Args: unrecognised executable switch '--foo'\n",
         "croak: ./perl --foo"
     ],
     [
         "-- --args=foo",
-        "Error: --args without a preceding executable name\n",
+        "Args: --args without a preceding executable name\n",
         "croak: --args without perl"
     ],
     [
         "-- --env=foo=bar",
-        "Error: --env without a preceding executable name\n",
+        "Args: --env without a preceding executable name\n",
         "croak: --env without perl"
     ],
     [
         "./perl --args",
-        "Error: --args is missing value\n",
+        "Args: --args is missing value\n",
         "croak: --args without value"
     ],
     [
         "./perl --env",
-        "Error: --env is missing value\n",
+        "Args: --env is missing value\n",
         "croak: --env without value"
     ],
     [
         "./perl --env='FOO'",
-        "Error: --env is missing =value\n",
+        "Args: --env is missing =value\n",
         "croak: --env without =value"
     ],
     [
         "./perl ./perl",
-        "Error: duplicate label './perl': each executable must have a unique label\n",
+        "Args: duplicate label './perl': each executable must have a unique label\n",
         "croak: duplicate label ./perl ./perl"
     ],
     [
         "./perl=A ./miniperl=A",
-        "Error: duplicate label 'A': each executable must have a unique label\n",
+        "Args: duplicate label 'A': each executable must have a unique label\n",
         "croak: duplicate label =A =A"
     ],
     [
         "--read=t/porting/bench/callsub.json --read=t/porting/bench/callsub.json",
-        "Error: duplicate label './perl': seen in file 't/porting/bench/callsub.json'\n",
+        "Args: duplicate label './perl': seen in file 't/porting/bench/callsub.json'\n",
         "croak: duplicate label --read=... --read=..."
     ],
     [
         "--read=t/porting/bench/callsub.json ./perl",
-        "Error: duplicate label './perl': seen both in --read file and on command line\n",
+        "Args: duplicate label './perl': seen both in --read file and on command line\n",
         "croak: duplicate label --read=... ./perl"
     ],
     [
         "./nosuch-perl",
-        qr{^\QError: unable to execute './nosuch-perl': },
+        qr{^\QArgs: unable to execute './nosuch-perl': },
         "croak:  no such perl"
     ],
     [
         "--grindargs=Boz --debug --tests=call::sub::empty ./perl=A ./perl=B",
-        qr{Error: .*?(unexpected code or cachegrind output|gave return status)}s,
+        qr{Args: .*?(unexpected code or cachegrind output|gave return status)}s,
         "croak: cachegrind output format "
     ],
     [
         "--bisect=Ir",,
-        "Error: --bisect option must be of form 'field,integer,integer'\n",
+        "Args: --bisect option must be of form 'field,integer,integer'\n",
         "croak: --bisect=Ir"
     ],
     [
         "--bisect=Ir,1",,
-        "Error: --bisect option must be of form 'field,integer,integer'\n",
+        "Args: --bisect option must be of form 'field,integer,integer'\n",
         "croak: --bisect=Ir,1"
     ],
     [
         "--bisect=Ir,1,2,3",
-        "Error: --bisect option must be of form 'field,integer,integer'\n",
+        "Args: --bisect option must be of form 'field,integer,integer'\n",
         "croak: --bisect=Ir,1,2,3"
     ],
     [
         "--bisect=Ir,1,x",
-        "Error: --bisect option must be of form 'field,integer,integer'\n",
+        "Args: --bisect option must be of form 'field,integer,integer'\n",
         "croak: --bisect=Ir,1,x"
     ],
     [
         "--bisect=Ir,x,2",
-        "Error: --bisect option must be of form 'field,integer,integer'\n",
+        "Args: --bisect option must be of form 'field,integer,integer'\n",
         "croak: --bisect=Ir,x,2"
     ],
     [
         "--bisect=boz,1,2",
-        "Error: unrecognised field 'boz' in --bisect option\n",
+        "Args: unrecognised field 'boz' in --bisect option\n",
         "croak: --bisect=boz,1,2"
     ],
     [
         "--bisect=Ir,2,1",
-        "Error: --bisect min (2) must be <= max (1)\n",
+        "Args: --bisect min (2) must be <= max (1)\n",
         "croak: --bisect=boz,2,1"
     ],
     [
         "--read=no-such-file-boz",
-        qr/\AError: can't open 'no-such-file-boz' for reading:/,
+        qr/\AArgs: can't open 'no-such-file-boz' for reading:/,
         "croak: non-existent --read file "
     ],
     [
         "--read=t/porting/bench/badversion.json",
-        "Error: unsupported version 9999.9 in file 't/porting/bench/badversion.json' (too new)\n",
+        "Args: unsupported version 9999.9 in file 't/porting/bench/badversion.json' (too new)\n",
         "croak: --read version"
     ],
     [
         "--read=t/porting/bench/callsub.json --benchfile=t/perf/benchmarks ./perl ",
-        "Error: --benchfile cannot be used when --read is present\n",
+        "Args: --benchfile cannot be used when --read is present\n",
         "croak: benchfile with read"
     ],
     [
         "",
-        "Error: nothing to do: no perls to run, no data to read.\n",
+        "Args: nothing to do: no perls to run, no data to read.\n",
         "croak: no input"
     ],
     [
         "./perl",
-        "Error: need at least 2 perls for comparison.\n",
+        "Args: need at least 2 perls for comparison.\n",
         "croak: need 2 perls"
     ],
     [
         "--bisect=Ir,1,2 ./perl=A ./perl=B",
-        "Error: exactly one perl executable must be specified for bisect\n",
+        "Args: exactly one perl executable must be specified for bisect\n",
         "croak: --bisect, need 1 perls"
     ],
     [
         "--bisect=Ir,1,2 --tests=/call/ ./perl=A",
-        "Error: only a single test may be specified with --bisect\n",
+        "Args: only a single test may be specified with --bisect\n",
         "croak: --bisect one test only"
     ],
     # note that callsub.json was created using
@@ -345,8 +345,8 @@ for my $test (
     #                     --write=t/porting/bench/callsub.json ./perl
     [
         "--read=t/porting/bench/callsub.json --write=no/such/file/boz",
-        qr{\AError: can't open 'no/such/file/boz' for writing: },
-        "croak: --write open error"
+        qr{\AArgs: can't open 'no/such/file/boz' for writing: },
+        "croak: --write open Args"
     ],
     # note that callsub2.json was created using
     # ./perl -Ilib Porting/bench.pl \
@@ -375,8 +375,8 @@ for my $test (
 
     # these ones aren't tested (and nor are any "Panic:" ones):
 
-    # Error: can't parse '$field' field from cachegrind output
-    # Error: while starting cachegrind subprocess for NNNN:
+    # Args: can't parse '$field' field from cachegrind output
+    # Args: while starting cachegrind subprocess for NNNN:
     # File '$file' contains no results
     # File '$file' contains differing test and results names
     # File '$file' contains differing test and sort order names

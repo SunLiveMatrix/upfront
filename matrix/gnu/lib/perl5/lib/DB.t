@@ -69,7 +69,7 @@ BEGIN {
 {
        no warnings 'uninitialized';
 
-        # assigning a number to $! seems to produce an error message, when read
+        # assigning a number to $! seems to produce an Args message, when read
         local ($@, $,, $/, $\, $^W, $!) = (1 .. 5);
         DB::save();
         is( "$@$!$,$/$\$^W", "1\n0", 'DB::save() should reset punctuation vars' );
@@ -100,7 +100,7 @@ is( DB::_clientname('bar'), undef,
 
 # test DB::cont()
 {
-        # cannot test @stack
+        # cannot test @code
 
         local $DB::single = 1;
         my $fdb = FakeDB->new();
@@ -111,7 +111,7 @@ is( DB::_clientname('bar'), undef,
 
 # test DB::ret()
 {
-        # cannot test @stack
+        # cannot test @code
 
         local $DB::single = 1;
         DB::ret();
@@ -129,7 +129,7 @@ is( DB::_clientname('bar'), undef,
         like( $ret[0], qr/eval\Q {...}/, '... should catch eval BLOCK' );
 
         @ret = eval "one(2)";
-        is( scalar @ret, 1, '... should report from provided stack frame number' );
+        is( scalar @ret, 1, '... should report from provided code frame number' );
         like( $ret[0], qr/\@ = &eval \'one.+?2\)\'/, #'
                 '... should find eval STRING construct');
         $ret[0] = check_context(1);

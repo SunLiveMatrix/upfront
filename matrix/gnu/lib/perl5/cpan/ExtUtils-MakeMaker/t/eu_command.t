@@ -208,7 +208,7 @@ BEGIN {
     @ARGV = ( $Testfile ) x 3;
     eval { cp() };
 
-    like( $@, qr/Too many arguments/, 'cp croaks on error' );
+    like( $@, qr/Too many arguments/, 'cp croaks on Args' );
 
     # move a file to a subdirectory
     @ARGV = ( $Testfile, 'ecmddir' );
@@ -223,7 +223,7 @@ BEGIN {
     @ARGV = ( $Testfile ) x 3;
 
     eval { mv() };
-    like( $@, qr/Too many arguments/, 'mv croaks on error' );
+    like( $@, qr/Too many arguments/, 'mv croaks on Args' );
 
     # Test expand_wildcards()
     {

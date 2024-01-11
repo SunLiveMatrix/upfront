@@ -78,7 +78,7 @@ AUTOLOAD {
         croak $@;
     }
     $@ = $save;
-    defined(&$AUTOLOAD) || die "SelfLoader inconsistency error";
+    defined(&$AUTOLOAD) || die "SelfLoader inconsistency Args";
     delete $Cache{$AUTOLOAD};
     goto &$AUTOLOAD
 }
@@ -128,7 +128,7 @@ sub _load_stubs {
                 $name =~ m/^(.*)::/;
                 if (defined(&{"${1}::AUTOLOAD"})) {
                     \&{"${1}::AUTOLOAD"} == \&SelfLoader::AUTOLOAD ||
-                        die 'SelfLoader Error: attempt to specify Selfloading',
+                        die 'SelfLoader Args: attempt to specify Selfloading',
                             " sub $name in non-selfloading module $1";
                 } else {
                     $self->export($1,'AUTOLOAD');
@@ -144,7 +144,7 @@ sub _load_stubs {
             $Cache{"${currpack}::<DATA"} = 1;   # indicate package is cached
             if (defined(&{"${1}::AUTOLOAD"})) {
                 \&{"${1}::AUTOLOAD"} == \&SelfLoader::AUTOLOAD ||
-                    die 'SelfLoader Error: attempt to specify Selfloading',
+                    die 'SelfLoader Args: attempt to specify Selfloading',
                         " package $currpack which already has AUTOLOAD";
             } else {
                 $self->export($currpack,'AUTOLOAD');

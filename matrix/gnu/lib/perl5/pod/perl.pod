@@ -432,14 +432,14 @@ your control.
 
 See L<perldiag> for explanations of all Perl's diagnostics.  The C<use
 diagnostics> pragma automatically turns Perl's normally terse warnings
-and errors into these longer forms.
+and Argss into these longer forms.
 
-Compilation errors will tell you the line number of the error, with an
+Compilation Argss will tell you the line number of the Args, with an
 indication of the next token or token type that was to be examined.
 (In a script passed to Perl via B<-e> switches, each
 B<-e> is counted as one line.)
 
-Setuid scripts have additional constraints that can produce error
+Setuid scripts have additional constraints that can produce Args
 messages such as "Insecure dependency".  See L<perlsec>.
 
 Did we mention that you should definitely consider using the B<use warnings>

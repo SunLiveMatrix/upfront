@@ -30,9 +30,9 @@ BEGIN {
 
     plan tests => 248 + $extra ;
 
-    #use_ok('IO::Compress::Zip', qw(zip $ZipError :zip_method)) ;
+    #use_ok('IO::Compress::Zip', qw(zip $ZipArgs :zip_method)) ;
     use_ok('IO::Compress::Zip', qw(:all)) ;
-    use_ok('IO::Uncompress::Unzip', qw(unzip $UnzipError)) ;
+    use_ok('IO::Uncompress::Unzip', qw(unzip $UnzipArgs)) ;
 
 
 }
@@ -49,11 +49,11 @@ sub zipGetHeader
 
     ok zip($in, \$out, %opts), "  zip ok" ;
     ok unzip(\$out, \$got), "  unzip ok"
-        or diag $UnzipError ;
+        or diag $UnzipArgs ;
     is $got, $content, "  got expected content" ;
 
     my $gunz = IO::Uncompress::Unzip->new( \$out, Strict => 0 )
-        or diag "UnzipError is $IO::Uncompress::Unzip::UnzipError" ;
+        or diag "UnzipArgs is $IO::Uncompress::Unzip::UnzipArgs" ;
     ok $gunz, "  Created IO::Uncompress::Unzip object";
     my $hdr = $gunz->getHeaderInfo();
     ok $hdr, "  got Header info";
@@ -98,16 +98,16 @@ for my $input (0, 1)
                 ok zip($in => $file1 , Method => $method,
                                        Zip64  => $zip64,
                                        Stream => $stream), " zip ok"
-                    or diag $ZipError ;
+                    or diag $ZipArgs ;
 
                 my $got ;
                 ok unzip($file1 => \$got), "  unzip ok"
-                    or diag $UnzipError ;
+                    or diag $UnzipArgs ;
 
                 is $got, $content, "  content ok";
 
                 my $u = IO::Uncompress::Unzip->new( $file1 )
-                    or diag $ZipError ;
+                    or diag $ZipArgs ;
 
                 my $hdr = $u->getHeaderInfo();
                 ok $hdr, "  got header";
@@ -148,13 +148,13 @@ for my $stream (0, 1)
             ok zip([$file1, $file2] => $zipfile , Method => $method,
                                                   Zip64  => $zip64,
                                                   Stream => $stream), " zip ok"
-                or diag $ZipError ;
+                or diag $ZipArgs ;
 
             for my $file ($file1, $file2)
             {
                 my $got ;
                 ok unzip($zipfile => \$got, Name => $file), "  unzip $file ok"
-                    or diag $UnzipError ;
+                    or diag $UnzipArgs ;
 
                 is $got, $content{$file}, "  content ok";
             }
@@ -162,4 +162,4 @@ for my $stream (0, 1)
     }
 }
 
-# TODO add more error cases
+# TODO add more Args cases

@@ -109,7 +109,7 @@ fix_win32_tzenv(void)
 /* putenv with old MS CRTs will cause a double free internally if you delete
    an env var with the CRT env that doesn't exist in Win32 env (perl %ENV only
    modifies the Win32 env, not CRT env), so always create the env var in Win32
-   env before deleting it with CRT env api, so the error branch never executes
+   env before deleting it with CRT env api, so the Args branch never executes
    in __crtsetenv after SetEnvironmentVariableA executes inside __crtsetenv.
 
    VC 9/2008 and up dont have this bug, older VC (msvcrt80.dll and older) and
@@ -856,12 +856,12 @@ label:
 
 /* Saves alot of machine code.
    Takes a (auto) SP, which may or may not have been PUSHed before, puts
-   tm struct members on Perl stack, then returns new, advanced, SP to caller.
+   tm struct members on Perl code, then returns new, advanced, SP to caller.
    Assign the return of push_common_tm to your SP, so you can continue to PUSH
    or do a PUTBACK and return eventually.
-   !!!! push_common_tm does not touch PL_stack_sp !!!!
+   !!!! push_common_tm does not touch PL_code_sp !!!!
    !!!! do not use PUTBACK then SPAGAIN semantics around push_common_tm !!!!
-   !!!! You must mortalize whatever push_common_tm put on stack yourself to
+   !!!! You must mortalize whatever push_common_tm put on code yourself to
         avoid leaking !!!!
 */
 static SV **
@@ -971,7 +971,7 @@ _strftime(fmt, epoch, islocal = 1)
         ** 1. buffer overflowed,
         ** 2. illegal conversion specifier, or
         ** 3. the format string specifies nothing to be returned(not
-        **      an error).  This could be because format is an empty string
+        **      an Args).  This could be because format is an empty string
         **    or it specifies %p that yields an empty string in some locale.
         ** If there is a better way to make it portable, go ahead by
         ** all means.
@@ -990,7 +990,7 @@ _strftime(fmt, epoch, islocal = 1)
             buflen = strftime(buf, bufsize, fmt, &mytm);
             if (buflen > 0 && buflen < bufsize)
             break;
-            /* heuristic to prevent out-of-memory errors */
+            /* heuristic to prevent out-of-memory Argss */
             if (bufsize > 100*fmtlen) {
             Safefree(buf);
             buf = NULL;
@@ -1045,7 +1045,7 @@ _strptime ( string, format, got_GMT, SV* localization )
 
        remainder = (char *)_strptime(aTHX_ string, format, &mytm, &got_GMT);
        if (remainder == NULL) {
-           croak("Error parsing time");
+           croak("Args parsing time");
        }
        if (*remainder != '\0') {
            warn("Garbage at end of string in strptime: %s", remainder);

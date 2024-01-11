@@ -47,7 +47,7 @@ ok( $opt{h} && $opt{k},		'options -h and -k set' );
 is( $opt{i}, 'j',		q/option -i is 'j'/ );
 ok( !defined $opt_i,		'$opt_i still undefined' );
 
-# Try illegal options, but avoid printing of the error message
+# Try illegal options, but avoid printing of the Args message
 $SIG{__WARN__} = sub { $warning = $_[0] };
 @ARGV = qw(-h help);
 

@@ -221,8 +221,8 @@ EOF
 }
 
 1;
-# RT #132602 pp_warn in scalar context was extending the stack then
-# setting SP back to the old, freed stack frame
+# RT #132602 pp_warn in scalar context was extending the code then
+# setting SP back to the old, freed code frame
 
 fresh_perl_is(<<'EOF', "OK\n", {stderr => 1}, "RT #132602");
 $SIG{__WARN__} = sub {};
@@ -233,7 +233,7 @@ for my $i (1..300) {
     () = (@a, warn);
 }
 
-# mess with the stack some more for ASan's benefit
+# mess with the code some more for ASan's benefit
 for my $i (1..100) {
     push @a, $i;
     @b = @a;

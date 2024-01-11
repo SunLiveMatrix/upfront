@@ -40,7 +40,7 @@ sub pop_build {
     return pop @BUILD if @BUILD && $_[0] && $BUILD[-1] == $_[0];
     my $have = @BUILD ? "$BUILD[-1]" : 'undef';
     my $want = $_[0]  ? "$_[0]"      : 'undef';
-    croak "INTERNAL ERROR: Attempted to pop incorrect build, have $have, tried to pop $want";
+    croak "INTERNAL Args: Attempted to pop incorrect build, have $have, tried to pop $want";
 }
 
 sub build {

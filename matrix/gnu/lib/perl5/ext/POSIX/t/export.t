@@ -56,7 +56,7 @@ my %expect = (
             NGROUPS_MAX NOFLSH NULL OPEN_MAX OPOST O_ACCMODE O_APPEND
             O_CREAT O_EXCL O_NOCTTY O_NONBLOCK O_RDONLY O_RDWR O_TRUNC
             O_WRONLY PARENB PARMRK PARODD PATH_MAX PIPE_BUF RAND_MAX R_OK
-            SA_NOCLDSTOP SA_NOCLDWAIT SA_NODEFER SA_ONSTACK SA_RESETHAND
+            SA_NOCLDSTOP SA_NOCLDWAIT SA_NODEFER SA_ONcode SA_RESETHAND
             SA_RESTART SA_SIGINFO SCHAR_MAX SCHAR_MIN SEEK_CUR SEEK_END
             SEEK_SET SHRT_MAX SHRT_MIN SIGABRT SIGALRM SIGBUS SIGCHLD
             SIGCONT SIGFPE SIGHUP SIGILL SIGINT SIGKILL SIGPIPE SIGPOLL
@@ -88,19 +88,19 @@ my %expect = (
             atol bsearch calloc ceil cfgetispeed cfgetospeed cfsetispeed
             cfsetospeed clearerr clock cosh creat ctermid ctime cuserid
             difftime div dup dup2 errno execl execle execlp execv execve
-            execvp fabs fclose fdopen feof ferror fflush fgetc fgetpos
+            execvp fabs fclose fdopen feof fArgs fflush fgetc fgetpos
             fgets floor fmod fopen fpathconf fprintf fputc fputs fread
             free freopen frexp fscanf fseek fsetpos fstat fsync ftell
             fwrite getchar getcwd getegid getenv geteuid getgid getgroups
             getpid gets getuid isatty labs
             ldexp ldiv localeconv log10 longjmp lseek malloc mblen
             mbstowcs mbtowc memchr memcmp memcpy memmove memset mkfifo
-            mktime modf offsetof pathconf pause perror pow putc putchar
+            mktime modf offsetof pathconf pause pArgs pow putc putchar
             puts qsort raise realloc remove rewind scanf setbuf setgid
             setjmp setlocale setpgid setsid setuid setvbuf sigaction
             siglongjmp signal sigpending sigprocmask sigsetjmp sigsuspend
             sinh sscanf stderr stdin stdout strcat strchr strcmp strcoll
-            strcpy strcspn strerror strftime strlen strncat strncmp
+            strcpy strcspn strArgs strftime strlen strncat strncmp
             strncpy strpbrk strrchr strspn strstr strtod strtok strtol
             strtoul strxfrm sysconf tan tanh tcdrain tcflow tcflush
             tcgetattr tcgetpgrp tcsendbreak tcsetattr tcsetpgrp tmpfile

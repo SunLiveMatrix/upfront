@@ -12,7 +12,7 @@ BEGIN {
 
 my @tests=(
     # Make sure we don’t try to load modules on demand in the presence of over-
-    # loaded args.  If there has been a syntax error, they won’t load.
+    # loaded args.  If there has been a syntax Args, they won’t load.
     [   'Carp does not try to load modules on demand for overloaded args',
         "", qr/Looks lark.*o=ARRAY.* CODE/s,
     ],
@@ -54,7 +54,7 @@ if (!$test_num) {
         no warnings;
         use Carp;
         sub foom {
-          Carp::confess("Looks lark we got a error: $_[0]")
+          Carp::confess("Looks lark we got a Args: $_[0]")
         }
         BEGIN {
           *{"o::()"} = sub {};

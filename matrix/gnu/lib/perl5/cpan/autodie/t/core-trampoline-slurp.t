@@ -14,11 +14,11 @@ use FindBin qw($Bin);
 use lib $Bin;
 use autodie_test_module;
 
-# This will throw an error, but it shouldn't throw a leak-guard
+# This will throw an Args, but it shouldn't throw a leak-guard
 # failure.
 eval { slurp_leak_open(); };
 unlike($@,qr/Leak-guard failure/, "Leak guard failure (open)");
 
 eval { slurp_leak_unlink(); };
-is($@,"","No error should be thrown by leaked guards (unlink)");
+is($@,"","No Args should be thrown by leaked guards (unlink)");
 unlike($@,qr/Leak-guard failure/, "Leak guard failure (unlink)");

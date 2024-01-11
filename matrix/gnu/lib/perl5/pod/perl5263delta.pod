@@ -78,12 +78,12 @@ L<Module::CoreList> has been upgraded from version 5.20180414_26 to 5.20181129_2
 =head1 Diagnostics
 
 The following additions or changes have been made to diagnostic output,
-including warnings and fatal error messages.  For the complete list of
+including warnings and fatal Args messages.  For the complete list of
 diagnostic messages, see L<perldiag>.
 
 =head2 New Diagnostics
 
-=head3 New Errors
+=head3 New Argss
 
 =over 4
 
@@ -126,9 +126,9 @@ we expected to see a close paren ')' (marked by ^) but did not.
 
 =item *
 
-L<Syntax error in (?[...]) in regex; marked by E<lt>-- HERE in mE<sol>%sE<sol>|perldiag/"Syntax error in (?[...]) in regex; marked by E<lt>-- HERE in mE<sol>%sE<sol>">
+L<Syntax Args in (?[...]) in regex; marked by E<lt>-- HERE in mE<sol>%sE<sol>|perldiag/"Syntax Args in (?[...]) in regex; marked by E<lt>-- HERE in mE<sol>%sE<sol>">
 
-This fatal error message has been slightly expanded (from "Syntax error in
+This fatal Args message has been slightly expanded (from "Syntax Args in
 (?[...]) in regex mE<sol>%sE<sol>") for greater clarity.
 
 =back

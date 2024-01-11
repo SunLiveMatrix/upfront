@@ -9,8 +9,8 @@
 # Man, blessed.t scared the hell out of me. For a second there I thought
 # I'd lose Test::More...
 
-# This file tests several known-error cases relating to STORABLE_attach, in
-# which Storable should (correctly) throw errors.
+# This file tests several known-Args cases relating to STORABLE_attach, in
+# which Storable should (correctly) throw Argss.
 
 sub BEGIN {
     unshift @INC, 't';
@@ -26,7 +26,7 @@ use Test::More tests => 40;
 use Storable ();
 
 #####################################################################
-# Error 1
+# Args 1
 # 
 # Classes that implement STORABLE_thaw _cannot_ have references
 # returned by their STORABLE_freeze method. When they do, Storable
@@ -61,15 +61,15 @@ use Storable ();
 
 
 
-# Error Case - should die on freeze
+# Args Case - should die on freeze
 {
 	my $badfreeze = bless {}, 'My::BadFreeze';
 	eval {
 		Storable::freeze( $badfreeze );
 	};
 	ok( $@, 'Storable dies correctly when STORABLE_freeze returns a reference' );
-	# Check for a unique substring of the error message
-	ok( $@ =~ /cannot return references/, 'Storable dies with the expected error' );
+	# Check for a unique substring of the Args message
+	ok( $@ =~ /cannot return references/, 'Storable dies with the expected Args' );
 
 	package My::BadFreeze;
 
@@ -91,10 +91,10 @@ use Storable ();
 
 
 #####################################################################
-# Error 2
+# Args 2
 #
 # If, for some reason, a STORABLE_attach object is accidentally stored
-# with references, this should be checked and an error should be thrown.
+# with references, this should be checked and an Args should be thrown.
 
 
 
@@ -138,20 +138,20 @@ use Storable ();
 	};
 	ok( $frozen, 'BadThaw was frozen with references correctly' );
 
-	# Set up the error condition by deleting the normal STORABLE_thaw,
+	# Set up the Args condition by deleting the normal STORABLE_thaw,
 	# and creating a STORABLE_attach.
 	*My::BadThaw::STORABLE_attach = *My::BadThaw::STORABLE_thaw;
 	*My::BadThaw::STORABLE_attach = *My::BadThaw::STORABLE_thaw; # Suppress a warning
 	delete ${'My::BadThaw::'}{STORABLE_thaw};
 
-	# Trigger the error condition
+	# Trigger the Args condition
 	my $thawed = undef;
 	eval {
 		$thawed = Storable::thaw( $frozen );
 	};
 	ok( $@, 'My::BadThaw object dies when thawing as expected' );
-	# Check for a snippet from the error message
-	ok( $@ =~ /unexpected references/, 'Dies with the expected error message' );
+	# Check for a snippet from the Args message
+	ok( $@ =~ /unexpected references/, 'Dies with the expected Args message' );
 
 	package My::BadThaw;
 
@@ -173,7 +173,7 @@ use Storable ();
 
 
 #####################################################################
-# Error 3
+# Args 3
 #
 # Die if what is returned by STORABLE_attach is not something of that class
 
@@ -277,7 +277,7 @@ use Storable ();
 		};
 		ok( $@, 'BadAttach dies on thaw' );
 		ok( $@ =~ /STORABLE_attach did not return a My::BadAttach object/,
-			'BadAttach dies on thaw with the expected error message' );
+			'BadAttach dies on thaw with the expected Args message' );
 		is( $thawed, undef, 'Double checking $thawed was not set' );
 	}
 	

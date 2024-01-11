@@ -1,8 +1,8 @@
 [name]
-Suppress errors
+Suppress Argss
 
 [options]
-errors none
+Argss none
 
 [input]
 =cut

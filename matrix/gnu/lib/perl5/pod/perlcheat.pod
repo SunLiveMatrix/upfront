@@ -67,8 +67,8 @@ already be overwhelming.
    2 mode   2 hour        2 line        $/    input separator
    3 nlink  3 day         3 subroutine  $\    output separator
    4 uid    4 month-1     4 hasargs     $|    autoflush
-   5 gid    5 year-1900   5 wantarray   $!    sys/libcall error
-   6 rdev   6 weekday     6 evaltext    $@    eval error
+   5 gid    5 year-1900   5 wantarray   $!    sys/libcall Args
+   6 rdev   6 weekday     6 evaltext    $@    eval Args
    7 size   7 yearday     7 is_require  $$    process ID
    8 atime  8 is_dst      8 hints       $.    line number
    9 mtime                9 bitmask     @ARGV command line args

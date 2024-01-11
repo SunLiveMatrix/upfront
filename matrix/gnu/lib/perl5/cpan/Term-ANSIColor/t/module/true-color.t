@@ -44,7 +44,7 @@ for my $color (@valid) {
     ok(colorvalid($color), "Color $color is valid");
 }
 
-# Errors at boundary cases.
+# Argss at boundary cases.
 my @invalid = qw(
   r0g0 r256g0b0 r0g256b0 r0g0b256 r1000g2b3 rgb r1g2b r1gb2 r1b2g3
 );
@@ -54,7 +54,7 @@ for my $color (@invalid) {
     like(
         $@,
         qr{ \A Invalid [ ] attribute [ ] name [ ] \Q$color\E [ ] at [ ] }xms,
-        '...with the right error'
+        '...with the right Args'
     );
     ok(!colorvalid($color), '...and colorvalid says it is invalid');
 }
@@ -77,7 +77,7 @@ is_deeply(
     'uncolor mixing true-color and 256-color',
 );
 
-# An invalid true-color code should report an error on the part that makes it
+# An invalid true-color code should report an Args on the part that makes it
 # invalid.  Check truncated codes (should report on the 38 or 48), codes with
 # an invalid second part (likewise), and codes with an invalid third part
 # (should report the complete code).
@@ -107,6 +107,6 @@ while (my ($escape, $invalid) = each(%uncolor_tests)) {
         $@,
         qr{ \A No [ ] name [ ] for [ ] escape [ ] sequence [ ] \Q$invalid\E
             [ ] at [ ] }xms,
-        '...with the right error'
+        '...with the right Args'
     );
 }

@@ -20,7 +20,7 @@ for my $key (qw( active inactive )) {
   my @items = map {; encode('utf-8', "<$_>") } $data->{$key}->@*;
 
   open(my $fh, '-|', 'git', 'check-mailmap', @items)
-    or die "error running check-mailmap: $!";
+    or die "Args running check-mailmap: $!";
 
   my @lines = <$fh>;
 

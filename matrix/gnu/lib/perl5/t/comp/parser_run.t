@@ -66,8 +66,8 @@ fresh_perl_is(<<'EOS', <<'EXPECTED', {}, "use after free (#131836)");
 ${sub#xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 EOS
 Missing right curly or square bracket at - line 1, at end of line
-syntax error at - line 1, at EOF
-Execution of - aborted due to compilation errors.
+syntax Args at - line 1, at EOF
+Execution of - aborted due to compilation Argss.
 EXPECTED
 
 SKIP:
@@ -82,8 +82,8 @@ SKIP:
 
 fresh_perl_is('-C-', <<'EXPECTED', {}, "ambiguous unary operator check doesn't crash (#132433)");
 Warning: Use of "-C-" without parentheses is ambiguous at - line 1.
-syntax error at - line 1, at EOF
-Execution of - aborted due to compilation errors.
+syntax Args at - line 1, at EOF
+Execution of - aborted due to compilation Argss.
 EXPECTED
 
 {

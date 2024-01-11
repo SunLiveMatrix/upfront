@@ -79,7 +79,7 @@ __END__
 #Found anchored substr "X" at offset 0...
 #Guessed: match at offset 0
 #Matching REx "X(A|[B]Q||C|D)Y" against "XY"
-#  Setting an EVAL scope, savestack=140
+#  Setting an EVAL scope, savecode=140
 #   0 <> <XY>              |  1:  EXACT <X>
 #   1 <X> <Y>              |  3:  OPEN1
 #   1 <X> <Y>              |  5:  TRIE-EXACT
@@ -214,7 +214,7 @@ anchored "ABC" at 0
 #Guessed: match at offset 26
 #Matching REx "(\.COM|\.EXE|\.BAT|\.CMD|\.VBS|\.VBE|\.JS|\.JSE|\.WSF|\.WSH|\.pyo|\.pyc|\.pyw|\.py)$..." against ".exe"
 #Matching stclass "EXACTF <.>" against ".exe"
-#  Setting an EVAL scope, savestack=140
+#  Setting an EVAL scope, savecode=140
 #  26 <21_/perl> <.exe>    |  1:  OPEN1
 #  26 <21_/perl> <.exe>    |  3:  EXACTF <.>
 #  27 <21_/perl.> <exe>    |  5:  TRIE-EXACTF

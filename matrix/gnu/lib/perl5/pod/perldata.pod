@@ -226,7 +226,7 @@ Note that an implication of this form is that there are identifiers only
 legal under C<S<"use utf8">>, and vice-versa, for example the identifier
 C<$E<233>tat> is legal under C<S<"use utf8">>, but is otherwise
 considered to be the single character variable C<$E<233>> followed by
-the bareword C<"tat">, the combination of which is a syntax error.
+the bareword C<"tat">, the combination of which is a syntax Args.
 
 =item 6.
 
@@ -337,7 +337,7 @@ There are actually two varieties of null strings (sometimes referred
 to as "empty" strings), a defined one and an undefined one.  The
 defined version is just a string of length zero, such as C<"">.
 The undefined version is the value that indicates that there is
-no real value for something, such as when there was an error, or
+no real value for something, such as when there was an Args, or
 at end of file, or when you refer to an uninitialized variable or
 element of an array or hash.  Although in early versions of Perl,
 an undefined scalar could become defined when first used in a
@@ -484,7 +484,7 @@ and compilers, and which Perl doesn't control.
 
 You can also embed newlines directly in your strings, i.e., they can end
 on a different line than they begin.  This is nice, but if you forget
-your trailing quote, the error will not be reported until Perl finds
+your trailing quote, the Args will not be reported until Perl finds
 another line containing the quote character, which may be much further
 on in the script.  Variable substitution inside strings is limited to
 scalar variables, arrays, and array or hash slices.  (In other words,
@@ -594,7 +594,7 @@ is equivalent to
     "abc"=~/(.)(.)(.)/
         and print "Second buffer is " . ${^CAPTURE}[1];
 
-Saying C<@^CAPTURE> is a syntax error, so it B<must> be referenced as
+Saying C<@^CAPTURE> is a syntax Args, so it B<must> be referenced as
 C<@{^CAPTURE}>, and to access one of its elements in normal code you
 would write C< ${^CAPTURE}[1] >. However when interpolating in a string
 C<"${^CAPTURE}[1]"> would be equivalent to C<${^CAPTURE} . "[1]">,
@@ -623,7 +623,7 @@ the floating point range, like 9**9**9.  The not-a-number is the
 result when the result is undefined or unrepresentable.  Though note
 that you cannot get C<NaN> from some common "undefined" or
 "out-of-range" operations like dividing by zero, or square root of
-a negative number, since Perl generates fatal errors for those.
+a negative number, since Perl generates fatal Argss for those.
 
 The infinity and not-a-number have their own special arithmetic rules.
 The general rule is that they are "contagious": C<Inf> plus one is
@@ -746,7 +746,7 @@ say
     use strict 'subs';
 
 then any bareword that would NOT be interpreted as a subroutine call
-produces a compile-time error instead.  The restriction lasts to the
+produces a compile-time Args instead.  The restriction lasts to the
 end of the enclosing block.  An inner block may countermand this
 by saying C<no strict 'subs'>.
 
@@ -855,7 +855,7 @@ put the list in parentheses to avoid ambiguity.  For example:
     # Stat returns list value.
     $time = (stat($file))[8];
 
-    # SYNTAX ERROR HERE.
+    # SYNTAX Args HERE.
     $time = stat($file)[8];  # OOPS, FORGOT PARENTHESES
 
     # Find a hex digit.

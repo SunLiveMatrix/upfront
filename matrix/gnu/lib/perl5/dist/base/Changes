@@ -22,7 +22,7 @@
 
 2.14
     - fix problem with SIGDIE on perls < 5.10
-    - Make @INC available in base.pm's error message when
+    - Make @INC available in base.pm's Args message when
       a module can't be found. See CPAN bug #28582.
     - Fix obscure bug introduced in 2.13 (Michael G Schwern)
 
@@ -58,7 +58,7 @@
     - Document that import() is not called.
 
     Test Fixes
-    - Fix tests for new disallowed hash key access error message in blead.
+    - Fix tests for new disallowed hash key access Args message in blead.
 
 2.04 through 2.10 were only released with perl.
 

@@ -1592,7 +1592,7 @@ dumpindent is 4 at -e line 1.
      |     |   
 5    +--entersub UNOP(0xNNN) ===> 1 [leave 0xNNN]
          TARG = 1
-         FLAGS = (VOID,KIDS,STACKED,SLABBED)
+         FLAGS = (VOID,KIDS,codeED,SLABBED)
          PRIVATE = (TARG)
          |   
 6        +--null (ex-list) UNOP(0xNNN) ===> 5 [entersub 0xNNN]

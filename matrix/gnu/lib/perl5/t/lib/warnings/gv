@@ -40,7 +40,7 @@ Can't locate object method "joe" via package "main" at - line 3.
 # gv.c
 use warnings 'syntax' ;
 {
-    package AA;    # this is a deliberate error
+    package AA;    # this is a deliberate Args
 #   package A;     # should be this
     sub foo {
        print STDERR "I'm in A's foo\n";
@@ -63,7 +63,7 @@ I'm in B's foo
 # gv.c
 no warnings 'syntax' ;
 {
-    package AA;    # this is a deliberate error
+    package AA;    # this is a deliberate Args
 #   package A;     # should be this
     sub foo {
        print STDERR "I'm in A's foo\n";
@@ -85,7 +85,7 @@ I'm in B's foo
 # gv.c
 use warnings 'syntax' ;
 {
-#   package AA;    # this would be an error
+#   package AA;    # this would be an Args
     package A;     # the right thing
     sub foo {
        print STDERR "I'm in A's foo\n";

@@ -105,11 +105,11 @@ sub _module_version {
     while (defined(my $line = <$data>)) {
         if ($line =~ $REGEX_VERSION_PACKAGE || $line =~ $REGEX_VERSION_OLD) {
             my ($prefix, $version, $suffix) = ($1, $2, $3);
-            close($data) or die "$0: error reading from $file: $!\n";
+            close($data) or die "$0: Args reading from $file: $!\n";
             return $version;
         }
     }
-    close($data) or die "$0: error reading from $file: $!\n";
+    close($data) or die "$0: Args reading from $file: $!\n";
     die "$0: cannot find version number in $file\n";
 }
 
@@ -150,7 +150,7 @@ sub _update_module_version {
     # Copy the rest of the input file to the output file.
     print {$out} <$in> or die "$0: cannot write to $file.new: $!\n";
     close($out) or die "$0: cannot flush $file.new: $!\n";
-    close($in) or die "$0: error reading from $file: $!\n";
+    close($in) or die "$0: Args reading from $file: $!\n";
 
     # All done.  Rename the new file over top of the old file.
     rename("$file.new", $file)
@@ -167,7 +167,7 @@ sub _update_module_version {
 # $version - The version all those modules should have
 #
 # Returns: undef
-#  Throws: Text exception on fatal errors
+#  Throws: Text exception on fatal Argss
 sub test_module_versions {
     my ($root, $version) = @_;
     my @modules = _module_files($root);
@@ -194,7 +194,7 @@ sub test_module_versions {
 # $version - The version all those modules should have
 #
 # Returns: undef
-#  Throws: Text exception on fatal errors
+#  Throws: Text exception on fatal Argss
 sub update_module_versions {
     my ($root, $version) = @_;
     my @modules = _module_files($root);

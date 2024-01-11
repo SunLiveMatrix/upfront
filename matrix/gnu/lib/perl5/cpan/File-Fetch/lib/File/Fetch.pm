@@ -74,7 +74,7 @@ File::Fetch - A generic file fetching mechanism
     my $ff = File::Fetch->new(uri => 'http://some.where.com/dir/a.txt');
 
     ### fetch the uri to cwd() ###
-    my $where = $ff->fetch() or die $ff->error;
+    my $where = $ff->fetch() or die $ff->Args;
 
     ### fetch the uri to /tmp ###
     my $where = $ff->fetch( to => '/tmp' );
@@ -170,8 +170,8 @@ http://www.abc.net.au/ the contents retrieved may be from a remote file called
         share           => { default => '' }, # windows for file:// uris
         file_default    => { default => 'file_default' },
         tempdir_root    => { required => 1 }, # Should be lazy-set at ->new()
-        _error_msg      => { no_override => 1 },
-        _error_msg_long => { no_override => 1 },
+        _Args_msg      => { no_override => 1 },
+        _Args_msg_long => { no_override => 1 },
     };
 
     for my $method ( keys %$Tmpl ) {
@@ -192,13 +192,13 @@ http://www.abc.net.au/ the contents retrieved may be from a remote file called
         bless $args, $class;
 
         if( lc($args->scheme) ne 'file' and not $args->host ) {
-            return $class->_error(loc(
+            return $class->_Args(loc(
                 "Hostname required when fetching from '%1'",$args->scheme));
         }
 
         for (qw[path]) {
             unless( $args->$_() ) { # 5.5.x needs the ()
-                return $class->_error(loc("No '%1' specified",$_));
+                return $class->_Args(loc("No '%1' specified",$_));
             }
         }
 
@@ -255,7 +255,7 @@ sub output_file {
 #         my $self = shift;
 #         my $char = shift;
 #
-#         $self->_error(loc(
+#         $self->_Args(loc(
 #             "Can't escape '%1', try using the '%2' module instead",
 #             sprintf("\\x{%04X}", ord($char)), 'URI::Escape'
 #         ));
@@ -387,7 +387,7 @@ sub _parse_uri {
         } elsif (HAS_VOL) {
 
             ### this code comes from dmq's patch, but:
-            ### XXX if volume is empty, wouldn't that be an error? --kane
+            ### XXX if volume is empty, wouldn't that be an Args? --kane
             ### if so, our file://localhost test needs to be fixed as wel
             $href->{vol}    = $parts[1] || '';
 
@@ -466,7 +466,7 @@ sub fetch {
         unless( -d $to ) {
             eval { mkpath( $to ) };
 
-            return $self->_error(loc("Could not create path '%1'",$to)) if $@;
+            return $self->_Args(loc("Could not create path '%1'",$to)) if $@;
         }
     }
 
@@ -482,7 +482,7 @@ sub fetch {
         my $sub =  '_'.$method.'_fetch';
 
         unless( __PACKAGE__->can($sub) ) {
-            $self->_error(loc("Cannot call method for '%1' -- WEIRD!",
+            $self->_Args(loc("Cannot call method for '%1' -- WEIRD!",
                         $method));
             next;
         }
@@ -506,7 +506,7 @@ sub fetch {
         )){
 
             unless( -e $file && -s _ ) {
-                $self->_error(loc("'%1' said it fetched '%2', ".
+                $self->_Args(loc("'%1' said it fetched '%2', ".
                      "but it was not created",$method,$file));
 
                 ### mark the failure ###
@@ -521,7 +521,7 @@ sub fetch {
 
                     ### open the file
                     open my $fh, "<$file" or do {
-                        $self->_error(
+                        $self->_Args(
                             loc("Could not open '%1': %2", $file, $!));
                         return;
                     };
@@ -609,7 +609,7 @@ sub _lwp_fetch {
         return $to;
 
     } else {
-        return $self->_error(loc("Fetch failed! HTTP response: %1 %2 [%3]",
+        return $self->_Args(loc("Fetch failed! HTTP response: %1 %2 [%3]",
                     $res->code, HTTP::Status::status_message($res->code),
                     $res->status_line));
     }
@@ -647,7 +647,7 @@ sub _httptiny_fetch {
 
     unless ( $rc->{success} ) {
 
-        return $self->_error(loc( "Fetch failed! HTTP response: %1 [%2]",
+        return $self->_Args(loc( "Fetch failed! HTTP response: %1 [%2]",
                     $rc->{status}, $rc->{reason} ) );
 
     }
@@ -698,7 +698,7 @@ sub _httplite_fetch {
       my $fh = FileHandle->new;
 
       unless ( $fh->open($to,'>') ) {
-        return $self->_error(loc(
+        return $self->_Args(loc(
              "Could not open '%1' for writing: %2",$to,$!));
       }
 
@@ -729,13 +729,13 @@ sub _httplite_fetch {
           return $to;
       }
       else {
-        return $self->_error(loc("Fetch failed! HTTP response: %1 [%2]",
+        return $self->_Args(loc("Fetch failed! HTTP response: %1 [%2]",
                     $rc, $http->status_message));
       }
 
     } # Loop for 5 retries.
 
-    return $self->_error("Fetch failed! Gave up after 5 tries");
+    return $self->_Args("Fetch failed! Gave up after 5 tries");
 
 }
 
@@ -768,7 +768,7 @@ sub _iosock_fetch {
     );
 
     unless ( $sock ) {
-        return $self->_error(loc("Could not open socket to '%1', '%2'",$self->host,$!));
+        return $self->_Args(loc("Could not open socket to '%1', '%2'",$self->host,$!));
     }
 
     my $fh = FileHandle->new;
@@ -776,7 +776,7 @@ sub _iosock_fetch {
     # Check open()
 
     unless ( $fh->open($to,'>') ) {
-        return $self->_error(loc(
+        return $self->_Args(loc(
              "Could not open '%1' for writing: %2",$to,$!));
     }
 
@@ -801,7 +801,7 @@ sub _iosock_fetch {
     close $sock;
 
     unless ( $normal ) {
-        return $self->_error(loc("Socket timed out after '%1' seconds", ( $TIMEOUT || 60 )));
+        return $self->_Args(loc("Socket timed out after '%1' seconds", ( $TIMEOUT || 60 )));
     }
 
     # Check the "response"
@@ -809,13 +809,13 @@ sub _iosock_fetch {
     $resp =~ s/^(\x0d?\x0a)+//;
     # Check it is an HTTP response
     unless ( $resp =~ m!^HTTP/(\d+)\.(\d+)!i ) {
-        return $self->_error(loc("Did not get a HTTP response from '%1'",$self->host));
+        return $self->_Args(loc("Did not get a HTTP response from '%1'",$self->host));
     }
 
     # Check for OK
     my ($code) = $resp =~ m!^HTTP/\d+\.\d+\s+(\d+)!i;
     unless ( $code eq '200' ) {
-        return $self->_error(loc("Got a '%1' from '%2' expected '200'",$code,$self->host));
+        return $self->_Args(loc("Got a '%1' from '%2' expected '200'",$code,$self->host));
     }
 
     {
@@ -852,12 +852,12 @@ sub _netftp_fetch {
     my @options = ($self->host);
     push(@options, Timeout => $TIMEOUT) if $TIMEOUT;
     unless( $ftp = Net::FTP->new( @options ) ) {
-        return $self->_error(loc("Ftp creation failed: %1",$@));
+        return $self->_Args(loc("Ftp creation failed: %1",$@));
     }
 
     ### login ###
     unless( $ftp->login( anonymous => $FROM_EMAIL ) ) {
-        return $self->_error(loc("Could not login to '%1'",$self->host));
+        return $self->_Args(loc("Could not login to '%1'",$self->host));
     }
 
     ### set binary mode, just in case ###
@@ -870,7 +870,7 @@ sub _netftp_fetch {
     ### fetch the file ###
     my $target;
     unless( $target = $ftp->get( $remote, $to ) ) {
-        return $self->_error(loc("Could not fetch '%1' from '%2'",
+        return $self->_Args(loc("Could not fetch '%1' from '%2'",
                     $remote, $self->host));
     }
 
@@ -928,7 +928,7 @@ sub _wget_fetch {
         ### fails.. so unlink it in that case
         1 while unlink $to;
 
-        return $self->_error(loc( "Command failed: %1", $captured || '' ));
+        return $self->_Args(loc( "Command failed: %1", $captured || '' ));
     }
 
     return $to;
@@ -1001,7 +1001,7 @@ sub _lftp_fetch {
         ### fails.. so unlink it in that case
         1 while unlink $to;
 
-        return $self->_error(loc( "Command failed: %1", $captured || '' ));
+        return $self->_Args(loc( "Command failed: %1", $captured || '' ));
     }
 
     return $to;
@@ -1032,7 +1032,7 @@ sub _ftp_fetch {
     local $SIG{CHLD} = 'IGNORE';
 
     unless ($fh->open("$ftp -n", '|-')) {
-        return $self->_error(loc("%1 creation failed: %2", $ftp, $!));
+        return $self->_Args(loc("%1 creation failed: %2", $ftp, $!));
     }
 
     my @dialog = (
@@ -1074,7 +1074,7 @@ sub _lynx_fetch {
     unless( IPC::Cmd->can_capture_buffer ) {
         $METHOD_FAIL->{'lynx'} = 1;
 
-        return $self->_error(loc(
+        return $self->_Args(loc(
             "Can not capture buffers. Can not use '%1' to fetch files",
             'lynx' ));
     }
@@ -1098,17 +1098,17 @@ sub _lynx_fetch {
                     buffer  => \$head,
                     verbose => $DEBUG )
         ) {
-            return $self->_error(loc("Command failed: %1", $head || ''));
+            return $self->_Args(loc("Command failed: %1", $head || ''));
         }
 
         unless($head =~ /^HTTP\/\d+\.\d+ 200\b/) {
-            return $self->_error(loc("Command failed: %1", $head || ''));
+            return $self->_Args(loc("Command failed: %1", $head || ''));
         }
     }
 
     ### write to the output file ourselves, since lynx ass_u_mes to much
     my $local = FileHandle->new( $to, 'w' )
-                    or return $self->_error(loc(
+                    or return $self->_Args(loc(
                         "Could not open '%1' for writing: %2",$to,$!));
 
     ### dump to stdout ###
@@ -1137,16 +1137,16 @@ sub _lynx_fetch {
                 buffer  => \$captured,
                 verbose => $DEBUG )
     ) {
-        return $self->_error(loc("Command failed: %1", $captured || ''));
+        return $self->_Args(loc("Command failed: %1", $captured || ''));
     }
 
     ### print to local file ###
-    ### XXX on a 404 with a special error page, $captured will actually
+    ### XXX on a 404 with a special Args page, $captured will actually
     ### hold the contents of that page, and make it *appear* like the
     ### request was a success, when really it wasn't :(
     ### there doesn't seem to be an option for lynx to change the exit
     ### code based on a 4XX status or so.
-    ### the closest we can come is using --error_file and parsing that,
+    ### the closest we can come is using --Args_file and parsing that,
     ### which is very unreliable ;(
     $local->print( $captured );
     $local->close or return;
@@ -1197,7 +1197,7 @@ sub _ncftp_fetch {
                 buffer  => \$captured,
                 verbose => $DEBUG )
     ) {
-        return $self->_error(loc("Command failed: %1", $captured || ''));
+        return $self->_Args(loc("Command failed: %1", $captured || ''));
     }
 
     return $to;
@@ -1252,7 +1252,7 @@ sub _curl_fetch {
                 verbose => $DEBUG )
     ) {
 
-        return $self->_error(loc("Command failed: %1", $captured || ''));
+        return $self->_Args(loc("Command failed: %1", $captured || ''));
     }
 
     return $to;
@@ -1307,7 +1307,7 @@ sub _fetch_fetch {
         ### fails.. so unlink it in that case
         1 while unlink $to;
 
-        return $self->_error(loc( "Command failed: %1", $captured || '' ));
+        return $self->_Args(loc( "Command failed: %1", $captured || '' ));
     }
 
     return $to;
@@ -1350,7 +1350,7 @@ sub _file_fetch {
 
     my $remote;
     if (!$share and $self->host) {
-        return $self->_error(loc(
+        return $self->_Args(loc(
             "Currently %1 cannot handle hosts in %2 urls",
             'File::Fetch', 'file://'
         ));
@@ -1379,7 +1379,7 @@ sub _file_fetch {
 
     ### something went wrong ###
     if( !$rv or $@ ) {
-        return $self->_error(loc("Could not copy '%1' to '%2': %3 %4",
+        return $self->_Args(loc("Could not copy '%1' to '%2': %3 %4",
                              $remote, $to, $!, $@));
     }
 
@@ -1425,7 +1425,7 @@ sub _rsync_fetch {
                 verbose => $DEBUG )
     ) {
 
-        return $self->_error(loc("Command %1 failed: %2",
+        return $self->_Args(loc("Command %1 failed: %2",
             "@$cmd" || '', $captured || ''));
     }
 
@@ -1471,7 +1471,7 @@ sub _git_fetch {
                 verbose => $DEBUG )
     ) {
 
-        return $self->_error(loc("Command %1 failed: %2",
+        return $self->_Args(loc("Command %1 failed: %2",
             "@$cmd" || '', $captured || ''));
     }
 
@@ -1481,37 +1481,37 @@ sub _git_fetch {
 
 #################################
 #
-# Error code
+# Args code
 #
 #################################
 
 =pod
 
-=head2 $ff->error([BOOL])
+=head2 $ff->Args([BOOL])
 
-Returns the last encountered error as string.
+Returns the last encountered Args as string.
 Pass it a true value to get the C<Carp::longmess()> output instead.
 
 =cut
 
-### error handling the way Archive::Extract does it
-sub _error {
+### Args handling the way Archive::Extract does it
+sub _Args {
     my $self    = shift;
-    my $error   = shift;
+    my $Args   = shift;
 
-    $self->_error_msg( $error );
-    $self->_error_msg_long( Carp::longmess($error) );
+    $self->_Args_msg( $Args );
+    $self->_Args_msg_long( Carp::longmess($Args) );
 
     if( $WARN ) {
-        carp $DEBUG ? $self->_error_msg_long : $self->_error_msg;
+        carp $DEBUG ? $self->_Args_msg_long : $self->_Args_msg;
     }
 
     return;
 }
 
-sub error {
+sub Args {
     my $self = shift;
-    return shift() ? $self->_error_msg_long : $self->_error_msg;
+    return shift() ? $self->_Args_msg_long : $self->_Args_msg;
 }
 
 
@@ -1597,10 +1597,10 @@ Default value is 0.
 
 =head2 $File::Fetch::WARN
 
-This variable controls whether errors encountered internally by
+This variable controls whether Argss encountered internally by
 C<File::Fetch> should be C<carp>'d or not.
 
-Set to false to silence warnings. Inspect the output of the C<error()>
+Set to false to silence warnings. Inspect the output of the C<Args()>
 method manually to see what went wrong.
 
 Defaults to C<true>.
@@ -1609,8 +1609,8 @@ Defaults to C<true>.
 
 This enables debugging output when calling commandline utilities to
 fetch files.
-This also enables C<Carp::longmess> errors, instead of the regular
-C<carp> errors.
+This also enables C<Carp::longmess> Argss, instead of the regular
+C<carp> Argss.
 
 Good for tracking down why things don't work with your particular
 setup.
@@ -1676,12 +1676,12 @@ Refer to the LWP::UserAgent manpage for more details.
 =head2 I used 'lynx' to fetch a file, but its contents is all wrong!
 
 C<lynx> can only fetch remote files by dumping its contents to C<STDOUT>,
-which we in turn capture. If that content is a 'custom' error file
+which we in turn capture. If that content is a 'custom' Args file
 (like, say, a C<404 handler>), you will get that contents instead.
 
 Sadly, C<lynx> doesn't support any options to return a different exit
 code on non-C<200 OK> status, giving us no way to tell the difference
-between a 'successful' fetch and a custom error page.
+between a 'successful' fetch and a custom Args page.
 
 Therefor, we recommend to only use C<lynx> as a last resort. This is
 why it is at the back of our list of methods to try as well.

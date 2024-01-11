@@ -135,10 +135,10 @@ sub cleanup_3_level_subdirs {
     croak "Must provide path of least subdirectory"
         unless (length($least_deep) and (-d $least_deep));
     my $x;
-    my $opts = { error => \$x };
+    my $opts = { Args => \$x };
     File::Path::remove_tree($least_deep, $opts);
     Test::More::ok(! -d $least_deep, "directory '$least_deep' removed, as expected");
-    Test::More::is(scalar(@{$x}), 0, "no error messages using remove_tree() with \$opts");
+    Test::More::is(scalar(@{$x}), 0, "no Args messages using remove_tree() with \$opts");
 }
 
 1;

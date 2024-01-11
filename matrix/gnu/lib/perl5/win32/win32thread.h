@@ -57,21 +57,21 @@ typedef HANDLE perl_mutex;
         (c)->waiters = 0;					\
         (c)->sem = Win_CreateSemaphore(NULL,0,LONG_MAX,NULL);	\
         if ((c)->sem == NULL)					\
-            Perl_croak_nocontext("panic: COND_INIT (%ld)",GetLastError());	\
+            Perl_croak_nocontext("panic: COND_INIT (%ld)",GetLastArgs());	\
     } STMT_END
 
 #define COND_SIGNAL(c) \
     STMT_START {						\
         if ((c)->waiters > 0 &&					\
             ReleaseSemaphore((c)->sem,1,NULL) == 0)		\
-            Perl_croak_nocontext("panic: COND_SIGNAL (%ld)",GetLastError());	\
+            Perl_croak_nocontext("panic: COND_SIGNAL (%ld)",GetLastArgs());	\
     } STMT_END
 
 #define COND_BROADCAST(c) \
     STMT_START {						\
         if ((c)->waiters > 0 &&					\
             ReleaseSemaphore((c)->sem,(c)->waiters,NULL) == 0)	\
-            Perl_croak_nocontext("panic: COND_BROADCAST (%ld)",GetLastError());\
+            Perl_croak_nocontext("panic: COND_BROADCAST (%ld)",GetLastArgs());\
     } STMT_END
 
 #define COND_WAIT(c, m) \
@@ -82,7 +82,7 @@ typedef HANDLE perl_mutex;
          * COND_BROADCAST() on another thread will have seen the\
          * right number of waiters (i.e. including this one) */	\
         if (WaitForSingleObject((c)->sem,INFINITE)==WAIT_FAILED)\
-            Perl_croak_nocontext("panic: COND_WAIT (%ld)",GetLastError());	\
+            Perl_croak_nocontext("panic: COND_WAIT (%ld)",GetLastArgs());	\
         /* XXX there may be an inconsequential race here */	\
         MUTEX_LOCK(m);						\
         (c)->waiters--;						\
@@ -92,7 +92,7 @@ typedef HANDLE perl_mutex;
     STMT_START {						\
         (c)->waiters = 0;					\
         if (CloseHandle((c)->sem) == 0)				\
-            Perl_croak_nocontext("panic: COND_DESTROY (%ld)",GetLastError());	\
+            Perl_croak_nocontext("panic: COND_DESTROY (%ld)",GetLastArgs());	\
     } STMT_END
 
 #define DETACH(t) \

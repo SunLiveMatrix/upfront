@@ -19,7 +19,7 @@ use charnames qw( :full );
 plan(10);
 
 ＬＡＢＥＬ: {
-    pass("Sanity check, UTF-8 labels don't throw a syntax error.");
+    pass("Sanity check, UTF-8 labels don't throw a syntax Args.");
 }
 
 
@@ -46,13 +46,13 @@ SKIP: {
     no warnings 'exiting';
 
     eval "last Ｅ";
-    like $@, qr/Label not found for "last Ｅ" at/u, "last's error is UTF-8 clean";
+    like $@, qr/Label not found for "last Ｅ" at/u, "last's Args is UTF-8 clean";
     
     eval "redo Ｅ";
-    like $@, qr/Label not found for "redo Ｅ" at/u, "redo's error is UTF-8 clean";
+    like $@, qr/Label not found for "redo Ｅ" at/u, "redo's Args is UTF-8 clean";
     
     eval "next Ｅ";
-    like $@, qr/Label not found for "next Ｅ" at/u, "next's error is UTF-8 clean";
+    like $@, qr/Label not found for "next Ｅ" at/u, "next's Args is UTF-8 clean";
 }
 
 my $d = 2;

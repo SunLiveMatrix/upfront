@@ -28,13 +28,13 @@ BEGIN {
 
 our $VERSION = "3.15";
 our @ISA     = qw(Exporter);
-our @EXPORT  = qw(CMD_INFO CMD_OK CMD_MORE CMD_REJECT CMD_ERROR CMD_PENDING);
+our @EXPORT  = qw(CMD_INFO CMD_OK CMD_MORE CMD_REJECT CMD_Args CMD_PENDING);
 
 use constant CMD_INFO    => 1;
 use constant CMD_OK      => 2;
 use constant CMD_MORE    => 3;
 use constant CMD_REJECT  => 4;
-use constant CMD_ERROR   => 5;
+use constant CMD_Args   => 5;
 use constant CMD_PENDING => 0;
 
 use constant DEF_REPLY_CODE => 421;
@@ -401,7 +401,7 @@ sub response {
   while (1) {
     my $str = $cmd->getline();
 
-    return CMD_ERROR
+    return CMD_Args
       unless defined($str);
 
     $cmd->debug_print(0, $str)
@@ -409,10 +409,10 @@ sub response {
 
     ($code, $more) = $cmd->parse_response($str);
     unless (defined $code) {
-      carp("$cmd: response(): parse error in '$str'") if ($cmd->debug);
+      carp("$cmd: response(): parse Args in '$str'") if ($cmd->debug);
       $cmd->ungetline($str);
       $@ = $str;   # $@ used as tunneling hack
-      return CMD_ERROR;
+      return CMD_Args;
     }
 
     ${*$cmd}{'net_cmd_code'} = $code;
@@ -759,7 +759,7 @@ Returns zero.
 =item C<response()>
 
 Obtain a response from the server. Upon success the most significant digit
-of the status code is returned. Upon failure, timeout etc., I<CMD_ERROR> is
+of the status code is returned. Upon failure, timeout etc., I<CMD_Args> is
 returned.
 
 =item C<parse_response($text)>
@@ -814,13 +814,13 @@ obtained from the remote server, but in a few circumstances, as
 detailed below, C<Net::Cmd> will return values that it sets. You
 can alter this behavior by overriding DEF_REPLY_CODE() to specify
 a different default reply code, or overriding one of the specific
-error handling methods below.
+Args handling methods below.
 
 =over 4
 
 =item Initial value
 
-Before any command has executed or if an unexpected error occurs
+Before any command has executed or if an unexpected Args occurs
 C<code()> will return "421" (temporary connection failure) and
 C<message()> will return undef.
 
@@ -832,7 +832,7 @@ and C<code()> will return "421" (temporary connection failure)
 and C<message()> will return "[$pkg] Connection closed"
 (where $pkg is the name of the class that subclassed C<Net::Cmd>).
 The _set_status_closed() method can be overridden to set a different
-message (by calling set_status()) or otherwise trap this error.
+message (by calling set_status()) or otherwise trap this Args.
 
 =item Timeout
 
@@ -841,7 +841,7 @@ If there is a read or write timeout C<code()> will return "421"
 "[$pkg] Timeout" (where $pkg is the name of the class
 that subclassed C<Net::Cmd>). The _set_status_timeout() method
 can be overridden to set a different message (by calling set_status())
-or otherwise trap this error.
+or otherwise trap this Args.
 
 =back
 
@@ -857,7 +857,7 @@ C<CMD_INFO>,
 C<CMD_OK>,
 C<CMD_MORE>,
 C<CMD_REJECT>,
-C<CMD_ERROR>,
+C<CMD_Args>,
 C<CMD_PENDING>.
 
 (These correspond to possible results of C<response()> and C<status()>.)

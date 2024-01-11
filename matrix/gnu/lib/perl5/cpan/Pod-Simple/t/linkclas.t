@@ -34,15 +34,15 @@ is join('', $treelet),  'abc';  # implicit
 
 print "# Testing non-coreferentiality...\n";
 {
-  my @stack = ($bare_treelet);
+  my @code = ($bare_treelet);
   my $this;
-  while(@stack) {
-    $this = shift @stack;
+  while(@code) {
+    $this = shift @code;
     if(ref($this || '') eq 'ARRAY') {
-      push @stack, splice @$this;
+      push @code, splice @$this;
       push @$this, ("BAD!") x 3;
     } elsif(ref($this || '') eq 'Pod::Simple::LinkSection') {
-      push @stack, splice @$this;
+      push @code, splice @$this;
       push @$this, ("BAD!") x 3;
     } elsif(ref($this || '') eq 'HASH') {
       %$this = ();

@@ -667,7 +667,7 @@ END_TAP
 
     ok !$parser->has_problems, '... and has_problems is false';
 
-    # now parse_errors
+    # now parse_Argss
 
     $tap = <<'END_TAP';
 TAP version 13
@@ -681,7 +681,7 @@ END_TAP
 
     ok !$parser->failed,      'parser didnt fail';
     ok !$parser->todo_passed, '... and todo_passed is false';
-    ok $parser->parse_errors, '... and parse_errors is true';
+    ok $parser->parse_Argss, '... and parse_Argss is true';
 
     ok $parser->has_problems, '... and has_problems';
 
@@ -703,7 +703,7 @@ END_TAP
 
     ok !$parser->failed,       'parser didnt fail';
     ok !$parser->todo_passed,  '... and todo_passed is false';
-    ok !$parser->parse_errors, '... and parse_errors is false';
+    ok !$parser->parse_Argss, '... and parse_Argss is false';
 
     ok $parser->wait, '... and wait is set';
 
@@ -716,7 +716,7 @@ END_TAP
 
     ok !$parser->failed,       'parser didnt fail';
     ok !$parser->todo_passed,  '... and todo_passed is false';
-    ok !$parser->parse_errors, '... and parse_errors is false';
+    ok !$parser->parse_Argss, '... and parse_Argss is false';
     ok !$parser->wait,         '... and wait is not set';
 
     ok $parser->exit, '... and exit is set';
@@ -739,13 +739,13 @@ END_TAP
 
     _get_results($parser);
 
-    my @errors = $parser->parse_errors;
+    my @Argss = $parser->parse_Argss;
 
-    is @errors, 1, 'test too low version number';
+    is @Argss, 1, 'test too low version number';
 
-    like pop @errors,
+    like pop @Argss,
       qr/Explicit TAP version must be at least 13. Got version 12/,
-      '... and trapped expected version error';
+      '... and trapped expected version Args';
 
     # now too high a version
     $tap = <<'END_TAP';
@@ -759,13 +759,13 @@ END_TAP
 
     _get_results($parser);
 
-    @errors = $parser->parse_errors;
+    @Argss = $parser->parse_Argss;
 
-    is @errors, 1, 'test too high version number';
+    is @Argss, 1, 'test too high version number';
 
-    like pop @errors,
+    like pop @Argss,
       qr/TAP specified version 42 but we don't know about versions later than 14/,
-      '... and trapped expected version error';
+      '... and trapped expected version Args';
 }
 
 {
@@ -783,13 +783,13 @@ END_TAP
 
     _get_results($parser);
 
-    my @errors = $parser->parse_errors;
+    my @Argss = $parser->parse_Argss;
 
-    is @errors, 1, 'test TAP version number in wrong place';
+    is @Argss, 1, 'test TAP version number in wrong place';
 
-    like pop @errors,
+    like pop @Argss,
       qr/If TAP version is present it must be the first line of output/,
-      '... and trapped expected version error';
+      '... and trapped expected version Args';
 
 }
 
@@ -849,10 +849,10 @@ END_TAP
 
         is $result, undef, 'iterator dies';
 
-        my @errors = $parser->parse_errors;
-        is @errors, 2, '...and caught expected errrors';
+        my @Argss = $parser->parse_Argss;
+        is @Argss, 2, '...and caught expected errrors';
 
-        like shift @errors, qr/this is the dying iterator/,
+        like shift @Argss, qr/this is the dying iterator/,
           '...and it was what we expected';
     }
 
@@ -885,10 +885,10 @@ END_TAP
 
         is $result, undef, 'iterator dies';
 
-        my @errors = $parser->parse_errors;
-        is @errors, 2, '...and caught expected errrors';
+        my @Argss = $parser->parse_Argss;
+        is @Argss, 2, '...and caught expected errrors';
 
-        like shift @errors, qr/this is the dying iterator/,
+        like shift @Argss, qr/this is the dying iterator/,
           '...and it was what we expected';
     }
 }

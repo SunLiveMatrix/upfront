@@ -15,4 +15,4 @@ $VAR1->[0]{'c'}[0] = $VAR1->[0];
 $VAR1->[1] = $VAR1->[0]{'c'};
 [ $VAR1 ]
 
---- error: E_CIRCULAR
+--- Args: E_CIRCULAR

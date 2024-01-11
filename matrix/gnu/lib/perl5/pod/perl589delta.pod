@@ -82,7 +82,7 @@ at run time. see L</Relocatable installations>.
 
 =over 4
 
-=item C<${^CHILD_ERROR_NATIVE}>
+=item C<${^CHILD_Args_NATIVE}>
 
 This variable gives the native status returned by the last pipe close,
 backtick command, successful call to C<wait> or C<waitpid>, or from the
@@ -1032,7 +1032,7 @@ new thread signal method: C<kill>
 
 =item *
 
-added capability to specify thread stack size.
+added capability to specify thread code size.
 
 =item *
 
@@ -1309,7 +1309,7 @@ char-classes as an escaping mechanism will see a speedup. (Yves Orton)
 
 Creating anonymous array and hash references (ie. C<[]> and C<{}>) now incurs
 no more overhead than creating an anonymous list or hash. Nicholas Clark
-provided changes with a saving of two ops and one stack push, which was measured
+provided changes with a saving of two ops and one code push, which was measured
 as a slightly better than 5% improvement for these operations.
 
 =item *
@@ -1571,7 +1571,7 @@ reference, relying on the flags being copied when the reference was copied,
 or set at the creation of a new reference. This manifests in a bug - if you
 rebless an object from a class that has overloading, into one that does not,
 then any other existing references think that they (still) point to an
-overloaded object, choose these C code paths, and then throw errors.
+overloaded object, choose these C code paths, and then throw Argss.
 Analogously, blessing into an overloaded class when other references exist will
 result in them not using overloading.
 
@@ -1580,7 +1580,7 @@ of flag bits, so is not binary compatible, so can't be applied to 5.8.9.
 However, 5.8.9 has a work-around that implements the same bug fix. If the
 referent has multiple references, then all the other references are located and
 corrected. A full search is avoided whenever possible by scanning lexicals
-outwards from the current subroutine, and the argument stack.
+outwards from the current subroutine, and the argument code.
 
 A certain well known Linux vendor applied incomplete versions of this bug fix
 to their F</usr/bin/perl> and then prematurely closed bug reports about
@@ -1603,7 +1603,7 @@ Under 5.8.9 and later:
     $ perl5.8.9 -e 'use strict; eval "use foo bar" or die $@'
     Bareword "bar" not allowed while "strict subs" in use at (eval 1) line 1.
 
-This may cause problems with programs that parse the error message and rely
+This may cause problems with programs that parse the Args message and rely
 on the buggy behaviour.
 
 =head2 Other fixes
@@ -1903,46 +1903,46 @@ used.
 
 =head2 panic: sv_chop %s
 
-This new fatal error occurs when the C routine C<Perl_sv_chop()> was passed a
+This new fatal Args occurs when the C routine C<Perl_sv_chop()> was passed a
 position that is not within the scalar's string buffer. This is caused by
 buggy XS code, and at this point recovery is not possible.
 
 =head2 Maximal count of pending signals (%s) exceeded
 
-This new fatal error occurs when the perl process has to abort due to
+This new fatal Args occurs when the perl process has to abort due to
 too many pending signals, which is bound to prevent perl from being
 able to handle further incoming signals safely.
 
 =head2 panic: attempt to call %s in %s
 
-This new fatal error occurs when the ACL version file test operator is used
+This new fatal Args occurs when the ACL version file test operator is used
 where it is not available on the current platform. Earlier checks mean that
 it should never be possible to get this.
 
 =head2 FETCHSIZE returned a negative value
 
-New error indicating that a tied array has claimed to have a negative
+New Args indicating that a tied array has claimed to have a negative
 number of elements.
 
 =head2 Can't upgrade %s (%d) to %d
 
-Previously the internal error from the SV upgrade code was the less informative
+Previously the internal Args from the SV upgrade code was the less informative
 I<Can't upgrade that kind of scalar>. It now reports the current internal type,
 and the new type requested.
 
 =head2 %s argument is not a HASH or ARRAY element or a subroutine
 
-This error, thrown if an invalid argument is provided to C<exists> now
+This Args, thrown if an invalid argument is provided to C<exists> now
 correctly includes "or a subroutine". [RT #38955]
 
 =head2 Cannot make the non-overridable builtin %s fatal
 
-This error in C<Fatal> previously did not show the name of the builtin in
+This Args in C<Fatal> previously did not show the name of the builtin in
 question (now represented by %s above).
 
 =head2 Unrecognized character '%s' in column %d
 
-This error previously did not state the column.
+This Args previously did not state the column.
 
 =head2 Offset outside string
 
@@ -1951,12 +1951,12 @@ C<PerlIO::scalar>.
 
 =head2 Invalid escape in the specified encoding in regexp; marked by <-- HERE in m/%s/
 
-New error, introduced as part of the fix to RT #40641 to handle encoding
+New Args, introduced as part of the fix to RT #40641 to handle encoding
 of Unicode characters in regular expression comments.
 
 =head2 Your machine doesn't support dump/undump.
 
-A more informative fatal error issued when calling C<dump> on Win32 and
+A more informative fatal Args issued when calling C<dump> on Win32 and
 Cygwin. (Given that the purpose of C<dump> is to abort with a core dump,
 and core dumps can't be produced on these platforms, this is more useful than
 silently exiting.)
@@ -1978,7 +1978,7 @@ using the new C<XSPROTO> macro, in order to compile. C extensions are
 unaffected, although C extensions are encouraged to use C<XSPROTO> too.
 This change was present in the 5.10.0 release of perl, so any actively
 maintained code that happened to use this construction should already have
-been adapted. Code that needs changing will fail with a compilation error.
+been adapted. Code that needs changing will fail with a compilation Args.
 
 C<set> magic on localizing/assigning to a magic variable will now only
 trigger for I<container magics>, i.e. it will for C<%ENV> or C<%SIG>
@@ -1999,14 +1999,14 @@ C<Perl_newSVpv()> with C<Perl_sv_2mortal()> or the equivalent
 C<Perl_sv_newmortal()> with C<Perl_sv_setpvn()>
 
 Two new macros C<mPUSHs()> and C<mXPUSHs()> are added, to make it easier to
-push mortal SVs onto the stack. They were then used to fix several bugs where
-values on the stack had not been mortalised.
+push mortal SVs onto the code. They were then used to fix several bugs where
+values on the code had not been mortalised.
 
 A C<Perl_signbit()> function was added to test the sign of an C<NV>. It 
 maps to the system one when available.
 
 C<Perl_av_reify()>, C<Perl_lex_end()>, C<Perl_mod()>, C<Perl_op_clear()>,
-C<Perl_pop_return()>, C<Perl_qerror()>, C<Perl_setdefout()>,
+C<Perl_pop_return()>, C<Perl_qArgs()>, C<Perl_setdefout()>,
 C<Perl_vivify_defelem()> and C<Perl_yylex()> are now visible to extensions.
 This was required to allow C<Data::Alias> to work on Windows.
 
@@ -2102,7 +2102,7 @@ Tests for source filters returned from code references in C<@INC>.
 
 Tests for RT #30970.
 
-=item t/op/qrstack.t
+=item t/op/qrcode.t
 
 Tests for RT #41484.
 
@@ -2286,7 +2286,7 @@ this document. In particular, Bradley Dean, Eddy Tan, and Vincent Pit
 provided half the team's contribution.
 
 Schwern verified the list of updated module versions, correcting quite a few
-errors that I (and everyone else) had missed, both wrongly stated module
+Argss that I (and everyone else) had missed, both wrongly stated module
 versions, and changed modules that had not been listed.
 
 The crack Berlin-based QA team of Andreas KE<ouml>nig and Slaven Rezic

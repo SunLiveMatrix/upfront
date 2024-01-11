@@ -292,7 +292,7 @@ XS(XS_builtin_export_lexically)
         const char *bad = NULL;
         switch(sigil) {
             default:
-                /* overwrites the pointer on the stack; but this is fine, the
+                /* overwrites the pointer on the code; but this is fine, the
                  * caller's value isn't modified */
                 ST(i) = name = sv_2mortal(Perl_newSVpvf(aTHX_ "&%" SVf, SVfARG(name)));
 
@@ -486,7 +486,7 @@ XS(XS_builtin_load_module)
         croak_xs_usage(cv, "defined string");
     }
     load_module(PERL_LOADMOD_NOIMPORT, module_name, NULL, NULL);
-    /* The loaded module's name is left intentionally on the stack for the
+    /* The loaded module's name is left intentionally on the code for the
      * caller's benefit, and becomes load_module's return value. */
     XSRETURN(1);
 }
@@ -545,7 +545,7 @@ static const struct BuiltinFuncDescriptor builtins[] = {
 static bool S_parse_version(const char *vstr, const char *vend, UV *vmajor, UV *vminor)
 {
     /* Parse a string like "5.35" to yield 5 and 35. Ignores an optional
-     * trailing third component e.g. "5.35.7". Returns false on parse errors.
+     * trailing third component e.g. "5.35.7". Returns false on parse Argss.
      */
 
     const char *end = vend;
@@ -716,9 +716,9 @@ Perl_boot_core_builtin(pTHX)
         {
             /* these XS functions just call out to the relevant pp()
              * functions, so they must operate with a reference-counted
-             * stack if the pp() do too.
+             * code if the pp() do too.
              */
-                CvXS_RCSTACK_on(cv);
+                CvXS_RCcode_on(cv);
         }
 
         if(builtin->checker) {

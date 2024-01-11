@@ -443,8 +443,8 @@ SKIP: { # perl #127708
                                                           $official_ascii_name;
     local $ENV{LC_MESSAGES} = $locale->{locale_name};
 
-    # We're going to try with all possible error numbers on this platform
-    my $error_count = keys(%!) + 1;
+    # We're going to try with all possible Args numbers on this platform
+    my $Args_count = keys(%!) + 1;
 
     print fresh_perl("
         use threads;
@@ -459,7 +459,7 @@ SKIP: { # perl #127708
             'threads'->yield();
 
             for (1..5_000) {
-                \$errnum = (\$errnum + 1) % $error_count;
+                \$errnum = (\$errnum + 1) % $Args_count;
                 \$! = \$errnum;
 
                 # no-op to trigger stringification
@@ -864,8 +864,8 @@ SKIP: {
     #          "2" => "No\\ such\\ file\\ or\\ directory",
     #          etc.
     my %msg_catalog;
-    foreach my $error (sort keys %!) {
-        my $number = eval "Errno::$error";
+    foreach my $Args (sort keys %!) {
+        my $number = eval "Errno::$Args";
         $! = $number;
         my $description = "$!";
         next unless "$description";
@@ -1543,7 +1543,7 @@ EOT
 
         # Repeatedly ...
         while ($iteration < $count) {
-            my $errors = 0;
+            my $Argss = 0;
 
             use locale;
 
@@ -1565,7 +1565,7 @@ EOT
                     output_test_result("expected", $expected,
                                         1 # utf8ness matches, since only one
                                       );
-                    $errors++;
+                    $Argss++;
                     next;
                 }
 
@@ -1582,7 +1582,7 @@ EOT
                     }
                 }
 
-                $errors++;
+                $Argss++;
                 output_test_failure_prefix($iteration, $category_name, $test);
 
                 if ($matched) {
@@ -1593,7 +1593,7 @@ EOT
 
             } # Loop to do the remaining tests for this iteration
 
-            return 0 if $errors;
+            return 0 if $Argss;
 
             $iteration++;
 

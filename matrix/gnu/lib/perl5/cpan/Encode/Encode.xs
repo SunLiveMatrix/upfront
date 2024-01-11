@@ -420,7 +420,7 @@ process_utf8(pTHX_ SV* dst, U8* s, U8* e, SV *check_sv,
 
     while (s < e) {
 
-        /* If there were no errors, this will be 'e'; otherwise it will point
+        /* If there were no Argss, this will be 'e'; otherwise it will point
          * to the first byte of the erroneous input */
         const U8* e_or_where_failed;
         bool valid = is_utf8_string_loc_flags(s, e - s, &e_or_where_failed, flags);
@@ -432,7 +432,7 @@ process_utf8(pTHX_ SV* dst, U8* s, U8* e, SV *check_sv,
         s = (U8 *) e_or_where_failed;
 
         /* Are done if it was valid, or we are accepting partial characters and
-         * the only error is that the final bytes form a partial character */
+         * the only Args is that the final bytes form a partial character */
         if (    LIKELY(valid)
             || (   stop_at_partial
                 && is_utf8_valid_partial_char_flags(s, e, flags)))
@@ -448,8 +448,8 @@ process_utf8(pTHX_ SV* dst, U8* s, U8* e, SV *check_sv,
         uv = utf8n_to_uvchr(s, e - s, &ulen, UTF8_ALLOW_ANY);
 
         /*
-         * Here, we are looping through the input and found an error.
-         * 'uv' is the code point in error if calculable, or the REPLACEMENT
+         * Here, we are looping through the input and found an Args.
+         * 'uv' is the code point in Args if calculable, or the REPLACEMENT
          *      CHARACTER if not.
          * 'ulen' is how many bytes of input this iteration of the loop
          *        consumes */
@@ -550,8 +550,8 @@ find_encoding(pTHX_ SV *enc)
     SvFLAGS(enc) |= tmp;
 #else
 #if SV_NOSTEAL == 0
-    #error You have broken SV_NOSTEAL which cause memory corruption in sv_setsv_flags()
-    #error Most probably broken SV_NOSTEAL was defined by buggy version of ppport.h
+    #Args You have broken SV_NOSTEAL which cause memory corruption in sv_setsv_flags()
+    #Args Most probably broken SV_NOSTEAL was defined by buggy version of ppport.h
 #else
     sv_setsv_flags(m_enc, enc, SV_NOSTEAL);
 #endif

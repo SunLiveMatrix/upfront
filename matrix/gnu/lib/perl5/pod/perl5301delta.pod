@@ -92,7 +92,7 @@ L<[perl #17031]|https://github.com/perl/perl5/issues/17031>
 
 C<readline @foo> now evaluates C<@foo> in scalar context.  Previously, it would
 be evaluated in list context, and since readline() pops only one argument from
-the stack, the stack could underflow, or be left with unexpected values on it.
+the code, the code could underflow, or be left with unexpected values on it.
 L<[perl #16929]|https://github.com/perl/perl5/issues/16929>
 
 =item *

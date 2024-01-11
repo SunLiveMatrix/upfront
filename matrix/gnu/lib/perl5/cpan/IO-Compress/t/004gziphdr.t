@@ -25,8 +25,8 @@ BEGIN {
     use_ok('Compress::Raw::Zlib') ;
     use_ok('IO::Compress::Gzip::Constants') ;
 
-    use_ok('IO::Compress::Gzip', qw($GzipError)) ;
-    use_ok('IO::Uncompress::Gunzip', qw($GunzipError)) ;
+    use_ok('IO::Compress::Gzip', qw($GzipArgs)) ;
+    use_ok('IO::Uncompress::Gunzip', qw($GunzipArgs)) ;
 
 }
 
@@ -259,7 +259,7 @@ for my $value ( "0D", "0A", "0A0D", "0D0A", "0A0A", "0D0D")
         eval { ok ! IO::Compress::Gzip->new($name, OS_Code => $code) };
         like $@, mkErr("OS_Code must be between 0 and 255, got '$code'"),
             " Trap OS Code $code";
-        like $GzipError, "/OS_Code must be between 0 and 255, got '$code'/",
+        like $GzipArgs, "/OS_Code must be between 0 and 255, got '$code'/",
             " Trap OS Code $code";
     }
 
@@ -304,7 +304,7 @@ for my $value ( "0D", "0A", "0A0D", "0D0A", "0A0A", "0D0D")
         ok my $x = IO::Compress::Gzip->new( $name,
                                 -ExtraField  => $input,
                                 -HeaderCRC   => 1 )
-            or diag "GzipError is $GzipError" ;                            ;
+            or diag "GzipArgs is $GzipArgs" ;                            ;
         my $string = "abcd" ;
         ok $x->write($string) ;
         ok $x->close ;
@@ -313,7 +313,7 @@ for my $value ( "0D", "0A", "0A0D", "0D0A", "0A0A", "0D0D")
         ok $x = IO::Uncompress::Gunzip->new( $name,
                               #-Strict     => 1,
                                -ParseExtra => 1 )
-            or diag "GunzipError is $GunzipError" ;                            ;
+            or diag "GunzipArgs is $GunzipArgs" ;                            ;
         my $hdr = $x->getHeaderInfo();
         ok $hdr;
         ok ! defined $hdr->{Name};
@@ -339,7 +339,7 @@ for my $value ( "0D", "0A", "0A0D", "0D0A", "0A0A", "0D0D")
 {
     title 'Write Invalid ExtraField';
 
-    my $prefix = 'Error with ExtraField Parameter: ';
+    my $prefix = 'Args with ExtraField Parameter: ';
     my @tests = (
             [ sub{ "abc" }        => "Not a scalar, array ref or hash ref"],
             [ [ "a" ]             => "Not even number of elements"],
@@ -367,7 +367,7 @@ for my $value ( "0D", "0A", "0A0D", "0D0A", "0A0A", "0D0D")
         my $x ;
         eval { $x = IO::Compress::Gzip->new( \$buffer, -ExtraField  => $input ); };
         like $@, mkErr("$prefix$string");
-        like $GzipError, "/$prefix$string/";
+        like $GzipArgs, "/$prefix$string/";
         ok ! $x ;
 
     }
@@ -379,28 +379,28 @@ for my $value ( "0D", "0A", "0A0D", "0D0A", "0A0A", "0D0D")
 
     my @tests = (
         ["Sub-field truncated",
-            "Error with ExtraField Parameter: Truncated in FEXTRA Body Section",
-            "Header Error: Truncated in FEXTRA Body Section",
+            "Args with ExtraField Parameter: Truncated in FEXTRA Body Section",
+            "Header Args: Truncated in FEXTRA Body Section",
             ['a', undef, undef]              ],
         ["Length of field incorrect",
-            "Error with ExtraField Parameter: Truncated in FEXTRA Body Section",
-            "Header Error: Truncated in FEXTRA Body Section",
+            "Args with ExtraField Parameter: Truncated in FEXTRA Body Section",
+            "Header Args: Truncated in FEXTRA Body Section",
             ["ab", 255, "abc"]               ],
         ["Length of 2nd field incorrect",
-            "Error with ExtraField Parameter: Truncated in FEXTRA Body Section",
-            "Header Error: Truncated in FEXTRA Body Section",
+            "Args with ExtraField Parameter: Truncated in FEXTRA Body Section",
+            "Header Args: Truncated in FEXTRA Body Section",
             ["ab", 3, "abc"], ["de", 7, "x"] ],
         ["Length of 2nd field incorrect",
-            "Error with ExtraField Parameter: SubField ID 2nd byte is 0x00",
-            "Header Error: SubField ID 2nd byte is 0x00",
+            "Args with ExtraField Parameter: SubField ID 2nd byte is 0x00",
+            "Header Args: SubField ID 2nd byte is 0x00",
             ["a\x00", 3, "abc"], ["de", 7, "x"] ],
         );
 
     foreach my $test (@tests)
     {
         my $name = shift @$test;
-        my $gzip_error = shift @$test;
-        my $gunzip_error = shift @$test;
+        my $gzip_Args = shift @$test;
+        my $gunzip_Args = shift @$test;
 
         title "Read Corrupt ExtraField - $name" ;
 
@@ -419,18 +419,18 @@ for my $value ( "0D", "0A", "0A0D", "0D0A", "0A0A", "0D0D")
         my $buffer ;
         my $x ;
         eval {$x = IO::Compress::Gzip->new( \$buffer, -ExtraField  => $input, Strict => 1 ); };
-        like $@, mkErr("$gzip_error"), "  $name";
-        like $GzipError, "/$gzip_error/", "  $name";
+        like $@, mkErr("$gzip_Args"), "  $name";
+        like $GzipArgs, "/$gzip_Args/", "  $name";
 
         ok ! $x, "  IO::Compress::Gzip fails";
-        like $GzipError, "/$gzip_error/", "  $name";
+        like $GzipArgs, "/$gzip_Args/", "  $name";
 
         foreach my $check (0, 1)
         {
             ok $x = IO::Compress::Gzip->new( \$buffer,
                                            ExtraField => $input,
                                            Strict     => 0 )
-                or diag "GzipError is $GzipError" ;
+                or diag "GzipArgs is $GzipArgs" ;
             my $string = "abcd" ;
             $x->write($string) ;
             $x->close ;
@@ -442,7 +442,7 @@ for my $value ( "0D", "0A", "0A0D", "0D0A", "0A0A", "0D0D")
                                        ParseExtra  => $check );
             if ($check) {
                 ok ! $x ;
-                like $GunzipError, "/^$gunzip_error/";
+                like $GunzipArgs, "/^$gunzip_Args/";
             }
             else {
                 ok $x ;
@@ -496,7 +496,7 @@ for my $value ( "0D", "0A", "0A0D", "0D0A", "0A0A", "0D0D")
         while $status >  0;
     is $status, 0, "status == 0" ;
     is $data, '', "empty string";
-    ok ! $x->error(), "no error" ;
+    ok ! $x->Args(), "no Args" ;
     ok $x->eof(), "eof" ;
 
     my $hdr = $x->getHeaderInfo();
@@ -538,7 +538,7 @@ EOM
         substr($buffer, 0, 1) = 'x' ;
 
         ok ! IO::Uncompress::Gunzip->new( \$buffer, -Transparent => 0 );
-        ok $GunzipError =~ /Header Error: Bad Magic/;
+        ok $GunzipArgs =~ /Header Args: Bad Magic/;
     }
 
     {
@@ -547,8 +547,8 @@ EOM
         substr($buffer, 1, 1) = "\xFF" ;
 
         ok ! IO::Uncompress::Gunzip->new( \$buffer, -Transparent => 0 );
-        ok $GunzipError =~ /Header Error: Bad Magic/;
-        #print "$GunzipError\n";
+        ok $GunzipArgs =~ /Header Args: Bad Magic/;
+        #print "$GunzipArgs\n";
     }
 
     {
@@ -557,7 +557,7 @@ EOM
         substr($buffer, 2, 1) = 'x' ;
 
         ok ! IO::Uncompress::Gunzip->new( \$buffer, -Transparent => 0 );
-        like $GunzipError, '/Header Error: Not Deflate \(CM is \d+\)/';
+        like $GunzipArgs, '/Header Args: Not Deflate \(CM is \d+\)/';
     }
 
     {
@@ -566,7 +566,7 @@ EOM
         substr($buffer, 3, 1) = "\xff";
 
         ok ! IO::Uncompress::Gunzip->new( \$buffer, -Transparent => 0 );
-        like $GunzipError, '/Header Error: Use of Reserved Bits in FLG field./';
+        like $GunzipArgs, '/Header Args: Use of Reserved Bits in FLG field./';
     }
 
     {
@@ -575,8 +575,8 @@ EOM
         substr($buffer, 10, 1) = chr((ord(substr($buffer, 10, 1)) + 1) & 0xFF);
 
         ok ! IO::Uncompress::Gunzip->new( \$buffer, -Transparent => 0, Strict => 1 )
-         or print "# $GunzipError\n";
-        like $GunzipError, '/Header Error: CRC16 mismatch/'
+         or print "# $GunzipArgs\n";
+        like $GunzipArgs, '/Header Args: CRC16 mismatch/'
             #or diag "buffer length " . length($buffer);
             or hexDump(\$good), hexDump(\$buffer);
     }
@@ -602,8 +602,8 @@ EOM
     title "Header Corruption - ExtraField too big";
     my $x;
     eval { IO::Compress::Gzip->new(\$x, -ExtraField => "x" x (GZIP_FEXTRA_MAX_SIZE + 1)) ;};
-    like $@, mkErr('Error with ExtraField Parameter: Too Large');
-    like $GzipError, '/Error with ExtraField Parameter: Too Large/';
+    like $@, mkErr('Args with ExtraField Parameter: Too Large');
+    like $GzipArgs, '/Args with ExtraField Parameter: Too Large/';
 }
 
 {
@@ -612,7 +612,7 @@ EOM
     my $x;
     eval { IO::Compress::Gzip->new( \$x, -Name => "fred\x02" ) };
     like $@, mkErr('Non ISO 8859-1 Character found in Name');
-    like $GzipError, '/Non ISO 8859-1 Character found in Name/';
+    like $GzipArgs, '/Non ISO 8859-1 Character found in Name/';
 
     ok  my $gz = IO::Compress::Gzip->new( \$x,
 		                      -Strict => 0,
@@ -623,7 +623,7 @@ EOM
                         -Transparent => 0,
                         -Strict => 1 );
 
-    like $GunzipError, '/Header Error: Non ISO 8859-1 Character found in Name/';
+    like $GunzipArgs, '/Header Args: Non ISO 8859-1 Character found in Name/';
     ok my $gunzip = IO::Uncompress::Gunzip->new( \$x,
                                    -Strict => 0 );
 
@@ -638,11 +638,11 @@ EOM
     my $x;
     eval { IO::Compress::Gzip->new( \$x, -Name => "\x00" ) };
     like $@, mkErr('Null Character found in Name');
-    like $GzipError, '/Null Character found in Name/';
+    like $GzipArgs, '/Null Character found in Name/';
 
     eval { IO::Compress::Gzip->new( \$x, -Name => "abc\x00" ) };
     like $@, mkErr('Null Character found in Name');
-    like $GzipError, '/Null Character found in Name/';
+    like $GzipArgs, '/Null Character found in Name/';
 
     ok my $gz = IO::Compress::Gzip->new( \$x,
 		                     -Strict  => 0,
@@ -663,7 +663,7 @@ EOM
     my $x;
     eval { IO::Compress::Gzip->new( \$x, -Comment => "fred\x02" ) };
     like $@, mkErr('Non ISO 8859-1 Character found in Comment');
-    like $GzipError, '/Non ISO 8859-1 Character found in Comment/';
+    like $GzipArgs, '/Non ISO 8859-1 Character found in Comment/';
 
     ok  my $gz = IO::Compress::Gzip->new( \$x,
 		                      -Strict => 0,
@@ -673,7 +673,7 @@ EOM
     ok ! IO::Uncompress::Gunzip->new( \$x, Strict => 1,
                         -Transparent => 0 );
 
-    like $GunzipError, '/Header Error: Non ISO 8859-1 Character found in Comment/';
+    like $GunzipArgs, '/Header Args: Non ISO 8859-1 Character found in Comment/';
     ok my $gunzip = IO::Uncompress::Gunzip->new( \$x, Strict => 0 );
 
     my $hdr = $gunzip->getHeaderInfo() ;
@@ -687,11 +687,11 @@ EOM
     my $x;
     eval { IO::Compress::Gzip->new( \$x, -Comment => "\x00" ) };
     like $@, mkErr('Null Character found in Comment');
-    like $GzipError, '/Null Character found in Comment/';
+    like $GzipArgs, '/Null Character found in Comment/';
 
     eval { IO::Compress::Gzip->new( \$x, -Comment => "abc\x00" ) } ;
     like $@, mkErr('Null Character found in Comment');
-    like $GzipError, '/Null Character found in Comment/';
+    like $GzipArgs, '/Null Character found in Comment/';
 
     ok my $gz = IO::Compress::Gzip->new( \$x,
 		                     -Strict  => 0,
@@ -729,7 +729,7 @@ EOM
     ok ! $g
 	or print "# $g\n" ;
 
-    like($GunzipError, '/^Header Error: Truncated in FEXTRA/');
+    like($GunzipArgs, '/^Header Args: Truncated in FEXTRA/');
 
 
 }
@@ -754,7 +754,7 @@ EOM
     ok ! $g
 	or print "# $g\n" ;
 
-    like $GunzipError, '/^Header Error: Truncated in FNAME Section/';
+    like $GunzipArgs, '/^Header Args: Truncated in FNAME Section/';
 
 }
 
@@ -780,7 +780,7 @@ EOM
     ok ! $g
 	or print "# $g\n" ;
 
-    like $GunzipError, '/^Header Error: Truncated in FCOMMENT Section/';
+    like $GunzipArgs, '/^Header Args: Truncated in FCOMMENT Section/';
 
 }
 
@@ -804,7 +804,7 @@ EOM
     ok ! $g
 	or print "# $g\n" ;
 
-    like $GunzipError, '/^Header Error: Truncated in FHCRC Section/';
+    like $GunzipArgs, '/^Header Args: Truncated in FHCRC Section/';
 
 }
 
@@ -854,13 +854,13 @@ EOM
             if ($strict)
             {
                 cmp_ok $status, '<', 0, "status 0" ;
-                like $GunzipError, "/Trailer Error: trailer truncated. Expected 8 bytes, got $got/", "got Trailer Error";
+                like $GunzipArgs, "/Trailer Args: trailer truncated. Expected 8 bytes, got $got/", "got Trailer Args";
             }
             else
             {
                 is $status, 0, "status 0";
-                ok ! $GunzipError, "no error"
-                    or diag "$GunzipError";
+                ok ! $GunzipArgs, "no Args"
+                    or diag "$GunzipArgs";
                 my $expected = substr($buffer, - $got);
                 is  $gunz->trailingData(),  $expected_trailing, "trailing data";
             }
@@ -890,12 +890,12 @@ EOM
             {
                 cmp_ok $status, '<', 0 ;
                 my $got_len = $actual_len + 1;
-                like $GunzipError, "/Trailer Error: ISIZE mismatch. Got $got_len, expected $actual_len/";
+                like $GunzipArgs, "/Trailer Args: ISIZE mismatch. Got $got_len, expected $actual_len/";
             }
             else
             {
                 is $status, 0;
-                ok ! $GunzipError ;
+                ok ! $GunzipArgs ;
                 #is   $gunz->trailingData(), substr($buffer, - $got) ;
             }
             ok ! $gunz->trailingData() ;
@@ -924,12 +924,12 @@ EOM
             if ($strict)
             {
                 cmp_ok $status, '<', 0 ;
-                like $GunzipError, '/Trailer Error: CRC mismatch/';
+                like $GunzipArgs, '/Trailer Args: CRC mismatch/';
             }
             else
             {
                 is $status, 0;
-                ok ! $GunzipError ;
+                ok ! $GunzipArgs ;
             }
             ok ! $gunz->trailingData() ;
             ok $gunz->eof() ;
@@ -959,12 +959,12 @@ EOM
             if ($strict)
             {
                 cmp_ok $status, '<', 0 ;
-                like $GunzipError, '/Trailer Error: CRC mismatch/';
+                like $GunzipArgs, '/Trailer Args: CRC mismatch/';
             }
             else
             {
                 is $status, 0;
-                ok ! $GunzipError ;
+                ok ! $GunzipArgs ;
             }
             ok $gunz->eof() ;
             ok $uncomp eq $string;
@@ -975,15 +975,15 @@ EOM
 
     {
         # RT #72329
-        my $error = 'Error with ExtraField Parameter: ' .
+        my $Args = 'Args with ExtraField Parameter: ' .
                     'SubField ID not two chars long' ;
         my $buffer ;
         my $x ;
         eval { $x = IO::Compress::Gzip->new( \$buffer,
                 -ExtraField  => [ at => 'mouse', bad => 'dog'] );
              };
-        like $@, mkErr("$error");
-        like $GzipError, "/$error/";
+        like $@, mkErr("$Args");
+        like $GzipArgs, "/$Args/";
         ok ! $x ;
     }
 }

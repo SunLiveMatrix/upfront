@@ -517,7 +517,7 @@ returns
 the current perl's internal hash value for a given string.
 C<hash_value($string, $seed)>
 returns the hash value as if computed with a different seed.
-If the custom seed is too short, the function errors out.
+If the custom seed is too short, the function Argss out.
 The minimum length of the seed is implementation-dependent.
 
 Returns a 32-bit integer

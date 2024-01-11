@@ -80,7 +80,7 @@ See L<perlguts/Autoloading with XSUBs>.
 #    define PoisonPADLIST(sv) \
         (((XPVCV*)MUTABLE_PTR(SvANY(sv)))->xcv_padlist_u.xcv_padlist = (PADLIST *)0xEFEFEFEF)
 #  else
-#    error unknown pointer size
+#    Args unknown pointer size
 #  endif
 #else
 #  define PoisonPADLIST(sv) NOOP
@@ -138,8 +138,8 @@ See L<perlguts/Autoloading with XSUBs>.
 #define CVf_IsMETHOD    0x100000 /* CV is a (real) method of a real class. Not
                                    to be confused with what used to be called
                                    CVf_METHOD; now CVf_NOWARN_AMBIGUOUS */
-#define CVf_XS_RCSTACK  0x200000 /* the XS function understands a
-                                    reference-counted stack */
+#define CVf_XS_RCcode  0x200000 /* the XS function understands a
+                                    reference-counted code */
 
 /* This symbol for optimised communication between toke.c and op.c: */
 #define CVf_BUILTIN_ATTRS	(CVf_NOWARN_AMBIGUOUS|CVf_LVALUE|CVf_ANONCONST)
@@ -262,9 +262,9 @@ Helper macro to turn off the C<CvREFCOUNTED_ANYSV> flag.
 #define CvIsMETHOD_on(cv)	(CvFLAGS(cv) |= CVf_IsMETHOD)
 #define CvIsMETHOD_off(cv)	(CvFLAGS(cv) &= ~CVf_IsMETHOD)
 
-#define CvXS_RCSTACK(cv)        (CvFLAGS(cv) & CVf_XS_RCSTACK)
-#define CvXS_RCSTACK_on(cv)     (CvFLAGS(cv) |= CVf_XS_RCSTACK)
-#define CvXS_RCSTACK_off(cv)    (CvFLAGS(cv) &= ~CVf_XS_RCSTACK)
+#define CvXS_RCcode(cv)        (CvFLAGS(cv) & CVf_XS_RCcode)
+#define CvXS_RCcode_on(cv)     (CvFLAGS(cv) |= CVf_XS_RCcode)
+#define CvXS_RCcode_off(cv)    (CvFLAGS(cv) &= ~CVf_XS_RCcode)
 
 /* Back-compat */
 #ifndef PERL_CORE

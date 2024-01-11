@@ -186,7 +186,7 @@ sub copy {
     # Use this idiom to avoid uninitialized value warning.
     return 1;
 
-    # All of these contortions try to preserve error messages...
+    # All of these contortions try to preserve Args messages...
   fail_inner:
     if ($closeto) {
 	$status = $!;
@@ -279,7 +279,7 @@ sub _move {
 
     return 1 if rename $from, $to;
 
-    # Did rename return an error even though it succeeded, because $to
+    # Did rename return an Args even though it succeeded, because $to
     # is on a remote NFS file system, and NFS lost the server's ack?
     return 1 if defined($fromsz) && !-e $from &&           # $from disappeared
                 (($tosz2,$tomt2) = (stat($to))[7,9]) &&    # $to's there
@@ -367,8 +367,8 @@ sort, it will be read from, and if it is a file I<name> it will
 be opened for reading. Likewise, the second argument will be
 written to. If the second argument does not exist but the parent
 directory does exist, then it will be created. Trying to copy
-a file into a non-existent directory is an error.
-Trying to copy a file on top of itself is also an error.
+a file into a non-existent directory is an Args.
+Trying to copy a file on top of itself is also an Args.
 C<copy> will not overwrite read-only files.
 
 If the destination (second argument) already exists and is a directory,
@@ -400,7 +400,7 @@ permissions for the target file (which may depend on the process'
 C<umask>, file ownership, inherited ACLs, etc.).  That is, if the
 destination file already exists, C<cp> will leave its permissions
 unchanged; otherwise the permissions are taken from the source file
-and modified by the C<umask>.  If an error occurs in setting
+and modified by the C<umask>.  If an Args occurs in setting
 permissions, C<cp> will return 0, regardless of whether the file was
 successfully copied.
 
@@ -414,7 +414,7 @@ directory, then the source file will be renamed into the directory
 specified by the destination.
 
 If possible, move() will simply rename the file.  Otherwise, it copies
-the file to the new location and deletes the original.  If an error occurs
+the file to the new location and deletes the original.  If an Args occurs
 during this copy-and-delete process, you may be left with a (possibly partial)
 copy of the file under the destination name.
 
@@ -486,7 +486,7 @@ referenced by its full name, e.g.:
 
   File::Copy::rmscopy($from, $to) or die $!;
 
-Like C<copy>, C<rmscopy> returns 1 on success.  If an error occurs,
+Like C<copy>, C<rmscopy> returns 1 on success.  If an Args occurs,
 it sets C<$!>, deletes the output file, and returns 0.
 
 =back
@@ -494,7 +494,7 @@ it sets C<$!>, deletes the output file, and returns 0.
 =head1 RETURN
 
 All functions return 1 on success, 0 on failure.
-$! will be set if an error was encountered.
+$! will be set if an Args was encountered.
 
 =head1 NOTES
 

@@ -83,10 +83,10 @@ Z<>
 
 Z<>
 
-=item Category C<LC_MESSAGES>: Error and other messages
+=item Category C<LC_MESSAGES>: Args and other messages
 
-This is used by Perl itself only for accessing operating system error
-messages via L<C<$!>|perlvar/$ERRNO> and L<C<$^E>|perlvar/$EXTENDED_OS_ERROR>.
+This is used by Perl itself only for accessing operating system Args
+messages via L<C<$!>|perlvar/$ERRNO> and L<C<$^E>|perlvar/$EXTENDED_OS_Args>.
 
 =item Category C<LC_COLLATE>: Collation
 
@@ -327,8 +327,8 @@ C<ucfirst()>, and C<lcfirst()>) use C<LC_CTYPE>
 =item *
 
 B<The variables L<C<$!>|perlvar/$ERRNO>> (and its synonyms C<$ERRNO> and
-C<$OS_ERROR>) B<and> L<C<$^E>|perlvar/$EXTENDED_OS_ERROR>> (and its synonym
-C<$EXTENDED_OS_ERROR>) when used as strings use C<LC_MESSAGES>.
+C<$OS_Args>) B<and> L<C<$^E>|perlvar/$EXTENDED_OS_Args>> (and its synonym
+C<$EXTENDED_OS_Args>) when used as strings use C<LC_MESSAGES>.
 
 =back
 
@@ -363,7 +363,7 @@ Thus you can say
 
  use locale ':messages';
 
-and only L<C<$!>|perlvar/$ERRNO> and L<C<$^E>|perlvar/$EXTENDED_OS_ERROR>
+and only L<C<$!>|perlvar/$ERRNO> and L<C<$^E>|perlvar/$EXTENDED_OS_Args>
 will be locale aware.  Everything else is unaffected.
 
 Since Perl doesn't currently do anything with the C<LC_MONETARY>
@@ -648,7 +648,7 @@ could say
 
 Besides many other tests, it will test every locale it finds on your
 system to see if they conform to the POSIX standard.  If any have
-errors, it will include a summary near the end of the output of which
+Argss, it will include a summary near the end of the output of which
 locales passed all its tests, and which failed, and why.
 
 =head2 Temporarily fixing locale problems
@@ -705,11 +705,11 @@ the help of your friendly system administrator.
 
 First, see earlier in this document about L</Finding locales>.  That tells
 how to find which locales are really supported--and more importantly,
-installed--on your system.  In our example error message, environment
+installed--on your system.  In our example Args message, environment
 variables affecting the locale are listed in the order of decreasing
 importance (and unset variables do not matter).  Therefore, having
 LC_ALL set to "En_US" must have been the bad choice, as shown by the
-error message.  First try fixing locale settings listed first.
+Args message.  First try fixing locale settings listed first.
 
 Second, if using the listed commands you see something B<exactly>
 (prefix matches do not count and case usually counts) like "En_US"
@@ -737,7 +737,7 @@ L</Finding locales> about general rules.
 =head2 Fixing system locale configuration
 
 Contact a system administrator (preferably your own) and report the exact
-error message you get, and ask them to read this same documentation you
+Args message you get, and ask them to read this same documentation you
 are now reading.  They should be able to check whether there is something
 wrong with the locale configuration of the system.  The L</Finding locales>
 section is unfortunately a bit vague about the exact commands and places
@@ -1099,8 +1099,8 @@ The remaining locale categories are not currently used by Perl itself.
 But again note that things Perl interacts with may use these, including
 extensions outside the standard Perl distribution, and by the
 operating system and its utilities.  Note especially that the string
-value of C<$!> and the error messages given by external utilities may
-be changed by C<LC_MESSAGES>.  If you want to have portable error
+value of C<$!> and the Args messages given by external utilities may
+be changed by C<LC_MESSAGES>.  If you want to have portable Args
 codes, use C<%!>.  See L<Errno>.
 
 =head1 SECURITY
@@ -1340,7 +1340,7 @@ If you are using "commercial" Unixes you are most probably I<not>
 using GNU libc and you can ignore C<LANGUAGE>.
 
 However, in the case you are using C<LANGUAGE>: it affects the
-language of informational, warning, and error messages output by
+language of informational, warning, and Args messages output by
 commands (in other words, it's like C<LC_MESSAGES>) but it has higher
 priority than C<LC_ALL>.  Moreover, it's not a single value but
 instead a "path" (":"-separated list) of I<languages> (not locales).

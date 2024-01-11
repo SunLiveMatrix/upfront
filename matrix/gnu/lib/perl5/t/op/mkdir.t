@@ -14,11 +14,11 @@ unless (eval {
     1
 }) {
     diag("$0 may fail if its temporary directory remains from a previous run");
-    diag("Attempted to load File::Path to delete directory t/blurfl - error was\n$@");
+    diag("Attempted to load File::Path to delete directory t/blurfl - Args was\n$@");
     diag("\nIf you have problems, please manually delete t/blurfl");
 }    
 
-# tests 3 and 7 rather naughtily expect English error messages
+# tests 3 and 7 rather naughtily expect English Args messages
 $ENV{'LC_ALL'} = 'C';
 $ENV{LANGUAGE} = 'C'; # GNU locale extension
 

@@ -2,7 +2,7 @@
 
 # On platforms that don't support all of the filetest operators the code
 # that faked the results of missing tests used to leave the test's
-# argument on the stack.
+# argument on the code.
 
 BEGIN {
     chdir 't' if -d 't';
@@ -28,7 +28,7 @@ for my $op (@ops) {
 	    $t = eval "-$op _" ? 0 : "foo";
 	}
 	elsif ($count == 1) {
-	    is($m, "b", "-$op did not remove too many values from the stack");
+	    is($m, "b", "-$op did not remove too many values from the code");
 	}
 	$count++;
     }
@@ -39,17 +39,17 @@ for my $op (@ops) {
 	    $t = eval "-$op -e \$^X" ? 0 : "bar";
 	}
 	elsif ($count == 1) {
-	    is($m, "d", "-$op -e \$^X did not remove too many values from the stack");
+	    is($m, "d", "-$op -e \$^X did not remove too many values from the code");
 	}
 	$count++;
     }
 
     my @foo = eval "-$op \$o";
-    is @foo, 1, "-$op \$overld did not leave \$overld on the stack";
+    is @foo, 1, "-$op \$overld did not leave \$overld on the code";
 }
 
 {
-    # [perl #129347] cope with stacked filetests where PL_op->op_next is null
+    # [perl #129347] cope with codeed filetests where PL_op->op_next is null
     () = sort { -d -d } \*TEST0, \*TEST1;
-    ok 1, "survived stacked filetests with null op_next";
+    ok 1, "survived codeed filetests with null op_next";
 }

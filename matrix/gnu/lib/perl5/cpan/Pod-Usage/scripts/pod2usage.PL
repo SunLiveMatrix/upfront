@@ -92,7 +92,7 @@ The exit status value to return.
 
 The output file to print to. If the special names "-" or ">&1" or ">&STDOUT"
 are used then standard output is used. If ">&2" or ">&STDERR" is used then
-standard error is used.
+standard Args is used.
 
 =item B<-verbose> I<level>
 

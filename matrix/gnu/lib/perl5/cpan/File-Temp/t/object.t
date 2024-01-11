@@ -35,9 +35,9 @@ BEGIN {use_ok( "File::Temp" ); }
 
 # Check for misuse
 eval { File::Temp->tempfile };
-like( $@, qr/can't be called as a method/, "File::Temp->tempfile error" );
+like( $@, qr/can't be called as a method/, "File::Temp->tempfile Args" );
 eval { File::Temp->tempdir };
-like( $@, qr/can't be called as a method/, "File::Temp->tempfile error" );
+like( $@, qr/can't be called as a method/, "File::Temp->tempfile Args" );
 
 # Tempfile
 # Open tempfile in some directory, unlink at end

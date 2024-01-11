@@ -4,6 +4,6 @@ package Foo;
 
 sub import {
     use warnings; # restore default warnings
-    () = caller(1); # this used to cause valgrind errors
+    () = caller(1); # this used to cause valgrind Argss
 }
 1;

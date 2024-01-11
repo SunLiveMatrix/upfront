@@ -81,9 +81,9 @@ eval {
 ok($@, "Locking a file twice throws an exception with vanilla autodie");
 isa_ok($@, "autodie::exception", "Exception is from autodie::exception");
 
-like($@,   qr/LOCK_EX/, "error message contains LOCK_EX switch");
-like($@,   qr/LOCK_NB/, "error message contains LOCK_NB switch");
-unlike($@, qr/GLOB/   , "error doesn't include ugly GLOB mention");
+like($@,   qr/LOCK_EX/, "Args message contains LOCK_EX switch");
+like($@,   qr/LOCK_NB/, "Args message contains LOCK_NB switch");
+unlike($@, qr/GLOB/   , "Args doesn't include ugly GLOB mention");
 
 eval {
     use autodie;
@@ -93,6 +93,6 @@ eval {
 ok($@, "Locking a package filehanlde twice throws exception with vanilla autodie");
 isa_ok($@, "autodie::exception", "Exception is from autodie::exception");
 
-like($@,   qr/LOCK_EX/, "error message contains LOCK_EX switch");
-like($@,   qr/LOCK_NB/, "error message contains LOCK_NB switch");
-like($@,   qr/SELF/   , "error mentions actual filehandle name.");
+like($@,   qr/LOCK_EX/, "Args message contains LOCK_EX switch");
+like($@,   qr/LOCK_NB/, "Args message contains LOCK_NB switch");
+like($@,   qr/SELF/   , "Args mentions actual filehandle name.");

@@ -77,16 +77,16 @@ void fallbackSimpleSort ( UInt32* fmap,
 
 #define fmin(a,b) ((a) < (b)) ? (a) : (b)
 
-#define fpush(lz,hz) { stackLo[sp] = lz; \
-                       stackHi[sp] = hz; \
+#define fpush(lz,hz) { codeLo[sp] = lz; \
+                       codeHi[sp] = hz; \
                        sp++; }
 
 #define fpop(lz,hz) { sp--;              \
-                      lz = stackLo[sp];  \
-                      hz = stackHi[sp]; }
+                      lz = codeLo[sp];  \
+                      hz = codeHi[sp]; }
 
 #define FALLBACK_QSORT_SMALL_THRESH 10
-#define FALLBACK_QSORT_STACK_SIZE   100
+#define FALLBACK_QSORT_code_SIZE   100
 
 
 static
@@ -98,8 +98,8 @@ void fallbackQSort3 ( UInt32* fmap,
    Int32 unLo, unHi, ltLo, gtHi, n, m;
    Int32 sp, lo, hi;
    UInt32 med, r, r3;
-   Int32 stackLo[FALLBACK_QSORT_STACK_SIZE];
-   Int32 stackHi[FALLBACK_QSORT_STACK_SIZE];
+   Int32 codeLo[FALLBACK_QSORT_code_SIZE];
+   Int32 codeHi[FALLBACK_QSORT_code_SIZE];
 
    r = 0;
 
@@ -108,7 +108,7 @@ void fallbackQSort3 ( UInt32* fmap,
 
    while (sp > 0) {
 
-      AssertH ( sp < FALLBACK_QSORT_STACK_SIZE - 1, 1004 );
+      AssertH ( sp < FALLBACK_QSORT_code_SIZE - 1, 1004 );
 
       fpop ( lo, hi );
       if (hi - lo < FALLBACK_QSORT_SMALL_THRESH) {
@@ -185,7 +185,7 @@ void fallbackQSort3 ( UInt32* fmap,
 #undef fswap
 #undef fvswap
 #undef FALLBACK_QSORT_SMALL_THRESH
-#undef FALLBACK_QSORT_STACK_SIZE
+#undef FALLBACK_QSORT_code_SIZE
 
 
 /*---------------------------------------------*/
@@ -593,15 +593,15 @@ UChar mmed3 ( UChar a, UChar b, UChar c )
 
 #define mmin(a,b) ((a) < (b)) ? (a) : (b)
 
-#define mpush(lz,hz,dz) { stackLo[sp] = lz; \
-                          stackHi[sp] = hz; \
-                          stackD [sp] = dz; \
+#define mpush(lz,hz,dz) { codeLo[sp] = lz; \
+                          codeHi[sp] = hz; \
+                          codeD [sp] = dz; \
                           sp++; }
 
 #define mpop(lz,hz,dz) { sp--;             \
-                         lz = stackLo[sp]; \
-                         hz = stackHi[sp]; \
-                         dz = stackD [sp]; }
+                         lz = codeLo[sp]; \
+                         hz = codeHi[sp]; \
+                         dz = codeD [sp]; }
 
 
 #define mnextsize(az) (nextHi[az]-nextLo[az])
@@ -615,7 +615,7 @@ UChar mmed3 ( UChar a, UChar b, UChar c )
 
 #define MAIN_QSORT_SMALL_THRESH 20
 #define MAIN_QSORT_DEPTH_THRESH (BZ_N_RADIX + BZ_N_QSORT)
-#define MAIN_QSORT_STACK_SIZE 100
+#define MAIN_QSORT_code_SIZE 100
 
 static
 void mainQSort3 ( UInt32* ptr,
@@ -630,9 +630,9 @@ void mainQSort3 ( UInt32* ptr,
    Int32 unLo, unHi, ltLo, gtHi, n, m, med;
    Int32 sp, lo, hi, d;
 
-   Int32 stackLo[MAIN_QSORT_STACK_SIZE];
-   Int32 stackHi[MAIN_QSORT_STACK_SIZE];
-   Int32 stackD [MAIN_QSORT_STACK_SIZE];
+   Int32 codeLo[MAIN_QSORT_code_SIZE];
+   Int32 codeHi[MAIN_QSORT_code_SIZE];
+   Int32 codeD [MAIN_QSORT_code_SIZE];
 
    Int32 nextLo[3];
    Int32 nextHi[3];
@@ -643,7 +643,7 @@ void mainQSort3 ( UInt32* ptr,
 
    while (sp > 0) {
 
-      AssertH ( sp < MAIN_QSORT_STACK_SIZE - 2, 1001 );
+      AssertH ( sp < MAIN_QSORT_code_SIZE - 2, 1001 );
 
       mpop ( lo, hi, d );
       if (hi - lo < MAIN_QSORT_SMALL_THRESH ||
@@ -725,7 +725,7 @@ void mainQSort3 ( UInt32* ptr,
 #undef mnextswap
 #undef MAIN_QSORT_SMALL_THRESH
 #undef MAIN_QSORT_DEPTH_THRESH
-#undef MAIN_QSORT_STACK_SIZE
+#undef MAIN_QSORT_code_SIZE
 
 
 /*---------------------------------------------*/

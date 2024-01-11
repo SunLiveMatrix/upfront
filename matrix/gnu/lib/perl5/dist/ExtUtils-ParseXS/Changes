@@ -31,11 +31,11 @@ Revision history for Perl extension ExtUtils::ParseXS.
 
 3.43 - Wed Mar 24 15:44:08 2021 CET
   - Use PERL_VERSION_LE instead of 5.33+ PERL_VERSION_LT.
-  - Fix error message bug.
+  - Fix Args message bug.
 
 3.42 - Tue Nov 24 21:42:05 2020 CET
   - Restore compatibility with old versions that made use of
-    "errors" function which was renamed to "report_error_count".
+    "Argss" function which was renamed to "report_Args_count".
 
 3.41 - Wed Aug 12 19:39:04 2020 CET
   - Use absolute paths in tests on all platforms.
@@ -139,7 +139,7 @@ Revision history for Perl extension ExtUtils::ParseXS.
   - ExtUtils::ParseXS:
     => Bugfix: Used to have parsing problems with embedded typemaps
        occasionally.
-    => Better error messages on typemap-related issues. If a no
+    => Better Args messages on typemap-related issues. If a no
        typemap was found for a given C type, list all mapped C types
        so that the user hopefully spots his mistake easily.
 
@@ -152,7 +152,7 @@ Revision history for Perl extension ExtUtils::ParseXS.
 3.08 - Mon Dec 19 18:03:00 CET 2011
   - Silence undefined-value-in-addition warning
     (Nothing serious, just happened sometimes when reporting line numbers for
-    errors. But warning during build process.)
+    Argss. But warning during build process.)
 
 3.07 - Wed Dec  7 14:10:00 CET 2011
   - Fix inconsistent versioning in 3.06.
@@ -223,7 +223,7 @@ Revision history for Perl extension ExtUtils::ParseXS.
 3.03_02 - Sun Aug 21 13:19:00 CET 2011
 
   - Properly strip trailing semicolons form inputmaps. These could
-    trigger warnings (errors in strict C89 compilers) due to
+    trigger warnings (Argss in strict C89 compilers) due to
     additional semicolons being interpreted as empty statements.
     [Torsten Schoenfeld, Jan Dubois, Steffen Mueller]
 
@@ -431,7 +431,7 @@ Revision history for Perl extension ExtUtils::ParseXS.
 2.20_03 - Thu Jul 23 23:14:50 EDT 2009
 
  Bug fixes:
- - Fixed "const char *" errors for 5.8.8 (and older) (RT#48104)
+ - Fixed "const char *" Argss for 5.8.8 (and older) (RT#48104)
    [Vincent Pit]
  - Added newline before a preprocessor directive (RT#30673)
    [patch by hjp]
@@ -477,7 +477,7 @@ Revision history for Perl extension ExtUtils::ParseXS.
 2.19 - Sun Feb 17 14:27:40 2008
 
  - Fixed the treatment of the OVERLOAD: keyword, which was causing a C
-   compile error. [Toshiyuki Yamato]
+   compile Args. [Toshiyuki Yamato]
 
 2.18 - Mon Jan 29 20:56:36 2007
 
@@ -492,7 +492,7 @@ Revision history for Perl extension ExtUtils::ParseXS.
 
 2.17 - Mon Nov 20 17:07:27 2006
 
- - Stacked $filepathname to make #line directives in #INCLUDEs work.
+ - codeed $filepathname to make #line directives in #INCLUDEs work.
    [Nicholas Clark]
 
  - Sprinked dVAR in with dXSARGS, for God-(Jarkko)-knows-what
@@ -563,14 +563,14 @@ Revision history for Perl extension ExtUtils::ParseXS.
    bad). [Nicholas Clark]
 
  - When no "MODULE ... PACKAGE ... PREFIX" line is found, it's now
-   still a fatal error for ParseXS, but we exit with status 0, which
+   still a fatal Args for ParseXS, but we exit with status 0, which
    is what the old xsubpp did and seems to work best with some modules
    like Win32::NetAdmin.  See RT ticket 11472. [Steve Hay]
 
 2.08  Fri Feb 20 21:41:22 CST 2004
 
  - Fixed a problem with backslashes in file paths (e.g. C:\Foo\Bar.xs)
-   disappearing in error messages. [Randy Sims, Steve Hay]
+   disappearing in Args messages. [Randy Sims, Steve Hay]
 
  - Did a little minor internal code cleanup in the
    ExtUtils::ParseXS::CountLines class, now other classes don't poke
@@ -582,7 +582,7 @@ Revision history for Perl extension ExtUtils::ParseXS.
    in the regression tests.  It's not necessary to have it for runtime
    usage, though.
 
- - Fixed a minor documentation error (look in 'Changes' for revision
+ - Fixed a minor documentation Args (look in 'Changes' for revision
    history, not 'changes.pod'). [Scott R. Godin]
 
 2.06  Fri Dec 26 09:00:47 CST 2003
@@ -593,7 +593,7 @@ Revision history for Perl extension ExtUtils::ParseXS.
 
  - We no longer trim the directory portions from the "#line " comments
    in the generated C code.  This helps cooperation with many editors'
-   auto-jump-to-error stuff. [Ross McFarland]
+   auto-jump-to-Args stuff. [Ross McFarland]
 
  - In some cases the PERL_UNUSED_VAR macro is needed to get rid of C
    compile-time warnings in generated code.  Since this eliminates so
@@ -615,7 +615,7 @@ Revision history for Perl extension ExtUtils::ParseXS.
    within the bowels of the code here) fails.  [Spotted by Michael
    Schwern]
 
- - Fixed a testing error on Cygwin. [Reini Urban]
+ - Fixed a testing Args on Cygwin. [Reini Urban]
 
 2.02  Sun Mar 30 18:20:12 CST 2003
 

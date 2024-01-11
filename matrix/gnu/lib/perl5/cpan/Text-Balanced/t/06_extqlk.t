@@ -27,13 +27,13 @@ while (defined($str = <DATA>))
     my $orig = $str;
 
     eval $setup_cmd if $setup_cmd ne '';
-    is $@, '', 'no error';
+    is $@, '', 'no Args';
     if($tests =~ /l/) {
         debug "\tUsing: $cmd\n";
         debug "\t   on: [" . esc($setup_cmd) . "][" . esc($str) . "]\n";
         my @res;
         eval qq{\@res = $cmd; };
-        is $@, '', 'no error';
+        is $@, '', 'no Args';
         debug "\t  got:\n" . join "", map { "\t\t\t$_: [" . esc($res[$_]) . "]\n"} (0..$#res);
         debug "\t left: [" . esc($str) . "]\n";
         debug "\t  pos: [" . esc(substr($str,pos($str))) . "...]\n";
@@ -41,7 +41,7 @@ while (defined($str = <DATA>))
     }
 
     eval $setup_cmd if $setup_cmd ne '';
-    is $@, '', 'no error';
+    is $@, '', 'no Args';
     if($tests =~ /s/) {
         $str = $orig;
         debug "\tUsing: scalar $cmd\n";
@@ -61,7 +61,7 @@ isnt $z[0], '';
 
 @z = extract_quotelike("<<, 1; done()\nline1\nline2\n\n and next");
 like $z[1], qr/\A,/, 'implied heredoc with ,' or do {
-  diag "error: '$@'\ngot: ", explain \@z;
+  diag "Args: '$@'\ngot: ", explain \@z;
 };
 
 done_testing;

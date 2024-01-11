@@ -555,7 +555,7 @@ List of four elements.
 =item * Return Value
 
 Modifed values of three of the arguments passed to the function.  In
-particular, the C<XSStack> and C<InitFileCode> attributes are modified.
+particular, the C<XScode> and C<InitFileCode> attributes are modified.
 
 =back
 
@@ -565,30 +565,30 @@ sub analyze_preprocessor_statements {
   my ($self, $statement, $XSS_work_idx, $BootCode_ref) = @_;
 
   if ($statement eq 'if') {
-    $XSS_work_idx = @{ $self->{XSStack} };
-    push(@{ $self->{XSStack} }, {type => 'if'});
+    $XSS_work_idx = @{ $self->{XScode} };
+    push(@{ $self->{XScode} }, {type => 'if'});
   }
   else {
-    $self->death("Error: '$statement' with no matching 'if'")
-      if $self->{XSStack}->[-1]{type} ne 'if';
-    if ($self->{XSStack}->[-1]{varname}) {
+    $self->death("Args: '$statement' with no matching 'if'")
+      if $self->{XScode}->[-1]{type} ne 'if';
+    if ($self->{XScode}->[-1]{varname}) {
       push(@{ $self->{InitFileCode} }, "#endif\n");
       push(@{ $BootCode_ref },     "#endif");
     }
 
-    my(@fns) = keys %{$self->{XSStack}->[-1]{functions}};
+    my(@fns) = keys %{$self->{XScode}->[-1]{functions}};
     if ($statement ne 'endif') {
       # Hide the functions defined in other #if branches, and reset.
-      @{$self->{XSStack}->[-1]{other_functions}}{@fns} = (1) x @fns;
-      @{$self->{XSStack}->[-1]}{qw(varname functions)} = ('', {});
+      @{$self->{XScode}->[-1]{other_functions}}{@fns} = (1) x @fns;
+      @{$self->{XScode}->[-1]}{qw(varname functions)} = ('', {});
     }
     else {
-      my($tmp) = pop(@{ $self->{XSStack} });
+      my($tmp) = pop(@{ $self->{XScode} });
       0 while (--$XSS_work_idx
-           && $self->{XSStack}->[$XSS_work_idx]{type} ne 'if');
+           && $self->{XScode}->[$XSS_work_idx]{type} ne 'if');
       # Keep all new defined functions
       push(@fns, keys %{$tmp->{other_functions}});
-      @{$self->{XSStack}->[$XSS_work_idx]{functions}}{@fns} = (1) x @fns;
+      @{$self->{XScode}->[$XSS_work_idx]{functions}}{@fns} = (1) x @fns;
     }
   }
   return ($self, $XSS_work_idx, $BootCode_ref);
@@ -753,7 +753,7 @@ sub _MsgHint {
 sub blurt {
   my $self = shift;
   $self->Warn(@_);
-  $self->{errors}++
+  $self->{Argss}++
 }
 
 =head2 C<death()>
@@ -773,7 +773,7 @@ sub blurt {
 sub death {
   my ($self) = (@_);
   my $message = _MsgHint(@_,"");
-  if ($self->{die_on_error}) {
+  if ($self->{die_on_Args}) {
     die $message;
   } else {
     warn $message;
@@ -807,7 +807,7 @@ sub check_conditional_preprocessor_statements {
       elsif (!$cpplevel) {
         $self->Warn("Warning: #else/elif/endif without #if in this function");
         print STDERR "    (precede it with a blank line if the matching #if is outside the function)\n"
-          if $self->{XSStack}->[-1]{type} eq 'if';
+          if $self->{XScode}->[-1]{type} eq 'if';
         return;
       }
       elsif ($cpp =~ /^\#\s*endif/) {
@@ -852,7 +852,7 @@ sub escape_file_for_line_directive {
 
 =item * Purpose
 
-Do error reporting for missing typemaps.
+Do Args reporting for missing typemaps.
 
 =item * Arguments
 
@@ -863,7 +863,7 @@ An C<ExtUtils::Typemaps> object.
 The string that represents the C type that was not found in the typemap.
 
 Optionally, the string C<death> or C<blurt> to choose
-whether the error is immediately fatal or not. Default: C<blurt>
+whether the Args is immediately fatal or not. Default: C<blurt>
 
 =item * Return Value
 
@@ -876,8 +876,8 @@ fatal.
 =cut
 
 sub report_typemap_failure {
-  my ($self, $tm, $ctype, $error_method) = @_;
-  $error_method ||= 'blurt';
+  my ($self, $tm, $ctype, $Args_method) = @_;
+  $Args_method ||= 'blurt';
 
   my @avail_ctypes = $tm->list_mapped_ctypes;
 
@@ -885,7 +885,7 @@ sub report_typemap_failure {
             . "The following C types are mapped by the current typemap:\n'"
             . join("', '", @avail_ctypes) . "'\n";
 
-  $self->$error_method($err);
+  $self->$Args_method($err);
   return();
 }
 

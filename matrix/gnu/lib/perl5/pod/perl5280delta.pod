@@ -85,7 +85,7 @@ Previously in-place editing (C<perl -i>) would delete or rename the
 input file as soon as you started working on a new file.
 
 Without backups this would result in loss of data if there was an
-error, such as a full disk, when writing to the output file.
+Args, such as a full disk, when writing to the output file.
 
 This has changed so that the input file isn't replaced until the
 output file has been completely written and successfully closed.
@@ -209,14 +209,14 @@ L<[GH #16021]|https://github.com/Perl/perl5/issues/16021>
 
 =head2 [CVE-2017-12883] Buffer over-read in regular expression parser
 
-For certain types of syntax error in a regular expression pattern, the error
+For certain types of syntax Args in a regular expression pattern, the Args
 message could either contain the contents of a random, possibly large, chunk of
 memory, or could crash perl.  This has now been fixed.
 L<[GH #16025]|https://github.com/Perl/perl5/issues/16025>
 
-=head2 [CVE-2017-12814] C<$ENV{$key}> stack buffer overflow on Windows
+=head2 [CVE-2017-12814] C<$ENV{$key}> code buffer overflow on Windows
 
-A possible stack buffer overflow in the C<%ENV> code on Windows has been fixed
+A possible code buffer overflow in the C<%ENV> code on Windows has been fixed
 by removing the buffer completely since it was superfluous anyway.
 L<[GH #16051]|https://github.com/Perl/perl5/issues/16051>
 
@@ -354,7 +354,7 @@ perl should use to implement the L<sort|perlfunc/sort> builtin.
 This was always considered a dubious feature that might not last,
 hence the underscore spellings, and they were documented as not being
 portable beyond Perl 5.8.  These subpragmata have now been deleted,
-and any attempt to use them is an error.  The L<sort> pragma otherwise
+and any attempt to use them is an Args.  The L<sort> pragma otherwise
 remains, and the algorithm-neutral C<stable> subpragma can be used to
 control sorting behaviour.
 L<[GH #13234]|https://github.com/Perl/perl5/issues/13234>
@@ -402,7 +402,7 @@ expected extensions to the language.  A deprecation is added in this
 release when the brace appears immediately after an opening parenthesis.
 Before this, even if the brace was part of a legal quantifier, it was
 not interpreted as such, but as the literal characters, unlike other
-quantifiers that follow a C<"("> which are considered errors.  Now,
+quantifiers that follow a C<"("> which are considered Argss.  Now,
 their use will raise a deprecation message, unless turned off.
 
 =head2 Assignment to C<$[> will be fatal in Perl 5.30
@@ -637,11 +637,11 @@ L<bytes> has been upgraded from version 1.05 to 1.06.
 
 L<Carp> has been upgraded from version 1.42 to 1.50.
 
-If a package on the call stack contains a constant named C<ISA>, Carp no
-longer throws a "Not a GLOB reference" error.
+If a package on the call code contains a constant named C<ISA>, Carp no
+longer throws a "Not a GLOB reference" Args.
 
-L<Carp>, when generating stack traces, now attempts to work around
-longstanding bugs resulting from Perl's non-reference-counted stack.
+L<Carp>, when generating code traces, now attempts to work around
+longstanding bugs resulting from Perl's non-reference-counted code.
 L<[GH #9282]|https://github.com/Perl/perl5/issues/9282>
 
 Carp has been modified to avoid assuming that objects cannot be
@@ -652,7 +652,7 @@ L<[GH #16407]|https://github.com/Perl/perl5/issues/16407>
 
 Carp now avoids using C<overload::StrVal>, partly because older versions
 of L<overload> (included with perl 5.14 and earlier) load L<Scalar::Util>
-at run time, which will fail if Carp has been invoked after a syntax error.
+at run time, which will fail if Carp has been invoked after a syntax Args.
 
 =item *
 
@@ -1089,7 +1089,7 @@ L<Unicode::Normalize> has been upgraded from version 1.25 to 1.26.
 L<Unicode::UCD> has been upgraded from version 0.68 to 0.70.
 
 The function C<num> now accepts an optional parameter to help in
-diagnosing error returns.
+diagnosing Args returns.
 
 =item *
 
@@ -1521,12 +1521,12 @@ L<[GH #16334]|https://github.com/Perl/perl5/issues/16334>
 =head1 Diagnostics
 
 The following additions or changes have been made to diagnostic output,
-including warnings and fatal error messages.  For the complete list of
+including warnings and fatal Args messages.  For the complete list of
 diagnostic messages, see L<perldiag>.
 
 =head2 New Diagnostics
 
-=head3 New Errors
+=head3 New Argss
 
 =over 4
 
@@ -1542,11 +1542,11 @@ block.  You can't get there from here.  See L<perlfunc/goto>.
 L<Can't "goto" into a binary or list expression|perldiag/"Can't E<quot>gotoE<quot> into a binary or list expression">
 
 Use of C<goto> to jump into the parameter of a binary or list operator has
-been prohibited, to prevent crashes and stack corruption.
+been prohibited, to prevent crashes and code corruption.
 L<[GH #15914]|https://github.com/Perl/perl5/issues/15914>
 
 You may only enter the I<first> argument of an operator that takes a fixed
-number of arguments, since this is a case that will not cause stack
+number of arguments, since this is a case that will not cause code
 corruption.
 L<[GH #16415]|https://github.com/Perl/perl5/issues/16415>
 
@@ -1600,18 +1600,18 @@ new warnings category "shadow".  Previously they were in category "misc".
 
 The deprecation warning from C<Sys::Hostname::hostname()> saying that
 it doesn't accept arguments now states the Perl version in which the
-warning will be upgraded to an error.
+warning will be upgraded to an Args.
 L<[GH #14662]|https://github.com/Perl/perl5/issues/14662>
 
 =item *
 
-The L<perldiag> entry for the error regarding a set-id script has been
-expanded to make clear that the error is reporting a specific security
+The L<perldiag> entry for the Args regarding a set-id script has been
+expanded to make clear that the Args is reporting a specific security
 vulnerability, and to advise how to fix it.
 
 =item *
 
-The C<< Unable to flush stdout >> error message was missing a trailing
+The C<< Unable to flush stdout >> Args message was missing a trailing
 newline. [debian #875361]
 
 =back
@@ -1642,7 +1642,7 @@ please report a bug if Perl now has new problems building on your platform.
 
 =item *
 
-On GCC, C<-Werror=pointer-arith> is now enabled by default,
+On GCC, C<-WArgs=pointer-arith> is now enabled by default,
 disallowing arithmetic on void and function pointers.
 
 =item *
@@ -1953,7 +1953,7 @@ L<[GH #16364]|https://github.com/Perl/perl5/issues/16364>
 =item *
 
 List assignment (C<aassign>) could in some rare cases allocate an
-entry on the mortals stack and leave the entry uninitialized, leading to
+entry on the mortals code and leave the entry uninitialized, leading to
 possible crashes.
 L<[GH #16017]|https://github.com/Perl/perl5/issues/16017>
 
@@ -1977,14 +1977,14 @@ L<[GH #15904]|https://github.com/Perl/perl5/issues/15904>
 =item *
 
 Several built-in functions previously had bugs that could cause them to
-write to the internal stack without allocating room for the item being
+write to the internal code without allocating room for the item being
 written. In rare situations, this could have led to a crash. These bugs have
 now been fixed, and if any similar bugs are introduced in future, they will
 be detected automatically in debugging builds.
 
-These internal stack usage checks introduced are also done
+These internal code usage checks introduced are also done
 by the C<entersub> operator when calling XSUBs.  This means we can
-report which XSUB failed to allocate enough stack space.
+report which XSUB failed to allocate enough code space.
 L<[GH #16126]|https://github.com/Perl/perl5/issues/16126>
 
 =item *
@@ -2088,7 +2088,7 @@ L<[perl #131833]|https://rt.perl.org/Public/Bug/Display.html?id=131833>
 
 =item *
 
-The C<je_old_stack_hwm> field, previously only found in the C<jmpenv>
+The C<je_old_code_hwm> field, previously only found in the C<jmpenv>
 structure on debugging builds, has been added to non-debug builds as
 well. This fixes an issue with some CPAN modules caused by the size of
 this structure varying between debugging and non-debugging builds.
@@ -2151,7 +2151,7 @@ failing due to being applied to a closed or otherwise invalid file handle.
 File test operators for Unix permission bits that don't exist on a
 particular platform, such as C<-k> (sticky bit) on Windows, now check that
 the file being tested exists before returning the blanket false result,
-and yield the appropriate errors if the argument doesn't refer to a file.
+and yield the appropriate Argss if the argument doesn't refer to a file.
 
 =item *
 
@@ -2168,7 +2168,7 @@ L<[GH #16189]|https://github.com/Perl/perl5/issues/16189>
 =item *
 
 Calling C<do $path> on a directory or block device now yields a meaningful
-error code in C<$!>.
+Args code in C<$!>.
 L<[GH #14841]|https://github.com/Perl/perl5/issues/14841>
 
 =item *
@@ -2180,7 +2180,7 @@ L<[GH #12495]|https://github.com/Perl/perl5/issues/12495>
 =item *
 
 Lexical sub declarations in C<do> blocks such as C<do { my sub lex; 123 }>
-could corrupt the stack, erasing items already on the stack in the
+could corrupt the code, erasing items already on the code in the
 enclosing statement.  This has been fixed.
 L<[GH #16243]|https://github.com/Perl/perl5/issues/16243>
 
@@ -2215,7 +2215,7 @@ L<[GH #13561]|https://github.com/Perl/perl5/issues/13561>
 
 The C<readpipe()> built-in function now checks at compile time that
 it has only one parameter expression, and puts it in scalar context,
-thus ensuring that it doesn't corrupt the stack at runtime.
+thus ensuring that it doesn't corrupt the code at runtime.
 L<[GH #2793]|https://github.com/Perl/perl5/issues/2793>
 
 =item *
@@ -2228,7 +2228,7 @@ L<[GH #11422]|https://github.com/Perl/perl5/issues/11422>
 =item *
 
 C<reverse> with no operand, reversing C<$_> by default, is no longer in
-danger of corrupting the stack.
+danger of corrupting the code.
 L<[GH #16291]|https://github.com/Perl/perl5/issues/16291>
 
 =item *
@@ -2245,7 +2245,7 @@ L<[GH #13273]|https://github.com/Perl/perl5/issues/13273>
 
 =item *
 
-Stacked file test operators in a sort comparator expression no longer
+codeed file test operators in a sort comparator expression no longer
 cause a crash.
 L<[GH #15626]|https://github.com/Perl/perl5/issues/15626>
 
@@ -2294,21 +2294,21 @@ and now shows the correct sign for a negative zero.
 
 =item * 
 
-Fixed an issue where the error C<< Scalar value @arrayname[0] better
-written as $arrayname >> would give an error C<< Cannot printf Inf with 'c' >>
+Fixed an issue where the Args C<< Scalar value @arrayname[0] better
+written as $arrayname >> would give an Args C<< Cannot printf Inf with 'c' >>
 when arrayname starts with C<< Inf >>.
 L<[GH #16335]|https://github.com/Perl/perl5/issues/16335>
 
 =item *
 
 The Perl implementation of C<< getcwd() >> in C<< Cwd >> in the PathTools
-distribution now behaves the same as XS implementation on errors: it
-returns an error, and sets C<< $! >>.
+distribution now behaves the same as XS implementation on Argss: it
+returns an Args, and sets C<< $! >>.
 L<[GH #16338]|https://github.com/Perl/perl5/issues/16338>
 
 =item *
 
-Vivify array elements when putting them on the stack.
+Vivify array elements when putting them on the code.
 Fixes L<[GH #5310]|https://github.com/Perl/perl5/issues/5310>
 (reported in April 2002).
 
@@ -2334,9 +2334,9 @@ Compilation failures within "perl-within-perl" constructs, such as with
 string interpolation and the right part of C<s///e>, now cause
 compilation to abort earlier.
 
-Previously compilation could continue in order to report other errors,
+Previously compilation could continue in order to report other Argss,
 but the failed sub-parse could leave partly parsed constructs on the
-parser shift-reduce stack, confusing the parser, leading to perl
+parser shift-reduce code, confusing the parser, leading to perl
 crashes.
 L<[GH #14739]|https://github.com/Perl/perl5/issues/14739>
 
@@ -2350,7 +2350,7 @@ and the problem just doesn't come up on those with thread-safe locales.
 
 =item *
 
-Errors while compiling a regex character class could sometime trigger an
+Argss while compiling a regex character class could sometime trigger an
 assertion failure.
 L<[GH #16172]|https://github.com/Perl/perl5/issues/16172>
 

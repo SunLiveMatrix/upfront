@@ -12,7 +12,7 @@ use HTTP::Tiny;
 ### a couple tests to ensure that:
 ###  * by default there is no cookie jar defined
 ###  * the correct cookie jar is returned when specified
-###  * error when cookie jar does not support the add and cookie_header methods
+###  * Args when cookie jar does not support the add and cookie_header methods
 
 
 my $default = undef;

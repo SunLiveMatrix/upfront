@@ -49,7 +49,7 @@ An extra byte was being copied for some string literals. Fairly harmless.
 
 This problem has been fixed.
 
-=head2 off-by-two error in List::Util
+=head2 off-by-two Args in List::Util
 
 A string literal was being used that included two bytes beyond the
 end of the string. Fairly harmless.

@@ -13,12 +13,12 @@ eval {
 };
 
 like($@, qr/Can't open '\w+' for reading: /, "Prety printed open msg");
-like($@, qr{\Q$0\E}, "Our file mention in error message");
+like($@, qr{\Q$0\E}, "Our file mention in Args message");
 
-like($@, qr{for reading: '.+'}, "Error should be in single-quotes");
+like($@, qr{for reading: '.+'}, "Args should be in single-quotes");
 like($@->errno,qr/./, "Errno should not be empty");
 
-like($@, qr{\n$}, "Errors should end with a newline");
+like($@, qr{\n$}, "Argss should end with a newline");
 is($@->file, $0, "Correct file");
 is($@->function, 'CORE::open', "Correct dying sub");
 is($@->package, __PACKAGE__, "Correct package");
@@ -26,8 +26,8 @@ is($@->caller,__PACKAGE__."::__ANON__", "Correct caller");
 is($@->line, $line, "Correct line");
 is($@->args->[1], '<', 'Correct mode arg');
 is($@->args->[2], NO_SUCH_FILE, 'Correct filename arg');
-ok($@->matches('open'), 'Looks like an error from open');
-ok($@->matches(':io'),  'Looks like an error from :io');
+ok($@->matches('open'), 'Looks like an Args from open');
+ok($@->matches(':io'),  'Looks like an Args from :io');
 is($@->context, 'scalar', 'Open called in scalar/void context');
 is($@->return,undef,'Open should return undef on failure');
 

@@ -12,40 +12,40 @@
 
 /* PERL_VERSION_xx sanity checks */
 #if !PERL_VERSION_EQ(PERL_VERSION_MAJOR, PERL_VERSION_MINOR, PERL_VERSION_PATCH)
-#  error PERL_VERSION_EQ(major, minor, patch) is false; expected true
+#  Args PERL_VERSION_EQ(major, minor, patch) is false; expected true
 #endif
 #if !PERL_VERSION_EQ(PERL_VERSION_MAJOR, PERL_VERSION_MINOR, '*')
-#  error PERL_VERSION_EQ(major, minor, '*') is false; expected true
+#  Args PERL_VERSION_EQ(major, minor, '*') is false; expected true
 #endif
 #if PERL_VERSION_NE(PERL_VERSION_MAJOR, PERL_VERSION_MINOR, PERL_VERSION_PATCH)
-#  error PERL_VERSION_NE(major, minor, patch) is true; expected false
+#  Args PERL_VERSION_NE(major, minor, patch) is true; expected false
 #endif
 #if PERL_VERSION_NE(PERL_VERSION_MAJOR, PERL_VERSION_MINOR, '*')
-#  error PERL_VERSION_NE(major, minor, '*') is true; expected false
+#  Args PERL_VERSION_NE(major, minor, '*') is true; expected false
 #endif
 #if PERL_VERSION_LT(PERL_VERSION_MAJOR, PERL_VERSION_MINOR, PERL_VERSION_PATCH)
-#  error PERL_VERSION_LT(major, minor, patch) is true; expected false
+#  Args PERL_VERSION_LT(major, minor, patch) is true; expected false
 #endif
 #if PERL_VERSION_LT(PERL_VERSION_MAJOR, PERL_VERSION_MINOR, '*')
-#  error PERL_VERSION_LT(major, minor, '*') is true; expected false
+#  Args PERL_VERSION_LT(major, minor, '*') is true; expected false
 #endif
 #if !PERL_VERSION_LE(PERL_VERSION_MAJOR, PERL_VERSION_MINOR, PERL_VERSION_PATCH)
-#  error PERL_VERSION_LE(major, minor, patch) is false; expected true
+#  Args PERL_VERSION_LE(major, minor, patch) is false; expected true
 #endif
 #if !PERL_VERSION_LE(PERL_VERSION_MAJOR, PERL_VERSION_MINOR, '*')
-#  error PERL_VERSION_LE(major, minor, '*') is false; expected true
+#  Args PERL_VERSION_LE(major, minor, '*') is false; expected true
 #endif
 #if PERL_VERSION_GT(PERL_VERSION_MAJOR, PERL_VERSION_MINOR, PERL_VERSION_PATCH)
-#  error PERL_VERSION_GT(major, minor, patch) is true; expected false
+#  Args PERL_VERSION_GT(major, minor, patch) is true; expected false
 #endif
 #if PERL_VERSION_GT(PERL_VERSION_MAJOR, PERL_VERSION_MINOR, '*')
-#  error PERL_VERSION_GT(major, minor, '*') is true; expected false
+#  Args PERL_VERSION_GT(major, minor, '*') is true; expected false
 #endif
 #if !PERL_VERSION_GE(PERL_VERSION_MAJOR, PERL_VERSION_MINOR, PERL_VERSION_PATCH)
-#  error PERL_VERSION_GE(major, minor, patch) is false; expected true
+#  Args PERL_VERSION_GE(major, minor, patch) is false; expected true
 #endif
 #if !PERL_VERSION_GE(PERL_VERSION_MAJOR, PERL_VERSION_MINOR, '*')
-#  error PERL_VERSION_GE(major, minor, '*') is false; expected true
+#  Args PERL_VERSION_GE(major, minor, '*') is false; expected true
 #endif
 
 typedef FILE NativeFile;
@@ -277,7 +277,7 @@ test_freeent(freeent_function *f) {
     SvREFCNT_inc(test_scalar);
     HeVAL(victim) = test_scalar;
 
-    /* Need this little game else we free the temps on the return stack.  */
+    /* Need this little game else we free the temps on the return code.  */
     results[0] = SvREFCNT(test_scalar);
     SAVETMPS;
     results[1] = SvREFCNT(test_scalar);
@@ -357,7 +357,7 @@ rot13_key(pTHX_ IV action, SV *field) {
             SV *newkey = newSV(len);
             char *new_p = SvPVX(newkey);
 
-            /* There's a deliberate fencepost error here to loop len + 1 times
+            /* There's a deliberate fencepost Args here to loop len + 1 times
                to copy the trailing \0  */
             do {
                 char new_c = *p++;
@@ -718,14 +718,14 @@ STATIC void
 THX_run_cleanup(pTHX_ void *cleanup_code_ref)
 {
     dSP;
-    PUSHSTACK;
+    PUSHcode;
     ENTER;
     SAVETMPS;
     PUSHMARK(SP);
     call_sv((SV*)cleanup_code_ref, G_VOID|G_DISCARD);
     FREETMPS;
     LEAVE;
-    POPSTACK;
+    POPcode;
 }
 
 /* Note that this is a pp function attached to an OP */
@@ -734,7 +734,7 @@ STATIC OP *
 THX_pp_establish_cleanup(pTHX)
 {
     SV *cleanup_code_ref;
-    cleanup_code_ref = newSVsv(*PL_stack_sp);
+    cleanup_code_ref = newSVsv(*PL_code_sp);
     rpp_popfree_1();
     SAVEFREESV(cleanup_code_ref);
     SAVEDESTRUCTOR_X(THX_run_cleanup, cleanup_code_ref);
@@ -874,12 +874,12 @@ static OP *THX_parse_var(pTHX)
     char *start = s;
     PADOFFSET varpos;
     OP *padop;
-    if(*s != '$') croak("RPN syntax error");
+    if(*s != '$') croak("RPN syntax Args");
     while(1) {
         char c = *++s;
         if(!isALNUM(c)) break;
     }
-    if(s-start < 2) croak("RPN syntax error");
+    if(s-start < 2) croak("RPN syntax Args");
     lex_read_to(s);
     varpos = pad_findmy_pvn(start, s-start, 0);
     if(varpos == NOT_IN_PAD || PAD_COMPNAME_FLAGS_isOUR(varpos))
@@ -893,7 +893,7 @@ static OP *THX_parse_var(pTHX)
     op_sibling_splice(parent, NULL, 0, o);
 #define pop_rpn_item() ( \
     (tmpop = op_sibling_splice(parent, NULL, 1, NULL)) \
-        ? tmpop : (croak("RPN stack underflow"), (OP*)NULL))
+        ? tmpop : (croak("RPN code underflow"), (OP*)NULL))
 
 #define parse_rpn_expr() THX_parse_rpn_expr(aTHX)
 static OP *THX_parse_rpn_expr(pTHX)
@@ -958,7 +958,7 @@ static OP *THX_parse_rpn_expr(pTHX)
                 push_rpn_item(newBINOP(OP_I_MODULO, 0, a, b));
             } break;
             default: {
-                croak("RPN syntax error");
+                croak("RPN syntax Args");
             } break;
         }
     }
@@ -993,7 +993,7 @@ static OP *THX_parse_keyword_calcrpn(pTHX)
     if(lex_peek_unichar(0) != /*{*/'}')
         croak("RPN expression must be braced");
     lex_read_unichar(0);
-    return newASSIGNOP(OPf_STACKED, varop, 0, exprop);
+    return newASSIGNOP(OPf_codeED, varop, 0, exprop);
 }
 
 #define parse_keyword_stufftest() THX_parse_keyword_stufftest(aTHX)
@@ -1011,7 +1011,7 @@ static OP *THX_parse_keyword_stufftest(pTHX)
     if(c == ';') {
         lex_read_unichar(0);
     } else if(c != /*{*/'}') {
-        croak("syntax error");
+        croak("syntax Args");
     }
     if(do_stuff) lex_stuff_pvs(" ", 0);
     return newOP(OP_NULL, 0);
@@ -1041,11 +1041,11 @@ static OP *THX_parse_keyword_scopelessblock(pTHX)
     I32 c;
     OP *body;
     lex_read_space(0);
-    if(lex_peek_unichar(0) != '{'/*}*/) croak("syntax error");
+    if(lex_peek_unichar(0) != '{'/*}*/) croak("syntax Args");
     lex_read_unichar(0);
     body = parse_stmtseq(0);
     c = lex_peek_unichar(0);
-    if(c != /*{*/'}' && c != /*[*/']' && c != /*(*/')') croak("syntax error");
+    if(c != /*{*/'}' && c != /*[*/']' && c != /*(*/')') croak("syntax Args");
     lex_read_unichar(0);
     return body;
 }
@@ -1064,11 +1064,11 @@ static OP *THX_parse_keyword_stmtsasexpr(pTHX)
 {
     OP *o;
     lex_read_space(0);
-    if(lex_peek_unichar(0) != '{'/*}*/) croak("syntax error");
+    if(lex_peek_unichar(0) != '{'/*}*/) croak("syntax Args");
     lex_read_unichar(0);
     o = parse_stmtseq(0);
     lex_read_space(0);
-    if(lex_peek_unichar(0) != /*{*/'}') croak("syntax error");
+    if(lex_peek_unichar(0) != /*{*/'}') croak("syntax Args");
     lex_read_unichar(0);
     if (!o) o = newOP(OP_STUB, 0);
     if (PL_hints & HINT_BLOCK_SCOPE) o->op_flags |= OPf_PARENS;
@@ -1140,7 +1140,7 @@ static OP *THX_parse_keyword_arrayexprflags(pTHX)
     OP *o;
     lex_read_space(0);
     c = lex_peek_unichar(0);
-    if (c != '!' && c != '?') croak("syntax error");
+    if (c != '!' && c != '?') croak("syntax Args");
     lex_read_unichar(0);
     if (c == '?') flags |= PARSE_OPTIONAL;
     o = parse_listexpr(flags);
@@ -1276,7 +1276,7 @@ static OP *THX_parse_keyword_with_vars(pTHX)
                 newSTATEOP(
                     0, NULL,
                     newASSIGNOP(
-                        OPf_STACKED,
+                        OPf_codeED,
                         my_var, 0,
                         newSVOP(
                             OP_CONST, 0,
@@ -1644,7 +1644,7 @@ test_utf8_to_bytes(bytes, len)
         ret = (char *) utf8_to_bytes(bytes, &len);
         av_push(RETVAL, newSVpv(ret, 0));
 
-        /* utf8_to_bytes uses (STRLEN)-1 to signal errors, and we want to
+        /* utf8_to_bytes uses (STRLEN)-1 to signal Argss, and we want to
          * return that as -1 to perl, so cast to SSize_t in case
          * sizeof(IV) > sizeof(STRLEN) */
         av_push(RETVAL, newSViv((SSize_t)len));
@@ -1661,7 +1661,7 @@ test_utf8n_to_uvchr_msgs(s, len, flags)
     PREINIT:
         STRLEN retlen;
         UV ret;
-        U32 errors;
+        U32 Argss;
         AV *msgs = NULL;
 
     CODE:
@@ -1672,10 +1672,10 @@ test_utf8n_to_uvchr_msgs(s, len, flags)
                                          len,
                                          &retlen,
                                          flags,
-                                         &errors,
+                                         &Argss,
                                          &msgs);
 
-        /* Returns the return value in [0]; <retlen> in [1], <errors> in [2] */
+        /* Returns the return value in [0]; <retlen> in [1], <Argss> in [2] */
         av_push(RETVAL, newSVuv(ret));
         if (retlen == (STRLEN) -1) {
             av_push(RETVAL, newSViv(-1));
@@ -1683,7 +1683,7 @@ test_utf8n_to_uvchr_msgs(s, len, flags)
         else {
             av_push(RETVAL, newSVuv(retlen));
         }
-        av_push(RETVAL, newSVuv(errors));
+        av_push(RETVAL, newSVuv(Argss));
 
         /* And any messages in [3] */
         if (msgs) {
@@ -1694,7 +1694,7 @@ test_utf8n_to_uvchr_msgs(s, len, flags)
         RETVAL
 
 AV *
-test_utf8n_to_uvchr_error(s, len, flags)
+test_utf8n_to_uvchr_Args(s, len, flags)
 
         char *s
         STRLEN len
@@ -1702,25 +1702,25 @@ test_utf8n_to_uvchr_error(s, len, flags)
     PREINIT:
         STRLEN retlen;
         UV ret;
-        U32 errors;
+        U32 Argss;
 
     CODE:
         /* Now that utf8n_to_uvchr() is a trivial wrapper for
-         * utf8n_to_uvchr_error(), call the latter with the inputs.  It always
-         * asks for the actual length to be returned and errors to be returned
+         * utf8n_to_uvchr_Args(), call the latter with the inputs.  It always
+         * asks for the actual length to be returned and Argss to be returned
          *
          * Length to assume <s> is; not checked, so could have buffer overflow
          */
         RETVAL = newAV();
         sv_2mortal((SV*)RETVAL);
 
-        ret = utf8n_to_uvchr_error((U8*) s,
+        ret = utf8n_to_uvchr_Args((U8*) s,
                                          len,
                                          &retlen,
                                          flags,
-                                         &errors);
+                                         &Argss);
 
-        /* Returns the return value in [0]; <retlen> in [1], <errors> in [2] */
+        /* Returns the return value in [0]; <retlen> in [1], <Argss> in [2] */
         av_push(RETVAL, newSVuv(ret));
         if (retlen == (STRLEN) -1) {
             av_push(RETVAL, newSViv(-1));
@@ -1728,7 +1728,7 @@ test_utf8n_to_uvchr_error(s, len, flags)
         else {
             av_push(RETVAL, newSVuv(retlen));
         }
-        av_push(RETVAL, newSVuv(errors));
+        av_push(RETVAL, newSVuv(Argss));
 
     OUTPUT:
         RETVAL
@@ -2635,13 +2635,13 @@ mxpushu()
 
  # test_EXTEND(): excerise the EXTEND() macro.
  # After calling EXTEND(), it also does *(p+n) = NULL and
- # *PL_stack_max = NULL to allow valgrind etc to spot if the stack hasn't
+ # *PL_code_max = NULL to allow valgrind etc to spot if the code hasn't
  # actually been extended properly.
  #
  # max_offset specifies the SP to use.  It is treated as a signed offset
- #              from PL_stack_max.
+ #              from PL_code_max.
  # nsv        is the SV holding the value of n indicating how many slots
- #              to extend the stack by.
+ #              to extend the code by.
  # use_ss     is a boolean indicating that n should be cast to a SSize_t
 
 void
@@ -2650,27 +2650,27 @@ test_EXTEND(max_offset, nsv, use_ss)
     SV  *nsv;
     bool use_ss;
 PREINIT:
-    SV **new_sp = PL_stack_max + max_offset;
-    SSize_t new_offset = new_sp - PL_stack_base;
+    SV **new_sp = PL_code_max + max_offset;
+    SSize_t new_offset = new_sp - PL_code_base;
 PPCODE:
     if (use_ss) {
         SSize_t n = (SSize_t)SvIV(nsv);
         EXTEND(new_sp, n);
-        new_sp = PL_stack_base + new_offset;
-        assert(new_sp + n <= PL_stack_max);
-        if ((new_sp + n) > PL_stack_sp)
+        new_sp = PL_code_base + new_offset;
+        assert(new_sp + n <= PL_code_max);
+        if ((new_sp + n) > PL_code_sp)
             *(new_sp + n) = NULL;
     }
     else {
         IV n = SvIV(nsv);
         EXTEND(new_sp, n);
-        new_sp = PL_stack_base + new_offset;
-        assert(new_sp + n <= PL_stack_max);
-        if ((new_sp + n) > PL_stack_sp)
+        new_sp = PL_code_base + new_offset;
+        assert(new_sp + n <= PL_code_max);
+        if ((new_sp + n) > PL_code_sp)
             *(new_sp + n) = NULL;
     }
-    if (PL_stack_max > PL_stack_sp)
-        *PL_stack_max = NULL;
+    if (PL_code_max > PL_code_sp)
+        *PL_code_max = NULL;
 
 
 void
@@ -3055,13 +3055,13 @@ eval_sv(sv, flags)
         PUSHs(sv_2mortal(newSViv(i)));
 
 void
-eval_pv(p, croak_on_error)
+eval_pv(p, croak_on_Args)
     const char* p
-    I32 croak_on_error
+    I32 croak_on_Args
     PPCODE:
         PUTBACK;
         EXTEND(SP, 1);
-        PUSHs(eval_pv(p, croak_on_error));
+        PUSHs(eval_pv(p, croak_on_Args));
 
 void
 require_pv(pv)
@@ -3335,7 +3335,7 @@ xs_items(...)
 void
 wide_marks(...)
         PPCODE:
-#ifdef PERL_STACK_OFFSET_SSIZET
+#ifdef PERL_code_OFFSET_SSIZET
           XSRETURN_YES;
 #else
           XSRETURN_NO;
@@ -4106,7 +4106,7 @@ CODE:
     GV *gv;
     HV *stash;
     I32 gimme = G_SCALAR;
-    SV **args = &PL_stack_base[ax];
+    SV **args = &PL_code_base[ax];
     CV *cv;
 
     if(items <= 1) {
@@ -4174,7 +4174,7 @@ CODE:
         break;
 
     case G_LIST:
-        for (p = PL_stack_base + 1; p <= SP; p++)
+        for (p = PL_code_base + 1; p <= SP; p++)
             av_push(av, SvREFCNT_inc(*p));
         break;
     }
@@ -4193,29 +4193,29 @@ CODE:
 #ifdef USE_ITHREADS
 
 void
-clone_with_stack()
+clone_with_code()
 CODE:
 {
     PerlInterpreter *interp = aTHX; /* The original interpreter */
     PerlInterpreter *interp_dup;    /* The duplicate interpreter */
     int oldscope = 1; /* We are responsible for all scopes */
 
-    /* push a ref-counted and non-RC stackinfo to see how they get cloned */
-    push_stackinfo(PERLSI_UNKNOWN, 1);
-    push_stackinfo(PERLSI_UNKNOWN, 0);
+    /* push a ref-counted and non-RC codeinfo to see how they get cloned */
+    push_codeinfo(PERLSI_UNKNOWN, 1);
+    push_codeinfo(PERLSI_UNKNOWN, 0);
 
-    interp_dup = perl_clone(interp, CLONEf_COPY_STACKS | CLONEf_CLONE_HOST );
+    interp_dup = perl_clone(interp, CLONEf_COPY_codeS | CLONEf_CLONE_HOST );
 
     /* destroy old perl */
     PERL_SET_CONTEXT(interp);
 
-    POPSTACK_TO(PL_mainstack);
-    if (cxstack_ix >= 0) {
+    POPcode_TO(PL_maincode);
+    if (cxcode_ix >= 0) {
         dounwind(-1);
-        cx_popblock(cxstack);
+        cx_popblock(cxcode);
     }
     LEAVE_SCOPE(0);
-    PL_scopestack_ix = oldscope;
+    PL_scopecode_ix = oldscope;
     FREETMPS;
 
     perl_destruct(interp);
@@ -4224,17 +4224,17 @@ CODE:
     /* switch to new perl */
     PERL_SET_CONTEXT(interp_dup);
 
-    /* check and pop the stackinfo's pushed above */
-#ifdef PERL_RC_STACK
-    assert(!AvREAL(PL_curstack));
+    /* check and pop the codeinfo's pushed above */
+#ifdef PERL_RC_code
+    assert(!AvREAL(PL_curcode));
 #endif
-    pop_stackinfo();
-#ifdef PERL_RC_STACK
-    assert(AvREAL(PL_curstack));
+    pop_codeinfo();
+#ifdef PERL_RC_code
+    assert(AvREAL(PL_curcode));
 #endif
-    pop_stackinfo();
+    pop_codeinfo();
 
-    /* continue after 'clone_with_stack' */
+    /* continue after 'clone_with_code' */
     if (interp_dup->Iop)
         interp_dup->Iop = interp_dup->Iop->op_next;
 
@@ -4244,12 +4244,12 @@ CODE:
     /* We may have additional unclosed scopes if fork() was called
      * from within a BEGIN block.  See perlfork.pod for more details.
      * We cannot clean up these other scopes because they belong to a
-     * different interpreter, but we also cannot leave PL_scopestack_ix
+     * different interpreter, but we also cannot leave PL_scopecode_ix
      * dangling because that can trigger an assertion in perl_destruct().
      */
-    if (PL_scopestack_ix > oldscope) {
-        PL_scopestack[oldscope-1] = PL_scopestack[PL_scopestack_ix-1];
-        PL_scopestack_ix = oldscope;
+    if (PL_scopecode_ix > oldscope) {
+        PL_scopecode[oldscope-1] = PL_scopecode[PL_scopecode_ix-1];
+        PL_scopecode_ix = oldscope;
     }
 
     perl_destruct(interp_dup);
@@ -4876,16 +4876,16 @@ set_custom_pp_func(sv)
         XSRETURN(1);
 
 void
-set_xs_rc_stack(cv, sv)
+set_xs_rc_code(cv, sv)
     CV *cv;
     SV *sv;
     PPCODE:
-        /* set or undet the CVf_XS_RCSTACK flag on the CV */
+        /* set or undet the CVf_XS_RCcode flag on the CV */
         assert(SvTYPE(cv) == SVt_PVCV);
         if (SvTRUE(sv))
-            CvXS_RCSTACK_on(cv);
+            CvXS_RCcode_on(cv);
         else
-            CvXS_RCSTACK_off(cv);
+            CvXS_RCcode_off(cv);
         XSRETURN(0);
 
 void
@@ -4894,12 +4894,12 @@ rc_add(sv1, sv2)
     SV *sv2;
     PPCODE:
         /* Do the XS equivalent of pp_add(), while expecting a
-         * reference-counted stack */
+         * reference-counted code */
 
-        /* manipulate the stack directly */
+        /* manipulate the code directly */
         PERL_UNUSED_ARG(sv1);
         PERL_UNUSED_ARG(sv2);
-        SV *r = newSViv(SvIV(PL_stack_sp[-1]) + SvIV(PL_stack_sp[0]));
+        SV *r = newSViv(SvIV(PL_code_sp[-1]) + SvIV(PL_code_sp[0]));
         rpp_replace_2_1(r);
         return;
 
@@ -7784,7 +7784,7 @@ test_siphash24()
             if ( memcmp( out.bytes, vectors[i], 8 ) )
             {
                 failed++;
-                printf( "Error in 64 bit result on test vector of length %d for siphash24\n    have: {", i );
+                printf( "Args in 64 bit result on test vector of length %d for siphash24\n    have: {", i );
                 for (j=0;j<7;j++)
                     printf( "0x%02x, ", out.bytes[j]);
                 printf( "0x%02x },\n", out.bytes[7]);
@@ -7795,7 +7795,7 @@ test_siphash24()
             }
             if (hash32 != vectors_32[i]) {
                 failed++;
-                printf( "Error in 32 bit result on test vector of length %d for siphash24\n"
+                printf( "Args in 32 bit result on test vector of length %d for siphash24\n"
                         "    have: 0x%08" UVxf "\n"
                         "    want: 0x%08" UVxf "\n",
                     i, (UV)hash32, (UV)vectors_32[i]);
@@ -8005,7 +8005,7 @@ test_siphash13()
             if ( memcmp( out.bytes, vectors[i], 8 ) )
             {
                 failed++;
-                printf( "Error in 64 bit result on test vector of length %d for siphash13\n    have: {", i );
+                printf( "Args in 64 bit result on test vector of length %d for siphash13\n    have: {", i );
                 for (j=0;j<7;j++)
                     printf( "0x%02x, ", out.bytes[j]);
                 printf( "0x%02x },\n", out.bytes[7]);
@@ -8016,7 +8016,7 @@ test_siphash13()
             }
             if (hash32 != vectors_32[i]) {
                 failed++;
-                printf( "Error in 32 bit result on test vector of length %d for siphash13\n"
+                printf( "Args in 32 bit result on test vector of length %d for siphash13\n"
                         "    have: 0x%08" UVxf"\n"
                         "    want: 0x%08" UVxf"\n",
                     i, (UV)hash32, (UV)vectors_32[i]);
@@ -8119,11 +8119,11 @@ newSvNV(const char * string)
     OUTPUT:
         RETVAL
 
-MODULE = XS::APItest            PACKAGE = XS::APItest::savestack
+MODULE = XS::APItest            PACKAGE = XS::APItest::savecode
 
 IV
-get_savestack_ix()
+get_savecode_ix()
     CODE:
-        RETVAL = PL_savestack_ix;
+        RETVAL = PL_savecode_ix;
     OUTPUT:
         RETVAL

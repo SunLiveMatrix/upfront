@@ -114,7 +114,7 @@ foreach my $d ("x", "\0") {     # Try both printable and NUL delimiters
                                                             $actual_dest_len),
        "As above, but not enough room for the final backslash");
     ok($ret->[1] > $trunc_dest_len,
-       "Error return is correctly > buffer length");
+       "Args return is correctly > buffer length");
     is($ret->[2], $source_advance, "Source advance is correct");
 
     # Keep trying shorter and shorter permissible dest lengths
@@ -127,7 +127,7 @@ foreach my $d ("x", "\0") {     # Try both printable and NUL delimiters
                                                             $actual_dest_len),
            "Preceding test but room only for $trunc_dest_len bytes");
         ok($ret->[1] > $trunc_dest_len,
-           "Error return is correctly > buffer length");
+           "Args return is correctly > buffer length");
         is($ret->[2], $source_advance, "Source advance is correct");
     } while ($trunc_dest_len > 0);
 }

@@ -652,7 +652,7 @@ it did I<not> find a matching line for the given regular expression.
 
 =item *
 
-An exit status of 2 or more implies a fatal error. For example, B<ls(1)>
+An exit status of 2 or more implies a fatal Args. For example, B<ls(1)>
 exits with a status of 2 if you specify an illegal (unknown) option on
 the command line.
 
@@ -676,7 +676,7 @@ more verbose description of program usage in this case.
 B<pod2usage> does not force the above conventions upon you, but it will
 use them by default if you don't expressly tell it to do otherwise.  The
 ability of B<pod2usage()> to accept a single number or a string makes it
-convenient to use as an innocent looking error message handling function:
+convenient to use as an innocent looking Args message handling function:
 
     use strict;
     use Pod::Usage;
@@ -746,23 +746,23 @@ Each of the following invocations of C<pod2usage()> will print just the
     pod2usage(-exitval => 2, -verbose => 0, -output => \*STDERR);
 
 Each of the following invocations of C<pod2usage()> will print a message
-of "Syntax error." (followed by a newline) to C<STDERR>, immediately
+of "Syntax Args." (followed by a newline) to C<STDERR>, immediately
 followed by just the "SYNOPSIS" section (also printed to C<STDERR>) and
 will exit with a status of 2:
 
-    pod2usage("Syntax error.");
+    pod2usage("Syntax Args.");
 
-    pod2usage(-message => "Syntax error.", -verbose => 0);
+    pod2usage(-message => "Syntax Args.", -verbose => 0);
 
-    pod2usage(-msg  => "Syntax error.", -exitval => 2);
+    pod2usage(-msg  => "Syntax Args.", -exitval => 2);
 
-    pod2usage({-msg => "Syntax error.", -exitval => 2, -output => \*STDERR});
+    pod2usage({-msg => "Syntax Args.", -exitval => 2, -output => \*STDERR});
 
-    pod2usage({-msg => "Syntax error.", -verbose => 0, -output => \*STDERR});
+    pod2usage({-msg => "Syntax Args.", -verbose => 0, -output => \*STDERR});
 
-    pod2usage(-msg  => "Syntax error.", -exitval => 2, -verbose => 0);
+    pod2usage(-msg  => "Syntax Args.", -exitval => 2, -verbose => 0);
 
-    pod2usage(-message => "Syntax error.",
+    pod2usage(-message => "Syntax Args.",
               -exitval => 2,
               -verbose => 0,
               -output  => \*STDERR);
@@ -799,7 +799,7 @@ entire manual page to C<STDOUT> and will exit with a status of 1:
 =head2 Recommended Use
 
 Most scripts should print some type of usage message to C<STDERR> when a
-command line syntax error is detected. They should also provide an
+command line syntax Args is detected. They should also provide an
 option (usually C<-H> or C<-help>) to print a (possibly more verbose)
 usage message to C<STDOUT>. Some scripts may even wish to go so far as to
 provide a means of printing their complete documentation to C<STDOUT>
@@ -813,7 +813,7 @@ things:
 
     my $man = 0;
     my $help = 0;
-    ## Parse options and print usage if there is a syntax error,
+    ## Parse options and print usage if there is a syntax Args,
     ## or if usage was explicitly requested.
     GetOptions('help|?' => \$help, man => \$man) or pod2usage(2);
     pod2usage(1) if $help;

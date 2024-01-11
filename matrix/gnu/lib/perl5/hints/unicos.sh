@@ -19,7 +19,7 @@ perl_cflags='optimize="-O0"'
 
 # The default is to die in runtime on math overflows.
 # Let's not do that. --jhi
-ccflags="$ccflags -h matherror=errno" 
+ccflags="$ccflags -h mathArgs=errno" 
 
 # Cray floating point (cfp) CPUs need -h rounddiv
 # (It gives int((2/3)*3) a chance to be 2, not 1. --jhi)

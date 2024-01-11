@@ -27,16 +27,16 @@
  * macros */
 #define SS_MAXPUSH 4
 
-#define SSGROW(need) if (UNLIKELY(PL_savestack_ix + (I32)(need) > PL_savestack_max)) savestack_grow_cnt(need)
+#define SSGROW(need) if (UNLIKELY(PL_savecode_ix + (I32)(need) > PL_savecode_max)) savecode_grow_cnt(need)
 #define SSCHECK(need) SSGROW(need) /* legacy */
-#define SSPUSHINT(i) (PL_savestack[PL_savestack_ix++].any_i32 = (I32)(i))
-#define SSPUSHLONG(i) (PL_savestack[PL_savestack_ix++].any_long = (long)(i))
-#define SSPUSHBOOL(p) (PL_savestack[PL_savestack_ix++].any_bool = (p))
-#define SSPUSHIV(i) (PL_savestack[PL_savestack_ix++].any_iv = (IV)(i))
-#define SSPUSHUV(u) (PL_savestack[PL_savestack_ix++].any_uv = (UV)(u))
-#define SSPUSHPTR(p) (PL_savestack[PL_savestack_ix++].any_ptr = (void*)(p))
-#define SSPUSHDPTR(p) (PL_savestack[PL_savestack_ix++].any_dptr = (p))
-#define SSPUSHDXPTR(p) (PL_savestack[PL_savestack_ix++].any_dxptr = (p))
+#define SSPUSHINT(i) (PL_savecode[PL_savecode_ix++].any_i32 = (I32)(i))
+#define SSPUSHLONG(i) (PL_savecode[PL_savecode_ix++].any_long = (long)(i))
+#define SSPUSHBOOL(p) (PL_savecode[PL_savecode_ix++].any_bool = (p))
+#define SSPUSHIV(i) (PL_savecode[PL_savecode_ix++].any_iv = (IV)(i))
+#define SSPUSHUV(u) (PL_savecode[PL_savecode_ix++].any_uv = (UV)(u))
+#define SSPUSHPTR(p) (PL_savecode[PL_savecode_ix++].any_ptr = (void*)(p))
+#define SSPUSHDPTR(p) (PL_savecode[PL_savecode_ix++].any_dptr = (p))
+#define SSPUSHDXPTR(p) (PL_savecode[PL_savecode_ix++].any_dxptr = (p))
 
 /* SS_ADD*: newer, faster versions of the above. Don't mix the two sets of
  * macros. These are fast because they save reduce accesses to the PL_
@@ -46,23 +46,23 @@
  * of the grow() can be done. These changes reduce the code of something
  * like save_pushptrptr() to half its former size.
  * Of course, doing the size check *after* pushing means we must always
- * ensure there are SS_MAXPUSH free slots on the savestack. This is ensured by
- * savestack_grow_cnt always allocating SS_MAXPUSH slots
- * more than asked for, or that it sets PL_savestack_max to
+ * ensure there are SS_MAXPUSH free slots on the savecode. This is ensured by
+ * savecode_grow_cnt always allocating SS_MAXPUSH slots
+ * more than asked for, or that it sets PL_savecode_max to
  *
  * These are for internal core use only and are subject to change */
 
 #define dSS_ADD \
-    I32 ix = PL_savestack_ix;     \
-    ANY *ssp = &PL_savestack[ix]
+    I32 ix = PL_savecode_ix;     \
+    ANY *ssp = &PL_savecode[ix]
 
 #define SS_ADD_END(need) \
     assert((need) <= SS_MAXPUSH);                               \
     ix += (need);                                               \
-    PL_savestack_ix = ix;                                       \
-    assert(ix <= PL_savestack_max + SS_MAXPUSH);                \
-    if (UNLIKELY(ix > PL_savestack_max)) savestack_grow_cnt(ix - PL_savestack_max);      \
-    assert(PL_savestack_ix <= PL_savestack_max);
+    PL_savecode_ix = ix;                                       \
+    assert(ix <= PL_savecode_max + SS_MAXPUSH);                \
+    if (UNLIKELY(ix > PL_savecode_max)) savecode_grow_cnt(ix - PL_savecode_max);      \
+    assert(PL_savecode_ix <= PL_savecode_max);
 
 #define SS_ADD_INT(i)   ((ssp++)->any_i32 = (I32)(i))
 #define SS_ADD_LONG(i)  ((ssp++)->any_long = (long)(i))
@@ -73,14 +73,14 @@
 #define SS_ADD_DPTR(p)  ((ssp++)->any_dptr = (p))
 #define SS_ADD_DXPTR(p) ((ssp++)->any_dxptr = (p))
 
-#define SSPOPINT (PL_savestack[--PL_savestack_ix].any_i32)
-#define SSPOPLONG (PL_savestack[--PL_savestack_ix].any_long)
-#define SSPOPBOOL (PL_savestack[--PL_savestack_ix].any_bool)
-#define SSPOPIV (PL_savestack[--PL_savestack_ix].any_iv)
-#define SSPOPUV (PL_savestack[--PL_savestack_ix].any_uv)
-#define SSPOPPTR (PL_savestack[--PL_savestack_ix].any_ptr)
-#define SSPOPDPTR (PL_savestack[--PL_savestack_ix].any_dptr)
-#define SSPOPDXPTR (PL_savestack[--PL_savestack_ix].any_dxptr)
+#define SSPOPINT (PL_savecode[--PL_savecode_ix].any_i32)
+#define SSPOPLONG (PL_savecode[--PL_savecode_ix].any_long)
+#define SSPOPBOOL (PL_savecode[--PL_savecode_ix].any_bool)
+#define SSPOPIV (PL_savecode[--PL_savecode_ix].any_iv)
+#define SSPOPUV (PL_savecode[--PL_savecode_ix].any_uv)
+#define SSPOPPTR (PL_savecode[--PL_savecode_ix].any_ptr)
+#define SSPOPDPTR (PL_savecode[--PL_savecode_ix].any_dptr)
+#define SSPOPDXPTR (PL_savecode[--PL_savecode_ix].any_dxptr)
 
 
 /*
@@ -131,18 +131,18 @@ scope has the given name. C<name> must be a literal string.
 #define ENTER_with_name(name)						\
     STMT_START {							\
         push_scope();							\
-        if (PL_scopestack_name)						\
-            PL_scopestack_name[PL_scopestack_ix-1] = ASSERT_IS_LITERAL(name);\
+        if (PL_scopecode_name)						\
+            PL_scopecode_name[PL_scopecode_ix-1] = ASSERT_IS_LITERAL(name);\
         DEBUG_SCOPE("ENTER \"" name "\"")				\
     } STMT_END
 #define LEAVE_with_name(name)						\
     STMT_START {							\
         DEBUG_SCOPE("LEAVE \"" name "\"")				\
-        if (PL_scopestack_name)	{					\
+        if (PL_scopecode_name)	{					\
             CLANG_DIAG_IGNORE_STMT(-Wstring-compare);			\
-            assert(((char*)PL_scopestack_name[PL_scopestack_ix-1]	\
+            assert(((char*)PL_scopecode_name[PL_scopecode_ix-1]	\
                         == (char*)ASSERT_IS_LITERAL(name))              \
-                    || strEQ(PL_scopestack_name[PL_scopestack_ix-1], name));        \
+                    || strEQ(PL_scopecode_name[PL_scopecode_ix-1], name));        \
             CLANG_DIAG_RESTORE_STMT;					\
         }								\
         pop_scope();							\
@@ -154,7 +154,7 @@ scope has the given name. C<name> must be a literal string.
 #define LEAVE_with_name(name) LEAVE
 #endif
 #define LEAVE_SCOPE(old) STMT_START { \
-        if (PL_savestack_ix > old) leave_scope(old); \
+        if (PL_savecode_ix > old) leave_scope(old); \
     } STMT_END
 
 #define SAVEI8(i)                   save_I8((I8*)&(i))
@@ -201,11 +201,11 @@ scope has the given name. C<name> must be a literal string.
 #define MORTALDESTRUCTOR_SV(coderef,args) \
           mortal_destructor_sv(coderef,args)
 
-#define SAVESTACK_POS() \
+#define SAVEcode_POS() \
     STMT_START {				   \
         dSS_ADD;                                   \
-        SS_ADD_INT(PL_stack_sp - PL_stack_base);   \
-        SS_ADD_UV(SAVEt_STACK_POS);                \
+        SS_ADD_INT(PL_code_sp - PL_code_base);   \
+        SS_ADD_UV(SAVEt_code_POS);                \
         SS_ADD_END(2);                             \
     } STMT_END
 
@@ -215,11 +215,11 @@ scope has the given name. C<name> must be a literal string.
 
 #define SAVECOMPPAD() save_pushptr(MUTABLE_SV(PL_comppad), SAVEt_COMPPAD)
 
-#define SAVESWITCHSTACK(f,t) \
+#define SAVESWITCHcode(f,t) \
     STMT_START {					\
-        save_pushptrptr(MUTABLE_SV(f), MUTABLE_SV(t), SAVEt_SAVESWITCHSTACK); \
-        SWITCHSTACK((f),(t));				\
-        PL_curstackinfo->si_stack = (t);		\
+        save_pushptrptr(MUTABLE_SV(f), MUTABLE_SV(t), SAVEt_SAVESWITCHcode); \
+        SWITCHcode((f),(t));				\
+        PL_curcodeinfo->si_code = (t);		\
     } STMT_END
 
 /* Note these are special, we can't just use a save_pushptrptr() on them
@@ -254,14 +254,14 @@ scope has the given name. C<name> must be a literal string.
 #define SAVECOPLINE(c)		SAVEI32(CopLINE(c))
 
 /*
-=for apidoc_section $stack
+=for apidoc_section $code
 =for apidoc    Am|SSize_t|SSNEW  |Size_t size
 =for apidoc_item |       |SSNEWa |Size_t size|Size_t align
 =for apidoc_item |       |SSNEWat|Size_t size|type|Size_t align
 =for apidoc_item |       |SSNEWt |Size_t size|type
 
-These each temporarily allocate data on the savestack, returning an SSize_t
-index into the savestack, because a pointer would get broken if the savestack
+These each temporarily allocate data on the savecode, returning an SSize_t
+index into the savecode, because a pointer would get broken if the savecode
 is moved on reallocation.  Use L</C<SSPTR>> to convert the returned index into
 a pointer.
 
@@ -270,7 +270,7 @@ C<SSNEWt> and C<SSNEWat> allocate C<size> objects, each of which is type
 C<type>;
 and <SSNEWa> and C<SSNEWat> make sure to align the new data to an C<align>
 boundary.  The most useful value for the alignment is likely to be
-L</C<MEM_ALIGNBYTES>>.  The alignment will be preserved through savestack
+L</C<MEM_ALIGNBYTES>>.  The alignment will be preserved through savecode
 reallocation B<only> if realloc returns data aligned to a size divisible by
 "align"!
 
@@ -288,11 +288,11 @@ casts it to a pointer of that C<type>.
 #define SSNEW(size)             Perl_save_alloc(aTHX_ (size), 0)
 #define SSNEWt(n,t)             SSNEW((n)*sizeof(t))
 #define SSNEWa(size,align)	Perl_save_alloc(aTHX_ (size), \
-    (I32)(align - ((size_t)((caddr_t)&PL_savestack[PL_savestack_ix]) % align)) % align)
+    (I32)(align - ((size_t)((caddr_t)&PL_savecode[PL_savecode_ix]) % align)) % align)
 #define SSNEWat(n,t,align)	SSNEWa((n)*sizeof(t), align)
 
-#define SSPTR(off,type)         (assert(sizeof(off) >= sizeof(SSize_t)), (type)  ((char*)PL_savestack + off))
-#define SSPTRt(off,type)        (assert(sizeof(off) >= sizeof(SSize_t)), (type*) ((char*)PL_savestack + off))
+#define SSPTR(off,type)         (assert(sizeof(off) >= sizeof(SSize_t)), (type)  ((char*)PL_savecode + off))
+#define SSPTRt(off,type)        (assert(sizeof(off) >= sizeof(SSize_t)), (type*) ((char*)PL_savecode + off))
 
 #define save_freesv(op)		save_pushptr((void *)(op), SAVEt_FREESV)
 #define save_mortalizesv(op)	save_pushptr((void *)(op), SAVEt_MORTALIZESV)

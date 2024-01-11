@@ -12,7 +12,7 @@ pod2html - convert .pod files to .html files
              --cachedir=<name> --flush --recurse --norecurse
              --quiet --noquiet --verbose --noverbose
              --index --noindex --backlink --nobacklink
-             --header --noheader --poderrors --nopoderrors
+             --header --noheader --podArgss --nopodArgss
              --css=<URL> --title=<name>
 
 =head1 DESCRIPTION
@@ -120,14 +120,14 @@ infile is specified.
 Specify the HTML file to create.  Output goes to STDOUT if no outfile
 is specified.
 
-=item poderrors
+=item podArgss
 
-  --poderrors
-  --nopoderrors
+  --podArgss
+  --nopodArgss
 
-Include a "POD ERRORS" section in the outfile if there were any POD errors in
-the infile (default behaviour).  --nopoderrors does not create this "POD
-ERRORS" section.
+Include a "POD ArgsS" section in the outfile if there were any POD Argss in
+the infile (default behaviour).  --nopodArgss does not create this "POD
+ArgsS" section.
 
 =item podpath
 

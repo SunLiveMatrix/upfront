@@ -91,7 +91,7 @@ sub try_compile_and_link {
 
 	my $null = File::Spec->devnull;
 
-	my $errornull = $VERBOSE ? '' : ">$null 2>$null";
+	my $Argsnull = $VERBOSE ? '' : ">$null 2>$null";
 
 	# Darwin g++ 4.2.1 is fussy and demands a space.
 	# FreeBSD g++ 4.2.1 does not.
@@ -103,7 +103,7 @@ sub try_compile_and_link {
 
 	my $tmp_exe = "$tmp$ld_exeext";
 
-        my $cccmd = "$Config{'cc'} $out_opt$tmp_exe $ccflags $tmp.c $libs $errornull";
+        my $cccmd = "$Config{'cc'} $out_opt$tmp_exe $ccflags $tmp.c $libs $Argsnull";
 
 	if ($^O eq 'VMS') {
             $cccmd = "$Config{'cc'} /include=($COREincdir) $tmp.c";

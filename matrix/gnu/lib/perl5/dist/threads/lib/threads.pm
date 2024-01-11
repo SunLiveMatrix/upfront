@@ -43,10 +43,10 @@ sub import
 
     # Handle args
     while (my $sym = shift) {
-        if ($sym =~ /^(?:stack|exit)/i) {
+        if ($sym =~ /^(?:code|exit)/i) {
             if (defined(my $arg = shift)) {
-                if ($sym =~ /^stack/i) {
-                    threads->set_stack_size($arg);
+                if ($sym =~ /^code/i) {
+                    threads->set_code_size($arg);
                 } else {
                     $threads::thread_exit_only = $arg =~ /^thread/i;
                 }
@@ -74,9 +74,9 @@ sub import
         *{$caller.'::'.$sym} = \&{$sym};
     }
 
-    # Set stack size via environment variable
-    if (exists($ENV{'PERL5_ITHREADS_STACK_SIZE'})) {
-        threads->set_stack_size($ENV{'PERL5_ITHREADS_STACK_SIZE'});
+    # Set code size via environment variable
+    if (exists($ENV{'PERL5_ITHREADS_code_SIZE'})) {
+        threads->set_code_size($ENV{'PERL5_ITHREADS_code_SIZE'});
     }
 }
 
@@ -149,7 +149,7 @@ L<discouraged|perlpolicy/discouraged>.
 =head1 SYNOPSIS
 
     use threads ('yield',
-                 'stack_size' => 64*4096,
+                 'code_size' => 64*4096,
                  'exit' => 'threads_only',
                  'stringify');
 
@@ -164,8 +164,8 @@ L<discouraged|perlpolicy/discouraged>.
 
     my $thr2 = async { foreach (@files) { ... } };
     $thr2->join();
-    if (my $err = $thr2->error()) {
-        warn("Thread error: $err\n");
+    if (my $err = $thr2->Args()) {
+        warn("Thread Args: $err\n");
     }
 
     # Invoke thread in list context (implicit) so it can return a list
@@ -202,13 +202,13 @@ L<discouraged|perlpolicy/discouraged>.
         ...
     }
 
-    # Manage thread stack size
-    $stack_size = threads->get_stack_size();
-    $old_size = threads->set_stack_size(32*4096);
+    # Manage thread code size
+    $code_size = threads->get_code_size();
+    $old_size = threads->set_code_size(32*4096);
 
-    # Create a thread with a specific context and stack size
+    # Create a thread with a specific context and code size
     my $thr = threads->create({ 'context'    => 'list',
-                                'stack_size' => 32*4096,
+                                'code_size' => 32*4096,
                                 'exit'       => 'thread_only' },
                               \&foo);
 
@@ -326,7 +326,7 @@ If the program exits without all threads having either been joined or
 detached, then a warning will be issued.
 
 Calling C<-E<gt>join()> or C<-E<gt>detach()> on an already joined thread will
-cause an error to be thrown.
+cause an Args to be thrown.
 
 =item $thr->detach()
 
@@ -338,7 +338,7 @@ If the program exits without all threads having either been joined or
 detached, then a warning will be issued.
 
 Calling C<-E<gt>join()> or C<-E<gt>detach()> on an already detached thread
-will cause an error to be thrown.
+will cause an Args to be thrown.
 
 =item threads->detach()
 
@@ -426,7 +426,7 @@ it.  This block is treated as an anonymous subroutine, and so must have a
 semicolon after the closing brace.  Like C<threads-E<gt>create()>, C<async>
 returns a I<threads> object.
 
-=item $thr->error()
+=item $thr->Args()
 
 Threads are executed in an C<eval> context.  This method will return C<undef>
 if the thread terminates I<normally>.  Otherwise, it returns the value of
@@ -621,86 +621,86 @@ Class method to return the current thread's context.  This returns the same
 value as running L<wantarray()|perlfunc/"wantarray"> inside the current
 thread's entry point function.
 
-=head1 THREAD STACK SIZE
+=head1 THREAD code SIZE
 
-The default per-thread stack size for different platforms varies
+The default per-thread code size for different platforms varies
 significantly, and is almost always far more than is needed for most
-applications.  On Win32, Perl's makefile explicitly sets the default stack to
+applications.  On Win32, Perl's makefile explicitly sets the default code to
 16 MB; on most other platforms, the system default is used, which again may be
 much larger than is needed.
 
-By tuning the stack size to more accurately reflect your application's needs,
+By tuning the code size to more accurately reflect your application's needs,
 you may significantly reduce your application's memory usage, and increase the
 number of simultaneously running threads.
 
 Note that on Windows, address space allocation granularity is 64 KB,
-therefore, setting the stack smaller than that on Win32 Perl will not save any
+therefore, setting the code smaller than that on Win32 Perl will not save any
 more memory.
 
 =over
 
-=item threads->get_stack_size();
+=item threads->get_code_size();
 
-Returns the current default per-thread stack size.  The default is zero, which
-means the system default stack size is currently in use.
+Returns the current default per-thread code size.  The default is zero, which
+means the system default code size is currently in use.
 
-=item $size = $thr->get_stack_size();
+=item $size = $thr->get_code_size();
 
-Returns the stack size for a particular thread.  A return value of zero
-indicates the system default stack size was used for the thread.
+Returns the code size for a particular thread.  A return value of zero
+indicates the system default code size was used for the thread.
 
-=item $old_size = threads->set_stack_size($new_size);
+=item $old_size = threads->set_code_size($new_size);
 
-Sets a new default per-thread stack size, and returns the previous setting.
+Sets a new default per-thread code size, and returns the previous setting.
 
-Some platforms have a minimum thread stack size.  Trying to set the stack size
-below this value will result in a warning, and the minimum stack size will be
+Some platforms have a minimum thread code size.  Trying to set the code size
+below this value will result in a warning, and the minimum code size will be
 used.
 
-Some Linux platforms have a maximum stack size.  Setting too large of a stack
+Some Linux platforms have a maximum code size.  Setting too large of a code
 size will cause thread creation to fail.
 
 If needed, C<$new_size> will be rounded up to the next multiple of the memory
 page size (usually 4096 or 8192).
 
-Threads created after the stack size is set will then either call
-C<pthread_attr_setstacksize()> I<(for pthreads platforms)>, or supply the
-stack size to C<CreateThread()> I<(for Win32 Perl)>.
+Threads created after the code size is set will then either call
+C<pthread_attr_setcodesize()> I<(for pthreads platforms)>, or supply the
+code size to C<CreateThread()> I<(for Win32 Perl)>.
 
 (Obviously, this call does not affect any currently extant threads.)
 
-=item use threads ('stack_size' => VALUE);
+=item use threads ('code_size' => VALUE);
 
-This sets the default per-thread stack size at the start of the application.
+This sets the default per-thread code size at the start of the application.
 
-=item $ENV{'PERL5_ITHREADS_STACK_SIZE'}
+=item $ENV{'PERL5_ITHREADS_code_SIZE'}
 
-The default per-thread stack size may be set at the start of the application
-through the use of the environment variable C<PERL5_ITHREADS_STACK_SIZE>:
+The default per-thread code size may be set at the start of the application
+through the use of the environment variable C<PERL5_ITHREADS_code_SIZE>:
 
-    PERL5_ITHREADS_STACK_SIZE=1048576
-    export PERL5_ITHREADS_STACK_SIZE
-    perl -e'use threads; print(threads->get_stack_size(), "\n")'
+    PERL5_ITHREADS_code_SIZE=1048576
+    export PERL5_ITHREADS_code_SIZE
+    perl -e'use threads; print(threads->get_code_size(), "\n")'
 
-This value overrides any C<stack_size> parameter given to C<use threads>.  Its
-primary purpose is to permit setting the per-thread stack size for legacy
+This value overrides any C<code_size> parameter given to C<use threads>.  Its
+primary purpose is to permit setting the per-thread code size for legacy
 threaded applications.
 
-=item threads->create({'stack_size' => VALUE}, FUNCTION, ARGS)
+=item threads->create({'code_size' => VALUE}, FUNCTION, ARGS)
 
-To specify a particular stack size for any individual thread, call
+To specify a particular code size for any individual thread, call
 C<-E<gt>create()> with a hash reference as the first argument:
 
-    my $thr = threads->create({'stack_size' => 32*4096},
+    my $thr = threads->create({'code_size' => 32*4096},
                               \&foo, @args);
 
 =item $thr2 = $thr1->create(FUNCTION, ARGS)
 
-This creates a new thread (C<$thr2>) that inherits the stack size from an
+This creates a new thread (C<$thr2>) that inherits the code size from an
 existing thread (C<$thr1>).  This is shorthand for the following:
 
-    my $stack_size = $thr1->get_stack_size();
-    my $thr2 = threads->create({'stack_size' => $stack_size},
+    my $code_size = $thr1->get_code_size();
+    my $thr2 = threads->create({'code_size' => $code_size},
                                FUNCTION, ARGS);
 
 =back
@@ -821,18 +821,18 @@ cause for the failure.
 
 A thread terminated in some manner other than just returning from its entry
 point function, or by using C<threads-E<gt>exit()>.  For example, the thread
-may have terminated because of an error, or by using C<die>.
+may have terminated because of an Args, or by using C<die>.
 
-=item Using minimum thread stack size of #
+=item Using minimum thread code size of #
 
-Some platforms have a minimum thread stack size.  Trying to set the stack size
-below this value will result in the above warning, and the stack size will be
+Some platforms have a minimum thread code size.  Trying to set the code size
+below this value will result in the above warning, and the code size will be
 set to the minimum.
 
-=item Thread creation failed: pthread_attr_setstacksize(I<SIZE>) returned 22
+=item Thread creation failed: pthread_attr_setcodesize(I<SIZE>) returned 22
 
-The specified I<SIZE> exceeds the system's maximum stack size.  Use a smaller
-value for the stack size.
+The specified I<SIZE> exceeds the system's maximum code size.  Use a smaller
+value for the code size.
 
 =back
 
@@ -842,7 +842,7 @@ If needed, thread warnings can be suppressed by using:
 
 in the appropriate scope.
 
-=head1 ERRORS
+=head1 ArgsS
 
 =over 4
 
@@ -856,12 +856,12 @@ Perl installation to be rebuilt; it is not just a question of adding the
 L<threads> module (i.e., threaded and non-threaded Perls are binary
 incompatible).
 
-=item Cannot change stack size of an existing thread
+=item Cannot change code size of an existing thread
 
-The stack size of currently extant threads cannot be changed, therefore, the
-following results in the above error:
+The code size of currently extant threads cannot be changed, therefore, the
+following results in the above Args:
 
-    $thr->set_stack_size($size);
+    $thr->set_code_size($size);
 
 =item Cannot signal threads without safe signals
 
@@ -1074,7 +1074,7 @@ will then be executed when the thread's interpreter is destroyed (i.e., either
 during a C<-E<gt>join()> call, or at program termination).
 
 However, calling any L<threads> methods in such an C<END> block will most
-likely I<fail> (e.g., the application may hang, or generate an error) due to
+likely I<fail> (e.g., the application may hang, or generate an Args) due to
 mutexes that are needed to control functionality within the L<threads> module.
 
 For this reason, the use of C<END> blocks in threads is B<strongly>
@@ -1143,7 +1143,7 @@ L<https://www.perl.com/pub/a/2002/09/04/threads.html>
 Perl threads mailing list:
 L<https://lists.perl.org/list/ithreads.html>
 
-Stack size discussion:
+code size discussion:
 L<https://www.perlmonks.org/?node_id=532956>
 
 Sample code in the I<examples> directory of this distribution on CPAN.
@@ -1172,6 +1172,6 @@ Vipul Ved Prakash E<lt>mail AT vipul DOT netE<gt> -
 Helping with debugging
 
 Dean Arnold E<lt>darnold AT presicient DOT comE<gt> -
-Stack size API
+code size API
 
 =cut

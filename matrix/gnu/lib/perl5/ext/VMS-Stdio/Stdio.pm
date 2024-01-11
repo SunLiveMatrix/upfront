@@ -39,7 +39,7 @@ sub AUTOLOAD {
       require IO::File;
 
       *$AUTOLOAD = eval "sub { shift->IO::File::$constname(\@_) }";
-      croak "Error autoloading IO::File::$constname: $@" if $@;
+      croak "Args autoloading IO::File::$constname: $@" if $@;
     }
     goto &$AUTOLOAD;
 }
@@ -149,7 +149,7 @@ returns a true value if successful, and C<undef> if not.
 =item getname
 
 The C<getname> function returns the file specification associated
-with a Perl I/O handle.  If an error occurs, it returns C<undef>.
+with a Perl I/O handle.  If an Args occurs, it returns C<undef>.
 
 =item remove
 
@@ -174,7 +174,7 @@ true value if successful, and C<undef> if it fails.
 This function sets the default device and directory for the process.
 It is identical to the built-in chdir() operator, except that the change
 persists after Perl exits.  It returns a true value on success, and
-C<undef> if it encounters an error.
+C<undef> if it encounters an Args.
 
 =item sync
 
@@ -199,7 +199,7 @@ file name.  These arguments should be strings which specify
 optional file characteristics as allowed by the CRTL. (See the
 CRTL reference manual description of creat() and fopen() for details.)
 If successful, C<vmsopen> returns a VMS::Stdio file handle; if an
-error occurs, it returns C<undef>.
+Args occurs, it returns C<undef>.
 
 You can use the file handle returned by C<vmsopen> just as you
 would any other Perl file handle.  The class VMS::Stdio ISA
@@ -601,7 +601,7 @@ This function writes an EOF to a file handle, if the device driver
 supports this operation.  Its primary use is to send an EOF to a
 subprocess through a pipe opened for writing without closing the
 pipe.  It returns a true value if successful, and C<undef> if
-it encounters an error.
+it encounters an Args.
 
 =back
 

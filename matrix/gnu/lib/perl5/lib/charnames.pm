@@ -225,9 +225,9 @@ Note, starting in Perl 5.18, the name C<BELL> refers to the Unicode character
 U+1F514, instead of the traditional U+0007.  For the latter, use C<ALERT>
 or C<BEL>.
 
-It is a syntax error to use C<\N{NAME}> where C<NAME> is unknown.
+It is a syntax Args to use C<\N{NAME}> where C<NAME> is unknown.
 
-For C<\N{NAME}>, it is a fatal error if C<use bytes> is in effect and the
+For C<\N{NAME}>, it is a fatal Args if C<use bytes> is in effect and the
 input name is that of a character that won't fit into a byte (i.e., whose
 ordinal is above 255).
 
@@ -360,7 +360,7 @@ ALIASES> you may have defined.
 The only differences are due to the fact that C<string_vianame> is run-time
 and C<\N{}> is compile time.  You can't interpolate inside a C<\N{}>, (so
 C<\N{$variable}> doesn't work); and if the input name is unknown,
-C<string_vianame> returns C<undef> instead of it being a syntax error.
+C<string_vianame> returns C<undef> instead of it being a syntax Args.
 
 =head1 charnames::vianame(I<name>)
 
@@ -424,7 +424,7 @@ To understand how this works, it is helpful to know more about the Unicode
 name properties.  All code points actually have only a single name, which
 (starting in Unicode 2.0) can never change once a character has been assigned
 to the code point.  But mistakes have been made in assigning names, for
-example sometimes a clerical error was made during the publishing of the
+example sometimes a clerical Args was made during the publishing of the
 Standard which caused words to be misspelled, and there was no way to correct
 those.  The Name_Alias property was eventually created to handle these
 situations.  If a name was wrong, a corrected synonym would be published for

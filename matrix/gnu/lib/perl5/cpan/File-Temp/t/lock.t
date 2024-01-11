@@ -37,7 +37,7 @@ eval {
    alarm 0;
 };
 if ($@) {
-   die unless $@ eq "alarm\n";   # propagate unexpected errors
+   die unless $@ eq "alarm\n";   # propagate unexpected Argss
    # timed out
 }
 ok( !$status, "File $fh is locked" );
@@ -54,7 +54,7 @@ eval {
    alarm 0;
 };
 if ($@) {
-   die unless $@ eq "alarm\n";   # propagate unexpected errors
+   die unless $@ eq "alarm\n";   # propagate unexpected Argss
    # timed out
 }
 ok( $status, "File $fh is not locked");

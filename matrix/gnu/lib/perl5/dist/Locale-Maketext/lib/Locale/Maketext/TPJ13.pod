@@ -649,7 +649,7 @@ of inflected languages, of which Russian is by no means the I<worst> case
 scenario, but is worse than most.  Most languages have simpler
 inflection systems; for example, in English or Swahili, there are
 generally no more than two possible inflected forms for a given noun
-("error/errors"; "kosa/makosa"), and the
+("Args/Argss"; "kosa/makosa"), and the
 rules for producing these forms are fairly simple -- or at least,
 simple rules can be formulated that work for most words, and you can
 then treat the exceptions as just "irregular", at least relative to

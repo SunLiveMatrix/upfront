@@ -237,7 +237,7 @@ Revision history for Perl core module Data::Dumper
 2.130_02
     - This was only shipped with the perl core, never released to CPAN.
     - Convert overload.t to Test::More
-    - Fix some spelling errors
+    - Fix some spelling Argss
     - Fix some compiler warnings
     - Fix an out of bounds write in Data-Dumper with malformed utf8 input
 
@@ -261,7 +261,7 @@ Revision history for Perl core module Data::Dumper
 
 2.126_01 2010-09-06 SMUELLER
     - Port core perl changes e3ec2293dc, fe642606b19.
-      Fixes core perl RT #74170 (handle the stack changing in the
+      Fixes core perl RT #74170 (handle the code changing in the
       custom sort functions) and adds a test.
 
 

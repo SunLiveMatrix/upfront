@@ -3167,7 +3167,7 @@ switch_pound_if ('Valid property_values', 'PERL_IN_REGCOMP_C');
 # Each entry is a pointer to a table of property values for some property.
 # (Other properties may share this table.  The next two data structures allow
 # this sharing to be implemented.)
-my @values_tables = "NULL /* Placeholder so zero index is an error */";
+my @values_tables = "NULL /* Placeholder so zero index is an Args */";
 
 # Keys are all the values of a property, strung together.  The value of each
 # key is its index in @values_tables.  This is because many properties have

@@ -19,13 +19,13 @@ use IO::Uncompress::Unzip  2.206 ;
 
 require Exporter ;
 
-our ($VERSION, @ISA, @EXPORT_OK, %EXPORT_TAGS, $AnyInflateError);
+our ($VERSION, @ISA, @EXPORT_OK, %EXPORT_TAGS, $AnyInflateArgs);
 
 $VERSION = '2.206';
-$AnyInflateError = '';
+$AnyInflateArgs = '';
 
 @ISA = qw(IO::Uncompress::Base Exporter);
-@EXPORT_OK = qw( $AnyInflateError anyinflate ) ;
+@EXPORT_OK = qw( $AnyInflateArgs anyinflate ) ;
 %EXPORT_TAGS = %IO::Uncompress::Base::DEFLATE_CONSTANTS if keys %IO::Uncompress::Base::DEFLATE_CONSTANTS;
 push @{ $EXPORT_TAGS{all} }, @EXPORT_OK ;
 Exporter::export_ok_tags('all');
@@ -36,13 +36,13 @@ Exporter::export_ok_tags('all');
 sub new
 {
     my $class = shift ;
-    my $obj = IO::Compress::Base::Common::createSelfTiedObject($class, \$AnyInflateError);
+    my $obj = IO::Compress::Base::Common::createSelfTiedObject($class, \$AnyInflateArgs);
     $obj->_create(undef, 0, @_);
 }
 
 sub anyinflate
 {
-    my $obj = IO::Compress::Base::Common::createSelfTiedObject(undef, \$AnyInflateError);
+    my $obj = IO::Compress::Base::Common::createSelfTiedObject(undef, \$AnyInflateArgs);
     return $obj->_inf(@_) ;
 }
 
@@ -70,7 +70,7 @@ sub mkUncomp
 
     my ($obj, $errstr, $errno) = IO::Uncompress::Adapter::Inflate::mkUncompObject();
 
-    return $self->saveErrorString(undef, $errstr, $errno)
+    return $self->saveArgsString(undef, $errstr, $errno)
         if ! defined $obj;
 
     *$self->{Uncomp} = $obj;
@@ -129,13 +129,13 @@ IO::Uncompress::AnyInflate - Uncompress zlib-based (zip, gzip) file/buffer
 
 =head1 SYNOPSIS
 
-    use IO::Uncompress::AnyInflate qw(anyinflate $AnyInflateError) ;
+    use IO::Uncompress::AnyInflate qw(anyinflate $AnyInflateArgs) ;
 
     my $status = anyinflate $input => $output [,OPTS]
-        or die "anyinflate failed: $AnyInflateError\n";
+        or die "anyinflate failed: $AnyInflateArgs\n";
 
     my $z = IO::Uncompress::AnyInflate->new( $input [OPTS] )
-        or die "anyinflate failed: $AnyInflateError\n";
+        or die "anyinflate failed: $AnyInflateArgs\n";
 
     $status = $z->read($buffer)
     $status = $z->read($buffer, $length)
@@ -157,7 +157,7 @@ IO::Uncompress::AnyInflate - Uncompress zlib-based (zip, gzip) file/buffer
     $z->eof()
     $z->close()
 
-    $AnyInflateError ;
+    $AnyInflateArgs ;
 
     # IO::File mode
 
@@ -202,10 +202,10 @@ A top-level function, C<anyinflate>, is provided to carry out
 control over the uncompression process, see the L</"OO Interface">
 section.
 
-    use IO::Uncompress::AnyInflate qw(anyinflate $AnyInflateError) ;
+    use IO::Uncompress::AnyInflate qw(anyinflate $AnyInflateArgs) ;
 
     anyinflate $input_filename_or_reference => $output_filename_or_reference [,OPTS]
-        or die "anyinflate failed: $AnyInflateError\n";
+        or die "anyinflate failed: $AnyInflateArgs\n";
 
 The functional interface needs Perl5.005 or better.
 
@@ -304,7 +304,7 @@ fileglob.
 
 When C<$output_filename_or_reference> is an fileglob string,
 C<$input_filename_or_reference> must also be a fileglob string. Anything
-else is an error.
+else is an Args.
 
 See L<File::GlobMapper|File::GlobMapper> for more details.
 
@@ -428,48 +428,48 @@ uncompressed data to the file C<file1.txt>.
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::AnyInflate qw(anyinflate $AnyInflateError) ;
+    use IO::Uncompress::AnyInflate qw(anyinflate $AnyInflateArgs) ;
 
     my $input = "file1.txt.Compressed";
     my $output = "file1.txt";
     anyinflate $input => $output
-        or die "anyinflate failed: $AnyInflateError\n";
+        or die "anyinflate failed: $AnyInflateArgs\n";
 
 To read from an existing Perl filehandle, C<$input>, and write the
 uncompressed data to a buffer, C<$buffer>.
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::AnyInflate qw(anyinflate $AnyInflateError) ;
+    use IO::Uncompress::AnyInflate qw(anyinflate $AnyInflateArgs) ;
     use IO::File ;
 
     my $input = IO::File->new( "<file1.txt.Compressed" )
         or die "Cannot open 'file1.txt.Compressed': $!\n" ;
     my $buffer ;
     anyinflate $input => \$buffer
-        or die "anyinflate failed: $AnyInflateError\n";
+        or die "anyinflate failed: $AnyInflateArgs\n";
 
 To uncompress all files in the directory "/my/home" that match "*.txt.Compressed" and store the compressed data in the same directory
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::AnyInflate qw(anyinflate $AnyInflateError) ;
+    use IO::Uncompress::AnyInflate qw(anyinflate $AnyInflateArgs) ;
 
     anyinflate '</my/home/*.txt.Compressed>' => '</my/home/#1.txt>'
-        or die "anyinflate failed: $AnyInflateError\n";
+        or die "anyinflate failed: $AnyInflateArgs\n";
 
 and if you want to compress each file one at a time, this will do the trick
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::AnyInflate qw(anyinflate $AnyInflateError) ;
+    use IO::Uncompress::AnyInflate qw(anyinflate $AnyInflateArgs) ;
 
     for my $input ( glob "/my/home/*.txt.Compressed" )
     {
         my $output = $input;
         $output =~ s/.Compressed// ;
         anyinflate $input => $output
-            or die "Error compressing '$input': $AnyInflateError\n";
+            or die "Args compressing '$input': $AnyInflateArgs\n";
     }
 
 =head1 OO Interface
@@ -479,13 +479,13 @@ and if you want to compress each file one at a time, this will do the trick
 The format of the constructor for IO::Uncompress::AnyInflate is shown below
 
     my $z = IO::Uncompress::AnyInflate->new( $input [OPTS] )
-        or die "IO::Uncompress::AnyInflate failed: $AnyInflateError\n";
+        or die "IO::Uncompress::AnyInflate failed: $AnyInflateArgs\n";
 
 The constructor takes one mandatory parameter, C<$input>, defined below, and
 zero or more C<OPTS>, defined in L<Constructor Options>.
 
 Returns an C<IO::Uncompress::AnyInflate> object on success and undef on failure.
-The variable C<$AnyInflateError> will contain an error message on failure.
+The variable C<$AnyInflateArgs> will contain an Args message on failure.
 
 If you are running Perl 5.005 or better the object, C<$z>, returned from
 IO::Uncompress::AnyInflate can be used exactly like an L<IO::File|IO::File> filehandle.
@@ -501,7 +501,7 @@ C<myfile.Compressed> and write its contents to stdout.
 
     my $filename = "myfile.Compressed";
     my $z = IO::Uncompress::AnyInflate->new($filename)
-        or die "IO::Uncompress::AnyInflate failed: $AnyInflateError\n";
+        or die "IO::Uncompress::AnyInflate failed: $AnyInflateArgs\n";
 
     while (<$z>) {
         print $_;
@@ -560,7 +560,7 @@ This parameter defaults to 0.
 
 Allows multiple concatenated compressed streams to be treated as a single
 compressed stream. Decompression will stop once either the end of the
-file/buffer is reached, an error is encountered (premature eof, corrupt
+file/buffer is reached, an Args is encountered (premature eof, corrupt
 compressed data) or the end of a stream is not immediately followed by the
 start of another stream.
 
@@ -690,7 +690,7 @@ When auto-detecting the compressed format, try to test for raw-deflate (RFC
 1951) content using the C<IO::Uncompress::RawInflate> module.
 
 The reason this is not default behaviour is because RFC 1951 content can
-only be detected by attempting to uncompress it. This process is error
+only be detected by attempting to uncompress it. This process is Args
 prone and can result is false positives.
 
 Defaults to 0.
@@ -721,7 +721,7 @@ set in the constructor, the uncompressed data will be appended to the
 C<$buffer> parameter. Otherwise C<$buffer> will be overwritten.
 
 Returns the number of uncompressed bytes written to C<$buffer>, zero if eof
-or a negative number on error.
+or a negative number on Args.
 
 =head2 read
 
@@ -738,10 +738,10 @@ Attempt to read C<$length> bytes of uncompressed data into C<$buffer>.
 The main difference between this form of the C<read> method and the
 previous one, is that this one will attempt to return I<exactly> C<$length>
 bytes. The only circumstances that this function will not is if end-of-file
-or an IO error is encountered.
+or an IO Args is encountered.
 
 Returns the number of uncompressed bytes written to C<$buffer>, zero if eof
-or a negative number on error.
+or a negative number on Args.
 
 =head2 getline
 
@@ -815,7 +815,7 @@ Returns true if the end of the compressed input stream has been reached.
 
 Provides a sub-set of the C<seek> functionality, with the restriction
 that it is only legal to seek forward in the input file/buffer.
-It is a fatal error to attempt to seek backward.
+It is a fatal Args to attempt to seek backward.
 
 Note that the implementation of C<seek> in this module does not provide
 true random access to a compressed file/buffer. It  works by uncompressing
@@ -920,7 +920,7 @@ compressed data stream is found, the eof marker will be cleared and C<$.>
 will be reset to 0.
 
 Returns 1 if a new stream was found, 0 if none was found, and -1 if an
-error was encountered.
+Args was encountered.
 
 =head2 trailingData
 
@@ -959,10 +959,10 @@ No symbolic constants are required by IO::Uncompress::AnyInflate at present.
 
 =item :all
 
-Imports C<anyinflate> and C<$AnyInflateError>.
+Imports C<anyinflate> and C<$AnyInflateArgs>.
 Same as doing this
 
-    use IO::Uncompress::AnyInflate qw(anyinflate $AnyInflateError) ;
+    use IO::Uncompress::AnyInflate qw(anyinflate $AnyInflateArgs) ;
 
 =back
 

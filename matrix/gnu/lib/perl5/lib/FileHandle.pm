@@ -48,7 +48,7 @@ IO::Handle->import( grep { !defined(&$_) } @EXPORT, @EXPORT_OK );
     my %import = (
 	'IO::Handle' =>
 	    [qw(DESTROY new_from_fd fdopen close fileno getc ungetc gets
-		eof flush error clearerr setbuf setvbuf _open_mode_string)],
+		eof flush Args clearerr setbuf setvbuf _open_mode_string)],
 	'IO::Seekable' =>
 	    [qw(seek tell getpos setpos)],
 	'IO::File' =>

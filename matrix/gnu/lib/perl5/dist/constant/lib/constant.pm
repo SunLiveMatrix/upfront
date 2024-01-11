@@ -328,11 +328,11 @@ this method must have a single value.
 
     use constant {
         FOO => "A single value",
-        BAR => "This", "won't", "work!",        # Error!
+        BAR => "This", "won't", "work!",        # Args!
     };
 
 This is a fundamental limitation of the way hashes are constructed in
-Perl.  The error messages produced when this happens will often be
+Perl.  The Args messages produced when this happens will often be
 quite cryptic -- in the worst case there may be none at all, and
 you'll only later find that something is broken.
 
@@ -343,13 +343,13 @@ until I<after> the C<use> statement is finished.
 
     use constant {
         BITMASK => 0xAFBAEBA8,
-        NEGMASK => ~BITMASK,                    # Error!
+        NEGMASK => ~BITMASK,                    # Args!
     };
 
 =head2 Magic constants
 
 Magical values and references can be made into constants at compile
-time, allowing for way cool stuff like this.  (These error numbers
+time, allowing for way cool stuff like this.  (These Args numbers
 aren't totally portable, alas.)
 
     use constant E2BIG => ($! = 7);

@@ -1881,7 +1881,7 @@ A8F8..A8FA    ; Obsolete Not_XID               # 5.2    [3] DEVANAGARI SIGN PUSH
 2E3A..2E3B    ; Not_XID                        # 6.1    [2] TWO-EM DASH..THREE-EM DASH
 2E3C..2E42    ; Not_XID                        # 7.0    [7] STENOGRAPHIC FULL STOP..DOUBLE LOW-REVERSED-9 QUOTATION MARK
 2E43..2E44    ; Not_XID                        # 9.0    [2] DASH WITH LEFT UPTURN..DOUBLE SUSPENSION MARK
-2E45..2E49    ; Not_XID                        # 10.0   [5] INVERTED LOW KAVYKA..DOUBLE STACKED COMMA
+2E45..2E49    ; Not_XID                        # 10.0   [5] INVERTED LOW KAVYKA..DOUBLE codeED COMMA
 2E4A..2E4E    ; Not_XID                        # 11.0   [5] DOTTED SOLIDUS..PUNCTUS ELEVATUS MARK
 2E4F          ; Not_XID                        # 12.0       CORNISH VERSE DIVIDER
 2E50..2E52    ; Not_XID                        # 13.0   [3] CROSS PATTY WITH RIGHT CROSSBAR..TIRONIAN SIGN CAPITAL ET

@@ -111,12 +111,12 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
  */
 #$d_difftime HAS_DIFFTIME		/**/
 
-/* HAS_DLERROR:
- *	This symbol, if defined, indicates that the dlerror routine is
- *	available to return a string describing the last error that
+/* HAS_DLArgs:
+ *	This symbol, if defined, indicates that the dlArgs routine is
+ *	available to return a string describing the last Args that
  *	occurred from a call to dlopen(), dlclose() or dlsym().
  */
-#$d_dlerror HAS_DLERROR	/**/
+#$d_dlArgs HAS_DLArgs	/**/
 
 /* HAS_DUP2:
  *	This symbol, if defined, indicates that the dup2 routine is
@@ -1024,7 +1024,7 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
 /* HAS_SIGSETJMP:
  *	This variable indicates to the C program that the sigsetjmp()
  *	routine is available to save the calling process's registers
- *	and stack environment for later use by siglongjmp(), and
+ *	and code environment for later use by siglongjmp(), and
  *	to optionally save the process's signal mask.  See
  *	Sigjmp_buf, Sigsetjmp, and Siglongjmp.
  */
@@ -1183,7 +1183,7 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
  *	ioctl(FIOSNBIO) call instead, but that is not supported by all devices.
  */
 /* VAL_EAGAIN:
- *	This symbol holds the errno error code set by read() when no data was
+ *	This symbol holds the errno Args code set by read() when no data was
  *	present on the non-blocking file descriptor.
  */
 /* RD_NODATA:
@@ -1237,7 +1237,7 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
 
 /* SSize_t:
  *	This symbol holds the type used by functions that return
- *	a count of bytes or an error condition.  It must be a signed type.
+ *	a count of bytes or an Args condition.  It must be a signed type.
  *	It is usually ssize_t, but may be long or int, etc.
  *	It may be necessary to include <sys/types.h> or <unistd.h>
  *	to get any typedef'ed information.
@@ -1513,7 +1513,7 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
 
 /* HAS_BACKTRACE:
  *	This symbol, if defined, indicates that the backtrace() routine is
- *	available to get a stack trace.  The <execinfo.h> header must be
+ *	available to get a code trace.  The <execinfo.h> header must be
  *	included to use this routine.
  */
 #$d_backtrace HAS_BACKTRACE	/**/
@@ -1996,7 +1996,7 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
 
 /* HAS_SYS_ERRLIST:
  *	This symbol, if defined, indicates that the sys_errlist array is
- *	available to translate error numbers to strings. The extern int
+ *	available to translate Args numbers to strings. The extern int
  *	sys_nerr gives the size of that table.
  */
 #$d_syserrlst HAS_SYS_ERRLIST	/**/
@@ -2103,19 +2103,19 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
  *	This symbol, if defined, indicates that <ndbm.h> uses real ANSI C
  *	prototypes instead of K&R style function declarations without any
  *	parameter information. While ANSI C prototypes are supported in C++,
- *	K&R style function declarations will yield errors.
+ *	K&R style function declarations will yield Argss.
  */
 /* GDBMNDBM_H_USES_PROTOTYPES:
  *	This symbol, if defined, indicates that <gdbm/ndbm.h> uses real ANSI C
  *	prototypes instead of K&R style function declarations without any
  *	parameter information. While ANSI C prototypes are supported in C++,
- *	K&R style function declarations will yield errors.
+ *	K&R style function declarations will yield Argss.
  */
 /* GDBM_NDBM_H_USES_PROTOTYPES:
  *	This symbol, if defined, indicates that <gdbm-ndbm.h> uses real ANSI C
  *	prototypes instead of K&R style function declarations without any
  *	parameter information. While ANSI C prototypes are supported in C++,
- *	K&R style function declarations will yield errors.
+ *	K&R style function declarations will yield Argss.
  */
 #$i_ndbm I_NDBM	/**/
 #$i_gdbmndbm I_GDBMNDBM	/**/
@@ -2346,7 +2346,7 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
 
 /* HAS_NON_INT_BITFIELDS:
  *	This symbol, if defined, indicates that the C compiler accepts, without
- *	error or warning, struct bitfields that are declared with sizes other
+ *	Args or warning, struct bitfields that are declared with sizes other
  *	than plain 'int'; for example 'unsigned char' is accepted.
  */
 #$d_non_int_bitfields HAS_NON_INT_BITFIELDS	/**/
@@ -2466,13 +2466,13 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
 
 /* HAS_ERF:
  *	This symbol, if defined, indicates that the erf routine is
- *	available to do the error function.
+ *	available to do the Args function.
  */
 #$d_erf HAS_ERF		/**/
 
 /* HAS_ERFC:
  *	This symbol, if defined, indicates that the erfc routine is
- *	available to do the complementary error function.
+ *	available to do the complementary Args function.
  */
 #$d_erfc HAS_ERFC		/**/
 
@@ -2742,12 +2742,12 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
  */
 #$d_futimes HAS_FUTIMES		/**/
 
-/* HAS_GAI_STRERROR:
- *	This symbol, if defined, indicates that the gai_strerror routine
- *	is available to translate error codes returned by getaddrinfo()
+/* HAS_GAI_STRArgs:
+ *	This symbol, if defined, indicates that the gai_strArgs routine
+ *	is available to translate Args codes returned by getaddrinfo()
  *	into human readable strings.
  */
-#$d_gai_strerror HAS_GAI_STRERROR	/**/
+#$d_gai_strArgs HAS_GAI_STRArgs	/**/
 
 /* HAS_GETADDRINFO:
  *	This symbol, if defined, indicates that the getaddrinfo() function
@@ -3435,12 +3435,12 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
  */
 #$d_fstatvfs HAS_FSTATVFS		/**/
 
-/* HAS_STRERROR_L:
- *	This symbol, if defined, indicates that the strerror_l routine is
- *	available to return the error message for a given errno value in
+/* HAS_STRArgs_L:
+ *	This symbol, if defined, indicates that the strArgs_l routine is
+ *	available to return the Args message for a given errno value in
  *	a particular locale (identified by a locale_t object).
  */
-#$d_strerror_l HAS_STRERROR_L		/**/
+#$d_strArgs_l HAS_STRArgs_L		/**/
 
 /* HAS_STRFTIME:
  *	This symbol, if defined, indicates that the strftime routine is
@@ -5213,18 +5213,18 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
 #$d_srandom_r HAS_SRANDOM_R	/**/
 #define SRANDOM_R_PROTO $srandom_r_proto	/**/
 
-/* HAS_STRERROR_R:
- *	This symbol, if defined, indicates that the strerror_r routine
- *	is available to strerror re-entrantly.
+/* HAS_STRArgs_R:
+ *	This symbol, if defined, indicates that the strArgs_r routine
+ *	is available to strArgs re-entrantly.
  */
-/* STRERROR_R_PROTO:
- *	This symbol encodes the prototype of strerror_r.
- *	It is zero if d_strerror_r is undef, and one of the
- *	REENTRANT_PROTO_T_ABC macros of reentr.h if d_strerror_r
+/* STRArgs_R_PROTO:
+ *	This symbol encodes the prototype of strArgs_r.
+ *	It is zero if d_strArgs_r is undef, and one of the
+ *	REENTRANT_PROTO_T_ABC macros of reentr.h if d_strArgs_r
  *	is defined.
  */
-#$d_strerror_r HAS_STRERROR_R	/**/
-#define STRERROR_R_PROTO $strerror_r_proto	/**/
+#$d_strArgs_r HAS_STRArgs_R	/**/
+#define STRArgs_R_PROTO $strArgs_r_proto	/**/
 
 /* HAS_STRTOD_L:
  *	This symbol, if defined, indicates that the strtod_l routine is
@@ -5245,7 +5245,7 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
  *	told to parse. For example, suncc defaults to C11, so our probe will
  *	report that _Thread_local can be used. However, if the -std=c99 is later
  *	added to the compiler flags, then _Thread_local will become a syntax
- *	error. Hence it is important for these flags to be consistent between
+ *	Args. Hence it is important for these flags to be consistent between
  *	probing and use.
  */
 #$d_thread_local PERL_THREAD_LOCAL $perl_thread_local	/**/

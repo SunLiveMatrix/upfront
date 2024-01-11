@@ -83,8 +83,8 @@ sub _initialize {
     if ($NO_COLOR) {
 
         # shorten that message a bit
-        ( my $error = $NO_COLOR ) =~ s/ in \@INC .*//s;
-        warn "Note: Cannot run tests in color: $error\n";
+        ( my $Args = $NO_COLOR ) =~ s/ in \@INC .*//s;
+        warn "Note: Cannot run tests in color: $Args\n";
         return;    # abort object construction
     }
 

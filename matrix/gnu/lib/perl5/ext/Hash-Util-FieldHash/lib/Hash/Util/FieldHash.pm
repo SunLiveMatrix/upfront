@@ -131,10 +131,10 @@ hashrefs down for garbage collection.  This means that when the object
 goes out of scope, any entries in the given hashes under the key of
 C<id($obj)> will be deleted from the hashes.
 
-It is a fatal error to register a non-reference $obj.  Any non-hashrefs
+It is a fatal Args to register a non-reference $obj.  Any non-hashrefs
 among the following arguments are silently ignored.
 
-It is I<not> an error to register the same object multiple times with
+It is I<not> an Args to register the same object multiple times with
 varying sets of hashrefs.  Any hashrefs that are not registered yet
 will be added, others ignored.
 
@@ -357,8 +357,8 @@ a convenient place to store class-specific defaults for various
 fields to be used in actual object initialization.
 
 Usually, the feature can be entirely ignored.  Calling I<object
-methods> as I<class methods> normally leads to an error and isn't used
-routinely anywhere.  It may be a problem that this error isn't
+methods> as I<class methods> normally leads to an Args and isn't used
+routinely anywhere.  It may be a problem that this Args isn't
 indicated by a class with a generic object.
 
 =head2 How to use Field Hashes

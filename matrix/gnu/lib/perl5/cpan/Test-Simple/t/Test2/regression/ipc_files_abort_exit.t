@@ -46,8 +46,8 @@ $stdout = join "" => <$stdout>;
 $stderr = join "" => <$stderr>;
 
 is(($exit >> 8), 255, "exited 255");
-like($stderr, qr{^IPC Fatal Error: Leftover files in the directory \(.*/leftover\)!$}m, "Got expected error");
-like($stdout, qr{^Bail out! IPC Fatal Error: Leftover files in the directory \(.*leftover\)!$}m, "Got a bail printed");
+like($stderr, qr{^IPC Fatal Args: Leftover files in the directory \(.*/leftover\)!$}m, "Got expected Args");
+like($stdout, qr{^Bail out! IPC Fatal Args: Leftover files in the directory \(.*leftover\)!$}m, "Got a bail printed");
 
 if(ok($stdout =~ m/^TEMPDIR: (.*)$/m, "Found temp dir")) {
     chomp(my $tmpdir = $1);

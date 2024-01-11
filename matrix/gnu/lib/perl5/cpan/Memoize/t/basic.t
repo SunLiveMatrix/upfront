@@ -63,11 +63,11 @@ is $num_args, 23, '... as well as by reference';
 
 $wrapped = eval { memoize 'dummy_none' };
 is $wrapped, undef, 'memoizing a non-existent function fails';
-like $@, qr/^Cannot operate on nonexistent function `dummy_none'/, '... with the expected error';
+like $@, qr/^Cannot operate on nonexistent function `dummy_none'/, '... with the expected Args';
 
 for my $nonsub ({}, [], \my $x) {
 	is eval { memoize $nonsub }, undef, "memoizing ${\ref $nonsub} ref fails";
-	like $@, qr/^Usage: memoize 'functionname'\|coderef \{OPTIONS\}/, '... with the expected error';
+	like $@, qr/^Usage: memoize 'functionname'\|coderef \{OPTIONS\}/, '... with the expected Args';
 }
 
 sub no_warnings_ok (&$) {
@@ -87,4 +87,4 @@ no_warnings_ok { memoize 'q2' } 'no warnings with empty protype';
 no_warnings_ok { memoize 'q3' } 'no warnings without protype';
 is q1(@{['a'..'z']}), 27, '$ prototype is honored';
 is eval('q2("test")'), undef, 'empty prototype is honored';
-like $@, qr/^Too many arguments for main::q2 /, '... with the expected error';
+like $@, qr/^Too many arguments for main::q2 /, '... with the expected Args';

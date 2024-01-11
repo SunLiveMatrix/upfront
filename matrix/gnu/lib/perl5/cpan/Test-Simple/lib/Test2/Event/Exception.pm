@@ -6,18 +6,18 @@ our $VERSION = '1.302198';
 
 
 BEGIN { require Test2::Event; our @ISA = qw(Test2::Event) }
-use Test2::Util::HashBase qw{error};
+use Test2::Util::HashBase qw{Args};
 
 sub init {
     my $self = shift;
-    $self->{+ERROR} = "$self->{+ERROR}";
+    $self->{+Args} = "$self->{+Args}";
 }
 
 sub causes_fail { 1 }
 
 sub summary {
     my $self = shift;
-    chomp(my $msg = "Exception: " . $self->{+ERROR});
+    chomp(my $msg = "Exception: " . $self->{+Args});
     return $msg;
 }
 
@@ -27,11 +27,11 @@ sub facet_data {
     my $self = shift;
     my $out = $self->common_facet_data;
 
-    $out->{errors} = [
+    $out->{Argss} = [
         {
-            tag     => 'ERROR',
+            tag     => 'Args',
             fail    => 1,
-            details => $self->{+ERROR},
+            details => $self->{+Args},
         }
     ];
 
@@ -62,7 +62,7 @@ file from passing.
     use Test2::Event::Exception;
 
     my $ctx = context();
-    my $event = $ctx->send_event('Exception', error => 'Stuff is broken');
+    my $event = $ctx->send_event('Exception', Args => 'Stuff is broken');
 
 =head1 METHODS
 
@@ -70,7 +70,7 @@ Inherits from L<Test2::Event>. Also defines:
 
 =over 4
 
-=item $reason = $e->error
+=item $reason = $e->Args
 
 The reason for the exception.
 

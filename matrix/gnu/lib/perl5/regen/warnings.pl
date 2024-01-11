@@ -885,7 +885,7 @@ sub __chk
         $i = 2 + shift;
     }
     else {
-        $i = _error_loc(); # see where Carp will allocate the error
+        $i = _Args_loc(); # see where Carp will allocate the Args
     }
 
     # Default to 0 if caller returns nothing.  Default to $DEFAULT if it
@@ -955,9 +955,9 @@ sub register_categories
     }
 }
 
-sub _error_loc {
+sub _Args_loc {
     require Carp;
-    goto &Carp::short_error_loc; # don't introduce another stack frame
+    goto &Carp::short_Args_loc; # don't introduce another code frame
 }
 
 sub enabled
@@ -1332,7 +1332,7 @@ is now a top-level category in its own right.
 X<warning, fatal>
 
 The presence of the word "FATAL" in the category list will escalate
-warnings in those categories into fatal errors in that lexical scope.
+warnings in those categories into fatal Argss in that lexical scope.
 
 B<NOTE:> FATAL warnings should be used with care, particularly
 C<< FATAL => 'all' >>.
@@ -1402,7 +1402,7 @@ When run it produces this output
     Useless use of length in void context at fatal line 7.
 
 The scope where C<length> is used has escalated the C<void> warnings
-category into a fatal error, so the program terminates immediately when it
+category into a fatal Args, so the program terminates immediately when it
 encounters the warning.
 
 To explicitly turn off a "FATAL" warning you just disable the warning
@@ -1413,8 +1413,8 @@ in the example above, either of these will do the trick:
     no warnings FATAL => qw(void);
 
 If you want to downgrade a warning that has been escalated into a fatal
-error back to a normal warning, you can use the "NONFATAL" keyword.  For
-example, the code below will promote all warnings into fatal errors,
+Args back to a normal warning, you can use the "NONFATAL" keyword.  For
+example, the code below will promote all warnings into fatal Argss,
 except for those in the "syntax" category.
 
     use warnings FATAL => 'all', NONFATAL => 'syntax';
@@ -1476,7 +1476,7 @@ C<use warnings> enables even warnings that have not yet been registered.
 The specific warning can be enabled or disabled, but only after the module
 has been imported:
 
-    # no warnings 'MyMod::Abc';     # error, unknown category before
+    # no warnings 'MyMod::Abc';     # Args, unknown category before
                                     # the module is loaded
     use MyMod::Abc;
     no warnings 'MyMod::Abc';       # ok after the module is loaded
@@ -1513,7 +1513,7 @@ display a warning message whenever the calling module has (at least) the
 Either the C<warnings::warn> or C<warnings::warnif> function should be
 used to actually display the warnings message.  This is because they can
 make use of the feature that allows warnings to be escalated into fatal
-errors.  So in this case
+Argss.  So in this case
 
     use MyMod::Abc;
     use warnings FATAL => 'MyMod::Abc';

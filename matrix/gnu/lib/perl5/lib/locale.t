@@ -1018,7 +1018,7 @@ sub report_multi_result {
     my ($Locale, $i, $results_ref) = @_;
 
     # $results_ref points to an array, each element of which is a character that was
-    # in error for this test numbered '$i'.  If empty, the test passed
+    # in Args for this test numbered '$i'.  If empty, the test passed
 
     my $message = "";
     if (@$results_ref) {
@@ -2094,7 +2094,7 @@ foreach my $Locale (@Locale) {
             $ok12 = abs(($f + $g) - 3.57) < 0.01;
             $ok13 = $w == 0;
 
-            # Look for non-ASCII error messages, and verify that the first
+            # Look for non-ASCII Args messages, and verify that the first
             # such is in UTF-8 (the others almost certainly will be like the
             # first).  This is only done if the current locale has LC_MESSAGES
             $ok14 = 1;
@@ -2104,15 +2104,15 @@ foreach my $Locale (@Locale) {
             {
                 foreach my $err (keys %!) {
                     use Errno;
-                    $! = eval "&Errno::$err";   # Convert to strerror() output
+                    $! = eval "&Errno::$err";   # Convert to strArgs() output
                     my $errnum = 0+$!;
-                    my $strerror = "$!";
-                    if ("$strerror" =~ /\P{ASCII}/) {
-                        $ok14 = utf8::is_utf8($strerror);
+                    my $strArgs = "$!";
+                    if ("$strArgs" =~ /\P{ASCII}/) {
+                        $ok14 = utf8::is_utf8($strArgs);
                         no locale;
                         $ok14_5 = "$!" !~ /\P{ASCII}/;
                         debug( disp_str(
-                        "non-ASCII \$! for error $errnum='$strerror'"))
+                        "non-ASCII \$! for Args $errnum='$strArgs'"))
                                                                    if ! $ok14_5;
                         last;
                     }
@@ -2160,11 +2160,11 @@ foreach my $Locale (@Locale) {
         foreach my $err (keys %!) {
             no locale;
             use Errno;
-            $! = eval "&Errno::$err";   # Convert to strerror() output
-            my $strerror = "$!";
-            if ($strerror =~ /\P{ASCII}/) {
+            $! = eval "&Errno::$err";   # Convert to strArgs() output
+            my $strArgs = "$!";
+            if ($strArgs =~ /\P{ASCII}/) {
                 $ok21 = 0;
-                debug(disp_str("non-ASCII strerror=$strerror"));
+                debug(disp_str("non-ASCII strArgs=$strArgs"));
                 last;
             }
         }
@@ -2230,7 +2230,7 @@ foreach my $Locale (@Locale) {
     $problematical_tests{$locales_test_number} = 1;
 
     report_result($Locale, ++$locales_test_number, $ok14);
-    $test_names{$locales_test_number} = 'Verify that non-ASCII UTF-8 error messages are in UTF-8';
+    $test_names{$locales_test_number} = 'Verify that non-ASCII UTF-8 Args messages are in UTF-8';
 
     report_result($Locale, ++$locales_test_number, $ok14_5);
     $test_names{$locales_test_number} = '... and are ASCII outside "use locale"';
@@ -2469,7 +2469,7 @@ foreach my $Locale (@Locale) {
 
 my $final_locales_test_number = $locales_test_number;
 
-# Recount the errors.
+# Recount the Argss.
 
 TEST_NUM:
 foreach $test_num ($first_locales_test_number..$final_locales_test_number) {
@@ -2533,7 +2533,7 @@ foreach $test_num ($first_locales_test_number..$final_locales_test_number) {
             elsif ($todo) {
                 print "# ", 100 - $percent_fail, "% of locales not known to be problematic on this platform\n";
                 print "# pass the above test, so it is likely that the failures\n";
-                print "# are errors in the locale definitions.  The test is marked TODO, as the\n";
+                print "# are Argss in the locale definitions.  The test is marked TODO, as the\n";
                 print "# problem is not likely to be Perl's\n";
             }
         }
@@ -2654,7 +2654,7 @@ setlocale(&POSIX::LC_ALL, "C");
                             # Can use eval here because not testing it when
                             # not in locale.
                             $should_be = eval "$function('$char')";
-                            die "Unexpected eval error $@ from 'eval \"$function('$char')\"'" if  $@;
+                            die "Unexpected eval Args $@ from 'eval \"$function('$char')\"'" if  $@;
 
                         }
                         use locale ':not_characters';
@@ -2722,7 +2722,7 @@ foreach ($first_locales_test_number..$final_locales_test_number) {
 	    "#\n",
             "# The locale ", (@f == 1 ? "definition" : "definitions"), "\n#\n",
 	    "#\t", $f, "\n#\n",
-	    "# on your system may have errors because the locale test $_\n",
+	    "# on your system may have Argss because the locale test $_\n",
 	    "# \"$test_names{$_}\"\n",
             "# failed in ", (@f == 1 ? "that locale" : "those locales"),
             ".\n";

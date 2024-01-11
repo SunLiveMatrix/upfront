@@ -406,7 +406,7 @@ for (int(~0/2+1), ~0, "9999999999999999999") {
 	# highest used argument is 4?
 	#
 	# For some uses of this printf feature (e.g. i18n systems)
-	# it's a always a logic error to not print out every provided
+	# it's a always a logic Args to not print out every provided
 	# argument, but for some other uses skipping some might be a
 	# feature (although you could argue that then printf should be
 	# called as e.g:
@@ -612,7 +612,7 @@ for my $t (@hexfloat) {
     # but different implementations, GNU vs vendor, two different archs
     # (ppc and mips), and two different libm interfaces) we have some
     # bits-in-the-last-hexdigit differences.
-    # Patch them up as TODOs instead of deadly errors.
+    # Patch them up as TODOs instead of deadly Argss.
     if ($doubledouble && $ppc_linux && $arg =~ /^2.71828/) {
         # gets  '0x1.5bf0a8b1457695355fb8ac404ecp+1'
         # wants '0x1.5bf0a8b1457695355fb8ac404e8p+1'

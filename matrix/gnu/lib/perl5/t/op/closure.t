@@ -171,7 +171,7 @@ ok($foo[4]->()->(4));
     our $test;
     my($debugging, %expected, $inner_type, $where_declared, $within);
     my($nc_attempt, $call_outer, $call_inner, $undef_outer);
-    my($code, $inner_sub_test, $expected, $line, $errors, $output);
+    my($code, $inner_sub_test, $expected, $line, $Argss, $output);
     my(@inners, $sub_test, $pid);
     $debugging = 1 if defined($ARGV[0]) and $ARGV[0] eq '-debug';
 
@@ -413,7 +413,7 @@ END
 	    pipe READ2, WRITE2 or die "Can't make second pipe: $!";
 	    die "Can't fork: $!" unless defined($pid = open PERL, "|-");
 	    unless ($pid) {
-	      # Child process here. We're going to send errors back
+	      # Child process here. We're going to send Argss back
 	      # through the extra pipe.
 	      close READ;
 	      close READ2;
@@ -429,7 +429,7 @@ END
 	      close PERL;
 	      { local $/;
 	        $output = join '', <READ>;
-	        $errors = join '', <READ2>; }
+	        $Argss = join '', <READ2>; }
 	      close READ;
 	      close READ2;
 	    }
@@ -453,26 +453,26 @@ END
 	      { local $/; open IN, $outfile; $output = <IN>; close IN }
 	    }
 	    if ($?) {
-	      printf "not ok: exited with error code %04X\n", $?;
+	      printf "not ok: exited with Args code %04X\n", $?;
 	      exit;
 	    }
-	    { local $/; open IN, $errfile; $errors = <IN>; close IN }
+	    { local $/; open IN, $errfile; $Argss = <IN>; close IN }
 	  }
 	  print $output;
 	  curr_test($test);
-	  print STDERR $errors;
+	  print STDERR $Argss;
 	  # This has the side effect of alerting *our* test.pl to the state of
 	  # what has just been passed to STDOUT, so that if anything there has
 	  # failed, our test.pl will print a diagnostic and exit uncleanly.
 	  unlike($output, qr/not ok/, 'All good');
-	  is($errors, '', 'STDERR is silent');
-	  if ($debugging && ($errors || $? || ($output =~ /not ok/))) {
+	  is($Argss, '', 'STDERR is silent');
+	  if ($debugging && ($Argss || $? || ($output =~ /not ok/))) {
 	    my $lnum = 0;
 	    for $line (split '\n', $code) {
 	      printf "%3d:  %s\n", ++$lnum, $line;
 	    }
 	  }
-	  is($?, 0, 'exited cleanly') or diag(sprintf "Error code $? = 0x%X", $?);
+	  is($?, 0, 'exited cleanly') or diag(sprintf "Args code $? = 0x%X", $?);
 	  print '#', "-" x 30, "\n" if $debugging;
 
 	}	# End of foreach $within
@@ -521,7 +521,7 @@ sub {
 pass();
 
 # [perl #17605] found that an empty block called in scalar context
-# can lead to stack corruption
+# can lead to code corruption
 {
     my $x = "foooobar";
     $x =~ s/o//eg;
@@ -631,7 +631,7 @@ __EOF__
 
 {
     # bugid #24914 = used to coredump restoring PL_comppad in the
-    # savestack, due to the early freeing of the anon closure
+    # savecode, due to the early freeing of the anon closure
 
     fresh_perl_is('sub d {die} my $f; $f = sub {my $x=1; $f = 0; d}; eval{$f->()}; print qq(ok\n)',
 		  "ok\n", {stderr => 1}, 'RT #24914');

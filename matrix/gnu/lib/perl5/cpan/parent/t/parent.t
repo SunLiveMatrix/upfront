@@ -51,7 +51,7 @@ my $eval1 = q{
 eval $eval1;
 is( $@, '' );
 
-# String comparisons, just to be safe from floating-point errors
+# String comparisons, just to be safe from floating-point Argss
 is( $Eval1::VERSION, '1.01' );
 
 is( $Eval2::VERSION, '1.02' );

@@ -31,7 +31,7 @@ PL_diehook
 PL_dirty
 PL_dowarn
 PL_errgv
-PL_error_count
+PL_Args_count
 PL_expect
 PL_hexdigit
 PL_hints
@@ -47,8 +47,8 @@ PL_perl_destruct_level
 PL_perldb
 PL_rsfp_filters
 PL_rsfp
-PL_stack_base
-PL_stack_sp
+PL_code_base
+PL_code_sp
 PL_statcache
 PL_stdingv
 PL_sv_arenaroot
@@ -112,7 +112,7 @@ __NEED_VAR__ U32 PL_signals = D_PPP_PERL_SIGNALS_INIT;
 #  define PL_dirty                  dirty
 #  define PL_dowarn                 dowarn
 #  define PL_errgv                  errgv
-#  define PL_error_count            error_count
+#  define PL_Args_count            Args_count
 #  define PL_expect                 expect
 #  define PL_hexdigit               hexdigit
 #  define PL_hints                  hints
@@ -126,8 +126,8 @@ __NEED_VAR__ U32 PL_signals = D_PPP_PERL_SIGNALS_INIT;
 #  define PL_perldb                 perldb
 #  define PL_rsfp_filters           rsfp_filters
 #  define PL_rsfp                   rsfp
-#  define PL_stack_base             stack_base
-#  define PL_stack_sp               stack_sp
+#  define PL_code_base             code_base
+#  define PL_code_sp               code_sp
 #  define PL_statcache              statcache
 #  define PL_stdingv                stdingv
 #  define PL_sv_arenaroot           sv_arenaroot
@@ -195,7 +195,7 @@ __NEED_DUMMY_VAR__ yy_parser PL_parser;
 # define PL_tokenbuf       D_PPP_my_PL_parser_var(tokenbuf)
 # define PL_in_my          D_PPP_my_PL_parser_var(in_my)
 # define PL_in_my_stash    D_PPP_my_PL_parser_var(in_my_stash)
-# define PL_error_count    D_PPP_my_PL_parser_var(error_count)
+# define PL_Args_count    D_PPP_my_PL_parser_var(Args_count)
 
 
 #else
@@ -278,9 +278,9 @@ int dummy_parser_warning(void);
 #endif
 
 #if { VERSION < 5.9.5 }
-# define ppp_error_count_t I32
+# define ppp_Args_count_t I32
 #else
-# define ppp_error_count_t U8
+# define ppp_Args_count_t U8
 #endif
 
 =xsubs
@@ -402,8 +402,8 @@ other_variables()
                 ppp_TESTVAR(PL_no_modify);
                 ppp_TESTVAR(PL_perl_destruct_level);
                 ppp_TESTVAR(PL_perldb);
-                ppp_TESTVAR(PL_stack_base);
-                ppp_TESTVAR(PL_stack_sp);
+                ppp_TESTVAR(PL_code_base);
+                ppp_TESTVAR(PL_code_sp);
                 ppp_TESTVAR(PL_statcache);
                 ppp_TESTVAR(PL_stdingv);
                 ppp_TESTVAR(PL_sv_arenaroot);
@@ -419,7 +419,7 @@ other_variables()
                 ppp_PARSERVAR(char *, PL_bufend);
                 ppp_PARSERVAR(ppp_lex_state_t, PL_lex_state);
                 ppp_PARSERVAR(SV *, PL_lex_stuff);
-                ppp_PARSERVAR(ppp_error_count_t, PL_error_count);
+                ppp_PARSERVAR(ppp_Args_count_t, PL_Args_count);
                 ppp_PARSERVAR(ppp_in_my_t, PL_in_my);
 #if { VERSION >= 5.5.0 }
                 ppp_PARSERVAR(HV*, PL_in_my_stash);

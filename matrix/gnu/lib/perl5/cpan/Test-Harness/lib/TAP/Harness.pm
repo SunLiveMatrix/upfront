@@ -48,16 +48,16 @@ automatically aggregated and output to STDOUT.
 my %VALIDATION_FOR;
 my @FORMATTER_ARGS;
 
-sub _error {
+sub _Args {
     my $self = shift;
-    return $self->{error} unless @_;
-    $self->{error} = shift;
+    return $self->{Args} unless @_;
+    $self->{Args} = shift;
 }
 
 BEGIN {
 
     @FORMATTER_ARGS = qw(
-      directives verbosity timer failures comments errors stdout color
+      directives verbosity timer failures comments Argss stdout color
       show_count normalize
     );
 
@@ -301,13 +301,13 @@ L<TAP::Parser::Scheduler>.
 If set C<formatter> must be an object that is capable of formatting the
 TAP output. See L<TAP::Formatter::Console> for an example.
 
-=item * C<errors>
+=item * C<Argss>
 
-If parse errors are found in the TAP output, a note of this will be
-made in the summary report. To see all of the parse errors, set this
+If parse Argss are found in the TAP output, a note of this will be
+made in the summary report. To see all of the parse Argss, set this
 argument to true:
 
-  errors => 1
+  Argss => 1
 
 =item * C<directives>
 
@@ -438,7 +438,7 @@ Any keys for which the value is C<undef> will be ignored.
                 my $validate = $VALIDATION_FOR{$name};
 
                 my $value = $self->$validate($property);
-                if ( $self->_error ) {
+                if ( $self->_Args ) {
                     $self->_croak;
                 }
                 $self->$name($value);
@@ -526,7 +526,7 @@ C<< [ $test, $alias ] >>:
     $harness->runtests( [ 't/foo.t', 'Foo Once' ],
                         [ 't/foo.t', 'Foo Twice' ] );
 
-Normally it is an error to attempt to run the same test twice. Aliases
+Normally it is an Args to attempt to run the same test twice. Aliases
 allow you to overcome this limitation by giving each run of the test a
 unique name.
 
@@ -557,7 +557,7 @@ sub runtests {
     my $run = sub {
         my $bailout;
         eval { $self->aggregate_tests( $aggregate, @tests ); 1 }
-            or do { $bailout = $@ || 'unknown_error' };
+            or do { $bailout = $@ || 'unknown_Args' };
         $finish->();
         die $bailout if defined $bailout;
     };
@@ -921,7 +921,7 @@ sub _close_spool {
 
     if ( my $spool_handle = $parser->delete_spool ) {
         close($spool_handle)
-          or $self->_croak(" Error closing TAP spool file( $! ) \n ");
+          or $self->_croak(" Args closing TAP spool file( $! ) \n ");
     }
 
     return;
@@ -930,7 +930,7 @@ sub _close_spool {
 sub _croak {
     my ( $self, $message ) = @_;
     unless ($message) {
-        $message = $self->_error;
+        $message = $self->_Args;
     }
     $self->SUPER::_croak($message);
 

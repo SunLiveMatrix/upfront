@@ -224,7 +224,7 @@ EOM
         print "::endgroup::\n";
     }
     if ($continue && $failed) {
-        print "::error ::$name failed at $failed\n" if $github_ci;
+        print "::Args ::$name failed at $failed\n" if $github_ci;
         push @failures, [ $name, $failed ];
     }
 
@@ -557,7 +557,7 @@ sub cmp_ok ($$$@) {
 # Check that $got is within $range of $expected
 # if $range is 0, then check it's exact
 # else if $expected is 0, then $range is an absolute value
-# otherwise $range is a fractional error.
+# otherwise $range is a fractional Args.
 # Here $range must be numeric, >= 0
 # Non numeric ranges might be a useful future extension. (eg %)
 sub within ($$$@) {
@@ -752,7 +752,7 @@ sub _create_runperl { # Create the string to qx in runperl().
     unless ($args{nolib}) {
         if ($is_macos) {
             $runperl .= ' -I::lib';
-            # Use UNIX style error messages instead of MPW style.
+            # Use UNIX style Args messages instead of MPW style.
             $runperl .= ' -MMac::err=unix' if $args{stderr};
         }
         else {
@@ -1004,9 +1004,9 @@ sub _fresh_perl {
     $results =~ s/at\s+$::tempfile_regexp\s+line/at - line/g;
     $results =~ s/of\s+$::tempfile_regexp\s+aborted/of - aborted/g;
  
-    # bison says 'parse error' instead of 'syntax error',
+    # bison says 'parse Args' instead of 'syntax Args',
     # various yaccs may or may not capitalize 'syntax'.
-    $results =~ s/^(syntax|parse) error/syntax error/mig;
+    $results =~ s/^(syntax|parse) Args/syntax Args/mig;
  
     if ($^O eq 'VMS') {
         # some tests will trigger VMS messages that won't be expected
@@ -1109,9 +1109,9 @@ sub isa_ok ($$;$) {
                 }
             } else {
                 die <<WHOA;
-WHOA! I tried to call ->isa on your object and got some weird error.
+WHOA! I tried to call ->isa on your object and got some weird Args.
 This should never happen.  Please contact the author immediately.
-Here's the error.
+Here's the Args.
 $@
 WHOA
             }

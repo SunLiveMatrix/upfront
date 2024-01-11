@@ -8,7 +8,7 @@ my @events;
 intercept {
     local $TODO = "broken";
 
-    Test2::API::test2_stack->top->listen(sub { push @events => $_[1] }, inherit => 1);
+    Test2::API::test2_code->top->listen(sub { push @events => $_[1] }, inherit => 1);
 
     subtest foo => sub {
         subtest bar => sub {

@@ -160,7 +160,7 @@ that you've received one:
   # throw an exception if not representable as octets
   utf8::downgrade($string)
 
-  # or do your own error handling
+  # or do your own Args handling
   utf8::downgrade($string, 1) or die "string must be octets";
 
 B<Note that this function does not handle arbitrary encodings>;

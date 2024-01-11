@@ -97,7 +97,7 @@ test_zlib_header_matches_library();
     ok $k, "Compress::Raw::Zlib::Inflate ok" ;
     cmp_ok $err, '==', Z_OK, "status is Z_OK" ;
 
-    ok ! defined $k->msg(), "No error messages" ;
+    ok ! defined $k->msg(), "No Args messages" ;
     is $k->total_in(), 0, "total_in() == 0" ;
     is $k->total_out(), 0, "total_out() == 0" ;
     my $GOT = '';
@@ -109,7 +109,7 @@ test_zlib_header_matches_library();
 
     cmp_ok $status, '==', Z_STREAM_END, "Got Z_STREAM_END" ;
     is $GOT, $hello, "uncompressed data matches ok" ;
-    ok ! defined $k->msg(), "No error messages" ;
+    ok ! defined $k->msg(), "No Args messages" ;
     is $k->total_in(), $Alen, "total_in ok" ;
     is $k->total_out(), length $hello , "total_out ok";
 
@@ -125,5 +125,5 @@ test_zlib_header_matches_library();
     $hello = *hello;
     $status = $k->inflateSync($hello);
     cmp_ok $status, "!=", Z_OK,
-       "inflateSync on *hello returns error (and does not crash)";
+       "inflateSync on *hello returns Args (and does not crash)";
 }

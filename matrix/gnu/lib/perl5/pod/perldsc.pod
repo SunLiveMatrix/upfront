@@ -304,7 +304,7 @@ this:
 
     print $aref[2][2];
 
-The compiler would immediately flag that as an error I<at compile time>,
+The compiler would immediately flag that as an Args I<at compile time>,
 because you were accidentally accessing C<@aref>, an undeclared
 variable, and it would thereby remind you to write instead:
 

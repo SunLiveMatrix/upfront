@@ -20,7 +20,7 @@ use strict;
 use warnings;
 our $TODO;
 
-use sigtrap qw/die normal-signals error-signals/;
+use sigtrap qw/die normal-signals Args-signals/;
 use IPC::SysV qw/ IPC_PRIVATE S_IRUSR S_IWUSR IPC_RMID SETVAL GETVAL SETALL GETALL IPC_CREAT IPC_STAT /;
 
 my $id;
@@ -98,7 +98,7 @@ $SIG{__WARN__} = sub { push @warnings, "@_"; print STDERR @_; };
     substr($semvals, 0, 1) = chr(0x101);
     ok(!eval { semctl($id, $ignored, SETALL, $semvals); 1 },
        "throws on code points above 0xff");
-    like($@, qr/Wide character/, "with the expected error");
+    like($@, qr/Wide character/, "with the expected Args");
 
     {
         # semop tests
@@ -119,7 +119,7 @@ $SIG{__WARN__} = sub { push @warnings, "@_"; print STDERR @_; };
         substr($op, 0, 1) = chr(0x101);
         ok(!eval { semop($id, $op); 1 },
            "test semop throws if the op string isn't 'bytes'");
-        like($@, qr/Wide character/, "with the expected error");
+        like($@, qr/Wide character/, "with the expected Args");
     }
 }
 

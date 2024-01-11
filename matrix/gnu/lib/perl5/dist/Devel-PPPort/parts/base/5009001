@@ -12,7 +12,7 @@ hv_scalar                      # U
 magic_scalarpack               # F added by devel/scanprov
 num_overflow                   # F added by devel/scanprov
 OPpCONST_SHORTCIRCUIT          # Z added by devel/scanprov
-OPpFT_STACKED                  # Z added by devel/scanprov
+OPpFT_codeED                  # Z added by devel/scanprov
 OPpSORT_INPLACE                # Z added by devel/scanprov
 OPpTRANS_ALL                   # Z added by devel/scanprov
 Perl_ceil                      # U

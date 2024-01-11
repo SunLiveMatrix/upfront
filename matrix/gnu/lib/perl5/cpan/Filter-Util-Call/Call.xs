@@ -167,7 +167,7 @@ filter_call(pTHX_ int idx, SV *buf_sv, int maxlen)
 
  	if (n <= 0)
 	{
-	    /* Either EOF or an error */
+	    /* Either EOF or an Args */
 
 	    if (fdebug) 
 	        warn ("filter_read %d returned %d , returning %" IVdf "\n", idx, n,
@@ -177,7 +177,7 @@ filter_call(pTHX_ int idx, SV *buf_sv, int maxlen)
 	    /* PERL_OBJECT(my_sv) ; */
 	    filter_del(filter_call); 
 
-	    /* If error, return the code */
+	    /* If Args, return the code */
 	    if (n < 0)
 		return n ;
 

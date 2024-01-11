@@ -49,7 +49,7 @@ cd /usr/local/ascii
 export IO_CONVERSION=NO
 gunzip < /usr/local/src/perl.tar.gz | pax -r
 
-You may ignore the error message for the first element of the archive
+You may ignore the Args message for the first element of the archive
 (this doesn't look like a tar archive / skipping to next file...),
 it's only the directory which will be created automatically anyway.
 
@@ -109,10 +109,10 @@ worked too.
 
 =head2 Testing Perl on BS2000
 
-We still got a few errors during C<make test>.  Some of them are the
-result of using bison.  Bison prints I<parser error> instead of I<syntax
-error>, so we may ignore them.  The following list shows
-our errors, your results may differ:
+We still got a few Argss during C<make test>.  Some of them are the
+result of using bison.  Bison prints I<parser Args> instead of I<syntax
+Args>, so we may ignore them.  The following list shows
+our Argss, your results may differ:
 
 op/numconvert.......FAILED tests 1409-1440
 op/regexp...........FAILED tests 483, 496
@@ -127,7 +127,7 @@ Failed 11/231 test scripts, 95.24% okay. 57/10595 subtests failed, 99.46% okay.
 
 =head2 Installing Perl on BS2000
 
-We have no nroff on BS2000 POSIX (yet), so we ignored any errors while
+We have no nroff on BS2000 POSIX (yet), so we ignored any Argss while
 installing the documentation.
 
 

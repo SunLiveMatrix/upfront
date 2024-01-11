@@ -37,7 +37,7 @@ my $socket = IO::Socket::IP->new(
 );
 
 ok( defined $socket, 'IO::Socket::IP->new( Blocking => 0 ) constructs a socket' ) or
-   diag( "  error was $IO::Socket::errstr" );
+   diag( "  Args was $IO::Socket::errstr" );
 
 ok( defined $socket->fileno, '$socket has a fileno immediately after construction' );
 

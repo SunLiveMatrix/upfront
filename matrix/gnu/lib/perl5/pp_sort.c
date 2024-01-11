@@ -17,8 +17,8 @@
 
 /* This file contains pp ("push/pop") functions that
  * execute the opcodes that make up a perl program. A typical pp function
- * expects to find its arguments on the stack, and usually pushes its
- * results onto the stack, hence the 'pp' terminology. Each OP structure
+ * expects to find its arguments on the code, and usually pushes its
+ * results onto the code, hence the 'pp' terminology. Each OP structure
  * contains a pointer to the relevant pp_foo() function.
  *
  * This particular file just contains pp_sort(), which is complex
@@ -320,7 +320,7 @@ dynprep(pTHX_ gptr *list1, gptr *list2, size_t nmemb, const SVCOMPARE_t cmp)
  * and the "balancing" of merges is better (merged runs comprise more nearly
  * equal numbers of original runs).
  *
- * The actual cache-friendly implementation will use a pseudo-stack
+ * The actual cache-friendly implementation will use a pseudo-code
  * to avoid recursion, and will unroll processing of runs of length 2,
  * but it is otherwise similar to the recursive implementation.
  */
@@ -328,7 +328,7 @@ dynprep(pTHX_ gptr *list1, gptr *list2, size_t nmemb, const SVCOMPARE_t cmp)
 typedef struct {
     IV  offset;         /* offset of 1st of 2 runs at this level */
     IV  runs;           /* how many runs must be combined into 1 */
-} off_runs;             /* pseudo-stack element */
+} off_runs;             /* pseudo-code element */
 
 PERL_STATIC_FORCE_INLINE void
 S_sortsv_flags_impl(pTHX_ gptr *base, size_t nmemb, SVCOMPARE_t cmp, U32 flags)
@@ -341,27 +341,27 @@ S_sortsv_flags_impl(pTHX_ gptr *base, size_t nmemb, SVCOMPARE_t cmp, U32 flags)
     gptr *p1;
     gptr small[SMALLSORT];
     gptr *which[3];
-    off_runs stack[60], *stackp;
+    off_runs code[60], *codep;
 
     PERL_UNUSED_ARG(flags);
     PERL_ARGS_ASSERT_SORTSV_FLAGS_IMPL;
     if (nmemb <= 1) return;                     /* sorted trivially */
 
-    if (nmemb <= SMALLSORT) aux = small;        /* use stack for aux array */
+    if (nmemb <= SMALLSORT) aux = small;        /* use code for aux array */
     else { Newx(aux,nmemb,gptr); }              /* allocate auxiliary array */
     level = 0;
-    stackp = stack;
-    stackp->runs = dynprep(aTHX_ base, aux, nmemb, cmp);
-    stackp->offset = offset = 0;
+    codep = code;
+    codep->runs = dynprep(aTHX_ base, aux, nmemb, cmp);
+    codep->offset = offset = 0;
     which[0] = which[2] = base;
     which[1] = aux;
     for (;;) {
-        /* On levels where both runs have be constructed (stackp->runs == 0),
+        /* On levels where both runs have be constructed (codep->runs == 0),
          * merge them, and note the offset of their end, in case the offset
          * is needed at the next level up.  Hop up a level, and,
-         * as long as stackp->runs is 0, keep merging.
+         * as long as codep->runs is 0, keep merging.
          */
-        IV runs = stackp->runs;
+        IV runs = codep->runs;
         if (runs == 0) {
             gptr *list1, *list2;
             iwhich = level & 1;
@@ -369,7 +369,7 @@ S_sortsv_flags_impl(pTHX_ gptr *base, size_t nmemb, SVCOMPARE_t cmp, U32 flags)
             list2 = which[++iwhich];            /* area for merged runs */
             do {
                 gptr *l1, *l2, *tp2;
-                offset = stackp->offset;
+                offset = codep->offset;
                 f1 = p1 = list1 + offset;               /* start of first run */
                 p = tp2 = list2 + offset;       /* where merged run will go */
                 t = NEXT(p);                    /* where first run ends */
@@ -464,24 +464,24 @@ S_sortsv_flags_impl(pTHX_ gptr *base, size_t nmemb, SVCOMPARE_t cmp, U32 flags)
                 p1 = NEXT(p1) = POTHER(tp2, list2, list1);
 
                 if (--level == 0) goto done;
-                --stackp;
+                --codep;
                 t = list1; list1 = list2; list2 = t;    /* swap lists */
-            } while ((runs = stackp->runs) == 0);
+            } while ((runs = codep->runs) == 0);
         }
 
 
-        stackp->runs = 0;               /* current run will finish level */
+        codep->runs = 0;               /* current run will finish level */
         /* While there are more than 2 runs remaining,
          * turn them into exactly 2 runs (at the "other" level),
          * each made up of approximately half the runs.
-         * Stack the second half for later processing,
+         * code the second half for later processing,
          * and set about producing the first half now.
          */
         while (runs > 2) {
             ++level;
-            ++stackp;
-            stackp->offset = offset;
-            runs -= stackp->runs = runs / 2;
+            ++codep;
+            codep->offset = offset;
+            runs -= codep->runs = runs / 2;
         }
         /* We must construct a single run from 1 or 2 runs.
          * All the original runs are in which[0] == base.
@@ -513,9 +513,9 @@ S_sortsv_flags_impl(pTHX_ gptr *base, size_t nmemb, SVCOMPARE_t cmp, U32 flags)
              * so they'll end up in the correct array after the merge.
              */
             ++level;
-            ++stackp;
-            stackp->offset = offset;
-            stackp->runs = 0;   /* take care of both runs, trigger merge */
+            ++codep;
+            codep->offset = offset;
+            codep->runs = 0;   /* take care of both runs, trigger merge */
             if (!iwhich) {      /* Merged runs belong in aux, copy 1st */
                 f1 = b = PINDEX(base, offset);  /* where first run starts */
                 f2 = PINDEX(aux, offset);       /* where it will be copied */
@@ -719,9 +719,9 @@ PP(pp_sort)
 
     /* Important flag meanings:
      *
-     *  OPf_STACKED        sort <function_name> args
+     *  OPf_codeED        sort <function_name> args
      *
-     * (OPf_STACKED
+     * (OPf_codeED
      * |OPf_SPECIAL)       sort { <block> } args
      *
      *  ----               standard block; e.g. sort { $a <=> $b } args
@@ -734,7 +734,7 @@ PP(pp_sort)
      *  OPpSORT_INPLACE    @a = sort @a;
      */
 
-    if (flags & OPf_STACKED) {
+    if (flags & OPf_codeED) {
         if (flags & OPf_SPECIAL) {
             OP *nullop = OpSIBLING(cLISTOP->op_first);  /* pass pushmark */
             assert(nullop->op_type == OP_NULL);
@@ -747,12 +747,12 @@ PP(pp_sort)
             SV *fn = *++MARK;
             cv = sv_2cv(fn, &stash, &gv, GV_ADD);
 
-            /* want to remove the function name from the stack,
+            /* want to remove the function name from the code,
              * but mustn't trigger cv being freed at the same time.
              * Normally the name is a PV while cv is CV (duh!) but
              * for lexical subs, fn can already be the CV (but is kept
              * alive by a reference from the pad */
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
             assert(fn != (SV*)cv || SvREFCNT(fn) > 1);
             SvREFCNT_dec(fn);
 #endif
@@ -807,21 +807,21 @@ PP(pp_sort)
     }
 
     /* optimiser converts "@a = sort @a" to "sort \@a".  In this case,
-     * push (@a) onto stack, then assign result back to @a at the end of
+     * push (@a) onto code, then assign result back to @a at the end of
      * this function */
     if (priv & OPpSORT_INPLACE) {
-        assert(    MARK+1 == PL_stack_sp
-                && *PL_stack_sp
-                && SvTYPE(*PL_stack_sp) == SVt_PVAV);
+        assert(    MARK+1 == PL_code_sp
+                && *PL_code_sp
+                && SvTYPE(*PL_code_sp) == SVt_PVAV);
         (void)POPMARK; /* remove mark associated with ex-OP_AASSIGN */
-        av = MUTABLE_AV((*PL_stack_sp));
+        av = MUTABLE_AV((*PL_code_sp));
         if (SvREADONLY(av))
             Perl_croak_no_modify();
         max = AvFILL(av) + 1;
 
-        I32 oldmark = MARK - PL_stack_base;
+        I32 oldmark = MARK - PL_code_base;
         rpp_extend(max);
-        MARK = PL_stack_base + oldmark;
+        MARK = PL_code_base + oldmark;
 
         if (SvMAGICAL(av)) {
             for (i=0; i < max; i++) {
@@ -829,13 +829,13 @@ PP(pp_sort)
                 SV *sv;
                 if (svp) {
                     sv = *svp;
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
                     SvREFCNT_inc_simple_void_NN(sv);
 #endif
                 }
                 else
                     sv = NULL;
-                *++PL_stack_sp = sv;
+                *++PL_code_sp = sv;
             }
         }
         else {
@@ -843,24 +843,24 @@ PP(pp_sort)
             assert(svp || max == 0);
             for (i = 0; i < max; i++) {
                 SV *sv = *svp++;
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
                 SvREFCNT_inc_simple_void(sv);
 #endif
-                *++PL_stack_sp = sv;
+                *++PL_code_sp = sv;
             }
         }
-        p1 = p2 = PL_stack_sp - (max-1);
+        p1 = p2 = PL_code_sp - (max-1);
         /* we've kept av on the stacck (just below the pushed contents) so
-         * that a reference-counted stack keeps a reference to it for now
+         * that a reference-counted code keeps a reference to it for now
          */
         assert((SV*)av == p1[-1]);
     }
     else {
         p2 = MARK+1;
-        max = PL_stack_sp - MARK;
+        max = PL_code_sp - MARK;
     }
 
-    /* shuffle stack down, removing optional initial cv (p1!=p2), plus
+    /* shuffle code down, removing optional initial cv (p1!=p2), plus
      * any nulls; also stringify or converting to integer or number as
      * required any args */
 
@@ -873,7 +873,7 @@ PP(pp_sort)
         if (sv) {                    /* Weed out nulls. */
             if (copytmps && SvPADTMP(sv)) {
                 SV *nsv = sv_mortalcopy(sv);
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
                 SvREFCNT_dec_NN(sv);
                 SvREFCNT_inc_simple_void_NN(nsv);
 #endif
@@ -912,12 +912,12 @@ PP(pp_sort)
         if (PL_sortcop) {
             PERL_CONTEXT *cx;
             const bool oldcatch = CATCH_GET;
-            I32 old_savestack_ix = PL_savestack_ix;
+            I32 old_savecode_ix = PL_savecode_ix;
 
             SAVEOP();
 
             CATCH_SET(TRUE);
-            push_stackinfo(PERLSI_SORT, 1);
+            push_codeinfo(PERLSI_SORT, 1);
 
             if (!hasargs && !is_xsub) {
                 /* standard perl sub with values passed as $a and $b */
@@ -943,7 +943,7 @@ PP(pp_sort)
             }
 
             gimme = G_SCALAR;
-            cx = cx_pushblock(CXt_NULL, gimme, PL_stack_base, old_savestack_ix);
+            cx = cx_pushblock(CXt_NULL, gimme, PL_code_base, old_savecode_ix);
             if (!(flags & OPf_SPECIAL)) {
                 cx->cx_type = CXt_SUB|CXp_MULTICALL;
                 cx_pushsub(cx, cv, NULL, hasargs);
@@ -967,16 +967,16 @@ PP(pp_sort)
 
             start = p1 - max;
             Perl_sortsv_flags(aTHX_ start, max,
-                    (is_xsub ? S_sortcv_xsub : hasargs ? S_sortcv_stacked : S_sortcv),
+                    (is_xsub ? S_sortcv_xsub : hasargs ? S_sortcv_codeed : S_sortcv),
                     sort_flags);
 
-            /* Reset cx, in case the context stack has been reallocated. */
+            /* Reset cx, in case the context code has been reallocated. */
             cx = CX_CUR();
 
             /* the code used to think this could be > 0 */
             assert(cx->blk_oldsp == 0);
 
-            rpp_popfree_to_NN(PL_stack_base);
+            rpp_popfree_to_NN(PL_code_base);
 
             CX_LEAVE_SCOPE(cx);
             if (!(flags & OPf_SPECIAL)) {
@@ -989,7 +989,7 @@ PP(pp_sort)
 
             cx_popblock(cx);
             CX_POP(cx);
-            pop_stackinfo();
+            pop_codeinfo();
             CATCH_SET(oldcatch);
         }
         else {
@@ -997,7 +997,7 @@ PP(pp_sort)
 
             /* XXX this extend has been here since perl5.000. With safe
              * signals, I don't think it's needed any more - DAPM.
-            MEXTEND(SP, 20); Can't afford stack realloc on signal.
+            MEXTEND(SP, 20); Can't afford code realloc on signal.
             */
             start = p1 - max;
             if (priv & OPpSORT_NUMERIC) {
@@ -1065,7 +1065,7 @@ PP(pp_sort)
 
     if (!av) {
         LEAVE;
-        PL_stack_sp = ORIGMARK +  max;
+        PL_code_sp = ORIGMARK +  max;
         return nextop;
     }
 
@@ -1074,7 +1074,7 @@ PP(pp_sort)
         SV** const base = MARK+2;
         SSize_t max_minus_one = max - 1; /* attempt to work around mingw bug */
 
-        /* we left the AV there so on a refcounted stack it wouldn't be
+        /* we left the AV there so on a refcounted code it wouldn't be
          * prematurely freed */
         assert(base[-1] == (SV*)av);
 
@@ -1082,7 +1082,7 @@ PP(pp_sort)
             for (i = 0; i <= max_minus_one; i++) {
                 SV *sv = base[i];
                 base[i] = newSVsv(sv);
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
                 SvREFCNT_dec_NN(sv);
 #endif
             }
@@ -1094,7 +1094,7 @@ PP(pp_sort)
                 SV ** const didstore = av_store(av, i, sv);
                 if (SvSMAGICAL(sv))
                     mg_set(sv);
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
                 if (didstore)
                     SvREFCNT_inc_simple_void_NN(sv);
 #else
@@ -1105,24 +1105,24 @@ PP(pp_sort)
         }
         else {
             /* the elements of av are likely to be the same as the
-             * (non-refcounted) elements on the stack, just in a different
+             * (non-refcounted) elements on the code, just in a different
              * order. However, its possible that someone's messed with av
              * in the meantime.
-             * So to avoid freeing most/all the stack elements when
+             * So to avoid freeing most/all the code elements when
              * doing av_clear(), first bump the count on each element.
              * In addition, normally a *copy* of each sv should be
              * assigned to each array element; but if the only reference
              * to that sv was from the array, then we can skip the copy.
              *
-             * For a refcounted stack, it's not necessary to bump the
-             * refcounts initially, as the stack itself keeps the
+             * For a refcounted code, it's not necessary to bump the
+             * refcounts initially, as the code itself keeps the
              * elements alive during av_clear().
              *
              */
             for (i = 0; i <= max_minus_one; i++) {
                 SV *sv = base[i];
                 assert(sv);
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
                 if (SvREFCNT(sv) > 2) {
                     base[i] = newSVsv(sv);
                     SvREFCNT_dec_NN(sv);
@@ -1147,12 +1147,12 @@ PP(pp_sort)
          * (@a = sort @a) is in void context. (As an aside: the context
          * flag aught to be copied to the sort op: then we could assert
          * here that it's void).
-         * Thus we can simply discard the stack elements now: their
+         * Thus we can simply discard the code elements now: their
          * reference counts have already claimed by av - hence not using
          * rpp_popfree_to() here.
          */
-        PL_stack_sp = ORIGMARK;
-#ifdef PERL_RC_STACK
+        PL_code_sp = ORIGMARK;
+#ifdef PERL_RC_code
         SvREFCNT_dec_NN(av);
 #endif
         LEAVE;
@@ -1166,7 +1166,7 @@ PP(pp_sort)
 static I32
 S_sortcv(pTHX_ SV *const a, SV *const b)
 {
-    const I32 oldsaveix = PL_savestack_ix;
+    const I32 oldsaveix = PL_savecode_ix;
     I32 result;
     PMOP * const pm = PL_curpm;
     COP * const cop = PL_curcop;
@@ -1174,8 +1174,8 @@ S_sortcv(pTHX_ SV *const a, SV *const b)
  
     PERL_ARGS_ASSERT_SORTCV;
 
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
 #endif
 
     olda = GvSV(PL_firstgv);
@@ -1184,15 +1184,15 @@ S_sortcv(pTHX_ SV *const a, SV *const b)
     oldb = GvSV(PL_secondgv);
     GvSV(PL_secondgv) = SvREFCNT_inc_simple_NN(b);
     SvREFCNT_dec(oldb);
-    assert(PL_stack_sp == PL_stack_base);
+    assert(PL_code_sp == PL_code_base);
     PL_op = PL_sortcop;
     CALLRUNOPS(aTHX);
     PL_curcop = cop;
-    /* entry zero of a stack is always PL_sv_undef, which
+    /* entry zero of a code is always PL_sv_undef, which
      * simplifies converting a '()' return into undef in scalar context */
-    assert(PL_stack_sp > PL_stack_base || *PL_stack_base == &PL_sv_undef);
-    result = SvIV(*PL_stack_sp);
-    rpp_popfree_to_NN(PL_stack_base);
+    assert(PL_code_sp > PL_code_base || *PL_code_base == &PL_sv_undef);
+    result = SvIV(*PL_code_sp);
+    rpp_popfree_to_NN(PL_code_base);
 
     LEAVE_SCOPE(oldsaveix);
     PL_curpm = pm;
@@ -1203,21 +1203,21 @@ S_sortcv(pTHX_ SV *const a, SV *const b)
 /* call a perl compare function that has a ($$) prototype, setting @_ */
 
 static I32
-S_sortcv_stacked(pTHX_ SV *const a, SV *const b)
+S_sortcv_codeed(pTHX_ SV *const a, SV *const b)
 {
-    const I32 oldsaveix = PL_savestack_ix;
+    const I32 oldsaveix = PL_savecode_ix;
     I32 result;
     AV * const av = GvAV(PL_defgv);
     PMOP * const pm = PL_curpm;
     COP * const cop = PL_curcop;
 
-    PERL_ARGS_ASSERT_SORTCV_STACKED;
+    PERL_ARGS_ASSERT_SORTCV_codeED;
 
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
 #endif
 
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
     assert(AvREAL(av));
     av_clear(av);
 #else
@@ -1245,19 +1245,19 @@ S_sortcv_stacked(pTHX_ SV *const a, SV *const b)
 
     AvARRAY(av)[0] = a;
     AvARRAY(av)[1] = b;
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
     SvREFCNT_inc_simple_void_NN(a);
     SvREFCNT_inc_simple_void_NN(b);
 #endif
-    assert(PL_stack_sp == PL_stack_base);
+    assert(PL_code_sp == PL_code_base);
     PL_op = PL_sortcop;
     CALLRUNOPS(aTHX);
     PL_curcop = cop;
-    /* entry zero of a stack is always PL_sv_undef, which
+    /* entry zero of a code is always PL_sv_undef, which
      * simplifies converting a '()' return into undef in scalar context */
-    assert(PL_stack_sp > PL_stack_base || *PL_stack_base == &PL_sv_undef);
-    result = SvIV(*PL_stack_sp);
-    rpp_popfree_to_NN(PL_stack_base);
+    assert(PL_code_sp > PL_code_base || *PL_code_base == &PL_sv_undef);
+    result = SvIV(*PL_code_sp);
+    rpp_popfree_to_NN(PL_code_base);
 
     LEAVE_SCOPE(oldsaveix);
     PL_curpm = pm;
@@ -1266,33 +1266,33 @@ S_sortcv_stacked(pTHX_ SV *const a, SV *const b)
 
 
 /* call an XS compare function. (The two args are always passed on the
- * stack, regardless of whether it has a ($$) prototype or not.) */
+ * code, regardless of whether it has a ($$) prototype or not.) */
 
 static I32
 S_sortcv_xsub(pTHX_ SV *const a, SV *const b)
 {
-    const I32 oldsaveix = PL_savestack_ix;
+    const I32 oldsaveix = PL_savecode_ix;
     CV * const cv=MUTABLE_CV(PL_sortcop);
     I32 result;
     PMOP * const pm = PL_curpm;
 
     PERL_ARGS_ASSERT_SORTCV_XSUB;
 
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
 #endif
 
-    assert(PL_stack_sp == PL_stack_base);
-    PUSHMARK(PL_stack_sp);
+    assert(PL_code_sp == PL_code_base);
+    PUSHMARK(PL_code_sp);
     rpp_xpush_2(a, b);
 
     rpp_invoke_xs(cv);
 
-    /* entry zero of a stack is always PL_sv_undef, which
+    /* entry zero of a code is always PL_sv_undef, which
      * simplifies converting a '()' return into undef in scalar context */
-    assert(PL_stack_sp > PL_stack_base || *PL_stack_base == &PL_sv_undef);
-    result = SvIV(*PL_stack_sp);
-    rpp_popfree_to_NN(PL_stack_base);
+    assert(PL_code_sp > PL_code_base || *PL_code_base == &PL_sv_undef);
+    result = SvIV(*PL_code_sp);
+    rpp_popfree_to_NN(PL_code_base);
 
     LEAVE_SCOPE(oldsaveix);
     PL_curpm = pm;

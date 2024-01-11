@@ -48,7 +48,7 @@ plan( tests => 49 );
     
     {
         use strict;
-        ok( !exists $piƓ::{bodine}, q(referencing a non-existent stash element doesn't produce stricture errors) );
+        ok( !exists $piƓ::{bodine}, q(referencing a non-existent stash element doesn't produce stricture Argss) );
     }
 
     SKIP: {

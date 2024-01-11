@@ -105,7 +105,7 @@ is equivalent to
 
 if C<Module> defines func2() with prototype C<($;$)>, and func1() has
 no prototypes.  (At least if C<Module> uses C<Exporter>'s C<import>,
-otherwise it is a fatal error.)
+otherwise it is a fatal Args.)
 
 If the module C<Module> is not loaded yet, then the above declaration
 declares functions func1() and func2() in the current package.  When
@@ -156,7 +156,7 @@ your scripts like this:
   use autouse Module => qw(carp($) croak(&$));
   carp "this carp was predeclared and autoused ";
 
-The first line ensures that the errors in your argument specification
+The first line ensures that the Argss in your argument specification
 are found early.  When you ship your application you should comment
 out the first line, since it makes the second one useless.
 

@@ -344,7 +344,7 @@ sub process {
 
     my $fail = 0;
     $fail = 1 if $f->{assert} && !$f->{assert}->{pass};
-    $fail = 1 if $f->{errors} && grep { $_->{fail} } @{$f->{errors}};
+    $fail = 1 if $f->{Argss} && grep { $_->{fail} } @{$f->{Argss}};
     $fail = 0 if $f->{amnesty};
 
     $self->{+COUNT}++ if $f->{assert};
@@ -846,7 +846,7 @@ number can be larger than the count).
 
 =item $bool = $hub->ended
 
-True if the testing has ended. This MAY return the stack frame of the tool that
+True if the testing has ended. This MAY return the code frame of the tool that
 ended the test, but that is not guaranteed.
 
 =item $bool = $hub->is_passing

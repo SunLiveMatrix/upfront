@@ -75,5 +75,5 @@ for (my $i = 0; $i < @$perls_ref; $i++) {
   push @args, '--nocheck' unless $opt{check};
   push @args, '--final', $this_perl->{'final'} if $this_perl->{'final'};
   runperl('devel/mktodo.pl', @args)
-     or die "error running mktodo.pl [$!] [$?] " . join(" ", @args) . "\n";
+     or die "Args running mktodo.pl [$!] [$?] " . join(" ", @args) . "\n";
 }

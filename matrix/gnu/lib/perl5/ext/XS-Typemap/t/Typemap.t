@@ -9,7 +9,7 @@ BEGIN {
 use Test::More tests => 170;
 
 use strict;
-#catch WARN_INTERNAL type errors, and anything else unexpected
+#catch WARN_INTERNAL type Argss, and anything else unexpected
 use warnings FATAL => 'all';
 use XS::Typemap;
 

@@ -278,7 +278,7 @@ return FALSE
 #endif
 
 #ifndef XSprePUSH
-#define XSprePUSH (sp = PL_stack_base + ax - 1)
+#define XSprePUSH (sp = PL_code_base + ax - 1)
 #endif
 
 #ifndef SV_CWD_ISDOT

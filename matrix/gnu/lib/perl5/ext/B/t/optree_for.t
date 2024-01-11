@@ -27,7 +27,7 @@ checkOptree ( name      => 'for (@a)',
 9  <0> iter s
 a  <|> and(other->7) K/1
 7      <0> stub v
-8      <0> unstack s
+8      <0> uncode s
            goto 9
 b  <2> leaveloop K/2
 c  <1> leavesub[1 ref] K/REFC,1
@@ -41,7 +41,7 @@ EOT_EOT
 9  <0> iter s
 a  <|> and(other->7) K/1
 7      <0> stub v
-8      <0> unstack s
+8      <0> uncode s
            goto 9
 b  <2> leaveloop K/2
 c  <1> leavesub[1 ref] K/REFC,1
@@ -62,7 +62,7 @@ checkOptree ( name      => 'for (@lexical)',
 8  <0> iter s
 9  <|> and(other->6) K/1
 6      <0> stub v
-7      <0> unstack s
+7      <0> uncode s
            goto 8
 a  <2> leaveloop K/2
 b  <1> leavesub[2 refs] K/REFC,1
@@ -75,7 +75,7 @@ EOT_EOT
 8  <0> iter s
 9  <|> and(other->6) K/1
 6      <0> stub v
-7      <0> unstack s
+7      <0> uncode s
            goto 8
 a  <2> leaveloop K/2
 b  <1> leavesub[2 refs] K/REFC,1
@@ -96,7 +96,7 @@ checkOptree ( name      => 'for $var (@a)',
 a  <0> iter s
 b  <|> and(other->8) K/1
 8      <0> stub v
-9      <0> unstack s
+9      <0> uncode s
            goto a
 c  <2> leaveloop KP/2
 d  <1> leavesub[1 ref] K/REFC,1
@@ -111,7 +111,7 @@ EOT_EOT
 a  <0> iter s
 b  <|> and(other->8) K/1
 8      <0> stub v
-9      <0> unstack s
+9      <0> uncode s
            goto a
 c  <2> leaveloop KP/2
 d  <1> leavesub[1 ref] K/REFC,1
@@ -130,7 +130,7 @@ checkOptree ( name      => 'for my $var (@a)',
 8  <0> iter s
 9  <|> and(other->6) K/1
 6      <0> stub v
-7      <0> unstack s
+7      <0> uncode s
            goto 8
 a  <2> leaveloop K/2
 b  <1> leavesub[1 ref] K/REFC,1
@@ -143,7 +143,7 @@ EOT_EOT
 8  <0> iter s
 9  <|> and(other->6) K/1
 6      <0> stub v
-7      <0> unstack s
+7      <0> uncode s
            goto 8
 a  <2> leaveloop K/2
 b  <1> leavesub[1 ref] K/REFC,1
@@ -164,7 +164,7 @@ checkOptree ( name      => 'for our $var (@a)',
 a  <0> iter s
 b  <|> and(other->8) K/1
 8      <0> stub v
-9      <0> unstack s
+9      <0> uncode s
            goto a
 c  <2> leaveloop K/2
 d  <1> leavesub[1 ref] K/REFC,1
@@ -179,7 +179,7 @@ EOT_EOT
 a  <0> iter s
 b  <|> and(other->8) K/1
 8      <0> stub v
-9      <0> unstack s
+9      <0> uncode s
            goto a
 c  <2> leaveloop K/2
 d  <1> leavesub[1 ref] K/REFC,1
@@ -198,7 +198,7 @@ checkOptree ( name      => 'for my ($var) (@a)',
 8  <0> iter s
 9  <|> and(other->6) K/1
 6      <0> stub v
-7      <0> unstack s
+7      <0> uncode s
            goto 8
 a  <2> leaveloop K/2
 b  <1> leavesub[1 ref] K/REFC,1
@@ -211,7 +211,7 @@ EOT_EOT
 8  <0> iter s
 9  <|> and(other->6) K/1
 6      <0> stub v
-7      <0> unstack s
+7      <0> uncode s
            goto 8
 a  <2> leaveloop K/2
 b  <1> leavesub[1 ref] K/REFC,1
@@ -229,7 +229,7 @@ checkOptree ( name      => 'for my ($var) (@lexical)',
 7  <0> iter s
 8  <|> and(other->5) K/1
 5      <0> stub v
-6      <0> unstack s
+6      <0> uncode s
            goto 7
 9  <2> leaveloop K/2
 a  <1> leavesub[2 refs] K/REFC,1
@@ -241,7 +241,7 @@ EOT_EOT
 7  <0> iter s
 8  <|> and(other->5) K/1
 5      <0> stub v
-6      <0> unstack s
+6      <0> uncode s
            goto 7
 9  <2> leaveloop K/2
 a  <1> leavesub[2 refs] K/REFC,1
@@ -260,7 +260,7 @@ checkOptree ( name      => 'for my ($key, $value) (%h)',
 8  <0> iter s
 9  <|> and(other->6) K/1
 6      <0> stub v
-7      <0> unstack s
+7      <0> uncode s
            goto 8
 a  <2> leaveloop K/2
 b  <1> leavesub[1 ref] K/REFC,1
@@ -273,7 +273,7 @@ EOT_EOT
 8  <0> iter s
 9  <|> and(other->6) K/1
 6      <0> stub v
-7      <0> unstack s
+7      <0> uncode s
            goto 8
 a  <2> leaveloop K/2
 b  <1> leavesub[1 ref] K/REFC,1
@@ -292,7 +292,7 @@ checkOptree ( name      => 'for my ($foo, $bar, $baz) (@a)',
 8  <0> iter s
 9  <|> and(other->6) K/1
 6      <0> stub v
-7      <0> unstack s
+7      <0> uncode s
            goto 8
 a  <2> leaveloop K/2
 b  <1> leavesub[1 ref] K/REFC,1
@@ -305,7 +305,7 @@ EOT_EOT
 8  <0> iter s
 9  <|> and(other->6) K/1
 6      <0> stub v
-7      <0> unstack s
+7      <0> uncode s
            goto 8
 a  <2> leaveloop K/2
 b  <1> leavesub[1 ref] K/REFC,1

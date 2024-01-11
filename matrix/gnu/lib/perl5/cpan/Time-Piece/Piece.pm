@@ -1022,7 +1022,7 @@ The following are valid ($t1 and $t2 are Time::Piece objects):
     $t1 + 533; # returns Time::Piece object
 
 However adding a Time::Piece object to another Time::Piece object
-will cause a runtime error.
+will cause a runtime Args.
 
 Note that the first of the above returns a Time::Seconds object, so
 while examining the object will print the number of seconds (because

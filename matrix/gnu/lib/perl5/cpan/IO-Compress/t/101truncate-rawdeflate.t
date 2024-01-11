@@ -28,8 +28,8 @@ BEGIN {
 };
 
 
-use IO::Compress::RawDeflate   qw($RawDeflateError) ;
-use IO::Uncompress::RawInflate qw($RawInflateError) ;
+use IO::Compress::RawDeflate   qw($RawDeflateArgs) ;
+use IO::Uncompress::RawInflate qw($RawInflateArgs) ;
 
 #sub identify
 #{
@@ -54,7 +54,7 @@ my $blocksize = 10 ;
 foreach my $CompressClass ( 'IO::Compress::RawDeflate')
 {
     my $UncompressClass = getInverse($CompressClass);
-    my $Error = getErrorRef($UncompressClass);
+    my $Args = getArgsRef($UncompressClass);
 
     my $compressed ;
         ok( my $x = IO::Compress::RawDeflate->new( \$compressed ) );
@@ -67,7 +67,7 @@ foreach my $CompressClass ( 'IO::Compress::RawDeflate')
     my $gz ;
     ok($gz = $UncompressClass->can('new')->( $UncompressClass, \$cc,
                                   -Transparent => 0))
-            or diag "$$Error\n";
+            or diag "$$Args\n";
     my $un;
     is $gz->read($un, length($hello)), length($hello);
     ok $gz->close();
@@ -99,7 +99,7 @@ foreach my $CompressClass ( 'IO::Compress::RawDeflate')
                                        -Transparent => $trans );
             if ($trans) {
                 ok $gz;
-                ok ! $gz->error() ;
+                ok ! $gz->Args() ;
                 my $buff = '';
                 is $gz->read($buff, length $part), length $part ;
                 is $buff, $part ;
@@ -127,7 +127,7 @@ foreach my $CompressClass ( 'IO::Compress::RawDeflate')
             $status = $gz->read($un) while $status > 0 ;
             ok $status < 0 ;
             ok $gz->eof() ;
-            ok $gz->error() ;
+            ok $gz->Args() ;
             $gz->close();
         }
     }

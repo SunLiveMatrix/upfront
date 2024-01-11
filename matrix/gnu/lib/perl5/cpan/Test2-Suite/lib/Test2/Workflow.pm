@@ -4,7 +4,7 @@ use warnings;
 
 our $VERSION = '0.000159';
 
-our @EXPORT_OK = qw/parse_args current_build build root_build init_root build_stack/;
+our @EXPORT_OK = qw/parse_args current_build build root_build init_root build_code/;
 use base 'Exporter';
 
 use Test2::Workflow::Build;
@@ -60,11 +60,11 @@ sub parse_args {
 
 {
     my %ROOT_BUILDS;
-    my @BUILD_STACK;
+    my @BUILD_code;
 
     sub root_build    { $ROOT_BUILDS{$_[0]} }
-    sub current_build { @BUILD_STACK ? $BUILD_STACK[-1] : undef }
-    sub build_stack   { @BUILD_STACK }
+    sub current_build { @BUILD_code ? $BUILD_code[-1] : undef }
+    sub build_code   { @BUILD_code }
 
     sub init_root {
         my ($pkg, %args) = @_;
@@ -88,7 +88,7 @@ sub parse_args {
 
         return $build if $args->{skip};
 
-        push @BUILD_STACK => $build;
+        push @BUILD_code => $build;
 
         my ($ok, $err);
         my $events = intercept {
@@ -102,10 +102,10 @@ sub parse_args {
         $build->{stash} = [];
         $build->set_events($events);
 
-        pop @BUILD_STACK;
+        pop @BUILD_code;
 
         unless($ok) {
-            my $hub = Test2::API::test2_stack->top;
+            my $hub = Test2::API::test2_code->top;
             my $count = @$events;
             my $list = $count
                 ? "Overview of unseen events:\n" . join "" => map "    " . blessed($_) . " " . $_->trace($hub)->debug . "\n", @$events
@@ -147,7 +147,7 @@ extensions.
 
 L<Test2::Workflow::Build>
 
-A Build is used to compose tasks. Usually a build object is pushed to the stack
+A Build is used to compose tasks. Usually a build object is pushed to the code
 before running code that adds tasks to the build. Once the build sub is
 complete the build is popped and returned. Usually a build is converted into a
 root task or task group.
@@ -232,13 +232,13 @@ This will return the root build for the specified package.
 
 =item $build = current_build()
 
-This will return the build currently at the top of the build stack (or undef).
+This will return the build currently at the top of the build code (or undef).
 
 =item $build = build($name, \%params, sub { ... })
 
 This will push a new build object onto the build stash then run the provided
 codeblock. Once the codeblock has finished running the build will be popped off
-the stack and returned.
+the code and returned.
 
 See C<parse_args()> for details about argument processing.
 

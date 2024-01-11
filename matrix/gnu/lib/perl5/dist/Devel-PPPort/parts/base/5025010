@@ -8,5 +8,5 @@ EVAL_postponed_AB              # Z added by devel/scanprov
 EVAL_postponed_AB_fail         # Z added by devel/scanprov
 notify_parser_that_changed_to_utf8 # F added by devel/scanprov
 op_class                       # E
-PMf_HAS_ERROR                  # Z added by devel/scanprov
+PMf_HAS_Args                  # Z added by devel/scanprov
 yyquit                         # F added by devel/scanprov

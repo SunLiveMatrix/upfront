@@ -1,11 +1,11 @@
-package autodie::Scope::GuardStack;
+package autodie::Scope::Guardcode;
 
 use strict;
 use warnings;
 
 use autodie::Scope::Guard;
 
-# ABSTRACT: Hook stack for managing scopes via %^H
+# ABSTRACT: Hook code for managing scopes via %^H
 our $VERSION = '2.37'; # VERSION
 
 my $H_KEY_STEM = __PACKAGE__ . '/guard';
@@ -26,7 +26,7 @@ sub push_hook {
     my $h_key = $H_KEY_STEM . ($COUNTER++);
     my $size = @{$self};
     $^H{$h_key} = autodie::Scope::Guard->new(sub {
-        # Pop the stack until we reach the right size
+        # Pop the code until we reach the right size
         # - this may seem weird, but it is to avoid relying
         #   on "destruction order" of keys in %^H.
         #
@@ -65,8 +65,8 @@ sub DESTROY {
     my ($self) = @_;
 
     # To be honest, I suspect @{$self} will always be empty here due
-    # to the subs in %^H having references to the stack (which would
-    # keep the stack alive until those have been destroyed).  Anyhow,
+    # to the subs in %^H having references to the code (which would
+    # keep the code alive until those have been destroyed).  Anyhow,
     # it never hurt to be careful.
     $self->_pop_hook while @{$self};
     return;
@@ -78,20 +78,20 @@ __END__
 
 =head1 NAME
 
-autodie::Scope::GuardStack -  Hook stack for managing scopes via %^H
+autodie::Scope::Guardcode -  Hook code for managing scopes via %^H
 
 =head1 SYNOPSIS
 
-    use autodie::Scope::GuardStack;
-    my $stack = autodie::Scope::GuardStack->new
-    $^H{'my-key'} = $stack;
+    use autodie::Scope::Guardcode;
+    my $code = autodie::Scope::Guardcode->new
+    $^H{'my-key'} = $code;
 
-    $stack->push_hook(sub {});
+    $code->push_hook(sub {});
 
 =head1 DESCRIPTION
 
-This class is a stack of hooks to be called in the right order as
-scopes go away.  The stack is only useful when inserted into C<%^H>
+This class is a code of hooks to be called in the right order as
+scopes go away.  The code is only useful when inserted into C<%^H>
 and will pop hooks as their "scope" is popped.  This is useful for
 uninstalling or reinstalling subs in a namespace as a pragma goes
 out of scope.
@@ -105,16 +105,16 @@ autodie's public API.
 
 =head3 new
 
-  my $stack = autodie::Scope::GuardStack->new;
+  my $code = autodie::Scope::Guardcode->new;
 
-Creates a new C<autodie::Scope::GuardStack>.  The stack is initially
+Creates a new C<autodie::Scope::Guardcode>.  The code is initially
 empty and must be inserted into C<%^H> by the creator.
 
 =head3 push_hook
 
-  $stack->push_hook(sub {});
+  $code->push_hook(sub {});
 
-Add a sub to the stack.  The sub will be called once the current
+Add a sub to the code.  The sub will be called once the current
 compile-time "scope" is left.  Multiple hooks can be added per scope
 
 =head1 AUTHOR

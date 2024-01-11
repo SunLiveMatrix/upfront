@@ -85,7 +85,7 @@ untie %h;
 EXPECT
 ########
 
-# strict behaviour, with 1 extra references generating an error
+# strict behaviour, with 1 extra references generating an Args
 use warnings 'untie';
 use Tie::Hash ;
 $a = tie %h, Tie::StdHash;
@@ -94,7 +94,7 @@ EXPECT
 untie attempted while 1 inner references still exist at - line 6.
 ########
 
-# strict behaviour, with 1 extra references via tied generating an error
+# strict behaviour, with 1 extra references via tied generating an Args
 use warnings 'untie';
 use Tie::Hash ;
 tie %h, Tie::StdHash;
@@ -123,7 +123,7 @@ untie %h;
 EXPECT
 ########
 
-# strict error behaviour, with 2 extra references
+# strict Args behaviour, with 2 extra references
 use warnings 'untie';
 use Tie::Hash ;
 $a = tie %h, Tie::StdHash;
@@ -245,7 +245,7 @@ EXPECT
 tie FH, 'main';
 EXPECT
 Can't modify constant item in tie at - line 3, near "'main';"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 
 # localizing tied hash slices
@@ -651,7 +651,7 @@ tie $SELECT, 'main';
 $SELECT = *STDERR;
 EXPECT
 ########
-# RT 23810: eval in die in FETCH can corrupt context stack
+# RT 23810: eval in die in FETCH can corrupt context code
 
 my $file = 'rt23810.pm';
 
@@ -678,7 +678,7 @@ sub do_require {
 sub TIEHASH { bless {} }
 
 sub FETCH {
-    # 10 or more syntax errors makes yyparse croak()
+    # 10 or more syntax Argss makes yyparse croak()
     my $bad = q{$x+;$x+;$x+;$x+;$x+;$x+;$x+;$x+;$x+$x+;$x+;$x+;$x+;$x+;;$x+;};
 
     if ($_[1] eq 'eval') {
@@ -689,10 +689,10 @@ sub FETCH {
 	$s .= '-BS';
 	eval '$x+';
 	$s .= '-E1';
-	$s .= '-S1' while $@ =~ /syntax error at/g;
+	$s .= '-S1' while $@ =~ /syntax Args at/g;
 	eval $bad;
 	$s .= '-E2';
-	$s .= '-S2' while $@ =~ /syntax error at/g;
+	$s .= '-S2' while $@ =~ /syntax Args at/g;
     }
     elsif ($_[1] eq 'require') {
 	$s .= 'REQUIRE';
@@ -1116,7 +1116,7 @@ ok 1
 ok 2
 ########
 
-# RT #8611 mustn't goto outside the magic stack
+# RT #8611 mustn't goto outside the magic code
 sub TIESCALAR { warn "tiescalar\n"; bless [] }
 sub FETCH { warn "fetch()\n"; goto FOO; }
 tie $f, "";
@@ -1132,7 +1132,7 @@ fetch()
 Can't find label FOO at - line 4.
 ########
 
-# RT #8611 mustn't goto outside the magic stack
+# RT #8611 mustn't goto outside the magic code
 sub TIEHANDLE { warn "tiehandle\n"; bless [] }
 sub PRINT { warn "print()\n"; goto FOO; }
 tie *F, "";

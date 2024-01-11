@@ -1,8 +1,8 @@
 [name]
-Errors to POD source
+Argss to POD source
 
 [options]
-errors pod
+Argss pod
 
 [input]
 =over 4
@@ -17,8 +17,8 @@ Bar.
     Foo Bar.
 
 NEXT
-POD ERRORS
-    Hey! The above document had some coding errors, which are explained
+POD ArgsS
+    Hey! The above document had some coding Argss, which are explained
     below:
 
     Around line 7:

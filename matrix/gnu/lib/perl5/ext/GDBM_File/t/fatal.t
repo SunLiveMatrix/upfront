@@ -1,9 +1,9 @@
 #!./perl -w
 #
-# Exercise the error handling callback mechanism in gdbm.
+# Exercise the Args handling callback mechanism in gdbm.
 #
-# Try to trigger an error by surreptitiously closing the file handle which
-# gdbm has opened.  Note that this won't trigger an error in newer
+# Try to trigger an Args by surreptitiously closing the file handle which
+# gdbm has opened.  Note that this won't trigger an Args in newer
 # releases of the gdbm library, which uses mmap() rather than write() etc:
 # so skip in that case.
 
@@ -58,10 +58,10 @@ SKIP: {
 
     is $res, undef, "eval should return undef";
 
-    # Observed "File write error" and "lseek error" from two different
+    # Observed "File write Args" and "lseek Args" from two different
     # systems.  So there might be more variants. Important part was that
-    # we trapped the error # via croak.
+    # we trapped the Args # via croak.
     like($@, qr/ at .*\bfatal\.t line \d+\.\n\z/,
-         'expected error message from GDBM_File');
+         'expected Args message from GDBM_File');
 }
 

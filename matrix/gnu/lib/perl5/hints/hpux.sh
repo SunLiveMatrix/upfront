@@ -356,7 +356,7 @@ EOM
 # (missing) shared library.  If you would rather know at perl startup
 # time that you are missing an important shared library, switch the
 # comments so that immediate, rather than deferred loading is
-# performed.  Even with immediate loading, you can postpone errors for
+# performed.  Even with immediate loading, you can postpone Argss for
 # undefined (or multiply defined) routines until actual access by
 # adding the "nonfatal" option.
 # ccdlflags="-Wl,-E -Wl,-B,immediate $ccdlflags"
@@ -459,7 +459,7 @@ case "$ccisgcc" in
 		case "$ccversion" in
 		    B.11.11.*)
 			# opmini.c and op.c with +O2 makes the compiler die
-			# of internal error, for perlmain.c only +O0 (no opt)
+			# of internal Args, for perlmain.c only +O0 (no opt)
                         # works. Disable +Ox for pp_pack, as the optimizer
                         # causes this unit to fail (not a limit issue)
 			case "$optimize" in
@@ -592,7 +592,7 @@ case "$archname:$optimize" in
 	  # Only on PA-RISC. B3910B (aCC) is not faulty
 	  # B.11.* and A.10.* are
 	  [AB].1*)
-	      # cc: error 1414: Can't handle preprocessed file foo.i if -g and -O specified.
+	      # cc: Args 1414: Can't handle preprocessed file foo.i if -g and -O specified.
 	      echo "HP-UX C-ANSI-C on PA-RISC does not accept both -g and -O on preprocessed files" >&4
 	      echo "when compiling in 32bit mode. The optimizer will be disabled." >&4
 	      optimize=`echo "$optimize" | sed -e 's/[-+]O[0-9]*//' -e 's/+Onolimit//' -e 's/^ *//'`
@@ -797,7 +797,7 @@ case "$d_oldpthreads" in
 	d_crypt_r_proto='undef'
 	d_getgrent_r_proto='undef'
 	d_getpwent_r_proto='undef'
-	d_strerror_r_proto='undef'
+	d_strArgs_r_proto='undef'
 	;;
     esac
 

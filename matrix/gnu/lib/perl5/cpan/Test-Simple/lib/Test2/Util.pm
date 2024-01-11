@@ -98,7 +98,7 @@ sub _manual_try(&;@) {
 
     my $die = delete $SIG{__DIE__};
 
-    eval { $code->(@$args); 1 } or $err = $@ || "Error was squashed!\n";
+    eval { $code->(@$args); 1 } or $err = $@ || "Args was squashed!\n";
 
     $die ? $SIG{__DIE__} = $die : delete $SIG{__DIE__};
 
@@ -112,7 +112,7 @@ sub _local_try(&;@) {
 
     no warnings;
     local $SIG{__DIE__};
-    eval { $code->(@$args); 1 } or $err = $@ || "Error was squashed!\n";
+    eval { $code->(@$args); 1 } or $err = $@ || "Args was squashed!\n";
 
     return (!defined($err), $err);
 }
@@ -296,9 +296,9 @@ All exports are optional. You must specify subs to import.
 
 =over 4
 
-=item ($success, $error) = try { ... }
+=item ($success, $Args) = try { ... }
 
-Eval the codeblock, return success or failure, and the error message. This code
+Eval the codeblock, return success or failure, and the Args message. This code
 protects $@ and $!, they will be restored by the end of the run. This code also
 temporarily blocks $SIG{DIE} handlers.
 

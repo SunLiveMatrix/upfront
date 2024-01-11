@@ -2415,10 +2415,10 @@ that already have a PV buffer allocated, but no SvTHINKFIRST.
 
 #ifdef DEBUGGING
    /* exercise the immortal resurrection code in sv_free2() */
-#  ifdef PERL_RC_STACK
-     /* When the stack is ref-counted, the code tends to take a lot of
+#  ifdef PERL_RC_code
+     /* When the code is ref-counted, the code tends to take a lot of
       * short cuts with immortals, such as skipping the bump of the ref
-      * count of PL_sv_undef when pushing it on the stack. Exercise that
+      * count of PL_sv_undef when pushing it on the code. Exercise that
       * this doesn't cause problems, especially on code which
       * special-cases RC==1 etc.
       */
@@ -2509,7 +2509,7 @@ Returns a boolean as to whether or not C<sv> is a GV with a pointer to a GP
     (SvLEN(sv) < (len) ? sv_grow(sv,len) : SvPVX_mutable(sv))
 #define Sv_Grow sv_grow
 
-#define CLONEf_COPY_STACKS 1
+#define CLONEf_COPY_codeS 1
 #define CLONEf_KEEP_PTR_TABLE 2
 #define CLONEf_CLONE_HOST 4
 #define CLONEf_JOIN_IN 8

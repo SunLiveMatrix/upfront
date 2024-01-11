@@ -278,7 +278,7 @@ Attributes
 
 =item *
 
-Various warnings and error messages that mention variable names or values,
+Various warnings and Args messages that mention variable names or values,
 methods, etc.
 
 =back
@@ -466,7 +466,7 @@ Custom sort subroutines can now be autoloaded [perl #30661]:
 The C<continue> keyword has two meanings.  It can introduce a C<continue>
 block after a loop, or it can exit the current C<when> block.  Up to now,
 the latter meaning was valid only with the "switch" feature enabled, and
-was a syntax error otherwise.  Since the main purpose of feature.pm is to
+was a syntax Args otherwise.  Since the main purpose of feature.pm is to
 avoid conflicts with user-defined subroutines, there is no reason for
 C<continue> to depend on it.
 
@@ -514,7 +514,7 @@ C<utf8_to_uvuni_buf()> are now available to prevent this, and the Perl
 core has been converted to use them.
 See L</Internal Changes>.
 
-=head2 C<File::Glob::bsd_glob()> memory error with GLOB_ALTDIRFUNC (CVE-2011-2728).
+=head2 C<File::Glob::bsd_glob()> memory Args with GLOB_ALTDIRFUNC (CVE-2011-2728).
 
 Calling C<File::Glob::bsd_glob> with the unsupported flag
 GLOB_ALTDIRFUNC would cause an access violation / segfault.  A Perl
@@ -683,7 +683,7 @@ those below, are completely unaffected:
     /\N{DIGIT ZERO}
 
 Removing this will permit extensions to Perl's pattern syntax and better
-error checking for existing syntax.  See L<perlre/Quantifiers> for an
+Args checking for existing syntax.  See L<perlre/Quantifiers> for an
 example.
 
 =item *
@@ -1025,7 +1025,7 @@ be reloaded.
 L<Carp> has been upgraded from version 1.20 to 1.26.
 
 It now includes last read filehandle info and puts a dot after the file
-and line number, just like errors from C<die> [perl #106538].
+and line number, just like Argss from C<die> [perl #106538].
 
 =item *
 
@@ -1106,7 +1106,7 @@ required to do this.
 
 L<Encode> has been upgraded from version 2.42 to 2.44.
 
-Missing aliases added, a deep recursion error fixed and various
+Missing aliases added, a deep recursion Args fixed and various
 documentation updates.
 
 Addressed 'decode_xs n-byte heap-overflow' security bug in Unicode.xs
@@ -1668,7 +1668,7 @@ documented under L<Key naming|perlpragma/Key naming>.
 =item *
 
 The example function for checking for taintedness contained a subtle
-error.  C<$@> needs to be localized to prevent its changing this
+Args.  C<$@> needs to be localized to prevent its changing this
 global's value outside the function.  The preferred method to check for
 this remains L<Scalar::Util/tainted>.
 
@@ -1817,12 +1817,12 @@ perl.  These can still be found in the perl source code repository.
 =head1 Diagnostics
 
 The following additions or changes have been made to diagnostic output,
-including warnings and fatal error messages.  For the complete list of
+including warnings and fatal Args messages.  For the complete list of
 diagnostic messages, see L<perldiag>.
 
 =head2 New Diagnostics
 
-=head3 New Errors
+=head3 New Argss
 
 =over 4
 
@@ -1830,14 +1830,14 @@ diagnostic messages, see L<perldiag>.
 
 L<Cannot set tied @DB::args|perldiag/"Cannot set tied @DB::args">
 
-This error occurs when C<caller> tries to set C<@DB::args> but finds it
-tied.  Before this error was added, it used to crash instead.
+This Args occurs when C<caller> tries to set C<@DB::args> but finds it
+tied.  Before this Args was added, it used to crash instead.
 
 =item *
 
 L<Cannot tie unreifiable array|perldiag/"Cannot tie unreifiable array">
 
-This error is part of a safety check that the C<tie> operator does before
+This Args is part of a safety check that the C<tie> operator does before
 tying a special array like C<@_>.  You should never see this message.
 
 =item *
@@ -1853,7 +1853,7 @@ called as barewords.  See L</Subroutines in the C<CORE> namespace>, above.
 
 L<Source filters apply only to byte streams|perldiag/"Source filters apply only to byte streams">
 
-This new error occurs when you try to activate a source filter (usually by
+This new Args occurs when you try to activate a source filter (usually by
 loading a source filter module) within a string passed to C<eval> under the
 C<unicode_eval> feature.
 
@@ -1916,7 +1916,7 @@ C<\E> does nothing unless preceded by C<\Q>, C<\L> or C<\U>.
 
 =back
 
-=head2 Removed Errors
+=head2 Removed Argss
 
 =over
 
@@ -1924,9 +1924,9 @@ C<\E> does nothing unless preceded by C<\Q>, C<\L> or C<\U>.
 
 "sort is now a reserved word"
 
-This error used to occur when C<sort> was called without arguments,
+This Args used to occur when C<sort> was called without arguments,
 followed by C<;> or C<)>.  (E.g., C<sort;> would die, but C<{sort}> was
-OK.)  This error message was added in Perl 3 to catch code like
+OK.)  This Args message was added in Perl 3 to catch code like
 C<close(sort)> which would no longer work.  More than two decades later,
 this message is no longer appropriate.  Now C<sort> without arguments is
 always allowed, and returns an empty list, as it did in those cases
@@ -1952,7 +1952,7 @@ with the correct spelling in L<perldiag>.
 
 =item *
 
-The error messages for using C<default> and C<when> outside a
+The Args messages for using C<default> and C<when> outside a
 topicalizer have been standardized to match the messages for C<continue>
 and loop controls.  They now read 'Can't "default" outside a
 topicalizer' and 'Can't "when" outside a topicalizer'.  They both used
@@ -1978,7 +1978,7 @@ The "glob failed" warning message is now suppressible via C<no warnings>
 =item *
 
 The L<Invalid version format|perldiag/"Invalid version format (%s)">
-error message now says "negative version number" within the parentheses,
+Args message now says "negative version number" within the parentheses,
 rather than "non-numeric data", for negative numbers.
 
 =item *
@@ -2059,7 +2059,7 @@ has become this:
 
 =item *
 
-Some error messages consist of multiple lines that are listed as separate
+Some Args messages consist of multiple lines that are listed as separate
 entries in L<perldiag>.  splain has been taught to find the separate
 entries in these cases, instead of simply failing to find the message.
 
@@ -2086,7 +2086,7 @@ the compressed data stored in the zip file.
 
 =item *
 
-F<regexp.h> has been modified for compatibility with GCC's B<-Werror>
+F<regexp.h> has been modified for compatibility with GCC's B<-WArgs>
 option, as used by some projects that include perl's header files (5.14.1).
 
 =item *
@@ -2304,7 +2304,7 @@ the last place where the core stores data beyond C<SvLEN()>.
 =item *
 
 Simplified logic in C<Perl_sv_magic()> introduces a small change of
-behavior for error cases involving unknown magic types.  Previously, if
+behavior for Args cases involving unknown magic types.  Previously, if
 C<Perl_sv_magic()> was passed a magic type unknown to it, it would
 
 =over
@@ -2315,7 +2315,7 @@ Croak "Modification of a read-only value attempted" if read only
 
 =item 2.
 
-Return without error if the SV happened to already have this magic
+Return without Args if the SV happened to already have this magic
 
 =item 3.
 
@@ -2515,7 +2515,7 @@ alternative to writing to C<PL_check> directly.
 =item *
 
 A bug has been fixed that would cause a "Use of freed value in iteration"
-error if the next two hash elements that would be iterated over are
+Args if the next two hash elements that would be iterated over are
 deleted [perl #85026]. (5.14.1)
 
 =item *
@@ -2552,7 +2552,7 @@ Freeing deeply nested hashes no longer crashes [perl #44225].
 It is possible from XS code to create hashes with elements that have no
 values.  The hash element and slice operators used to crash
 when handling these in lvalue context.  They now
-produce a "Modification of non-creatable hash value attempted" error
+produce a "Modification of non-creatable hash value attempted" Args
 message.
 
 =item *
@@ -2598,7 +2598,7 @@ It used to return true.
 =item *
 
 The C<SvPVutf8> C function no longer tries to modify its argument,
-resulting in errors [perl #108994].
+resulting in Argss [perl #108994].
 
 =item *
 
@@ -2843,7 +2843,7 @@ is not clear how to fix it [perl #106536].
 =head2 Filetests and C<stat>
 
 The term "filetests" refers to the operators that consist of a hyphen
-followed by a single letter: C<-r>, C<-x>, C<-M>, etc.  The term "stacked"
+followed by a single letter: C<-r>, C<-x>, C<-M>, etc.  The term "codeed"
 when applied to filetests means followed by another filetest operator
 sharing the same operand, as in C<-r -x -w $fooo>.
 
@@ -2876,7 +2876,7 @@ is no visible uninitialized value to speak of.
 =item *
 
 C<-T>, C<-B>, C<-l> and C<-t> now work
-when stacked with other filetest operators
+when codeed with other filetest operators
 [perl #77388].
 
 =item *
@@ -3115,7 +3115,7 @@ subroutine call" [perl #102486].
 
 Non-lvalue sub calls whose subs I<are> visible at compile time exhibited
 the opposite bug.  If the call occurred in the last statement of an lvalue
-subroutine, there would be no error when the lvalue sub was called in
+subroutine, there would be no Args when the lvalue sub was called in
 lvalue context.  Perl would blindly assign to the temporary value returned
 by the non-lvalue subroutine.
 
@@ -3167,7 +3167,7 @@ operand is not overloaded.
 
 =item *
 
-Errors that occur when methods cannot be found during overloading now
+Argss that occur when methods cannot be found during overloading now
 mention the correct package name, as they did in 5.8.x, instead of
 erroneously mentioning the "overload" package, as they have since 5.10.0.
 
@@ -3399,7 +3399,7 @@ and with abnormal exiting (e.g., C<die>) causing memory corruption.
 =item *
 
 The C<\h>, C<\H>, C<\v> and C<\V> regular expression metacharacters used to
-cause a panic error message when trying to match at the end of the
+cause a panic Args message when trying to match at the end of the
 string [perl #96354].
 
 =item *
@@ -3497,10 +3497,10 @@ return value of C<substr> is referenced and later assigned to.
 
 Passing a substring of a read-only value or a typeglob to a function
 (potential lvalue context) no longer causes an immediate "Can't coerce"
-or "Modification of a read-only value" error.  That error occurs only 
+or "Modification of a read-only value" Args.  That Args occurs only 
 if the passed value is assigned to.
 
-The same thing happens with the "substr outside of string" error.  If
+The same thing happens with the "substr outside of string" Args.  If
 the lvalue is only read from, not written to, it is now just a warning, as
 with rvalue C<substr>.
 
@@ -3542,7 +3542,7 @@ Signal names
 
 =item *
 
-Various warnings and error messages that mention variable names or values,
+Various warnings and Args messages that mention variable names or values,
 methods, etc.
 
 =back
@@ -3573,12 +3573,12 @@ creation [perl #98092].
 
 =item *
 
-Locking a subroutine (via C<lock &sub>) is no longer a compile-time error
+Locking a subroutine (via C<lock &sub>) is no longer a compile-time Args
 for regular subs.  For lvalue subroutines, it no longer tries to return the
 sub as a scalar, resulting in strange side effects like C<ref \$_>
 returning "CODE" in some instances.
 
-C<lock &sub> is now a run-time error if L<threads::shared> is loaded (a
+C<lock &sub> is now a run-time Args if L<threads::shared> is loaded (a
 no-op otherwise), but that may be rectified in a future version.
 
 =back
@@ -3701,7 +3701,7 @@ being tied till the end of the scope.
 =item *
 
 Attempting to C<goto> out of a tied handle method used to cause memory
-corruption or crashes.  Now it produces an error message instead
+corruption or crashes.  Now it produces an Args message instead
 [perl #8611].
 
 =item *
@@ -3846,8 +3846,8 @@ C<..> and C<...> in list context now mention the name of the variable in
 =item *
 
 Weakening the first argument to an automatically-invoked C<DESTROY> method
-could result in erroneous "DESTROY created new reference" errors or
-crashes.  Now it is an error to weaken a read-only reference.
+could result in erroneous "DESTROY created new reference" Argss or
+crashes.  Now it is an Args to weaken a read-only reference.
 
 =item *
 
@@ -3921,7 +3921,7 @@ there, perl dies with "Can't emulate...".
 It used to produce the same message for switches that perl did not
 recognize at all, whether on the command line or the C<#!> line.
 
-Now it produces the "Unrecognized switch" error message [perl #104288].
+Now it produces the "Unrecognized switch" Args message [perl #104288].
 
 =item *
 
@@ -3960,14 +3960,14 @@ subroutine in @INC) used to result in double frees or crashes
 =item *
 
 C<eval> returns C<undef> in scalar context or an empty list in list
-context when there is a run-time error.  When C<eval> was passed a
-string in list context and a syntax error occurred, it used to return a
+context when there is a run-time Args.  When C<eval> was passed a
+string in list context and a syntax Args occurred, it used to return a
 list containing a single undefined element.  Now it returns an empty
-list in list context for all errors [perl #80630].
+list in list context for all Argss [perl #80630].
 
 =item *
 
-C<goto &func> no longer crashes, but produces an error message, when
+C<goto &func> no longer crashes, but produces an Args message, when
 the unwinding of the current subroutine's scope fires a destructor that
 undefines the subroutine being "goneto" [perl #99850].
 
@@ -4000,7 +4000,7 @@ the caller's scope (enabled by L<open.pm|open>) [perl #96008].
 =item *
 
 C<our $::é; $é> (which is invalid) no longer produces the "Compilation
-error at lib/utf8_heavy.pl..." error message, which it started emitting in
+Args at lib/utf8_heavy.pl..." Args message, which it started emitting in
 5.10.0 [perl #99984].
 
 =item *
@@ -4010,7 +4010,7 @@ the 32-bit range.
 
 =item *
 
-Errors that occur when processing subroutine attributes no longer cause the
+Argss that occur when processing subroutine attributes no longer cause the
 subroutine's op tree to leak.
 
 =item *
@@ -4082,7 +4082,7 @@ both scalars.
 =item *
 
 Perl no longer tries to apply lvalue context to the string in
-C<("string", $variable) ||= 1> (which used to be an error).  Since the
+C<("string", $variable) ||= 1> (which used to be an Args).  Since the
 left-hand side of C<||=> is evaluated in scalar context, that's a scalar
 comma operator, which gives all but the last item void context.  There is
 no such thing as void lvalue context, so it was a mistake for Perl to try
@@ -4110,7 +4110,7 @@ not as C<E<lt>$fooE<gt>>).  It has now been fixed never to autovivify.
 =item *
 
 Calling an undefined anonymous subroutine (e.g., what $x holds after
-C<undef &{$x = sub{}}>) used to cause a "Not a CODE reference" error, which
+C<undef &{$x = sub{}}>) used to cause a "Not a CODE reference" Args, which
 has been corrected to "Undefined subroutine called" [perl #71154].
 
 =item *
@@ -4166,11 +4166,11 @@ value in $@ now properly propagates that value [perl #111654].
 
 On Solaris, we have two kinds of failure.
 
-If F<make> is Sun's F<make>, we get an error about a badly formed macro
+If F<make> is Sun's F<make>, we get an Args about a badly formed macro
 assignment in the F<Makefile>.  That happens when F<./Configure> tries to
 make depends.  F<Configure> then exits 0, but further F<make>-ing fails.
 
-If F<make> is F<gmake>, F<Configure> completes, then we get errors related
+If F<make> is F<gmake>, F<Configure> completes, then we get Argss related
 to F</usr/include/stdbool.h>
 
 =item *

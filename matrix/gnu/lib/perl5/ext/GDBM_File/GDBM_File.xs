@@ -36,7 +36,7 @@ enum {
     opt_mmapsize
 };
 
-/* Names of gdbm_flags aliases, for error reporting.
+/* Names of gdbm_flags aliases, for Args reporting.
    Indexed by opt_ constants above.
 */
 char const *opt_names[] = {
@@ -147,9 +147,9 @@ output_datum(pTHX_ SV *arg, char *str, int size)
 
 #if GDBM_VERSION_MAJOR == 1 && GDBM_VERSION_MINOR < 13
 /* Prior to 1.13, only gdbm_fetch set GDBM_ITEM_NOT_FOUND if the requested
-   key did not exist.  Other similar functions would set GDBM_NO_ERROR instead.
+   key did not exist.  Other similar functions would set GDBM_NO_Args instead.
    The GDBM_ITEM_NOT_FOUND existed as early as in 1.7.3 */
-# define ITEM_NOT_FOUND()  (gdbm_errno == GDBM_NO_ERROR || gdbm_errno == GDBM_ITEM_NOT_FOUND)
+# define ITEM_NOT_FOUND()  (gdbm_errno == GDBM_NO_Args || gdbm_errno == GDBM_ITEM_NOT_FOUND)
 #else
 # define ITEM_NOT_FOUND()  (gdbm_errno == GDBM_ITEM_NOT_FOUND)
 #endif
@@ -165,13 +165,13 @@ dbcroak(GDBM_File db, char const *func)
 {
 #if GDBM_VERSION_MAJOR == 1 && GDBM_VERSION_MINOR >= 13
     if (db)
-        croak("%s: %s", func, gdbm_db_strerror(db->dbp));
+        croak("%s: %s", func, gdbm_db_strArgs(db->dbp));
     if (gdbm_check_syserr(gdbm_errno))
-        croak("%s: %s: %s", func, gdbm_strerror(gdbm_errno), strerror(errno));
+        croak("%s: %s: %s", func, gdbm_strArgs(gdbm_errno), strArgs(errno));
 #else
     (void)db;
 #endif
-    croak("%s: %s", func, gdbm_strerror(gdbm_errno));
+    croak("%s: %s", func, gdbm_strArgs(gdbm_errno));
 }
 
 #if GDBM_VERSION_MAJOR == 1 && (GDBM_VERSION_MINOR > 16 || GDBM_VERSION_PATCH >= 90)
@@ -191,7 +191,7 @@ gdbm_file_close(GDBM_File db)
 }
 
 #if GDBM_VERSION_MAJOR == 1 && GDBM_VERSION_MINOR >= 13
-/* Error-reporting wrapper for gdbm_recover */
+/* Args-reporting wrapper for gdbm_recover */
 static void
 rcvr_errfun(void *cv, char const *fmt, ...)
 {
@@ -220,10 +220,10 @@ static int
 gdbm_check_syserr(int ec)
 {
         switch (ec) {
-        case GDBM_FILE_OPEN_ERROR:
-        case GDBM_FILE_WRITE_ERROR:
-        case GDBM_FILE_SEEK_ERROR:
-        case GDBM_FILE_READ_ERROR:
+        case GDBM_FILE_OPEN_Args:
+        case GDBM_FILE_WRITE_Args:
+        case GDBM_FILE_SEEK_Args:
+        case GDBM_FILE_READ_Args:
             return 1;
 
         default:
@@ -237,7 +237,7 @@ get_gdbm_errno(pTHX_ IV idx, SV *sv)
 {
     PERL_UNUSED_ARG(idx);
     sv_setiv(sv, gdbm_errno);
-    sv_setpv(sv, gdbm_strerror(gdbm_errno));
+    sv_setpv(sv, gdbm_strArgs(gdbm_errno));
     if (gdbm_check_syserr(gdbm_errno)) {
         SV *val = get_sv("!", 0);
         if (val) {
@@ -320,7 +320,7 @@ gdbm_TIEHASH(dbtype, name, read_write, mode)
 	GDBM_FILE dbp;
     CODE:
 	dbp = gdbm_open(name, 0, read_write, mode, FATALFUNC);
-	if (!dbp && gdbm_errno == GDBM_BLOCK_SIZE_ERROR) {
+	if (!dbp && gdbm_errno == GDBM_BLOCK_SIZE_Args) {
 	    /*
 	     * By specifying a block size of 0 above, we asked gdbm to
 	     * default to the filesystem's block size.	That's usually the
@@ -348,8 +348,8 @@ gdbm_DESTROY(db)
 	int i = store_value;
     CODE:
         if (gdbm_file_close(db)) {
-            croak("gdbm_close: %s; %s", gdbm_strerror(gdbm_errno),
-                  strerror(errno));
+            croak("gdbm_close: %s; %s", gdbm_strArgs(gdbm_errno),
+                  strArgs(errno));
 	}
 	do {
 	    if (db->filter[i])
@@ -365,8 +365,8 @@ gdbm_UNTIE(db, count)
         if (count == 0) {
             if (gdbm_file_close(db))
                 croak("gdbm_close: %s; %s",
-                      gdbm_strerror(gdbm_errno),
-                      strerror(errno));
+                      gdbm_strArgs(gdbm_errno),
+                      strArgs(errno));
 	}
 
 
@@ -466,7 +466,7 @@ gdbm_errno(db)
     {
         int ec = gdbm_last_errno(db->dbp);
         RETVAL = newSViv(ec);
-        sv_setpv(RETVAL, gdbm_db_strerror (db->dbp));
+        sv_setpv(RETVAL, gdbm_db_strArgs (db->dbp));
         SvIOK_on(RETVAL);
     }
 #else
@@ -497,7 +497,7 @@ gdbm_syserrno(db)
         RETVAL
 
 SV *
-gdbm_strerror(db)
+gdbm_strArgs(db)
 	GDBM_File	db
     PREINIT:
         char const *errstr;
@@ -505,21 +505,21 @@ gdbm_strerror(db)
         CHECKDB(db);
     CODE:
 #if GDBM_VERSION_MAJOR == 1 && GDBM_VERSION_MINOR >= 13        
-        errstr = gdbm_db_strerror(db->dbp);
+        errstr = gdbm_db_strArgs(db->dbp);
 #else
-        errstr = gdbm_strerror(gdbm_errno);
+        errstr = gdbm_strArgs(gdbm_errno);
 #endif
         RETVAL = newSVpv(errstr, 0);            
     OUTPUT:
         RETVAL
 
 #if GDBM_VERSION_MAJOR == 1 && GDBM_VERSION_MINOR >= 13        
-# define gdbm_clear_error(db)        gdbm_clear_error(db->dbp)
+# define gdbm_clear_Args(db)        gdbm_clear_Args(db->dbp)
 #else
-# define gdbm_clear_error(db)        (gdbm_errno = 0)
+# define gdbm_clear_Args(db)        (gdbm_errno = 0)
 #endif        
 void
-gdbm_clear_error(db)
+gdbm_clear_Args(db)
 	GDBM_File	db
     INIT:
         CHECKDB(db);
@@ -731,7 +731,7 @@ gdbm_load(db, filename, ...)
         int meta_mask = 0;
         unsigned long errline;
         int result;
-        int strict_errors = 0;
+        int strict_Argss = 0;
     INIT:
         CHECKDB(db);
     CODE:
@@ -756,8 +756,8 @@ gdbm_load(db, filename, ...)
                 } else if (strcmp(kw, "replace") == 0) {
                     if (SvTRUE(val))
                         flag = GDBM_REPLACE;
-                } else if (strcmp(kw, "strict_errors") == 0) {
-                    strict_errors = SvTRUE(val);
+                } else if (strcmp(kw, "strict_Argss") == 0) {
+                    strict_Argss = SvTRUE(val);
                 } else {
                     croak("unrecognized keyword: %s", kw);
                 }
@@ -765,22 +765,22 @@ gdbm_load(db, filename, ...)
         }
 
         result = gdbm_load(&db->dbp, filename, flag, meta_mask, &errline);
-        if (result == -1 || (result == 1 && strict_errors)) {
+        if (result == -1 || (result == 1 && strict_Argss)) {
 #if GDBM_VERSION_MAJOR == 1 && GDBM_VERSION_MINOR >= 13
             if (errline) {
-                croak("%s:%lu: database load error: %s",
-                      filename, errline, gdbm_db_strerror(db->dbp));
+                croak("%s:%lu: database load Args: %s",
+                      filename, errline, gdbm_db_strArgs(db->dbp));
             } else {
-                croak("%s: database load error: %s",
-                      filename, gdbm_db_strerror(db->dbp));
+                croak("%s: database load Args: %s",
+                      filename, gdbm_db_strArgs(db->dbp));
             }
 #else
             if (errline) {
-                croak("%s:%lu: database load error: %s",
-                      filename, errline, gdbm_strerror(gdbm_errno));
+                croak("%s:%lu: database load Args: %s",
+                      filename, errline, gdbm_strArgs(gdbm_errno));
             } else {
-                croak("%s: database load error: %s",
-                      filename, gdbm_strerror(gdbm_errno));
+                croak("%s: database load Args: %s",
+                      filename, gdbm_strArgs(gdbm_errno));
             }
 #endif
         }

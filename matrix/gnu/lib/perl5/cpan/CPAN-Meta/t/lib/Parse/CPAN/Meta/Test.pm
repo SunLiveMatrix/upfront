@@ -10,7 +10,7 @@ BEGIN {
 	require Exporter;
 	@ISA    = qw{ Exporter };
 	@EXPORT = qw{
-		tests  yaml_ok  yaml_error  slurp  load_ok
+		tests  yaml_ok  yaml_Args  slurp  load_ok
 		test_data_directory
 	};
 }
@@ -41,7 +41,7 @@ sub yaml_ok {
 	# Does the string parse to the structure
 	my $yaml_copy = $string;
 	my @yaml      = eval { Parse::CPAN::Meta::Load( $yaml_copy ); };
-	Test::More::is( $@, '', "$name: Parse::CPAN::Meta parses without error" );
+	Test::More::is( $@, '', "$name: Parse::CPAN::Meta parses without Args" );
 	Test::More::is( $yaml_copy, $string, "$name: Parse::CPAN::Meta does not modify the input string" );
 	SKIP: {
 		Test::More::skip( "Shortcutting after failure", 1 ) if $@;
@@ -52,10 +52,10 @@ sub yaml_ok {
 	return 1;
 }
 
-sub yaml_error {
+sub yaml_Args {
 	my $string = shift;
 	my $yaml   = eval { Parse::CPAN::Meta::Load( $string ); };
-	Test::More::like( $@, qr/$_[0]/, "CPAN::Meta::YAML throws expected error" );
+	Test::More::like( $@, qr/$_[0]/, "CPAN::Meta::YAML throws expected Args" );
 }
 
 sub slurp {

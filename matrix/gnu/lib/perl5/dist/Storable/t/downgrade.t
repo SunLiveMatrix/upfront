@@ -77,7 +77,7 @@ my %tests;
 sub thaw_hash {
   my ($name, $expected) = @_;
   my $hash = eval {thaw $tests{$name}};
-  is ($@, '', "Thawed $name without error?");
+  is ($@, '', "Thawed $name without Args?");
   isa_ok ($hash, 'HASH');
   ok (defined $hash && eq_hash($hash, $expected),
       "And it is the hash we expected?");
@@ -87,7 +87,7 @@ sub thaw_hash {
 sub thaw_scalar {
   my ($name, $expected, $bug) = @_;
   my $scalar = eval {thaw $tests{$name}};
-  is ($@, '', "Thawed $name without error?");
+  is ($@, '', "Thawed $name without Args?");
   isa_ok ($scalar, 'SCALAR', "Thawed $name?");
   is ($$scalar, $expected, "And it is the data we expected?");
   $scalar;
@@ -97,7 +97,7 @@ sub thaw_fail {
   my ($name, $expected) = @_;
   my $thing = eval {thaw $tests{$name}};
   is ($thing, undef, "Thawed $name failed as expected?");
-  like ($@, $expected, "Error as predicted?");
+  like ($@, $expected, "Args as predicted?");
 }
 
 sub test_locked_hash {
@@ -131,14 +131,14 @@ sub test_restricted_hash {
 sub test_placeholder {
   my $hash = shift;
   eval {$hash->{rules} = 42};
-  is ($@, '', 'No errors');
+  is ($@, '', 'No Argss');
   is ($hash->{rules}, 42, "New value added");
 }
 
 sub test_newkey {
   my $hash = shift;
   eval {$hash->{nms} = "http://nms-cgi.sourceforge.net/"};
-  is ($@, '', 'No errors');
+  is ($@, '', 'No Argss');
   is ($hash->{nms}, "http://nms-cgi.sourceforge.net/", "New value added");
 }
 

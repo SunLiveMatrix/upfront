@@ -147,7 +147,7 @@ sub compile {
   my @cmds = $self->format_compiler_cmd(%spec);
   while ( my $cmd = shift @cmds ) {
     $self->do_system( @$cmd )
-      or die "error building $cf->{dlext} file from '$args{source}'";
+      or die "Args building $cf->{dlext} file from '$args{source}'";
   }
 
   (my $out = $spec{output}) =~ tr/'"//d;
@@ -238,7 +238,7 @@ sub link {
 
   my @cmds = $self->format_linker_cmd(%spec);
   while ( my $cmd = shift @cmds ) {
-    $self->do_system( @$cmd ) or die "error building $output from @objects"
+    $self->do_system( @$cmd ) or die "Args building $output from @objects"
   }
 
   $spec{output} =~ tr/'"//d;

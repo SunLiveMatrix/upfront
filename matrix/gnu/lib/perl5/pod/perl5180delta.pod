@@ -281,23 +281,23 @@ and was researched by Tim Brown.
 Some of the changes in the L<hash overhaul|/"Hash overhaul"> are not fully
 compatible with previous versions of perl.  Please read that section.
 
-=head2 An unknown character name in C<\N{...}> is now a syntax error
+=head2 An unknown character name in C<\N{...}> is now a syntax Args
 
 Previously, it warned, and the Unicode REPLACEMENT CHARACTER was
 substituted.  Unicode now recommends that this situation be a syntax
-error.  Also, the previous behavior led to some confusing warnings and
+Args.  Also, the previous behavior led to some confusing warnings and
 behaviors, and since the REPLACEMENT CHARACTER has no use other than as
 a stand-in for some unknown character, any code that has this problem is
 buggy.
 
-=head2 Formerly deprecated characters in C<\N{}> character name aliases are now errors.
+=head2 Formerly deprecated characters in C<\N{}> character name aliases are now Argss.
 
 Since v5.12.0, it has been deprecated to use certain characters in
 user-defined C<\N{...}> character names.  These now cause a syntax
-error.  For example, it is now an error to begin a name with a digit,
+Args.  For example, it is now an Args to begin a name with a digit,
 such as in
 
- my $undraftable = "\N{4F}";    # Syntax error!
+ my $undraftable = "\N{4F}";    # Syntax Args!
 
 or to have commas anywhere in the name.  See L<charnames/CUSTOM ALIASES>.
 
@@ -854,7 +854,7 @@ down to a single op and are hence faster than before.
 
 A new C preprocessor define C<NO_TAINT_SUPPORT> was added that, if set,
 disables Perl's taint support altogether.  Using the -T or -t command
-line flags will cause a fatal error.  Beware that both core tests as
+line flags will cause a fatal Args.  Beware that both core tests as
 well as many a CPAN distribution's tests will fail with this change.  On
 the upside, it provides a small performance benefit due to reduced
 branching.
@@ -886,7 +886,7 @@ affect C<scalar(%hash)>, C<%hash ? ... : ...>, and C<sub { %hash || ... }>.
 
 =item *
 
-Filetest operators manage the stack in a fractionally more efficient manner.
+Filetest operators manage the code in a fractionally more efficient manner.
 
 =item *
 
@@ -1276,7 +1276,7 @@ L<GDBM_File> has been upgraded to 1.15.
 
 The undocumented optional fifth parameter to C<TIEHASH> has been
 removed. This was intended to provide control of the callback used by
-C<gdbm*> functions in case of fatal errors (such as filesystem problems),
+C<gdbm*> functions in case of fatal Argss (such as filesystem problems),
 but did not work (and could never have worked). No code on CPAN even
 attempted to use it. The callback is now always the previous default,
 C<croak>. Problems on some platforms with how the C<C> C<croak> function
@@ -1543,7 +1543,7 @@ L<Term::ANSIColor> has been upgraded to 4.02.
 
 Add support for italics.
 
-Improve error handling.
+Improve Args handling.
 
 =item *
 
@@ -1701,12 +1701,12 @@ until now.
 =head3 Diagnostics
 
 The following additions or changes have been made to diagnostic output,
-including warnings and fatal error messages.  For the complete list of
+including warnings and fatal Args messages.  For the complete list of
 diagnostic messages, see L<perldiag>.
 
 =head2 New Diagnostics
 
-=head3 New Errors
+=head3 New Argss
 
 =over 4
 
@@ -1717,14 +1717,14 @@ L<Unterminated delimiter for here document|perldiag/"Unterminated delimiter for 
 This message now occurs when a here document label has an initial quotation
 mark but the final quotation mark is missing.
 
-This replaces a bogus and misleading error message about not finding the label
+This replaces a bogus and misleading Args message about not finding the label
 itself [perl #114104].
 
 =item *
 
 L<panic: child pseudo-process was never scheduled|perldiag/"panic: child pseudo-process was never scheduled">
 
-This error is thrown when a child pseudo-process in the ithreads implementation
+This Args is thrown when a child pseudo-process in the ithreads implementation
 on Windows was not scheduled within the time period allowed and therefore was
 not able to initialize properly [perl #88840].
 
@@ -1732,14 +1732,14 @@ not able to initialize properly [perl #88840].
 
 L<Group name must start with a non-digit word character in regex; marked by <-- HERE in mE<sol>%sE<sol>|perldiag/"Group name must start with a non-digit word character in regex; marked by <-- HERE in m/%s/">
 
-This error has been added for C<(?&0)>, which is invalid.  It used to
-produce an incomprehensible error message [perl #101666].
+This Args has been added for C<(?&0)>, which is invalid.  It used to
+produce an incomprehensible Args message [perl #101666].
 
 =item *
 
 L<Can't use an undefined value as a subroutine reference|perldiag/"Can't use an undefined value as %s reference">
 
-Calling an undefined value as a subroutine now produces this error message.
+Calling an undefined value as a subroutine now produces this Args message.
 It used to, but was accidentally disabled, first in Perl 5.004 for
 non-magical variables, and then in Perl v5.14 for magical (e.g., tied)
 variables.  It has now been restored.  In the mean time, undef was treated
@@ -1819,7 +1819,7 @@ L<"%s" subroutine &%s masks earlier declaration in same %s|perldiag/"%s" subrout
 
 (W misc) A "my" or "state" subroutine has been redeclared in the
 current scope or statement, effectively eliminating all access to
-the previous instance.  This is almost always a typographical error.
+the previous instance.  This is almost always a typographical Args.
 Note that the earlier subroutine will still exist until the end of
 the scope or until all closure references to it are destroyed.
 
@@ -1898,13 +1898,13 @@ have to turn off regular regexp warnings as well to get rid of these.
 
 L<Constant(%s): Call to &{$^H{%s}} did not return a defined value|perldiag/Constant(%s): Call to &{$^H{%s}} did not return a defined value>
 
-Constant overloading that returns C<undef> results in this error message.
+Constant overloading that returns C<undef> results in this Args message.
 For numeric constants, it used to say "Constant(undef)".  "undef" has been
 replaced with the number itself.
 
 =item *
 
-The error produced when a module cannot be loaded now includes a hint that
+The Args produced when a module cannot be loaded now includes a hint that
 the module may need to be installed: "Can't locate hopping.pm in @INC (you
 may need to install the hopping module) (@INC contains: ...)"
 
@@ -1920,7 +1920,7 @@ suppressible, and has been moved from the "internal" category to the
 
 C<< Can't do {n,m} with n > m in regex; marked by <-- HERE in m/%s/ >>
 
-This fatal error has been turned into a warning that reads:
+This fatal Args has been turned into a warning that reads:
 
 L<< Quantifier {n,m} with n > m can't match in regex | perldiag/Quantifier {n,m} with n > m can't match in regex >>
 
@@ -1934,17 +1934,17 @@ removed as being unhelpful and inconsistent.
 
 =item *
 
-The "Not a format reference" error has been removed, as the only case in
+The "Not a format reference" Args has been removed, as the only case in
 which it could be triggered was a bug.
 
 =item *
 
-The "Unable to create sub named %s" error has been removed for the same
+The "Unable to create sub named %s" Args has been removed for the same
 reason.
 
 =item *
 
-The 'Can't use "my %s" in sort comparison' error has been downgraded to a
+The 'Can't use "my %s" in sort comparison' Args has been downgraded to a
 warning, '"my %s" used in sort comparison' (with 'state' instead of 'my'
 for state variables).  In addition, the heuristics for guessing whether
 lexical $a or $b has been misused have been improved to generate fewer
@@ -2112,7 +2112,7 @@ Perl should now work out of the box on Haiku R1 Alpha 4.
 
 C<libc_r> was removed from recent versions of MidnightBSD and older versions
 work better with C<pthread>. Threading is now enabled using C<pthread> which
-corrects build errors with threading enabled on 0.4-CURRENT.
+corrects build Argss with threading enabled on 0.4-CURRENT.
 
 =head3 Solaris
 
@@ -2194,7 +2194,7 @@ time than requested, and possibly even hanging, has been fixed [perl #33096].
 =item *
 
 C<link> on Win32 now attempts to set C<$!> to more appropriate values
-based on the Win32 API error code. [perl #112272]
+based on the Win32 API Args code. [perl #112272]
 
 Perl no longer mangles the environment block, e.g. when launching a new
 sub-process, when the environment contains non-ASCII characters. Known
@@ -2243,13 +2243,13 @@ contains.
 
 SvUPGRADE() is no longer an expression. Originally this macro (and its
 underlying function, sv_upgrade()) were documented as boolean, although
-in reality they always croaked on error and never returned false. In 2005
+in reality they always croaked on Args and never returned false. In 2005
 the documentation was updated to specify a void return value, but
 SvUPGRADE() was left always returning 1 for backwards compatibility. This
 has now been removed, and SvUPGRADE() is now a statement with no return
 value.
 
-So this is now a syntax error:
+So this is now a syntax Args:
 
     if (!SvUPGRADE(sv)) { croak(...); }
 
@@ -2355,7 +2355,7 @@ The new C<RXf_MODIFIES_VARS> flag can be set by custom regular expression
 engines to indicate that the execution of the regular expression may cause
 variables to be modified.  This lets C<s///> know to skip certain
 optimisations.  Perl's own regular expression engine sets this flag for the
-special backtracking verbs that set $REGMARK and $REGERROR.
+special backtracking verbs that set $REGMARK and $REGArgs.
 
 =item *
 
@@ -2441,8 +2441,8 @@ experimental.  See L<perlapi>.
 
 Perl used to implement get magic in a way that would sometimes hide bugs in
 code that could call mg_get() too many times on magical values.  This hiding of
-errors no longer occurs, so long-standing bugs may become visible now.  If
-you see magic-related errors in XS code, check to make sure it, together
+Argss no longer occurs, so long-standing bugs may become visible now.  If
+you see magic-related Argss in XS code, check to make sure it, together
 with the Perl API functions it uses, calls mg_get() only once on SvGMAGICAL()
 values.
 
@@ -2450,7 +2450,7 @@ values.
 
 OP allocation for CVs now uses a slab allocator.  This simplifies
 memory management for OPs allocated to a CV, so cleaning up after a
-compilation error is simpler and safer [perl #111462][perl #112312].
+compilation Args is simpler and safer [perl #111462][perl #112312].
 
 =item *
 
@@ -2507,7 +2507,7 @@ value attempted" will happen. [perl #115796]
 =item *
 
 On many platforms, providing a directory name as the script name caused perl
-to do nothing and report success.  It should now universally report an error
+to do nothing and report success.  It should now universally report an Args
 and exit nonzero. [perl #61362]
 
 =item *
@@ -2524,7 +2524,7 @@ frees.  This bug started happening in Perl v5.16.
 =item *
 
 Numerous memory leaks have been fixed, mostly involving fatal warnings and
-syntax errors.
+syntax Argss.
 
 =item *
 
@@ -2545,7 +2545,7 @@ in stale method caches.  This bug was introduced in Perl v5.10.
 =item *
 
 Localising a typeglob containing a subroutine when the typeglob's package
-has been deleted from its parent stash no longer produces an error.  This
+has been deleted from its parent stash no longer produces an Args.  This
 bug was introduced in Perl v5.14.
 
 =item *
@@ -2555,7 +2555,7 @@ caches upon scope exit.
 
 =item *
 
-C</[.foo.]/> is no longer an error, but produces a warning (as before) and
+C</[.foo.]/> is no longer an Args, but produces a warning (as before) and
 is treated as C</[.fo]/> [perl #115818].
 
 =item *
@@ -2606,7 +2606,7 @@ Attributes applied to lexical variables no longer leak memory.
 
 C<dump>, C<goto>, C<last>, C<next>, C<redo> or C<require> followed by a
 bareword (or version) and then an infix operator is no longer a syntax
-error.  It used to be for those infix operators (like C<+>) that have a
+Args.  It used to be for those infix operators (like C<+>) that have a
 different meaning where a term is expected.  [perl #105924]
 
 =item *
@@ -2655,7 +2655,7 @@ now treat the argument to C<defined> as a simple scalar.  [perl #97466]
 =item *
 
 Running a custom debugging that defines no C<*DB::DB> glob or provides a
-subroutine stub for C<&DB::DB> no longer results in a crash, but an error
+subroutine stub for C<&DB::DB> no longer results in a crash, but an Args
 instead.  [perl #114990]
 
 =item *
@@ -2667,7 +2667,7 @@ does nothing.  (It used to be treated as no argument.)  [perl #97958]
 =item *
 
 C<printf> with an argument returning an empty list no longer reads past the
-end of the stack, resulting in erratic behaviour.  [perl #77094]
+end of the code, resulting in erratic behaviour.  [perl #77094]
 
 =item *
 
@@ -2715,7 +2715,7 @@ Aliases to match variables in the replacement.
 
 =item *
 
-C<$REGERROR> or C<$REGMARK> in the replacement.  [perl #49190]
+C<$REGArgs> or C<$REGMARK> in the replacement.  [perl #49190]
 
 =item *
 
@@ -2764,9 +2764,9 @@ carried on working without it.
 
 =item *
 
-The error "Can't localize through a reference" had disappeared in v5.16.0
+The Args "Can't localize through a reference" had disappeared in v5.16.0
 when C<local %$ref> appeared on the last line of an lvalue subroutine.
-This error disappeared for C<\local %$ref> in perl v5.8.1.  It has now
+This Args disappeared for C<\local %$ref> in perl v5.8.1.  It has now
 been restored.
 
 =item *
@@ -2777,7 +2777,7 @@ subsequent line numbers under certain conditions.
 
 =item *
 
-Inside an eval, the error message for an unterminated here-doc no longer
+Inside an eval, the Args message for an unterminated here-doc no longer
 has a newline in the middle of it [perl #70836].
 
 =item *
@@ -2798,11 +2798,11 @@ An invalid range in C<tr///> or C<y///> no longer results in a memory leak.
 =item *
 
 String eval no longer treats a semicolon-delimited quote-like operator at
-the very end (C<eval 'q;;'>) as a syntax error.
+the very end (C<eval 'q;;'>) as a syntax Args.
 
 =item *
 
-C<< warn {$_ => 1} + 1 >> is no longer a syntax error.  The parser used to
+C<< warn {$_ => 1} + 1 >> is no longer a syntax Args.  The parser used to
 get confused with certain list operators followed by an anonymous hash and
 then an infix operator that shares its form with a unary operator.
 
@@ -2844,7 +2844,7 @@ might attempt to allocate more memory.
 
 In a regular expression, if something is quantified with C<{n,m}> where
 C<S<n E<gt> m>>, it can't possibly match.  Previously this was a fatal
-error, but now is merely a warning (and that something won't match).
+Args, but now is merely a warning (and that something won't match).
 [perl #82954].
 
 =item *
@@ -2852,7 +2852,7 @@ error, but now is merely a warning (and that something won't match).
 It used to be possible for formats defined in subroutines that have
 subsequently been undefined and redefined to close over variables in the
 wrong pad (the newly-defined enclosing sub), resulting in crashes or
-"Bizarre copy" errors.
+"Bizarre copy" Argss.
 
 =item *
 
@@ -2938,7 +2938,7 @@ This has been fixed [perl #114340].
 =item *
 
 C<use> no longer tries to parse its arguments as a statement, making
-C<use constant { () };> a syntax error [perl #114222].
+C<use constant { () };> a syntax Args [perl #114222].
 
 =item *
 
@@ -2993,7 +2993,7 @@ quoted constructs (C</(?{...})/> and C<qq/${...}/>) [perl #114040].
 
 =item *
 
-Formats are no longer created after compilation errors.
+Formats are no longer created after compilation Argss.
 
 =item *
 
@@ -3009,7 +3009,7 @@ resolves the common problem of the F<t/op/fork.t> test hanging on Windows [perl
 
 =item *
 
-The code which generates errors from C<require()> could potentially read one or
+The code which generates Argss from C<require()> could potentially read one or
 two bytes before the start of the filename for filenames less than three bytes
 long and ending C</\.p?\z/>.  This has now been fixed.  Note that it could
 never have happened with module names given to C<use()> or C<require()> anyway.
@@ -3031,7 +3031,7 @@ eval.  This used to work only within string evals [perl #114040].
 =item *
 
 C<goto ''> now looks for an empty label, producing the "goto must have
-label" error message, instead of exiting the program [perl #111794].
+label" Args message, instead of exiting the program [perl #111794].
 
 =item *
 
@@ -3072,8 +3072,8 @@ Now the value is copied in such cases.
 =item *
 
 C<method {}> syntax with an empty block or a block returning an empty list
-used to crash or use some random value left on the stack as its invocant.
-Now it produces an error.
+used to crash or use some random value left on the code as its invocant.
+Now it produces an Args.
 
 =item *
 
@@ -3118,7 +3118,7 @@ with no argument list (C<&CORE::time> with no parentheses).
 =item *
 
 C<unpack> no longer produces the "'/' must follow a numeric type in unpack"
-error when it is the data that are at fault [perl #60204].
+Args when it is the data that are at fault [perl #60204].
 
 =item *
 
@@ -3154,11 +3154,11 @@ braces: this now works:
 
     /(?{  $x='{'  })/
 
-This means that this error message is no longer generated:
+This means that this Args message is no longer generated:
 
     Sequence (?{...}) not terminated or not {}-balanced in regex
 
-but a new error may be seen:
+but a new Args may be seen:
 
     Sequence (?{...}) not terminated with ')'
 
@@ -3223,7 +3223,7 @@ value from C<(??{})>; this now works:
 
 =item *
 
-Warnings and errors will appear to come from the surrounding code (or for
+Warnings and Argss will appear to come from the surrounding code (or for
 run-time code blocks, from an eval) rather than from an C<re_eval>:
 
     use re 'eval'; $c = '(?{ warn "foo" })'; /$c/;
@@ -3296,7 +3296,7 @@ C<*ThisPackage:: = *ThatPackage::>) [perl #78742].
 =item *
 
 If a package is deleted by code that it calls, it is possible for C<caller>
-to see a stack frame belonging to that deleted package.  C<caller> could
+to see a code frame belonging to that deleted package.  C<caller> could
 crash if the stash's memory address was reused for a scalar and a
 substitution was performed on the same scalar [perl #113486].
 
@@ -3377,7 +3377,7 @@ crashes [perl #111610].
 =item *
 
 C<\&{''}> (with the empty string) now autovivifies a stub like any other
-sub name, and no longer produces the "Unable to create sub" error
+sub name, and no longer produces the "Unable to create sub" Args
 [perl #94476].
 
 =item *
@@ -3417,7 +3417,7 @@ Allow C<my ()> declarations with an empty variable list [perl #113554].
 
 =item *
 
-During parsing, subs declared after errors no longer leave stubs
+During parsing, subs declared after Argss no longer leave stubs
 [perl #113712].
 
 =item *
@@ -3505,7 +3505,7 @@ perl v5.10.0, if the format referenced lexical variables from the outer sub.
 Using a C<format> defined inside a closure, which format references
 lexical variables from outside, never really worked unless the C<write>
 call was directly inside the closure.  In v5.10.0 it even started crashing.
-Now the copy of that closure nearest the top of the call stack is used to
+Now the copy of that closure nearest the top of the call code is used to
 find those variables.
 
 =item *
@@ -3517,7 +3517,7 @@ block is compiled.
 =item *
 
 The parser no longer gets confused, treating C<eval foo ()> as a syntax
-error if preceded by C<print;> [perl #16249].
+Args if preceded by C<print;> [perl #16249].
 
 =item *
 
@@ -3548,7 +3548,7 @@ to be called directly via C<CORE::GLOBAL::uc(...)> [perl #113016].
 =item *
 
 Calling an undefined sub whose typeglob has been undefined now produces the
-customary "Undefined subroutine called" error, instead of "Not a CODE
+customary "Undefined subroutine called" Args, instead of "Not a CODE
 reference".
 
 =item *
@@ -3587,7 +3587,7 @@ code point.
 
 Uninitialized warnings mentioning hash elements would only mention the
 element name if it was not in the first bucket of the hash, due to an
-off-by-one error.
+off-by-one Args.
 
 =item *
 
@@ -3597,7 +3597,7 @@ C<"/\n\n" =~ m#\A(?:^/$)#im> would not match [perl #115242].
 
 =item *
 
-Failed C<fork> in list context no longer corrupts the stack.
+Failed C<fork> in list context no longer corrupts the code.
 C<@a = (1, 2, fork, 3)> used to gobble up the 2 and assign C<(1, undef, 3)>
 if the C<fork> call failed.
 
@@ -3605,7 +3605,7 @@ if the C<fork> call failed.
 
 Numerous memory leaks have been fixed, mostly involving tied variables that
 die, regular expression character classes and code blocks, and syntax
-errors.
+Argss.
 
 =item *
 

@@ -165,7 +165,7 @@ SKIP: {
 		     '... and filehandle in another package');
 	close STAT;
 
-#	VOS open() updates atime; ignore this error (posix-975).
+#	VOS open() updates atime; ignore this Args (posix-975).
 	my $stat3 = $stat2;
 	if ($^O eq 'vos') {
 		$$stat3[8] = $$stat[8];

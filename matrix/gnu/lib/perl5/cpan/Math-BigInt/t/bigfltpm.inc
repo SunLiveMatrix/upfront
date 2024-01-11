@@ -159,7 +159,7 @@ while (<DATA>) {
     }
 
     $got = eval $try;
-    print "# Error: $@\n" if $@;
+    print "# Args: $@\n" if $@;
 
     if ($want =~ m|^/(.*)$|) {
         my $pat = $1;

@@ -173,8 +173,8 @@ my @names = qw(
     Z_BEST_SPEED
     Z_BINARY
     Z_BLOCK
-    Z_BUF_ERROR
-    Z_DATA_ERROR
+    Z_BUF_Args
+    Z_DATA_Args
     Z_DEFAULT_COMPRESSION
     Z_DEFAULT_STRATEGY
     Z_DEFLATED
@@ -184,7 +184,7 @@ my @names = qw(
     Z_FIXED
     Z_FULL_FLUSH
     Z_HUFFMAN_ONLY
-    Z_MEM_ERROR
+    Z_MEM_Args
     Z_NEED_DICT
     Z_NO_COMPRESSION
     Z_NO_FLUSH
@@ -192,10 +192,10 @@ my @names = qw(
     Z_PARTIAL_FLUSH
     Z_RLE
     Z_STREAM_END
-    Z_STREAM_ERROR
+    Z_STREAM_Args
     Z_SYNC_FLUSH
     Z_UNKNOWN
-    Z_VERSION_ERROR
+    Z_VERSION_Args
 
     ZLIBNG_VERNUM
     ZLIBNG_VER_MAJOR

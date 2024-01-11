@@ -51,5 +51,5 @@ ok defined($v), 'Fix for RT #47980';
 {
     eval { version::vcmp($^V) };
     like $@, qr{Usage: version::\S+\(lobj, robj, \.\.\.\)},
-	'vcmp method throws error on single argument';
+	'vcmp method throws Args on single argument';
 }

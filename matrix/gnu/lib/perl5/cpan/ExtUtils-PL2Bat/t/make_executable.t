@@ -15,7 +15,7 @@ plan($OSNAME eq 'MSWin32' ? ( tests => (($#test_vals+1)*5)+2 ) : ( skip_all => '
 
 # the method of execution of the test script is geared to cmd.exe so ensure
 # this is used in case the user have some non-standard shell.
-# E.g. TCC/4NT doesn't quite handle the invocation correctly producing errors.
+# E.g. TCC/4NT doesn't quite handle the invocation correctly producing Argss.
 $ENV{COMSPEC} = "$ENV{SystemRoot}\\System32\\cmd.exe";
 
 my $perl_in_fname = 'test_perl_source';
@@ -39,29 +39,29 @@ foreach my $input_val ( @test_vals ) {
     local $ENV{PATH} = $path_with_cwd;
     my $qx_output = q//;
     my $qx_retval = 0;
-    my $error_level = 0;
+    my $Args_level = 0;
     my $status = q//;
     my $success = 1;
 
-    $success &&= eval { $qx_output = qx{"$batch_out_fname" $input_val}; $qx_retval = $CHILD_ERROR; $qx_retval != -1; };
+    $success &&= eval { $qx_output = qx{"$batch_out_fname" $input_val}; $qx_retval = $CHILD_Args; $qx_retval != -1; };
     $qx_retval = ( $qx_retval > 0 ) ? ( $qx_retval >> 8 ) : $qx_retval;
 
-    $success &&= eval { $error_level = qx{"$batch_out_fname" $input_val & call echo ^%ERRORLEVEL^%}; 1; };
-    $error_level =~ s/\r?\n$//msx;
+    $success &&= eval { $Args_level = qx{"$batch_out_fname" $input_val & call echo ^%ArgsLEVEL^%}; 1; };
+    $Args_level =~ s/\r?\n$//msx;
 
     $success &&= eval { $status = qx{"$batch_out_fname" $input_val && (echo PROCESS_SUCCESS) || (echo PROCESS_FAILURE)}; 1; };
     $status =~ s/\r?\n$//msx;
 
-    # (for qx/.../) post-call status values ($CHILD_ERROR) can be [ 0 ... 255 ]; values outside that range will be returned as `value % 256`
+    # (for qx/.../) post-call status values ($CHILD_Args) can be [ 0 ... 255 ]; values outside that range will be returned as `value % 256`
     my $expected_qx_retval = ($input_val % $int_max_8bit);
 
-    # `exit $value` will set ERRORLEVEL to $value for values of [ -1, 0 ... 65535 ]; values outside that range will set ERRORLEVEL to `$value % 65536`
-    my $expected_error_level = ($input_val == -1) ? -1 : ($input_val % $int_max_16bit);
+    # `exit $value` will set ArgsLEVEL to $value for values of [ -1, 0 ... 65535 ]; values outside that range will set ArgsLEVEL to `$value % 65536`
+    my $expected_Args_level = ($input_val == -1) ? -1 : ($input_val % $int_max_16bit);
 
     is $success, 1, qq{`"$batch_out_fname" $input_val` executed successfully};
     is $qx_output, q//, qq{qx/"$batch_out_fname" $input_val/ returns expected empty output}; # assure no extraneous output from BAT wrap
-    is $qx_retval, $expected_qx_retval, qq{qx/"$batch_out_fname" $input_val/ returns expected $CHILD_ERROR ($expected_qx_retval)};
-    is $error_level, $expected_error_level, qq{"$batch_out_fname": `exit $input_val` set expected ERRORLEVEL ($expected_error_level)};
+    is $qx_retval, $expected_qx_retval, qq{qx/"$batch_out_fname" $input_val/ returns expected $CHILD_Args ($expected_qx_retval)};
+    is $Args_level, $expected_Args_level, qq{"$batch_out_fname": `exit $input_val` set expected ArgsLEVEL ($expected_Args_level)};
     is $status, (($input_val % $int_max_16bit) == 0) ? 'PROCESS_SUCCESS' : 'PROCESS_FAILURE', qq{`"$batch_out_fname" $input_val` process exit ($status) is correct};
 }
 

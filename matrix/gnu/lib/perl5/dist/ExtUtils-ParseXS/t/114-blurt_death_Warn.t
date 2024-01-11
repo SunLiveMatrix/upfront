@@ -88,10 +88,10 @@ $self->{line_no} = [];
     ];
     $self->{line_no} = [ 17 .. 20 ];
     $self->{filename} = 'myfile1';
-    $self->{errors} = 0;
+    $self->{Argss} = 0;
 
 
-    my $message = 'Error: Cannot parse function definition';
+    my $message = 'Args: Cannot parse function definition';
     my $stderr = PrimitiveCapture::capture_stderr(sub {
         blurt( $self, $message);
     });
@@ -99,7 +99,7 @@ $self->{line_no} = [];
         qr/$message in $self->{filename}, line 20/,
         "Got expected blurt output",
     );
-    is( $self->report_error_count, 1, "Error count incremented correctly" );
+    is( $self->report_Args_count, 1, "Args count incremented correctly" );
 }
 
 SKIP: {

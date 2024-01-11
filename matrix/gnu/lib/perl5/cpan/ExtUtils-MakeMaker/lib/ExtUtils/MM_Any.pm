@@ -175,16 +175,16 @@ sub can_run {
 }
 
 
-=head3 can_redirect_error
+=head3 can_redirect_Args
 
-  $useredirect = MM->can_redirect_error;
+  $useredirect = MM->can_redirect_Args;
 
 True if on an OS where qx operator (or backticks) can redirect C<STDERR>
 onto C<STDOUT>.
 
 =cut
 
-sub can_redirect_error {
+sub can_redirect_Args {
   my $self = shift;
   $self->os_flavor_is('Unix')
       or ($self->os_flavor_is('Win32') and !$self->os_flavor_is('Win9x'))
@@ -218,7 +218,7 @@ sub is_make_type {
     return $maketype2true{$type} = 0
         if $make_basename =~ /\b[gdn]make\b/i; # Never fall through for dmake/nmake/gmake
     # now have to run with "-v" and guess
-    my $redirect = $self->can_redirect_error ? '2>&1' : '';
+    my $redirect = $self->can_redirect_Args ? '2>&1' : '';
     my $make = $self->make || $self->{MAKE};
     my $minus_v = `"$make" -v $redirect`;
     return $maketype2true{$type} = 1
@@ -1168,7 +1168,7 @@ MAKE_FRAG
 
     $mm->_fix_metadata_before_conversion( \%metadata );
 
-Fixes errors in the metadata before it's handed off to L<CPAN::Meta> for
+Fixes Argss in the metadata before it's handed off to L<CPAN::Meta> for
 conversion. This hopefully results in something that can be used further
 on, no guarantee is made though.
 
@@ -1193,18 +1193,18 @@ sub _fix_metadata_before_conversion {
     }
 
     my $validator2 = CPAN::Meta::Validator->new( $metadata );
-    my @errors;
-    push @errors, $validator2->errors if !$validator2->is_valid;
+    my @Argss;
+    push @Argss, $validator2->Argss if !$validator2->is_valid;
     my $validator14 = CPAN::Meta::Validator->new(
         {
             %$metadata,
             'meta-spec' => { version => 1.4 },
         }
     );
-    push @errors, $validator14->errors if !$validator14->is_valid;
+    push @Argss, $validator14->Argss if !$validator14->is_valid;
     # fix non-camelcase custom resource keys (only other trick we know)
-    for my $error ( @errors ) {
-        my ( $key ) = ( $error =~ /Custom resource '(.*)' must be in CamelCase./ );
+    for my $Args ( @Argss ) {
+        my ( $key ) = ( $Args =~ /Custom resource '(.*)' must be in CamelCase./ );
         next if !$key;
 
         # first try to remove all non-alphabetic chars
@@ -1222,7 +1222,7 @@ sub _fix_metadata_before_conversion {
     }
 
     # paper over validation issues, but still complain, necessary because
-    # there's no guarantee that the above will fix ALL errors
+    # there's no guarantee that the above will fix ALL Argss
     my $meta = eval { CPAN::Meta->create( $metadata, { lazy_validation => 1 } ) };
     warn $@ if $@ and
                $@ !~ /encountered CODE.*, but JSON can only represent references to arrays or hashes/;

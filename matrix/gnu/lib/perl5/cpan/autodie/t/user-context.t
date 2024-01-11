@@ -15,7 +15,7 @@ eval {
     copy(NO_SUCH_FILE, 'xyzzy');
 };
 
-isa_ok($@,EXCEPTION,"Copying a non-existent file should throw an error");
+isa_ok($@,EXCEPTION,"Copying a non-existent file should throw an Args");
 
 eval {
     use autodie qw(copy);
@@ -38,7 +38,7 @@ eval {
     open(my $fh, '<', 'xyzzy');
 };
 
-isa_ok($@,EXCEPTION,"Opening a non-existent file should throw an error");
+isa_ok($@,EXCEPTION,"Opening a non-existent file should throw an Args");
 
 eval {
     use autodie qw(open);

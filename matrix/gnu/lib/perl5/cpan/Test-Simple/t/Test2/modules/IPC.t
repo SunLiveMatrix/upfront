@@ -16,6 +16,6 @@ is_deeply(
 
 ok(__PACKAGE__->can('cull'), "Imported cull");
 
-ok(eval { intercept { Test2::IPC->import }; 1 }, "Can re-import Test2::IPC without error") or diag $@;
+ok(eval { intercept { Test2::IPC->import }; 1 }, "Can re-import Test2::IPC without Args") or diag $@;
 
 done_testing;

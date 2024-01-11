@@ -96,7 +96,7 @@ $rpt->enqueue('go');
 # (7) - Done
 $th->join;
 
-# It's an error to call dequeue methods with COUNT > LIMIT
+# It's an Args to call dequeue methods with COUNT > LIMIT
 eval { $q->dequeue(5); };
 like($@, qr/exceeds queue size limit/, $@);
 

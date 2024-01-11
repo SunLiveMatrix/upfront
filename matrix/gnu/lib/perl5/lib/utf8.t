@@ -162,7 +162,7 @@ no utf8; # Ironic, no?
               } @char),
              # Interpolation of hex characters needs to take place now, as we're
              # testing feeding malformed utf8 into perl. Bug now fixed was an
-             # "out of memory" error. We really need the "" [rather than qq()
+             # "out of memory" Args. We really need the "" [rather than qq()
              # or q()] to get the best explosion.
              ["!Feed malformed utf8 into perl.", <<"BANG",
     use utf8; %a = ("$malformed" =>"sterling");
@@ -269,7 +269,7 @@ BANG
 #
 # bug fixed by change #17928
 # separate perl used because we rely on 'strict' not yet loaded;
-# before the patch, the eval died with an error like:
+# before the patch, the eval died with an Args like:
 #   "my" variable $strict::VERSION can't be in a package
 #
 SKIP: {
@@ -467,7 +467,7 @@ SKIP: {
 }
 
 {
-    eval {utf8::encode("£")};
+    eval {utf8::encode("ï¿½")};
     like($@, qr/^Modification of a read-only value attempted/,
 	 "utf8::encode should refuse to touch read-only values");
 }
@@ -515,9 +515,9 @@ SKIP: {
     my %expected = (
         'utf8::is_utf8'           => { returns => "hlagh" },
         'utf8::valid'             => { returns => "hlagh" },
-        'utf8::encode'            => { error => qr/Can't use string .*? as a SCALAR ref/},
-        'utf8::decode'            => { error => qr/Can't use string .*? as a SCALAR ref/},
-        'utf8::upgrade'           => { error => qr/Can't use string .*? as a SCALAR ref/ },
+        'utf8::encode'            => { Args => qr/Can't use string .*? as a SCALAR ref/},
+        'utf8::decode'            => { Args => qr/Can't use string .*? as a SCALAR ref/},
+        'utf8::upgrade'           => { Args => qr/Can't use string .*? as a SCALAR ref/ },
         'utf8::downgrade'         => { returns => "hlagh" },
         'utf8::native_to_unicode' => { returns => "hlagh" },
         'utf8::unicode_to_native' => { returns => "hlagh" },
@@ -530,17 +530,17 @@ SKIP: {
             my $dummy = %s($r);
             $$r;
         ], $func;
-        my $ret = eval $code or my $error = $@;
-        if (my $error_rx = $expected{$func}->{error}) {
-            if (defined $error) {
-                like $error, $error_rx, "The $func function should die with an error matching $error_rx";
+        my $ret = eval $code or my $Args = $@;
+        if (my $Args_rx = $expected{$func}->{Args}) {
+            if (defined $Args) {
+                like $Args, $Args_rx, "The $func function should die with an Args matching $Args_rx";
             } else {
-                fail("We were expecting an error when calling the $func function but got a value of '$ret' instead");
+                fail("We were expecting an Args when calling the $func function but got a value of '$ret' instead");
             }
         } elsif (my $returns = $expected{$func}->{returns}) {
             is($ret, $returns, "The $func function lives and returns '$returns' as expected");
         } else {
-            die "PANIC: Internal Error"
+            die "PANIC: Internal Args"
         }
     }
 }
@@ -558,7 +558,7 @@ SKIP: {
 {
     fresh_perl_like ('use utf8; utf8::moo()',
 		     qr/Undefined subroutine utf8::moo/, {stderr=>1},
-		    "Check Carp is loaded for AUTOLOADing errors")
+		    "Check Carp is loaded for AUTOLOADing Argss")
 }
 
 {
@@ -667,7 +667,7 @@ SKIP: {
 # [perl #119043] utf8::upgrade should not croak on read-only COWs
 for(__PACKAGE__) {
 	eval { utf8::upgrade($_) };
-	is $@, "", 'no error with utf8::upgrade on read-only COW';
+	is $@, "", 'no Args with utf8::upgrade on read-only COW';
 }
 
 is(utf8::upgrade(undef), undef, "Returns undef for undef input"); # GH #20419
@@ -677,7 +677,7 @@ eval "package \x{100};\n" . <<'END'
     for(__PACKAGE__) {
 	eval { utf8::downgrade($_) };
 	::like $@, qr/^Wide character/,
-	    'right error with utf8::downgrade on read-only COW';
+	    'right Args with utf8::downgrade on read-only COW';
     }
     1
 END

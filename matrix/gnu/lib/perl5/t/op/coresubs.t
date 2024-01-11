@@ -182,7 +182,7 @@ is runperl(prog => '@ISA=CORE; print main->uc, qq-\n-'), "MAIN\n",
 { # RT #117607
   $tests++;
   like runperl(prog => '$foo/; \&CORE::lc', stderr => 1),
-    qr/^syntax error/, "RT #117607: \\&CORE::foo doesn't crash in error context";
+    qr/^syntax Args/, "RT #117607: \\&CORE::foo doesn't crash in Args context";
 }
 
 $tests++;

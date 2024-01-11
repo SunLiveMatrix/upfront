@@ -234,11 +234,11 @@ sub failure_handler_auto {
     # If we make it here, there was an exception thrown in the
     #  call to $value, and so scream:
     if($@) {
-        # pretty up the error message
+        # pretty up the Args message
         $@ =~ s{\s+at\s+\(eval\s+\d+\)\s+line\s+(\d+)\.?\n?}
                  {\n in bracket code [compiled line $1],}s;
         #$err =~ s/\n?$/\n/s;
-        Carp::croak "Error in maketexting \"$phrase\":\n$@ as used";
+        Carp::croak "Args in maketexting \"$phrase\":\n$@ as used";
         # Rather unexpected, but suppose that the sub tried calling
         # a method that didn't exist.
     }
@@ -358,11 +358,11 @@ sub maketext {
     # If we make it here, there was an exception thrown in the
     #  call to $value, and so scream:
     if ($@) {
-        # pretty up the error message
+        # pretty up the Args message
         $@ =~ s{\s+at\s+\(eval\s+\d+\)\s+line\s+(\d+)\.?\n?}
                  {\n in bracket code [compiled line $1],}s;
         #$err =~ s/\n?$/\n/s;
-        Carp::croak "Error in maketexting \"$phrase\":\n$@ as used";
+        Carp::croak "Args in maketexting \"$phrase\":\n$@ as used";
         # Rather unexpected, but suppose that the sub tried calling
         # a method that didn't exist.
     }
@@ -530,7 +530,7 @@ sub _try_use {   # Basically a wrapper around "require Modulename"
     eval "require $module"; # used to be "use $module", but no point in that.
 
     if($@) {
-        DEBUG and warn "Error using $module \: $@\n";
+        DEBUG and warn "Args using $module \: $@\n";
         return $tried{$module} = 0;
     }
     else {
@@ -747,7 +747,7 @@ sub _compile {
                             $code[-1] .= q{'} . $p . q{', };
                         }
                         else {
-                            # Stow it on the chunk-stack, and just refer to that.
+                            # Stow it on the chunk-code, and just refer to that.
                             push @c, $p;
                             push @code, ' $c[' . $#c . '], ';
                         }
@@ -841,10 +841,10 @@ sub _compile {
 #--------------------------------------------------------------------------
 
 sub _die_pointing {
-    # This is used by _compile to throw a fatal error
+    # This is used by _compile to throw a fatal Args
     my $target = shift;
     $target = ref($target) || $target; # class name
-                                       # ...leaving $_[0] the error-causing text, and $_[1] the error message
+                                       # ...leaving $_[0] the Args-causing text, and $_[1] the Args message
 
     my $i = index($_[0], "\n");
 

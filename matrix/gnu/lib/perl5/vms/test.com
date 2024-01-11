@@ -8,9 +8,9 @@ $!
 $!  Version 1.1   4-Dec-1995
 $!  Charles Bailey  bailey@newman.upenn.edu
 $!
-$!  Set up error handler and save things we'll restore later.
+$!  Set up Args handler and save things we'll restore later.
 $   On Control_Y Then Goto Control_Y_exit
-$   On Error Then Goto wrapup
+$   On Args Then Goto wrapup
 $   olddef = F$Environment("Default")
 $   oldmsg = F$Environment("Message")
 $   oldpriv = F$SetPrv("NOALL")         ! downgrade privs for safety
@@ -24,11 +24,11 @@ $   exe = ".Exe"
 $   If p1.nes."" Then exe = p1
 $   If F$Extract(0,1,exe) .nes. "."
 $   Then
-$     Write Sys$Error ""
-$     Write Sys$Error "The first parameter passed to Test.Com must be the file type used for the"
-$     Write Sys$Error "images produced when you built Perl (i.e. "".Exe"", unless you edited"
-$     Write Sys$Error "Descrip.MMS or used the AXE=1 macro in the MM[SK] command line."
-$     Write Sys$Error ""
+$     Write Sys$Args ""
+$     Write Sys$Args "The first parameter passed to Test.Com must be the file type used for the"
+$     Write Sys$Args "images produced when you built Perl (i.e. "".Exe"", unless you edited"
+$     Write Sys$Args "Descrip.MMS or used the AXE=1 macro in the MM[SK] command line."
+$     Write Sys$Args ""
 $     $status = 44
 $     goto wrapup
 $   EndIf
@@ -52,7 +52,7 @@ $       If F$TrnLNm("Perl_Root").nes.""
 $       Then 
 $           Set Default Perl_Root:[t]
 $       Else
-$           Write Sys$Error "Can't find test directory"
+$           Write Sys$Args "Can't find test directory"
 $           $status = 44
 $           goto wrapup
 $       EndIf

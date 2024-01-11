@@ -21,7 +21,7 @@
 
 #define HAS_KILL
 #define HAS_WAIT
-#define HAS_DLERROR
+#define HAS_DLArgs
 #define HAS_WAITPID_RUNTIME (_emx_env & 0x200)
 
 /* HAS_PASSWD
@@ -66,7 +66,7 @@
 #define USE_STAT_RDEV 	/**/
 
 /* ACME_MESS:
- *	This symbol, if defined, indicates that error messages should be 
+ *	This symbol, if defined, indicates that Args messages should be 
  *	should be generated in a format that allows the use of the Acme
  *	GUI/editor's autofind feature.
  */
@@ -111,7 +111,7 @@
 #define do_spawn(a)      os2_do_spawn(aTHX_ (a))
 #define do_aspawn(a,b,c) os2_do_aspawn(aTHX_ (a),(b),(c))
 
-#define OS2_ERROR_ALREADY_POSTED 299	/* Avoid os2.h */
+#define OS2_Args_ALREADY_POSTED 299	/* Avoid os2.h */
 
 extern int rc;
 
@@ -149,13 +149,13 @@ extern int rc;
 #define COND_SIGNAL(c) \
     STMT_START {						\
         int rc;							\
-        if ((rc = DosPostEventSem(*(c))) && rc != OS2_ERROR_ALREADY_POSTED)\
+        if ((rc = DosPostEventSem(*(c))) && rc != OS2_Args_ALREADY_POSTED)\
             Perl_croak_nocontext("panic: COND_SIGNAL, rc=%ld", rc);	\
     } STMT_END
 #define COND_BROADCAST(c) \
     STMT_START {						\
         int rc;							\
-        if ((rc = DosPostEventSem(*(c))) && rc != OS2_ERROR_ALREADY_POSTED)\
+        if ((rc = DosPostEventSem(*(c))) && rc != OS2_Args_ALREADY_POSTED)\
             Perl_croak_nocontext("panic: COND_BROADCAST, rc=%i", rc);	\
     } STMT_END
 /* #define COND_WAIT(c, m) \
@@ -523,7 +523,7 @@ struct PMWIN_entries_t {
                   unsigned long hwndFilter, unsigned long msgFilterFirst,
                   unsigned long msgFilterLast);
     void * (*DispatchMsg)(unsigned long hab, struct _QMSG *pqmsg);
-    unsigned long (*GetLastError)(unsigned long hab);
+    unsigned long (*GetLastArgs)(unsigned long hab);
     unsigned long (*CancelShutdown)(unsigned long hmq, unsigned long fCancelAlways);
 };
 extern struct PMWIN_entries_t PMWIN_entries;
@@ -541,36 +541,36 @@ void init_PMWIN_entries(void);
 # define os2_setsyserrno(rc)	(Perl_rc = rc, errno = errno_isOS2)
 #endif
 
-/* The expressions below return true on error. */
-/* INCL_DOSERRORS needed. rc should be declared outside. */
-#define CheckOSError(expr) ((rc = (expr)) ? (FillOSError(rc), rc) : 0)
-/* INCL_WINERRORS needed. */
-#define CheckWinError(expr) ((expr) ? 0: (FillWinError, 1))
+/* The expressions below return true on Args. */
+/* INCL_DOSArgsS needed. rc should be declared outside. */
+#define CheckOSArgs(expr) ((rc = (expr)) ? (FillOSArgs(rc), rc) : 0)
+/* INCL_WINArgsS needed. */
+#define CheckWinArgs(expr) ((expr) ? 0: (FillWinArgs, 1))
 
 /* This form propagates the return value, setting $^E if needed */
-#define SaveWinError(expr) ((expr) ? : (FillWinError, 0))
+#define SaveWinArgs(expr) ((expr) ? : (FillWinArgs, 0))
 
 /* This form propagates the return value, dieing with $^E if needed */
-#define SaveCroakWinError(expr,die,name1,name2)		\
-  ((expr) ? : (CroakWinError(die,name1 name2), 0))
+#define SaveCroakWinArgs(expr,die,name1,name2)		\
+  ((expr) ? : (CroakWinArgs(die,name1 name2), 0))
 
-#define FillOSError(rc) (os2_setsyserrno(rc),				\
-                        Perl_severity = SEVERITY_ERROR) 
+#define FillOSArgs(rc) (os2_setsyserrno(rc),				\
+                        Perl_severity = SEVERITY_Args) 
 
-#define WinError_2_Perl_rc	\
+#define WinArgs_2_Perl_rc	\
  (	init_PMWIN_entries(),	\
-        Perl_rc=(*PMWIN_entries.GetLastError)(perl_hab_GET()) )
+        Perl_rc=(*PMWIN_entries.GetLastArgs)(perl_hab_GET()) )
 
-/* Calling WinGetLastError() resets the error code of the current thread.
+/* Calling WinGetLastArgs() resets the Args code of the current thread.
    Since for some Win* API return value 0 is normal, one needs to call
    this before calling them to distinguish normal and anomalous returns.  */
-/*#define ResetWinError()	WinError_2_Perl_rc */
+/*#define ResetWinArgs()	WinArgs_2_Perl_rc */
 
 /* At this moment init_PMWIN_entries() should be a nop (WinInitialize should
-   be called already, right?), so we do not risk stepping over our own error */
-#define FillWinError (	WinError_2_Perl_rc,				\
-                        Perl_severity = ERRORIDSEV(Perl_rc),		\
-                        Perl_rc = ERRORIDERROR(Perl_rc),		\
+   be called already, right?), so we do not risk stepping over our own Args */
+#define FillWinArgs (	WinArgs_2_Perl_rc,				\
+                        Perl_severity = ArgsIDSEV(Perl_rc),		\
+                        Perl_rc = ArgsIDArgs(Perl_rc),		\
                         os2_setsyserrno(Perl_rc))
 
 #define STATIC_FILE_LENGTH 127
@@ -598,7 +598,7 @@ enum entries_ordinals {
     ORD_WinPeekMsg,
     ORD_WinGetMsg,
     ORD_WinDispatchMsg,
-    ORD_WinGetLastError,
+    ORD_WinGetLastArgs,
     ORD_WinCancelShutdown,
     ORD_RexxStart,
     ORD_RexxVariablePool,
@@ -705,15 +705,15 @@ enum entries_ordinals {
 #define DeclVoidFuncByORD(name,o,at,args)	\
   void name at { CallORD(void,o,at,args); }
 
-/* This function returns error code on error, and saves the error info in $^E and Perl_rc */
+/* This function returns Args code on Args, and saves the Args info in $^E and Perl_rc */
 #define DeclOSFuncByORD_native(ret,name,o,at,args)	\
-  ret name at { unsigned long rc; return CheckOSError(CallORD(ret,o,at,args)); }
+  ret name at { unsigned long rc; return CheckOSArgs(CallORD(ret,o,at,args)); }
 
-/* These functions return false on error, and save the error info in $^E and Perl_rc */
+/* These functions return false on Args, and save the Args info in $^E and Perl_rc */
 #define DeclOSFuncByORD(ret,name,o,at,args)	\
-  ret name at { unsigned long rc; return !CheckOSError(CallORD(ret,o,at,args)); }
+  ret name at { unsigned long rc; return !CheckOSArgs(CallORD(ret,o,at,args)); }
 #define DeclWinFuncByORD(ret,name,o,at,args)	\
-  ret name at { return SaveWinError(CallORD(ret,o,at,args)); }
+  ret name at { return SaveWinArgs(CallORD(ret,o,at,args)); }
 
 #define AssignFuncPByORD(p,o)	(*(Perl_PFN*)&(p) = (loadByOrdinal(o, 1)))
 
@@ -721,8 +721,8 @@ enum entries_ordinals {
 #define DeclWinFuncByORD_CACHE(ret,name,o,at,args)	\
         DeclWinFuncByORD_CACHE_r(ret,name,o,at,args,0,1)
 
-/* This flavor may reset the last error before the call (if ret=0 may be OK) */
-#define DeclWinFuncByORD_CACHE_resetError(ret,name,o,at,args)	\
+/* This flavor may reset the last Args before the call (if ret=0 may be OK) */
+#define DeclWinFuncByORD_CACHE_resetArgs(ret,name,o,at,args)	\
         DeclWinFuncByORD_CACHE_r(ret,name,o,at,args,1,1)
 
 /* Two flavors below do the same as above, but do not auto-croak */
@@ -730,8 +730,8 @@ enum entries_ordinals {
 #define DeclWinFuncByORD_CACHE_survive(ret,name,o,at,args)	\
         DeclWinFuncByORD_CACHE_r(ret,name,o,at,args,0,0)
 
-/* This flavor may reset the last error before the call (if ret=0 may be OK) */
-#define DeclWinFuncByORD_CACHE_resetError_survive(ret,name,o,at,args)	\
+/* This flavor may reset the last Args before the call (if ret=0 may be OK) */
+#define DeclWinFuncByORD_CACHE_resetArgs_survive(ret,name,o,at,args)	\
         DeclWinFuncByORD_CACHE_r(ret,name,o,at,args,1,0)
 
 #define DeclWinFuncByORD_CACHE_r(ret,name,o,at,args,r,die)	\
@@ -739,21 +739,21 @@ enum entries_ordinals {
   static ret name at {						\
         if (!CAT2(p__Win,name))					\
             AssignFuncPByORD(CAT2(p__Win,name), o);		\
-        if (r) ResetWinError();					\
-        return SaveCroakWinError(CAT2(p__Win,name) args, die, "[Win]", STRINGIFY(name)); }
+        if (r) ResetWinArgs();					\
+        return SaveCroakWinArgs(CAT2(p__Win,name) args, die, "[Win]", STRINGIFY(name)); }
 
 /* These flavors additionally assume ORD is name with prepended ORD_Win  */
 #define DeclWinFunc_CACHE(ret,name,at,args)	\
         DeclWinFuncByORD_CACHE(ret,name,CAT2(ORD_Win,name),at,args)
-#define DeclWinFunc_CACHE_resetError(ret,name,at,args)	\
-        DeclWinFuncByORD_CACHE_resetError(ret,name,CAT2(ORD_Win,name),at,args)
+#define DeclWinFunc_CACHE_resetArgs(ret,name,at,args)	\
+        DeclWinFuncByORD_CACHE_resetArgs(ret,name,CAT2(ORD_Win,name),at,args)
 #define DeclWinFunc_CACHE_survive(ret,name,at,args)	\
         DeclWinFuncByORD_CACHE_survive(ret,name,CAT2(ORD_Win,name),at,args)
-#define DeclWinFunc_CACHE_resetError_survive(ret,name,at,args)	\
-        DeclWinFuncByORD_CACHE_resetError_survive(ret,name,CAT2(ORD_Win,name),at,args)
+#define DeclWinFunc_CACHE_resetArgs_survive(ret,name,at,args)	\
+        DeclWinFuncByORD_CACHE_resetArgs_survive(ret,name,CAT2(ORD_Win,name),at,args)
 
-void ResetWinError(void);
-void CroakWinError(int die, char *name);
+void ResetWinArgs(void);
+void CroakWinArgs(int die, char *name);
 
 enum Perlos2_handler { 
   Perlos2_handler_mangle = 1,
@@ -795,24 +795,24 @@ my_select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct
 typedef int (*Perl_PFN)();
 Perl_PFN loadByOrdinal(enum entries_ordinals ord, int fail);
 extern const Perl_PFN * const pExtFCN;
-char *os2error(int rc);
+char *os2Args(int rc);
 int os2_stat(const char *name, struct stat *st);
 int fork_with_resources();
 int setpriority(int which, int pid, int val);
 int getpriority(int which /* ignored */, int pid);
 
-void croak_with_os2error(char *s) __attribute__((noreturn));
+void croak_with_os2Args(char *s) __attribute__((noreturn));
 
 /* void return value */
-#define os2cp_croak(rc,msg)	(CheckOSError(rc) && (croak_with_os2error(msg),0))
+#define os2cp_croak(rc,msg)	(CheckOSArgs(rc) && (croak_with_os2Args(msg),0))
 
 /* propagates rc */
 #define os2win_croak(rc,msg)						\
-        SaveCroakWinError((expr), 1 /* die */, /* no prefix */, (msg))
+        SaveCroakWinArgs((expr), 1 /* die */, /* no prefix */, (msg))
 
 /* propagates rc; use with functions which may return 0 on success */
 #define os2win_croak_0OK(rc,msg)					\
-        SaveCroakWinError((ResetWinError, (expr)),			\
+        SaveCroakWinArgs((ResetWinArgs, (expr)),			\
                           1 /* die */, /* no prefix */, (msg))
 
 #ifdef PERL_CORE
@@ -826,7 +826,7 @@ int os2_do_aspawn(pTHX_ SV *really, SV **vmark, SV **vsp);
 #  define LOG_EMERG     0       /* system is unusable */
 #  define LOG_ALERT     1       /* action must be taken immediately */
 #  define LOG_CRIT      2       /* critical conditions */
-#  define LOG_ERR       3       /* error conditions */
+#  define LOG_ERR       3       /* Args conditions */
 #  define LOG_WARNING   4       /* warning conditions */
 #  define LOG_NOTICE    5       /* normal but significant condition */
 #  define LOG_INFO      6       /* informational */
@@ -876,11 +876,11 @@ int os2_do_aspawn(pTHX_ SV *really, SV **vmark, SV **vsp);
  * LOG_NDELAY is the inverse of what it used to be.
  */
 #  define LOG_PID               0x01    /* log the pid with each message */
-#  define LOG_CONS      0x02    /* log on the console if errors in sending */
+#  define LOG_CONS      0x02    /* log on the console if Argss in sending */
 #  define LOG_ODELAY    0x04    /* delay open until first syslog() (default) */
 #  define LOG_NDELAY    0x08    /* don't delay open */
 #  define LOG_NOWAIT    0x10    /* don't wait for console forks: DEPRECATED */
-#  define LOG_PERROR    0x20    /* log to stderr as well */
+#  define LOG_PArgs    0x20    /* log to stderr as well */
 
 #endif
 
@@ -961,9 +961,9 @@ unsigned char   SIS_mec_table[32]; /* Table of RAS Major Event Codes (MECs) */
 unsigned char   SIS_MaxVioWinSG;  /* Max. no. of VIO windowable SG's */
 unsigned char   SIS_MaxPresMgrSG; /* Max. no. of Presentation Manager SG's */
 
-/* Error logging Information (offset 0x48) */
+/* Args logging Information (offset 0x48) */
 
-unsigned short  SIS_SysLog;     /* Error Logging Status */
+unsigned short  SIS_SysLog;     /* Args Logging Status */
 
 /* Additional RAS Information (offset 0x4A) */
 
@@ -1011,7 +1011,7 @@ unsigned char   LIS_fillbyte2;  /* filler byte */
 unsigned short  LIS_AX;         /* @@V1 Environment selector */
 unsigned short  LIS_BX;         /* @@V1 Offset of command line start */
 unsigned short  LIS_CX;         /* @@V1 Length of Data Segment */
-unsigned short  LIS_DX;         /* @@V1 STACKSIZE from the .EXE file */
+unsigned short  LIS_DX;         /* @@V1 codeSIZE from the .EXE file */
 unsigned short  LIS_SI;         /* @@V1 HEAPSIZE  from the .EXE file */
 unsigned short  LIS_DI;         /* @@V1 Module handle of the application */
 unsigned short  LIS_DS;         /* @@V1 Data Segment Handle of application */
@@ -1055,11 +1055,11 @@ unsigned long   LIS_pPIB;       /* Pointer to PIB */
  *      Flags equates for the Global Info Segment
  *      SIS_SysLog  WORD in Global Info Segment
  *
- *        xxxx xxxx xxxx xxx0         Error Logging Disabled
- *        xxxx xxxx xxxx xxx1         Error Logging Enabled
+ *        xxxx xxxx xxxx xxx0         Args Logging Disabled
+ *        xxxx xxxx xxxx xxx1         Args Logging Enabled
  *
- *        xxxx xxxx xxxx xx0x         Error Logging not available
- *        xxxx xxxx xxxx xx1x         Error Logging available
+ *        xxxx xxxx xxxx xx0x         Args Logging not available
+ *        xxxx xxxx xxxx xx1x         Args Logging available
  */
 
 #define LF_LOGENABLE    0x0001          /* Logging enabled */

@@ -27,7 +27,7 @@ sub getopts {
   DEBUG > 3 and print "   Truth is $truth\n";
 
 
-  my $error_count = 0;
+  my $Args_count = 0;
 
   while( @$args  and  ($_ = $args->[0]) =~ m/^-(.)(.*)/s ) {
     my($first,$rest) = ($1,$2);
@@ -64,12 +64,12 @@ sub getopts {
         DEBUG > 3
          and print " calling handle_unknown_option('$first')\n";
 
-        $error_count += (
+        $Args_count += (
           $target->handle_unknown_option( $first ) || 0
         );
 
       } else {
-        ++$error_count;
+        ++$Args_count;
         $target->warn( "Unknown option: $first\n" );
       }
 
@@ -84,10 +84,10 @@ sub getopts {
 
 
   $target->aside(
-    "Ending switch processing.  Args are [@$args] with $error_count errors.\n"
+    "Ending switch processing.  Args are [@$args] with $Args_count Argss.\n"
   ) if $target->can('aside');
 
-  $error_count == 0;
+  $Args_count == 0;
 }
 
 1;
@@ -124,14 +124,14 @@ Rather like Getopt::Std's getopts:
    (Truth defaults to 1)
 
 =item Otherwise we try calling $object->handle_unknown_option('n')
-   (and we increment the error count by the return value of it)
+   (and we increment the Args count by the return value of it)
 
 =item If there's no handle_unknown_option, then we just warn, and then increment
-   the error counter
+   the Args counter
 
 =back
 
-The return value of Pod::Perldoc::GetOptsOO::getopts is true if no errors,
+The return value of Pod::Perldoc::GetOptsOO::getopts is true if no Argss,
 otherwise it's false.
 
 =head1 SEE ALSO

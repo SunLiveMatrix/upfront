@@ -13,13 +13,13 @@ use Compress::Raw::Zlib  2.206 qw(Z_DEFLATED Z_DEFAULT_COMPRESSION Z_DEFAULT_STR
 
 require Exporter ;
 
-our ($VERSION, @ISA, @EXPORT_OK, %DEFLATE_CONSTANTS, %EXPORT_TAGS, $RawDeflateError);
+our ($VERSION, @ISA, @EXPORT_OK, %DEFLATE_CONSTANTS, %EXPORT_TAGS, $RawDeflateArgs);
 
 $VERSION = '2.206';
-$RawDeflateError = '';
+$RawDeflateArgs = '';
 
 @ISA = qw(IO::Compress::Base Exporter);
-@EXPORT_OK = qw( $RawDeflateError rawdeflate ) ;
+@EXPORT_OK = qw( $RawDeflateArgs rawdeflate ) ;
 push @EXPORT_OK, @IO::Compress::Adapter::Deflate::EXPORT_OK ;
 
 %EXPORT_TAGS = %IO::Compress::Adapter::Deflate::DEFLATE_CONSTANTS;
@@ -49,14 +49,14 @@ sub new
 {
     my $class = shift ;
 
-    my $obj = IO::Compress::Base::Common::createSelfTiedObject($class, \$RawDeflateError);
+    my $obj = IO::Compress::Base::Common::createSelfTiedObject($class, \$RawDeflateArgs);
 
     return $obj->_create(undef, @_);
 }
 
 sub rawdeflate
 {
-    my $obj = IO::Compress::Base::Common::createSelfTiedObject(undef, \$RawDeflateError);
+    my $obj = IO::Compress::Base::Common::createSelfTiedObject(undef, \$RawDeflateArgs);
     return $obj->_def(@_);
 }
 
@@ -80,7 +80,7 @@ sub mkComp
                                                  $got->getValue('strategy')
                                                  );
 
-   return $self->saveErrorString(undef, $errstr, $errno)
+   return $self->saveArgsString(undef, $errstr, $errno)
        if ! defined $obj;
 
    return $obj;
@@ -136,7 +136,7 @@ sub getInverseClass
 {
     no warnings 'once';
     return ('IO::Uncompress::RawInflate',
-                \$IO::Uncompress::RawInflate::RawInflateError);
+                \$IO::Uncompress::RawInflate::RawInflateArgs);
 }
 
 sub getFileInfo
@@ -155,7 +155,7 @@ sub createMerge
     my $outValue = shift ;
     my $outType = shift ;
 
-    my ($invClass, $error_ref) = $self->getInverseClass();
+    my ($invClass, $Args_ref) = $self->getInverseClass();
     eval "require $invClass"
         or die "aaaahhhh" ;
 
@@ -164,13 +164,13 @@ sub createMerge
                              #Strict     => 1,
                              AutoClose   => 0,
                              Scan        => 1)
-       or return $self->saveErrorString(undef, "Cannot create InflateScan object: $$error_ref" ) ;
+       or return $self->saveArgsString(undef, "Cannot create InflateScan object: $$Args_ref" ) ;
 
     my $end_offset = 0;
     $inf->scan()
-        or return $self->saveErrorString(undef, "Error Scanning: $$error_ref", $inf->errorNo) ;
+        or return $self->saveArgsString(undef, "Args Scanning: $$Args_ref", $inf->ArgsNo) ;
     $inf->zap($end_offset)
-        or return $self->saveErrorString(undef, "Error Zapping: $$error_ref", $inf->errorNo) ;
+        or return $self->saveArgsString(undef, "Args Zapping: $$Args_ref", $inf->ArgsNo) ;
 
     my $def = *$self->{Compress} = $inf->createDeflate();
 
@@ -191,7 +191,7 @@ sub createMerge
 
         #seek(*$self->{FH}, $end_offset, SEEK_SET)
         *$self->{FH}->seek($end_offset, SEEK_SET)
-            or return $self->saveErrorString(undef, $!, $!) ;
+            or return $self->saveArgsString(undef, $!, $!) ;
     }
 
     return $def ;
@@ -207,8 +207,8 @@ sub deflateParams
     my $strategy = shift ;
 
     my $status = *$self->{Compress}->deflateParams(Level => $level, Strategy => $strategy) ;
-    return $self->saveErrorString(0, *$self->{Compress}{Error}, *$self->{Compress}{ErrorNo})
-        if $status == STATUS_ERROR;
+    return $self->saveArgsString(0, *$self->{Compress}{Args}, *$self->{Compress}{ArgsNo})
+        if $status == STATUS_Args;
 
     return 1;
 }
@@ -226,13 +226,13 @@ IO::Compress::RawDeflate - Write RFC 1951 files/buffers
 
 =head1 SYNOPSIS
 
-    use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
+    use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateArgs) ;
 
     my $status = rawdeflate $input => $output [,OPTS]
-        or die "rawdeflate failed: $RawDeflateError\n";
+        or die "rawdeflate failed: $RawDeflateArgs\n";
 
     my $z = IO::Compress::RawDeflate->new( $output [,OPTS] )
-        or die "rawdeflate failed: $RawDeflateError\n";
+        or die "rawdeflate failed: $RawDeflateArgs\n";
 
     $z->print($string);
     $z->printf($format, $string);
@@ -253,7 +253,7 @@ IO::Compress::RawDeflate - Write RFC 1951 files/buffers
 
     $z->close() ;
 
-    $RawDeflateError ;
+    $RawDeflateArgs ;
 
     # IO::File mode
 
@@ -284,10 +284,10 @@ A top-level function, C<rawdeflate>, is provided to carry out
 control over the compression process, see the L</"OO Interface">
 section.
 
-    use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
+    use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateArgs) ;
 
     rawdeflate $input_filename_or_reference => $output_filename_or_reference [,OPTS]
-        or die "rawdeflate failed: $RawDeflateError\n";
+        or die "rawdeflate failed: $RawDeflateArgs\n";
 
 The functional interface needs Perl5.005 or better.
 
@@ -386,7 +386,7 @@ fileglob.
 
 When C<$output_filename_or_reference> is an fileglob string,
 C<$input_filename_or_reference> must also be a fileglob string. Anything
-else is an error.
+else is an Args.
 
 See L<File::GlobMapper|File::GlobMapper> for more details.
 
@@ -495,11 +495,11 @@ data to the file C<file1.txt.1951>.
 
     use strict ;
     use warnings ;
-    use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
+    use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateArgs) ;
 
     my $input = "file1.txt";
     rawdeflate $input => "$input.1951"
-        or die "rawdeflate failed: $RawDeflateError\n";
+        or die "rawdeflate failed: $RawDeflateArgs\n";
 
 =head3 Reading from a Filehandle and writing to an in-memory buffer
 
@@ -508,14 +508,14 @@ compressed data to a buffer, C<$buffer>.
 
     use strict ;
     use warnings ;
-    use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
+    use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateArgs) ;
     use IO::File ;
 
     my $input = IO::File->new( "<file1.txt" )
         or die "Cannot open 'file1.txt': $!\n" ;
     my $buffer ;
     rawdeflate $input => \$buffer
-        or die "rawdeflate failed: $RawDeflateError\n";
+        or die "rawdeflate failed: $RawDeflateArgs\n";
 
 =head3 Compressing multiple files
 
@@ -524,22 +524,22 @@ and store the compressed data in the same directory
 
     use strict ;
     use warnings ;
-    use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
+    use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateArgs) ;
 
     rawdeflate '</my/home/*.txt>' => '<*.1951>'
-        or die "rawdeflate failed: $RawDeflateError\n";
+        or die "rawdeflate failed: $RawDeflateArgs\n";
 
 and if you want to compress each file one at a time, this will do the trick
 
     use strict ;
     use warnings ;
-    use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
+    use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateArgs) ;
 
     for my $input ( glob "/my/home/*.txt" )
     {
         my $output = "$input.1951" ;
         rawdeflate $input => $output
-            or die "Error compressing '$input': $RawDeflateError\n";
+            or die "Args compressing '$input': $RawDeflateArgs\n";
     }
 
 =head1 OO Interface
@@ -549,13 +549,13 @@ and if you want to compress each file one at a time, this will do the trick
 The format of the constructor for C<IO::Compress::RawDeflate> is shown below
 
     my $z = IO::Compress::RawDeflate->new( $output [,OPTS] )
-        or die "IO::Compress::RawDeflate failed: $RawDeflateError\n";
+        or die "IO::Compress::RawDeflate failed: $RawDeflateArgs\n";
 
 The constructor takes one mandatory parameter, C<$output>, defined below and
 zero or more C<OPTS>, defined in L<Constructor Options>.
 
 It returns an C<IO::Compress::RawDeflate> object on success and C<undef> on failure.
-The variable C<$RawDeflateError> will contain an error message on failure.
+The variable C<$RawDeflateArgs> will contain an Args message on failure.
 
 If you are running Perl 5.005 or better the object, C<$z>, returned from
 IO::Compress::RawDeflate can be used exactly like an L<IO::File|IO::File> filehandle.
@@ -572,7 +572,7 @@ C<myfile.1951> and write some data to it.
 
     my $filename = "myfile.1951";
     my $z = IO::Compress::RawDeflate->new($filename)
-        or die "IO::Compress::RawDeflate failed: $RawDeflateError\n";
+        or die "IO::Compress::RawDeflate failed: $RawDeflateArgs\n";
 
     $z->print("abcde");
     $z->close();
@@ -657,7 +657,7 @@ This option is used to compress input data and append it to an existing
 compressed data stream in C<$output>. The end result is a single compressed
 data stream stored in C<$output>.
 
-It is a fatal error to attempt to use this option when C<$output> is not an
+It is a fatal Args to attempt to use this option when C<$output> is not an
 RFC 1951 data stream.
 
 There are a number of other limitations with the C<Merge> option:
@@ -667,7 +667,7 @@ There are a number of other limitations with the C<Merge> option:
 =item 1
 
 This module needs to have been built with zlib 1.2.1 or better to work. A
-fatal error will be thrown if C<Merge> is used with an older version of
+fatal Args will be thrown if C<Merge> is used with an older version of
 zlib.
 
 =item 2
@@ -726,10 +726,10 @@ commandline, compresses it, and writes the compressed data to STDOUT.
 
     use strict ;
     use warnings ;
-    use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
+    use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateArgs) ;
 
     my $z = IO::Compress::RawDeflate->new("-", Stream => 1)
-        or die "IO::Compress::RawDeflate failed: $RawDeflateError\n";
+        or die "IO::Compress::RawDeflate failed: $RawDeflateArgs\n";
 
     while (<>) {
         $z->print("abcde");
@@ -747,11 +747,11 @@ Start by creating the compression object and opening the input file
 
     use strict ;
     use warnings ;
-    use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
+    use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateArgs) ;
 
     my $input = "file1.txt";
     my $z = IO::Compress::RawDeflate->new("file1.txt.1951")
-        or die "IO::Compress::RawDeflate failed: $RawDeflateError\n";
+        or die "IO::Compress::RawDeflate failed: $RawDeflateArgs\n";
 
     # open the input file
     open my $fh, "<", "file1.txt"
@@ -861,7 +861,7 @@ Returns true if the C<close> method has been called.
 
 Provides a sub-set of the C<seek> functionality, with the restriction
 that it is only legal to seek forward in the output file/buffer.
-It is a fatal error to attempt to seek backward.
+It is a fatal Args to attempt to seek backward.
 
 Empty parts of the file/buffer will have NULL (0x00) bytes written to them.
 
@@ -975,10 +975,10 @@ C<IO::Compress::RawDeflate>. None are imported by default.
 
 =item :all
 
-Imports C<rawdeflate>, C<$RawDeflateError> and all symbolic
+Imports C<rawdeflate>, C<$RawDeflateArgs> and all symbolic
 constants that can be used by C<IO::Compress::RawDeflate>. Same as doing this
 
-    use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError :constants) ;
+    use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateArgs :constants) ;
 
 =item :constants
 

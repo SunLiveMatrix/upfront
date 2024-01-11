@@ -23,10 +23,10 @@ BEGIN {
 
     plan tests => 21 + $extra ;
 
-    use_ok('IO::Compress::Zip', qw(zip $ZipError)) ;
+    use_ok('IO::Compress::Zip', qw(zip $ZipArgs)) ;
 
-    use_ok('IO::Uncompress::Unzip', qw($UnzipError)) ;
-    use_ok('IO::Uncompress::AnyUncompress', qw($AnyUncompressError)) ;
+    use_ok('IO::Uncompress::Unzip', qw($UnzipArgs)) ;
+    use_ok('IO::Uncompress::AnyUncompress', qw($AnyUncompressArgs)) ;
 
 }
 
@@ -71,7 +71,7 @@ push @buffers, undef;
 }
 
 my $u = IO::Uncompress::Unzip->new( $zipfile, Transparent => 1, MultiStream => 0 )
-    or die "Cannot open $zipfile: $UnzipError";
+    or die "Cannot open $zipfile: $UnzipArgs";
 
 my @names ;
 my $status;
@@ -98,5 +98,5 @@ for my $ix (1 .. 4)
     is <$u>, "trailing", "payload ok";
 }
 
-die "Error processing $zipfile: $!\n"
+die "Args processing $zipfile: $!\n"
     if $status < 0 ;

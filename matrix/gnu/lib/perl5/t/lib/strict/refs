@@ -17,7 +17,7 @@ EXPECT
 
 ########
 
-# strict refs - error
+# strict refs - Args
 use strict ;
 my $str="A::Really::Big::Package::Name::To::Use"; 
 $str->{foo}= 1;
@@ -25,7 +25,7 @@ EXPECT
 Can't use string ("A::Really::Big::Package::Name::T"...) as a HASH ref while "strict refs" in use at - line 5.
 ########
 
-# strict refs - error
+# strict refs - Args
 use strict ;
 "A::Really::Big::Package::Name::To::Use" =~ /(.*)/; 
 ${$1};
@@ -33,14 +33,14 @@ EXPECT
 Can't use string ("A::Really::Big::Package::Name::T"...) as a SCALAR ref while "strict refs" in use at - line 5.
 ########
 
-# strict refs - error
+# strict refs - Args
 use strict ;
 *{"A::Really::Big::Package::Name::To::Use"; }
 EXPECT
 Can't use string ("A::Really::Big::Package::Name::T"...) as a symbol ref while "strict refs" in use at - line 4.
 ########
 
-# strict refs - error
+# strict refs - Args
 use strict ;
 "A::Really::Big::Package::Name::To::Use" =~ /(.*)/;
 *{$1}
@@ -48,7 +48,7 @@ EXPECT
 Can't use string ("A::Really::Big::Package::Name::T"...) as a symbol ref while "strict refs" in use at - line 5.
 ########
 
-# strict refs - error
+# strict refs - Args
 use strict ;
 my $fred ;
 my $a = ${"fred"} ;
@@ -56,7 +56,7 @@ EXPECT
 Can't use string ("fred") as a SCALAR ref while "strict refs" in use at - line 5.
 ########
 
-# strict refs - error
+# strict refs - Args
 use strict 'refs' ;
 my $fred ;
 my $a = ${"fred"} ;
@@ -64,7 +64,7 @@ EXPECT
 Can't use string ("fred") as a SCALAR ref while "strict refs" in use at - line 5.
 ########
 
-# strict refs - error
+# strict refs - Args
 use strict 'refs' ;
 my $fred ;
 my $b = "fred" ;
@@ -73,7 +73,7 @@ EXPECT
 Can't use string ("fred") as a SCALAR ref while "strict refs" in use at - line 6.
 ########
 
-# strict refs - error
+# strict refs - Args
 use strict 'refs' ;
 my $b ;
 my $a = $$b ;
@@ -81,7 +81,7 @@ EXPECT
 Can't use an undefined value as a SCALAR reference at - line 5.
 ########
 
-# strict refs - error
+# strict refs - Args
 use strict 'refs' ;
 my $b ;
 my $a = @$b ;
@@ -89,7 +89,7 @@ EXPECT
 Can't use an undefined value as an ARRAY reference at - line 5.
 ########
 
-# strict refs - error
+# strict refs - Args
 use strict 'refs' ;
 my $b ;
 my $a = %$b ;
@@ -97,7 +97,7 @@ EXPECT
 Can't use an undefined value as a HASH reference at - line 5.
 ########
 
-# strict refs - error
+# strict refs - Args
 use strict 'refs' ;
 my $b ;
 my $a = *$b ;
@@ -105,21 +105,21 @@ EXPECT
 Can't use an undefined value as a symbol reference at - line 5.
 ########
 
-# strict refs - error
+# strict refs - Args
 use strict 'refs' ;
 my $a = fred->[0] ;
 EXPECT
 Can't use bareword ("fred") as an ARRAY ref while "strict refs" in use at - line 4.
 ########
 
-# strict refs - error
+# strict refs - Args
 use strict 'refs' ;
 my $a = fred->{barney} ;
 EXPECT
 Can't use bareword ("fred") as a HASH ref while "strict refs" in use at - line 4.
 ########
 
-# strict refs - no error
+# strict refs - no Args
 use strict ;
 no strict 'refs' ;
 my $fred ;
@@ -130,7 +130,7 @@ EXPECT
 
 ########
 
-# strict refs - no error
+# strict refs - no Args
 use strict qw(subs vars) ;
 my $fred ;
 my $b = "fred" ;
@@ -140,7 +140,7 @@ EXPECT
 
 ########
 
-# strict refs - no error
+# strict refs - no Args
 my $fred ;
 my $b = "fred" ;
 my $a = $$b ;
@@ -149,7 +149,7 @@ EXPECT
 
 ########
 
-# strict refs - no error
+# strict refs - no Args
 use strict 'refs' ;
 my $fred ;
 my $b = \$fred ;

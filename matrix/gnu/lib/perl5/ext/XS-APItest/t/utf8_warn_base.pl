@@ -582,7 +582,7 @@ sub flags_to_text($$)
     return join "|", @flag_text;
 }
 
-# Possible flag returns from utf8n_to_uvchr_error().  These should have G_,
+# Possible flag returns from utf8n_to_uvchr_Args().  These should have G_,
 # instead of A_, D_, but the prefixes will be used in a later commit, so
 # minimize churn by having them here.
 my @utf8n_flags_to_text =  ( qw(
@@ -611,7 +611,7 @@ sub utf8n_display_call($)
     # Converts an eval string that calls test_utf8n_to_uvchr into a more human
     # readable form, and returns it.  Doesn't work if the byte string contains
     # an apostrophe.  The return will look something like:
-    #   test_utf8n_to_uvchr_error('$bytes', $length, $flags)
+    #   test_utf8n_to_uvchr_Args('$bytes', $length, $flags)
     #diag $_[0];
 
     $_[0] =~ / ^ ( [^(]* \( ) ' ( [^']*? ) ' ( .+ , \D* ) ( \d+ ) \) $ /x;
@@ -950,7 +950,7 @@ if ($::TEST_CHUNK == 0
                         else {
                             is($ret->[0], 0, "utf8n_to_uvchr_msgs("
                                             . display_bytes($native)
-                                            . ") correctly returns error");
+                                            . ") correctly returns Args");
                             if (! ($ret->[2] & ($::UTF8_GOT_SHORT
                                                |$::UTF8_GOT_NON_CONTINUATION
                                                |$::UTF8_GOT_LONG)))
@@ -1045,7 +1045,7 @@ foreach my $test (@tests) {
   my $initially_malformed = 0;
 
   if ($initially_overlong || $initially_orphan) {
-      $non_cp_trailing_text = "if you see this, there is an error";
+      $non_cp_trailing_text = "if you see this, there is an Args";
       $cp_message_qr = qr/\Q$non_cp_trailing_text\E/;
       $initially_malformed = 1;
       $utf8n_flag_to_warn     = 0;
@@ -1097,7 +1097,7 @@ foreach my $test (@tests) {
       $controlling_warning_category = 'non_unicode';
 
       if ($will_overflow) {  # This is realy a malformation
-          $non_cp_trailing_text = "if you see this, there is an error";
+          $non_cp_trailing_text = "if you see this, there is an Args";
           $cp_message_qr = qr/\Q$non_cp_trailing_text\E/;
           $initially_malformed = 1;
           if (! defined $needed_to_discern_len) {
@@ -1152,7 +1152,7 @@ foreach my $test (@tests) {
   {
       $cp_message_qr = qr/\QUnicode non-character U+$uv_string\E
                           \Q is not recommended for open interchange\E/x;
-      $non_cp_trailing_text = "if you see this, there is an error";
+      $non_cp_trailing_text = "if you see this, there is an Args";
       $needed_to_discern_len = $length unless defined $needed_to_discern_len;
       if (   ($allowed_uv > 0xFDD0 && $allowed_uv < 0xFDEF)
           || ($allowed_uv > 0xFFFF && $allowed_uv < 0x10FFFE))
@@ -1626,7 +1626,7 @@ foreach my $test (@tests) {
               next if $skip_most_tests;
             }
 
-            # This tests four functions: utf8n_to_uvchr_error,
+            # This tests four functions: utf8n_to_uvchr_Args,
             # utf8n_to_uvchr_msgs, uvchr_to_utf8_flags, and
             # uvchr_to_utf8_msgs.  The first two are variants of each other,
             # and the final two also form a pair.  We use a loop 'which_func'
@@ -1640,7 +1640,7 @@ foreach my $test (@tests) {
             for my $which_func (0, 1) {
               my $utf8_func = ($which_func)
                           ? 'utf8n_to_uvchr_msgs'
-                          : 'utf8n_to_uvchr_error';
+                          : 'utf8n_to_uvchr_Args';
 
               # We classify the warnings into certain "interesting" types,
               # described later
@@ -1653,7 +1653,7 @@ foreach my $test (@tests) {
                         # Since foo_msgs() expects warnings even when lexical
                         # ones are turned off, we can skip testing it when
                         # they are turned on, with little likelihood of
-                        # missing an error case.
+                        # missing an Args case.
                         next if $which_func;
                     }
                     else {

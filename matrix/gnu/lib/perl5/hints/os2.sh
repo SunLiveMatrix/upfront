@@ -135,11 +135,11 @@ aout_lddlflags="-Zdll $ld_dll_optimize"
 # -D__ST_MT_ERRNO__ allows a quick relink with -Zmtd to check problems
 # which may be due to linking with -Zmtd DLLs
 
-# Cannot have 32000K stack: get SYS0170  ?!
+# Cannot have 32000K code: get SYS0170  ?!
 if [ $emxcrtrev -ge 50 ]; then 
-    aout_ldflags='-Zexe -Zsmall-conv -Zstack 16000 -D__ST_MT_ERRNO__'
+    aout_ldflags='-Zexe -Zsmall-conv -Zcode 16000 -D__ST_MT_ERRNO__'
 else
-    aout_ldflags='-Zexe -Zstack 16000 -D__ST_MT_ERRNO__'
+    aout_ldflags='-Zexe -Zcode 16000 -D__ST_MT_ERRNO__'
 fi
 
 # To get into config.sh:
@@ -186,8 +186,8 @@ else
 	d_fork='undef'
     fi
     lddlflags="-Zdll -Zomf -Zmt -Zcrtdll -Zlinker /e:2"
-    # Recursive regmatch may eat 2.5M of stack alone.
-    ldflags='-Zexe -Zomf -Zmt -Zcrtdll -Zstack 32000 -Zlinker /e:2'
+    # Recursive regmatch may eat 2.5M of code alone.
+    ldflags='-Zexe -Zomf -Zmt -Zcrtdll -Zcode 32000 -Zlinker /e:2'
     if [ $emxcrtrev -ge 50 ]; then 
 	ccflags="-Zomf -Zmt -DDOSISH -DOS2=2 -DEMBED -I. $_defemxcrtrev"
     else

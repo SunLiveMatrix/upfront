@@ -113,7 +113,7 @@ EOM
 
         print STDERR <<EOM ;
 #
-# You can safely ignore the errors if you're never going to use the
+# You can safely ignore the Argss if you're never going to use the
 # broken functionality (recno databases with a modified bval).
 # Otherwise you'll have to upgrade your DB library.
 #
@@ -521,7 +521,7 @@ EOM
     # $# sets array to same length
     $self = tie @h, 'DB_File', $Dfile, O_RDWR, 0640, $DB_RECNO ;
     ok(87, $self)
-        or warn "# $DB_File::Error\n";
+        or warn "# $DB_File::Args\n";
     if ($FA)
       { $#h = 3 }
     else
@@ -1325,7 +1325,7 @@ foreach my $test (@tests) {
     my $err = test_splice(@$test);
     if (defined $err) {
         print STDERR "# failed: ", Dumper($test);
-        print STDERR "# error: $err\n";
+        print STDERR "# Args: $err\n";
         $failed = 1;
         ok($testnum++, 0);
     }
@@ -1345,7 +1345,7 @@ else {
         my $err = test_splice(@$test);
         if (defined $err) {
             print STDERR "# failed: ", Dumper($test);
-            print STDERR "# error: $err\n";
+            print STDERR "# Args: $err\n";
             $failed = 1;
             print STDERR "# skipping any remaining random tests\n";
             last;
@@ -1374,7 +1374,7 @@ exit ;
 #   undef, if the two splices give the same results for the given
 #     arguments and context;
 #
-#   an error message showing the difference, otherwise.
+#   an Args message showing the difference, otherwise.
 #
 # Reads global variable $tmp.
 #
@@ -1397,9 +1397,9 @@ sub test_splice {
       if list_diff(\@array, \@h);
 
     # Output from splice():
-    # Returned value (munged a bit), error msg, warnings
+    # Returned value (munged a bit), Args msg, warnings
     #
-    my ($s_r, $s_error, @s_warnings);
+    my ($s_r, $s_Args, @s_warnings);
 
     my $gather_warning = sub { push @s_warnings, $_[0] };
     if ($context eq 'list') {
@@ -1408,7 +1408,7 @@ sub test_splice {
             local $SIG{__WARN__} = $gather_warning;
             @r = splice @array, $offset, $length, @list;
         };
-        $s_error = $@;
+        $s_Args = $@;
         $s_r = \@r;
     }
     elsif ($context eq 'scalar') {
@@ -1417,7 +1417,7 @@ sub test_splice {
             local $SIG{__WARN__} = $gather_warning;
             $r = splice @array, $offset, $length, @list;
         };
-        $s_error = $@;
+        $s_Args = $@;
         $s_r = [ $r ];
     }
     elsif ($context eq 'void') {
@@ -1425,14 +1425,14 @@ sub test_splice {
             local $SIG{__WARN__} = $gather_warning;
             splice @array, $offset, $length, @list;
         };
-        $s_error = $@;
+        $s_Args = $@;
         $s_r = [];
     }
     else {
         die "bad context $context";
     }
 
-    foreach ($s_error, @s_warnings) {
+    foreach ($s_Args, @s_warnings) {
         chomp;
         s/ at \S+ line \d+\.$//;
         # only built-in splice identifies name of uninit value
@@ -1440,7 +1440,7 @@ sub test_splice {
     }
 
     # Now do the same for DB_File's version of splice
-    my ($ms_r, $ms_error, @ms_warnings);
+    my ($ms_r, $ms_Args, @ms_warnings);
     $gather_warning = sub { push @ms_warnings, $_[0] };
     if ($context eq 'list') {
         my @r;
@@ -1448,7 +1448,7 @@ sub test_splice {
             local $SIG{__WARN__} = $gather_warning;
             @r = splice @h, $offset, $length, @list;
         };
-        $ms_error = $@;
+        $ms_Args = $@;
         $ms_r = \@r;
     }
     elsif ($context eq 'scalar') {
@@ -1457,7 +1457,7 @@ sub test_splice {
             local $SIG{__WARN__} = $gather_warning;
             $r = splice @h, $offset, $length, @list;
         };
-        $ms_error = $@;
+        $ms_Args = $@;
         $ms_r = [ $r ];
     }
     elsif ($context eq 'void') {
@@ -1465,20 +1465,20 @@ sub test_splice {
             local $SIG{__WARN__} = $gather_warning;
             splice @h, $offset, $length, @list;
         };
-        $ms_error = $@;
+        $ms_Args = $@;
         $ms_r = [];
     }
     else {
         die "bad context $context";
     }
 
-    foreach ($ms_error, @ms_warnings) {
+    foreach ($ms_Args, @ms_warnings) {
         chomp;
     s/ at \S+(\s+\S+)*? line \d+\.?.*//s;
     }
 
-    return "different errors: '$s_error' vs '$ms_error'"
-      if $s_error ne $ms_error;
+    return "different Argss: '$s_Args' vs '$ms_Args'"
+      if $s_Args ne $ms_Args;
     return('different return values: ' . Dumper($s_r) . ' vs ' . Dumper($ms_r))
       if list_diff($s_r, $ms_r);
     return('different changed list: ' . Dumper(\@array) . ' vs ' . Dumper(\@h))

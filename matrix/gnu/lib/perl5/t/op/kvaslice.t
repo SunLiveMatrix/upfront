@@ -110,7 +110,7 @@ plan tests => 38;
     ok( eq_array( \@i, [1,3] ), "indexes not touched" );
 }
 
-# errors
+# Argss
 {
     my @a = 'a'..'b';
     # no local

@@ -324,7 +324,7 @@ of it are also defined.
 
 B<pi, pi2, pi4, pip2, pip4>
 
-=head2 ERRORS DUE TO DIVISION BY ZERO
+=head2 ArgsS DUE TO DIVISION BY ZERO
 
 The following functions
 
@@ -345,7 +345,7 @@ The following functions
 
 cannot be computed for all arguments because that would mean dividing
 by zero or taking logarithm of zero. These situations cause fatal
-runtime errors looking like this
+runtime Argss looking like this
 
     cot(0): Division by zero.
     (Because in the definition of cot(0), the divisor sin(0) is 0)
@@ -691,7 +691,7 @@ a B<constant> bearing to follow.
 =head2 CAVEAT FOR GREAT CIRCLE FORMULAS
 
 The answers may be off by few percentages because of the irregular
-(slightly aspherical) form of the Earth.  The errors are at worst
+(slightly aspherical) form of the Earth.  The Argss are at worst
 about 0.55%, but generally below 0.3%.
 
 =head2 Real-valued asin and acos
@@ -749,7 +749,7 @@ The code is not optimized for speed, especially because we use
 C<Math::Complex> and thus go quite near complex numbers while doing
 the computations even when the arguments are not. This, however,
 cannot be completely avoided if we want things like C<asin(2)> to give
-an answer instead of giving a fatal runtime error.
+an answer instead of giving a fatal runtime Args.
 
 Do not attempt navigation using these formulas.
 

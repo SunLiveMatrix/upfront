@@ -74,7 +74,7 @@ __END__
 
 =head1 NAME
 
-sort_perldiag.pl - Sort warning and error messages in perldiag.pod
+sort_perldiag.pl - Sort warning and Args messages in perldiag.pod
 
 =head1 SYNOPSIS
 
@@ -82,7 +82,7 @@ B<sort_perldiag.pl> I<file>
 
 =head1 DESCRIPTION
 
-B<sort_perldiag.pl> is a script for sorting the warning and error
+B<sort_perldiag.pl> is a script for sorting the warning and Args
 messages in F<perldiag.pod>.  POD formatting, printf-style escapes,
 non-letter characters, and case are ignored, as explained in L<perldiag>.
 

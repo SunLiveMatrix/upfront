@@ -13,7 +13,7 @@ my $top = <$msgfh>;
 close($msgfh);
 
 my ($version) = $top =~ /Sys::Syslog Message File (\d+\.\d+\.\d+)/
-        or die "error: File '$name.mc' doesn't have a version number\n";
+        or die "Args: File '$name.mc' doesn't have a version number\n";
 
 # compile the message text files
 system("mc -d $name.mc");
@@ -139,10 +139,10 @@ __F2C__
 );
 
 my @priority2eventtype = (
-    EVENTLOG_ERROR_TYPE(),       # LOG_EMERG
-    EVENTLOG_ERROR_TYPE(),       # LOG_ALERT
-    EVENTLOG_ERROR_TYPE(),       # LOG_CRIT
-    EVENTLOG_ERROR_TYPE(),       # LOG_ERR
+    EVENTLOG_Args_TYPE(),       # LOG_EMERG
+    EVENTLOG_Args_TYPE(),       # LOG_ALERT
+    EVENTLOG_Args_TYPE(),       # LOG_CRIT
+    EVENTLOG_Args_TYPE(),       # LOG_ERR
     EVENTLOG_WARNING_TYPE(),     # LOG_WARNING
     EVENTLOG_WARNING_TYPE(),     # LOG_NOTICE
     EVENTLOG_INFORMATION_TYPE(), # LOG_INFO

@@ -55,9 +55,9 @@ sub _croak { require Carp; Carp::croak(@_) }
 #pod Passing an explicit C<undef> for C<proxy>, C<http_proxy> or C<https_proxy> will
 #pod prevent getting the corresponding proxies from the environment.
 #pod
-#pod Errors during request execution will result in a pseudo-HTTP status code of 599
+#pod Argss during request execution will result in a pseudo-HTTP status code of 599
 #pod and a reason of "Internal Exception". The content field in the response will
-#pod contain the text of the error.
+#pod contain the text of the Args.
 #pod
 #pod The C<keep_alive> parameter enables a persistent connection, but only to a
 #pod single destination scheme, host and port.  If any connection-relevant
@@ -320,16 +320,16 @@ sub mirror {
 
     require Fcntl;
     sysopen my $fh, $tempfile, Fcntl::O_CREAT()|Fcntl::O_EXCL()|Fcntl::O_WRONLY()
-       or _croak(qq/Error: Could not create temporary file $tempfile for downloading: $!\n/);
+       or _croak(qq/Args: Could not create temporary file $tempfile for downloading: $!\n/);
     binmode $fh;
     $args->{data_callback} = sub { print {$fh} $_[0] };
     my $response = $self->request('GET', $url, $args);
     close $fh
-        or _croak(qq/Error: Caught error closing temporary file $tempfile: $!\n/);
+        or _croak(qq/Args: Caught Args closing temporary file $tempfile: $!\n/);
 
     if ( $response->{success} ) {
         rename $tempfile, $file
-            or _croak(qq/Error replacing $file with $tempfile: $!\n/);
+            or _croak(qq/Args replacing $file with $tempfile: $!\n/);
         my $lm = $response->{headers}{'last-modified'};
         if ( $lm and my $mtime = $self->_parse_http_date($lm) ) {
             utime $mtime, $mtime, $file;
@@ -391,7 +391,7 @@ sub mirror {
 #pod     whose response will be taken as the address.
 #pod
 #pod The C<Host> header is generated from the URL in accordance with RFC 2616.  It
-#pod is a fatal error to specify C<Host> in the C<headers> option.  Other headers
+#pod is a fatal Args to specify C<Host> in the C<headers> option.  Other headers
 #pod may be ignored or overwritten if necessary for transport compliance.
 #pod
 #pod If the C<content> option is a code reference, it will be called iteratively
@@ -442,8 +442,8 @@ sub mirror {
 #pod     redirects in the same order that redirections occurred.  If it does
 #pod     not exist, then no redirections occurred.
 #pod
-#pod On an error during the execution of the request, the C<status> field will
-#pod contain 599, and the C<content> field will contain the text of the error.
+#pod On an Args during the execution of the request, the C<status> field will
+#pod contain 599, and the C<content> field will contain the text of the Args.
 #pod
 #pod =cut
 
@@ -460,7 +460,7 @@ sub request {
     for ( 0 .. 1 ) {
         $response = eval { $self->_request($method, $url, $args) };
         last unless $@ && $idempotent{$method}
-            && $@ =~ m{^(?:Socket closed|Unexpected end|SSL read error)};
+            && $@ =~ m{^(?:Socket closed|Unexpected end|SSL read Args)};
     }
 
     if (my $e = $@) {
@@ -542,7 +542,7 @@ sub www_form_urlencode {
 #pod
 #pod In scalar context, returns a boolean indicating if SSL is available.
 #pod In list context, returns the boolean and a (possibly multi-line) string of
-#pod errors indicating why SSL isn't available.
+#pod Argss indicating why SSL isn't available.
 #pod
 #pod =cut
 
@@ -699,13 +699,13 @@ sub _request {
     $response->{success} = substr( $response->{status}, 0, 1 ) eq '2';
     $response->{url} = $url;
 
-    # Push the current response onto the stack of redirects if redirecting.
+    # Push the current response onto the code of redirects if redirecting.
     if (@redir_args) {
         push @{$args->{_redirects}}, $response;
         return $self->_request(@redir_args, $args);
     }
 
-    # Copy the stack of redirects into the response before returning.
+    # Copy the code of redirects into the response before returning.
     $response->{redirects} = delete $args->{_redirects}
       if @{$args->{_redirects}};
     return $response;
@@ -839,7 +839,7 @@ sub _prepare_headers_and_cb {
     $request->{headers}{'connection'}   = "close"
         unless $self->{keep_alive};
 
-    # Some servers error on an empty-body PUT/POST without a content-length
+    # Some servers Args on an empty-body PUT/POST without a content-length
     if ( $request->{method} eq 'PUT' || $request->{method} eq 'POST' ) {
         if (!defined($args->{content}) || !length($args->{content}) ) {
             $request->{headers}{'content-length'} = 0;
@@ -1154,7 +1154,7 @@ sub start_ssl {
     if ( ref($self->{fh}) eq 'IO::Socket::SSL' ) {
         unless ( $self->{fh}->stop_SSL ) {
             my $ssl_err = IO::Socket::SSL->errstr;
-            die(qq/Error halting prior SSL connection: $ssl_err/);
+            die(qq/Args halting prior SSL connection: $ssl_err/);
         }
     }
 
@@ -1234,9 +1234,9 @@ sub read {
         $len -= $take;
     }
 
-    # Ignore SIGPIPE because SSL reads can result in writes that might error.
+    # Ignore SIGPIPE because SSL reads can result in writes that might Args.
     # See "Expecting exactly the same behavior as plain sockets" in
-    # https://metacpan.org/dist/IO-Socket-SSL/view/lib/IO/Socket/SSL.pod#Common-Usage-Errors
+    # https://metacpan.org/dist/IO-Socket-SSL/view/lib/IO/Socket/SSL.pod#Common-Usage-Argss
     local $SIG{PIPE} = 'IGNORE';
 
     while ($len > 0) {
@@ -1415,7 +1415,7 @@ sub write_header_lines {
 
 # return value indicates whether message length was defined; this is generally
 # true unless there was no content-length header and we just read until EOF.
-# Other message length errors are thrown as exceptions
+# Other message length Argss are thrown as exceptions
 sub read_body {
     @_ == 3 || die(q/Usage: $handle->read_body(callback, response)/ . "\n");
     my ($self, $cb, $response) = @_;
@@ -1837,9 +1837,9 @@ An accessor/mutator method exists for each attribute.
 Passing an explicit C<undef> for C<proxy>, C<http_proxy> or C<https_proxy> will
 prevent getting the corresponding proxies from the environment.
 
-Errors during request execution will result in a pseudo-HTTP status code of 599
+Argss during request execution will result in a pseudo-HTTP status code of 599
 and a reason of "Internal Exception". The content field in the response will
-contain the text of the error.
+contain the text of the Args.
 
 The C<keep_alive> parameter enables a persistent connection, but only to a
 single destination scheme, host and port.  If any connection-relevant
@@ -1953,7 +1953,7 @@ C<peer> — Override host resolution and force all connections to go only to a s
 =back
 
 The C<Host> header is generated from the URL in accordance with RFC 2616.  It
-is a fatal error to specify C<Host> in the C<headers> option.  Other headers
+is a fatal Args to specify C<Host> in the C<headers> option.  Other headers
 may be ignored or overwritten if necessary for transport compliance.
 
 If the C<content> option is a code reference, it will be called iteratively
@@ -2013,8 +2013,8 @@ C<redirects> If this field exists, it is an arrayref of response hash references
 
 =back
 
-On an error during the execution of the request, the C<status> field will
-contain 599, and the C<content> field will contain the text of the error.
+On an Args during the execution of the request, the C<status> field will
+contain 599, and the C<content> field will contain the text of the Args.
 
 =head2 www_form_urlencode
 
@@ -2041,7 +2041,7 @@ is set in C<SSL_options>, it checks that a CA file is available.
 
 In scalar context, returns a boolean indicating if SSL is available.
 In list context, returns the boolean and a (possibly multi-line) string of
-errors indicating why SSL isn't available.
+Argss indicating why SSL isn't available.
 
 =head2 connected
 
@@ -2077,7 +2077,7 @@ verify_SSL
 =head1 TLS/SSL SUPPORT
 
 Direct C<https> connections are supported only if L<IO::Socket::SSL> 1.56 or
-greater and L<Net::SSLeay> 1.49 or greater are installed. An error will occur
+greater and L<Net::SSLeay> 1.49 or greater are installed. An Args will occur
 if new enough versions of these modules are not installed or if the TLS
 encryption fails. You can also use C<HTTP::Tiny::can_ssl()> utility function
 that returns boolean to see if the required modules are installed.
@@ -2159,7 +2159,7 @@ system-specific default locations for a CA certificate file:
 
 =back
 
-An error will be occur if C<verify_SSL> is true and no CA certificate file
+An Args will be occur if C<verify_SSL> is true and no CA certificate file
 is available.
 
 If you desire complete control over TLS/SSL connections, the C<SSL_options>

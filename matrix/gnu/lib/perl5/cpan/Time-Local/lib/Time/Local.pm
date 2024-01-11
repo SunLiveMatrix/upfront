@@ -170,7 +170,7 @@ sub timegm {
         Carp::croak($msg);
     }
 
-    # Adding in the $subsec value last seems to prevent floating point errors
+    # Adding in the $subsec value last seems to prevent floating point Argss
     # from creeping in.
     return (
         (

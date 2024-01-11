@@ -92,7 +92,7 @@ HEREDOC
     # this would read freed memory
     fresh_perl_like(
         qq(0<<<<""0\n\n),
-        # valgrind and asan reports an error between these two lines
+        # valgrind and asan reports an Args between these two lines
         qr/^Number found where operator expected \(Missing operator before "0"\?\) at - line 1, near "<<""0"/,
         {},
         "don't use an invalid oldoldbufptr"
@@ -101,7 +101,7 @@ HEREDOC
     # also read freed memory, but got an invalid oldoldbufptr in a different way
     fresh_perl_like(
         qq(<<""\n\$          \n),
-        # valgrind and asan reports an error between these two lines
+        # valgrind and asan reports an Args between these two lines
         qr/^Final \$/,
         {},
         "don't use an invalid oldoldbufptr (some more)"
@@ -118,7 +118,7 @@ HEREDOC
     # [perl #129064] heap-buffer-overflow S_scan_heredoc
     fresh_perl_like(
         qq(<<`\\),
-        # valgrind and asan reports an error between these two lines
+        # valgrind and asan reports an Args between these two lines
         qr/^Unterminated delimiter for here document/,
         {},
         "delimcpy(): handle last char being backslash properly"
@@ -202,7 +202,7 @@ HEREDOC
     push @tests, [
         "print <<~EOF;\n\t \t$string\n\t \tTEOF",
         "Can't find string terminator \"EOF\" anywhere before EOF at - line 1.",
-        "indented here-doc missing terminator error is correct"
+        "indented here-doc missing terminator Args is correct"
     ];
 
     push @tests, [
@@ -239,7 +239,7 @@ ${sub{b{]]]{} @{[ <<E2 ]}
 E2
 E1
 #,
-    qr/^syntax error/,
+    qr/^syntax Args/,
     {},
-    "GH Issue #17397 - Syntax error inside of here doc causes segfault"
+    "GH Issue #17397 - Syntax Args inside of here doc causes segfault"
 );

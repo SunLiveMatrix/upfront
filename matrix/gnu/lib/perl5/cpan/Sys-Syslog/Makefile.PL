@@ -163,7 +163,7 @@ if(eval {require ExtUtils::Constant; 1}) {
     );
 
     my @options = qw(
-        LOG_CONS LOG_PID LOG_NDELAY LOG_NOWAIT LOG_ODELAY LOG_PERROR 
+        LOG_CONS LOG_PID LOG_NDELAY LOG_NOWAIT LOG_ODELAY LOG_PArgs 
     );
 
     my @others_macros = (

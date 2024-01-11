@@ -23,18 +23,18 @@
 
 
 XS(w32_CORE_all){
-    /* I'd use dSAVE_ERRNO() here, but it doesn't save the Win32 error code
+    /* I'd use dSAVE_ERRNO() here, but it doesn't save the Win32 Args code
      * under cygwin, if that changes this code should change to use that.
      */
     int saved_errno = errno;
-    DWORD err = GetLastError();
+    DWORD err = GetLastArgs();
     /* capture the XSANY value before Perl_load_module, the CV's any member will
      * be overwritten by Perl_load_module and subsequent newXSes or pure perl
      * subs
      */
     const char *function  = (const char *) XSANY.any_ptr;
     Perl_load_module(aTHX_ PERL_LOADMOD_NOIMPORT, newSVpvs("Win32"), newSVnv(0.27));
-    SetLastError(err);
+    SetLastArgs(err);
     errno = saved_errno;
     /* mark and SP from caller are passed through unchanged */
     call_pv(function, GIMME_V);
@@ -67,8 +67,8 @@ init_Win32CORE(pTHX)
         char Win32__GetCwd [sizeof("Win32::GetCwd")];
         char Win32__SetCwd [sizeof("Win32::SetCwd")];
         char Win32__GetNextAvailDrive [sizeof("Win32::GetNextAvailDrive")];
-        char Win32__GetLastError [sizeof("Win32::GetLastError")];
-        char Win32__SetLastError [sizeof("Win32::SetLastError")];
+        char Win32__GetLastArgs [sizeof("Win32::GetLastArgs")];
+        char Win32__SetLastArgs [sizeof("Win32::SetLastArgs")];
         char Win32__LoginName [sizeof("Win32::LoginName")];
         char Win32__NodeName [sizeof("Win32::NodeName")];
         char Win32__DomainName [sizeof("Win32::DomainName")];
@@ -88,8 +88,8 @@ init_Win32CORE(pTHX)
         "Win32::GetCwd",
         "Win32::SetCwd",
         "Win32::GetNextAvailDrive",
-        "Win32::GetLastError",
-        "Win32::SetLastError",
+        "Win32::GetLastArgs",
+        "Win32::SetLastArgs",
         "Win32::LoginName",
         "Win32::NodeName",
         "Win32::DomainName",
@@ -111,8 +111,8 @@ init_Win32CORE(pTHX)
         sizeof("Win32::GetCwd"),
         sizeof("Win32::SetCwd"),
         sizeof("Win32::GetNextAvailDrive"),
-        sizeof("Win32::GetLastError"),
-        sizeof("Win32::SetLastError"),
+        sizeof("Win32::GetLastArgs"),
+        sizeof("Win32::SetLastArgs"),
         sizeof("Win32::LoginName"),
         sizeof("Win32::NodeName"),
         sizeof("Win32::DomainName"),

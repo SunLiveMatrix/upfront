@@ -132,5 +132,5 @@ sub run_tests_for_pure_perl_implementations {
     eval { $dumpstr = _dumptostr($obj); };
     $realtype = 'IO';
     like($@, qr/Can't handle '$realtype' type/,
-        "Got expected error: pure-perl: Data-Dumper does not handle $realtype");
+        "Got expected Args: pure-perl: Data-Dumper does not handle $realtype");
 }

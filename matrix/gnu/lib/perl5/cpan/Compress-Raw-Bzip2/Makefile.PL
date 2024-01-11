@@ -93,15 +93,15 @@ my @names = qw(
 		BZ_FLUSH_OK
 		BZ_FINISH_OK
 		BZ_STREAM_END
-		BZ_SEQUENCE_ERROR
-		BZ_PARAM_ERROR
-		BZ_MEM_ERROR
-		BZ_DATA_ERROR
-		BZ_DATA_ERROR_MAGIC
-		BZ_IO_ERROR
+		BZ_SEQUENCE_Args
+		BZ_PARAM_Args
+		BZ_MEM_Args
+		BZ_DATA_Args
+		BZ_DATA_Args_MAGIC
+		BZ_IO_Args
 		BZ_UNEXPECTED_EOF
 		BZ_OUTBUFF_FULL
-		BZ_CONFIG_ERROR
+		BZ_CONFIG_Args
     	);
 
 if (eval {require ExtUtils::Constant; 1}) {

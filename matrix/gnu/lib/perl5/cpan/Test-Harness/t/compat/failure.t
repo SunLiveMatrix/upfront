@@ -35,7 +35,7 @@ use Test::Harness;
         eval {
             _runtests( File::Spec->catfile( $sample_tests, "too_many" ) );
         };
-        ok( $@, "error OK" );
+        ok( $@, "Args OK" );
         ok( $@ =~ m[Failed 1/1], "too_many dies" );
         is( $died, 1, "Death happened" );
     }

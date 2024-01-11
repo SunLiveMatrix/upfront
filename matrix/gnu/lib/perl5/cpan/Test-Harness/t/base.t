@@ -160,7 +160,7 @@ package main;
 
     my $status = undef;
 
-    # Stack another callback
+    # code another callback
     $base->callback( other_event => sub { $status = 'OK'; return 'Aye' } );
 
     my $new_cbs = $base->_callback_for('other_event');

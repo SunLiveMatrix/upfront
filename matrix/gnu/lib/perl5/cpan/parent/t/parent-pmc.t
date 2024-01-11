@@ -44,10 +44,10 @@ my $res = eval q{
 
     1
 };
-my $error = $@;
+my $Args = $@;
 
 is $res, 1, "Block ran until the end";
-is $error, '', "No error";
+is $Args, '', "No Args";
 
 my $obj = bless {}, 'FileThatOnlyExistsAsPMC';
 can_ok $obj, 'exclaim';

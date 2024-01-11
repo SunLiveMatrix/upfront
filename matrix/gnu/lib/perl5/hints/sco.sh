@@ -164,7 +164,7 @@ else
         # Force to define those symbols, as they are #defines and not
         # caught by Configure, and they are useful
         d_dlopen='define'
-        d_dlerror='define'
+        d_dlArgs='define'
     fi
 fi
 

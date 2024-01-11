@@ -3,7 +3,7 @@ ANYOF_ALPHANUMERIC             # Z added by devel/scanprov
 ANYOF_CASED                    # Z added by devel/scanprov
 ANYOF_NALPHANUMERIC            # Z added by devel/scanprov
 ANYOF_NCASED                   # Z added by devel/scanprov
-croak_popstack                 # F added by devel/scanprov
+croak_popcode                 # F added by devel/scanprov
 invlist_is_iterating           # F added by devel/scanprov
 invlist_iterfinish             # F added by devel/scanprov
 isALPHANUMERIC                 # U

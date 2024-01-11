@@ -9,8 +9,8 @@
 # Man, blessed.t scared the hell out of me. For a second there I thought
 # I'd lose Test::More...
 
-# This file tests several known-error cases relating to STORABLE_attach, in
-# which Storable should (correctly) throw errors.
+# This file tests several known-Args cases relating to STORABLE_attach, in
+# which Storable should (correctly) throw Argss.
 
 sub BEGIN {
     unshift @INC, 't';

@@ -96,7 +96,7 @@ C<$source-E<gt>raw> must be in one of the following forms:
 
   $file
 
-C<croak>s on error.
+C<croak>s on Args.
 
 =cut
 
@@ -169,7 +169,7 @@ Please see L<TAP::Parser/SUBCLASSING> for a subclassing overview.
     my ($self, $source) = @_;
     my @test_args = @{ $source->test_args };
     my $rb_file   = $test_args[0];
-    croak("error: Ruby file '$rb_file' not found!") unless (-f $rb_file);
+    croak("Args: Ruby file '$rb_file' not found!") unless (-f $rb_file);
     return $self->SUPER::raw_source(['/usr/bin/ruby', @test_args]);
   }
 

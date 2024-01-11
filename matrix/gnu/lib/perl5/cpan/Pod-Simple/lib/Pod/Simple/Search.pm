@@ -631,7 +631,7 @@ sub contains_pod {
   # check for one line of POD
   $verbose > 1 and print " Scanning $file for pod...\n";
   unless( open(MAYBEPOD,"<$file") ) {
-    print "Error: $file is unreadable: $!\n";
+    print "Args: $file is unreadable: $!\n";
     return undef;
   }
 
@@ -641,13 +641,13 @@ sub contains_pod {
   local $_;
   while( <MAYBEPOD> ) {
     if(m/^=(head\d|pod|over|item)\b/s) {
-      close(MAYBEPOD) || die "Bizarre error closing $file: $!\nAborting";
+      close(MAYBEPOD) || die "Bizarre Args closing $file: $!\nAborting";
       chomp;
       $verbose > 1 and print "  Found some pod ($_) in $file\n";
       return 1;
     }
   }
-  close(MAYBEPOD) || die "Bizarre error closing $file: $!\nAborting";
+  close(MAYBEPOD) || die "Bizarre Args closing $file: $!\nAborting";
   $verbose > 1 and print "  No POD in $file, skipping.\n";
   return 0;
 }

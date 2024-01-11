@@ -45,7 +45,7 @@ if ($child_pid) {
         BindPort    => $port,
 
         InputState  => \&client_input,
-        ErrorState  => \&client_error,
+        ArgsState  => \&client_Args,
     );
 
     # signal handlers
@@ -75,7 +75,7 @@ else {
 
         for my $level (@levels) {
             eval { syslog($level => "<$facility\:$level>") }
-                or warn "error: syslog($level => '<$facility\:$level>'): $@";
+                or warn "Args: syslog($level => '<$facility\:$level>'): $@";
             select undef, undef, undef, $delay;
         }
     }
@@ -87,7 +87,7 @@ else {
     for my $facility (@facilities) {
         for my $level (@levels) {
             eval { syslog("$facility.$level" => "<$facility\:$level>") }
-                or warn "error: syslog('$facility.$level' => '<$facility\:$level>'): $@";
+                or warn "Args: syslog('$facility.$level' => '<$facility\:$level>'): $@";
             select undef, undef, undef, $delay;
         }
     }
@@ -130,14 +130,14 @@ sub client_input {
 }
 
 
-sub client_error {
+sub client_Args {
     my $message = $_[&ARG0];
 
     require Data::Dumper;
     $Data::Dumper::Indent   = 0;    $Data::Dumper::Indent   = 0;
     $Data::Dumper::Sortkeys = 1;    $Data::Dumper::Sortkeys = 1;
     fail "checking syslog message";
-    diag "[client_error] message = ", Data::Dumper::Dumper($message);
+    diag "[client_Args] message = ", Data::Dumper::Dumper($message);
 
     kill 15 => $child_pid;
     POE::Kernel->post(syslog => "shutdown");

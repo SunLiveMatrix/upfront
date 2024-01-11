@@ -37,7 +37,7 @@ BEGIN
     use_ok('Compress::Zlib', qw(:ALL memGunzip memGzip zlib_version));
     use_ok('IO::Compress::Gzip::Constants') ;
 
-    use_ok('IO::Compress::Gzip', qw($GzipError)) ;
+    use_ok('IO::Compress::Gzip', qw($GzipArgs)) ;
 }
 
 
@@ -459,7 +459,7 @@ EOM
     $minimal = substr($keep, 0, -9) ;
     $ungzip = memGunzip(\$minimal) ;
     ok ! defined $ungzip ;
-    cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+    cmp_ok $gzerrno, "==", Z_DATA_Args ;
 
 
     #1 while unlink $name ;
@@ -468,55 +468,55 @@ EOM
     $dest = "x" ;
     my $result = memGunzip($dest) ;
     ok !defined $result ;
-    cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+    cmp_ok $gzerrno, "==", Z_DATA_Args ;
 
     # check corrupt header -- full of junk
     $dest = "x" x 200 ;
     $result = memGunzip($dest) ;
     ok !defined $result ;
-    cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+    cmp_ok $gzerrno, "==", Z_DATA_Args ;
 
     # corrupt header - 1st byte wrong
     my $bad = $keep ;
     substr($bad, 0, 1) = "\xFF" ;
     $ungzip = memGunzip(\$bad) ;
     ok ! defined $ungzip ;
-    cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+    cmp_ok $gzerrno, "==", Z_DATA_Args ;
 
     # corrupt header - 2st byte wrong
     $bad = $keep ;
     substr($bad, 1, 1) = "\xFF" ;
     $ungzip = memGunzip(\$bad) ;
     ok ! defined $ungzip ;
-    cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+    cmp_ok $gzerrno, "==", Z_DATA_Args ;
 
     # corrupt header - method not deflated
     $bad = $keep ;
     substr($bad, 2, 1) = "\xFF" ;
     $ungzip = memGunzip(\$bad) ;
     ok ! defined $ungzip ;
-    cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+    cmp_ok $gzerrno, "==", Z_DATA_Args ;
 
     # corrupt header - reserved bits used
     $bad = $keep ;
     substr($bad, 3, 1) = "\xFF" ;
     $ungzip = memGunzip(\$bad) ;
     ok ! defined $ungzip ;
-    cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+    cmp_ok $gzerrno, "==", Z_DATA_Args ;
 
     # corrupt trailer - length wrong
     $bad = $keep ;
     substr($bad, -8, 4) = "\xFF" x 4 ;
     $ungzip = memGunzip(\$bad) ;
     ok ! defined $ungzip ;
-    cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+    cmp_ok $gzerrno, "==", Z_DATA_Args ;
 
     # corrupt trailer - CRC wrong
     $bad = $keep ;
     substr($bad, -4, 4) = "\xFF" x 4 ;
     $ungzip = memGunzip(\$bad) ;
     ok ! defined $ungzip ;
-    cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+    cmp_ok $gzerrno, "==", Z_DATA_Args ;
 }
 
 {
@@ -662,7 +662,7 @@ EOM
     {
         my $byte = shift @Answer;
         $status = $k->inflateSync($byte) ;
-        last unless $status == Z_DATA_ERROR;
+        last unless $status == Z_DATA_Args;
 
     }
 
@@ -680,8 +680,8 @@ EOM
 
     }
 
-    # zlib 1.0.9 returns Z_STREAM_END here, all others return Z_DATA_ERROR
-    ok $status == Z_DATA_ERROR || $status == Z_STREAM_END ;
+    # zlib 1.0.9 returns Z_STREAM_END here, all others return Z_DATA_Args
+    ok $status == Z_DATA_Args || $status == Z_STREAM_END ;
     ok $GOT eq $goodbye ;
 
 
@@ -702,7 +702,7 @@ EOM
 
     ($GOT, $status) = $k->inflate($rest) ;
 
-    # Z_STREAM_END returned by 1.12.2, Z_DATA_ERROR for older zlib
+    # Z_STREAM_END returned by 1.12.2, Z_DATA_Args for older zlib
     # always Z_STREAM_ENDin zlib_ng
     if (ZLIB_VERNUM >= ZLIB_1_2_12_0 || Compress::Raw::Zlib::is_zlibng)
     {
@@ -710,7 +710,7 @@ EOM
     }
     else
     {
-        cmp_ok $status, '==', Z_DATA_ERROR ;
+        cmp_ok $status, '==', Z_DATA_Args ;
     }
 
     ok $Z . $GOT eq $goodbye ;
@@ -735,7 +735,7 @@ EOM
     ok $status == Z_OK ;
     $input .= $hello;
 
-    # error cases
+    # Args cases
     eval { $x->deflateParams() };
     #like $@, mkErr("^Compress::Raw::Zlib::deflateParams needs Level and/or Strategy");
     like $@, "/^Compress::Raw::Zlib::deflateParams needs Level and/or Strategy/";
@@ -803,7 +803,7 @@ EOM
 }
 
 {
-    # error cases
+    # Args cases
 
     eval { deflateInit(-Level) };
     like $@, '/^Compress::Zlib::deflateInit: Expected even number of parameters, got 1/';
@@ -968,7 +968,7 @@ EOM
         substr($buffer, 0, 1) = 'x' ;
 
         ok ! memGunzip(\$buffer) ;
-        cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+        cmp_ok $gzerrno, "==", Z_DATA_Args ;
     }
 
     {
@@ -977,7 +977,7 @@ EOM
         substr($buffer, 1, 1) = "\xFF" ;
 
         ok ! memGunzip(\$buffer) ;
-        cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+        cmp_ok $gzerrno, "==", Z_DATA_Args ;
     }
 
     {
@@ -986,7 +986,7 @@ EOM
         substr($buffer, 2, 1) = 'x' ;
 
         ok ! memGunzip(\$buffer) ;
-        cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+        cmp_ok $gzerrno, "==", Z_DATA_Args ;
     }
 
     {
@@ -995,7 +995,7 @@ EOM
         substr($buffer, 3, 1) = "\xff";
 
         ok ! memGunzip(\$buffer) ;
-        cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+        cmp_ok $gzerrno, "==", Z_DATA_Args ;
     }
 
 }
@@ -1016,7 +1016,7 @@ EOM
     substr($truncated, $index) = '' ;
 
     ok ! memGunzip(\$truncated) ;
-    cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+    cmp_ok $gzerrno, "==", Z_DATA_Args ;
 
 
 }
@@ -1037,7 +1037,7 @@ EOM
     substr($truncated, $index) = '' ;
 
     ok ! memGunzip(\$truncated) ;
-    cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+    cmp_ok $gzerrno, "==", Z_DATA_Args ;
 }
 
 my $Comment = "comment" ;
@@ -1055,7 +1055,7 @@ EOM
 
     substr($truncated, $index) = '' ;
     ok ! memGunzip(\$truncated) ;
-    cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+    cmp_ok $gzerrno, "==", Z_DATA_Args ;
 }
 
 for my $index ( GZIP_MIN_HEADER_SIZE ..  GZIP_MIN_HEADER_SIZE + GZIP_FHCRC_SIZE -1)
@@ -1073,7 +1073,7 @@ EOM
     substr($truncated, $index) = '' ;
 
     ok ! memGunzip(\$truncated) ;
-    cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+    cmp_ok $gzerrno, "==", Z_DATA_Args ;
 }
 
 {
@@ -1134,7 +1134,7 @@ EOM
         substr($buffer, -4, 4) = pack('V', 1234);
 
         ok ! memGunzip(\$buffer) ;
-        cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+        cmp_ok $gzerrno, "==", Z_DATA_Args ;
     }
 
     {
@@ -1144,7 +1144,7 @@ EOM
         substr($buffer, -8, 4) = pack('V', 1234);
 
         ok ! memGunzip(\$buffer) ;
-        cmp_ok $gzerrno, "==", Z_DATA_ERROR ;
+        cmp_ok $gzerrno, "==", Z_DATA_Args ;
 
     }
 }
@@ -1235,7 +1235,7 @@ sub trickle
     is $fil->gzwrite($data1), length $data1, "write data1" ;
     $status = $fil->gzflush(0xfff);
     ok   $status, "flush not ok" ;
-    is $status, Z_STREAM_ERROR;
+    is $status, Z_STREAM_Args;
     ok ! $fil->gzflush(), "flush ok" ;
     ok ! $fil->gzclose(), "Closed";
 }

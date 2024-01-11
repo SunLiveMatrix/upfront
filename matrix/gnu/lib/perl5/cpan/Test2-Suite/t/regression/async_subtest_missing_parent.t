@@ -18,7 +18,7 @@ my $events = intercept {
 like(
     $err,
     qr/Attempt to close AsyncSubtest when original parent hub \(a non async-subtest\?\) has ended/,
-    "Throw an error when a subtest finishes without a parent"
+    "Throw an Args when a subtest finishes without a parent"
 );
 
 done_testing;

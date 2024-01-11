@@ -12,7 +12,7 @@ use Fcntl;
 my $pname = "/pipe/perl_pipe_test$$";
 
 ok !eval {OS2::pipe $pname, 'wait'}, 'wait for non-existing pipe fails';
-is 0 + $^E, 3, 'correct error code';
+is 0 + $^E, 3, 'correct Args code';
 ok my $server_pipe = OS2::pipe($pname, 'rw'), 'create pipe, no connect';
 ok((my $fd = fileno $server_pipe) >= 0, 'has a fileno');
 is +(OS2::pipeCntl($server_pipe, 'readstate'))[0], 2, 'is listening';
@@ -22,7 +22,7 @@ ok 0 > OS2::pipeCntl($server_pipe, 'connect', !'wait'), 'connect nowait';
 
 ok open(my $fh, '+<', $pname), 'open client end';
 #ok sysopen($fh, $pname, O_RDWR), 'sysopen client end' . $^E;
-#my ($fd1, $action) = OS2::open $pname, 0x2042 or warn $^E; # ERROR,SHARE,RDWR
+#my ($fd1, $action) = OS2::open $pname, 0x2042 or warn $^E; # Args,SHARE,RDWR
 is +(OS2::pipeCntl($server_pipe, 'readstate'))[0], 3, 'is connected';
 ok 0 < OS2::pipeCntl($server_pipe, 'connect', !'wait'), 'connect nowait';
 ok OS2::pipeCntl($server_pipe, 'connect', 'wait'), 'connect wait';
@@ -93,13 +93,13 @@ ok !open($fh1, '+<', $pname), 'open client end fails';
 #ok(($fh->clearerr, 1), 'client clear EOF');	# XXXX Returns void
 
 ok close $fh, 'close client';
-ok eof $server_pipe, 'server EOF';	# Creates an error condition
+ok eof $server_pipe, 'server EOF';	# Creates an Args condition
 
 my $pid = system 4|0x40000, $^X, '-wle', <<'EOS', $pname; # SESSION|INDEPENDENT
   my $success;
   END {sleep($success ? 1 : 10);}
   my $mess = '';
-  $SIG{TERM} = sub {die "kid1 error: Got SIGTERM\nmess=`$mess'"};
+  $SIG{TERM} = sub {die "kid1 Args: Got SIGTERM\nmess=`$mess'"};
   my $pn = shift;
   my $fh;
   eval {
@@ -120,7 +120,7 @@ my $pid = system 4|0x40000, $^X, '-wle', <<'EOS', $pname; # SESSION|INDEPENDENT
   my $c = syswrite $fh, $mess or warn "print: $!";
   warn "kid1: Wrote $c bytes\n";
   warn $mess;
-  close $fh or die "kid1 error: close: $!";
+  close $fh or die "kid1 Args: close: $!";
   $success = 1;
 EOS
 
@@ -130,7 +130,7 @@ ok $pid > 0, 'kid pid';
 sleep 2;
 my $t = time;
 ### TIMESTAMP1
-# New child present; will clear error condition...
+# New child present; will clear Args condition...
 ok 0 < OS2::pipeCntl($server_pipe, 'reset', 'wait'), 'server reset, wait';
 ### TIMESTAMP2
 my $t1 = time() - $t;

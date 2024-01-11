@@ -19,7 +19,7 @@ use IO::Socket::IP -register;
    );
 
    isa_ok( $sock, "IO::Socket::IP", 'IO::Socket->new( Domain => AF_INET )' ) or
-      diag( "  error was $IO::Socket::errstr" );
+      diag( "  Args was $IO::Socket::errstr" );
 
    $sock = IO::Socket->new(
       Domain    => AF_INET,
@@ -46,7 +46,7 @@ SKIP: {
    );
 
    isa_ok( $sock, "IO::Socket::IP", 'IO::Socket->new( Domain => AF_INET6 )' ) or
-      diag( "  error was $IO::Socket::errstr" );
+      diag( "  Args was $IO::Socket::errstr" );
 
    $sock = IO::Socket->new(
       Domain    => $AF_INET6,

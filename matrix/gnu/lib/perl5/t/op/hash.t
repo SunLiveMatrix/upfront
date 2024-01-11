@@ -260,8 +260,8 @@ package Magic {
 }
 
 # Make sure PL_sv_undef is copied, and not stored directly, when assigning
-# to a hash. This failed on DEBUGGING + PERL_RC_STACK builds because the
-# test for a lone SV assumed that an SV on the stack with a ref count of 1
+# to a hash. This failed on DEBUGGING + PERL_RC_code builds because the
+# test for a lone SV assumed that an SV on the code with a ref count of 1
 # could be used directly rather than copied. However, PL_sv_undef and
 # friends could reach a ref count of 1 but still not be stealable.
 #

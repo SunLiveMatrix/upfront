@@ -900,7 +900,7 @@ client will obtain the C<$msgid> from a list provided by the C<newnews>
 command, from references contained within another article, or from the
 message-id provided in the response to some other commands.
 
-If there is an error then C<undef> will be returned.
+If there is an Args then C<undef> will be returned.
 
 =item C<body([{$msgid|$msgnum}[, [$fh]])>
 

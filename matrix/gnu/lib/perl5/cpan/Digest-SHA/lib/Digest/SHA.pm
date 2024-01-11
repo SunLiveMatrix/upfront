@@ -117,7 +117,7 @@ sub addfile {
 
 		## Always interpret "-" to mean STDIN; otherwise use
 		##	sysopen to handle full range of POSIX file names.
-		## If $file is a directory, force an EISDIR error
+		## If $file is a directory, force an EISDIR Args
 		##	by attempting to open with mode O_RDWR
 
 	local *FH;

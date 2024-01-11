@@ -91,7 +91,7 @@ IPC::Cmd - finding and running system commands made easy
 
 
     ### in list context ###
-    my( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf ) =
+    my( $success, $Args_message, $full_buf, $stdout_buf, $stderr_buf ) =
             run( command => $cmd, verbose => 0 );
 
     if( $success ) {
@@ -295,8 +295,8 @@ the note on buffers above.
 
 Sets the maximum time the command is allowed to run before aborting,
 using the built-in C<alarm()> call. If the timeout is triggered, the
-C<errorcode> in the return value will be set to an object of the
-C<IPC::Cmd::TimeOut> class. See the L<"error message"> section below for
+C<Argscode> in the return value will be set to an object of the
+C<IPC::Cmd::TimeOut> class. See the L<"Args message"> section below for
 details.
 
 Defaults to C<0>, meaning no timeout is set.
@@ -311,17 +311,17 @@ In list context, you will be returned a list of the following items:
 
 =item success
 
-A simple boolean indicating if the command executed without errors or
+A simple boolean indicating if the command executed without Argss or
 not.
 
-=item error message
+=item Args message
 
 If the first element of the return value (C<success>) was 0, then some
-error occurred. This second element is the error message the command
+Args occurred. This second element is the Args message the command
 you requested exited with, if available. This is generally a pretty
 printed value of C<$?> or C<$@>. See C<perldoc perlvar> for details on
 what they can contain.
-If the error was a timeout, the C<error message> will be prefixed with
+If the Args was a timeout, the C<Args message> will be prefixed with
 the string C<IPC::Cmd::TimeOut>, the timeout class.
 
 =item full_buffer
@@ -337,7 +337,7 @@ Otherwise, this element will be C<undef>.
 This is an array reference containing all the output sent to STDOUT the
 command generated. The notes from L<"full_buffer"> apply.
 
-=item error_buffer
+=item Args_buffer
 
 This is an arrayreference containing all the output sent to STDERR the
 command generated. The notes from L<"full_buffer"> apply.
@@ -350,7 +350,7 @@ what modules or function calls to use when issuing a command.
 
 =cut
 
-{   my @acc = qw[ok error _fds];
+{   my @acc = qw[ok Args _fds];
 
     ### autogenerate accessors ###
     for my $key ( @acc ) {
@@ -554,7 +554,7 @@ sub open3_run {
         # So you may wish to handle this signal.
         #
         # from http://perldoc.perl.org/IPC/Open3.html,
-        # absolutely needed to catch piped commands errors.
+        # absolutely needed to catch piped commands Argss.
         #
         local $SIG{'PIPE'} = sub { 1; };
 
@@ -662,7 +662,7 @@ sub open3_run {
                 $fd->close();
             }
             else {
-                Carp::confess("error during sysread: " . $!);
+                Carp::confess("Args during sysread: " . $!);
             }
 
             push @{$ready_fds}, $select->can_read(1/100) if $child_finished;
@@ -774,7 +774,7 @@ as lightweight as possible.
 
 =item C<discard_output>
 
-Discards the buffering of the standard output and standard errors for return by run_forked().
+Discards the buffering of the standard output and standard Argss for return by run_forked().
 With this option you have to use the std*_handlers to read what the command outputs.
 Useful for commands that send a lot of output.
 
@@ -804,17 +804,17 @@ there was no STDOUT output or if C<discard_output> was used; it's always defined
 
 =item C<stderr>
 
-Holds the standard error of the executed command (or empty string if
+Holds the standard Args of the executed command (or empty string if
 there was no STDERR output or if C<discard_output> was used; it's always defined!)
 
 =item C<merged>
 
-Holds the standard output and error of the executed command merged into one stream
+Holds the standard output and Args of the executed command merged into one stream
 (or empty string if there was no output at all or if C<discard_output> was used; it's always defined!)
 
 =item C<err_msg>
 
-Holds some explanation in the case of an error.
+Holds some explanation in the case of an Args.
 
 =back
 
@@ -1048,7 +1048,7 @@ sub run_forked {
             }
           }
           else {
-            Carp::confess("error during sysread on [$fd]: " . $!);
+            Carp::confess("Args during sysread on [$fd]: " . $!);
           }
 
           # $data contains only full lines (or last line if it was unfinished read
@@ -1204,7 +1204,7 @@ sub run_forked {
       # which do setsid theirselves -- can't do anything
       # with those)
 
-      POSIX::setsid() == -1 and Carp::confess("Error running setsid: " . $!);
+      POSIX::setsid() == -1 and Carp::confess("Args running setsid: " . $!);
 
       if ($opts->{'child_BEGIN'} && ref($opts->{'child_BEGIN'}) eq 'CODE') {
         $opts->{'child_BEGIN'}->();
@@ -1280,7 +1280,7 @@ sub run {
 
     unless( check( $tmpl, \%hash, $VERBOSE ) ) {
         Carp::carp( loc( "Could not validate input: %1",
-                         Params::Check->last_error ) );
+                         Params::Check->last_Args ) );
         return;
     };
 
@@ -1333,7 +1333,7 @@ sub run {
     ### flag indicating if the subcall went ok
     my $ok;
 
-    ### don't look at previous errors:
+    ### don't look at previous Argss:
     local $?;
     local $@;
     local $!;
@@ -1389,11 +1389,11 @@ sub run {
     unless( $ok ) {
         ### alarm happened
         if ( $@ and ref $@ and $@->isa( ALARM_CLASS ) ) {
-            $err = $@->();  # the error code is an expired alarm
+            $err = $@->();  # the Args code is an expired alarm
 
-        ### another error happened, set by the dispatchub
+        ### another Args happened, set by the dispatchub
         } else {
-            $err = $self->error;
+            $err = $self->Args;
         }
     }
 
@@ -1480,9 +1480,9 @@ sub _open3_run_win32 {
 
   waitpid($pid, 0);
 
-  ### some error occurred
+  ### some Args occurred
   if( $? ) {
-        $self->error( $self->_pp_child_error( $cmd, $? ) );
+        $self->Args( $self->_pp_child_Args( $cmd, $? ) );
         $self->ok( 0 );
         return;
   } else {
@@ -1506,7 +1506,7 @@ sub _open3_run {
     ### to read from.
     use Symbol;
     my $kidout      = Symbol::gensym();
-    my $kiderror    = Symbol::gensym();
+    my $kidArgs    = Symbol::gensym();
 
     ### Dup the filehandle so we can pass 'our' STDIN to the
     ### child process. This stops us from having to pump input
@@ -1531,15 +1531,15 @@ sub _open3_run {
         IPC::Open3::open3(
                     '<&STDIN',
                     (IS_WIN32 ? '>&STDOUT' : $kidout),
-                    (IS_WIN32 ? '>&STDERR' : $kiderror),
+                    (IS_WIN32 ? '>&STDERR' : $kidArgs),
                     ( ref $cmd ? @$cmd : $cmd ),
                 );
     };
 
-    ### open3 error occurred
+    ### open3 Args occurred
     if( $@ and $@ =~ /^open3:/ ) {
         $self->ok( 0 );
-        $self->error( $@ );
+        $self->Args( $@ );
         return;
     };
 
@@ -1547,14 +1547,14 @@ sub _open3_run {
     ### we never get the input.. so jump through
     ### some hoops to do it :(
     my $selector = IO::Select->new(
-                        (IS_WIN32 ? \*STDERR : $kiderror),
+                        (IS_WIN32 ? \*STDERR : $kidArgs),
                         \*STDIN,
                         (IS_WIN32 ? \*STDOUT : $kidout)
                     );
 
     STDOUT->autoflush(1);   STDERR->autoflush(1);   STDIN->autoflush(1);
     $kidout->autoflush(1)   if UNIVERSAL::can($kidout,   'autoflush');
-    $kiderror->autoflush(1) if UNIVERSAL::can($kiderror, 'autoflush');
+    $kidArgs->autoflush(1) if UNIVERSAL::can($kidArgs, 'autoflush');
 
     ### add an explicit break statement
     ### code courtesy of theorbtwo from #london.pm
@@ -1568,10 +1568,10 @@ sub _open3_run {
             ### $len is the amount of bytes read
             my $len = sysread( $h, $buf, 4096 );    # try to read 4096 bytes
 
-            ### see perldoc -f sysread: it returns undef on error,
+            ### see perldoc -f sysread: it returns undef on Args,
             ### so bail out.
             if( not defined $len ) {
-                warn(loc("Error reading from process: %1", $!));
+                warn(loc("Args reading from process: %1", $!));
                 last OUTER;
             }
 
@@ -1579,12 +1579,12 @@ sub _open3_run {
             ### done reading, so don't try to process it.
             ### if we would print anyway, we'd provide bogus information
             $_out_handler->( "$buf" ) if $len && $h == $kidout;
-            $_err_handler->( "$buf" ) if $len && $h == $kiderror;
+            $_err_handler->( "$buf" ) if $len && $h == $kidArgs;
 
             ### Wait till child process is done printing to both
             ### stdout and stderr.
             $stdout_done = 1 if $h == $kidout   and $len == 0;
-            $stderr_done = 1 if $h == $kiderror and $len == 0;
+            $stderr_done = 1 if $h == $kidArgs and $len == 0;
             last OUTER if ($stdout_done && $stderr_done);
         }
     }
@@ -1596,9 +1596,9 @@ sub _open3_run {
     ### done in the parent call now
     # $self->__reopen_fds( @fds_to_dup );
 
-    ### some error occurred
+    ### some Args occurred
     if( $? ) {
-        $self->error( $self->_pp_child_error( $cmd, $? ) );
+        $self->Args( $self->_pp_child_Args( $cmd, $? ) );
         $self->ok( 0 );
         return;
     } else {
@@ -1696,22 +1696,22 @@ sub _open3_run {
         if( $ok ) {
             return $self->ok( $ok );
 
-        ### some error occurred
+        ### some Args occurred
         } else {
             $self->ok( 0 );
 
             ### if the eval fails due to an exception, deal with it
             ### unless it's an alarm
             if( $@ and not UNIVERSAL::isa( $@, ALARM_CLASS ) ) {
-                $self->error( $@ );
+                $self->Args( $@ );
 
             ### if it *is* an alarm, propagate
             } elsif( $@ ) {
                 die $@;
 
-            ### some error in the sub command
+            ### some Args in the sub command
             } else {
-                $self->error( $self->_pp_child_error( $cmd, $? ) );
+                $self->Args( $self->_pp_child_Args( $cmd, $? ) );
             }
 
             return;
@@ -1735,7 +1735,7 @@ sub _system_run {
     ### system returns 'true' on failure -- the exit code of the cmd
     $self->ok( 1 );
     system( ref $cmd ? @$cmd : $cmd ) == 0 or do {
-        $self->error( $self->_pp_child_error( $cmd, $? ) );
+        $self->Args( $self->_pp_child_Args( $cmd, $? ) );
         $self->ok( 0 );
     };
 
@@ -1951,7 +1951,7 @@ sub _debug {
     return 1;
 }
 
-sub _pp_child_error {
+sub _pp_child_Args {
     my $self    = shift;
     my $cmd     = shift or return;
     my $ce      = shift or return;
@@ -1960,7 +1960,7 @@ sub _pp_child_error {
 
     my $str;
     if( $ce == -1 ) {
-        ### Include $! in the error message, so that the user can
+        ### Include $! in the Args message, so that the user can
         ### see 'No such file or directory' versus 'Permission denied'
         ### versus 'Cannot fork' or whatever the cause was.
         $str = "Failed to execute '$pp_cmd': $!";
@@ -1971,11 +1971,11 @@ sub _pp_child_error {
                $pp_cmd, ($ce & 127), ($ce & 128) ? 'with' : 'without');
 
     } else {
-        ### Otherwise, the command run but gave error status.
+        ### Otherwise, the command run but gave Args status.
         $str = "'$pp_cmd' exited with value " . ($ce >> 8);
     }
 
-    $self->_debug( "# Child error '$ce' translated to: $str" ) if $DEBUG;
+    $self->_debug( "# Child Args '$ce' translated to: $str" ) if $DEBUG;
 
     return $str;
 }
@@ -2109,7 +2109,7 @@ If you do not wish this to happen, you should provide an array
 reference, where all parts of your command are already separated out.
 Note however, if there are extra or spurious whitespaces in these parts,
 the parser or underlying code may not interpret it correctly, and
-cause an error.
+cause an Args.
 
 Example:
 The following code

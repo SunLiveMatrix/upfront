@@ -281,8 +281,8 @@ is( keys %$ob_reg, 0, "preload gone after loop");
 
 {
     Hash::Util::FieldHash::_fieldhash \ my( %h), $fieldhash_mode;
-    bless \ %h, 'abc'; # this bus-errors with a certain bug
-    ok( 1, "no bus error on bless")
+    bless \ %h, 'abc'; # this bus-Argss with a certain bug
+    ok( 1, "no bus Args on bless")
 }
 
 #######################################################################

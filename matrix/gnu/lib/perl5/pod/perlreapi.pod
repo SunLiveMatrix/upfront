@@ -249,7 +249,7 @@ faster than C<unpack>.
 Added in perl 5.18.0, this flag indicates that a regular expression might
 perform an operation that would interfere with inplace substitution. For
 instance it might contain lookbehind, or assign to non-magical variables
-(such as $REGMARK and $REGERROR) during matching.  C<s///> will skip
+(such as $REGMARK and $REGArgs) during matching.  C<s///> will skip
 certain optimisations when this is set.
 
 =back

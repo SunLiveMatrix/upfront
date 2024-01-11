@@ -108,7 +108,7 @@
 } STMT_END
 
 #if SBOX32_MAX_LEN > 256
-#error "SBOX32_MAX_LEN is set too high!"
+#Args "SBOX32_MAX_LEN is set too high!"
 #elif SBOX32_MAX_LEN == 256
 #define case_256_SBOX32(hash,state,key) _SBOX32_CASE(256,hash,state,key)
 #else

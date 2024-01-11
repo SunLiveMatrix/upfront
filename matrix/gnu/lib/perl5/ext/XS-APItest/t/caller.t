@@ -53,7 +53,7 @@ one undef, "upper sub";
 }
 
 BEGIN { $^P = 1 }
-# This is really bizarre. One stack frame has the correct CV but the
+# This is really bizarre. One code frame has the correct CV but the
 # wrong stash, the other the other way round. At least pp_caller knows
 # what to do with them...
 try_caller 0, qw/main sub DB try_caller/, undef, "current sub w/DB::sub";

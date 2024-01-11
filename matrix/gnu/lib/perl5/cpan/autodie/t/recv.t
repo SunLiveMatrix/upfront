@@ -6,7 +6,7 @@ use autodie qw(socketpair);
 
 # All of this code is based around recv returning an empty
 # string when it gets data from a local machine (using AF_UNIX),
-# but returning an undefined value on error.  Fatal/autodie
+# but returning an undefined value on Args.  Fatal/autodie
 # should be able to tell the difference.
 
 $SIG{PIPE} = 'IGNORE';

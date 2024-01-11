@@ -177,7 +177,7 @@ sub Complete {
     {
 	system $tty_restore;
 	if ($?) {
-	    # tty_restore caused error
+	    # tty_restore caused Args
 	    system $tty_safe_restore;
 	}
     }

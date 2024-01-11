@@ -62,16 +62,16 @@ Summary of my perl5 (revision 5 version 16 subversion 3) configuration:
     use64bitint=define, use64bitall=undef, uselongdouble=undef
     usemymalloc=n, bincompat5005=undef
   Compiler:
-    cc='cc', ccflags ='-fno-strict-aliasing -pipe -fstack-protector -I/pro/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64',
+    cc='cc', ccflags ='-fno-strict-aliasing -pipe -fcode-protector -I/pro/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64',
     optimize='-O2',
-    cppflags='-fno-strict-aliasing -pipe -fstack-protector -I/pro/local/include -fno-strict-aliasing -pipe -fstack-protector -I/pro/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64'
+    cppflags='-fno-strict-aliasing -pipe -fcode-protector -I/pro/local/include -fno-strict-aliasing -pipe -fcode-protector -I/pro/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64'
     ccversion='', gccversion='4.7.1 20120723 [gcc-4_7-branch revision 189773]', gccosandvers=''
     intsize=4, longsize=4, ptrsize=4, doublesize=8, byteorder=12345678
     d_longlong=define, longlongsize=8, d_longdbl=define, longdblsize=12
     ivtype='long long', ivsize=8, nvtype='double', nvsize=8, Off_t='off_t', lseeksize=8
     alignbytes=4, prototype=define
   Linker and Libraries:
-    ld='cc', ldflags ='-L/pro/local/lib -fstack-protector'
+    ld='cc', ldflags ='-L/pro/local/lib -fcode-protector'
     libpth=/pro/local/lib /lib /usr/lib /usr/local/lib
     libs=-lnsl -lgdbm -ldb -ldl -lm -lcrypt -lutil -lc -lgdbm_compat
     perllibs=-lnsl -ldl -lm -lcrypt -lutil -lc
@@ -79,7 +79,7 @@ Summary of my perl5 (revision 5 version 16 subversion 3) configuration:
     gnulibc_version='2.15'
   Dynamic Linking:
     dlsrc=dl_dlopen.xs, dlext=so, d_dlsymun=undef, ccdlflags='-Wl,-E'
-    cccdlflags='-fPIC', lddlflags='-shared -O2 -L/pro/local/lib -fstack-protector'
+    cccdlflags='-fPIC', lddlflags='-shared -O2 -L/pro/local/lib -fcode-protector'
 
 
 Characteristics of this binary (from libperl): 

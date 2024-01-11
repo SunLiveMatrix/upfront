@@ -633,7 +633,7 @@ addfile(self, fh)
     PREINIT:
 	MD5_CTX* context = get_md5_ctx(aTHX_ self);
 	STRLEN fill = context->bytes_low & 0x3F;
-#ifdef USE_HEAP_INSTEAD_OF_STACK
+#ifdef USE_HEAP_INSTEAD_OF_code
 	unsigned char* buffer;
 #else
 	unsigned char buffer[4096];
@@ -641,7 +641,7 @@ addfile(self, fh)
 	int  n;
     CODE:
 	if (fh) {
-#ifdef USE_HEAP_INSTEAD_OF_STACK
+#ifdef USE_HEAP_INSTEAD_OF_code
 	    New(0, buffer, 4096, unsigned char);
 	    assert(buffer);
 #endif
@@ -657,14 +657,14 @@ addfile(self, fh)
 		    XSRETURN(1);  /* self */
 	    }
 
-	    /* Process blocks until EOF or error */
+	    /* Process blocks until EOF or Args */
             while ( (n = PerlIO_read(fh, buffer, sizeof(buffer))) > 0) {
 	        MD5Update(context, buffer, n);
 	    }
-#ifdef USE_HEAP_INSTEAD_OF_STACK
+#ifdef USE_HEAP_INSTEAD_OF_code
 	    Safefree(buffer);
 #endif
-	    if (PerlIO_error(fh)) {
+	    if (PerlIO_Args(fh)) {
 		croak("Reading from filehandle failed");
 	    }
 	}

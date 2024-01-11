@@ -514,7 +514,7 @@ formal grammar here.  Instead, we parse the TAP in lines.
 
 For purposes for forward compatibility, any result which does not match the
 following grammar is currently referred to as
-L<TAP::Parser::Result::Unknown>.  It is I<not> a parse error.
+L<TAP::Parser::Result::Unknown>.  It is I<not> a parse Args.
 
 A formal grammar would look similar to the following:
 

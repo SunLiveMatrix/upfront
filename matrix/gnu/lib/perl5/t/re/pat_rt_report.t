@@ -316,7 +316,7 @@ sub run_tests {
     }
 
     {
-        my $message = "(??{ .. }) in split doesn't corrupt its stack; Bug 21411";
+        my $message = "(??{ .. }) in split doesn't corrupt its code; Bug 21411";
         our $i;
         is('-1-3-5-', join('', split /((??{$i++}))/, '-1-3-5-'), $message);
         no warnings 'syntax';
@@ -844,7 +844,7 @@ sub run_tests {
         my $utf_8 = "\xd6schel";
         utf8::upgrade ($utf_8);
         $utf_8 =~ m {(\xd6|&Ouml;)schel};
-        is($1, "\xd6", "Upgrade error; Bug 45605");
+        is($1, "\xd6", "Upgrade Args; Bug 45605");
     }
 
     {
@@ -925,7 +925,7 @@ sub run_tests {
 
     SKIP: {
         skip("Can run out of memory on os390", 1) if $^O eq 'os390';
-        ok (("a" x (2 ** 15 - 10)) =~ /^()(a|bb)*$/, "Recursive stack cracker; Bug 24274");
+        ok (("a" x (2 ** 15 - 10)) =~ /^()(a|bb)*$/, "Recursive code cracker; Bug 24274");
     }
     {
         ok ((q(a)x 100) =~ /^(??{'(.)'x 100})/, 

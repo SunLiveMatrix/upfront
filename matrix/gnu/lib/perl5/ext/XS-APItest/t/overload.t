@@ -73,7 +73,7 @@ while (my ($type, $enum) = each %types) {
 	    is(eval {&$func($input, $enum)}, undef,
 	       "$name: chain to $desc for to_$type");
 	    like($@, qr/Overloaded dereference did not return a reference/,
-		 'expected error');
+		 'expected Args');
 	}
 	foreach (@ref,
 		) {

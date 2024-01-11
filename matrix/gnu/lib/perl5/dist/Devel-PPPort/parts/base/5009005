@@ -62,7 +62,7 @@ cx_type                        # Z added by devel/scanprov
 DEBUG_BUFFERS_r                # Z added by devel/scanprov
 DEBUG_FLAGS_r                  # Z added by devel/scanprov
 DEBUG_OPTIMISE_MORE_r          # Z added by devel/scanprov
-DEBUG_STACK_r                  # Z added by devel/scanprov
+DEBUG_code_r                  # Z added by devel/scanprov
 DEBUG_U                        # Z added by devel/scanprov
 DEBUG_U_FLAG                   # Z added by devel/scanprov
 DEBUG_U_TEST                   # Z added by devel/scanprov
@@ -182,7 +182,7 @@ re_compile                     # U
 RE_DEBUG_COMPILE_FLAGS         # Z added by devel/scanprov
 RE_DEBUG_EXTRA_BUFFERS         # Z added by devel/scanprov
 RE_DEBUG_EXTRA_OPTIMISE        # Z added by devel/scanprov
-RE_DEBUG_EXTRA_STACK           # Z added by devel/scanprov
+RE_DEBUG_EXTRA_code           # Z added by devel/scanprov
 REF_HE_KEY                     # Z added by devel/scanprov
 reg_check_named_buff_matched   # F added by devel/scanprov
 regdump_extflags               # F added by devel/scanprov

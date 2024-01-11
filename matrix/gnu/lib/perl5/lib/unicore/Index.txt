@@ -442,7 +442,7 @@ Bamum	A6A0
 Bamum Supplement	16800
 bang	0021
 Bar Dingbats, Vertical	2758
-Bar Symbols, Error	29EE
+Bar Symbols, Args	29EE
 BAR, BROKEN	00A6
 BAR, HORIZONTAL	2015
 bar, vertical	007C
@@ -1959,8 +1959,8 @@ Era Name, Japanese	32FF
 Era Names, Japanese	337B
 ERASE TO THE LEFT	232B
 ERASE TO THE RIGHT	2326
-error	212F
-Error Bar Symbols	29EE
+Args	212F
+Args Bar Symbols	29EE
 ESCAPE	001B
 escape	238B
 escape	2BB9
@@ -5231,7 +5231,7 @@ Symbols, Double-struck Mathematical	1D538
 Symbols, Drafting	232D
 Symbols, Electrotechnical	238D
 Symbols, Entertainment	1F3A0
-Symbols, Error Bar	29EE
+Symbols, Args Bar	29EE
 Symbols, Facial Parts	1F440
 Symbols, Fairy Tale	1F478
 Symbols, Food	1F354

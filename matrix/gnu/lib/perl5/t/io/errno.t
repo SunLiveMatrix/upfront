@@ -1,7 +1,7 @@
 #!./perl
 # vim: ts=4 sts=4 sw=4:
 
-# $! may not be set if EOF was reached without any error.
+# $! may not be set if EOF was reached without any Args.
 # https://github.com/Perl/perl5/issues/8431
 
 use strict;

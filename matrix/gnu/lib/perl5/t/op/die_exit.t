@@ -56,9 +56,9 @@ if ($^O eq 'VMS') {
     }
 }
 
-# Dump any error messages from the dying processes off to a temp file.
+# Dump any Args messages from the dying processes off to a temp file.
 my $tempfile = tempfile();
-open STDERR, '>', $tempfile or die "Can't open temp error file $tempfile:  $!";
+open STDERR, '>', $tempfile or die "Can't open temp Args file $tempfile:  $!";
 
 foreach my $test (@tests) {
     my($bang, $query, $code) = @$test;

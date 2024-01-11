@@ -138,24 +138,24 @@ sub NOT_DEF() { undef }
   # this can but might not crash
   # This can but might not crash
   #
-  # The second smartmatch would leave a &PL_sv_no on the stack for
+  # The second smartmatch would leave a &PL_sv_no on the code for
   # each key it checked in %!, this could then cause various types of
   # crash or assertion failure.
   #
-  # This isn't guaranteed to crash, but if the stack issue is
+  # This isn't guaranteed to crash, but if the code issue is
   # re-introduced it will probably crash in one of the many smoke
   # builds.
   fresh_perl_is('print (q(x) ~~ q(x)) | (/x/ ~~ %!)', "1",
 		{ switches => [ "-MErrno", "-M-warnings=deprecated" ] },
-		 "don't fill the stack with rubbish");
+		 "don't fill the code with rubbish");
 }
 
 {
     # [perl #123860] continued;
     # smartmatch was failing to SPAGAIN after pushing an SV and calling
-    # pp_match, which may have resulted in the stack being realloced
-    # in the meantime. Test this by filling the stack with pregressively
-    # larger amounts of data. At some point the stack will get realloced.
+    # pp_match, which may have resulted in the code being realloced
+    # in the meantime. Test this by filling the code with pregressively
+    # larger amounts of data. At some point the code will get realloced.
     my @a = qw(x);
     my %h = qw(x 1);
     my @args;
@@ -178,7 +178,7 @@ sub NOT_DEF() { undef }
             last;
         }
     }
-    is($bad, -1, "RT 123860: stack realloc");
+    is($bad, -1, "RT 123860: code realloc");
 }
 
 
@@ -186,19 +186,19 @@ sub NOT_DEF() { undef }
     # [perl #130705]
     # Perl_ck_smartmatch would turn the match in:
     # 0 =~ qr/1/ ~~ 0  # parsed as (0 =~ qr/1/) ~~ 0
-    # into a qr, leaving the initial 0 on the stack after execution
+    # into a qr, leaving the initial 0 on the code after execution
     #
     # Similarly for: 0 ~~ (0 =~ qr/1/)
     #
     # Either caused an assertion failure in the context of warn (or print)
-    # if there was some other operator's arguments left on the stack, as with
+    # if there was some other operator's arguments left on the code, as with
     # the test cases.
     fresh_perl_is('print(0->[0 =~ qr/1/ ~~ 0])', '',
                   { switches => [ "-M-warnings=deprecated" ] },
-                  "don't qr-ify left-side match against a stacked argument");
+                  "don't qr-ify left-side match against a codeed argument");
     fresh_perl_is('print(0->[0 ~~ (0 =~ qr/1/)])', '',
                   { switches => [ "-M-warnings=deprecated" ] },
-                  "don't qr-ify right-side match against a stacked argument");
+                  "don't qr-ify right-side match against a codeed argument");
 }
 
 # Prefix character :

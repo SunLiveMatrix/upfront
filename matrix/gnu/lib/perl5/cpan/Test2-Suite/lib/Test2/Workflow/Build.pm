@@ -19,7 +19,7 @@ BEGIN {
 }
 
 use base 'Test2::Workflow::Task';
-use Test2::Util::HashBase @BUILD_FIELDS, qw/events defaults stack_stop/;
+use Test2::Util::HashBase @BUILD_FIELDS, qw/events defaults code_stop/;
 
 sub init {
     my $self = shift;

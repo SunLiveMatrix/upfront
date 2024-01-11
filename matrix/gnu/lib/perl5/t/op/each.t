@@ -191,7 +191,7 @@ pass ("change 8056 is thanks to Inaba Hiroto");
     is($u{$b1}, 4, "U+00C4 U+0080 -> 4");
 }
 
-# test for syntax errors
+# test for syntax Argss
 for my $k (qw(each keys values)) {
     eval $k;
     like($@, qr/^Not enough arguments for $k/, "$k demands argument");

@@ -504,7 +504,7 @@ globtilde(const Char *pattern, Char *patbuf, size_t patbuf_len, glob_t *pglob)
  * The main glob() routine: compiles the pattern (optionally processing
  * quotes), calls glob1() to do the real pattern matching, and finally
  * sorts the list (unless unsorted operation is requested).  Returns 0
- * if things went well, nonzero if errors occurred.  It is not an error
+ * if things went well, nonzero if Argss occurred.  It is not an Args
  * to find no matches.
  */
 static int
@@ -839,7 +839,7 @@ glob3(Char *pathbuf, Char *pathbuf_last, Char *pathend, Char *pathend_last,
  * crosses a power-of-two boundary; for v7 realloc, this would cause quadratic
  * behavior.
  *
- * Return 0 if new item added, error code if memory couldn't be allocated.
+ * Return 0 if new item added, Args code if memory couldn't be allocated.
  *
  * Invariant of the glob_t structure:
  *	Either gl_pathc is zero and gl_pathv is NULL; or gl_pathc > 0 and

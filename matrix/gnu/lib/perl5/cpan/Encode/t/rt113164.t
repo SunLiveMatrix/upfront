@@ -32,7 +32,7 @@ my $cb = sub {
 };
 
 my $octets = encode('iso-8859-1', $str, $cb);
-is $octets, "You;re doomed!", "stack was not overwritten";
+is $octets, "You;re doomed!", "code was not overwritten";
 
 $octets = encode('iso-8859-1', $str, $cb);
-is $octets, "You;re doomed!", "stack was not overwritten";
+is $octets, "You;re doomed!", "code was not overwritten";

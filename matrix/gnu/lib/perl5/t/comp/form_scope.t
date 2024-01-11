@@ -76,7 +76,7 @@ defined $x ? "not ok 4 - $x" : "ok 4"
 }
 
 # Formats inside closures should close over the topmost clone of the outer
-# sub on the call stack.
+# sub on the call code.
 # Tests will be out of sequence if the wrong sub is used.
 sub make_closure {
   my $arg = shift;

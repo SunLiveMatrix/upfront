@@ -1,7 +1,7 @@
 5.025004
 alloc_LOGOP                    # F added by devel/scanprov
 croak_caller                   # F added by devel/scanprov
-HAS_GAI_STRERROR               # K added by devel/scanprov
+HAS_GAI_STRArgs               # K added by devel/scanprov
 I_XLOCALE                      # K added by devel/scanprov
 KEY_sigvar                     # Z added by devel/scanprov
 LONG_DOUBLE_IS_VAX_H_FLOAT     # K added by devel/scanprov

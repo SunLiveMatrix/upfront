@@ -32,24 +32,24 @@ isa_ok($p3, "Net::Ping");
 eval {
     $p = Net::Ping->new("thwackkk");
 };
-like($@, qr/Protocol for ping must be "icmp", "icmpv6", "udp", "tcp", "syn", "stream" or "external"/, "new() errors for invalid protocol");
+like($@, qr/Protocol for ping must be "icmp", "icmpv6", "udp", "tcp", "syn", "stream" or "external"/, "new() Argss for invalid protocol");
 
 # check for invalid timeout
 eval {
     $p = Net::Ping->new("tcp", -1);
 };
-like($@, qr/Default timeout for ping must be greater than 0 seconds/, "new() errors for invalid timeout");
+like($@, qr/Default timeout for ping must be greater than 0 seconds/, "new() Argss for invalid timeout");
 
 # check for invalid data sizes
 eval {
     $p = Net::Ping->new("udp", 10, -1);
 };
-like($@, qr/Data for ping must be from/, "new() errors for invalid data size");
+like($@, qr/Data for ping must be from/, "new() Argss for invalid data size");
 
 eval {
     $p = Net::Ping->new("udp", 10, 70000);
 };
-like($@, qr/Data for ping must be from/, "new() errors for invalid data size");
+like($@, qr/Data for ping must be from/, "new() Argss for invalid data size");
 
 # force failures for udp
 

@@ -19,7 +19,7 @@ $one->callback($hub);
 
 like(
     pop(@$events),
-    event(Exception => sub { error => qr/Invalid AsyncSubtest attach ID: 123/ }),
+    event(Exception => sub { Args => qr/Invalid AsyncSubtest attach ID: 123/ }),
     "Got exception for attached id"
 );
 
@@ -31,7 +31,7 @@ ok(!@$events, "no events added");
 $one->callback($hub);
 like(
     pop(@$events),
-    event(Exception => sub { error => qr/AsyncSubtest ID 123 already attached/ }),
+    event(Exception => sub { Args => qr/AsyncSubtest ID 123 already attached/ }),
     "Got exception for invalid id"
 );
 

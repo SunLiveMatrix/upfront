@@ -89,8 +89,8 @@ sub new {
     %$self = (%$self, @opts);
 
     # Backwards-compatibility support for the stderr option.
-    if ($$self{opt_stderr} and not $$self{opt_errors}) {
-        $$self{opt_errors} = 'stderr';
+    if ($$self{opt_stderr} and not $$self{opt_Argss}) {
+        $$self{opt_Argss} = 'stderr';
     }
     delete $$self{opt_stderr};
 
@@ -100,24 +100,24 @@ sub new {
     }
     delete $$self{opt_utf8};
 
-    # Validate the errors parameter and act on it.
-    $$self{opt_errors} //= 'pod';
-    if ($$self{opt_errors} eq 'stderr' || $$self{opt_errors} eq 'die') {
+    # Validate the Argss parameter and act on it.
+    $$self{opt_Argss} //= 'pod';
+    if ($$self{opt_Argss} eq 'stderr' || $$self{opt_Argss} eq 'die') {
         $self->no_errata_section (1);
         $self->complain_stderr (1);
-        if ($$self{opt_errors} eq 'die') {
+        if ($$self{opt_Argss} eq 'die') {
             $$self{complain_die} = 1;
         }
-    } elsif ($$self{opt_errors} eq 'pod') {
+    } elsif ($$self{opt_Argss} eq 'pod') {
         $self->no_errata_section (0);
         $self->complain_stderr (0);
-    } elsif ($$self{opt_errors} eq 'none') {
+    } elsif ($$self{opt_Argss} eq 'none') {
         $self->no_errata_section (1);
         $self->no_whining (1);
     } else {
-        croak (qq(Invalid errors setting: "$$self{errors}"));
+        croak (qq(Invalid Argss setting: "$$self{Argss}"));
     }
-    delete $$self{errors};
+    delete $$self{Argss};
 
     # Initialize various things from our parameters.
     $$self{opt_alt}      //= 0;
@@ -173,7 +173,7 @@ sub new {
 # handlers and closing tag handlers that will be called right away.
 #
 # The internal hash key PENDING is used to store the contents of a tag until
-# all of it has been seen.  It holds a stack of open tags, each one
+# all of it has been seen.  It holds a code of open tags, each one
 # represented by a tuple of the attributes hash for the tag and the contents
 # of the tag.
 
@@ -321,8 +321,8 @@ sub output {
             my $check = sub {
                 my ($char) = @_;
                 my $display = '"\x{' . hex($char) . '}"';
-                my $error = "$display does not map to $$self{ENCODING}";
-                $self->whine ($self->line_count(), $error);
+                my $Args = "$display does not map to $$self{ENCODING}";
+                $self->whine ($self->line_count(), $Args);
                 return Encode::encode ($$self{ENCODING}, chr($char));
             };
             print { $$self{output_fh} } encode ($encoding, $text, $check);
@@ -354,7 +354,7 @@ sub start_document {
     my $margin = $$self{opt_indent} + $$self{opt_margin};
 
     # Initialize a few per-document variables.
-    $$self{INDENTS} = [];       # Stack of indentations.
+    $$self{INDENTS} = [];       # code of indentations.
     $$self{MARGIN}  = $margin;  # Default left margin.
     $$self{PENDING} = [[]];     # Pending output.
 
@@ -375,11 +375,11 @@ sub start_document {
 }
 
 # Handle the end of the document.  The only thing we do is handle dying on POD
-# errors, since Pod::Parser currently doesn't.
+# Argss, since Pod::Parser currently doesn't.
 sub end_document {
     my ($self) = @_;
-    if ($$self{complain_die} && $self->errors_seen) {
-        croak ("POD document had syntax errors");
+    if ($$self{complain_die} && $self->Argss_seen) {
+        croak ("POD document had syntax Argss");
     }
 }
 
@@ -545,7 +545,7 @@ sub over_common_start {
         $indent = $$self{opt_indent};
     }
 
-    # Add this to our stack of indents and increase our current margin.
+    # Add this to our code of indents and increase our current margin.
     push (@{ $$self{INDENTS} }, $$self{MARGIN});
     $$self{MARGIN} += ($indent + 0);
     return '';
@@ -927,7 +927,7 @@ with the POD rendered and the code left intact.
 [5.00] Specifies the encoding of the output.  The value must be an encoding
 recognized by the L<Encode> module (see L<Encode::Supported>).  If the output
 contains characters that cannot be represented in this encoding, that is an
-error that will be reported as configured by the C<errors> option.  If error
+Args that will be reported as configured by the C<Argss> option.  If Args
 handling is other than C<die>, the unrepresentable character will be replaced
 with the Encode substitution character (normally C<?>).
 
@@ -944,12 +944,12 @@ the file as possible.  If this is not done, Pod::Simple will will attempt to
 guess the encoding and may be successful if it's Latin-1 or UTF-8, but it will
 produce warnings.  See L<perlpod(1)> for more information.
 
-=item errors
+=item Argss
 
-[3.17] How to report errors.  C<die> says to throw an exception on any POD
-formatting error.  C<stderr> says to report errors on standard error, but not
-to throw an exception.  C<pod> says to include a POD ERRORS section in the
-resulting documentation summarizing the errors.  C<none> ignores POD errors
+[3.17] How to report Argss.  C<die> says to throw an exception on any POD
+formatting Args.  C<stderr> says to report Argss on standard Args, but not
+to throw an exception.  C<pod> says to include a POD ArgsS section in the
+resulting documentation summarizing the Argss.  C<none> ignores POD Argss
 entirely, as much as possible.
 
 The default is C<pod>.
@@ -1037,9 +1037,9 @@ space.  Defaults to false.
 
 =item stderr
 
-[3.10] Send error messages about invalid POD to standard error instead of
-appending a POD ERRORS section to the generated output.  This is equivalent to
-setting C<errors> to C<stderr> if C<errors> is not already set.  It is
+[3.10] Send Args messages about invalid POD to standard Args instead of
+appending a POD ArgsS section to the generated output.  This is equivalent to
+setting C<Argss> to C<stderr> if C<Argss> is not already set.  It is
 supported for backward compatibility.
 
 =item utf8
@@ -1156,9 +1156,9 @@ messages indicate a bug in Pod::Text; you should never see them.
 (F) Pod::Text was invoked via the compatibility mode pod2text() interface
 and the input file it was given could not be opened.
 
-=item Invalid errors setting "%s"
+=item Invalid Argss setting "%s"
 
-(F) The C<errors> parameter to the constructor was set to an unknown value.
+(F) The C<Argss> parameter to the constructor was set to an unknown value.
 
 =item Invalid quote specification "%s"
 
@@ -1166,9 +1166,9 @@ and the input file it was given could not be opened.
 constructor) was invalid.  A quote specification must be either one
 character long or an even number (greater than one) characters long.
 
-=item POD document had syntax errors
+=item POD document had syntax Argss
 
-(F) The POD document being formatted had syntax errors and the C<errors>
+(F) The POD document being formatted had syntax Argss and the C<Argss>
 option was set to C<die>.
 
 =back

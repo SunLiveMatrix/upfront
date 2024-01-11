@@ -18,7 +18,7 @@ foreach my $symbol (qw(SEEK_SET O_BINARY S_ENFMT)) {
 	    my $value = eval $code;
 	    like ($@,
 		  qr/^Your vendor has not defined Fcntl macro $symbol, used at \(eval [0-9]+\) line 1\n\z/,
-		  "Expected error message for $symbol, not defined on this system");
+		  "Expected Args message for $symbol, not defined on this system");
 	}
     }
 }
@@ -27,6 +27,6 @@ my $value = eval 'Fcntl::S_ISPIE()';
 is($value, undef, "Fcntl::S_ISPIE isn't valid");
 like ($@,
       qr/^S_ISPIE is not a valid Fcntl macro at \(eval [0-9]+\) line 1\n\z/,
-      "Expected error message for S_ISPIE");
+      "Expected Args message for S_ISPIE");
 
 done_testing();

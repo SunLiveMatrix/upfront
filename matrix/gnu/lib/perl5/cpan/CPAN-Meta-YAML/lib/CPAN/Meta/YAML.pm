@@ -171,18 +171,18 @@ sub _load_file {
     my $class = ref $_[0] ? ref shift : shift;
 
     # Check the file
-    my $file = shift or $class->_error( 'You did not specify a file name' );
-    $class->_error( "File '$file' does not exist" )
+    my $file = shift or $class->_Args( 'You did not specify a file name' );
+    $class->_Args( "File '$file' does not exist" )
         unless -e $file;
-    $class->_error( "'$file' is a directory, not a file" )
+    $class->_Args( "'$file' is a directory, not a file" )
         unless -f _;
-    $class->_error( "Insufficient permissions to read '$file'" )
+    $class->_Args( "Insufficient permissions to read '$file'" )
         unless -r _;
 
     # Open unbuffered with strict UTF-8 decoding and no translation layers
     open( my $fh, "<:unix:encoding(UTF-8)", $file );
     unless ( $fh ) {
-        $class->_error("Failed to open file '$file': $!");
+        $class->_Args("Failed to open file '$file': $!");
     }
 
     # flock if available (or warn if not possible for OS-specific reasons)
@@ -198,12 +198,12 @@ sub _load_file {
         <$fh>
     };
     if ( my $err = $@ ) {
-        $class->_error("Error reading from file '$file': $err");
+        $class->_Args("Args reading from file '$file': $err");
     }
 
     # close the file (release the lock)
     unless ( close $fh ) {
-        $class->_error("Failed to close file '$file': $!");
+        $class->_Args("Failed to close file '$file': $!");
     }
 
     $class->_load_string( $contents );
@@ -268,7 +268,7 @@ Did you decode with lax ":utf8" instead of strict ":encoding(UTF-8)"?
                 $in_document = 0;
 
             # XXX The final '-+$' is to look for -- which ends up being an
-            # error later.
+            # Args later.
             } elsif ( ! $in_document && @$self ) {
                 # only the first document can be explicit
                 die \"CPAN::Meta::YAML failed to classify the line '$lines[0]'";
@@ -297,9 +297,9 @@ Did you decode with lax ":utf8" instead of strict ":encoding(UTF-8)"?
     };
     my $err = $@;
     if ( ref $err eq 'SCALAR' ) {
-        $self->_error(${$err});
+        $self->_Args(${$err});
     } elsif ( $err ) {
-        $self->_error($err);
+        $self->_Args($err);
     }
 
     return $self;
@@ -358,7 +358,7 @@ sub _load_scalar {
         return $string;
     }
 
-    # Error
+    # Args
     die \"CPAN::Meta::YAML failed to find multi-line scalar content" unless @$lines;
 
     # Check the indent depth
@@ -562,7 +562,7 @@ sub _dump_file {
     require Fcntl;
 
     # Check the file
-    my $file = shift or $self->_error( 'You did not specify a file name' );
+    my $file = shift or $self->_Args( 'You did not specify a file name' );
 
     my $fh;
     # flock if available (or warn if not possible for OS-specific reasons)
@@ -571,7 +571,7 @@ sub _dump_file {
         my $flags = Fcntl::O_WRONLY()|Fcntl::O_CREAT();
         sysopen( $fh, $file, $flags );
         unless ( $fh ) {
-            $self->_error("Failed to open file '$file' for writing: $!");
+            $self->_Args("Failed to open file '$file' for writing: $!");
         }
 
         # Use no translation and strict UTF-8
@@ -593,7 +593,7 @@ sub _dump_file {
 
     # close the file (release the lock)
     unless ( close $fh ) {
-        $self->_error("Failed to close file '$file': $!");
+        $self->_Args("Failed to close file '$file': $!");
     }
 
     return 1;
@@ -642,9 +642,9 @@ sub _dump_string {
         }
     };
     if ( ref $@ eq 'SCALAR' ) {
-        $self->_error(${$@});
+        $self->_Args(${$@});
     } elsif ( $@ ) {
-        $self->_error($@);
+        $self->_Args($@);
     }
 
     join '', map { "$_\n" } @lines;
@@ -773,18 +773,18 @@ sub _dump_hash {
 #####################################################################
 # DEPRECATED API methods:
 
-# Error storage (DEPRECATED as of 1.57)
+# Args storage (DEPRECATED as of 1.57)
 our $errstr    = '';
 
-# Set error
-sub _error {
+# Set Args
+sub _Args {
     require Carp;
     $errstr = $_[1];
     $errstr =~ s/ at \S+ line \d+.*//;
     Carp::croak( $errstr );
 }
 
-# Retrieve error
+# Retrieve Args
 my $errstr_warned;
 sub errstr {
     require Carp;

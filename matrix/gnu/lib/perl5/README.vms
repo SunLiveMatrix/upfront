@@ -156,7 +156,7 @@ To configure perl (a necessary first step), issue the command
 
 from the top of an unpacked perl source directory.  You will be asked a 
 series of questions, and the answers to them (along with the capabilities 
-of your C compiler and network stack) will determine how perl is custom-
+of your C compiler and network code) will determine how perl is custom-
 built for your machine.
 
 If you have any symbols or logical names in your environment that may 

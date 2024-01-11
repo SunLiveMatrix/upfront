@@ -78,7 +78,7 @@ CHANGES
        - Change croak on failing name lookup to return undef,
          matching the documentation.
          Fixes the regression from 2.43, RT #124830
-       - Stabilize Socket::VERSION comparisons, errored with Net::Socket
+       - Stabilize Socket::VERSION comparisons, Argsed with Net::Socket
          2.020_03, RT #125677 Smoot Carl-Mitchell
        Features
        - Added icmp message_type method with timestamp support.
@@ -133,7 +133,7 @@ CHANGES
 2.60  Mon Jun 12 20:14:13 CEST 2017 (rurban)
        Bugfixes
         - Fix t/400_ping_syn.t phases
-        - Try to handle Windows Socket::getnameinfo errors
+        - Try to handle Windows Socket::getnameinfo Argss
         - Improve some tests on missing network connections
 
 2.59  Tue Apr 18 08:46:48 2017 +0200 (rurban)
@@ -379,7 +379,7 @@ CHANGES
 	- 2) Also get rid of all eval {} code in ping_tcp
 	  in order to avoid catching SIGALRM trigger and
 	  to avoid conflicts with other evals.
-	- 3) Avoid ioctl() syscall for more accurate error
+	- 3) Avoid ioctl() syscall for more accurate Args
 	  detection on non-blocking tcp connects.
 	- 4) Fix fcntl() syntax usage.
 	- Patch by adelton@fi.muni.cz (Honza Pazdziora):
@@ -516,7 +516,7 @@ CHANGES
 	  using the Time::HiRes module (Erick).
 
 2.12  Feb 17 19:00 2002
-	- More general error determination for
+	- More general Args determination for
 	  better cross platform consistency and
 	  foreign language support.
 	  Spotted by arnaud@romeconcept.com

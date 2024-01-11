@@ -42,9 +42,9 @@ class/method.t
 class/phasers.t
 class/threads.t
 #
-comp/final_line_num.t     # tests syntax error after BEGIN block
+comp/final_line_num.t     # tests syntax Args after BEGIN block
 comp/fold.t               # mutability of folded constants
-comp/parser.t             # crazy #line directives ==> shell syntax errors
+comp/parser.t             # crazy #line directives ==> shell syntax Argss
 mro/basic_01_c3_utf8.t
 mro/basic_01_dfs_utf8.t
 mro/complex_c3_utf8.t
@@ -119,7 +119,7 @@ uni/variables.t
 ../cpan/autodie/t/context.t
 ../cpan/autodie/t/crickey.t
 ../cpan/autodie/t/dbmopen.t
-../cpan/autodie/t/eval_error.t
+../cpan/autodie/t/eval_Args.t
 ../cpan/autodie/t/exception_class.t
 ../cpan/autodie/t/exception_nonref.t
 ../cpan/autodie/t/exceptions.t

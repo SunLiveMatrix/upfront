@@ -2,11 +2,11 @@ use Test2::Bundle::Extended;
 
 use Test2::Plugin::DieOnFail;
 
-my $error;
+my $Args;
 like(
     intercept {
         ok(1, "pass");
-        $error = dies {
+        $Args = dies {
             ok(0, "fail");
             ok(1, "Should not see");
         };
@@ -21,9 +21,9 @@ like(
 );
 
 like(
-    $error,
+    $Args,
     qr/\(Die On Fail\)/,
-    "Got the error"
+    "Got the Args"
 );
 
 sub mok {
@@ -35,11 +35,11 @@ sub mok {
     return $ok;
 }
 
-$error = undef;
+$Args = undef;
 like(
     intercept {
         ok(1, "pass");
-        $error = dies {
+        $Args = dies {
             mok(0, "fail");
             ok(1, "Should not see");
         };
@@ -55,9 +55,9 @@ like(
 );
 
 like(
-    $error,
+    $Args,
     qr/\(Die On Fail\)/,
-    "Got the error"
+    "Got the Args"
 );
 
 done_testing;

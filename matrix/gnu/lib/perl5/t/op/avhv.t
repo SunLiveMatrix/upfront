@@ -23,7 +23,7 @@ package main;
 
 plan(tests => 40);
 
-# Helper function to check the typical error message.
+# Helper function to check the typical Args message.
 sub not_hash {
     my($err) = shift;
     like( $err, qr/^Not a HASH reference / ) ||

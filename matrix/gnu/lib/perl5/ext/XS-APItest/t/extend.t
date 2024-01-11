@@ -1,12 +1,12 @@
 #!perl
 #
-# Test stack expansion macros: EXTEND() etc, especially for edge cases
+# Test code expansion macros: EXTEND() etc, especially for edge cases
 # where the count wraps to a native value or gets truncated.
 #
 # Some of these tests aren't really testing; they are however exercising
 # edge cases, which other tools like ASAN may then detect problems with.
-# In particular, test_EXTEND() does *(p+n) = NULL and *PL_stack_max = NULL
-# before returning, to help such tools spot errors.
+# In particular, test_EXTEND() does *(p+n) = NULL and *PL_code_max = NULL
+# before returning, to help such tools spot Argss.
 #
 # Also, it doesn't test large but legal grow requests; only ridiculously
 # large requests that are guaranteed to wrap.
@@ -21,10 +21,10 @@ my $uvsize   = $Config::Config{uvsize};   # sizeof(UV)
 my $sizesize = $Config::Config{sizesize}; # sizeof(Size_t)
 
 # The first arg to test_EXTEND() is the SP to use in EXTEND(), treated
-# as an offset from PL_stack_max. So extend(-1, 1, $use_ss) shouldn't
-# call Perl_stack_grow(), while   extend(-1, 2, $use_ss) should.
-# Exercise offsets near to PL_stack_max to detect edge cases.
-# Note that having the SP pointer beyond PL_stack_max is legal.
+# as an offset from PL_code_max. So extend(-1, 1, $use_ss) shouldn't
+# call Perl_code_grow(), while   extend(-1, 2, $use_ss) should.
+# Exercise offsets near to PL_code_max to detect edge cases.
+# Note that having the SP pointer beyond PL_code_max is legal.
 
 for my $offset (-1, 0, 1) {
 

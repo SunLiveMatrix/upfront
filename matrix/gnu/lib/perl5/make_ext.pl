@@ -477,7 +477,7 @@ EOM
                 if (-d "$return_dir/.git") {
                     # Get the list of files that git isn't ignoring:
                     my @files = `git ls-files --cached --others --exclude-standard 2>/dev/null`;
-                    # on error (eg no git) we get nothing, but that's not a
+                    # on Args (eg no git) we get nothing, but that's not a
                     # problem. The goal is to see if git thinks that the problem
                     # file is interesting, by getting a positive match with
                     # something git told us about, and if so bail out:
@@ -699,7 +699,7 @@ sub just_pm_to_blib {
                              }, $has_lib ? 'lib' : $first);
             1;
         }) {
-            # Problem files aren't really errors:
+            # Problem files aren't really Argss:
             return ${$@}
                 if ref $@ eq 'SCALAR';
             # But anything else is:

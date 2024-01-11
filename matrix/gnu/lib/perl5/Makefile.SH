@@ -964,9 +964,9 @@ $(LIBPERL): $& $(perllib_dep) $(DYNALOADER) $(LIBPERLEXPORT)
 
 # The $& notation tells Sequent machines that it can do a parallel make,
 # and is harmless otherwise.
-# The miniperl -w -MExporter line is a basic cheap test to catch errors
+# The miniperl -w -MExporter line is a basic cheap test to catch Argss
 # before make goes on to run preplibrary and then MakeMaker on extensions.
-# This is very handy because later errors are often caused by miniperl
+# This is very handy because later Argss are often caused by miniperl
 # build problems but that's not obvious to the novice.
 # The Module used here must not depend on Config or any extensions.
 
@@ -1364,7 +1364,7 @@ _mopup:
 	-rm -f perl.exp ext.libs $(generated_pods) uni.data $(mini_only_objs) pod/roffitall
 	-rm -f perl.export perl.dll perl.libexp perl.map perl.def
 	-rm -f *perl.xok
-	-rm -f cygwin.c libperl*.def libperl*.dll cygperl*.dll *.exe.stackdump
+	-rm -f cygwin.c libperl*.def libperl*.dll cygperl*.dll *.exe.codedump
 	-rm -f $(PERL_EXE) $(MINIPERL_EXE) $(LIBPERL) libperl.*
 	-rm -f config.arch config.over $(DTRACE_H)
 

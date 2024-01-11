@@ -5,7 +5,7 @@
 # fresh_perl_is()/fresh_perl_like() functions in t/test.pl.
 
 # This is for tests that used to abnormally cause segfaults, and other nasty
-# errors that might kill the interpreter and for some reason you can't
+# Argss that might kill the interpreter and for some reason you can't
 # use an eval().
 
 BEGIN {
@@ -195,7 +195,7 @@ BEGIN failed--compilation aborted at - line 1.
 BEGIN { undef = 0 }
 EXPECT
 Can't modify undef operator in scalar assignment at - line 1, near "0 }"
-BEGIN not safe after errors--compilation aborted at - line 1.
+BEGIN not safe after Argss--compilation aborted at - line 1.
 ########
 {
     package foo;
@@ -715,11 +715,11 @@ ok 1
 ######## [ID 20020623.009 (#9728)] nested eval/sub segfaults
 $eval = eval 'sub { eval "sub { %S }" }';
 $eval->({});
-######## [perl #17951] Strange UTF error
+######## [perl #17951] Strange UTF Args
 -W
 # From: "John Kodis" <kodis@mail630.gsfc.nasa.gov>
 # Newsgroups: comp.lang.perl.moderated
-# Subject: Strange UTF error
+# Subject: Strange UTF Args
 # Date: Fri, 11 Oct 2002 16:19:58 -0400
 # Message-ID: <pan.2002.10.11.20.19.48.407190@mail630.gsfc.nasa.gov>
 $_ = "foobar\n";
@@ -787,7 +787,7 @@ eval {
 print "If you get here, you didn't crash\n";
 EXPECT
 If you get here, you didn't crash
-######## [perl #112312] crash on syntax error
+######## [perl #112312] crash on syntax Args
 # SKIP: !defined &DynaLoader::boot_DynaLoader # miniperl
 #!/usr/bin/perl
 use strict;
@@ -803,9 +803,9 @@ meow {
 	};
 };
 EXPECT
-syntax error at - line 12, near "used"
-Execution of - aborted due to compilation errors.
-######## [perl #112312] crash on syntax error - another test
+syntax Args at - line 12, near "used"
+Execution of - aborted due to compilation Argss.
+######## [perl #112312] crash on syntax Args - another test
 # SKIP: !defined &DynaLoader::boot_DynaLoader # miniperl
 #!/usr/bin/perl
 use strict;
@@ -833,5 +833,5 @@ sub testo {
 }
 
 EXPECT
-syntax error at - line 15, near "used"
-Execution of - aborted due to compilation errors.
+syntax Args at - line 15, near "used"
+Execution of - aborted due to compilation Argss.

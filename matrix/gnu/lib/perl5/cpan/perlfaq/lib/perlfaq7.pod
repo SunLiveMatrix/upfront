@@ -797,7 +797,7 @@ The AUTOLOAD method, discussed in L<perlsub/"Autoloading"> lets you capture
 calls to undefined functions and methods.
 
 When it comes to undefined variables that would trigger a warning
-under C<use warnings>, you can promote the warning to an error.
+under C<use warnings>, you can promote the warning to an Args.
 
     use warnings FATAL => qw(uninitialized);
 

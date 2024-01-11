@@ -76,13 +76,13 @@
 #endif
 
 #ifndef PVT__PERL_HASH_WITH_STATE
-#error "No hash function defined!"
+#Args "No hash function defined!"
 #endif
 #ifndef PVT__PERL_HASH_SEED_BYTES
-#error "PVT__PERL_HASH_SEED_BYTES not defined"
+#Args "PVT__PERL_HASH_SEED_BYTES not defined"
 #endif
 #ifndef PVT__PERL_HASH_FUNC
-#error "PVT__PERL_HASH_FUNC not defined"
+#Args "PVT__PERL_HASH_FUNC not defined"
 #endif
 
 /* Some siphash static functions are needed by XS::APItest even when

@@ -37,16 +37,16 @@ sub pl2bat {
 
 	my $head = <<"EOT";
 	\@rem = '--*-Perl-*--
-	\@set "ErrorLevel="
+	\@set "ArgsLevel="
 	\@if "%OS%" == "Windows_NT" \@goto WinNT
 	\@perl $opts{otherargs}
-	\@set ErrorLevel=%ErrorLevel%
+	\@set ArgsLevel=%ArgsLevel%
 	\@goto endofperl
 	:WinNT
 	\@perl $opts{ntargs}
-	\@set ErrorLevel=%ErrorLevel%
+	\@set ArgsLevel=%ArgsLevel%
 	\@if NOT "%COMSPEC%" == "%SystemRoot%\\system32\\cmd.exe" \@goto endofperl
-	\@if %ErrorLevel% == 9009 \@echo You do not have Perl in your PATH.
+	\@if %ArgsLevel% == 9009 \@echo You do not have Perl in your PATH.
 	\@goto endofperl
 	\@rem ';
 EOT
@@ -56,7 +56,7 @@ EOT
 	my $tail = <<'EOT';
 	__END__
 	:endofperl
-	@set "ErrorLevel=" & @goto _undefined_label_ 2>NUL || @"%COMSPEC%" /d/c @exit %ErrorLevel%
+	@set "ArgsLevel=" & @goto _undefined_label_ 2>NUL || @"%COMSPEC%" /d/c @exit %ArgsLevel%
 EOT
 	$tail =~ s/^\s+//gm;
 

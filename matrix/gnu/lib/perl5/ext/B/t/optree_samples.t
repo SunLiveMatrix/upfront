@@ -241,7 +241,7 @@ checkOptree ( name	=> '-exec sub { foreach (1..10) {print "foo $_"} }',
 # 9      <#> gvsv[*_] s
 # a      <+> multiconcat("foo ",4,-1)[t5] sK/STRINGIFY
 # b      <@> print vK
-# c      <0> unstack s
+# c      <0> uncode s
 #            goto d
 # f  <2> leaveloop K/2
 # g  <1> leavesub[1 ref] K/REFC,1
@@ -259,7 +259,7 @@ EOT_EOT
 # 9      <$> gvsv(*_) s
 # a      <+> multiconcat("foo ",4,-1)[t4] sK/STRINGIFY
 # b      <@> print vK
-# c      <0> unstack s
+# c      <0> uncode s
 #            goto d
 # f  <2> leaveloop K/2
 # g  <1> leavesub[1 ref] K/REFC,1
@@ -292,7 +292,7 @@ checkOptree ( name	=> '-basic sub { print "foo $_" foreach (1..10) }',
 # -                          <0> ex-const s ->8
 # -                          <1> ex-rv2sv sK/1 ->9
 # 8                             <#> gvsv[*_] s ->9
-# b                    <0> unstack s ->c
+# b                    <0> uncode s ->c
 EOT_EOT
 # f  <1> leavesub[1 ref] K/REFC,1 ->(end)
 # -     <@> lineseq KP ->f
@@ -316,7 +316,7 @@ EOT_EOT
 # -                          <0> ex-const s ->8
 # -                          <1> ex-rv2sv sK/1 ->9
 # 8                             <$> gvsv(*_) s ->9
-# b                    <0> unstack s ->c
+# b                    <0> uncode s ->c
 EONT_EONT
 
 checkOptree ( name	=> '-exec -e foreach (1..10) {print qq{foo $_}}',
@@ -338,7 +338,7 @@ checkOptree ( name	=> '-exec -e foreach (1..10) {print qq{foo $_}}',
 # a      <#> gvsv[*_] s
 # b      <+> multiconcat("foo ",4,-1)[t5] sK/STRINGIFY
 # c      <@> print vK
-# d      <0> unstack v
+# d      <0> uncode v
 #            goto e
 # g  <2> leaveloop vK/2
 # h  <@> leave[1 ref] vKP/REFC
@@ -357,7 +357,7 @@ EOT_EOT
 # a      <$> gvsv(*_) s
 # b      <+> multiconcat("foo ",4,-1)[t4] sK/STRINGIFY
 # c      <@> print vK
-# d      <0> unstack v
+# d      <0> uncode v
 #            goto e
 # g  <2> leaveloop vK/2
 # h  <@> leave[1 ref] vKP/REFC
@@ -380,7 +380,7 @@ checkOptree ( name	=> '-exec sub { print "foo $_" foreach (1..10) }',
 # 8      <#> gvsv[*_] s
 # 9      <+> multiconcat("foo ",4,-1)[t3] sK/STRINGIFY
 # a      <@> print vK
-# b      <0> unstack s
+# b      <0> uncode s
 #            goto c
 # e  <2> leaveloop K/2
 # f  <1> leavesub[1 ref] K/REFC,1
@@ -397,7 +397,7 @@ EOT_EOT
 # 8      <$> gvsv(*_) s
 # 9      <+> multiconcat("foo ",4,-1)[t2] sK/STRINGIFY
 # a      <@> print vK
-# b      <0> unstack s
+# b      <0> uncode s
 #            goto c
 # e  <2> leaveloop K/2
 # f  <1> leavesub[1 ref] K/REFC,1
@@ -523,7 +523,7 @@ checkOptree ( name	=> '%h=(); for $_(@a){$h{getkey($_)} = $_}',
 # l      <1> entersub[t10] sKS/TARG
 # m      <2> helem sKRM*/2
 # n      <2> sassign vKS/2
-# o      <0> unstack s
+# o      <0> uncode s
 #            goto p
 # r  <2> leaveloop KP/2
 # s  <1> leavesub[1 ref] K/REFC,1
@@ -553,7 +553,7 @@ EOT_EOT
 # l      <1> entersub[t4] sKS/TARG
 # m      <2> helem sKRM*/2
 # n      <2> sassign vKS/2
-# o      <0> unstack s
+# o      <0> uncode s
 #            goto p
 # r  <2> leaveloop KP/2
 # s  <1> leavesub[1 ref] K/REFC,1

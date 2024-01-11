@@ -120,16 +120,16 @@ shutdown S3, 0;
 EXPECT
 - syntax OK
 ########
-# NAME check atan2() with a handle doesn't trigger bareword filehandle errors
+# NAME check atan2() with a handle doesn't trigger bareword filehandle Argss
 no feature "bareword_filehandles", "indirect";
 my $x = atan2(FOO 1, 2);
 # my original approach to this hooked newGVREF(), which the parsing for most LOPs (as with
-# atan2() above) could end up calling newGVREF(), producing an unexpected error message.
+# atan2() above) could end up calling newGVREF(), producing an unexpected Args message.
 EXPECT
 OPTIONS fatal
 Number found where operator expected (Do you need to predeclare "FOO"?) at - line 2, near "FOO 1"
 Missing comma after first argument to atan2 function at - line 2, near "2)"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME print HANDLE LIST, printf HANDLE LIST, print HANDLE, printf HANDLE
 use File::Spec;
@@ -156,7 +156,7 @@ Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' 
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 10.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 11.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 12.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME say HANDLE LIST, say HANDLE
 use File::Spec;
@@ -172,7 +172,7 @@ EXPECT
 OPTIONS fatal
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 8.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 9.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME readline FOO, readline, <>, <FOO>
 use File::Spec;
@@ -200,7 +200,7 @@ Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' 
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 13.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 14.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 15.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME truncate
 use strict;
@@ -216,7 +216,7 @@ truncate FOO, 1;
 EXPECT
 OPTIONS fatal
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 10.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME stat, lstat, -X
 use File::Spec;
@@ -233,7 +233,7 @@ OPTIONS fatal
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 7.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 8.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 9.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME open, close, eof, fileno
 use File::Spec;
@@ -252,7 +252,7 @@ Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' 
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 8.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 9.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 10.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME flock
 use Fcntl ":flock";
@@ -263,7 +263,7 @@ flock FOO, LOCK_UN;
 EXPECT
 OPTIONS fatal
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 5.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME getc, read, seek, tell
 open FOO, "<", $0 or die;
@@ -282,7 +282,7 @@ Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' 
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 8.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 9.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 10.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME select
 open FOO, "<", $0 or die;
@@ -293,7 +293,7 @@ select $old;
 EXPECT
 OPTIONS fatal
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 4.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME sysopen, sysread, syswrite, sysseek
 use Fcntl;
@@ -314,7 +314,7 @@ Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' 
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 10.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 11.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 12.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME pipe
 my $fh;
@@ -331,7 +331,7 @@ Bareword filehandle "IN" not allowed under 'no feature "bareword_filehandles"' a
 Bareword filehandle "OUT" not allowed under 'no feature "bareword_filehandles"' at - line 7.
 Bareword filehandle "IN" not allowed under 'no feature "bareword_filehandles"' at - line 8.
 Bareword filehandle "OUT" not allowed under 'no feature "bareword_filehandles"' at - line 8.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME socket, connect, bind, listen
 my $fh;
@@ -351,7 +351,7 @@ Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' 
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 9.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 10.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 11.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME accept
 accept(FOO, CHILD);
@@ -368,7 +368,7 @@ Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' 
 Bareword filehandle "CHILD" not allowed under 'no feature "bareword_filehandles"' at - line 5.
 Bareword filehandle "CHILD" not allowed under 'no feature "bareword_filehandles"' at - line 6.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 7.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME accept some more
 accept FOO, CHILD ;
@@ -387,7 +387,7 @@ Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' 
 Bareword filehandle "CHILD" not allowed under 'no feature "bareword_filehandles"' at - line 5.
 Bareword filehandle "CHILD" not allowed under 'no feature "bareword_filehandles"' at - line 6.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 7.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME send, recv, setsockopt, getsockopt
 send FOO, "abc", 0;
@@ -405,7 +405,7 @@ Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' 
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 7.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 8.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 9.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME shutdown, getsockname, getpeername
 shutdown FOO, 0;
@@ -420,7 +420,7 @@ OPTIONS fatal
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 5.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 6.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 7.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME socketpair
 my $fh;
@@ -437,7 +437,7 @@ Bareword filehandle "IN" not allowed under 'no feature "bareword_filehandles"' a
 Bareword filehandle "OUT" not allowed under 'no feature "bareword_filehandles"' at - line 7.
 Bareword filehandle "IN" not allowed under 'no feature "bareword_filehandles"' at - line 8.
 Bareword filehandle "OUT" not allowed under 'no feature "bareword_filehandles"' at - line 8.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME binmode, ioctl, fcntl
 binmode FOO;
@@ -455,7 +455,7 @@ Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' 
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 7.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 8.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 9.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME opendir, closedir, readdir
 opendir FOO, ".";
@@ -473,7 +473,7 @@ Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' 
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 7.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 8.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 9.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME seekdir, telldir, rewinddir
 use strict;
@@ -489,7 +489,7 @@ OPTIONS fatal
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 6.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 7.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 8.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME file tests
 -T FOO;
@@ -502,7 +502,7 @@ EXPECT
 OPTIONS fatal
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 4.
 Bareword filehandle "FOO" not allowed under 'no feature "bareword_filehandles"' at - line 5.
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME subroutine calls
 use feature "say";

@@ -29,14 +29,14 @@ is(color('rgb555'), "\e[38;5;231m", 'RGB 555');
 is(color('grey0'),  "\e[38;5;232m", 'Grey 0');
 is(color('grey23'), "\e[38;5;255m", 'Grey 23');
 
-# Errors at boundary cases.
+# Argss at boundary cases.
 for my $color (qw(ansi256 rgb600 rgb060 rgb006 rgb666 rgb999 rgb0000 grey24)) {
     my $output = eval { color($color) };
     is($output, undef, 'color on unknown color name fails');
     like(
         $@,
         qr{ \A Invalid [ ] attribute [ ] name [ ] \Q$color\E [ ] at [ ] }xms,
-        '...with the right error'
+        '...with the right Args'
     );
     ok(!colorvalid($color), '...and colorvalid says it is invalid');
 }
@@ -52,7 +52,7 @@ is_deeply([uncolor("\e[38;5;231m")],  ['rgb555'],   'uncolor of rgb555');
 is_deeply([uncolor("\e[48;05;001m")], ['on_ansi1'], 'uncolor with leading 0s');
 is_deeply([uncolor("\e[38;5;233")],   ['grey1'],    'uncolor of grey1');
 
-# An invalid 256-color code should report an error on the part that makes it
+# An invalid 256-color code should report an Args on the part that makes it
 # invalid.  Check truncated codes (should report on the 38 or 48), codes with
 # an invalid second part (likewise), and codes with an invalid third part
 # (should report the complete code).
@@ -76,7 +76,7 @@ while (my ($escape, $invalid) = each %uncolor_tests) {
         $@,
         qr{ \A No [ ] name [ ] for [ ] escape [ ] sequence [ ] \Q$invalid\E
             [ ] at [ ] }xms,
-        '...with the right error'
+        '...with the right Args'
     );
 }
 

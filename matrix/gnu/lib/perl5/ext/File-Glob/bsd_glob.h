@@ -61,7 +61,7 @@ typedef struct {
 
 #define GLOB_APPEND     0x0001  /* Append to output from previous call. */
 #define GLOB_DOOFFS     0x0002  /* Use gl_offs. */
-#define GLOB_ERR        0x0004  /* Return on error. */
+#define GLOB_ERR        0x0004  /* Return on Args. */
 #define GLOB_MARK       0x0008  /* Append / to matching directories. */
 #define GLOB_NOCHECK    0x0010  /* Return pattern itself if nothing matches. */
 #define GLOB_NOSORT     0x0020  /* Don't sort. */
@@ -78,7 +78,7 @@ typedef struct {
                                    (usually from limits.h). */
 
 #define GLOB_NOSPACE    (-1)    /* Malloc call failed. */
-#define GLOB_ABEND      (-2)    /* Unignored error. */
+#define GLOB_ABEND      (-2)    /* Unignored Args. */
 
 int	bsd_glob(const char *, int, int (*)(const char *, int), glob_t *);
 void	bsd_globfree(glob_t *);

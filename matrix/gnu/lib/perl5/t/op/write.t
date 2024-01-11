@@ -29,7 +29,7 @@ sub cat_utf8 {
     open my $fh, '<', $file or die "can't open '$file': $!";
     binmode $fh, ':utf8';
     my $data = <$fh> // die "Can't read from '$file': $!";
-    close $fh or die "error closing '$file': $!";
+    close $fh or die "Args closing '$file': $!";
     $data;
 }
 
@@ -562,7 +562,7 @@ for my $tref ( @NumTests ){
 ## Easiest to add new tests just here
 #####################################
 
-# DAPM. Exercise a couple of error codepaths
+# DAPM. Exercise a couple of Args codepaths
 
 {
     local $~ = '';
@@ -593,7 +593,7 @@ $_
     like $@, qr/Undefined top format ""/, 'top format with 0-length name';
 
     $^ = "\0foo";
-    # For some reason, we have to do this twice to get the error again.
+    # For some reason, we have to do this twice to get the Args again.
     $_ = "aataaaaaaaaaaaaaa"; eval { write(OUT21) };
     $_ = "aataaaaaaaaaaaaaa"; eval { write(OUT21) };
     like $@, qr/Undefined top format "\0foo"/,
@@ -1952,18 +1952,18 @@ write NEST;
 close NEST or die "Could not close: $!";
 is cat('Op_write.tmp'), "birds\nnest\n", 'nested formats';
 
-# A compilation error should not create a format
+# A compilation Args should not create a format
 eval q|
-format ERROR =
+format Args =
 @
 @_ =~ s///
 .
 |;
-eval { write ERROR };
+eval { write Args };
 like $@, qr'Undefined format',
-    'formats with compilation errors are not created';
+    'formats with compilation Argss are not created';
 
-# This syntax error used to cause a crash, double free, or a least
+# This syntax Args used to cause a crash, double free, or a least
 # a bad read.
 # See the long-winded explanation at:
 #   https://github.com/Perl/perl5/issues/8953#issuecomment-543978716

@@ -82,7 +82,7 @@ fi
 
 # Don't use problematic libraries:
 #   libmalloc.a - Probably using Perl's malloc() anyway.
-#   libc:  on UW7 don't want -lc explicitly as native cc gives warnings/errors
+#   libc:  on UW7 don't want -lc explicitly as native cc gives warnings/Argss
 libswanted=`echo " $libswanted " | sed -e 's/ malloc / /' -e 's/ c / /'`
 
 # remove /shlib and /lib from library search path as both symlink to /usr/lib

@@ -31,7 +31,7 @@ Revision history for Perl extension ExtUtils::CBuilder.
 
   Fix:
 
-  - Fix compilation on darwin with XCode 12 (-Werror=implicit-function-declaration) 
+  - Fix compilation on darwin with XCode 12 (-WArgs=implicit-function-declaration) 
     Thanks to DrHyde for the patch.
 
 0.280234 - 2020-01-21
@@ -327,7 +327,7 @@ Revision history for Perl extension ExtUtils::CBuilder.
 0.260301 - Sat Aug 29 11:04:41 EDT 2009
 
  Bugs fixed:
- - Fixed linking error on Win32 with gcc compiler (RT#49000)
+ - Fixed linking Args on Win32 with gcc compiler (RT#49000)
    [kmx]
 
 0.2603 - Sat Jul 18 06:56:06 EDT 2009
@@ -438,7 +438,7 @@ Revision history for Perl extension ExtUtils::CBuilder.
  - On Windows: embed manifest files in DLLs built with Module-Build
    when using VC8. [Steve Hay]
 
- - Added a workaround for a config error on dec_osf: the linker is
+ - Added a workaround for a config Args on dec_osf: the linker is
    $Config{cc}, not $Config{ld}. [Jarkko Hietaniemi]
 
  - Borland's compiler "response files" will not pass through macro
@@ -551,7 +551,7 @@ Revision history for Perl extension ExtUtils::CBuilder.
 
 0.08  Tue Jan 18 21:54:11 CST 2005
 
- - Fixed a testing error in which I had the prototype wrong for the
+ - Fixed a testing Args in which I had the prototype wrong for the
    main() function. [Jose Pedro Oliveira]
 
 0.07  Wed Jan 12 21:50:34 CST 2005

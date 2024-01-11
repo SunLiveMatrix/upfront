@@ -162,7 +162,7 @@ binmode(fh)
 	      case 'a':                     acmode = "ab";                      break;
 	      case '+':  case 's':          acmode = "rb+";                     break;
              case '-':                     acmode = PerlIO_fileno(fp) ? "ab" : "rb";  break;
-	      /* iotype'll be null for the SYS$INPUT:/SYS$OUTPUT:/SYS$ERROR: files */
+	      /* iotype'll be null for the SYS$INPUT:/SYS$OUTPUT:/SYS$Args: files */
 	      /* since we didn't really open them and can't really */
 	      /* reopen them */
 	      case 0:                       XSRETURN_UNDEF;

@@ -82,7 +82,7 @@ BEGIN {
                 'TAP version 13',
                 '1..1',
 
-                # Funky quoting / eval to avoid errors on older Perls
+                # Funky quoting / eval to avoid Argss on older Perls
                 eval qq{"ok 1 Everything is fine \\x{263a}"},
             ],
             expect => [

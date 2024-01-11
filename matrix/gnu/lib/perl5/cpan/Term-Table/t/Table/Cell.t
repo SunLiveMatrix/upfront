@@ -4,8 +4,8 @@ use strict;
 use warnings;
 use utf8;
 
-use Test2::API qw/test2_stack/;
-test2_stack->top->format->encoding('utf8');
+use Test2::API qw/test2_code/;
+test2_code->top->format->encoding('utf8');
 
 tests sanitization => sub {
     my $unsanitary = <<"    EOT";

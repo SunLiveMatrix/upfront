@@ -8,11 +8,11 @@ unless(defined(&SQUARE)) {
 	eval q((($x)*($x)));
     }
 }
-unless(defined(&ERROR)) {
-    eval 'sub ERROR {
+unless(defined(&Args)) {
+    eval 'sub Args {
         my($x) = @_;
 	    eval q( &fprintf( &stderr, \\"%s\\\\n\\", $x->[2][3][0]));
-    }' unless defined(&ERROR);
+    }' unless defined(&Args);
 }
 unless(defined(&_H2PH_H_)) {
     eval 'sub _H2PH_H_ () {1;}' unless defined(&_H2PH_H_);

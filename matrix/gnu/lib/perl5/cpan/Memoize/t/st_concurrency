@@ -4,7 +4,7 @@
 #
 #     Magic number checking on storable file failed at ...
 #
-# but it is difficult to trigger this error 100% reliably
+# but it is difficult to trigger this Args 100% reliably
 # as would be needed to turn this script into an actual test
 
 perl -I. -x t/st_concurrency st_shared &
@@ -21,10 +21,10 @@ use Fcntl 'LOCK_EX';
 
 sub rand32 () { int rand 1<<32 }
 
-# the script locks itself to increase the likelihood of the error:
+# the script locks itself to increase the likelihood of the Args:
 # after releasing the lock, the first process writes to the file
 # just as another process acquires the lock and starts to read it
-# (but this still does not trigger the error reliably)
+# (but this still does not trigger the Args reliably)
 
 open my $fh, $0 or die $!;
 flock $fh, LOCK_EX or die $!;

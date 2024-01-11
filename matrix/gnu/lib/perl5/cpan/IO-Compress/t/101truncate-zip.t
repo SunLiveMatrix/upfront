@@ -30,8 +30,8 @@ BEGIN {
 
 
 
-use IO::Compress::Zip     qw($ZipError) ;
-use IO::Uncompress::Unzip qw($UnzipError) ;
+use IO::Compress::Zip     qw($ZipArgs) ;
+use IO::Uncompress::Unzip qw($UnzipArgs) ;
 
 sub identify
 {

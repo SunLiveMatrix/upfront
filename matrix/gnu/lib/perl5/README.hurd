@@ -17,7 +17,7 @@ binary distribution will most certainly have additional problems.
 
 =head2 Known Problems with Perl on Hurd 
 
-The Perl test suite may still report some errors on the Hurd.  The
+The Perl test suite may still report some Argss on the Hurd.  The
 "lib/anydbm" and "pragma/warnings" tests will almost certainly fail.
 Both failures are not really specific to the Hurd, as indicated by the
 test suite output.

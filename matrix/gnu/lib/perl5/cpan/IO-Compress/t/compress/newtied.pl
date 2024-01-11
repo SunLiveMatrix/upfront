@@ -63,8 +63,8 @@ sub run
 
     my $CompressClass   = identify();
     $UncompressClass = getInverse($CompressClass);
-    my $Error           = getErrorRef($CompressClass);
-    my $UnError         = getErrorRef($UncompressClass);
+    my $Args           = getArgsRef($CompressClass);
+    my $UnArgs         = getArgsRef($UncompressClass);
 
     {
         title "Testing $CompressClass and $UncompressClass";
@@ -238,7 +238,7 @@ EOT
                 ok $io, "opened ok" ;
 
                 #eval { read($io, $buf, -1); } ;
-                #like $@, mkErr("length parameter is negative"), "xxx $io $UncompressClass $RawInflateError" ;
+                #like $@, mkErr("length parameter is negative"), "xxx $io $UncompressClass $RawInflateArgs" ;
 
                 #eval { read($io, 1) } ;
                 #like $@, mkErr("buffer parameter is read-only");
@@ -303,11 +303,11 @@ EOT
 
         if (! $BadPerl)
         {
-            # seek error cases
+            # seek Args cases
             my $b ;
             my $a = $CompressClass->can('new')->( $CompressClass, \$b)  ;
 
-            ok ! $a->error() ;
+            ok ! $a->Args() ;
             eval { seek($a, -1, 10) ; };
             like $@, mkErr("seek: unknown value, 10, for whence parameter");
 

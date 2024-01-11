@@ -21,7 +21,7 @@ __END__
 
 =head1 NAME
 
-poderrors.t - test Pod::Checker on some pod syntax errors
+podArgss.t - test Pod::Checker on some pod syntax Argss
 
     GASP! A verbatim paragraph in NAME
 
@@ -318,7 +318,7 @@ What?
 
 =begin :xml
 
-L<This pod's NAME in a link means it is internal|poderrors.t/link_to_nowhere>,
+L<This pod's NAME in a link means it is internal|podArgss.t/link_to_nowhere>,
 so should generate a warning
 
 =cut

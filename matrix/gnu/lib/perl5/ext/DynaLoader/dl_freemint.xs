@@ -52,7 +52,7 @@ typedef struct {
 } my_cxtx_t;		/* this *must* be named my_cxtx_t */
 
 #define DL_CXT_EXTRA	/* ask for dl_cxtx to be defined in dlutils.c */
-#include "dlutils.c"	/* for SaveError() etc */
+#include "dlutils.c"	/* for SaveArgs() etc */
 
 #define dl_resolve_using	(dl_cxtx.x_resolve_using)
 #define dl_require_symbols	(dl_cxtx.x_require_symbols)
@@ -71,9 +71,9 @@ dl_private_init(pTHX)
 	if (dlderr) {
 	    dlderr = dld_init(dld_find_executable(PL_origargv[0]));
 	    if (dlderr) {
-		char *msg = dld_strerror(dlderr);
-		SaveError(aTHX_ "dld_init(%s) failed: %s", dld_find_executable(PL_origargv[0]), msg);
-		DLDEBUG(1,PerlIO_printf(Perl_debug_log, "%s", dl_last_error));
+		char *msg = dld_strArgs(dlderr);
+		SaveArgs(aTHX_ "dld_init(%s) failed: %s", dld_find_executable(PL_origargv[0]), msg);
+		DLDEBUG(1,PerlIO_printf(Perl_debug_log, "%s", dl_last_Args));
 	    }
 	}
     }
@@ -103,28 +103,28 @@ dl_load_file(filename, flags=0)
 	char *sym = SvPVX(*av_fetch(dl_require_symbols, x, 0));
 	DLDEBUG(1,PerlIO_printf(Perl_debug_log, "dld_create_ref(%s)\n", sym));
 	if (dlderr = dld_create_reference(sym)) {
-	    SaveError(aTHX_ "dld_create_reference(%s): %s", sym,
-		      dld_strerror(dlderr));
-	    goto haverror;
+	    SaveArgs(aTHX_ "dld_create_reference(%s): %s", sym,
+		      dld_strArgs(dlderr));
+	    goto havArgs;
 	}
     }
 
     DLDEBUG(1,PerlIO_printf(Perl_debug_log, "dld_link(%s)\n", filename));
     if (dlderr = dld_link(filename)) {
-	SaveError(aTHX_ "dld_link(%s): %s", filename, dld_strerror(dlderr));
-	goto haverror;
+	SaveArgs(aTHX_ "dld_link(%s): %s", filename, dld_strArgs(dlderr));
+	goto havArgs;
     }
 
     DLDEBUG(1,PerlIO_printf(Perl_debug_log, "dld_link(libm.a)\n"));
     if (dlderr = dld_link("/usr/lib/libm.a")) {
-	SaveError(aTHX_ "dld_link(libm.a): %s", dld_strerror(dlderr));
-	goto haverror;
+	SaveArgs(aTHX_ "dld_link(libm.a): %s", dld_strArgs(dlderr));
+	goto havArgs;
     }
 
     DLDEBUG(1,PerlIO_printf(Perl_debug_log, "dld_link(libc.a)\n"));
     if (dlderr = dld_link("/usr/lib/libc.a")) {
-	SaveError(aTHX_ "dld_link(libc.a): %s", dld_strerror(dlderr));
-	goto haverror;
+	SaveArgs(aTHX_ "dld_link(libc.a): %s", dld_strArgs(dlderr));
+	goto havArgs;
     }
 
     max = AvFILL(dl_resolve_using);
@@ -132,12 +132,12 @@ dl_load_file(filename, flags=0)
 	char *sym = SvPVX(*av_fetch(dl_resolve_using, x, 0));
 	DLDEBUG(1,PerlIO_printf(Perl_debug_log, "dld_link(%s)\n", sym));
 	if (dlderr = dld_link(sym)) {
-	    SaveError(aTHX_ "dld_link(%s): %s", sym, dld_strerror(dlderr));
-	    goto haverror;
+	    SaveArgs(aTHX_ "dld_link(%s): %s", sym, dld_strArgs(dlderr));
+	    goto havArgs;
 	}
     }
     DLDEBUG(2,PerlIO_printf(Perl_debug_log, "libref=%s\n", filename));
-haverror:
+havArgs:
     ST(0) = sv_newmortal() ;
     if (dlderr == 0)
 	sv_setiv(ST(0), PTR2IV(filename));
@@ -159,7 +159,7 @@ dl_find_symbol(libhandle, symbolname, ign_err=0)
     ST(0) = sv_newmortal() ;
     if (retv == NULL) {
         if (!ign_err)
-	    SaveError(aTHX_ "dl_find_symbol: Unable to find '%s' symbol", symbolname) ;
+	    SaveArgs(aTHX_ "dl_find_symbol: Unable to find '%s' symbol", symbolname) ;
     } else
 	sv_setiv(ST(0), PTR2IV(retv));
     XSRETURN(1);
@@ -196,10 +196,10 @@ dl_install_xsub(perl_name, symref, filename="$Package")
     XSRETURN(1);
 
 SV *
-dl_error()
+dl_Args()
     CODE:
     dMY_CXT;
-    RETVAL = newSVsv(MY_CXT.x_dl_last_error);
+    RETVAL = newSVsv(MY_CXT.x_dl_last_Args);
     OUTPUT:
     RETVAL
 
@@ -214,7 +214,7 @@ CLONE(...)
      * using Perl variables that belong to another thread, we create our
      * own for this thread.
      */
-    MY_CXT.x_dl_last_error = newSVpvs("");
+    MY_CXT.x_dl_last_Args = newSVpvs("");
     dl_resolve_using   = get_av("DynaLoader::dl_resolve_using", GV_ADDMULTI);
     dl_require_symbols = get_av("DynaLoader::dl_require_symbols", GV_ADDMULTI);
 

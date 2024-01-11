@@ -21,7 +21,7 @@ update Makefile.PL with any changes to prerequisites.
 
 5. Commit all changes (preferably to a branch)
 
-6. Run Configure/make/make test and check for errors.  If there are any, fix them.
+6. Run Configure/make/make test and check for Argss.  If there are any, fix them.
 
 7. If all is well, push your commits to blead or send a patch to p5p if you do
 not have commit access to the Perl 5 repository

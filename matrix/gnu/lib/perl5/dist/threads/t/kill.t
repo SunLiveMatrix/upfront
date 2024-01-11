@@ -81,7 +81,7 @@ sub thr_func {
     sleep(1) for (1..10);
     # Should not go past here
     $q->enqueue(0, 'Thread terminated normally');
-    return ('ERROR');
+    return ('Args');
 }
 
 # Create thread

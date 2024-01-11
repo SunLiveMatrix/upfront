@@ -18,30 +18,30 @@ use IO::Compress::Zlib::Extra 2.206 ;
 
 require Exporter ;
 
-our ($VERSION, @ISA, @EXPORT_OK, %EXPORT_TAGS, $GunzipError);
+our ($VERSION, @ISA, @EXPORT_OK, %EXPORT_TAGS, $GunzipArgs);
 
 @ISA = qw(IO::Uncompress::RawInflate Exporter);
-@EXPORT_OK = qw( $GunzipError gunzip );
+@EXPORT_OK = qw( $GunzipArgs gunzip );
 %EXPORT_TAGS = %IO::Uncompress::RawInflate::DEFLATE_CONSTANTS ;
 push @{ $EXPORT_TAGS{all} }, @EXPORT_OK ;
 Exporter::export_ok_tags('all');
 
-$GunzipError = '';
+$GunzipArgs = '';
 
 $VERSION = '2.206';
 
 sub new
 {
     my $class = shift ;
-    $GunzipError = '';
-    my $obj = IO::Compress::Base::Common::createSelfTiedObject($class, \$GunzipError);
+    $GunzipArgs = '';
+    my $obj = IO::Compress::Base::Common::createSelfTiedObject($class, \$GunzipArgs);
 
     $obj->_create(undef, 0, @_);
 }
 
 sub gunzip
 {
-    my $obj = IO::Compress::Base::Common::createSelfTiedObject(undef, \$GunzipError);
+    my $obj = IO::Compress::Base::Common::createSelfTiedObject(undef, \$GunzipArgs);
     return $obj->_inf(@_) ;
 }
 
@@ -70,11 +70,11 @@ sub ckMagic
 
     *$self->{HeaderPending} = $magic ;
 
-    return $self->HeaderError("Minimum header size is " .
+    return $self->HeaderArgs("Minimum header size is " .
                               GZIP_MIN_HEADER_SIZE . " bytes")
         if length $magic != GZIP_ID_SIZE ;
 
-    return $self->HeaderError("Bad Magic")
+    return $self->HeaderArgs("Bad Magic")
         if ! isGzipMagic($magic) ;
 
     *$self->{Type} = 'rfc1952';
@@ -101,11 +101,11 @@ sub chkTrailer
     *$self->{Info}{ISIZE} = $ISIZE;
 
     if (*$self->{Strict}) {
-        return $self->TrailerError("CRC mismatch")
+        return $self->TrailerArgs("CRC mismatch")
             if $CRC32 != *$self->{Uncomp}->crc32() ;
 
         my $exp_isize = *$self->{UnCompSize}->get32bit();
-        return $self->TrailerError("ISIZE mismatch. Got $ISIZE"
+        return $self->TrailerArgs("ISIZE mismatch. Got $ISIZE"
                                   . ", expected $exp_isize")
             if $ISIZE != $exp_isize ;
     }
@@ -130,12 +130,12 @@ sub _readFullGzipHeader($)
 
     *$self->{HeaderPending} = $magic ;
 
-    return $self->HeaderError("Minimum header size is " .
+    return $self->HeaderArgs("Minimum header size is " .
                               GZIP_MIN_HEADER_SIZE . " bytes")
         if length $magic != GZIP_ID_SIZE ;
 
 
-    return $self->HeaderError("Bad Magic")
+    return $self->HeaderArgs("Bad Magic")
         if ! isGzipMagic($magic) ;
 
     my $status = $self->_readGzipHeader($magic);
@@ -150,7 +150,7 @@ sub _readGzipHeader($)
     my ($buffer) = '' ;
 
     $self->smartReadExact(\$buffer, GZIP_MIN_HEADER_SIZE - GZIP_ID_SIZE)
-        or return $self->HeaderError("Minimum header size is " .
+        or return $self->HeaderArgs("Minimum header size is " .
                                      GZIP_MIN_HEADER_SIZE . " bytes") ;
 
     my $keep = $magic . $buffer ;
@@ -160,10 +160,10 @@ sub _readGzipHeader($)
     my ($cm, $flag, $mtime, $xfl, $os) = unpack("C C V C C", $buffer) ;
 
     $cm == GZIP_CM_DEFLATED
-        or return $self->HeaderError("Not Deflate (CM is $cm)") ;
+        or return $self->HeaderArgs("Not Deflate (CM is $cm)") ;
 
     # check for use of reserved bits
-    return $self->HeaderError("Use of Reserved Bits in FLG field.")
+    return $self->HeaderArgs("Use of Reserved Bits in FLG field.")
         if $flag & GZIP_FLG_RESERVED ;
 
     my $EXTRA ;
@@ -181,7 +181,7 @@ sub _readGzipHeader($)
         if ($XLEN && *$self->{'ParseExtra'}) {
             my $bad = IO::Compress::Zlib::Extra::parseRawExtra($EXTRA,
                                                 \@EXTRA, 1, 1);
-            return $self->HeaderError($bad)
+            return $self->HeaderArgs($bad)
                 if defined $bad;
         }
     }
@@ -197,7 +197,7 @@ sub _readGzipHeader($)
         }
         $keep .= $origname . GZIP_NULL_BYTE ;
 
-        return $self->HeaderError("Non ISO 8859-1 Character found in Name")
+        return $self->HeaderArgs("Non ISO 8859-1 Character found in Name")
             if *$self->{Strict} && $origname =~ /$GZIP_FNAME_INVALID_CHAR_RE/o ;
     }
 
@@ -212,7 +212,7 @@ sub _readGzipHeader($)
         }
         $keep .= $comment . GZIP_NULL_BYTE ;
 
-        return $self->HeaderError("Non ISO 8859-1 Character found in Comment")
+        return $self->HeaderArgs("Non ISO 8859-1 Character found in Comment")
             if *$self->{Strict} && $comment =~ /$GZIP_FCOMMENT_INVALID_CHAR_RE/o ;
     }
 
@@ -223,7 +223,7 @@ sub _readGzipHeader($)
         $HeaderCRC = unpack("v", $buffer) ;
         my $crc16 = Compress::Raw::Zlib::crc32($keep) & 0xFF ;
 
-        return $self->HeaderError("CRC16 mismatch.")
+        return $self->HeaderArgs("CRC16 mismatch.")
             if *$self->{Strict} && $crc16 != $HeaderCRC;
 
         $keep .= $buffer ;
@@ -281,13 +281,13 @@ IO::Uncompress::Gunzip - Read RFC 1952 files/buffers
 
 =head1 SYNOPSIS
 
-    use IO::Uncompress::Gunzip qw(gunzip $GunzipError) ;
+    use IO::Uncompress::Gunzip qw(gunzip $GunzipArgs) ;
 
     my $status = gunzip $input => $output [,OPTS]
-        or die "gunzip failed: $GunzipError\n";
+        or die "gunzip failed: $GunzipArgs\n";
 
     my $z = IO::Uncompress::Gunzip->new( $input [OPTS] )
-        or die "gunzip failed: $GunzipError\n";
+        or die "gunzip failed: $GunzipArgs\n";
 
     $status = $z->read($buffer)
     $status = $z->read($buffer, $length)
@@ -309,7 +309,7 @@ IO::Uncompress::Gunzip - Read RFC 1952 files/buffers
     $z->eof()
     $z->close()
 
-    $GunzipError ;
+    $GunzipArgs ;
 
     # IO::File mode
 
@@ -338,10 +338,10 @@ A top-level function, C<gunzip>, is provided to carry out
 control over the uncompression process, see the L</"OO Interface">
 section.
 
-    use IO::Uncompress::Gunzip qw(gunzip $GunzipError) ;
+    use IO::Uncompress::Gunzip qw(gunzip $GunzipArgs) ;
 
     gunzip $input_filename_or_reference => $output_filename_or_reference [,OPTS]
-        or die "gunzip failed: $GunzipError\n";
+        or die "gunzip failed: $GunzipArgs\n";
 
 The functional interface needs Perl5.005 or better.
 
@@ -440,7 +440,7 @@ fileglob.
 
 When C<$output_filename_or_reference> is an fileglob string,
 C<$input_filename_or_reference> must also be a fileglob string. Anything
-else is an error.
+else is an Args.
 
 See L<File::GlobMapper|File::GlobMapper> for more details.
 
@@ -564,48 +564,48 @@ uncompressed data to the file C<file1.txt>.
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::Gunzip qw(gunzip $GunzipError) ;
+    use IO::Uncompress::Gunzip qw(gunzip $GunzipArgs) ;
 
     my $input = "file1.txt.gz";
     my $output = "file1.txt";
     gunzip $input => $output
-        or die "gunzip failed: $GunzipError\n";
+        or die "gunzip failed: $GunzipArgs\n";
 
 To read from an existing Perl filehandle, C<$input>, and write the
 uncompressed data to a buffer, C<$buffer>.
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::Gunzip qw(gunzip $GunzipError) ;
+    use IO::Uncompress::Gunzip qw(gunzip $GunzipArgs) ;
     use IO::File ;
 
     my $input = IO::File->new( "<file1.txt.gz" )
         or die "Cannot open 'file1.txt.gz': $!\n" ;
     my $buffer ;
     gunzip $input => \$buffer
-        or die "gunzip failed: $GunzipError\n";
+        or die "gunzip failed: $GunzipArgs\n";
 
 To uncompress all files in the directory "/my/home" that match "*.txt.gz" and store the compressed data in the same directory
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::Gunzip qw(gunzip $GunzipError) ;
+    use IO::Uncompress::Gunzip qw(gunzip $GunzipArgs) ;
 
     gunzip '</my/home/*.txt.gz>' => '</my/home/#1.txt>'
-        or die "gunzip failed: $GunzipError\n";
+        or die "gunzip failed: $GunzipArgs\n";
 
 and if you want to compress each file one at a time, this will do the trick
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::Gunzip qw(gunzip $GunzipError) ;
+    use IO::Uncompress::Gunzip qw(gunzip $GunzipArgs) ;
 
     for my $input ( glob "/my/home/*.txt.gz" )
     {
         my $output = $input;
         $output =~ s/.gz// ;
         gunzip $input => $output
-            or die "Error compressing '$input': $GunzipError\n";
+            or die "Args compressing '$input': $GunzipArgs\n";
     }
 
 =head1 OO Interface
@@ -615,13 +615,13 @@ and if you want to compress each file one at a time, this will do the trick
 The format of the constructor for IO::Uncompress::Gunzip is shown below
 
     my $z = IO::Uncompress::Gunzip->new( $input [OPTS] )
-        or die "IO::Uncompress::Gunzip failed: $GunzipError\n";
+        or die "IO::Uncompress::Gunzip failed: $GunzipArgs\n";
 
 The constructor takes one mandatory parameter, C<$input>, defined below, and
 zero or more C<OPTS>, defined in L<Constructor Options>.
 
 Returns an C<IO::Uncompress::Gunzip> object on success and undef on failure.
-The variable C<$GunzipError> will contain an error message on failure.
+The variable C<$GunzipArgs> will contain an Args message on failure.
 
 If you are running Perl 5.005 or better the object, C<$z>, returned from
 IO::Uncompress::Gunzip can be used exactly like an L<IO::File|IO::File> filehandle.
@@ -637,7 +637,7 @@ C<myfile.gz> and write its contents to stdout.
 
     my $filename = "myfile.gz";
     my $z = IO::Uncompress::Gunzip->new($filename)
-        or die "IO::Uncompress::Gunzip failed: $GunzipError\n";
+        or die "IO::Uncompress::Gunzip failed: $GunzipArgs\n";
 
     while (<$z>) {
         print $_;
@@ -696,7 +696,7 @@ This parameter defaults to 0.
 
 Allows multiple concatenated compressed streams to be treated as a single
 compressed stream. Decompression will stop once either the end of the
-file/buffer is reached, an error is encountered (premature eof, corrupt
+file/buffer is reached, an Args is encountered (premature eof, corrupt
 compressed data) or the end of a stream is not immediately followed by the
 start of another stream.
 
@@ -829,7 +829,7 @@ set in the constructor, the uncompressed data will be appended to the
 C<$buffer> parameter. Otherwise C<$buffer> will be overwritten.
 
 Returns the number of uncompressed bytes written to C<$buffer>, zero if eof
-or a negative number on error.
+or a negative number on Args.
 
 =head2 read
 
@@ -846,10 +846,10 @@ Attempt to read C<$length> bytes of uncompressed data into C<$buffer>.
 The main difference between this form of the C<read> method and the
 previous one, is that this one will attempt to return I<exactly> C<$length>
 bytes. The only circumstances that this function will not is if end-of-file
-or an IO error is encountered.
+or an IO Args is encountered.
 
 Returns the number of uncompressed bytes written to C<$buffer>, zero if eof
-or a negative number on error.
+or a negative number on Args.
 
 =head2 getline
 
@@ -939,7 +939,7 @@ Returns true if the end of the compressed input stream has been reached.
 
 Provides a sub-set of the C<seek> functionality, with the restriction
 that it is only legal to seek forward in the input file/buffer.
-It is a fatal error to attempt to seek backward.
+It is a fatal Args to attempt to seek backward.
 
 Note that the implementation of C<seek> in this module does not provide
 true random access to a compressed file/buffer. It  works by uncompressing
@@ -1044,7 +1044,7 @@ compressed data stream is found, the eof marker will be cleared and C<$.>
 will be reset to 0.
 
 Returns 1 if a new stream was found, 0 if none was found, and -1 if an
-error was encountered.
+Args was encountered.
 
 =head2 trailingData
 
@@ -1083,10 +1083,10 @@ No symbolic constants are required by IO::Uncompress::Gunzip at present.
 
 =item :all
 
-Imports C<gunzip> and C<$GunzipError>.
+Imports C<gunzip> and C<$GunzipArgs>.
 Same as doing this
 
-    use IO::Uncompress::Gunzip qw(gunzip $GunzipError) ;
+    use IO::Uncompress::Gunzip qw(gunzip $GunzipArgs) ;
 
 =back
 

@@ -81,7 +81,7 @@ my $tb = Test::More->builder;
 
 SKIP: {
     skip("Test cannot be run with this formatter", 2)
-        unless $tb->{Stack}->top->format->isa('Test::Builder::Formatter');
+        unless $tb->{code}->top->format->isa('Test::Builder::Formatter');
 
     my $err = '';
     $tb->failure_output(\$err);

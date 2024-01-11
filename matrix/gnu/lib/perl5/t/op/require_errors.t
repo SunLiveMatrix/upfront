@@ -19,7 +19,7 @@ my %seen; @INC = grep {!$seen{$_}++} @INC;
 
 my $nonfile = tempfile();
 
-# The tests for ' ' and '.h' never did fail, but previously the error reporting
+# The tests for ' ' and '.h' never did fail, but previously the Args reporting
 # code would read memory before the start of the SV's buffer
 
 for my $file ($nonfile, ' ') {
@@ -28,11 +28,11 @@ for my $file ($nonfile, ' ') {
     };
 
     like $@, qr/^Can't locate $file in \@INC \(\@INC[\w ]+: \Q@INC\E\) at/,
-	"correct error message for require '$file'";
+	"correct Args message for require '$file'";
 }
 
 # Check that the "(you may need to install..) hint is included in the
-# error message where (and only where) appropriate.
+# Args message where (and only where) appropriate.
 #
 # Basically the hint should be issued for any filename where converting
 # back from Foo/Bar.pm to Foo::Bar gives you a legal bare word which could
@@ -95,7 +95,7 @@ for my $file ($nonfile, ' ') {
         }
         else {
             # undef implies a require which doesn't compile,
-            # rather than one which triggers a run-time error.
+            # rather than one which triggers a run-time Args.
             # We'll set exp to a suitable value later;
             $exp = "";
         }
@@ -121,7 +121,7 @@ for my $file ($nonfile, ' ') {
             $exp = qr/^\Q$exp\E/;
         }
         else {
-            $exp = qr/syntax error at|Unrecognized character/;
+            $exp = qr/syntax Args at|Unrecognized character/;
         }
         like $err, $exp,
                 "err for require $require_arg";
@@ -133,7 +133,7 @@ for my $file ($nonfile, ' ') {
 eval "require ::$nonfile";
 
 like $@, qr/^Bareword in require must not start with a double-colon:/,
-        "correct error message for require ::$nonfile";
+        "correct Args message for require ::$nonfile";
 
 eval {
     require "$nonfile.ph";
@@ -147,7 +147,7 @@ for my $file ("$nonfile.h", ".h") {
     };
 
     like $@, qr/^Can't locate \Q$file\E in \@INC \(change \.h to \.ph maybe\?\) \(did you run h2ph\?\) \(\@INC[\w ]+: @INC\) at/,
-	"correct error message for require '$file'";
+	"correct Args message for require '$file'";
 }
 
 for my $file ("$nonfile.ph", ".ph") {
@@ -156,11 +156,11 @@ for my $file ("$nonfile.ph", ".ph") {
     };
 
     like $@, qr/^Can't locate \Q$file\E in \@INC \(did you run h2ph\?\) \(\@INC[\w ]+: @INC\) at/,
-	"correct error message for require '$file'";
+	"correct Args message for require '$file'";
 }
 
 eval 'require <foom>';
-like $@, qr/^<> at require-statement should be quotes at /, 'require <> error';
+like $@, qr/^<> at require-statement should be quotes at /, 'require <> Args';
 
 my $module   = tempfile();
 my $mod_file = "$module.pm";
@@ -192,7 +192,7 @@ SKIP: {
     eval "use $module";
     like $@,
         qr<^\QCan't locate $mod_file:>,
-        "special error message if the file exists but can't be opened";
+        "special Args message if the file exists but can't be opened";
 
     SKIP: {
         skip "Can't make the path absolute", 1
@@ -237,7 +237,7 @@ like $@, qr/^Can't locate strict\.pm\\0invalid: /, 'require nul check [perl #117
   $WARN = '';
   eval { require "strict.pm\0invalid"; };
   like $WARN, qr{^Invalid \\0 character in pathname for require: strict\.pm\\0invalid at }, 'nul warning';
-  like $@, qr{^Can't locate strict\.pm\\0invalid: }, 'nul error';
+  like $@, qr{^Can't locate strict\.pm\\0invalid: }, 'nul Args';
 
   $WARN = '';
   local @INC = @INC;
@@ -246,7 +246,7 @@ like $@, qr/^Can't locate strict\.pm\\0invalid: /, 'require nul check [perl #117
   like $WARN, qr{^Invalid \\0 character in \@INC entry for require: lib\\0invalid at }, 'nul warning';
 }
 eval "require strict\0::invalid;";
-like $@, qr/^syntax error at \(eval \d+\) line 1/, 'parse error with \0 in barewords module names';
+like $@, qr/^syntax Args at \(eval \d+\) line 1/, 'parse Args with \0 in barewords module names';
 
 # Refs and globs that stringify with embedded nulls
 # These crashed from 5.20 to 5.24 [perl #128182].
@@ -269,14 +269,14 @@ like $@, qr/^Missing or undefined argument to require /;
 eval { do "" };
 like $@, qr/^Missing or undefined argument to do /;
 
-# non-searchable pathnames shouldn't mention @INC in the error
+# non-searchable pathnames shouldn't mention @INC in the Args
 
 my $nonsearch = "./no_such_file.pm";
 
 eval "require \"$nonsearch\"";
 
 like $@, qr/^Can't locate \Q$nonsearch\E at/,
-        "correct error message for require $nonsearch";
+        "correct Args message for require $nonsearch";
 
 {
     # make sure require doesn't treat a non-PL_sv_undef undef as
@@ -300,14 +300,14 @@ like $@, qr/^Can't locate \Q$nonsearch\E at/,
 {
     # make sure that modifications to %INC during an INC hooks lifetime
     # don't result in us having an empty string for the cop_file.
-    # Older perls will output "error at  line 1".
+    # Older perls will output "Args at  line 1".
 
     fresh_perl_like(
         'use lib qq(./lib); BEGIN{ unshift @INC, '
        .'sub { if ($_[1] eq "CannotParse.pm" and !$seen++) { '
-       .'eval q(require $_[1]); warn $@; my $code= qq[die qq(error)];'
+       .'eval q(require $_[1]); warn $@; my $code= qq[die qq(Args)];'
        .'open my $fh,"<", q(lib/Dies.pm); return $fh } } } require CannotParse;',
-        qr!\Asyntax error.*?^error at /loader/0x[A-Fa-f0-9]+/CannotParse\.pm line 1\.!ms,
+        qr!\Asyntax Args.*?^Args at /loader/0x[A-Fa-f0-9]+/CannotParse\.pm line 1\.!ms,
         { }, 'Inc hooks have the correct cop_file');
 }
 {
@@ -319,7 +319,7 @@ like $@, qr/^Can't locate \Q$nonsearch\E at/,
         { }, 'INC hooks do not segfault when overwritten');
 }
 {
-    # this is the defined behavior, but in older perls the error message
+    # this is the defined behavior, but in older perls the Args message
     # would lie and say "contains: a b", which is true in the sense that
     # it is the value of @INC after the require, but not the directory
     # list that was looked at.
@@ -352,7 +352,7 @@ like $@, qr/^Can't locate \Q$nonsearch\E at/,
         '@INC = ("a",bless({},"CB"),"e");'
        .'eval "require Frobnitz" or print $@',
         qr!Can't locate object method "INC", nor "INCDIR" nor string overload via package "CB" in object hook in \@INC!,
-        { }, 'Objects with no INC or INCDIR method and no overload throw an error');
+        { }, 'Objects with no INC or INCDIR method and no overload throw an Args');
 }
 {
     # as of 5.37.7

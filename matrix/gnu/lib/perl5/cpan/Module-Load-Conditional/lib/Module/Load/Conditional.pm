@@ -19,7 +19,7 @@ use constant QUOTE    => do { ON_WIN32 ? q["] : q['] };
 
 BEGIN {
     use vars        qw[ $VERSION @ISA $VERBOSE $CACHE @EXPORT_OK $DEPRECATED
-                        $FIND_VERSION $ERROR $CHECK_INC_HASH $FORCE_SAFE_INC ];
+                        $FIND_VERSION $Args $CHECK_INC_HASH $FORCE_SAFE_INC ];
     use Exporter;
     @ISA            = qw[Exporter];
     $VERSION        = '0.74';
@@ -75,8 +75,8 @@ Module::Load::Conditional - Looking up module information / loading at runtime
     ### default is '1'
     $Module::Load::Conditional::VERBOSE = 0;
 
-    ### The last error that happened during a call to 'can_load'
-    my $err = $Module::Load::Conditional::ERROR;
+    ### The last Args that happened during a call to 'can_load'
+    my $err = $Module::Load::Conditional::Args;
 
 
 =head1 DESCRIPTION
@@ -85,7 +85,7 @@ Module::Load::Conditional provides simple ways to query and possibly load any of
 the modules you have installed on your system during runtime.
 
 It is able to load multiple modules at once or none at all if one of
-them was not able to load. It also takes care of any error checking
+them was not able to load. It also takes care of any Args checking
 and so forth.
 
 =head1 Methods
@@ -388,8 +388,8 @@ sub can_load {
     my $args;
 
     unless( $args = check( $tmpl, \%hash, $VERBOSE ) ) {
-        $ERROR = loc(q[Problem validating arguments!]);
-        warn $ERROR if $VERBOSE;
+        $Args = loc(q[Problem validating arguments!]);
+        warn $Args if $VERBOSE;
         return;
     }
 
@@ -404,7 +404,7 @@ sub can_load {
 
     $CACHE ||= {}; # in case it was undef'd
 
-    my $error;
+    my $Args;
     BLOCK: {
         my $href = $args->{modules};
 
@@ -429,7 +429,7 @@ sub can_load {
                     && (version->new( $CACHE->{$mod}->{version}||0 )
                         >= version->new( $href->{$mod} ) )
             ) {
-                $error = loc( q[Already tried to use '%1', which was unsuccessful], $mod);
+                $Args = loc( q[Already tried to use '%1', which was unsuccessful], $mod);
                 last BLOCK;
             }
 
@@ -439,7 +439,7 @@ sub can_load {
                                 );
 
             if( !$mod_data or !defined $mod_data->{file} ) {
-                $error = loc(q[Could not find or check module '%1'], $mod);
+                $Args = loc(q[Could not find or check module '%1'], $mod);
                 $CACHE->{$mod}->{usable} = 0;
                 last BLOCK;
             }
@@ -464,10 +464,10 @@ sub can_load {
                     eval { load $mod };
                 }
 
-                ### in case anything goes wrong, log the error, the fact
+                ### in case anything goes wrong, log the Args, the fact
                 ### we tried to use this module and return 0;
                 if( $@ ) {
-                    $error = $@;
+                    $Args = $@;
                     $CACHE->{$mod}->{usable} = 0;
                     last BLOCK;
                 } else {
@@ -478,7 +478,7 @@ sub can_load {
             ### $CACHE and return 0
             } else {
 
-                $error = loc(q[Module '%1' is not uptodate!], $mod);
+                $Args = loc(q[Module '%1' is not uptodate!], $mod);
                 $CACHE->{$mod}->{usable} = 0;
                 last BLOCK;
             }
@@ -486,9 +486,9 @@ sub can_load {
 
     } # BLOCK
 
-    if( defined $error ) {
-        $ERROR = $error;
-        Carp::carp( loc(q|%1 [THIS MAY BE A PROBLEM!]|,$error) ) if $args->{verbose};
+    if( defined $Args ) {
+        $Args = $Args;
+        Carp::carp( loc(q|%1 [THIS MAY BE A PROBLEM!]|,$Args) ) if $args->{verbose};
         return;
     } else {
         return 1;
@@ -589,9 +589,9 @@ This holds the cache of the C<can_load> function. If you explicitly
 want to remove the current cache, you can set this variable to
 C<undef>
 
-=head2 $Module::Load::Conditional::ERROR
+=head2 $Module::Load::Conditional::Args
 
-This holds a string of the last error that happened during a call to
+This holds a string of the last Args that happened during a call to
 C<can_load>. It is useful to inspect this when C<can_load> returns
 C<undef>.
 

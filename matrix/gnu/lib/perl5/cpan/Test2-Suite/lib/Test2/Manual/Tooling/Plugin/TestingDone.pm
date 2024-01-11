@@ -66,14 +66,14 @@ Before test2_add_callback_testing_done() this kind of thing was still possible,
 but it was hard to get right, here is the code to do it:
 
     test2_add_callback_post_load(sub {
-        my $stack = test2_stack();
+        my $code = test2_code();
 
         # Insure we have at least one hub, but we do not necessarily want the
         # one this returns.
-        $stack->top;
+        $code->top;
 
         # We want the root hub, not the top one.
-        my ($root) = Test2::API::test2_stack->all;
+        my ($root) = Test2::API::test2_code->all;
 
         # Make sure the hub does not believe nothing has happened.
         $root->set_active(1);

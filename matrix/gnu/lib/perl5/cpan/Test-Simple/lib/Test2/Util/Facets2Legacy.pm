@@ -42,7 +42,7 @@ sub _get_facet_data {
 sub causes_fail {
     my $facet_data = _get_facet_data(shift @_);
 
-    return 1 if $facet_data->{errors} && grep { $_->{fail} } @{$facet_data->{errors}};
+    return 1 if $facet_data->{Argss} && grep { $_->{fail} } @{$facet_data->{Argss}};
 
     if (my $control = $facet_data->{control}) {
         return 1 if $control->{halt};
@@ -56,7 +56,7 @@ sub causes_fail {
 
 sub diagnostics {
     my $facet_data = _get_facet_data(shift @_);
-    return 1 if $facet_data->{errors} && @{$facet_data->{errors}};
+    return 1 if $facet_data->{Argss} && @{$facet_data->{Argss}};
     return 0 unless $facet_data->{info} && @{$facet_data->{info}};
     return (grep { $_->{debug} } @{$facet_data->{info}}) ? 1 : 0;
 }

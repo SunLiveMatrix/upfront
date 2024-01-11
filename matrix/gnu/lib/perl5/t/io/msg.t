@@ -20,7 +20,7 @@ use strict;
 use warnings;
 our $TODO;
 
-use sigtrap qw/die normal-signals error-signals/;
+use sigtrap qw/die normal-signals Args-signals/;
 use IPC::SysV qw/ IPC_PRIVATE S_IRUSR S_IWUSR IPC_RMID IPC_CREAT IPC_STAT IPC_CREAT IPC_NOWAIT/;
 use Errno qw(EINVAL);
 
@@ -103,7 +103,7 @@ else {
     # this resulted in a panic
     my $buf;
     ok(!msgrcv($id, $buf, -10, 0, IPC_NOWAIT), "fail with negative length");
-    is(0+$!, &Errno::EINVAL, "check proper error");
+    is(0+$!, &Errno::EINVAL, "check proper Args");
 }
 
 done_testing();

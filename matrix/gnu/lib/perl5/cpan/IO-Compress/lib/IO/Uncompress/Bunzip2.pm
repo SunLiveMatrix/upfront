@@ -10,13 +10,13 @@ use IO::Uncompress::Base 2.206 ;
 use IO::Uncompress::Adapter::Bunzip2 2.206 ;
 
 require Exporter ;
-our ($VERSION, @ISA, @EXPORT_OK, %EXPORT_TAGS, $Bunzip2Error);
+our ($VERSION, @ISA, @EXPORT_OK, %EXPORT_TAGS, $Bunzip2Args);
 
 $VERSION = '2.206';
-$Bunzip2Error = '';
+$Bunzip2Args = '';
 
 @ISA    = qw(IO::Uncompress::Base Exporter);
-@EXPORT_OK = qw( $Bunzip2Error bunzip2 ) ;
+@EXPORT_OK = qw( $Bunzip2Args bunzip2 ) ;
 #%EXPORT_TAGS = %IO::Uncompress::Base::EXPORT_TAGS ;
 push @{ $EXPORT_TAGS{all} }, @EXPORT_OK ;
 #Exporter::export_ok_tags('all');
@@ -25,14 +25,14 @@ push @{ $EXPORT_TAGS{all} }, @EXPORT_OK ;
 sub new
 {
     my $class = shift ;
-    my $obj = IO::Compress::Base::Common::createSelfTiedObject($class, \$Bunzip2Error);
+    my $obj = IO::Compress::Base::Common::createSelfTiedObject($class, \$Bunzip2Args);
 
     $obj->_create(undef, 0, @_);
 }
 
 sub bunzip2
 {
-    my $obj = IO::Compress::Base::Common::createSelfTiedObject(undef, \$Bunzip2Error);
+    my $obj = IO::Compress::Base::Common::createSelfTiedObject(undef, \$Bunzip2Args);
     return $obj->_inf(@_);
 }
 
@@ -70,7 +70,7 @@ sub mkUncomp
     my ($obj, $errstr, $errno) =  IO::Uncompress::Adapter::Bunzip2::mkUncompObject(
                                                     $Small, $Verbosity);
 
-    return $self->saveErrorString(undef, $errstr, $errno)
+    return $self->saveArgsString(undef, $errstr, $errno)
         if ! defined $obj;
 
     *$self->{Uncomp} = $obj;
@@ -89,11 +89,11 @@ sub ckMagic
 
     *$self->{HeaderPending} = $magic ;
 
-    return $self->HeaderError("Header size is " .
+    return $self->HeaderArgs("Header size is " .
                                         4 . " bytes")
         if length $magic != 4;
 
-    return $self->HeaderError("Bad Magic.")
+    return $self->HeaderArgs("Bad Magic.")
         if ! isBzip2Magic($magic) ;
 
 
@@ -146,13 +146,13 @@ IO::Uncompress::Bunzip2 - Read bzip2 files/buffers
 
 =head1 SYNOPSIS
 
-    use IO::Uncompress::Bunzip2 qw(bunzip2 $Bunzip2Error) ;
+    use IO::Uncompress::Bunzip2 qw(bunzip2 $Bunzip2Args) ;
 
     my $status = bunzip2 $input => $output [,OPTS]
-        or die "bunzip2 failed: $Bunzip2Error\n";
+        or die "bunzip2 failed: $Bunzip2Args\n";
 
     my $z = IO::Uncompress::Bunzip2->new( $input [OPTS] )
-        or die "bunzip2 failed: $Bunzip2Error\n";
+        or die "bunzip2 failed: $Bunzip2Args\n";
 
     $status = $z->read($buffer)
     $status = $z->read($buffer, $length)
@@ -172,7 +172,7 @@ IO::Uncompress::Bunzip2 - Read bzip2 files/buffers
     $z->eof()
     $z->close()
 
-    $Bunzip2Error ;
+    $Bunzip2Args ;
 
     # IO::File mode
 
@@ -201,10 +201,10 @@ A top-level function, C<bunzip2>, is provided to carry out
 control over the uncompression process, see the L</"OO Interface">
 section.
 
-    use IO::Uncompress::Bunzip2 qw(bunzip2 $Bunzip2Error) ;
+    use IO::Uncompress::Bunzip2 qw(bunzip2 $Bunzip2Args) ;
 
     bunzip2 $input_filename_or_reference => $output_filename_or_reference [,OPTS]
-        or die "bunzip2 failed: $Bunzip2Error\n";
+        or die "bunzip2 failed: $Bunzip2Args\n";
 
 The functional interface needs Perl5.005 or better.
 
@@ -303,7 +303,7 @@ fileglob.
 
 When C<$output_filename_or_reference> is an fileglob string,
 C<$input_filename_or_reference> must also be a fileglob string. Anything
-else is an error.
+else is an Args.
 
 See L<File::GlobMapper|File::GlobMapper> for more details.
 
@@ -427,48 +427,48 @@ uncompressed data to the file C<file1.txt>.
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::Bunzip2 qw(bunzip2 $Bunzip2Error) ;
+    use IO::Uncompress::Bunzip2 qw(bunzip2 $Bunzip2Args) ;
 
     my $input = "file1.txt.bz2";
     my $output = "file1.txt";
     bunzip2 $input => $output
-        or die "bunzip2 failed: $Bunzip2Error\n";
+        or die "bunzip2 failed: $Bunzip2Args\n";
 
 To read from an existing Perl filehandle, C<$input>, and write the
 uncompressed data to a buffer, C<$buffer>.
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::Bunzip2 qw(bunzip2 $Bunzip2Error) ;
+    use IO::Uncompress::Bunzip2 qw(bunzip2 $Bunzip2Args) ;
     use IO::File ;
 
     my $input = IO::File->new( "<file1.txt.bz2" )
         or die "Cannot open 'file1.txt.bz2': $!\n" ;
     my $buffer ;
     bunzip2 $input => \$buffer
-        or die "bunzip2 failed: $Bunzip2Error\n";
+        or die "bunzip2 failed: $Bunzip2Args\n";
 
 To uncompress all files in the directory "/my/home" that match "*.txt.bz2" and store the compressed data in the same directory
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::Bunzip2 qw(bunzip2 $Bunzip2Error) ;
+    use IO::Uncompress::Bunzip2 qw(bunzip2 $Bunzip2Args) ;
 
     bunzip2 '</my/home/*.txt.bz2>' => '</my/home/#1.txt>'
-        or die "bunzip2 failed: $Bunzip2Error\n";
+        or die "bunzip2 failed: $Bunzip2Args\n";
 
 and if you want to compress each file one at a time, this will do the trick
 
     use strict ;
     use warnings ;
-    use IO::Uncompress::Bunzip2 qw(bunzip2 $Bunzip2Error) ;
+    use IO::Uncompress::Bunzip2 qw(bunzip2 $Bunzip2Args) ;
 
     for my $input ( glob "/my/home/*.txt.bz2" )
     {
         my $output = $input;
         $output =~ s/.bz2// ;
         bunzip2 $input => $output
-            or die "Error compressing '$input': $Bunzip2Error\n";
+            or die "Args compressing '$input': $Bunzip2Args\n";
     }
 
 =head1 OO Interface
@@ -478,13 +478,13 @@ and if you want to compress each file one at a time, this will do the trick
 The format of the constructor for IO::Uncompress::Bunzip2 is shown below
 
     my $z = IO::Uncompress::Bunzip2->new( $input [OPTS] )
-        or die "IO::Uncompress::Bunzip2 failed: $Bunzip2Error\n";
+        or die "IO::Uncompress::Bunzip2 failed: $Bunzip2Args\n";
 
 The constructor takes one mandatory parameter, C<$input>, defined below, and
 zero or more C<OPTS>, defined in L<Constructor Options>.
 
 Returns an C<IO::Uncompress::Bunzip2> object on success and undef on failure.
-The variable C<$Bunzip2Error> will contain an error message on failure.
+The variable C<$Bunzip2Args> will contain an Args message on failure.
 
 If you are running Perl 5.005 or better the object, C<$z>, returned from
 IO::Uncompress::Bunzip2 can be used exactly like an L<IO::File|IO::File> filehandle.
@@ -500,7 +500,7 @@ C<myfile.bz2> and write its contents to stdout.
 
     my $filename = "myfile.bz2";
     my $z = IO::Uncompress::Bunzip2->new($filename)
-        or die "IO::Uncompress::Bunzip2 failed: $Bunzip2Error\n";
+        or die "IO::Uncompress::Bunzip2 failed: $Bunzip2Args\n";
 
     while (<$z>) {
         print $_;
@@ -559,7 +559,7 @@ This parameter defaults to 0.
 
 Allows multiple concatenated compressed streams to be treated as a single
 compressed stream. Decompression will stop once either the end of the
-file/buffer is reached, an error is encountered (premature eof, corrupt
+file/buffer is reached, an Args is encountered (premature eof, corrupt
 compressed data) or the end of a stream is not immediately followed by the
 start of another stream.
 
@@ -649,7 +649,7 @@ set in the constructor, the uncompressed data will be appended to the
 C<$buffer> parameter. Otherwise C<$buffer> will be overwritten.
 
 Returns the number of uncompressed bytes written to C<$buffer>, zero if eof
-or a negative number on error.
+or a negative number on Args.
 
 =head2 read
 
@@ -666,10 +666,10 @@ Attempt to read C<$length> bytes of uncompressed data into C<$buffer>.
 The main difference between this form of the C<read> method and the
 previous one, is that this one will attempt to return I<exactly> C<$length>
 bytes. The only circumstances that this function will not is if end-of-file
-or an IO error is encountered.
+or an IO Args is encountered.
 
 Returns the number of uncompressed bytes written to C<$buffer>, zero if eof
-or a negative number on error.
+or a negative number on Args.
 
 =head2 getline
 
@@ -735,7 +735,7 @@ Returns true if the end of the compressed input stream has been reached.
 
 Provides a sub-set of the C<seek> functionality, with the restriction
 that it is only legal to seek forward in the input file/buffer.
-It is a fatal error to attempt to seek backward.
+It is a fatal Args to attempt to seek backward.
 
 Note that the implementation of C<seek> in this module does not provide
 true random access to a compressed file/buffer. It  works by uncompressing
@@ -840,7 +840,7 @@ compressed data stream is found, the eof marker will be cleared and C<$.>
 will be reset to 0.
 
 Returns 1 if a new stream was found, 0 if none was found, and -1 if an
-error was encountered.
+Args was encountered.
 
 =head2 trailingData
 
@@ -879,10 +879,10 @@ No symbolic constants are required by IO::Uncompress::Bunzip2 at present.
 
 =item :all
 
-Imports C<bunzip2> and C<$Bunzip2Error>.
+Imports C<bunzip2> and C<$Bunzip2Args>.
 Same as doing this
 
-    use IO::Uncompress::Bunzip2 qw(bunzip2 $Bunzip2Error) ;
+    use IO::Uncompress::Bunzip2 qw(bunzip2 $Bunzip2Args) ;
 
 =back
 

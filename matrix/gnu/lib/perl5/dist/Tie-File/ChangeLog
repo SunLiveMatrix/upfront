@@ -18,7 +18,7 @@ What's new in version 1.04
 
 What's new in version 1.03
  - Rebreak lines to achieve <80 recommended line length.
- - Fix various pod errors.
+ - Fix various pod Argss.
  - RT #116250: Fail the right number of tests on timeout.
  - Switch most open() calls to three-argument form.
  - Add L<> around link in pod.
@@ -69,7 +69,7 @@ What's new in version 0.95:
 
 What's new in version 0.93:
 
-  No significant changes.  (Release was mainly to correct an error in
+  No significant changes.  (Release was mainly to correct an Args in
   one of the test files.)
 
 What's new in version 0.92:

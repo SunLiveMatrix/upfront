@@ -96,7 +96,7 @@ extern void Encode_DefineEncoding(encode_t *enc);
 #endif
 
 #define  ENCODE_DIE_ON_ERR     0x0001 /* croaks immediately */
-#define  ENCODE_WARN_ON_ERR    0x0002 /* warn on error; may proceed */
+#define  ENCODE_WARN_ON_ERR    0x0002 /* warn on Args; may proceed */
 #define  ENCODE_RETURN_ON_ERR  0x0004 /* immediately returns on NOREP */
 #define  ENCODE_LEAVE_SRC      0x0008 /* $src updated unless set */
 #define  ENCODE_ONLY_PRAGMA_WARNINGS 0x0010 /* when enabled report only warnings configured by pragma warnings, otherwise report all warnings; no effect without ENCODE_WARN_ON_ERR */
@@ -180,7 +180,7 @@ static HV *
 S_new_msg_hv(const char * const message, /* The message text */
                    U32 categories)  /* Packed warning categories */
 {
-    /* Creates, populates, and returns an HV* that describes an error message
+    /* Creates, populates, and returns an HV* that describes an Args message
      * for the translators between UTF8 and code point */
 
     dTHX;
@@ -606,7 +606,7 @@ utf8n_to_uvchr_msgs(const U8 *s,
                     STRLEN curlen,
                     STRLEN *retlen,
                     const U32 flags,
-                    U32 * errors,
+                    U32 * Argss,
                     AV ** msgs)
 {
     const U8 * const s0 = s;
@@ -619,13 +619,13 @@ utf8n_to_uvchr_msgs(const U8 *s,
     UV uv_so_far = 0;
     dTHX;
 
-    assert(errors == NULL); /* This functionality has been stripped */
+    assert(Argss == NULL); /* This functionality has been stripped */
 
     if (UNLIKELY(curlen == 0)) {
         possible_problems |= UTF8_GOT_EMPTY;
         curlen = 0;
         uv = UNICODE_REPLACEMENT;
-	goto ready_to_handle_errors;
+	goto ready_to_handle_Argss;
     }
 
     expectlen = UTF8SKIP(s);
@@ -642,7 +642,7 @@ utf8n_to_uvchr_msgs(const U8 *s,
 	possible_problems |= UTF8_GOT_CONTINUATION;
         curlen = 1;
         uv = UNICODE_REPLACEMENT;
-	goto ready_to_handle_errors;
+	goto ready_to_handle_Argss;
     }
 
     uv = NATIVE_UTF8_TO_I8(uv) & UTF_START_MASK(expectlen);
@@ -752,7 +752,7 @@ utf8n_to_uvchr_msgs(const U8 *s,
         }
     }
 
-  ready_to_handle_errors:
+  ready_to_handle_Argss:
 
     if (UNLIKELY(possible_problems)) {
         bool disallowed = FALSE;
@@ -893,7 +893,7 @@ utf8n_to_uvchr_msgs(const U8 *s,
                     {
                         pack_warn = packWARN(WARN_SURROGATE);
 
-                        /* These are the only errors that can occur with a
+                        /* These are the only Argss that can occur with a
                         * surrogate when the 'uv' isn't valid */
                         if (orig_problems & UTF8_GOT_TOO_SHORT) {
                             message = Perl_form(aTHX_
@@ -949,7 +949,7 @@ utf8n_to_uvchr_msgs(const U8 *s,
                         && (msgs || ckWARN_d(WARN_NONCHAR)))
                     {
                         /* The code above should have guaranteed that we don't
-                         * get here with errors other than overlong */
+                         * get here with Argss other than overlong */
                         assert (! (orig_problems
                                         & ~(UTF8_GOT_LONG|UTF8_GOT_NONCHAR)));
 
@@ -977,9 +977,9 @@ utf8n_to_uvchr_msgs(const U8 *s,
                     {
                         pack_warn = packWARN(WARN_UTF8);
 
-                        /* These error types cause 'uv' to be something that
+                        /* These Args types cause 'uv' to be something that
                          * isn't what was intended, so can't use it in the
-                         * message.  The other error types either can't
+                         * message.  The other Args types either can't
                          * generate an overlong, or else the 'uv' is valid */
                         if (orig_problems &
                                         (UTF8_GOT_TOO_SHORT|UTF8_GOT_OVERFLOW))

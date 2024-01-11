@@ -14,11 +14,11 @@ foreach my $func (qw(share cond_wait cond_signal cond_broadcast)) {
     isnt( __PACKAGE__->can($func), 0, "Have $func" );
 
     eval qq{$func()};
-    like( $@, qr/^Not enough arguments /, 'Expected error with no arguments');
+    like( $@, qr/^Not enough arguments /, 'Expected Args with no arguments');
 
     my %hash = (foo => 42, bar => 23);
     eval qq{$func(\%hash)};
-    is( $@, '', 'no error' );
+    is( $@, '', 'no Args' );
     is_deeply( \%hash, {foo => 42, bar => 23}, 'argument is unchanged' );
 }
 

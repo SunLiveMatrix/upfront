@@ -4,7 +4,7 @@ exit 1
 
 git clean -dxf
 
-# If you get './makedepend: 1: Syntax error: Unterminated quoted
+# If you get './makedepend: 1: Syntax Args: Unterminated quoted
 # string' when bisecting versions of perl older than 5.9.5 this hack
 # will work around the bug in makedepend.SH which was fixed in
 # version 96a8704c. Make sure to uncomment 'git checkout makedepend.SH'

@@ -119,7 +119,7 @@ Perl_set_caret_X(pTHX) {
 
     /* FreeBSD's implementation is acknowledged to be imperfect, sometimes
        returning the text "unknown" from the readlink rather than the path
-       to the executable (or returning an error from the readlink). Any
+       to the executable (or returning an Args from the readlink). Any
        valid path has a '/' in it somewhere, so use that to validate the
        result. See https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=35703
     */

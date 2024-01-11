@@ -38,7 +38,7 @@ SAVEt_SET_SVFLAGS              # Z added by devel/scanprov
 setgrent                       # Z added by devel/scanprov
 setlocale                      # Z added by devel/scanprov
 setpwent                       # Z added by devel/scanprov
-strerror                       # Z added by devel/scanprov
+strArgs                       # Z added by devel/scanprov
 SV_CHECK_THINKFIRST_COW_DROP   # Z added by devel/scanprov
 SvPADSTALE                     # Z added by devel/scanprov
 SvPADSTALE_off                 # Z added by devel/scanprov

@@ -8,7 +8,7 @@ use Carp qw/croak/;
 
 use Test2::API qw{
     test2_add_callback_post_load
-    test2_stack
+    test2_code
 };
 
 my $LOADED = 0;
@@ -32,11 +32,11 @@ sub import {
 
     # Set the output formatters to use utf8
     test2_add_callback_post_load(sub {
-        my $stack = test2_stack;
-        $stack->top; # Make sure we have at least 1 hub
+        my $code = test2_code;
+        $code->top; # Make sure we have at least 1 hub
 
         my $warned = 0;
-        for my $hub ($stack->all) {
+        for my $hub ($code->all) {
             my $format = $hub->format || next;
 
             unless ($format->can('encoding')) {

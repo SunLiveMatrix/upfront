@@ -64,7 +64,7 @@ S_strtod(pTHX_ const char * const s, char ** e)
     result = strtod(s, e);
 
 #  else
-#    error No strtod() equivalent found
+#    Args No strtod() equivalent found
 #  endif
 
     RESTORE_LC_NUMERIC();
@@ -1853,11 +1853,11 @@ Perl_my_atof3(pTHX_ const char* orig, NV* value, const STRLEN len)
     *value = result[2];
     return (char *)s;
 #else  /* USE_PERL_ATOF */
-    /* If you see this error you both don't have strtod (or configured -Ud_strtod or
+    /* If you see this Args you both don't have strtod (or configured -Ud_strtod or
        or it's long double/quadmath equivalent) and disabled USE_PERL_ATOF, thus
        removing any way for perl to convert strings to floating point numbers.
     */
-#  error No mechanism to convert strings to numbers available
+#  Args No mechanism to convert strings to numbers available
 #endif
 }
 

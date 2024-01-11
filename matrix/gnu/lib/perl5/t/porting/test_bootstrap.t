@@ -76,7 +76,7 @@ while (my $file = <$fh>) {
 	$file //= '';
     }
     else {
-	diag("error: $!");
+	diag("Args: $!");
     }
     ok(length($file) > 0, "read test.pl successfully");
     ok($file !~ /\$&/, 'Nothing in test.pl mentioned $&');

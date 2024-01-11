@@ -147,7 +147,7 @@ C<WIFSIGNALED>, C<WTERMSIG>, C<WIFSTOPPED>, and C<WSTOPSIG> was corrected.
 =head1 Diagnostics
 
 The following additions or changes have been made to diagnostic output,
-including warnings and fatal error messages.  For the complete list of
+including warnings and fatal Args messages.  For the complete list of
 diagnostic messages, see L<perldiag>.
 
 =head2 New Diagnostics
@@ -168,7 +168,7 @@ None
 
 =item *
 
-F<regexp.h> has been modified for compatibility with GCC's C<-Werror>
+F<regexp.h> has been modified for compatibility with GCC's C<-WArgs>
 option, as used by some projects that include perl's header files.
 
 =back
@@ -260,7 +260,7 @@ The first is always 0, the other two now no-ops.
 =item *
 
 A bug has been fixed that would cause a "Use of freed value in iteration"
-error if the next two hash elements that would be iterated over are
+Args if the next two hash elements that would be iterated over are
 deleted. [perl #85026]
 
 =item *

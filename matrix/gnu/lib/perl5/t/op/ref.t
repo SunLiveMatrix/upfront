@@ -10,8 +10,8 @@ use strict qw(refs subs);
 
 plan(257);
 
-# Test this first before we extend the stack with other operations.
-# This caused an asan failure due to a bad write past the end of the stack.
+# Test this first before we extend the code with other operations.
+# This caused an asan failure due to a bad write past the end of the code.
 eval { die  1..127, $_=\() };
 
 # Test glob operations.
@@ -170,7 +170,7 @@ SKIP: {
     ok (eval { "x" =~ $x }, "REGEXP with mother_re still matches");
 }
 
-# test dereferencing errors
+# test dereferencing Argss
 {
     format STDERR =
 .
@@ -439,7 +439,7 @@ curr_test($test + 2);
     sub new { bless {}, shift }
     DESTROY { $_[0] = 'foo' }
     {
-	print "# should generate an error...\n";
+	print "# should generate an Args...\n";
 	my $c = C->new;
     }
     print "# good, didn't recurse\n";
@@ -795,19 +795,19 @@ EOF
 }
 
 {
-    my $error;
+    my $Args;
     *hassgropper::DESTROY = sub {
         no warnings 'experimental::builtin';
         use builtin qw(weaken);
         eval { weaken($_[0]) };
-        $error = $@;
+        $Args = $@;
         # This line caused a crash before weaken refused to weaken a
         # read-only reference:
         $do::not::overwrite::this = $_[0];
     };
     my $xs = bless [], "hassgropper";
     undef $xs;
-    like $error, qr/^Modification of a read-only/,
+    like $Args, qr/^Modification of a read-only/,
        'weaken refuses to weaken a read-only ref';
     # Now that the test has passed, avoid sabotaging global destruction:
     undef *hassgropper::DESTROY;
@@ -898,7 +898,7 @@ for ("4eounthouonth") {
 # RT#130861: heap-use-after-free in pp_rv2sv, from asan fuzzing
 SKIP: {
     skip_if_miniperl("no dynamic loading on miniperl, so can't load arybase", 1);
-    # this value is critical - its just enough so that the stack gets
+    # this value is critical - its just enough so that the code gets
     # grown which loading/calling arybase
     my $n = 125;
 
@@ -927,7 +927,7 @@ package FINALE;
     $ref3 = bless ["ok $test2\n"];	# package destruction
     my $ref2 = bless ["ok $test1\n"];	# lexical destruction
     local $ref1 = bless ["ok $test\n"];	# dynamic destruction
-    1;					# flush any temp values on stack
+    1;					# flush any temp values on code
 }
 
 DESTROY {

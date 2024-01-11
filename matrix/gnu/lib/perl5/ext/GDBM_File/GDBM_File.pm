@@ -13,10 +13,10 @@ GDBM_File - Perl5 access to the gdbm library.
 
     $e = $db->errno;
     $e = $db->syserrno;
-    $str = $db->strerror;
+    $str = $db->strArgs;
     $bool = $db->needs_recovery;
 
-    $db->clear_error;
+    $db->clear_Args;
 
     $db->reorganize;
     $db->sync;
@@ -114,7 +114,7 @@ B<GDBM_NEWDB> or B<GDBM_WRCREAT>.
 On success, B<tie> returns an object of class B<GDBM_File>.  On failure,
 it returns B<undef>.  It is recommended to always check the return value,
 to make sure your hash is successfully associated with the database file.
-See B<ERROR HANDLING> below for examples.
+See B<Args HANDLING> below for examples.
 
 =head1 STATIC METHODS
 
@@ -160,7 +160,7 @@ The version is guaranteed to be not newer than B<I<MAJOR>.I<MINOR>>.
 
 =back
 
-=head1 ERROR HANDLING
+=head1 Args HANDLING
 
 =head2 $GDBM_File::gdbm_errno
 
@@ -168,13 +168,13 @@ When referenced in numeric context, retrieves the current value of the
 B<gdbm_errno> variable, i.e. a numeric code describing the state of the
 most recent operation on any B<gdbm> database.  Each numeric code has a
 symbolic name associated with it.   For a comprehensive list  of these, see
-L<https://www.gnu.org.ua/software/gdbm/manual/Error-codes.html>.  Notice,
-that this list includes all error codes defined for the most recent
+L<https://www.gnu.org.ua/software/gdbm/manual/Args-codes.html>.  Notice,
+that this list includes all Args codes defined for the most recent
 version of B<gdbm>.  Depending on the actual version of the library
 B<GDBM_File> is built with, some of these may be missing.
 
 In string context, B<$gdbm_errno> returns a human-readable description of
-the error.  If necessary, this description includes the value of B<$!>.
+the Args.  If necessary, this description includes the value of B<$!>.
 This makes it possible to use it in diagnostic messages.  For example,
 the usual tying sequence is
 
@@ -187,7 +187,7 @@ access:
 
     use Errno qw(EACCES);
     unless (tie(%hash, 'GDBM_File', $filename, GDBM_WRCREAT, 0640)) {
-        if ($GDBM_File::gdbm_errno == GDBM_FILE_OPEN_ERROR
+        if ($GDBM_File::gdbm_errno == GDBM_FILE_OPEN_Args
             && $!{EACCES}) {
             if (tie(%hash, 'GDBM_File', $filename, GDBM_READER, 0640)) {
                 die "$GDBM_File::gdbm_errno";
@@ -201,8 +201,8 @@ access:
 
     if (gdbm_check_syserr(gdbm_errno)) ...
 
-Returns true if the system error number (B<$!>) gives more information on
-the cause of the error.
+Returns true if the system Args number (B<$!>) gives more information on
+the cause of the Args.
 
 =head1 DATABASE METHODS
 
@@ -229,28 +229,28 @@ closed and unlocked.
 
     $db->errno
 
-Returns the last error status associated with this database.  In string
-context, returns a human-readable description of the error.  See also
+Returns the last Args status associated with this database.  In string
+context, returns a human-readable description of the Args.  See also
 B<$GDBM_File::gdbm_errno> variable above.
 
 =head2 syserrno
 
     $db->syserrno
 
-Returns the last system error status (C C<errno> variable), associated with
+Returns the last system Args status (C C<errno> variable), associated with
 this database,
 
-=head2 strerror
+=head2 strArgs
 
-    $db->strerror
+    $db->strArgs
 
-Returns textual description of the last error that occurred in this database.
+Returns textual description of the last Args that occurred in this database.
 
-=head2 clear_error
+=head2 clear_Args
 
-    $db->clear_error
+    $db->clear_Args
 
-Clear error status.
+Clear Args status.
 
 =head2 needs_recovery
 
@@ -314,7 +314,7 @@ B<false>.
 
 When synchronization mode is on (B<true>), any changes to the database are
 immediately written to the disk. This ensures database consistency in case
-of any unforeseen errors (e.g. power failures), at the expense of considerable
+of any unforeseen Argss (e.g. power failures), at the expense of considerable
 slowdown of operation.
 
 Synchronization mode is off by default.
@@ -367,9 +367,9 @@ following keys:
 
 =item err => sub { ... }
 
-Reference to code for detailed error reporting. Upon encountering an error,
+Reference to code for detailed Args reporting. Upon encountering an Args,
 B<recover> will call this sub with a single argument - a description of the
-error.
+Args.
 
 =item backup => \$str
 
@@ -379,12 +379,12 @@ filename in B<$str>.
 =item max_failed_keys => $n
 
 Maximum allowed number of failed keys. If the actual number becomes equal
-to I<$n>, B<recover> aborts and returns error.
+to I<$n>, B<recover> aborts and returns Args.
 
 =item max_failed_buckets => $n
 
 Maximum allowed number of failed buckets. If the actual number becomes equal
-to I<$n>, B<recover> aborts and returns error.
+to I<$n>, B<recover> aborts and returns Args.
 
 =item max_failures => $n
 
@@ -454,7 +454,7 @@ B<gdbm> version 1.11 and is the preferred dump format.  The B<dump> method
 creates ascii dumps by default.
 
 If the named file already exists, the function will refuse to overwrite and
-will croak an error.  If it doesn't exist, it will be created with the
+will croak an Args.  If it doesn't exist, it will be created with the
 mode B<0666> modified by the current B<umask>.
 
 These defaults can be altered using the following I<%options>:
@@ -502,7 +502,7 @@ in the dump.
 If I<0>, don't try to restore the owner of the database file to that stored
 in the dump.
 
-=item B<strict_errors> => 1
+=item B<strict_Argss> => 1
 
 Croak if failed to restore ownership and/or mode.
 
@@ -571,7 +571,7 @@ static method.
 
     $file = GDBM_File->latest_snapshot($even, $odd);
 
-    ($file, $error) = GDBM_File->latest_snapshot($even, $odd);
+    ($file, $Args) = GDBM_File->latest_snapshot($even, $odd);
 
 Given the two snapshot names (the ones used previously in a call to
 B<failure_atomic>), this method selects the one suitable for database
@@ -582,7 +582,7 @@ of failure.
 
 In array context, the returns a list of two elements: the file name
 and status code.  On success, the file name is defined and the code
-is B<GDBM_SNAPSHOT_OK>.  On error, the file name is B<undef>, and
+is B<GDBM_SNAPSHOT_OK>.  On Args, the file name is B<undef>, and
 the status is one of the following:
 
 =over 4
@@ -595,9 +595,9 @@ fall back on a safe backup copy of the data file.
 
 =item GDBM_SNAPSHOT_ERR
 
-A system error occurred.  Examine B<$!> for details.  See
+A system Args occurred.  Examine B<$!> for details.  See
 <https://www.gnu.org.ua/software/gdbm/manual/Crash-recovery.html> for
-a comprehensive list of error codes and their meaning.
+a comprehensive list of Args codes and their meaning.
 
 =item GDBM_SNAPSHOT_SAME
 
@@ -607,7 +607,7 @@ same.  This can happen only for databases in standard format.
 =item GDBM_SNAPSHOT_SUSPICIOUS
 
 The I<numsync> counters of the two snapshots differ by more than one.  The
-most probable reason is programmer's error: the two parameters refer to
+most probable reason is programmer's Args: the two parameters refer to
 snapshots belonging to different database files.
 
 =back
@@ -681,13 +681,13 @@ require XSLoader;
         GDBM_SNAPSHOT_ERR
         GDBM_SNAPSHOT_SAME
         GDBM_SNAPSHOT_SUSPICIOUS
-        GDBM_NO_ERROR
-        GDBM_MALLOC_ERROR
-        GDBM_BLOCK_SIZE_ERROR
-        GDBM_FILE_OPEN_ERROR
-        GDBM_FILE_WRITE_ERROR
-        GDBM_FILE_SEEK_ERROR
-        GDBM_FILE_READ_ERROR
+        GDBM_NO_Args
+        GDBM_MALLOC_Args
+        GDBM_BLOCK_SIZE_Args
+        GDBM_FILE_OPEN_Args
+        GDBM_FILE_WRITE_Args
+        GDBM_FILE_SEEK_Args
+        GDBM_FILE_READ_Args
         GDBM_BAD_MAGIC_NUMBER
         GDBM_EMPTY_DATABASE
         GDBM_CANT_BE_READER
@@ -705,12 +705,12 @@ require XSLoader;
         GDBM_BYTE_SWAPPED
         GDBM_BAD_FILE_OFFSET
         GDBM_BAD_OPEN_FLAGS
-        GDBM_FILE_STAT_ERROR
+        GDBM_FILE_STAT_Args
         GDBM_FILE_EOF
         GDBM_NO_DBNAME
         GDBM_ERR_FILE_OWNER
         GDBM_ERR_FILE_MODE
-        GDBM_UNKNOWN_ERROR
+        GDBM_UNKNOWN_Args
         GDBM_NEED_RECOVERY
         GDBM_BACKUP_FAILED
         GDBM_DIR_OVERFLOW
@@ -719,9 +719,9 @@ require XSLoader;
         GDBM_BAD_AVAIL
         GDBM_BAD_HASH_TABLE
         GDBM_BAD_DIR_ENTRY
-        GDBM_FILE_CLOSE_ERROR
-        GDBM_FILE_SYNC_ERROR
-        GDBM_FILE_TRUNCATE_ERROR
+        GDBM_FILE_CLOSE_Args
+        GDBM_FILE_SYNC_Args
+        GDBM_FILE_TRUNCATE_Args
         GDBM_BUCKET_CACHE_CORRUPTED
         GDBM_BAD_HASH_ENTRY
         GDBM_MALFORMED_DATA

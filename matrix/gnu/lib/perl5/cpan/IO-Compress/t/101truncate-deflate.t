@@ -29,8 +29,8 @@ BEGIN {
 #use Test::More skip_all => "not implemented yet";
 
 
-use IO::Compress::Deflate   qw($DeflateError) ;
-use IO::Uncompress::Inflate qw($InflateError) ;
+use IO::Compress::Deflate   qw($DeflateArgs) ;
+use IO::Uncompress::Inflate qw($InflateArgs) ;
 
 sub identify
 {

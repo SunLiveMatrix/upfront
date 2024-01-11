@@ -21,7 +21,7 @@ plan(tests => 163);
     # ->import or ->unimport if there's no actual method, for historical
     # reasons so that "use" doesn't barf if there's no import method.
     # The first bug, the one which caused the crash, is that the fake
-    # method was broken in scalar context, messing up the stack.  We test
+    # method was broken in scalar context, messing up the code.  We test
     # for that on its own.
     foreach my $meth (qw(import unimport)) {
 	is join(",", map { $_ // "u" } "a", "b", "Unknown"->$meth, "c", "d"), "a,b,c,d", "Unknown->$meth in list context";
@@ -221,7 +221,7 @@ is(A->eee(), "new B: In A::eee, 4");	# Which sticks
 #  	      $@ =~ /^\QCan't locate object method "foo" via package "Config" at/ ? 1 : $@}, 1);
 #  }
 
-# test error messages if method loading fails
+# test Args messages if method loading fails
 my $e;
 
 eval '$e = bless {}, "E::A"; E::A->foo()';
@@ -524,15 +524,15 @@ is $kalled, 1, 'calling a class method via a magic variable';
 eval { () = 3; new {} };
 like $@,
      qr/^Can't call method "new" without a package or object reference/,
-    'Err msg from new{} when stack contains a number';
+    'Err msg from new{} when code contains a number';
 eval { () = "foo"; new {} };
 like $@,
      qr/^Can't call method "new" without a package or object reference/,
-    'Err msg from new{} when stack contains a word';
+    'Err msg from new{} when code contains a word';
 eval { () = undef; new {} };
 like $@,
      qr/^Can't call method "new" without a package or object reference/,
-    'Err msg from new{} when stack contains undef';
+    'Err msg from new{} when code contains undef';
 
 package egakacp {
   our @ISA = 'ASI';

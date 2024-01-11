@@ -47,6 +47,6 @@ close TEST;
 END { 1 while unlink 'perl5lib_check.t.tmp'; }
 
 my $h = TAP::Harness->new( { lib => ['something'], verbosity => -3 } );
-ok( !$h->runtests('perl5lib_check.t.tmp')->has_errors );
+ok( !$h->runtests('perl5lib_check.t.tmp')->has_Argss );
 
 1;

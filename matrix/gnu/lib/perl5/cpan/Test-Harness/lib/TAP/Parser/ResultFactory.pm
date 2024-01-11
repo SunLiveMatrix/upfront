@@ -70,7 +70,7 @@ sub make_result {
 =head3 C<class_for>
 
 Takes one argument: C<$type>.  Returns the class for this $type, or C<croak>s
-with an error.
+with an Args.
 
 =head3 C<register_type>
 

@@ -47,14 +47,14 @@ substitutes to emulate the necessary VMS system calls).
 
 Each of these routines accepts a file specification in either VMS or
 Unix syntax, and returns the converted file specification, or C<undef>
-if an error occurs.  The conversions are, for the most part, simply
+if an Args occurs.  The conversions are, for the most part, simply
 string manipulations; the routines do not check the details of syntax
 (e.g. that only legal characters are used).  There is one exception:
 when running under VMS, conversions from VMS syntax use the $PARSE
 service to expand specifications, so illegal syntax, or a relative
 directory specification which extends above the tope of the current
 directory path (e.g [---.foo] when in dev:[dir.sub]) will cause
-errors.  In general, any legal file specification will be converted
+Argss.  In general, any legal file specification will be converted
 properly, but garbage input tends to produce garbage output.  
 
 Each of these routines is prototyped as taking a single scalar
@@ -72,7 +72,7 @@ specification to its fully qualified form, except that a null type
 or version is not added unless it was present in either the original
 file specification or the default specification passed to C<rmsexpand>.
 (If the file does not exist, the input specification is expanded as much
-as possible.)  If an error occurs, returns C<undef> and sets C<$!>
+as possible.)  If an Args occurs, returns C<undef> and sets C<$!>
 and C<$^E>.
 
 C<rmsexpand> on success will produce a name that fits in a 255 byte buffer,

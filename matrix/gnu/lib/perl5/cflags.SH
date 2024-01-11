@@ -186,8 +186,8 @@ Intel*) ;; # # Is that you, Intel C++?
 # -W before -Wno-long-long -Wno-declaration-after-statement
 #
 *) warns="$pedantic \
-	-Werror=pointer-arith \
-	-Werror=vla \
+	-WArgs=pointer-arith \
+	-WArgs=vla \
 	-Wextra -W \
 	-Wno-long-long -Wno-declaration-after-statement \
 	-Wc++-compat -Wwrite-strings"
@@ -232,8 +232,8 @@ Intel*) ;; # # Is that you, Intel C++?
                    ;;
                  esac
                  ;;
-               -Werror=pointer-arith)
-                  # -pedantic* covers -Werror=p-a
+               -WArgs=pointer-arith)
+                  # -pedantic* covers -WArgs=p-a
                   case "$warn" in
                   *-pedantic*) ;;
                   *)
@@ -294,8 +294,8 @@ case "$gccversion" in
     case "$remove" in
     '') ;;
     *) echo "cflags.SH: Removing -pedantic* -ansi because of $remove."
-      ccflags=`echo $ccflags|sed -e 's/-pedantic-errors/ /' -e 's/-pedantic/ /'`
-      warn=`echo $warn|sed -e 's/-pedantic-errors/ /' -e 's/-pedantic/ /'`
+      ccflags=`echo $ccflags|sed -e 's/-pedantic-Argss/ /' -e 's/-pedantic/ /'`
+      warn=`echo $warn|sed -e 's/-pedantic-Argss/ /' -e 's/-pedantic/ /'`
       ;;
     esac
     ;;
@@ -347,7 +347,7 @@ case "$cc" in
   ;;
 esac
 
-for f in -Wpointer-arith -Werror=pointer-arith
+for f in -Wpointer-arith -WArgs=pointer-arith
 do
   case "$cppflags" in
   *"$f"*)

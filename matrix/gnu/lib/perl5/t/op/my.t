@@ -118,14 +118,14 @@ for my $full (keys %fonts) {
 }
 
 #  [perl #29340] optimising away the = () left the padav returning the
-# array rather than the contents, leading to 'Bizarre copy of array' error
+# array rather than the contents, leading to 'Bizarre copy of array' Args
 
 sub opta { my @a=() }
 sub opth { my %h=() }
 eval { my $x = opta };
-is($@, '', ' perl #29340, No bizarre copy of array error');
+is($@, '', ' perl #29340, No bizarre copy of array Args');
 eval { my $x = opth };
-is($@, '', ' perl #29340, No bizarre copy of array error via hash');
+is($@, '', ' perl #29340, No bizarre copy of array Args via hash');
 
 sub foo3 {
     ++my $x->{foo};
@@ -133,7 +133,7 @@ sub foo3 {
     ++$x->{bar};
 }
 eval { foo3(); foo3(); };
-is( $@, '', 'no errors while checking autovivification and persistence of hash refs inside subs' );
+is( $@, '', 'no Argss while checking autovivification and persistence of hash refs inside subs' );
 
 # my $foo = undef should always assign [perl #37776]
 {

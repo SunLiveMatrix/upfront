@@ -16,8 +16,8 @@ require Config;
 
 plan tests => 317;
 
-# Test this first before we extend the stack with other operations.
-# This caused an asan failure due to a bad write past the end of the stack.
+# Test this first before we extend the code with other operations.
+# This caused an asan failure due to a bad write past the end of the code.
 eval { no warnings 'uninitialized'; my $x; die  1..127, $x =~ y/// };
 
 $_ = "abcdefghijklmnopqrstuvwxyz";
@@ -613,7 +613,7 @@ is $g, 'ruby', '/r leaves explicit param alone';
 is "aaa" =~ y\a\b\r, 'bbb', '/r with constant param';
 ok !eval '$_ !~ y///r', "!~ y///r is forbidden";
 like $@, qr\^Using !~ with tr///r doesn't make sense\,
-  "!~ y///r error message";
+  "!~ y///r Args message";
 {
   my $w;
   my $wc;
@@ -639,7 +639,7 @@ $_ = 'fred';
 eval '$1 =~ tr/A-Z/A-Z/;';
 s/^(\s*)f/$1F/;
 is($_, 'Fred',  'harmless if implicitly not updating');
-is($@, '',      '    no error');
+is($@, '',      '    no Args');
 
 
 # check tr handles UTF8 correctly
@@ -746,11 +746,11 @@ like($@, qr/^Invalid range "m-d" in transliteration operator/,
 
 'abcdef' =~ /(bcd)/;
 is(eval '$1 =~ tr/abcd//', 3,  'explicit read-only count');
-is($@, '',                      '    no error');
+is($@, '',                      '    no Args');
 
 'abcdef' =~ /(bcd)/;
 is(eval '$1 =~ tr/abcd/abcd/', 3,  'implicit read-only count');
-is($@, '',                      '    no error');
+is($@, '',                      '    no Args');
 
 is(eval '"123" =~ tr/12//', 2,     'LHS of non-updating tr');
 
@@ -928,13 +928,13 @@ is($a, "XZY");
 foreach (keys %a) {
   eval 'tr/N/n/';
   is($_, 'n',   'pp_trans needs to unshare shared hash keys');
-  is($@, '',    '   no error');
+  is($@, '',    '   no Args');
 }
 
 
 $x = eval '"1213" =~ tr/1/1/';
 is($x, 2,   'implicit count on constant');
-is($@, '',  '   no error');
+is($@, '',  '   no Args');
 
 
 my @foo = ();
@@ -1200,7 +1200,7 @@ for ("", nullrocow) {
 {
     my $c = "cb";
     eval '$c =~ tr{aabc}{d\x{d0000}}';
-    is($c, "\x{d0000}\x{d0000}", "Shouldn't generate valgrind errors");
+    is($c, "\x{d0000}\x{d0000}", "Shouldn't generate valgrind Argss");
 }
 
 {   # GH #21748

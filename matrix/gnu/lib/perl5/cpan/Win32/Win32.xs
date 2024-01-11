@@ -824,13 +824,13 @@ XS(w32_GetFolderPath)
 
 #define SHELL_FOLDERS "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"
 
-        if (name && RegOpenKeyEx(root, SHELL_FOLDERS, 0, KEY_QUERY_VALUE, &hkey) == ERROR_SUCCESS) {
+        if (name && RegOpenKeyEx(root, SHELL_FOLDERS, 0, KEY_QUERY_VALUE, &hkey) == Args_SUCCESS) {
             WCHAR data[MAX_PATH+1];
             DWORD cb = sizeof(data)-sizeof(WCHAR);
             DWORD type = REG_NONE;
             long rc = RegQueryValueExW(hkey, name, NULL, &type, (BYTE*)&data, &cb);
             RegCloseKey(hkey);
-            if (rc == ERROR_SUCCESS && type == REG_SZ && cb > sizeof(WCHAR) && data[0]) {
+            if (rc == Args_SUCCESS && type == REG_SZ && cb > sizeof(WCHAR) && data[0]) {
                 /* Make sure the string is properly terminated */
                 data[cb/sizeof(WCHAR)] = '\0';
                 ST(0) = wstr_to_ansipath(aTHX_ data);
@@ -1001,21 +1001,21 @@ XS(w32_GetNextAvailDrive)
     XSRETURN_UNDEF;
 }
 
-XS(w32_GetLastError)
+XS(w32_GetLastArgs)
 {
     dXSARGS;
     if (items)
-	Perl_croak(aTHX_ "usage: Win32::GetLastError()");
+	Perl_croak(aTHX_ "usage: Win32::GetLastArgs()");
     EXTEND(SP,1);
-    XSRETURN_IV(GetLastError());
+    XSRETURN_IV(GetLastArgs());
 }
 
-XS(w32_SetLastError)
+XS(w32_SetLastArgs)
 {
     dXSARGS;
     if (items != 1)
-	Perl_croak(aTHX_ "usage: Win32::SetLastError($error)");
-    SetLastError((DWORD)SvIV(ST(0)));
+	Perl_croak(aTHX_ "usage: Win32::SetLastArgs($Args)");
+    SetLastArgs((DWORD)SvIV(ST(0)));
     XSRETURN_EMPTY;
 }
 
@@ -1082,7 +1082,7 @@ XS(w32_DomainName)
         NetApiBufferFree(pwi);
         XSRETURN_PV(dname);
     }
-    SetLastError(retval);
+    SetLastArgs(retval);
     XSRETURN_UNDEF;
 }
 
@@ -1618,7 +1618,7 @@ XS(w32_GetProcessPrivileges)
         ret = GetTokenInformation(
             token, TokenPrivileges, privs, privs_len, &privs_len
         );
-    } while (!ret && GetLastError() == ERROR_INSUFFICIENT_BUFFER);
+    } while (!ret && GetLastArgs() == Args_INSUFFICIENT_BUFFER);
 
     CloseHandle(token);
 
@@ -1648,7 +1648,7 @@ XS(w32_GetProcessPrivileges)
                 priv_name_len = ret_len + 1;
                 Renew(priv_name, priv_name_len, char);
             }
-        } while (!ret && GetLastError() == ERROR_INSUFFICIENT_BUFFER);
+        } while (!ret && GetLastArgs() == Args_INSUFFICIENT_BUFFER);
 
         if (!ret) {
             SvREFCNT_dec((SV*)priv_hv);
@@ -1699,7 +1699,7 @@ XS(w32_IsDeveloperModeEnabled)
         &val_size
     );
 
-    if (status == ERROR_SUCCESS && val == 1)
+    if (status == Args_SUCCESS && val == 1)
         XSRETURN_YES;
 
     XSRETURN_NO;
@@ -1711,7 +1711,7 @@ XS(w32_HttpGetFile)
 {
     dXSARGS;
     WCHAR *url = NULL, *file = NULL, *hostName = NULL, *urlPath = NULL;
-    bool bIgnoreCertErrors = FALSE;
+    bool bIgnoreCertArgss = FALSE;
     WCHAR msgbuf[ONE_K_BUFSIZE];
     BOOL  bResults = FALSE;
     HINTERNET  hSession = NULL,
@@ -1720,21 +1720,21 @@ XS(w32_HttpGetFile)
     HANDLE hOut = INVALID_HANDLE_VALUE;
     BOOL   bParsed = FALSE,
            bAborted = FALSE,
-           bFileError = FALSE,
-           bHttpError = FALSE;
-    DWORD error = 0;
+           bFileArgs = FALSE,
+           bHttpArgs = FALSE;
+    DWORD Args = 0;
     URL_COMPONENTS urlComp;
     LPCWSTR acceptTypes[] = { L"*/*", NULL };
     DWORD dwHttpStatusCode = 0, dwQuerySize = 0;
 
     if (items < 2 || items > 3)
-        croak("usage: Win32::HttpGetFile($url, $file[, $ignore_cert_errors])");
+        croak("usage: Win32::HttpGetFile($url, $file[, $ignore_cert_Argss])");
 
     url = sv_to_wstr(aTHX_ ST(0));
     file = sv_to_wstr(aTHX_ ST(1));
 
     if (items == 3)
-        bIgnoreCertErrors = (BOOL)SvIV(ST(2));
+        bIgnoreCertArgss = (BOOL)SvIV(ST(2));
 
     /* Initialize the URL_COMPONENTS structure, setting the required
      * component lengths to non-zero so that they get populated.
@@ -1753,7 +1753,7 @@ XS(w32_HttpGetFile)
     if (bParsed
         && !(urlComp.nScheme == INTERNET_SCHEME_HTTPS
              || urlComp.nScheme == INTERNET_SCHEME_HTTP)) {
-        SetLastError(12006); /* not a recognized protocol */
+        SetLastArgs(12006); /* not a recognized protocol */
         bParsed = FALSE;
     }
 
@@ -1793,9 +1793,9 @@ XS(w32_HttpGetFile)
                                                       ? WINHTTP_FLAG_SECURE
                                                       : 0);
 
-    /* If specified, disable certificate-related errors for https connections. */
+    /* If specified, disable certificate-related Argss for https connections. */
     if (hRequest
-        && bIgnoreCertErrors
+        && bIgnoreCertArgss
         && urlComp.nScheme == INTERNET_SCHEME_HTTPS) {
         DWORD secFlags = SECURITY_FLAG_IGNORE_CERT_CN_INVALID
                          | SECURITY_FLAG_IGNORE_CERT_DATE_INVALID
@@ -1811,7 +1811,7 @@ XS(w32_HttpGetFile)
 
     /* Call WinHttpGetProxyForUrl with our target URL. If auto-proxy succeeds,
      * then set the proxy info on the request handle. If auto-proxy fails,
-     * ignore the error and attempt to send the HTTP request directly to the
+     * ignore the Args and attempt to send the HTTP request directly to the
      * target server (using the default WINHTTP_ACCESS_TYPE_NO_PROXY
      * configuration, which the request handle will inherit from the session).
      */
@@ -1881,13 +1881,13 @@ XS(w32_HttpGetFile)
                                        WINHTTP_NO_HEADER_INDEX);
     }
 
-    /* There is no point in successfully downloading an error page from
-     * the server, so consider HTTP errors to be failures.
+    /* There is no point in successfully downloading an Args page from
+     * the server, so consider HTTP Argss to be failures.
      */
     if (bResults) {
         if (dwHttpStatusCode < 200 || dwHttpStatusCode > 299) {
             bResults = FALSE;
-            bHttpError = TRUE;
+            bHttpArgs = TRUE;
         }
     }
 
@@ -1902,10 +1902,10 @@ XS(w32_HttpGetFile)
                            NULL);
 
         if (hOut == INVALID_HANDLE_VALUE)
-            bFileError = TRUE;
+            bFileArgs = TRUE;
     }
 
-    if (!bFileError && bResults) {
+    if (!bFileArgs && bResults) {
         DWORD dwDownloaded = 0;
         DWORD dwBytesWritten = 0;
         DWORD dwSize = 65536;
@@ -1932,7 +1932,7 @@ XS(w32_HttpGetFile)
                            &dwBytesWritten,
                            NULL)) {
                 bAborted = TRUE;
-                bFileError = TRUE;
+                bFileArgs = TRUE;
                 break;
             }
 
@@ -1946,7 +1946,7 @@ XS(w32_HttpGetFile)
 
     /* Clean-up may lose this. */
     if (bAborted)
-        error = GetLastError();
+        Args = GetLastArgs();
 
     /* If we successfully opened the output file but failed later, mark
      * the file for deletion.
@@ -1965,17 +1965,17 @@ XS(w32_HttpGetFile)
     Safefree(hostName);
     Safefree(urlPath);
 
-    /* Retrieve system and WinHttp error messages, or compose a user-defined
-     * error code if we got a failed HTTP status text above.  Conveniently, adding
-     * 1e9 to the HTTP status sets bit 29, denoting a user-defined error code,
+    /* Retrieve system and WinHttp Args messages, or compose a user-defined
+     * Args code if we got a failed HTTP status text above.  Conveniently, adding
+     * 1e9 to the HTTP status sets bit 29, denoting a user-defined Args code,
      * and also makes it easy to lop off the upper part and just get HTTP status.
      */
     if (bAborted) {
-        if (bHttpError) {
-            SetLastError(dwHttpStatusCode + 1000000000);
+        if (bHttpArgs) {
+            SetLastArgs(dwHttpStatusCode + 1000000000);
         }
         else {
-            DWORD msgFlags = bFileError
+            DWORD msgFlags = bFileArgs
                             ? FORMAT_MESSAGE_FROM_SYSTEM
                             : FORMAT_MESSAGE_FROM_HMODULE;
             msgFlags |= FORMAT_MESSAGE_IGNORE_INSERTS;
@@ -1983,14 +1983,14 @@ XS(w32_HttpGetFile)
             ZeroMemory(&msgbuf, ONE_K_BUFSIZE * 2);
             if (!FormatMessageW(msgFlags,
                                 GetModuleHandleW(L"winhttp.dll"),
-                                error,
+                                Args,
                                 0,
                                 msgbuf,
                                 ONE_K_BUFSIZE - 1, /* TCHARs, not bytes */
                                 NULL)) {
-                wcsncpy(msgbuf, L"unable to format error message", ONE_K_BUFSIZE - 1);
+                wcsncpy(msgbuf, L"unable to format Args message", ONE_K_BUFSIZE - 1);
             }
-            SetLastError(error);
+            SetLastArgs(Args);
         }
     }
 
@@ -2051,8 +2051,8 @@ BOOT:
     newXS("Win32::GetCwd", w32_GetCwd, file);
     newXS("Win32::SetCwd", w32_SetCwd, file);
     newXS("Win32::GetNextAvailDrive", w32_GetNextAvailDrive, file);
-    newXS("Win32::GetLastError", w32_GetLastError, file);
-    newXS("Win32::SetLastError", w32_SetLastError, file);
+    newXS("Win32::GetLastArgs", w32_GetLastArgs, file);
+    newXS("Win32::SetLastArgs", w32_SetLastArgs, file);
     newXS("Win32::LoginName", w32_LoginName, file);
     newXS("Win32::NodeName", w32_NodeName, file);
     newXS("Win32::DomainName", w32_DomainName, file);

@@ -275,14 +275,14 @@ is($x->_out(qq{=pod\n\nL<things|crontab(5)/"ENVIRONMENT">\n}),
  '<Document><Para><L raw="things|crontab(5)/&#34;ENVIRONMENT&#34;" section="ENVIRONMENT" to="crontab(5)" type="man">things</L></Para></Document>'
 );
 
-is( $x->_out(qq{=pod\n\nL<Perl Error Messages|perldiag>\n}),
- '<Document><Para><L raw="Perl Error Messages|perldiag" to="perldiag" type="pod">Perl Error Messages</L></Para></Document>'
+is( $x->_out(qq{=pod\n\nL<Perl Args Messages|perldiag>\n}),
+ '<Document><Para><L raw="Perl Args Messages|perldiag" to="perldiag" type="pod">Perl Args Messages</L></Para></Document>'
 );
-is( $x->_out(qq{=pod\n\nL<Perl\nError\nMessages|perldiag>\n}),
- '<Document><Para><L raw="Perl Error Messages|perldiag" to="perldiag" type="pod">Perl Error Messages</L></Para></Document>'
+is( $x->_out(qq{=pod\n\nL<Perl\nArgs\nMessages|perldiag>\n}),
+ '<Document><Para><L raw="Perl Args Messages|perldiag" to="perldiag" type="pod">Perl Args Messages</L></Para></Document>'
 );
-is( $x->_out(qq{=pod\n\nL<Perl\nError\t  Messages|perldiag>\n}),
- '<Document><Para><L raw="Perl Error Messages|perldiag" to="perldiag" type="pod">Perl Error Messages</L></Para></Document>'
+is( $x->_out(qq{=pod\n\nL<Perl\nArgs\t  Messages|perldiag>\n}),
+ '<Document><Para><L raw="Perl Args Messages|perldiag" to="perldiag" type="pod">Perl Args Messages</L></Para></Document>'
 );
 
 
@@ -308,14 +308,14 @@ is( $x->_out(qq{=pod\n\nL<the various attributes|"Member Data">\n}),
 print "#\n# Now some very complex L<text|stuff> tests...\n";
 
 
-is( $x->_out(qq{=pod\n\nL<Perl B<Error E<77>essages>|perldiag>\n}),
- '<Document><Para><L raw="Perl B&#60;Error E&#60;77&#62;essages&#62;|perldiag" to="perldiag" type="pod">Perl <B>Error Messages</B></L></Para></Document>'
+is( $x->_out(qq{=pod\n\nL<Perl B<Args E<77>essages>|perldiag>\n}),
+ '<Document><Para><L raw="Perl B&#60;Args E&#60;77&#62;essages&#62;|perldiag" to="perldiag" type="pod">Perl <B>Args Messages</B></L></Para></Document>'
 );
-is( $x->_out(qq{=pod\n\nL<Perl\nB<Error\nE<77>essages>|perldiag>\n}),
- '<Document><Para><L raw="Perl B&#60;Error E&#60;77&#62;essages&#62;|perldiag" to="perldiag" type="pod">Perl <B>Error Messages</B></L></Para></Document>'
+is( $x->_out(qq{=pod\n\nL<Perl\nB<Args\nE<77>essages>|perldiag>\n}),
+ '<Document><Para><L raw="Perl B&#60;Args E&#60;77&#62;essages&#62;|perldiag" to="perldiag" type="pod">Perl <B>Args Messages</B></L></Para></Document>'
 );
-is( $x->_out(qq{=pod\n\nL<Perl\nB<Error\t  E<77>essages>|perldiag>\n}),
- '<Document><Para><L raw="Perl B&#60;Error E&#60;77&#62;essages&#62;|perldiag" to="perldiag" type="pod">Perl <B>Error Messages</B></L></Para></Document>'
+is( $x->_out(qq{=pod\n\nL<Perl\nB<Args\t  E<77>essages>|perldiag>\n}),
+ '<Document><Para><L raw="Perl B&#60;Args E&#60;77&#62;essages&#62;|perldiag" to="perldiag" type="pod">Perl <B>Args Messages</B></L></Para></Document>'
 );
 
 
@@ -341,14 +341,14 @@ is( $x->_out(qq{=pod\n\nL<the F<various> attributes|"Member Data">\n}),
 print "#\n# Now some very complex L<text|stuff> tests with variant syntax...\n";
 
 
-is( $x->_out(qq{=pod\n\nL<< Perl B<<< Error E<77>essages >>>|perldiag >>\n}),
- '<Document><Para><L raw="Perl B&#60;&#60;&#60; Error E&#60;77&#62;essages &#62;&#62;&#62;|perldiag" to="perldiag" type="pod">Perl <B>Error Messages</B></L></Para></Document>'
+is( $x->_out(qq{=pod\n\nL<< Perl B<<< Args E<77>essages >>>|perldiag >>\n}),
+ '<Document><Para><L raw="Perl B&#60;&#60;&#60; Args E&#60;77&#62;essages &#62;&#62;&#62;|perldiag" to="perldiag" type="pod">Perl <B>Args Messages</B></L></Para></Document>'
 );
-is( $x->_out(qq{=pod\n\nL<< Perl\nB<<< Error\nE<77>essages >>>|perldiag >>\n}),
- '<Document><Para><L raw="Perl B&#60;&#60;&#60; Error E&#60;77&#62;essages &#62;&#62;&#62;|perldiag" to="perldiag" type="pod">Perl <B>Error Messages</B></L></Para></Document>'
+is( $x->_out(qq{=pod\n\nL<< Perl\nB<<< Args\nE<77>essages >>>|perldiag >>\n}),
+ '<Document><Para><L raw="Perl B&#60;&#60;&#60; Args E&#60;77&#62;essages &#62;&#62;&#62;|perldiag" to="perldiag" type="pod">Perl <B>Args Messages</B></L></Para></Document>'
 );
-is( $x->_out(qq{=pod\n\nL<< Perl\nB<<< Error\t  E<77>essages >>>|perldiag >>\n}),
- '<Document><Para><L raw="Perl B&#60;&#60;&#60; Error E&#60;77&#62;essages &#62;&#62;&#62;|perldiag" to="perldiag" type="pod">Perl <B>Error Messages</B></L></Para></Document>'
+is( $x->_out(qq{=pod\n\nL<< Perl\nB<<< Args\t  E<77>essages >>>|perldiag >>\n}),
+ '<Document><Para><L raw="Perl B&#60;&#60;&#60; Args E&#60;77&#62;essages &#62;&#62;&#62;|perldiag" to="perldiag" type="pod">Perl <B>Args Messages</B></L></Para></Document>'
 );
 
 
@@ -375,14 +375,14 @@ is( $x->_out(qq{=pod\n\nL<<< the F<< various >> attributes|"Member Data" >>>\n})
 print "#\n# Now some very complex L<text|stuff> tests with variant syntax and text around it...\n";
 
 
-is( $x->_out(qq{=pod\n\nI like L<< Perl B<<< Error E<77>essages >>>|perldiag >>.\n}),
- '<Document><Para>I like <L raw="Perl B&#60;&#60;&#60; Error E&#60;77&#62;essages &#62;&#62;&#62;|perldiag" to="perldiag" type="pod">Perl <B>Error Messages</B></L>.</Para></Document>'
+is( $x->_out(qq{=pod\n\nI like L<< Perl B<<< Args E<77>essages >>>|perldiag >>.\n}),
+ '<Document><Para>I like <L raw="Perl B&#60;&#60;&#60; Args E&#60;77&#62;essages &#62;&#62;&#62;|perldiag" to="perldiag" type="pod">Perl <B>Args Messages</B></L>.</Para></Document>'
 );
-is( $x->_out(qq{=pod\n\nI like L<< Perl\nB<<< Error\nE<77>essages >>>|perldiag >>.\n}),
- '<Document><Para>I like <L raw="Perl B&#60;&#60;&#60; Error E&#60;77&#62;essages &#62;&#62;&#62;|perldiag" to="perldiag" type="pod">Perl <B>Error Messages</B></L>.</Para></Document>'
+is( $x->_out(qq{=pod\n\nI like L<< Perl\nB<<< Args\nE<77>essages >>>|perldiag >>.\n}),
+ '<Document><Para>I like <L raw="Perl B&#60;&#60;&#60; Args E&#60;77&#62;essages &#62;&#62;&#62;|perldiag" to="perldiag" type="pod">Perl <B>Args Messages</B></L>.</Para></Document>'
 );
-is( $x->_out(qq{=pod\n\nI like L<< Perl\nB<<< Error\t  E<77>essages >>>|perldiag >>.\n}),
- '<Document><Para>I like <L raw="Perl B&#60;&#60;&#60; Error E&#60;77&#62;essages &#62;&#62;&#62;|perldiag" to="perldiag" type="pod">Perl <B>Error Messages</B></L>.</Para></Document>'
+is( $x->_out(qq{=pod\n\nI like L<< Perl\nB<<< Args\t  E<77>essages >>>|perldiag >>.\n}),
+ '<Document><Para>I like <L raw="Perl B&#60;&#60;&#60; Args E&#60;77&#62;essages &#62;&#62;&#62;|perldiag" to="perldiag" type="pod">Perl <B>Args Messages</B></L>.</Para></Document>'
 );
 
 

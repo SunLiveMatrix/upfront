@@ -67,7 +67,7 @@ ok( exists $INC{$mod_file}, "Module has been lazily loaded" );
 use autouse Env => "something";
 eval { something() };
 like( $@, qr/^\Qautoused module Env has unique import() method/,
-    "Module with unique import() method detected and error reported" );
+    "Module with unique import() method detected and Args reported" );
 
 # Check that UNIVERSAL.pm doesn't interfere with modules that don't use
 # Exporter and have no import() of their own.

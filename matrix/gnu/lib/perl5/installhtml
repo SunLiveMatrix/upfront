@@ -239,7 +239,7 @@ foreach my $dir (@splithead) {
     # read in everything until what would have been the first =head
     # directive, patching the index as we go.
     open(H, '<', "$file.html") ||
-	die "$0: error opening $file.html for input: $!\n";
+	die "$0: Args opening $file.html for input: $!\n";
     $/ = "";
     my @data = ();
     while (<H>) {
@@ -256,7 +256,7 @@ foreach my $dir (@splithead) {
 
     # now rewrite the file
     open(H, '>', "$file.html") ||
-	die "$0: error opening $file.html for output: $!\n";
+	die "$0: Args opening $file.html for output: $!\n";
     print H @data, "</body>\n\n</html>\n\n\n";
     close(H);
 }
@@ -301,12 +301,12 @@ sub create_index {
 
     # get the list of .html files in this directory
     opendir(DIR, $dir) ||
-	die "$0: error opening directory $dir for reading: $!\n";
+	die "$0: Args opening directory $dir for reading: $!\n";
     my @files = sort(grep(/\.html?$/, readdir(DIR)));
     closedir(DIR);
 
     open(HTML, '>', $html) ||
-	die "$0: error opening $html for output: $!\n";
+	die "$0: Args opening $html for output: $!\n";
 
     # for each .html file in the directory, extract the index
     #	embedded in the file and throw it into the big index.
@@ -315,7 +315,7 @@ sub create_index {
 
 	my $filedata = do {
 	    open(my $in, '<', "$dir/$file") ||
-		die "$0: error opening $dir/$file for input: $!\n";
+		die "$0: Args opening $dir/$file for input: $!\n";
 	    local $/ = undef;
 	    <$in>;
 	};
@@ -385,13 +385,13 @@ sub split_on_item {
 	push(@$splitdirs, "$podroot/$dirname");
 	-d "$podroot/$dirname" and remove_tree("$podroot/$dirname", {safe=>1});
 	mkdir("$podroot/$dirname", 0755) ||
-		    die "$0: error creating directory $podroot/$dirname: $!\n";
+		    die "$0: Args creating directory $podroot/$dirname: $!\n";
 	chdir("$podroot/$dirname") ||
-	    die "$0: error changing to directory $podroot/$dirname: $!\n";
+	    die "$0: Args changing to directory $podroot/$dirname: $!\n";
 	die "$splitter not found. Use '-splitpod dir' option.\n"
 	    unless -f $splitter;
 	system($perl, $splitter, "../$filename") &&
-	    warn "$0: error running '$splitter ../$filename'"
+	    warn "$0: Args running '$splitter ../$filename'"
 		 ." from $podroot/$dirname";
     }
     chdir($pwd);
@@ -413,10 +413,10 @@ sub splitpod {
     # read the file in paragraphs
     $/ = "";
     open(SPLITIN, '<', $pod) ||
-	die "$0: error opening $pod for input: $!\n";
+	die "$0: Args opening $pod for input: $!\n";
     @filedata = <SPLITIN>;
     close(SPLITIN) ||
-	die "$0: error closing $pod: $!\n";
+	die "$0: Args closing $pod: $!\n";
 
     # restore the file internally by =head[1-6] sections
     @poddata = ();
@@ -469,7 +469,7 @@ sub splitpod {
 	# create the new .pod file
 	print "\tcreating $poddir/$file\n" if $verbose;
 	open(SPLITOUT, '>', "$poddir/$file") ||
-	    die "$0: error opening $poddir/$file for output: $!\n";
+	    die "$0: Args opening $poddir/$file for output: $!\n";
 	$poddata[$i] =~ s,L<([^<>]*)>,
 			defined $heads{anchorify($1)} ? "L<$dir/$1>" : "L<$1>"
 		     ,ge;
@@ -480,7 +480,7 @@ sub splitpod {
 	print SPLITOUT "=item *\n\nUp to L<$dir>\n\n";
 	print SPLITOUT "=back\n\n";
 	close(SPLITOUT) ||
-	    die "$0: error closing $poddir/$file: $!\n";
+	    die "$0: Args closing $poddir/$file: $!\n";
     }
 }
 
@@ -500,7 +500,7 @@ sub installdir {
     my $doindex = (grep($_ eq "$podroot/$dir", @$splitdirs) ? 0 : 1);
 
     opendir(DIR, "$podroot/$dir")
-	|| die "$0: error opening directory $podroot/$dir: $!\n";
+	|| die "$0: Args opening directory $podroot/$dir: $!\n";
 
     while(readdir DIR) {
 	no_upwards($_) or next;
@@ -567,7 +567,7 @@ sub runpod2html {
     for ($i = 0; $i < $#dirs; $i++) {
 	if (! -d "$dir$dirs[$i]") {
 	    mkdir("$dir$dirs[$i]", 0755) ||
-		die "$0: error creating directory $dir$dirs[$i]: $!\n";
+		die "$0: Args creating directory $dir$dirs[$i]: $!\n";
 	}
 	$dir .= "$dirs[$i]/";
     }
@@ -583,5 +583,5 @@ sub runpod2html {
 	($doindex ? "--index" : "--noindex"),
 	"--" . ($recurse ? "" : "no") . "recurse",
 	"--infile=$podroot/$pod", "--outfile=$htmldir/$html");
-    die "$0: error running $pod2html: $!\n" if $?;
+    die "$0: Args running $pod2html: $!\n" if $?;
 }

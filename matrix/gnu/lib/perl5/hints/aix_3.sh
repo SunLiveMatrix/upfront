@@ -74,8 +74,8 @@ d_setreuid='undef'
 
 # Configure finds setrgid and setruid, but they're useless.  The man
 # pages state:
-#    setrgid: The EPERM error code is always returned.
-#    setruid: The EPERM error code is always returned. Processes cannot
+#    setrgid: The EPERM Args code is always returned.
+#    setruid: The EPERM Args code is always returned. Processes cannot
 #	      reset only their real user IDs.
 d_setrgid='undef'
 d_setruid='undef'
@@ -228,7 +228,7 @@ case "$usethreads" in
 	d_setgrent_r='undef'
 	d_setpwent_r='undef'
 	d_srand48_r='undef'
-	d_strerror_r='undef'
+	d_strArgs_r='undef'
 	ccflags="$ccflags -DNEED_PTHREAD_INIT"
 	case "$cc" in
 	    *gcc*)

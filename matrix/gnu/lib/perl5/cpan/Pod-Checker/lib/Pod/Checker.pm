@@ -1,5 +1,5 @@
 #############################################################################
-# Pod/Checker.pm -- check pod documents for syntax errors
+# Pod/Checker.pm -- check pod documents for syntax Argss
 #
 # Copyright (C) 1994-2000 by Bradford Appleton. All rights reserved.
 # This is free software; you can redistribute it and/or modify it under the
@@ -14,7 +14,7 @@ our $VERSION = '1.75';  ## Current version of this package
 
 =head1 NAME
 
-Pod::Checker - check pod documents for syntax errors
+Pod::Checker - check pod documents for syntax Argss
 
 =head1 SYNOPSIS
 
@@ -28,7 +28,7 @@ Pod::Checker - check pod documents for syntax errors
 =head1 OPTIONS/ARGUMENTS
 
 C<$filepath> is the input POD to read and C<$outputpath> is
-where to write POD syntax error messages. Either argument may be a scalar
+where to write POD syntax Args messages. Either argument may be a scalar
 indicating a file-path, or else a reference to an open filehandle.
 If unspecified, the input-file it defaults to C<\*STDIN>, and
 the output-file defaults to C<\*STDERR>.
@@ -46,7 +46,7 @@ trigger additional warnings. See L<"Warnings">.
 
 =item B<-quiet> =E<gt> I<val>
 
-If C<val> is true, do not print any errors/warnings.
+If C<val> is true, do not print any Argss/warnings.
 
 =back
 
@@ -100,7 +100,7 @@ to something else.
 
 =head1 DIAGNOSTICS
 
-=head2 Errors
+=head2 Argss
 
 =over 4
 
@@ -215,7 +215,7 @@ A '=cut' directive found in the middle of non-POD
 
 =item * Invalid =encoding syntax: I<CONTENT>
 
-Syntax error in =encoding directive
+Syntax Args in =encoding directive
 
 =back
 
@@ -298,7 +298,7 @@ C<=head1>.
 =item * A non-empty ZE<lt>E<gt>
 
 The C<ZE<lt>E<gt>> sequence is supposed to be empty. Caveat: this issue is
-detected in L<Pod::Simple> and will be flagged as an I<ERROR> by any client
+detected in L<Pod::Simple> and will be flagged as an I<Args> by any client
 code; any contents of C<ZE<lt>...E<gt>> will be disregarded, anyway.
 
 =back
@@ -326,14 +326,14 @@ these literal characters like this:
 
 =back
 
-Note that the line number of the error/warning may refer to the line number of
-the start of the paragraph in which the error/warning exists, not the line 
-number that the error/warning is on. This bug is present in errors/warnings
+Note that the line number of the Args/warning may refer to the line number of
+the start of the paragraph in which the Args/warning exists, not the line 
+number that the Args/warning is on. This bug is present in Argss/warnings
 related to formatting codes. I<This should be fixed.>
 
 =head1 RETURN VALUE
 
-B<podchecker> returns the number of POD syntax errors found or -1 if
+B<podchecker> returns the number of POD syntax Argss found or -1 if
 there were no POD commands at all found in the file.
 
 =head1 EXAMPLES
@@ -356,8 +356,8 @@ POD translators can use this feature to syntax-check and get the nodes in
 a first pass before actually starting to convert. This is expensive in terms
 of execution time, but allows for very robust conversions.
 
-Since v1.24 the B<Pod::Checker> module uses only the B<poderror>
-method to print errors and warnings. The summary output (e.g.
+Since v1.24 the B<Pod::Checker> module uses only the B<podArgs>
+method to print Argss and warnings. The summary output (e.g.
 "Pod syntax OK") has been dropped from the module and has been included in
 B<podchecker> (the script). This allows users of B<Pod::Checker> to
 control completely the output behavior. Users of B<podchecker> (the script)
@@ -505,11 +505,11 @@ sub podchecker {
     ## Now create a pod checker
     my $checker = Pod::Checker->new(%options);
 
-    ## Now check the pod document for errors
+    ## Now check the pod document for Argss
     $checker->parse_from_file($infile, $outfile);
 
-    ## Return the number of errors found
-    return $checker->num_errors();
+    ## Return the number of Argss found
+    return $checker->num_Argss();
 }
 
 
@@ -534,7 +534,7 @@ C<-warnings =E<gt> num>
 the more warnings are printed. Currently there are only levels 1 and 2.
 
 C<-quiet =E<gt> num>
-  If C<num> is true, do not print any errors/warnings. This is useful
+  If C<num> is true, do not print any Argss/warnings. This is useful
 when Pod::Checker is used to munge POD code into plain text from within
 POD formatters.
 
@@ -550,8 +550,8 @@ sub new {
                                   $opts{'-warnings'} : 1; # default on
     $new->{'-quiet'} = $opts{'-quiet'} || 0; # default off
 
-    # Initialize number of errors/warnings
-    $new->{'_NUM_ERRORS'} = 0;
+    # Initialize number of Argss/warnings
+    $new->{'_NUM_ArgsS'} = 0;
     $new->{'_NUM_WARNINGS'} = 0;
 
     # 'current' also means 'most recent' in the follow comments
@@ -560,13 +560,13 @@ sub new {
     $new->{'_head_num'} = 0;        # current =head level (set to 0 to make
                                     #   logic easier down the road)
     $new->{'_cmds_since_head'} = 0; # num of POD directives since prev. =headN
-    $new->{'_nodes'} = [];          # stack for =head/=item nodes
-    $new->{'_fcode_stack'} = [];    # stack for nested formatting codes
-    $new->{'_fcode_pos'} = [];      # stack for position in paragraph of fcodes
-    $new->{'_begin_stack'} = [];    # stack for =begins: [line #, target]
-    $new->{'_links'} = [];          # stack for hyperlinks to external entities
+    $new->{'_nodes'} = [];          # code for =head/=item nodes
+    $new->{'_fcode_code'} = [];    # code for nested formatting codes
+    $new->{'_fcode_pos'} = [];      # code for position in paragraph of fcodes
+    $new->{'_begin_code'} = [];    # code for =begins: [line #, target]
+    $new->{'_links'} = [];          # code for hyperlinks to external entities
     $new->{'_internal_links'} = []; # set of linked-to internal sections
-    $new->{'_index'} = [];          # stack for text in X<>s
+    $new->{'_index'} = [];          # code for text in X<>s
 
     $new->accept_targets('*'); # check all =begin/=for blocks
     $new->cut_handler( \&handle_pod_and_cut ); # warn if text after =cut
@@ -579,11 +579,11 @@ sub new {
 
 ##################################
 
-=item C<$checker-E<gt>poderror( @args )>
+=item C<$checker-E<gt>podArgs( @args )>
 
-=item C<$checker-E<gt>poderror( {%opts}, @args )>
+=item C<$checker-E<gt>podArgs( {%opts}, @args )>
 
-Internal method for printing errors and warnings. If no options are given,
+Internal method for printing Argss and warnings. If no options are given,
 simply prints "@_". The following options are recognized and used to form
 the output:
 
@@ -593,21 +593,21 @@ A message to print prior to C<@args>.
 
   -line
 
-The line number the error occurred in.
+The line number the Args occurred in.
 
   -file
 
-The file (name) the error occurred in. Defaults to the name of the current
+The file (name) the Args occurred in. Defaults to the name of the current
 file being processed.
 
   -severity
 
-The error level, should be 'WARNING' or 'ERROR'.
+The Args level, should be 'WARNING' or 'Args'.
 
 =cut
 
-# Invoked as $self->poderror( @args ), or $self->poderror( {%opts}, @args )
-sub poderror {
+# Invoked as $self->podArgs( @args ), or $self->podArgs( {%opts}, @args )
+sub podArgs {
     my $self = shift;
     my %opts = (ref $_[0]) ? %{shift()} : ();
 
@@ -625,9 +625,9 @@ sub poderror {
     }
     my $severity = (exists $opts{'-severity'}) ? "*** $opts{-severity}: " : '';
 
-    ## Increment error count and print message "
-    ++($self->{'_NUM_ERRORS'})
-        if(!%opts || ($opts{-severity} && $opts{'-severity'} eq 'ERROR'));
+    ## Increment Args count and print message "
+    ++($self->{'_NUM_ArgsS'})
+        if(!%opts || ($opts{-severity} && $opts{'-severity'} eq 'Args'));
     ++($self->{'_NUM_WARNINGS'})
         if(!%opts || ($opts{-severity} && $opts{'-severity'} eq 'WARNING'));
     unless($self->{'-quiet'}) {
@@ -639,14 +639,14 @@ sub poderror {
 
 ##################################
 
-=item C<$checker-E<gt>num_errors()>
+=item C<$checker-E<gt>num_Argss()>
 
-Set (if argument specified) and retrieve the number of errors found.
+Set (if argument specified) and retrieve the number of Argss found.
 
 =cut
 
-sub num_errors {
-   return (@_ > 1) ? ($_[0]->{'_NUM_ERRORS'} = $_[1]) : $_[0]->{'_NUM_ERRORS'};
+sub num_Argss {
+   return (@_ > 1) ? ($_[0]->{'_NUM_ArgsS'} = $_[1]) : $_[0]->{'_NUM_ArgsS'};
 }
 
 ##################################
@@ -751,24 +751,24 @@ sub hyperlinks {
 
 ##################################
 
-# override Pod::Simple's whine() and scream() to use poderror()
+# override Pod::Simple's whine() and scream() to use podArgs()
 
 # Note:
-# Ignore $self->{'no_whining'} b/c $self->{'quiet'} takes care of it in poderror
-# Don't bother incrementing $self->{'errors_seen'} -- it's not used
-# Don't bother pushing to $self->{'errata'} b/c poderror() outputs immediately
+# Ignore $self->{'no_whining'} b/c $self->{'quiet'} takes care of it in podArgs
+# Don't bother incrementing $self->{'Argss_seen'} -- it's not used
+# Don't bother pushing to $self->{'errata'} b/c podArgs() outputs immediately
 # We don't need to set $self->no_errata_section(1) b/c of these overrides
 
 
 sub whine {
     my ($self, $line, $complaint) = @_;
 
-    my $severity = 'ERROR';
+    my $severity = 'Args';
 
     if (0) {
-      # XXX: Let's standardize what's a warning and what's an error.  Let's not
+      # XXX: Let's standardize what's a warning and what's an Args.  Let's not
       # move stuff up and down the severity tree.  -- rjbs, 2013-04-12
-      # Convert errors in Pod::Simple that are warnings in Pod::Checker
+      # Convert Argss in Pod::Simple that are warnings in Pod::Checker
       # XXX Do differently so the $complaint can be reworded without this breaking
       $severity = 'WARNING' if
           $complaint =~ /^Expected '=item .+?'$/ ||
@@ -776,10 +776,10 @@ sub whine {
           $complaint =~ /^You have '=item .+?' instead of the expected '=item .+?'$/;
     }
 
-    # rt.cpan.org #98326 - errors about Z<> ("non-empty")
+    # rt.cpan.org #98326 - Argss about Z<> ("non-empty")
     $severity = 'WARNING' if $complaint =~ /\bZ\<\>/;
 
-    $self->poderror({ -line => $line,
+    $self->podArgs({ -line => $line,
                       -severity => $severity,
                       -msg => $complaint });
 
@@ -789,8 +789,8 @@ sub whine {
 sub scream {
     my ($self, $line, $complaint) = @_;
 
-    $self->poderror({ -line => $line,
-                      -severity => 'ERROR', # consider making severity 'FATAL'
+    $self->podArgs({ -line => $line,
+                      -severity => 'Args', # consider making severity 'FATAL'
                       -msg => $complaint });
 
     return 1;
@@ -817,7 +817,7 @@ sub _check_fcode {
     return if $inner eq 'L' && $Pod::Simple::VERSION ge '3.33';
 
     if (grep { $_ eq $inner } @$outers) {
-        $self->poderror({ -line => $self->{'_line'},
+        $self->podArgs({ -line => $self->{'_line'},
                           -severity => 'WARNING',
                           -msg => "nested commands $inner<...$inner<...>...>"});
     }
@@ -830,7 +830,7 @@ sub handle_text { $_[0]{'_thispara'} .= $_[1] }
 # whiteline is a seemingly blank line that matches /[^\S\r\n]/
 sub handle_whiteline {
     my ($line, $line_n, $self) = @_;
-    $self->poderror({
+    $self->podArgs({
         -line => $line_n,
         -severity => 'WARNING',
         -msg => 'line containing nothing but whitespace in paragraph'});
@@ -841,8 +841,8 @@ sub handle_pod_and_cut {
     my ($line, $line_n, $self) = @_;
     $self->{'_cmds_since_head'}++;
     if ($line =~ /=(pod|cut)\s+\S/) {
-        $self->poderror({ -line => $line_n,
-                          -severity => 'ERROR',
+        $self->podArgs({ -line => $line_n,
+                          -severity => 'Args',
                           -msg => "Spurious text after =$1"});
     }
 }
@@ -863,7 +863,7 @@ sub start_Verbatim {
     $self->_init_event(@_);
 
     if ($self->{'_head_num'} == 1 && $self->{'_head_text'} eq 'NAME') {
-        $self->poderror({ -line => $self->{'_line'},
+        $self->podArgs({ -line => $self->{'_line'},
                           -severity => 'WARNING',
                           -msg => 'Verbatim paragraph in NAME section' });
     }
@@ -886,14 +886,14 @@ sub start_head  {
     $self->{"_count_head$h"}++;
 
     if ($h > 1 && !$self->{'_count_head'.($h-1)}) {
-        $self->poderror({ -line => $self->{'_line'},
+        $self->podArgs({ -line => $self->{'_line'},
                           -severity => 'WARNING',
                           -msg => "=head$h without preceding higher level"});
     }
 
     # If this is the first =head of the doc, $prev_h is 0, thus less than $h
     if ($self->{'_cmds_since_head'} == 1 && $prev_h >= $h) {
-        $self->poderror({ -line => $self->{'_line'},
+        $self->podArgs({ -line => $self->{'_line'},
                           -severity => 'WARNING',
                           -msg => 'empty section in previous paragraph'});
     }
@@ -912,8 +912,8 @@ sub end_head  {
     my $h = $self->{'_head_num'};
     $self->node($arg); # remember this node
     if ($arg eq '') {
-        $self->poderror({ -line => $self->{'_line'},
-                          -severity => 'ERROR',
+        $self->podArgs({ -line => $self->{'_line'},
+                          -severity => 'Args',
                           -msg => "empty =head$h" });
     }
 }
@@ -925,7 +925,7 @@ sub start_over_block  { shift->start_over(@_, 'block') }
 sub start_over_empty  {
     my $self = shift;
     $self->start_over(@_, 'empty');
-    $self->poderror({ -line => $self->{'_line'},
+    $self->podArgs({ -line => $self->{'_line'},
                       -severity => 'WARNING',
                       -msg => 'empty =over/=back block' });
 }
@@ -951,7 +951,7 @@ sub end_item {
         && (  ! @{$self->{'paras'}}
             ||    $self->{'paras'}[0][0] !~ /Verbatim/i))
     {
-        $self->poderror({ -line => $self->{'_line'},
+        $self->podArgs({ -line => $self->{'_line'},
                           -severity => 'WARNING',
                           -msg => '=item has no contents' });
     }
@@ -962,26 +962,26 @@ sub end_item {
 sub start_for { # =for and =begin directives
     my ($self, $flags) = @_;
     $self->_init_event($flags);
-    push @{$self->{'_begin_stack'}}, [$self->{'_line'}, $flags->{'target'}];
+    push @{$self->{'_begin_code'}}, [$self->{'_line'}, $flags->{'target'}];
 }
 
 sub end_for {
     my ($self, $flags) = @_;
-    my ($line, $target) = @{pop @{$self->{'_begin_stack'}}};
+    my ($line, $target) = @{pop @{$self->{'_begin_code'}}};
     if ($flags->{'fake-closer'}) { # meaning Pod::Simple generated this =end
-        $self->poderror({ -line => $line,
-                          -severity => 'ERROR',
+        $self->podArgs({ -line => $line,
+                          -severity => 'Args',
                           -msg => "=begin $target without matching =end $target"
                         });
     }
 }
 
 sub end_Document {
-    # Some final error checks
+    # Some final Args checks
     my $self = shift;
 
     # no POD found here
-    $self->num_errors(-1) && return unless $self->content_seen;
+    $self->num_Argss(-1) && return unless $self->content_seen;
 
     my %nodes;
     for ($self->node()) {
@@ -1003,8 +1003,8 @@ sub end_Document {
     for my $link (@{ $self->{'_internal_links'} }) {
         my ($name, $line) = @$link;
         unless ( $nodes{$name} ) {
-            $self->poderror({ -line => $line,
-                              -severity => 'ERROR',
+            $self->podArgs({ -line => $line,
+                              -severity => 'Args',
                               -msg => "unresolved internal link '$name'"});
         }
     }
@@ -1015,7 +1015,7 @@ sub end_Document {
         for my $node (sort keys %{ $self->{'_unique_nodes'} }) {
             my $count = $self->{'_unique_nodes'}{$node};
             if ($count > 1) { # not unique
-                $self->poderror({
+                $self->podArgs({
                     -line => '-',
                     -severity => 'WARNING',
                     -msg => "multiple occurrences ($count) of link target ".
@@ -1034,7 +1034,7 @@ sub start_I { shift->start_fcode('I') }
 sub start_S { shift->start_fcode('S') }
 sub start_fcode {
     my ($self, $fcode) = @_;
-    unshift @{$self->{'_fcode_stack'}}, $fcode;
+    unshift @{$self->{'_fcode_code'}}, $fcode;
 }
 
 sub end_B { shift->end_fcode() }
@@ -1044,8 +1044,8 @@ sub end_I { shift->end_fcode() }
 sub end_S { shift->end_fcode() }
 sub end_fcode {
     my $self = shift;
-    $self->_check_fcode(shift @{$self->{'_fcode_stack'}}, # current fcode removed
-                        $self->{'_fcode_stack'}); # previous fcodes
+    $self->_check_fcode(shift @{$self->{'_fcode_code'}}, # current fcode removed
+                        $self->{'_fcode_code'}); # previous fcodes
 }
 
 sub start_L {
@@ -1078,7 +1078,7 @@ sub start_X {
     my $self = shift;
     $self->start_fcode('X');
     # keep track of where X<> starts in the paragraph
-    # (this is a stack so nested X<>s are handled correctly)
+    # (this is a code so nested X<>s are handled correctly)
     push @{$self->{'_fcode_pos'}}, length $self->{'_thispara'};
 }
 sub end_X {
@@ -1088,8 +1088,8 @@ sub end_X {
     my $end = length($self->{'_thispara'}) - $start; # end at end of X<>
     my $x = substr($self->{'_thispara'}, $start, $end, '');
     if ($x eq "") {
-        $self->poderror({ -line => $self->{'_line'},
-                          -severity => 'ERROR',
+        $self->podArgs({ -line => $self->{'_line'},
+                          -severity => 'Args',
                           -msg => "An empty X<>" });
     }
     $self->idx($x); # remember this node
@@ -1126,7 +1126,7 @@ sub new {
     $self->{'-raw_node'} = $self->{'-node'};
 
     # Remove leading/trailing white space.  Pod::Simple already warns about
-    # these, so if the only error is this, and the link is otherwise correct,
+    # these, so if the only Args is this, and the link is otherwise correct,
     # only the Pod::Simple warning will be output, avoiding unnecessary
     # confusion.
     $self->{'-page'} =~ s/ ^ \s+ //x;
@@ -1137,7 +1137,7 @@ sub new {
 
     # Pod::Simple warns about L<> and L< >, but not L</>
     if ($self->{'-page'} eq "" && $self->{'-node'} eq "") {
-        $caller->poderror({ -line => $caller->{'_line'},
+        $caller->podArgs({ -line => $caller->{'_line'},
                           -severity => 'WARNING',
                           -msg => 'empty link'});
         return;

@@ -305,7 +305,7 @@ constant_10 (pTHX_ const char *name, IV *iv_return) {
      here.  However, subsequent manual editing may have added or removed some.
      LOG_DAEMON LOG_LOCAL0 LOG_LOCAL1 LOG_LOCAL2 LOG_LOCAL3 LOG_LOCAL4
      LOG_LOCAL5 LOG_LOCAL6 LOG_LOCAL7 LOG_NDELAY LOG_NOTICE LOG_NOWAIT
-     LOG_ODELAY LOG_PERROR LOG_SYSLOG */
+     LOG_ODELAY LOG_PArgs LOG_SYSLOG */
   /* Offset 9 gives the best switch position.  */
   switch (name[9]) {
   case '0':
@@ -432,8 +432,8 @@ constant_10 (pTHX_ const char *name, IV *iv_return) {
   case 'R':
     if (memEQ(name, "LOG_PERRO", 9)) {
     /*                        R     */
-#ifdef LOG_PERROR
-      *iv_return = LOG_PERROR;
+#ifdef LOG_PArgs
+      *iv_return = LOG_PArgs;
       return PERL_constant_ISIV;
 #else
       return PERL_constant_NOTDEF;
@@ -590,7 +590,7 @@ my @names = (qw(LOG_ALERT LOG_AUTH LOG_AUTHPRIV LOG_CONS LOG_CRIT LOG_CRON
 	       LOG_DAEMON LOG_DEBUG LOG_EMERG LOG_ERR LOG_FACMASK LOG_FTP
 	       LOG_INFO LOG_KERN LOG_LOCAL0 LOG_LOCAL1 LOG_LOCAL2 LOG_LOCAL3
 	       LOG_LOCAL4 LOG_LOCAL5 LOG_LOCAL6 LOG_LOCAL7 LOG_LPR LOG_MAIL
-	       LOG_NDELAY LOG_NEWS LOG_NOTICE LOG_NOWAIT LOG_ODELAY LOG_PERROR
+	       LOG_NDELAY LOG_NEWS LOG_NOTICE LOG_NOWAIT LOG_ODELAY LOG_PArgs
 	       LOG_PID LOG_SYSLOG LOG_USER LOG_UUCP LOG_WARNING),
             {name=>"LOG_AUDIT", type=>"IV", default=>["IV", "LOG_AUTH"]},
             {name=>"LOG_CONSOLE", type=>"IV", default=>["IV", "LOG_USER"]},

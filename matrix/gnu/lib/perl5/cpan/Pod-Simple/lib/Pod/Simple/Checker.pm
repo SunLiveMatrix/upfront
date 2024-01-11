@@ -142,7 +142,7 @@ Pod::Simple::Checker -- check the Pod syntax of a document
 
 This class is for checking the syntactic validity of Pod.
 It works by basically acting like a simple-minded version of
-L<Pod::Simple::Text> that formats only the "Pod Errors" section
+L<Pod::Simple::Text> that formats only the "Pod Argss" section
 (if Pod::Simple even generates one for the given document).
 
 This is a subclass of L<Pod::Simple> and inherits all its methods.

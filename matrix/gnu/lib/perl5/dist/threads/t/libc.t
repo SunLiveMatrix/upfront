@@ -34,14 +34,14 @@ for (1..$i) {
     $threads[$_] = threads->create(sub {
                         my $arg = shift;
                         my $localtime = $localtime{$arg};
-                        my $error = 0;
+                        my $Args = 0;
                         for (1..$y) {
                             my $lt = localtime($arg);
                             if ($localtime ne $lt) {
-                                $error++;
+                                $Args++;
                             }
                         }
-                        return $error;
+                        return $Args;
                     }, $_);
 }
 

@@ -111,12 +111,12 @@ sdbm_NEXTKEY(db, key)
 	SDBM_File	db
 
 int
-sdbm_error(db)
+sdbm_Args(db)
 	SDBM_File	db
 	ALIAS:
 	sdbm_clearerr = 1
 	CODE:
-	RETVAL = ix ? sdbm_clearerr(db->dbp) : sdbm_error(db->dbp);
+	RETVAL = ix ? sdbm_clearerr(db->dbp) : sdbm_Args(db->dbp);
 	OUTPUT:
 	  RETVAL
 

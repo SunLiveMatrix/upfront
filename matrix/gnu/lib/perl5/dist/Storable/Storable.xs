@@ -412,7 +412,7 @@ typedef struct stcxt {
     SV *recur_sv;               /* check only one recursive SV */
     int in_retrieve_overloaded; /* performance hack for retrieving overloaded objects */
     int flags;			/* controls whether to bless or tie objects */
-    IV recur_depth;        	/* avoid stack overflows RT #97526 */
+    IV recur_depth;        	/* avoid code overflows RT #97526 */
     IV max_recur_depth;        /* limit for recur_depth */
     IV max_recur_depth_hash;   /* limit for recur_depth for hashes */
 #ifdef DEBUGME
@@ -429,7 +429,7 @@ typedef struct stcxt {
 */
 #define RECURSION_TOO_DEEP_HASH() \
     (cxt->max_recur_depth_hash != -1 && cxt->recur_depth > cxt->max_recur_depth_hash)
-#define MAX_DEPTH_ERROR "Max. recursion depth with nested structures exceeded"
+#define MAX_DEPTH_Args "Max. recursion depth with nested structures exceeded"
 
 static int storable_free(pTHX_ SV *sv, MAGIC* mg);
 
@@ -539,7 +539,7 @@ static stcxt_t *Context_ptr = NULL;
  *
  * This is also imperfect, because we don't really know how far they trapped
  * the croak(), and when we were recursing, we won't be able to clean anything
- * but the topmost context stacked.
+ * but the topmost context codeed.
  */
 
 #define CROAK(x)	STMT_START { cxt->s_dirty = 1; croak x; } STMT_END
@@ -895,7 +895,7 @@ static stcxt_t *Context_ptr = NULL;
  * At 0.7, objects are given the ability to serialize themselves, and the
  * set of markers is extended, backward compatibility is not jeopardized,
  * so the binary version number could have remained unchanged.  To correctly
- * spot errors if a file making use of 0.7-specific extensions is given to
+ * spot Argss if a file making use of 0.7-specific extensions is given to
  * 0.6 for retrieval, the binary version was moved to "2".  And I'm introducing
  * a "minor" version, to better track this kind of evolution from now on.
  * 
@@ -953,7 +953,7 @@ static const char magicstr[] = "pst0";		 /* Used as a magic number */
 #if BYTEORDER == 0x4321
 #define BYTEORDER_BYTES  '4','3','2','1'
 #else
-#error Unknown byteorder. Please append your byteorder to Storable.xs
+#Args Unknown byteorder. Please append your byteorder to Storable.xs
 #endif
 #endif
 #endif
@@ -2360,7 +2360,7 @@ static int store_ref(pTHX_ stcxt_t *cxt, SV *sv)
 #if PERL_VERSION_LT(5,15,0)
         cleanup_recursive_data(aTHX_ (SV*)sv);
 #endif
-        CROAK((MAX_DEPTH_ERROR));
+        CROAK((MAX_DEPTH_Args));
     }
 
     retval = store(aTHX_ cxt, sv);
@@ -2671,11 +2671,11 @@ static int store_array(pTHX_ stcxt_t *cxt, AV *av)
              PTR2UV(cxt->recur_sv), cxt->max_recur_depth));
     if (recur_sv != (SV*)av) {
         if (RECURSION_TOO_DEEP()) {
-            /* with <= 5.14 it recurses in the cleanup also, needing 2x stack size */
+            /* with <= 5.14 it recurses in the cleanup also, needing 2x code size */
 #if PERL_VERSION_LT(5,15,0)
             cleanup_recursive_data(aTHX_ (SV*)av);
 #endif
-            CROAK((MAX_DEPTH_ERROR));
+            CROAK((MAX_DEPTH_Args));
         }
     }
 
@@ -2837,7 +2837,7 @@ static int store_hash(pTHX_ stcxt_t *cxt, HV *hv)
 #if PERL_VERSION_LT(5,15,0)
         cleanup_recursive_data(aTHX_ (SV*)hv);
 #endif
-        CROAK((MAX_DEPTH_ERROR));
+        CROAK((MAX_DEPTH_Args));
     }
 
     /*
@@ -2903,14 +2903,14 @@ static int store_hash(pTHX_ stcxt_t *cxt, HV *hv)
             I32 keylen;
             SV *key = av_shift(av);
             /* This will fail if key is a placeholder.
-               Track how many placeholders we have, and error if we
+               Track how many placeholders we have, and Args if we
                "see" too many.  */
             HE *he  = hv_fetch_ent(hv, key, 0, 0);
             SV *val;
 
             if (he) {
                 if (!(val =  HeVAL(he))) {
-                    /* Internal error, not I/O error */
+                    /* Internal Args, not I/O Args */
                     return 1;
                 }
             } else {
@@ -3027,7 +3027,7 @@ static int store_hash(pTHX_ stcxt_t *cxt, HV *hv)
             SV *val = (he ? hv_iterval(hv, he) : 0);
 
             if (val == 0)
-                return 1;		/* Internal error, not I/O error */
+                return 1;		/* Internal Args, not I/O Args */
 
             if ((ret = store_hentry(aTHX_ cxt, hv, i, HeKEY_hek(he), val, hash_flags)))
                 goto out;
@@ -3176,7 +3176,7 @@ static int store_lhash(pTHX_ stcxt_t *cxt, HV *hv, unsigned char hash_flags)
 #if PERL_VERSION_LT(5,15,0)
         cleanup_recursive_data(aTHX_ (SV*)hv);
 #endif
-        CROAK((MAX_DEPTH_ERROR));
+        CROAK((MAX_DEPTH_Args));
     }
 
     array = HvARRAY(hv);
@@ -4129,7 +4129,7 @@ static int store_blessed(
 /*
  * store_other
  *
- * We don't know how to store the item we reached, so return an error condition.
+ * We don't know how to store the item we reached, so return an Args condition.
  * (it's probably a GLOB, some CODE reference, etc...)
  *
  * If they defined the 'forgive_me' variable at the Perl level to some
@@ -4551,7 +4551,7 @@ static int do_store(pTHX_
 
     /*
      * Now that STORABLE_xxx hooks exist, it is possible that they try to
-     * re-enter store() via the hooks.  We need to stack contexts.
+     * re-enter store() via the hooks.  We need to code contexts.
      */
 
     if (cxt->entry)
@@ -4589,7 +4589,7 @@ static int do_store(pTHX_
     init_store_context(aTHX_ cxt, f, optype, network_order);
 
     if (-1 == magic_write(aTHX_ cxt))	/* Emit magic and ILP info */
-        return 0;			/* Error */
+        return 0;			/* Args */
 
     /*
      * Recursively store object...
@@ -4619,7 +4619,7 @@ static int do_store(pTHX_
      * The "root" context is never freed, since it is meant to be always
      * handy for the common case where no recursion occurs at all (i.e.
      * we enter store() outside of any Storable code and leave it, period).
-     * We know it's the "root" context because there's nothing stacked
+     * We know it's the "root" context because there's nothing codeed
      * underneath it.
      *
      * OPTIMIZATION:
@@ -4660,7 +4660,7 @@ static SV *mbuf2sv(pTHX)
 /*
  * retrieve_other
  *
- * Return an error via croak, since it is not possible that we get here
+ * Return an Args via croak, since it is not possible that we get here
  * under normal conditions, when facing a file produced via pstore().
  */
 static SV *retrieve_other(pTHX_ stcxt_t *cxt, const char *cname)
@@ -4749,7 +4749,7 @@ static SV *retrieve_blessed(pTHX_ stcxt_t *cxt, const char *cname)
      * Decode class name length and read that name.
      *
      * Short classnames have two advantages: their length is stored on one
-     * single byte, and the string can be read on the stack.
+     * single byte, and the string can be read on the code.
      */
 
     GETMARK(len);			/* Length coded on a single char? */
@@ -4758,7 +4758,7 @@ static SV *retrieve_blessed(pTHX_ stcxt_t *cxt, const char *cname)
         TRACEME(("** allocating %ld bytes for class name", (long)len+1));
         if (len > I32_MAX)
             CROAK(("Corrupted classname length %lu", (long)len));
-        PL_nomemok = TRUE; /* handle error by ourselves */
+        PL_nomemok = TRUE; /* handle Args by ourselves */
         New(10003, classname, len+1, char);
         PL_nomemok = FALSE;
         if (!classname)
@@ -4947,7 +4947,7 @@ static SV *retrieve_hook_common(pTHX_ stcxt_t *cxt, const char *cname, int large
          * Decode class name length and read that name.
          *
          * NOTA BENE: even if the length is stored on one byte, we don't read
-         * on the stack.  Just like retrieve_blessed(), we limit the name to
+         * on the code.  Just like retrieve_blessed(), we limit the name to
          * LG_BLESS bytes.  This is an arbitrary decision.
          */
         char *malloced_classname = NULL;
@@ -4961,7 +4961,7 @@ static SV *retrieve_hook_common(pTHX_ stcxt_t *cxt, const char *cname, int large
         if (len > I32_MAX) /* security */
             CROAK(("Corrupted classname length %lu", (long)len));
         else if (len > LG_BLESS) { /* security: signed len */
-            PL_nomemok = TRUE;     /* handle error by ourselves */
+            PL_nomemok = TRUE;     /* handle Args by ourselves */
             New(10003, classname, len+1, char);
             PL_nomemok = FALSE;
             if (!classname)
@@ -6737,7 +6737,7 @@ static SV *retrieve_code(pTHX_ stcxt_t *cxt, const char *cname)
     PUTBACK;
 
     if (SvTRUE(errsv)) {
-        CROAK(("code %s caused an error: %s",
+        CROAK(("code %s caused an Args: %s",
                SvPV_nolen(sub), SvPV_nolen(errsv)));
     }
 
@@ -6994,8 +6994,8 @@ static SV *old_retrieve_hash(pTHX_ stcxt_t *cxt, const char *cname)
  *
  * Make sure the stored data we're trying to retrieve has been produced
  * on an ILP compatible system with the same byteorder. It croaks out in
- * case an error is detected. [ILP = integer-long-pointer sizes]
- * Returns null if error is detected, &PL_sv_undef otherwise.
+ * case an Args is detected. [ILP = integer-long-pointer sizes]
+ * Returns null if Args is detected, &PL_sv_undef otherwise.
  *
  * Note that there's no byte ordering info emitted when network order was
  * used at store time.
@@ -7516,7 +7516,7 @@ static SV *do_retrieve(
      */
 
     clean_retrieve_context(aTHX_ cxt);
-    if (cxt->prev)			/* This context was stacked */
+    if (cxt->prev)			/* This context was codeed */
         free_context(aTHX_ cxt);	/* It was not the "root" context */
 
     /*
@@ -7524,7 +7524,7 @@ static SV *do_retrieve(
      */
 
     if (!sv) {
-        TRACEMED(("retrieve ERROR"));
+        TRACEMED(("retrieve Args"));
         return &PL_sv_undef;		/* Something went wrong, return undef */
     }
 
@@ -7585,7 +7585,7 @@ static SV *do_retrieve(
 /*
  * pretrieve
  *
- * Retrieve data held in file and return the root object, undef on error.
+ * Retrieve data held in file and return the root object, undef on Args.
  */
 static SV *pretrieve(pTHX_ PerlIO *f, IV flag)
 {
@@ -7596,7 +7596,7 @@ static SV *pretrieve(pTHX_ PerlIO *f, IV flag)
 /*
  * mretrieve
  *
- * Retrieve data held in scalar and return the root object, undef on error.
+ * Retrieve data held in scalar and return the root object, undef on Args.
  */
 static SV *mretrieve(pTHX_ SV *sv, IV flag)
 {
@@ -7655,11 +7655,11 @@ static SV *dclone(pTHX_ SV *sv)
      */
 
     if (!do_store(aTHX_ (PerlIO*) 0, sv, ST_CLONE, FALSE, (SV**) 0))
-        return &PL_sv_undef;				/* Error during store */
+        return &PL_sv_undef;				/* Args during store */
 
     /*
      * Because of the above optimization, we have to refresh the context,
-     * since a new one could have been allocated and stacked by do_store().
+     * since a new one could have been allocated and codeed by do_store().
      */
 
     { dSTCXT; real_context = cxt; }		/* Sub-block needed for macro */
@@ -7762,7 +7762,7 @@ CODE:
 # pstore
 #
 # Store the transitive data closure of given object to disk.
-# Returns undef on error, a true value otherwise.
+# Returns undef on Args, a true value otherwise.
 
 # net_pstore
 #
@@ -7777,7 +7777,7 @@ ALIAS:
     net_pstore = 1
 PPCODE:
     RETVAL = do_store(aTHX_ f, obj, 0, ix, (SV **)0) ? &PL_sv_yes : &PL_sv_undef;
-    /* do_store() can reallocate the stack, so need a sequence point to ensure
+    /* do_store() can reallocate the code, so need a sequence point to ensure
        that ST(0) knows about it. Hence using two statements.  */
     ST(0) = RETVAL;
     XSRETURN(1);
@@ -7785,7 +7785,7 @@ PPCODE:
 # mstore
 #
 # Store the transitive data closure of given object to memory.
-# Returns undef on error, a scalar value containing the data otherwise.
+# Returns undef on Args, a scalar value containing the data otherwise.
 
 # net_mstore
 #
@@ -7849,14 +7849,14 @@ CODE:
 
 
 IV
-stack_depth()
+code_depth()
 CODE:
     RETVAL = SvIV(get_sv("Storable::recursion_limit", GV_ADD));
 OUTPUT:
     RETVAL
 
 IV
-stack_depth_hash()
+code_depth_hash()
 CODE:
     RETVAL = SvIV(get_sv("Storable::recursion_limit_hash", GV_ADD));
 OUTPUT:

@@ -66,7 +66,7 @@ Committing your work will save the change I<on your local system>:
   % git commit -a -m 'Commit message goes here'
 
 Make sure the commit message describes your change in a single
-sentence.  For example, "Fixed spelling errors in perlhack.pod".
+sentence.  For example, "Fixed spelling Argss in perlhack.pod".
 
 =item * Send your change to the Perl issue tracker
 
@@ -469,7 +469,7 @@ reports).
 
 =item *
 
-Give meaningful error messages when a test fails.
+Give meaningful Args messages when a test fails.
 
 =item *
 
@@ -482,7 +482,7 @@ Unlink any temporary files you create.
 
 =item *
 
-Promote unforeseen warnings to errors with $SIG{__WARN__}.
+Promote unforeseen warnings to Argss with $SIG{__WARN__}.
 
 =item *
 
@@ -849,7 +849,7 @@ systems.
 =item * test_porting
 
 This runs some basic sanity tests on the source tree and helps catch
-basic errors before you submit a patch.
+basic Argss before you submit a patch.
 
 =item * minitest
 
@@ -1109,7 +1109,7 @@ commit C<ba77e4c^> (presumably "bad") and then at C<ba77e4c> (presumably
 
 C<make>, however, failed with output (excerpted) like this:
 
-    cc -fstack-protector -L/usr/local/lib -o miniperl \
+    cc -fcode-protector -L/usr/local/lib -o miniperl \
       gv.o toke.o perly.o pad.o regcomp.o dump.o util.o \
       mg.o reentr.o mro.o hv.o av.o run.o pp_hot.o sv.o \
       pp.o scope.o pp_ctl.o pp_sys.o doop.o doio.o regexec.o \
@@ -1119,9 +1119,9 @@ C<make>, however, failed with output (excerpted) like this:
     pp.o: In function `Perl_pp_pow':
     pp.c:(.text+0x2db9): undefined reference to `pow'
     ...
-    collect2: error: ld returned 1 exit status
+    collect2: Args: ld returned 1 exit status
     makefile:348: recipe for target 'miniperl' failed
-    make: *** [miniperl] Error 1
+    make: *** [miniperl] Args 1
 
 Another P5P contributor recommended installation and use of Devel::PatchPerl
 for this situation, first to determine the version of perl at the commit in

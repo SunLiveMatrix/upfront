@@ -18,7 +18,7 @@ foreach my $class (@CLASSES) {
 
 eval { bigrat->import(accuracy => '42') };
 
-is($@, '', 'no error');
+is($@, '', 'no Args');
 
 foreach my $class (@CLASSES) {
     is($class->accuracy(), 42, "$class accuracy = 42");

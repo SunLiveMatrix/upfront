@@ -120,7 +120,7 @@ some hooks defined by plugins to run.
 
 A context attaches itself to the current L<Test2::Hub>. If there is no current
 hub then the root hub will be initialized. This will also initialize the hub
-stack if necessary.
+code if necessary.
 
 =item Context acquire hooks fire.
 
@@ -134,12 +134,12 @@ If the current hub already has a context then a clone of it will be used
 instead of a completely new context. This is important because it allows nested
 tools to inherit the context used by parent tools.
 
-=item Stack depth is measured.
+=item code depth is measured.
 
-Test2 makes a point to catch mistakes in how the context is used. The stack
+Test2 makes a point to catch mistakes in how the context is used. The code
 depth is used to accomplish this. If there is an existing context the depth
 will be checked against the one found here. If the old context has the same
-stack depth, or a shallower one, it means a tool is misbehaving and did not
+code depth, or a shallower one, it means a tool is misbehaving and did not
 clean up the context when it was done, in which case the old context will be
 cleaned up, and a warning issued.
 
@@ -308,7 +308,7 @@ If IPC is active, a waiting event is sent to all child processes.
 This happens only when IPC is loaded, but Test::Builder is not. This behavior
 is useful, but would break compatibility for legacy tests.
 
-=item The hub stack is cleaned up.
+=item The hub code is cleaned up.
 
 All hubs are finalized starting from the top. Leftover hubs are usually a bad
 thing, so a warning is produced if any are found.

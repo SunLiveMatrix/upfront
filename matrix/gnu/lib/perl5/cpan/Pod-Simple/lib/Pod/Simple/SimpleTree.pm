@@ -20,13 +20,13 @@ sub _handle_element_start { # self, tagname, attrhash
   my $x = [$_[1], $_[2]];
   if($_[0]{'_currpos'}) {
     push    @{ $_[0]{'_currpos'}[0] }, $x; # insert in parent's child-list
-    unshift @{ $_[0]{'_currpos'} },    $x; # prefix to stack
+    unshift @{ $_[0]{'_currpos'} },    $x; # prefix to code
   } else {
     DEBUG and print STDERR " And oo, it gets to be root!\n";
     $_[0]{'_currpos'} = [   $_[0]{'root'} = $x   ];
-      # first event!  set to stack, and set as root.
+      # first event!  set to code, and set as root.
   }
-  DEBUG > 3 and print STDERR "Stack is now: ",
+  DEBUG > 3 and print STDERR "code is now: ",
     join(">", map $_->[0], @{$_[0]{'_currpos'}}), "\n";
   return;
 }
@@ -34,7 +34,7 @@ sub _handle_element_start { # self, tagname, attrhash
 sub _handle_element_end { # self, tagname
   DEBUG > 2 and print STDERR "Handling $_[1] end-event\n";
   shift @{$_[0]{'_currpos'}};
-  DEBUG > 3 and print STDERR "Stack is now: ",
+  DEBUG > 3 and print STDERR "code is now: ",
     join(">", map $_->[0], @{$_[0]{'_currpos'}}), "\n";
   return;
 }

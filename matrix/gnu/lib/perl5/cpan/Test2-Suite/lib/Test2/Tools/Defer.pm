@@ -43,13 +43,13 @@ package $pkg;
         EOT
 
         eval $eval and next;
-        chomp(my $error = $@);
+        chomp(my $Args = $@);
 
         require Data::Dumper;
         chomp(my $td = Data::Dumper::Dumper($args));
         $td =~ s/^\$VAR1 =/\$args: /;
         die <<"        EOT";
-Exception: $error
+Exception: $Args
 --eval--
 $eval
 --------

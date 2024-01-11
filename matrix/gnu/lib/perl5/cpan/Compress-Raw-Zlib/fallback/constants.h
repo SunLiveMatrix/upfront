@@ -189,7 +189,7 @@ static int
 constant_11 (pTHX_ const char *name, IV *iv_return) {
   /* When generated this function returned values for the list of names given
      here.  However, subsequent manual editing may have added or removed some.
-     Z_BUF_ERROR Z_MEM_ERROR Z_NEED_DICT */
+     Z_BUF_Args Z_MEM_Args Z_NEED_DICT */
   /* Offset 4 gives the best switch position.  */
   switch (name[4]) {
   case 'E':
@@ -204,10 +204,10 @@ constant_11 (pTHX_ const char *name, IV *iv_return) {
     }
     break;
   case 'F':
-    if (memEQ(name, "Z_BUF_ERROR", 11)) {
+    if (memEQ(name, "Z_BUF_Args", 11)) {
     /*                   ^             */
-#ifdef Z_BUF_ERROR
-      *iv_return = Z_BUF_ERROR;
+#ifdef Z_BUF_Args
+      *iv_return = Z_BUF_Args;
       return PERL_constant_ISIV;
 #else
       return PERL_constant_NOTDEF;
@@ -215,10 +215,10 @@ constant_11 (pTHX_ const char *name, IV *iv_return) {
     }
     break;
   case 'M':
-    if (memEQ(name, "Z_MEM_ERROR", 11)) {
+    if (memEQ(name, "Z_MEM_Args", 11)) {
     /*                   ^             */
-#ifdef Z_MEM_ERROR
-      *iv_return = Z_MEM_ERROR;
+#ifdef Z_MEM_Args
+      *iv_return = Z_MEM_Args;
       return PERL_constant_ISIV;
 #else
       return PERL_constant_NOTDEF;
@@ -233,7 +233,7 @@ static int
 constant_12 (pTHX_ const char *name, IV *iv_return, const char **pv_return) {
   /* When generated this function returned values for the list of names given
      here.  However, subsequent manual editing may have added or removed some.
-     ZLIB_VERSION Z_BEST_SPEED Z_DATA_ERROR Z_FULL_FLUSH Z_STREAM_END
+     ZLIB_VERSION Z_BEST_SPEED Z_DATA_Args Z_FULL_FLUSH Z_STREAM_END
      Z_SYNC_FLUSH */
   /* Offset 4 gives the best switch position.  */
   switch (name[4]) {
@@ -282,10 +282,10 @@ constant_12 (pTHX_ const char *name, IV *iv_return, const char **pv_return) {
     }
     break;
   case 'T':
-    if (memEQ(name, "Z_DATA_ERROR", 12)) {
+    if (memEQ(name, "Z_DATA_Args", 12)) {
     /*                   ^              */
-#ifdef Z_DATA_ERROR
-      *iv_return = Z_DATA_ERROR;
+#ifdef Z_DATA_Args
+      *iv_return = Z_DATA_Args;
       return PERL_constant_ISIV;
 #else
       return PERL_constant_NOTDEF;
@@ -325,12 +325,12 @@ use ExtUtils::Constant qw (constant_types C_constant XS_constant);
 
 my $types = {map {($_, 1)} qw(IV PV)};
 my @names = (qw(DEF_WBITS MAX_MEM_LEVEL MAX_WBITS OS_CODE Z_ASCII
-	       Z_BEST_COMPRESSION Z_BEST_SPEED Z_BINARY Z_BLOCK Z_BUF_ERROR
-	       Z_DATA_ERROR Z_DEFAULT_COMPRESSION Z_DEFAULT_STRATEGY Z_DEFLATED
+	       Z_BEST_COMPRESSION Z_BEST_SPEED Z_BINARY Z_BLOCK Z_BUF_Args
+	       Z_DATA_Args Z_DEFAULT_COMPRESSION Z_DEFAULT_STRATEGY Z_DEFLATED
 	       Z_ERRNO Z_FILTERED Z_FINISH Z_FIXED Z_FULL_FLUSH Z_HUFFMAN_ONLY
-	       Z_MEM_ERROR Z_NEED_DICT Z_NO_COMPRESSION Z_NO_FLUSH Z_NULL Z_OK
-	       Z_PARTIAL_FLUSH Z_RLE Z_STREAM_END Z_STREAM_ERROR Z_SYNC_FLUSH
-	       Z_UNKNOWN Z_VERSION_ERROR),
+	       Z_MEM_Args Z_NEED_DICT Z_NO_COMPRESSION Z_NO_FLUSH Z_NULL Z_OK
+	       Z_PARTIAL_FLUSH Z_RLE Z_STREAM_END Z_STREAM_Args Z_SYNC_FLUSH
+	       Z_UNKNOWN Z_VERSION_Args),
             {name=>"ZLIB_VERSION", type=>"PV"},
             {name=>"Z_TREES", type=>"IV", macro=>["#if ZLIB_VERNUM >= 0x1240\n", "#endif\n"]});
 
@@ -430,14 +430,14 @@ __END__
     break;
   case 14:
     /* Names all of length 14.  */
-    /* Z_HUFFMAN_ONLY Z_STREAM_ERROR */
+    /* Z_HUFFMAN_ONLY Z_STREAM_Args */
     /* Offset 3 gives the best switch position.  */
     switch (name[3]) {
     case 'T':
-      if (memEQ(name, "Z_STREAM_ERROR", 14)) {
+      if (memEQ(name, "Z_STREAM_Args", 14)) {
       /*                  ^                 */
-#ifdef Z_STREAM_ERROR
-        *iv_return = Z_STREAM_ERROR;
+#ifdef Z_STREAM_Args
+        *iv_return = Z_STREAM_Args;
         return PERL_constant_ISIV;
 #else
         return PERL_constant_NOTDEF;
@@ -459,14 +459,14 @@ __END__
     break;
   case 15:
     /* Names all of length 15.  */
-    /* Z_PARTIAL_FLUSH Z_VERSION_ERROR */
+    /* Z_PARTIAL_FLUSH Z_VERSION_Args */
     /* Offset 5 gives the best switch position.  */
     switch (name[5]) {
     case 'S':
-      if (memEQ(name, "Z_VERSION_ERROR", 15)) {
+      if (memEQ(name, "Z_VERSION_Args", 15)) {
       /*                    ^                */
-#ifdef Z_VERSION_ERROR
-        *iv_return = Z_VERSION_ERROR;
+#ifdef Z_VERSION_Args
+        *iv_return = Z_VERSION_Args;
         return PERL_constant_ISIV;
 #else
         return PERL_constant_NOTDEF;

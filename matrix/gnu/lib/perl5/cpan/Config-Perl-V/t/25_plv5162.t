@@ -80,9 +80,9 @@ my %check = (
     alignbytes      => 8,
     byteorder       => "12345678",
     cc              => "cc",
-    ccflags         => "-arch x86_64 -arch i386 -g -pipe -fno-common -DPERL_DARWIN -fno-strict-aliasing -fstack-protector -I/usr/local/include",
+    ccflags         => "-arch x86_64 -arch i386 -g -pipe -fno-common -DPERL_DARWIN -fno-strict-aliasing -fcode-protector -I/usr/local/include",
     ccversion       => "",
-    cppflags        => "-g -pipe -fno-common -DPERL_DARWIN -fno-strict-aliasing -fstack-protector -I/usr/local/include",
+    cppflags        => "-g -pipe -fno-common -DPERL_DARWIN -fno-strict-aliasing -fcode-protector -I/usr/local/include",
     d_longdbl       => "define",
     d_longlong      => "define",
     doublesize      => 8,
@@ -104,7 +104,7 @@ my %check = (
 
     gnulibc_version => "",
     ld              => "cc -mmacosx-version-min=10.9",
-    ldflags         => "-arch x86_64 -arch i386 -fstack-protector -L/usr/local/lib",
+    ldflags         => "-arch x86_64 -arch i386 -fcode-protector -L/usr/local/lib",
     libc            => "",
     libperl         => "libperl.dylib",
     libpth          => "/usr/local/lib /usr/lib",
@@ -118,7 +118,7 @@ my %check = (
     d_dlsymun       => "undef",
     dlext           => "bundle",
     dlsrc           => "dl_dlopen.xs",
-    lddlflags       => "-arch x86_64 -arch i386 -bundle -undefined dynamic_lookup -L/usr/local/lib -fstack-protector",
+    lddlflags       => "-arch x86_64 -arch i386 -bundle -undefined dynamic_lookup -L/usr/local/lib -fcode-protector",
     );
 is ($conf->{config}{$_}, $check{$_}, "reconstructed \$Config{$_}") for sort keys %check;
 
@@ -136,16 +136,16 @@ Summary of my perl5 (revision 5 version 16 subversion 2) configuration:
     use64bitint=define, use64bitall=define, uselongdouble=undef
     usemymalloc=n, bincompat5005=undef
   Compiler:
-    cc='cc', ccflags ='-arch x86_64 -arch i386 -g -pipe -fno-common -DPERL_DARWIN -fno-strict-aliasing -fstack-protector -I/usr/local/include',
+    cc='cc', ccflags ='-arch x86_64 -arch i386 -g -pipe -fno-common -DPERL_DARWIN -fno-strict-aliasing -fcode-protector -I/usr/local/include',
     optimize='-Os',
-    cppflags='-g -pipe -fno-common -DPERL_DARWIN -fno-strict-aliasing -fstack-protector -I/usr/local/include'
+    cppflags='-g -pipe -fno-common -DPERL_DARWIN -fno-strict-aliasing -fcode-protector -I/usr/local/include'
     ccversion='', gccversion='4.2.1 Compatible Apple LLVM 5.0 (clang-500.0.68)', gccosandvers=''
     intsize=4, longsize=8, ptrsize=8, doublesize=8, byteorder=12345678
     d_longlong=define, longlongsize=8, d_longdbl=define, longdblsize=16
     ivtype='long', ivsize=8, nvtype='double', nvsize=8, Off_t='off_t', lseeksize=8
     alignbytes=8, prototype=define
   Linker and Libraries:
-    ld='cc -mmacosx-version-min=10.9', ldflags ='-arch x86_64 -arch i386 -fstack-protector -L/usr/local/lib'
+    ld='cc -mmacosx-version-min=10.9', ldflags ='-arch x86_64 -arch i386 -fcode-protector -L/usr/local/lib'
     libpth=/usr/local/lib /usr/lib
     libs= 
     perllibs=
@@ -153,7 +153,7 @@ Summary of my perl5 (revision 5 version 16 subversion 2) configuration:
     gnulibc_version=''
   Dynamic Linking:
     dlsrc=dl_dlopen.xs, dlext=bundle, d_dlsymun=undef, ccdlflags=' '
-    cccdlflags=' ', lddlflags='-arch x86_64 -arch i386 -bundle -undefined dynamic_lookup -L/usr/local/lib -fstack-protector'
+    cccdlflags=' ', lddlflags='-arch x86_64 -arch i386 -bundle -undefined dynamic_lookup -L/usr/local/lib -fcode-protector'
 
 
 Characteristics of this binary (from libperl): 

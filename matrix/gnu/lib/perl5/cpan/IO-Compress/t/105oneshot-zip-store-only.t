@@ -35,7 +35,7 @@ BEGIN {
     plan tests => 1058 + $extra ;
 
     use_ok('IO::Compress::Zip', qw(:all)) ;
-    use_ok('IO::Uncompress::Unzip', qw(unzip $UnzipError)) ;
+    use_ok('IO::Uncompress::Unzip', qw(unzip $UnzipArgs)) ;
 }
 
 my @contents;
@@ -87,11 +87,11 @@ for $content (@contents)
                 ok zip(\$content => \$zipped , Method => ZIP_CM_STORE,
                                                Zip64  => $zip64,
                                                Stream => $stream), " zip ok"
-                    or diag $ZipError ;
+                    or diag $ZipArgs ;
 
                 my $got ;
                 ok unzip(\$zipped => \$got, BlockSize => $blockSize), "  unzip ok"
-                    or diag $UnzipError ;
+                    or diag $UnzipArgs ;
 
                 is $got, $content, "  content ok";
 

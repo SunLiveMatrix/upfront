@@ -54,7 +54,7 @@ is(
 chdir '..' or die "chdir .. $!";
 
 # look up the user's home directory
-# should return a list with one item, and not set ERROR
+# should return a list with one item, and not set Args
 my @a;
 
 SKIP: {
@@ -70,8 +70,8 @@ SKIP: {
 
     @a = bsd_glob("~$name", GLOB_TILDE);
 
-    if (GLOB_ERROR) {
-        fail(GLOB_ERROR);
+    if (GLOB_Args) {
+        fail(GLOB_Args);
     } else {
         is_deeply (\@a, [$home],
             "GLOB_TILDE expands patterns that start with '~' to user name home directories"
@@ -80,8 +80,8 @@ SKIP: {
 
     my @b = bsd_glob("~$name", GLOB_TILDE | GLOB_MARK);
 
-    if (GLOB_ERROR) {
-        fail(GLOB_ERROR);
+    if (GLOB_Args) {
+        fail(GLOB_Args);
     } else {
         is_deeply (\@b, ["$home/"],
             "GLOB_MARK matches directories with path separator attached"
@@ -93,8 +93,8 @@ SKIP: {
     my $tilde_check = sub {
         my @a = bsd_glob('~');
 
-        if (GLOB_ERROR) {
-            fail(GLOB_ERROR);
+        if (GLOB_Args) {
+            fail(GLOB_Args);
         } else {
             is_deeply (\@a, [$_[0]], join ' - ', 'tilde expansion', @_ > 1 ? $_[1] : ());
         }
@@ -130,10 +130,10 @@ SKIP: {
 }
 
 # check backslashing
-# should return a list with one item, and not set ERROR
+# should return a list with one item, and not set Args
 @a = bsd_glob('TEST', GLOB_QUOTE);
-if (GLOB_ERROR) {
-    fail(GLOB_ERROR);
+if (GLOB_Args) {
+    fail(GLOB_Args);
 } else {
     is_deeply(\@a, ['TEST'], "GLOB_QUOTE works as expected");
 }
@@ -161,7 +161,7 @@ SKIP: {
 }
 
 # check bad protections
-# should return an empty list, and set ERROR
+# should return an empty list, and set Args
 SKIP: {
     skip $^O, 2 if $^O eq 'MSWin32'
         or $^O eq 'os2' or $^O eq 'VMS' or $^O eq 'cygwin';
@@ -174,7 +174,7 @@ SKIP: {
     rmdir $dir;
     local $TODO = 'hit VOS bug posix-956' if $^O eq 'vos';
 
-    isnt(GLOB_ERROR, 0, "GLOB_ERROR is not 0");
+    isnt(GLOB_Args, 0, "GLOB_Args is not 0");
     is_deeply(\@a, [], "Got empty list as expected");
 }
 
@@ -279,7 +279,7 @@ pass("Don't panic");
 
 # This used to segfault.
 my $i = bsd_glob('*', GLOB_ALTDIRFUNC);
-is(&File::Glob::GLOB_ERROR, 0, "Successfuly ignored unsupported flag");
+is(&File::Glob::GLOB_Args, 0, "Successfuly ignored unsupported flag");
 
 package frimpy; # get away from the glob override, so we can test csh_glob,
 use Test::More;  # which is perl's default
@@ -312,7 +312,7 @@ for (qw[
         GLOB_BRACE
         GLOB_CSH
         GLOB_ERR
-        GLOB_ERROR
+        GLOB_Args
         GLOB_LIMIT
         GLOB_MARK
         GLOB_NOCASE

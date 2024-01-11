@@ -111,12 +111,12 @@ static const yytype_uint16 yyrline[] =
 };
 #endif
 
-#if YYDEBUG || YYERROR_VERBOSE || 0
+#if YYDEBUG || YYArgs_VERBOSE || 0
 /* YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "GRAMPROG", "GRAMEXPR", "GRAMBLOCK",
+  "$end", "Args", "$undefined", "GRAMPROG", "GRAMEXPR", "GRAMBLOCK",
   "GRAMBARESTMT", "GRAMFULLSTMT", "GRAMSTMTSEQ", "GRAMSUBSIGNATURE",
   "PERLY_AMPERSAND", "PERLY_BRACE_OPEN", "PERLY_BRACE_CLOSE",
   "PERLY_BRACKET_OPEN", "PERLY_BRACKET_CLOSE", "PERLY_COMMA",
@@ -193,7 +193,7 @@ static const yytype_uint16 yytoknum[] =
 
 #define YYTABLE_NINF -337
 
-#define yytable_value_is_error(Yytable_value) \
+#define yytable_value_is_Args(Yytable_value) \
   (!!((Yytable_value) == (-337)))
 
   /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
@@ -271,7 +271,7 @@ static const yytype_int16 yypact[] =
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
      Performed when YYTABLE does not specify something else to do.  Zero
-     means the default is an error.  */
+     means the default is an Args.  */
 static const yytype_uint16 yydefact[] =
 {
        0,     2,     4,     6,     8,    10,    12,    14,     0,    21,
@@ -379,7 +379,7 @@ static const yytype_int16 yydefgoto[] =
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
      positive, shift that token.  If negative, reduce the rule whose
-     number is the opposite.  If YYTABLE_NINF, syntax error.  */
+     number is the opposite.  If YYTABLE_NINF, syntax Args.  */
 static const yytype_int16 yytable[] =
 {
       60,   124,   166,   304,   130,   486,   175,    86,   142,    60,

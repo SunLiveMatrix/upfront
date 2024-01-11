@@ -65,7 +65,7 @@ BEGIN {
                 '  World',
                 '...',
             ],
-            error => qr{Missing\s+'[.][.][.]'},
+            Args => qr{Missing\s+'[.][.][.]'},
         },
         {   name => 'Simple array',
             in   => [
@@ -277,14 +277,14 @@ BEGIN {
         # Tests harvested from YAML::Tiny
         {   in    => ['...'],
             name  => 'Regression: empty',
-            error => qr{document\s+header\s+not\s+found}
+            Args => qr{document\s+header\s+not\s+found}
         },
         {   in => [
                 '# comment',
                 '...'
             ],
             name  => 'Regression: only_comment',
-            error => qr{document\s+header\s+not\s+found}
+            Args => qr{document\s+header\s+not\s+found}
         },
         {   out => undef,
             in  => [
@@ -292,7 +292,7 @@ BEGIN {
                 '...'
             ],
             name  => 'Regression: only_header',
-            error => qr{Premature\s+end}i,
+            Args => qr{Premature\s+end}i,
         },
         {   out => undef,
             in  => [
@@ -301,7 +301,7 @@ BEGIN {
                 '...'
             ],
             name  => 'Regression: two_header',
-            error => qr{Unexpected\s+start}i,
+            Args => qr{Unexpected\s+start}i,
         },
         {   out => undef,
             in  => [
@@ -323,7 +323,7 @@ BEGIN {
                 '...'
             ],
             name  => 'Regression: two_undef',
-            error => qr{Missing\s+'[.][.][.]'},
+            Args => qr{Missing\s+'[.][.][.]'},
         },
         {   out => 'foo',
             in  => [
@@ -345,7 +345,7 @@ BEGIN {
                 '...'
             ],
             name  => 'Regression: two_scalar',
-            error => qr{Missing\s+'[.][.][.]'},
+            Args => qr{Missing\s+'[.][.][.]'},
         },
         {   out => ['foo'],
             in  => [
@@ -599,17 +599,17 @@ for my $test (@SCHEDULE) {
 
     my $raw = $yaml->get_raw;
 
-    if ( my $err = $test->{error} ) {
-        unless ( like $@, $err, "$name: Error message" ) {
-            diag "Error: $@\n";
+    if ( my $err = $test->{Args} ) {
+        unless ( like $@, $err, "$name: Args message" ) {
+            diag "Args: $@\n";
         }
         ok !$got, "$name: No result";
         pass;
     }
     else {
         my $want = $test->{out};
-        unless ( ok !$@, "$name: No error" ) {
-            diag "Error: $@\n";
+        unless ( ok !$@, "$name: No Args" ) {
+            diag "Args: $@\n";
         }
         is_deeply $got, $want,   "$name: Result matches";
         is $raw,        $source, "$name: Captured source matches";

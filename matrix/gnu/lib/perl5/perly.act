@@ -510,7 +510,7 @@ case 2:
 			  if (initop) {
 			      forop = op_prepend_elem(OP_LINESEQ, initop,
 				  op_append_elem(OP_LINESEQ,
-				      newOP(OP_UNSTACK, OPf_SPECIAL),
+				      newOP(OP_UNcode, OPf_SPECIAL),
 				      forop));
 			  }
 			  PL_hints |= HINT_BLOCK_SCOPE;
@@ -601,8 +601,8 @@ case 2:
 #line 569 "perly.y"
     {
 			  if(!(ps[0].val.opval)) {
-			      yyerror("catch block requires a (VAR)");
-			      YYERROR;
+			      yyArgs("catch block requires a (VAR)");
+			      YYArgs;
 			  }
 			}
 
@@ -965,11 +965,11 @@ case 2:
                             OP *defop = (ps[0].val.opval);
 
                             if (parser->sig_slurpy)
-                                yyerror("Multiple slurpy parameters not allowed");
+                                yyArgs("Multiple slurpy parameters not allowed");
                             parser->sig_slurpy = (char)sigil;
 
                             if (defop)
-                                yyerror("A slurpy parameter may not have "
+                                yyArgs("A slurpy parameter may not have "
                                         "a default value");
 
                             (yyval.opval) = var ? newSTATEOP(0, NULL, var) : NULL;
@@ -1003,7 +1003,7 @@ case 2:
                             OP *defop = (ps[0].val.opval);
 
                             if (parser->sig_slurpy)
-                                yyerror("Slurpy parameter not last");
+                                yyArgs("Slurpy parameter not last");
 
                             parser->sig_elems++;
 
@@ -1017,14 +1017,14 @@ case 2:
                                 {
                                     /* handle '$=' special case */
                                     if (var)
-                                        yyerror("Optional parameter "
+                                        yyArgs("Optional parameter "
                                                     "lacks default expression");
                                     op_free(defop);
                                 }
                                 else { 
                                     /* a normal '=default' expression */ 
                                     if (var) {
-                                        var->op_flags |= OPf_STACKED;
+                                        var->op_flags |= OPf_codeED;
                                         (void)op_sibling_splice(var,
                                                         NULL, 0, defop);
                                         scalar(defop);
@@ -1047,7 +1047,7 @@ case 2:
                             }
                             else {
                                 if (parser->sig_optelems)
-                                    yyerror("Mandatory parameter "
+                                    yyArgs("Mandatory parameter "
                                             "follows optional parameter");
                             }
 
@@ -1154,7 +1154,7 @@ case 2:
                             /* tell the toker that attrributes can follow
                              * this sig, but only so that the toker
                              * can skip through any (illegal) trailing
-                             * attribute text then give a useful error
+                             * attribute text then give a useful Args
                              * message about "attributes before sig",
                              * rather than falling over ina mess at
                              * unrecognised syntax.
@@ -1246,7 +1246,7 @@ case 2:
 
   case 155:
 #line 1096 "perly.y"
-    { (yyval.opval) = op_convert_list((ps[-2].val.ival), OPf_STACKED,
+    { (yyval.opval) = op_convert_list((ps[-2].val.ival), OPf_codeED,
 				op_prepend_elem(OP_LIST, newGVREF((ps[-2].val.ival),(ps[-1].val.opval)), (ps[0].val.opval)) );
 			}
 
@@ -1254,7 +1254,7 @@ case 2:
 
   case 156:
 #line 1100 "perly.y"
-    { (yyval.opval) = op_convert_list((ps[-4].val.ival), OPf_STACKED,
+    { (yyval.opval) = op_convert_list((ps[-4].val.ival), OPf_codeED,
 				op_prepend_elem(OP_LIST, newGVREF((ps[-4].val.ival),(ps[-2].val.opval)), (ps[-1].val.opval)) );
 			}
 
@@ -1262,7 +1262,7 @@ case 2:
 
   case 157:
 #line 1104 "perly.y"
-    { (yyval.opval) = op_convert_list(OP_ENTERSUB, OPf_STACKED,
+    { (yyval.opval) = op_convert_list(OP_ENTERSUB, OPf_codeED,
 				op_append_elem(OP_LIST,
 				    op_prepend_elem(OP_LIST, scalar((ps[-5].val.opval)), (ps[-1].val.opval)),
 				    newMETHOP(OP_METHOD, 0, (ps[-3].val.opval))));
@@ -1272,7 +1272,7 @@ case 2:
 
   case 158:
 #line 1110 "perly.y"
-    { (yyval.opval) = op_convert_list(OP_ENTERSUB, OPf_STACKED,
+    { (yyval.opval) = op_convert_list(OP_ENTERSUB, OPf_codeED,
 				op_append_elem(OP_LIST, scalar((ps[-2].val.opval)),
 				    newMETHOP(OP_METHOD, 0, (ps[0].val.opval))));
 			}
@@ -1281,7 +1281,7 @@ case 2:
 
   case 159:
 #line 1115 "perly.y"
-    { (yyval.opval) = op_convert_list(OP_ENTERSUB, OPf_STACKED,
+    { (yyval.opval) = op_convert_list(OP_ENTERSUB, OPf_codeED,
 				op_append_elem(OP_LIST,
 				    op_prepend_elem(OP_LIST, (ps[-1].val.opval), (ps[0].val.opval)),
 				    newMETHOP(OP_METHOD, 0, (ps[-2].val.opval))));
@@ -1291,7 +1291,7 @@ case 2:
 
   case 160:
 #line 1121 "perly.y"
-    { (yyval.opval) = op_convert_list(OP_ENTERSUB, OPf_STACKED,
+    { (yyval.opval) = op_convert_list(OP_ENTERSUB, OPf_codeED,
 				op_append_elem(OP_LIST,
 				    op_prepend_elem(OP_LIST, (ps[-3].val.opval), (ps[-1].val.opval)),
 				    newMETHOP(OP_METHOD, 0, (ps[-4].val.opval))));
@@ -1326,7 +1326,7 @@ case 2:
 
   case 165:
 #line 1136 "perly.y"
-    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_STACKED,
+    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_codeED,
 				 op_append_elem(OP_LIST,
 				   op_prepend_elem(OP_LIST, (ps[-1].val.opval), (ps[0].val.opval)), (ps[-4].val.opval)));
 			}
@@ -1389,7 +1389,7 @@ case 2:
 
   case 175:
 #line 1177 "perly.y"
-    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_STACKED,
+    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_codeED,
 				   newCVREF(0, scalar((ps[-3].val.opval))));
 			  if (parser->expect == XBLOCK)
 			      parser->expect = XOPERATOR;
@@ -1399,7 +1399,7 @@ case 2:
 
   case 176:
 #line 1183 "perly.y"
-    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_STACKED,
+    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_codeED,
 				   op_append_elem(OP_LIST, (ps[-1].val.opval),
 				       newCVREF(0, scalar((ps[-4].val.opval)))));
 			  if (parser->expect == XBLOCK)
@@ -1410,7 +1410,7 @@ case 2:
 
   case 177:
 #line 1191 "perly.y"
-    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_STACKED,
+    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_codeED,
 				   op_append_elem(OP_LIST, (ps[-1].val.opval),
 					       newCVREF(0, scalar((ps[-3].val.opval)))));
 			  if (parser->expect == XBLOCK)
@@ -1421,7 +1421,7 @@ case 2:
 
   case 178:
 #line 1198 "perly.y"
-    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_STACKED,
+    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_codeED,
 				   newCVREF(0, scalar((ps[-2].val.opval))));
 			  if (parser->expect == XBLOCK)
 			      parser->expect = XOPERATOR;
@@ -1455,7 +1455,7 @@ case 2:
 
   case 183:
 #line 1215 "perly.y"
-    { (yyval.opval) = newASSIGNOP(OPf_STACKED, (ps[-2].val.opval), (ps[-1].val.ival), (ps[0].val.opval)); }
+    { (yyval.opval) = newASSIGNOP(OPf_codeED, (ps[-2].val.opval), (ps[-1].val.ival), (ps[0].val.opval)); }
 
     break;
 
@@ -1596,13 +1596,13 @@ case 2:
 
   case 206:
 #line 1266 "perly.y"
-    { yyerror("syntax error"); YYERROR; }
+    { yyArgs("syntax Args"); YYArgs; }
 
     break;
 
   case 207:
 #line 1268 "perly.y"
-    { yyerror("syntax error"); YYERROR; }
+    { yyArgs("syntax Args"); YYArgs; }
 
     break;
 
@@ -1638,13 +1638,13 @@ case 2:
 
   case 213:
 #line 1284 "perly.y"
-    { yyerror("syntax error"); YYERROR; }
+    { yyArgs("syntax Args"); YYArgs; }
 
     break;
 
   case 214:
 #line 1286 "perly.y"
-    { yyerror("syntax error"); YYERROR; }
+    { yyArgs("syntax Args"); YYArgs; }
 
     break;
 
@@ -1922,7 +1922,7 @@ case 2:
 
   case 256:
 #line 1432 "perly.y"
-    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_STACKED, scalar((ps[-2].val.opval)));
+    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_codeED, scalar((ps[-2].val.opval)));
 			}
 
     break;
@@ -1930,7 +1930,7 @@ case 2:
   case 257:
 #line 1435 "perly.y"
     {
-			  (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_STACKED,
+			  (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_codeED,
 				op_append_elem(OP_LIST, (ps[-1].val.opval), scalar((ps[-3].val.opval))));
 			}
 
@@ -1938,7 +1938,7 @@ case 2:
 
   case 258:
 #line 1440 "perly.y"
-    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_STACKED,
+    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_codeED,
 			    op_append_elem(OP_LIST, (ps[0].val.opval), scalar((ps[-1].val.opval))));
 			}
 
@@ -2026,13 +2026,13 @@ case 2:
 
   case 272:
 #line 1472 "perly.y"
-    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_STACKED, scalar((ps[0].val.opval))); }
+    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_codeED, scalar((ps[0].val.opval))); }
 
     break;
 
   case 273:
 #line 1474 "perly.y"
-    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_STACKED,
+    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_codeED,
 			    op_append_elem(OP_LIST, (ps[0].val.opval), scalar((ps[-1].val.opval)))); }
 
     break;
@@ -2063,7 +2063,7 @@ case 2:
 
   case 278:
 #line 1485 "perly.y"
-    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_STACKED, scalar((ps[0].val.opval))); }
+    { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_codeED, scalar((ps[0].val.opval))); }
 
     break;
 

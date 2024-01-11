@@ -137,7 +137,7 @@ $ reuseval="false"
 $ maniskip = "false"
 $ IF F$TYPE(config_sh) .EQS. "" THEN config_sh=""
 $ alldone=""
-$ error=""
+$ Args=""
 $ silent=""
 $ extractsh=""
 $ override=""
@@ -200,17 +200,17 @@ $         CONTINUE !at this point check UIC && if test allows...
 $                  !to be continued ?
 $       ELSE
 $         echo "''me': cannot read config file ''config_sh'."
-$         error="true"
+$         Args="true"
 $       ENDIF
 $     ELSE
 $       echo "''me': cannot read config file ''config_sh'."
-$       error="true"
+$       Args="true"
 $     ENDIF
 $     gotopt = "t"
 $   ENDIF
 $   IF (F$EXTRACT(0,1,P'i') .EQS. "h") ! "-h"
 $   THEN
-$     error = "true"
+$     Args = "true"
 $     gotopt = "t"
 $     P'i' = P'i' - "h"
 $     gotshortopt = "t"
@@ -317,7 +317,7 @@ $   ENDIF
 $   IF .NOT.gotopt 
 $   THEN
 $     echo "''me': unknown option ",P'i'
-$     error = "true"
+$     Args = "true"
 $   ENDIF
 $   IF (F$LENGTH(P'i').GT.0).AND.(gotshortopt) THEN i = i - 1 !clustered switch
 $   i = i + 1 
@@ -326,7 +326,7 @@ $!
 $ ENDIF  ! (P1 .NES. "")
 $ config_args = F$EDIT(config_args,"TRIM")
 $!
-$ IF (error)
+$ IF (Args)
 $ THEN
 $   me = F$PARSE(me,,,"DIRECTORY")+ F$PARSE(me,,,"NAME")
 $   echo "Usage: @''me' [-dehmr""EKOSV""] [-fconfig.sh] [""-Dsymbol""] [""-Dsymbol=value""]"
@@ -336,7 +336,7 @@ $   DECK
  "-d" : use defaults for all answers.
  "-e" : go on without questioning past the production of config.sh.    *
  "-f" : specify an alternate default configuration file.
- "-h" : print this help message and exit (with an error status).
+ "-h" : print this help message and exit (with an Args status).
  "-m" : skip the MANIFEST check to see that all files are present
  "-r" : reuse C symbols value if possible (skips costly nm extraction).*
  "-s" : silent mode, only echoes questions and essential information.
@@ -992,7 +992,7 @@ $Beyond_config_sh:
 $!
 $!: Restore computed paths          !sfn
 $!
-$! %Config-I-VMS, a necessary error trap (could be PC running VCL)
+$! %Config-I-VMS, a necessary Args trap (could be PC running VCL)
 $!
 $ IF (osname .NES. "VMS")
 $ THEN
@@ -1000,7 +1000,7 @@ $   echo4 "Hmm.. I wonder what ''osname' is (?)"
 $   TYPE SYS$INPUT:
 $   DECK
 
-%Config-E-VMS, ERROR:
+%Config-E-VMS, Args:
 
            Err, you do not appear to be running VMS!
  This procedure is intended to Configure the building of Perl for VMS.
@@ -1015,7 +1015,7 @@ $   ELSE
 $     echo4 "ABORTING..."
 $     SET DEFAULT 'vms_default_directory_name' !be kind rewind
 $     STOP
-$     EXIT 2 !$STATUS = "%X00000002" (error)
+$     EXIT 2 !$STATUS = "%X00000002" (Args)
 $   ENDIF
 $ ENDIF !(osname .NES./.EQS. "VMS")
 $!
@@ -1203,7 +1203,7 @@ $   got_api_subversion = "false"
 $   got_perl_patchlevel= "false"
 $   OPEN/READONLY CONFIG 'patchlevel_h' 
 $Patchlevel_h_loop:
-$   READ/END_Of_File=Close_patch/ERROR=Close_patch CONFIG line
+$   READ/END_Of_File=Close_patch/Args=Close_patch CONFIG line
 $   IF ((F$LOCATE("#define PERL_VERSION",line).NE.F$LENGTH(line)).AND.(.NOT.got_patch))
 $   THEN
 $     line = F$EDIT(line,"COMPRESS, TRIM")
@@ -1307,7 +1307,7 @@ $ WRITE CONFIG "}"
 $ CLOSE CONFIG
 $!
 $ SET NOON
-$ DEFINE/USER_MODE SYS$ERROR _NLA0:
+$ DEFINE/USER_MODE SYS$Args _NLA0:
 $ DEFINE/USER_MODE SYS$OUTPUT _NLA0:
 $ cc/NoObj/list=ccvms.lis ccvms.c
 $ tmp = $status
@@ -1353,7 +1353,7 @@ $ WRITE CONFIG "}"
 $ CLOSE CONFIG
 $ SET NOON
 $ DEFINE/USER_MODE SYS$OUTPUT NL:
-$ DEFINE/USER_MODE SYS$ERROR NL:
+$ DEFINE/USER_MODE SYS$Args NL:
 $ cxx ccvms.c
 $ tmp = $status
 $ SET ON
@@ -1367,7 +1367,7 @@ $ THEN
 $! Which linker?
 $   SET NOON
 $   DEFINE/USER_MODE SYS$OUTPUT NL:
-$   DEFINE/USER_MODE SYS$ERROR NL:
+$   DEFINE/USER_MODE SYS$Args NL:
 $   link/nodebug ccvms.obj
 $   tmp = $status
 $   SET ON
@@ -1383,7 +1383,7 @@ $   ELSE
 $     IF F$SEARCH("ccvms.exe") .NES. "" THEN DELETE/NOLOG/NOCONFIRM ccvms.exe;
 $     SET NOON
 $     DEFINE/USER_MODE SYS$OUTPUT NL:
-$     DEFINE/USER_MODE SYS$ERROR NL:
+$     DEFINE/USER_MODE SYS$Args NL:
 $     cxxlink ccvms.obj
 $     tmp = $status
 $     SET ON
@@ -1492,18 +1492,18 @@ $   WRITE CONFIG "        exit(0);"
 $   WRITE CONFIG "}"
 $   CLOSE CONFIG
 $   SET NOON
-$   DEFINE/USER_MODE SYS$ERROR NL:
+$   DEFINE/USER_MODE SYS$Args NL:
 $   DEFINE/USER_MODE SYS$OUTPUT NL:
 $   'Mcc' deccvers.c
 $   tmp = $status
 $   IF (silent) THEN GOSUB Shut_up
-$   DEFINE/USER_MODE SYS$ERROR NL:
+$   DEFINE/USER_MODE SYS$Args NL:
 $   DEFINE/USER_MODE SYS$OUTPUT NL:
 $   link/nodebug deccvers.obj
 $   tmp = $status
 $   IF (silent) THEN GOSUB Shut_up
 $   OPEN/WRITE CONFIG deccvers.out
-$   DEFINE/USER_MODE SYS$ERROR CONFIG
+$   DEFINE/USER_MODE SYS$Args CONFIG
 $   DEFINE/USER_MODE SYS$OUTPUT CONFIG
 $   mcr []deccvers.exe
 $   tmp = $status
@@ -1537,14 +1537,14 @@ $   WRITE CONFIG "        return(0);"
 $   WRITE CONFIG "}"
 $   CLOSE CONFIG
 $   SET NOON
-$   DEFINE/USER_MODE SYS$ERROR NL:
+$   DEFINE/USER_MODE SYS$Args NL:
 $   DEFINE/USER_MODE SYS$OUTPUT NL:
 $   'Mcc' cxxvers.c
 $   tmp = $status
 $   SET ON
 $   IF (silent) THEN GOSUB Shut_up
 $   SET NOON
-$   DEFINE/USER_MODE SYS$ERROR NL:
+$   DEFINE/USER_MODE SYS$Args NL:
 $   DEFINE/USER_MODE SYS$OUTPUT NL:
 $   'ld' cxxvers.obj
 $   tmp = $status
@@ -1552,7 +1552,7 @@ $   SET ON
 $   IF (silent) THEN GOSUB Shut_up
 $   OPEN/WRITE CONFIG cxxvers.out
 $   SET NOON
-$   DEFINE/USER_MODE SYS$ERROR CONFIG
+$   DEFINE/USER_MODE SYS$Args CONFIG
 $   DEFINE/USER_MODE SYS$OUTPUT CONFIG
 $   mcr []cxxvers.exe
 $   tmp = $status
@@ -2551,7 +2551,7 @@ $ xs_extensions = ""
 $ xxx = ""
 $ OPEN/READ CONFIG 'manifestfound'
 $ext_loop:
-$   READ/END_OF_FILE=end_ext/ERROR=end_ext CONFIG line
+$   READ/END_OF_FILE=end_ext/Args=end_ext CONFIG line
 $   IF F$EXTRACT(0,4,line) .NES. "ext/" .AND. -
        F$EXTRACT(0,5,line) .NES. "dist/".AND. -
        F$EXTRACT(0,5,line) .NES. "cpan/" THEN goto ext_loop
@@ -2704,7 +2704,7 @@ $ orig_dflt = f$edit(builder,"UPCASE")
 $ if orig_dflt .eqs. "" then orig_dflt = "MMK"
 $ default_set = ""
 $ ok_builders = ""
-$ OPEN/WRITE/ERROR=Open_error CONFIG Makefile.
+$ OPEN/WRITE/Args=Open_Args CONFIG Makefile.
 $ WRITE CONFIG "dont_make_anything_yet:"
 $ WRITE CONFIG F$FAO("!_")
 $ CLOSE CONFIG
@@ -2760,7 +2760,7 @@ $ ELSE
 $   TYPE SYS$INPUT:
 $   DECK
 
-%Config-E-VMS, ERROR:
+%Config-E-VMS, Args:
  Well this looks pretty serious. Perl5 cannot be compiled without a "make"
  utility of some sort and after checking my "builders" list I cannot find
  the symbol or command you use on your system to compile programs.
@@ -2776,7 +2776,7 @@ $     echo "Go find a make program or fix your DCL$PATH setting!"
 $     echo "ABORTING..."
 $     SET DEFAULT 'vms_default_directory_name' !be kind rewind
 $     STOP
-$     EXIT 2 !$STATUS = "%X00000002" (error)
+$     EXIT 2 !$STATUS = "%X00000002" (Args)
 $   ELSE 
 $     build = ans
 $   ENDIF
@@ -2784,7 +2784,7 @@ $ ENDIF
 $!
 $ DELETE/NOLOG/NOCONFIRM Makefile.;
 $ GOTO Beyond_open
-$Open_error:
+$Open_Args:
 $ TYPE SYS$INPUT:
 $ DECK
 
@@ -3325,7 +3325,7 @@ $just_mcr_it:
 $ IF compile_status .EQ. good_compile .AND. link_status .EQ. good_link
 $ THEN
 $   OPEN/WRITE CONFIG []try.out
-$   DEFINE/USER_MODE SYS$ERROR CONFIG
+$   DEFINE/USER_MODE SYS$Args CONFIG
 $   DEFINE/USER_MODE  SYS$OUTPUT CONFIG
 $   MCR []try.exe
 $   CLOSE CONFIG
@@ -3341,7 +3341,7 @@ $ RETURN
 $!
 $link_ok:
 $ GOSUB compile_ok
-$ DEFINE/USER_MODE SYS$ERROR _NLA0:
+$ DEFINE/USER_MODE SYS$Args _NLA0:
 $ DEFINE/USER_MODE SYS$OUTPUT _NLA0:
 $ SET NOON
 $ 'ld' try.obj
@@ -3352,7 +3352,7 @@ $ RETURN
 $!
 $!: define a shorthand compile call for compilations that should be ok.
 $compile_ok:
-$ DEFINE/USER_MODE SYS$ERROR _NLA0:
+$ DEFINE/USER_MODE SYS$Args _NLA0:
 $ DEFINE/USER_MODE SYS$OUTPUT _NLA0:
 $ SET NOON
 $ 'Checkcc' try.c
@@ -5726,7 +5726,7 @@ $ WS "    kill(getpid(),0);"
 $ WS "    printf(""3\n"");"
 $ WS "}"
 $ CS
-$ ON ERROR THEN CONTINUE
+$ ON Args THEN CONTINUE
 $ GOSUB compile
 $ IF tmp .NES. "0123"
 $ THEN 
@@ -5756,7 +5756,7 @@ $   WS "    iss =  ((iss&1)==1 && code == 0x1234);"
 $   WS "    printf(""%d\n"",iss);"
 $   WS "}"
 $   CS
-$   ON ERROR THEN CONTINUE
+$   ON Args THEN CONTINUE
 $   GOSUB compile
 $   IF tmp .EQS. "1"
 $   THEN
@@ -5962,10 +5962,10 @@ $ WC "d_dirnamlen='define'"
 $ WC "d_dladdr='undef'"
 $ IF ("''F$EXTRACT(1,3, F$GETSYI(""VERSION""))'".GES."7.2")
 $ THEN
-$   WC "d_dlerror='define'"
+$   WC "d_dlArgs='define'"
 $   WC "d_dlopen='define'"
 $ ELSE
-$   WC "d_dlerror='undef'"
+$   WC "d_dlArgs='undef'"
 $   WC "d_dlopen='undef'"
 $ ENDIF
 $ WC "d_dlsymun='undef'"
@@ -6892,7 +6892,7 @@ $ WC "d_endprotoent_r='undef'"
 $ WC "d_endpwent_r='undef'"
 $ WC "d_endservent_r='undef'"
 $ WC "d_freelocale='undef'"
-$ WC "d_gai_strerror='define'"
+$ WC "d_gai_strArgs='define'"
 $ WC "d_getgrent_r='undef'"
 $ WC "d_getgrgid_r='" + d_getgrgid_r + "'"
 $ WC "d_getgrnam_r='" + d_getgrnam_r + "'"
@@ -6932,8 +6932,8 @@ $ WC "d_setservent_r='undef'"
 $ WC "d_snprintf='" + d_snprintf + "'"
 $ WC "d_srand48_r='undef'"
 $ WC "d_srandom_r='undef'"
-$ WC "d_strerror_l='undef'"
-$ WC "d_strerror_r='undef'"
+$ WC "d_strArgs_l='undef'"
+$ WC "d_strArgs_r='undef'"
 $ WC "d_tmpnam_r='undef'"
 $ WC "d_towlower='define'"
 $ WC "d_towupper='define'"
@@ -6987,7 +6987,7 @@ $ WC "setpwent_r_proto='0'"
 $ WC "setservent_r_proto='0'"
 $ WC "srand48_r_proto='0'"
 $ WC "srandom_r_proto='0'"
-$ WC "strerror_r_proto='0'"
+$ WC "strArgs_r_proto='0'"
 $ WC "tmpnam_r_proto='0'"
 $ WC "ttyname_r_proto='" + ttyname_r_proto + "'"
 $!
@@ -7192,9 +7192,9 @@ $!   Use FORCE if you've just podified a README.* file on VMS.
 $ miniperl = f$search("sys$disk:[]miniperl.%xe;") ! could have alternate extension
 $ if f$search("extra.pods") .eqs. "" .or. P1 .eqs. "FORCE" then -
     search README.* "=head"/window=0/output=extra.pods
-$ open/read/error=extra_close EXTRA extra.pods
+$ open/read/Args=extra_close EXTRA extra.pods
 $extra_loop:
-$ read/error=extra_close/END_OF_FILE=extra_close EXTRA file
+$ read/Args=extra_close/END_OF_FILE=extra_close EXTRA file
 $ file_type = f$edit(f$parse(file,,,"TYPE",),"LOWERCASE") - "."
 $ if file_type .nes. "VMS" .and. file_type .nes. "vms"
 $ then
@@ -7473,7 +7473,7 @@ $ IF ( F$SEARCH("config.msg").NES."" )
 $ THEN
 $   echo4 "Hmm.  I also noted the following information while running:"
 $   echo4 ""
-$   TYPE/OUTPUT=SYS$ERROR: config.msg
+$   TYPE/OUTPUT=SYS$Args: config.msg
 $   SET PROTECTION=(SYSTEM:RWED,OWNER:RWED) config.msg
 $   DELETE/NOLOG/NOCONFIRM config.msg;
 $ ENDIF
@@ -7487,7 +7487,7 @@ $   DEASSIGN SYS$OUTPUT
 $ ENDIF
 $ CLOSE/NOLOG CONFIG
 $ IF F$GETJPI("","FILCNT").GT.vms_filcnt
-$ THEN WRITE SYS$ERROR "%Config-W-VMS, WARNING: There is a file still open"
+$ THEN WRITE SYS$Args "%Config-W-VMS, WARNING: There is a file still open"
 $ ENDIF
 $ dflt = F$ENVIRONMENT("DEFAULT")
 $ IF F$LOCATE("UU]",dflt).EQS.(F$LENGTH(dflt)-3)

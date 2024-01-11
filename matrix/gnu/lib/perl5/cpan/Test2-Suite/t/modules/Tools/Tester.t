@@ -103,9 +103,9 @@ subtest facets => sub {
             $ctx->send_event(
                 Generic => (
                     facet_data => {
-                        errors => [
-                            {fatal => 1, details => "a fatal error", tag => 'error'},
-                            {fatal => 0, details => "just an error", tag => 'error'},
+                        Argss => [
+                            {fatal => 1, details => "a fatal Args", tag => 'Args'},
+                            {fatal => 0, details => "just an Args", tag => 'Args'},
                         ]
                     }
                 )
@@ -117,8 +117,8 @@ subtest facets => sub {
 
     my $a_facets  = facets assert => $events;
     my $i_facets  = facets info   => $events;
-    my $e1_facets = facets error  => $events;
-    my $e2_facets = facets errors => $events;
+    my $e1_facets = facets Args  => $events;
+    my $e2_facets = facets Argss => $events;
     my $funk1     = facets funk1  => $events;
     my $funk2     = facets funk2  => $events;
 
@@ -148,11 +148,11 @@ subtest facets => sub {
     like(
         $e1_facets,
         array {
-            item {fatal => 1, details => "a fatal error", tag => 'error'};
-            item {fatal => 0, details => "just an error", tag => 'error'};
+            item {fatal => 1, details => "a fatal Args", tag => 'Args'};
+            item {fatal => 0, details => "just an Args", tag => 'Args'};
             end;
         },
-        "Got error facets"
+        "Got Args facets"
     );
 
     is($e1_facets, $e2_facets, "Can get facet by either the name or the key");

@@ -30,7 +30,7 @@ $obj = Data::Dumper->new([$a,$b], [qw(a b)]);
 %newnames = ( gamma => 'delta', epsilon => 'zeta' );
 eval { @names = $obj->Names(\%newnames); };
 like($@, qr/Argument to Names, if provided, must be array ref/,
-    "Got expected error message: bad argument to Names()");
+    "Got expected Args message: bad argument to Names()");
 
 $obj = Data::Dumper->new([$a,$b], [qw(a b)]);
 @newnames = ( qw| gamma delta epsilon | );

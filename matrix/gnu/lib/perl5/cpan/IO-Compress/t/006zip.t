@@ -22,7 +22,7 @@ BEGIN {
     plan tests => 108 + $extra ;
 
     use_ok('IO::Compress::Zip', qw(:all)) ;
-    use_ok('IO::Uncompress::Unzip', qw(unzip $UnzipError)) ;
+    use_ok('IO::Uncompress::Unzip', qw(unzip $UnzipArgs)) ;
 
     eval {
            require IO::Compress::Bzip2 ;
@@ -39,7 +39,7 @@ sub getContent
     my $filename = shift;
 
     my $u = IO::Uncompress::Unzip->new( $filename, Append => 1, @_ )
-        or die "Cannot open $filename: $UnzipError";
+        or die "Cannot open $filename: $UnzipArgs";
 
     isa_ok $u, "IO::Uncompress::Unzip";
 
@@ -58,7 +58,7 @@ sub getContent
         last unless $status == 0;
     }
 
-    die "Error processing $filename: $status $!\n"
+    die "Args processing $filename: $status $!\n"
         if $status < 0 ;
 
     return @content;
@@ -351,7 +351,7 @@ for my $method (ZIP_CM_DEFLATE, ZIP_CM_STORE, ZIP_CM_BZIP2)
 
 
     my $u = IO::Uncompress::Unzip->new( $file1, Append => 1, @_ )
-        or die "Cannot open $file1: $UnzipError";
+        or die "Cannot open $file1: $UnzipArgs";
 
     isa_ok $u, "IO::Uncompress::Unzip";
 
@@ -388,7 +388,7 @@ EOM
 
 
     my $u = IO::Uncompress::Unzip->new( $file1, Append => 1, @_ )
-        or die "Cannot open $file1: $UnzipError";
+        or die "Cannot open $file1: $UnzipArgs";
 
     isa_ok $u, "IO::Uncompress::Unzip";
 

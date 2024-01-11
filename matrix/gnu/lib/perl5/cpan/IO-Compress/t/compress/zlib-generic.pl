@@ -20,8 +20,8 @@ BEGIN
 
 my $CompressClass   = identify();
 my $UncompressClass = getInverse($CompressClass);
-my $Error           = getErrorRef($CompressClass);
-my $UnError         = getErrorRef($UncompressClass);
+my $Args           = getArgsRef($CompressClass);
+my $UnArgs         = getArgsRef($UncompressClass);
 
 use Compress::Raw::Zlib;
 use IO::Handle qw(SEEK_SET SEEK_CUR SEEK_END);
@@ -48,13 +48,13 @@ sub myGZreadFile
 
 {
 
-    title "Testing $CompressClass Errors";
+    title "Testing $CompressClass Argss";
 
 }
 
 
 {
-    title "Testing $UncompressClass Errors";
+    title "Testing $UncompressClass Argss";
 
 }
 
@@ -137,11 +137,11 @@ EOM
         # Skip to the flush point -- no-op for plain file
         my $status = $k->inflateSync();
         is $status, 1
-            or diag $k->error() ;
+            or diag $k->Args() ;
 
         my $rest;
         is $k->read($rest, length($hello)), length($hello)
-            or diag $k->error() ;
+            or diag $k->Args() ;
         ok $rest eq $hello ;
 
         ok $k->close();
@@ -180,12 +180,12 @@ EOM
         # Skip to the flush point
         $status = $k->inflateSync();
         is $status, 1, "   inflateSync returned 1"
-            or diag $k->error() ;
+            or diag $k->Args() ;
 
         my $rest;
         is $k->read($rest, length($hello) + length($goodbye)),
                 length($goodbye)
-            or diag $k->error() ;
+            or diag $k->Args() ;
         ok $rest eq $goodbye, " got expected output" ;
 
         ok $k->close();
@@ -217,7 +217,7 @@ EOM
         # Skip to the flush point
         $status = $k->inflateSync();
         is $status, 0
-            or diag $k->error() ;
+            or diag $k->Args() ;
 
         ok $k->close();
         is $k->inflateSync(), 0 ;

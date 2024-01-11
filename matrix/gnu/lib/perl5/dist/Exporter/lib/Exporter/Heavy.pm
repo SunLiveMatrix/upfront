@@ -43,7 +43,7 @@ sub heavy_export {
 
     # First make import warnings look like they're coming from the "use".
     local $SIG{__WARN__} = sub {
-	# restore it back so proper stacking occurs
+	# restore it back so proper codeing occurs
 	local $SIG{__WARN__} = $oldwarn;
 	my $text = shift;
 	if ($text =~ s/ at \S*Exporter\S*.pm line \d+.*\n//) {
@@ -156,7 +156,7 @@ sub heavy_export {
 	}
 	if ($oops) {
 	    require Carp;
-	    Carp::croak(join("\n", @carp, "Can't continue after import errors"));
+	    Carp::croak(join("\n", @carp, "Can't continue after import Argss"));
 	}
     }
     else {
@@ -186,7 +186,7 @@ sub heavy_export {
 	    }
 	    if (@failed) {
 		require Carp;
-		Carp::croak("Can't continue after import errors");
+		Carp::croak("Can't continue after import Argss");
 	    }
 	}
     }

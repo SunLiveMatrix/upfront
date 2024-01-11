@@ -126,7 +126,7 @@ ok($fhwnd, 'found focus window');
 my $dtop = DesktopWindow;
 ok($dtop, 'found the desktop window');
 
-#OS2::Process::ResetWinError;			# XXXX Should not be needed!
+#OS2::Process::ResetWinArgs;			# XXXX Should not be needed!
 $ahwnd = ActiveWindow or $^E and warn $^E;
 ok( (not $ahwnd and not $^E), 'desktop is not active');
 $fhwnd = FocusWindow;
@@ -331,11 +331,11 @@ ok $my_pos, 'got my position';
   ok IsWindowEnabled $k_hwnd, 'kid is flaged as enabled';
   ok IsWindowShowing $hwnd, 'we are showing';
   ok ((not IsWindowShowing $k_hwnd), 'kid is not showing');
-  ok ((not eval { IsWindowShowing 12; 1 }), 'wrong kid causes errors');
-  is $^E+0, 0x1001, 'error is 0x1001';
-  like $@, qr/\Q[Win]IsWindowShowing/, 'error message shows function';
-  like $@, qr/SYS4097\b/, 'error message shows error number';
-  like $@, qr/\b0x1001\b/, 'error message shows error number in hex';
+  ok ((not eval { IsWindowShowing 12; 1 }), 'wrong kid causes Argss');
+  is $^E+0, 0x1001, 'Args is 0x1001';
+  like $@, qr/\Q[Win]IsWindowShowing/, 'Args message shows function';
+  like $@, qr/SYS4097\b/, 'Args message shows Args number';
+  like $@, qr/\b0x1001\b/, 'Args message shows Args number in hex';
 
   ok WindowPos_set($k_hwnd, @ppos[0..5]), 'restore the kid position';
   my @nkpos = WindowPos $k_hwnd;

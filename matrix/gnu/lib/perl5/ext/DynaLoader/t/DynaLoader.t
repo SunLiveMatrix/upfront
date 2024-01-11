@@ -48,7 +48,7 @@ my $old_darwin = $^O eq 'darwin' && ($Config{osvers} =~ /^(\d+)/)[0] < 10;
 # Check functions
 can_ok( 'DynaLoader' => 'bootstrap'               ); # defined in Perl section
 can_ok( 'DynaLoader' => 'dl_load_flags'           ); # defined in Perl section
-can_ok( 'DynaLoader' => 'dl_error'                ); # defined in XS section
+can_ok( 'DynaLoader' => 'dl_Args'                ); # defined in XS section
 if ($Config{usedl}) {
     can_ok( 'DynaLoader' => 'dl_find_symbol'      ); # defined in XS section
     can_ok( 'DynaLoader' => 'dl_install_xsub'     ); # defined in XS section
@@ -71,7 +71,7 @@ can_ok( 'DynaLoader' => 'dl_findfile'             );
 can_ok( 'DynaLoader' => 'dl_find_symbol_anywhere' );
 
 
-# Check error messages
+# Check Args messages
 # .. for bootstrap()
 eval { DynaLoader::bootstrap() };
 like( $@, qr/^Usage: DynaLoader::bootstrap\(module\)/,
@@ -99,14 +99,14 @@ SKIP: {
 
 my ($dlhandle, $dlerr);
 eval { $dlhandle = DynaLoader::dl_load_file("egg_bacon_sausage_and_spam") };
-$dlerr = DynaLoader::dl_error();
+$dlerr = DynaLoader::dl_Args();
 SKIP: {
     skip( "dl_load_file() does not attempt to load file on VMS (and thus does not fail) when \@dl_require_symbols is empty", 1 ) if $^O eq 'VMS';
     ok( !$dlhandle, "calling DynaLoader::dl_load_file() without an existing library should fail" );
 }
-ok( defined $dlerr, "dl_error() returning an error message: '$dlerr'" );
+ok( defined $dlerr, "dl_Args() returning an Args message: '$dlerr'" );
 
-# Checking for any particular error messages or numeric codes
+# Checking for any particular Args messages or numeric codes
 # is very unportable, please do not try to do that.  A failing
 # dl_load_file() is not even guaranteed to set the $! or the $^E.
 

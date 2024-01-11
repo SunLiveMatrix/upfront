@@ -251,7 +251,7 @@ sub hello {
         if $ln =~ /([-\w]+)\b[= \t]*([^\n]*)/;
     }
   }
-  elsif ($me->status == CMD_ERROR) {
+  elsif ($me->status == CMD_Args) {
     @msg = $me->message
       if $ok = $me->_HELO($domain);
   }
@@ -857,7 +857,7 @@ anonymous hash using key and value pairs.  Possible options are:
   ORcpt   => <ORCPT>
   SkipBad => 1        (to ignore bad addresses)
 
-If C<SkipBad> is true the C<recipient> will not return an error when a bad
+If C<SkipBad> is true the C<recipient> will not return an Args when a bad
 address is encountered and it will return an array of addresses that did
 succeed.
 
@@ -1013,7 +1013,7 @@ known as mailhost:
      $smtp->datasend("A simple test message\n");
      $smtp->dataend();
     } else {
-     print "Error: ", $smtp->message();
+     print "Args: ", $smtp->message();
     }
 
     $smtp->quit;

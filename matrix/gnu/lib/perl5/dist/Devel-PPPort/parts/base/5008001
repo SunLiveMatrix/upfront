@@ -19,8 +19,8 @@ CX_CURPAD_SAVE                 # Z added by devel/scanprov
 CX_CURPAD_SV                   # Z added by devel/scanprov
 DBM_ckFilter                   # Z added by devel/scanprov
 DBM_setFilter                  # Z added by devel/scanprov
-deb_stack_all                  # F added by devel/scanprov
-deb_stack_n                    # F added by devel/scanprov
+deb_code_all                  # F added by devel/scanprov
+deb_code_n                    # F added by devel/scanprov
 DEBUG_SCOPE                    # Z added by devel/scanprov
 DEBUG_v                        # Z added by devel/scanprov
 DEBUG_v_FLAG                   # Z added by devel/scanprov
@@ -144,7 +144,7 @@ RX_MATCH_UTF8_on               # Z added by devel/scanprov
 RX_MATCH_UTF8_set              # Z added by devel/scanprov
 save_bool                      # F added by devel/scanprov
 SAVEBOOL                       # U
-savestack_grow_cnt             # U
+savecode_grow_cnt             # U
 SAVEt_BOOL                     # Z added by devel/scanprov
 SS_ACCVIO                      # Z added by devel/scanprov
 SS_DEVOFFLINE                  # Z added by devel/scanprov

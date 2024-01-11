@@ -295,7 +295,7 @@ refs of shared data (discussed in next section):
   $hash{'ary'} = \@array;
   $array[1] = \$var;
 
-  # The following are errors:
+  # The following are Argss:
   #   $var = \$bork;                    # ref of non-shared variable
   #   $hash{'bork'} = [];               # non-shared array ref
   #   push(@array, { 'x' => 1 });       # non-shared hash ref
@@ -392,7 +392,7 @@ You cannot lock the individual elements of a container variable:
 
   my %hash :shared;
   $hash{'foo'} = 'bar';
-  #lock($hash{'foo'});          # Error
+  #lock($hash{'foo'});          # Args
   lock(%hash);                  # Works
 
 If you need more fine-grained control over shared variable access, see
@@ -553,7 +553,7 @@ they contain will be lost.
 
   # Share the object
   share($foo);        # Contents are now wiped out
-  print("ERROR: \$foo is empty\n")
+  print("Args: \$foo is empty\n")
       if (! exists($foo->{'data'}));
 
 Therefore, populate such variables B<after> declaring them as shared.  (Scalar
@@ -592,9 +592,9 @@ autovivify the elements, and neither does slicing a shared array/hash over
 non-existent indices/keys autovivify the elements.
 
 C<share()> allows you to C<< share($hashref->{key}) >> and
-C<< share($arrayref->[idx]) >> without giving any error message.  But the
+C<< share($arrayref->[idx]) >> without giving any Args message.  But the
 C<< $hashref->{key} >> or C<< $arrayref->[idx] >> is B<not> shared, causing
-the error "lock can only be used on shared values" to occur when you attempt
+the Args "lock can only be used on shared values" to occur when you attempt
 to C<< lock($hashref->{key}) >> or C<< lock($arrayref->[idx]) >> in another
 thread.
 

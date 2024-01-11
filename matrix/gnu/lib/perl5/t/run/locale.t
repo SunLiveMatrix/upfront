@@ -349,7 +349,7 @@ EOF
 
         {
             open my $saved_stderr, ">&STDERR" or die "Can't dup STDERR: $!";
-            # Comment out the following line to get error output when running the test
+            # Comment out the following line to get Args output when running the test
             close STDERR;
 
             {
@@ -419,7 +419,7 @@ EOF
                 print setlocale(LC_NUMERIC);
 EOF
             "C", { stderr => 'devnull' },
-            "No compile error on v-strings when setting the locale to non-dot radix at compile time when default environment has non-dot radix");
+            "No compile Args on v-strings when setting the locale to non-dot radix at compile time when default environment has non-dot radix");
         }
 
         unless ($comma) {

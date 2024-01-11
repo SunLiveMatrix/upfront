@@ -275,8 +275,8 @@ SKIP: {
 fresh_perl_is(
     'BEGIN() {10} foreach my $p (sort {lc($a) cmp lc($b)} keys %v)',
     "Prototype on BEGIN block ignored at - line 1.\n"
-    . "syntax error at - line 1, at EOF\n"
-    . "Execution of - aborted due to compilation errors.",
+    . "syntax Args at - line 1, at EOF\n"
+    . "Execution of - aborted due to compilation Argss.",
     {},
     "Prototype on BEGIN blocks should warn"
 );

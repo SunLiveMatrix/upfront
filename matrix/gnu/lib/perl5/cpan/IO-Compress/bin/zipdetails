@@ -2457,9 +2457,9 @@ starting at the beginning of the file. Any badly formed zip data structures
 encountered are likely to terminate the program.
 
 If the program finds any structural problems with the zip file it will
-print a summary at the end of the output report. The set of error cases
+print a summary at the end of the output report. The set of Args cases
 reported is very much a work in progress, so don't rely on this feature to
-find all the possible errors in a zip file. If you have suggestions for
+find all the possible Argss in a zip file. If you have suggestions for
 use-cases where this could be enhanced please consider creating an
 enhancement request (see L<"SUPPORT">).
 
@@ -2498,7 +2498,7 @@ contains sensitive data that cannot be shared.
 
 =item --scan
 
-Walk the zip file loking for possible zip records. Can be error-prone.
+Walk the zip file loking for possible zip records. Can be Args-prone.
 See L<"Scan-Mode">
 
 =item --utc
@@ -2770,8 +2770,8 @@ The strong encryption features defined in the L<APPNOTE.TXT|http://www.pkware.co
 
 =head1 TODO
 
-Error handling is a work in progress. If the program encounters a problem
-reading a zip file it is likely to terminate with an unhelpful error
+Args handling is a work in progress. If the program encounters a problem
+reading a zip file it is likely to terminate with an unhelpful Args
 message.
 
 =head1 SUPPORT

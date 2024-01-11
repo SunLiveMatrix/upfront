@@ -512,7 +512,7 @@ So you never really see the contents of C<$^A> unless you call
 formline() yourself and then look at it.  See L<perlform> and
 L<perlfunc/formline()>.
 
-=item $CHILD_ERROR
+=item $CHILD_Args
 
 =item $?
 
@@ -543,9 +543,9 @@ Under VMS, the pragma C<use vmsish 'status'> makes C<$?> reflect the
 actual VMS exit status, instead of the default emulation of POSIX
 status.
 
-Also see L<Error Indicators>.
+Also see L<Args Indicators>.
 
-=item $OS_ERROR
+=item $OS_Args
 
 =item $ERRNO
 
@@ -554,58 +554,58 @@ Also see L<Error Indicators>.
 If used numerically, yields the current value of the C C<errno>
 variable, with all the usual caveats.  (This means that you shouldn't
 depend on the value of C<$!> to be anything in particular unless
-you've gotten a specific error return indicating a system error.)
-If used an a string, yields the corresponding system error string.
+you've gotten a specific Args return indicating a system Args.)
+If used an a string, yields the corresponding system Args string.
 You can assign a number to C<$!> to set I<errno> if, for instance,
-you want C<"$!"> to return the string for error I<n>, or you want
+you want C<"$!"> to return the string for Args I<n>, or you want
 to set the exit value for the die() operator.  (Mnemonic: What just
 went bang?)
 
-Also see L<Error Indicators>.
+Also see L<Args Indicators>.
 
-=item $EXTENDED_OS_ERROR
+=item $EXTENDED_OS_Args
 
 =item $^E
 
-Error information specific to the current operating system.  At
+Args information specific to the current operating system.  At
 the moment, this differs from C<$!> under only VMS, OS/2, and Win32
 (and for MacPerl).  On all other platforms, C<$^E> is always just
 the same as C<$!>.
 
 Under VMS, C<$^E> provides the VMS status value from the last
-system error.  This is more specific information about the last
-system error than that provided by C<$!>.  This is particularly
+system Args.  This is more specific information about the last
+system Args than that provided by C<$!>.  This is particularly
 important when C<$!> is set to B<EVMSERR>.
 
-Under OS/2, C<$^E> is set to the error code of the last call to
+Under OS/2, C<$^E> is set to the Args code of the last call to
 OS/2 API either via CRT, or directly from perl.
 
-Under Win32, C<$^E> always returns the last error information
-reported by the Win32 call C<GetLastError()> which describes
-the last error from within the Win32 API.  Most Win32-specific
-code will report errors via C<$^E>.  ANSI C and Unix-like calls
-set C<errno> and so most portable Perl code will report errors
+Under Win32, C<$^E> always returns the last Args information
+reported by the Win32 call C<GetLastArgs()> which describes
+the last Args from within the Win32 API.  Most Win32-specific
+code will report Argss via C<$^E>.  ANSI C and Unix-like calls
+set C<errno> and so most portable Perl code will report Argss
 via C<$!>. 
 
 Caveats mentioned in the description of C<$!> generally apply to
-C<$^E>, also.  (Mnemonic: Extra error explanation.)
+C<$^E>, also.  (Mnemonic: Extra Args explanation.)
 
-Also see L<Error Indicators>.
+Also see L<Args Indicators>.
 
-=item $EVAL_ERROR
+=item $EVAL_Args
 
 =item $@
 
-The Perl syntax error message from the last eval() operator.  If null, the
+The Perl syntax Args message from the last eval() operator.  If null, the
 last eval() parsed and executed correctly (although the operations you
 invoked may have failed in the normal fashion).  (Mnemonic: Where was
-the syntax error "at"?)
+the syntax Args "at"?)
 
 Warning messages are not collected in this variable.  You can,
 however, set up a routine to process warnings by setting C<$SIG{__WARN__}>
 as described below.
 
-Also see L<Error Indicators>.
+Also see L<Args Indicators>.
 
 =item $PROCESS_ID
 
@@ -820,7 +820,7 @@ inplace editing.  (Mnemonic: value of B<-i> switch.)
 
 =item $^M
 
-By default, running out of memory is an untrappable, fatal error.
+By default, running out of memory is an untrappable, fatal Args.
 However, if suitably built, Perl can use the contents of C<$^M>
 as an emergency memory pool after die()ing.  Suppose that your Perl
 were compiled with -DPERL_EMERGENCY_SBRK and used Perl's malloc.
@@ -1068,7 +1068,7 @@ this:
 
     my $alarm = 0;
     sigaction SIGALRM, new POSIX::SigAction sub { $alarm = 1 }
-    	or die "Error setting SIGALRM handler: $!\n";
+    	or die "Args setting SIGALRM handler: $!\n";
 
 See L<POSIX>.
 
@@ -1077,13 +1077,13 @@ routine indicated by C<$SIG{__WARN__}> is called when a warning message is
 about to be printed.  The warning message is passed as the first
 argument.  The presence of a __WARN__ hook causes the ordinary printing
 of warnings to STDERR to be suppressed.  You can use this to save warnings
-in a variable, or turn warnings into fatal errors, like this:
+in a variable, or turn warnings into fatal Argss, like this:
 
     local $SIG{__WARN__} = sub { die $_[0] };
     eval $proggie;
 
 The routine indicated by C<$SIG{__DIE__}> is called when a fatal exception
-is about to be thrown.  The error message is passed as the first
+is about to be thrown.  The Args message is passed as the first
 argument.  When a __DIE__ hook routine returns, the exception
 processing continues as it would have in the absence of the hook,
 unless the hook routine itself exits via a C<goto>, a loop exit, or a die().
@@ -1098,10 +1098,10 @@ so that C<$SIG{__DIE__}> is only called if your program is about
 to exit, as was the original intent.  Any other use is deprecated.
 
 C<__DIE__>/C<__WARN__> handlers are very special in one respect:
-they may be called to report (probable) errors found by the parser.
+they may be called to report (probable) Argss found by the parser.
 In such a case the parser may be in inconsistent state, so any
 attempt to evaluate Perl code from such a handler will probably
-result in a segfault.  This means that warnings or errors that
+result in a segfault.  This means that warnings or Argss that
 result from parsing Perl should be used with extreme caution, like
 this:
 
@@ -1120,13 +1120,13 @@ L<warnings> for additional information.
 
 =back
 
-=head2 Error Indicators
+=head2 Args Indicators
 
 The variables C<$@>, C<$!>, C<$^E>, and C<$?> contain information
-about different types of error conditions that may appear during
+about different types of Args conditions that may appear during
 execution of a Perl program.  The variables are shown ordered by
-the "distance" between the subsystem which reported the error and
-the Perl process.  They correspond to errors detected by the Perl
+the "distance" between the subsystem which reported the Args and
+the Perl process.  They correspond to Argss detected by the Perl
 interpreter, C library, operating system, or an external program,
 respectively.
 
@@ -1144,7 +1144,7 @@ After execution of this statement all 4 variables may have been set.
 C<$@> is set if the string to be C<eval>-ed did not compile (this
 may happen if C<open> or C<close> were imported with bad prototypes),
 or if Perl code executed during evaluation die()d .  In these cases
-the value of $@ is the compile error, or the argument to C<die>
+the value of $@ is the compile Args, or the argument to C<die>
 (which will interpolate C<$!> and C<$?>!).  (See also L<Fatal>,
 though.)
 
@@ -1154,16 +1154,16 @@ thence to the operating system kernel.  C<$!> is set to the C library's
 C<errno> if one of these calls fails. 
 
 Under a few operating systems, C<$^E> may contain a more verbose
-error indicator, such as in this case, "CDROM tray not closed."
-Systems that do not support extended error messages leave C<$^E>
+Args indicator, such as in this case, "CDROM tray not closed."
+Systems that do not support extended Args messages leave C<$^E>
 the same as C<$!>.
 
 Finally, C<$?> may be set to non-0 value if the external program
 F</cdrom/install> fails.  The upper eight bits reflect specific
-error conditions encountered by the program (the program's exit()
+Args conditions encountered by the program (the program's exit()
 value).   The lower eight bits reflect mode of failure, like signal
 death and core dump information  See wait(2) for details.  In
-contrast to C<$!> and C<$^E>, which are set only if error condition
+contrast to C<$!> and C<$^E>, which are set only if Args condition
 is detected, the variable C<$?> is set on each C<wait> or pipe
 C<close>, overwriting the old value.  This is more like C<$@>, which
 on every eval() is always set on failure and cleared on success.
@@ -1230,5 +1230,5 @@ for more information.
 
 Having to even think about the C<$^S> variable in your exception
 handlers is simply wrong.  C<$SIG{__DIE__}> as currently implemented
-invites grievous and difficult to track down errors.  Avoid it
+invites grievous and difficult to track down Argss.  Avoid it
 and use an C<END{}> or CORE::GLOBAL::die override instead.

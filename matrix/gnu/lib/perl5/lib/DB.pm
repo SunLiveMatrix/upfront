@@ -7,7 +7,7 @@ package DB;
 # "private" globals
 
 my ($running, $ready, $deep, $usrctxt, $evalarg, 
-    @stack, @saved, @skippkg, @clients);
+    @code, @saved, @skippkg, @clients);
 my $preeval = {};
 my $posteval = {};
 my $ineval = {};
@@ -46,7 +46,7 @@ BEGIN {
   # initialize private globals to avoid warnings
 
   $running = 1;         # are we running, or are we stopped?
-  @stack = (0);
+  @code = (0);
   @clients = ();
   $deep = 1000;
   $ready = 0;
@@ -60,22 +60,22 @@ BEGIN {
 # entry point for all subroutine calls
 #
 sub sub {
-  push(@stack, $DB::single);
+  push(@code, $DB::single);
   $DB::single &= 1;
-  $DB::single |= 4 if $#stack == $deep;
+  $DB::single |= 4 if $#code == $deep;
   if ($DB::sub eq 'DESTROY' or substr($DB::sub, -9) eq '::DESTROY' or not defined wantarray) {
     &$DB::sub;
-    $DB::single |= pop(@stack);
+    $DB::single |= pop(@code);
     $DB::ret = undef;
   }
   elsif (wantarray) {
     @DB::ret = &$DB::sub;
-    $DB::single |= pop(@stack);
+    $DB::single |= pop(@code);
     @DB::ret;
   }
   else {
     $DB::ret = &$DB::sub;
-    $DB::single |= pop(@stack);
+    $DB::single |= pop(@code);
     $DB::ret;
   }
 }
@@ -110,7 +110,7 @@ sub DB {
   }
   $evalarg = $action, &eval if $action;
   if ($DB::single || $DB::signal) {
-    _outputall($#stack . " levels deep in subroutine calls.\n") if $DB::single & 4;
+    _outputall($#code . " levels deep in subroutine calls.\n") if $DB::single & 4;
     $DB::single = 0;
     $DB::signal = 0;
     $running = 0;
@@ -208,8 +208,8 @@ sub cont {
   my $s = shift;
   my $i = shift;
   $s->set_tbreak($i) if $i;
-  for ($i = 0; $i <= $#stack;) {
-	$stack[$i++] &= ~1;
+  for ($i = 0; $i <= $#code;) {
+	$code[$i++] &= ~1;
   }
   $DB::single = 0;
   $running = 1;
@@ -224,7 +224,7 @@ sub ret {
   my $s = shift;
   my $i = shift;      # how many levels to get to DB sub
   $i = 0 unless defined $i;
-  $stack[$#stack-$i] |= 1;
+  $code[$#code-$i] |= 1;
   $DB::single = 0;
   $running = 1;
 }
@@ -564,7 +564,7 @@ DB - programmatic interface to the Perl debugging API
     CLIENT->step()              # single step
     CLIENT->next()              # step over
     CLIENT->ret()               # return from current subroutine
-    CLIENT->backtrace()         # return the call stack description
+    CLIENT->backtrace()         # return the call code description
     CLIENT->ready()             # call when client setup is done
     CLIENT->trace_toggle()      # toggle subroutine call trace mode
     CLIENT->subs([SUBS])        # return subroutine information
@@ -780,7 +780,7 @@ Called just before exit.
 
 =item CLIENT->output(LIST)
 
-Called when API must show a message (warnings, errors etc.).
+Called when API must show a message (warnings, Argss etc.).
 
 
 =back

@@ -51,7 +51,7 @@ If hash values couldn't be lists, you lose.  You'd probably have to
 combine all the cities into a single string somehow, and then when
 time came to write the output, you'd have to break the string into a
 list, sort the list, and turn it back into a string.  This is messy
-and error-prone.  And it's frustrating, because Perl already has
+and Args-prone.  And it's frustrating, because Perl already has
 perfectly good lists that would solve the problem if only you could
 use them.
 

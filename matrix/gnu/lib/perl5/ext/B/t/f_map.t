@@ -166,7 +166,7 @@ checkOptree(note   => q{},
 # n      <1> entersub[t10] sKS/TARG
 # o      <2> helem sKRM*/2
 # p      <2> sassign vKS/2
-# q      <0> unstack s
+# q      <0> uncode s
 #            goto r
 # t  <2> leaveloop KP/2
 # u  <2> leaveloop K/2
@@ -199,7 +199,7 @@ EOT_EOT
 # n      <1> entersub[t4] sKS/TARG
 # o      <2> helem sKRM*/2
 # p      <2> sassign vKS/2
-# q      <0> unstack s
+# q      <0> uncode s
 #            goto r
 # t  <2> leaveloop KP/2
 # u  <2> leaveloop K/2

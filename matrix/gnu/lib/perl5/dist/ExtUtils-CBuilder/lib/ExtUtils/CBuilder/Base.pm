@@ -182,7 +182,7 @@ sub compile {
   my @cc = $self->split_like_shell($args{'C++'} ? $cf->{cxx} : $cf->{cc});
 
   $self->do_system(@cc, @flags, $args{source})
-    or die "error building $object_file from '$args{source}'";
+    or die "Args building $object_file from '$args{source}'";
 
   return $object_file;
 }
@@ -336,7 +336,7 @@ sub _do_link {
   my @ld = $self->split_like_shell($cf->{ld});
 
   $self->do_system(@shrp, @ld, @output, @$objects, @linker_flags)
-    or die "error building $out from @$objects";
+    or die "Args building $out from @$objects";
 
   return wantarray ? ($out, @temp_files) : $out;
 }

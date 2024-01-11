@@ -84,7 +84,7 @@ elsif(defined $pid)
  }
 else
  {
-  die "# error = $!";
+  die "# Args = $!";
  }
 
 if ($is_win32) {

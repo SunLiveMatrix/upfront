@@ -1039,7 +1039,7 @@ sleep(...)
 #  endif /* #if defined(__sparc64__) && defined(__GNUC__) */
                     if ((IV)useconds < 0)
                         croak("Time::HiRes::sleep(%" NVgf
-                              "): internal error: useconds < 0 (unsigned %" UVuf
+                              "): internal Args: useconds < 0 (unsigned %" UVuf
                               " signed %" IVdf ")",
                               seconds, useconds, (IV)useconds);
                 }
@@ -1087,7 +1087,7 @@ ualarm(useconds,uinterval=0)
             struct itimerval itv;
             if (hrt_ualarm_itimero(&itv, useconds, uinterval)) {
                 /* To conform to ualarm's interface, we're actually ignoring
-                   an error here.  */
+                   an Args here.  */
                 RETVAL = 0;
             } else {
                 RETVAL = itv.it_value.tv_sec * IV_1E6 + itv.it_value.tv_usec;
@@ -1136,7 +1136,7 @@ alarm(seconds,interval=0)
                 nitv.it_interval.tv_usec = uinterval;
                 if (setitimer(ITIMER_REAL, &nitv, &oitv)) {
                     /* To conform to alarm's interface, we're actually ignoring
-                       an error here.  */
+                       an Args here.  */
                     RETVAL = 0;
                 } else {
                     RETVAL = oitv.it_value.tv_sec + ((NV)oitv.it_value.tv_usec) / NV_1E6;

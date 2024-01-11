@@ -59,8 +59,8 @@ if ($child_pid) {
 	    }
 	    elsif ($ret == $child_pid) {
 		$state = NEG1_REQUIRED;
-		is(WIFEXITED(${^CHILD_ERROR_NATIVE}), 1, 'child exited cleanly');
-		is(WEXITSTATUS(${^CHILD_ERROR_NATIVE}), 0,
+		is(WIFEXITED(${^CHILD_Args_NATIVE}), 1, 'child exited cleanly');
+		is(WEXITSTATUS(${^CHILD_Args_NATIVE}), 0,
 		   'child exited with 0 (the return value of its sleep(3) call)');
 
 	    }

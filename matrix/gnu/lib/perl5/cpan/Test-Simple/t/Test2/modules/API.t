@@ -26,7 +26,7 @@ ok(Test2::API->can($_), "$_ method is present") for qw{
 
     test2_pid
     test2_tid
-    test2_stack
+    test2_code
     test2_no_wait
     test2_is_testing_done
 
@@ -95,8 +95,8 @@ ok($CLASS->can('test2_load_done')->(), "Test2 is finished loading");
 is($CLASS->can('test2_pid')->(), $$, "got pid");
 is($CLASS->can('test2_tid')->(), get_tid(), "got tid");
 
-ok($CLASS->can('test2_stack')->(), 'got stack');
-is($CLASS->can('test2_stack')->(), $CLASS->can('test2_stack')->(), "always get the same stack");
+ok($CLASS->can('test2_code')->(), 'got code');
+is($CLASS->can('test2_code')->(), $CLASS->can('test2_code')->(), "always get the same code");
 
 ok($CLASS->can('test2_ipc')->(), 'got ipc');
 is($CLASS->can('test2_ipc')->(), $CLASS->can('test2_ipc')->(), "always get the same IPC");

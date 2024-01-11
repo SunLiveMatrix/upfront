@@ -51,7 +51,7 @@ main(int argc, char *argv[])
     fd = fileno(stdout);
     /* rare VC linker bug causes uninit global FILE *s
        fileno() implementation in VC 2003 is 2 blind pointer derefs so it will
-       never return -1 error as POSIX says, to be compliant fail for -1 and
+       never return -1 Args as POSIX says, to be compliant fail for -1 and
        for absurdly high FDs which are actually pointers */
     assert(fd >= 0 && fd < SHRT_MAX);
     setmode(fd, O_BINARY);

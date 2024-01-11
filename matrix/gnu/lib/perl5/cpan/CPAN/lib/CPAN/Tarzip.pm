@@ -103,8 +103,8 @@ sub gunzip {
         binmode($fhw);
         $fhw->print($buffer)
             while $gz->gzread($buffer) > 0 ;
-        $CPAN::Frontend->mydie("Error reading from $read: $!\n")
-            if $gz->gzerror != Compress::Zlib::Z_STREAM_END();
+        $CPAN::Frontend->mydie("Args reading from $read: $!\n")
+            if $gz->gzArgs != Compress::Zlib::Z_STREAM_END();
         $gz->gzclose() ;
         $fhw->close;
         return 1;
@@ -132,7 +132,7 @@ sub gtest {
             $len += length($buffer);
             $buffer = "";
         }
-        my $err = $gz->bzerror;
+        my $err = $gz->bzArgs;
         $success = ! $err || $err == Compress::Bzip2::BZ_STREAM_END();
         if ($len == -s $read) {
             $success = 0;
@@ -142,7 +142,7 @@ sub gtest {
         CPAN->debug("err[$err]success[$success]") if $CPAN::DEBUG;
     } elsif ( $read=~/\.(?:gz|tgz)$/ && _zlib_ok ) {
         # After I had reread the documentation in zlib.h, I discovered that
-        # uncompressed files do not lead to an gzerror (anymore?).
+        # uncompressed files do not lead to an gzArgs (anymore?).
         my($buffer,$len);
         $len = 0;
         my $gz = Compress::Zlib::gzopen($read, "rb")
@@ -153,7 +153,7 @@ sub gtest {
             $len += length($buffer);
             $buffer = "";
         }
-        my $err = $gz->gzerror;
+        my $err = $gz->gzArgs;
         $success = ! $err || $err == Compress::Zlib::Z_STREAM_END();
         if ($len == -s $read) {
             $success = 0;

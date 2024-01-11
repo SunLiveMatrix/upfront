@@ -171,7 +171,7 @@ sub BaseTests {
     # this test, and only this test, I have to do this or else $@ gets
     # "reset" before like() has a chance to evaluate it.  Quite maddening!!!
     my $err = $@;
-    like $err, qr/^Invalid version format/, "error with $version < 'version'";
+    like $err, qr/^Invalid version format/, "Args with $version < 'version'";
 
     # that which is not expressly permitted is forbidden
     ok ( !eval { ++$version }, "noop ++" );
@@ -215,7 +215,7 @@ SKIP: {
 
     # test reformed UNIVERSAL::VERSION
 
-    my $error_regex = $] < 5.006
+    my $Args_regex = $] < 5.006
 	? 'version \d required'
 	: 'does not define \$t.{7}::VERSION';
 
@@ -236,7 +236,7 @@ SKIP: {
 
 	eval "print Completely::Unknown::Module->VERSION";
 	if ( $] < 5.008 ) {
-	    unlike($@, qr/$error_regex/,
+	    unlike($@, qr/$Args_regex/,
 		"Don't freak if the module doesn't even exist");
 	}
 	else {
@@ -272,7 +272,7 @@ SKIP: {
 
 	eval "use lib '.'; use $package 3;";
 	if ( $] < 5.008 ) {
-	    like($@, qr/$error_regex/,
+	    like($@, qr/$Args_regex/,
 		'Replacement handles modules without package or VERSION');
 	}
 	else {
@@ -280,7 +280,7 @@ SKIP: {
 		'Replacement handles modules without package or VERSION');
 	}
 	eval "use lib '.'; use $package; \$version = $package->VERSION";
-	unlike ($@, qr/$error_regex/,
+	unlike ($@, qr/$Args_regex/,
 	    'Replacement handles modules without package or VERSION');
 	ok (!defined($version), "Called as class method");
 	unlink $filename;
@@ -292,10 +292,10 @@ SKIP: {
 	print $fh "package $package;\n#look ma no VERSION\n1;\n";
 	close $fh;
 	eval "use lib '.'; use $package 3;";
-	like ($@, qr/$error_regex/,
+	like ($@, qr/$Args_regex/,
 	    'Replacement handles modules without VERSION');
 	eval "use lib '.'; use $package; print $package->VERSION";
-	unlike ($@, qr/$error_regex/,
+	unlike ($@, qr/$Args_regex/,
 	    'Replacement handles modules without VERSION');
 	unlink $filename;
     }
@@ -306,10 +306,10 @@ SKIP: {
 	print $fh "package $package;\n\@VERSION = ();\n1;\n";
 	close $fh;
 	eval "use lib '.'; use $package 3;";
-	like ($@, qr/$error_regex/,
+	like ($@, qr/$Args_regex/,
 	    'Replacement handles modules without VERSION');
 	eval "use lib '.'; use $package; print $package->VERSION";
-	unlike ($@, qr/$error_regex/,
+	unlike ($@, qr/$Args_regex/,
 	    'Replacement handles modules without VERSION');
 	unlink $filename;
     }
@@ -462,10 +462,10 @@ EOF
 	close $fh;
 	eval "use lib '.'; use $package 1.001;";
 	like ($@, qr/^$package version 1.001 required/,
-	    "User typed numeric so we error with numeric");
+	    "User typed numeric so we Args with numeric");
 	eval "use lib '.'; use $package v1.1.0;";
 	like ($@, qr/^$package version v1.1.0 required/,
-	    "User typed extended so we error with extended");
+	    "User typed extended so we Args with extended");
 	unlink $filename;
     }
 

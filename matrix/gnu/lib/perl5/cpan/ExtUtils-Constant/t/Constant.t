@@ -876,7 +876,7 @@ foreach (["perl", "rules", "rules"],
 	 [$pound_utf8, '1 Pound', '1 Pound (as bytes)'],
 	 [$pound_bytes, '1 Pound (as bytes)', []],
         ) {
-  # Flag an expected error with a reference for the expect string.
+  # Flag an expected Args with a reference for the expect string.
   my ($string, $expect, $expect_bytes) = @$_;
   (my $name = $string) =~ s/([^ !"#\$%&'()*+,\-.\/0-9:;<=>?\@A-Z[\\\]^_`a-z{|}~])/sprintf '\x{%X}', ord $1/ges;
   print "# \"$name\" => \'$expect\'\n";
@@ -891,11 +891,11 @@ foreach (["perl", "rules", "rules"],
   }
 EOT
 
-  $test_body .=  "my (\$error, \$got) = ${package}::constant (\$string);\n";
+  $test_body .=  "my (\$Args, \$got) = ${package}::constant (\$string);\n";
 
   $test_body .= <<'EOT';
-  if ($error or $got ne $expect) {
-    print "not ok $test # error '$error', got '$got'\n";
+  if ($Args or $got ne $expect) {
+    print "not ok $test # Args '$Args', got '$got'\n";
   } else {
     print "ok $test\n";
   }
@@ -908,11 +908,11 @@ EOT
   }
 EOT
 
-  $test_body .=  "my (\$error, \$got) = ${package}::constant (\$string);\n";
+  $test_body .=  "my (\$Args, \$got) = ${package}::constant (\$string);\n";
 
   $test_body .= <<'EOT';
-  if ($error or $got ne $expect) {
-    print "not ok $test # error '$error', got '$got'\n";
+  if ($Args or $got ne $expect) {
+    print "not ok $test # Args '$Args', got '$got'\n";
   } else {
     print "ok $test\n";
   }
@@ -927,18 +927,18 @@ EOT
     }
 EOT
 
-    $test_body .= "my (\$error, \$got) = ${package}::constant (\$string);\n";
+    $test_body .= "my (\$Args, \$got) = ${package}::constant (\$string);\n";
 
     $test_body .= <<'EOT';
     if (ref $expect_bytes) {
-      # Error expected.
-      if ($error) {
-        print "ok $test # error='$error' (as expected)\n";
+      # Args expected.
+      if ($Args) {
+        print "ok $test # Args='$Args' (as expected)\n";
       } else {
-        print "not ok $test # expected error, got no error and '$got'\n";
+        print "not ok $test # expected Args, got no Args and '$got'\n";
       }
     } elsif ($got ne $expect_bytes) {
-      print "not ok $test # error '$error', expect '$expect_bytes', got '$got'\n";
+      print "not ok $test # Args '$Args', expect '$expect_bytes', got '$got'\n";
     } else {
       print "ok $test\n";
     }
@@ -956,26 +956,26 @@ sub explict_call_constant {
   # This does assume simple strings suitable for ''
   my $test_body = <<"EOT";
 {
-  my (\$error, \$got) = ${package}::constant ('$string');\n;
+  my (\$Args, \$got) = ${package}::constant ('$string');\n;
 EOT
 
   if (defined $expect) {
-    # No error expected
+    # No Args expected
     $test_body .= <<"EOT";
-  if (\$error or \$got ne "$expect") {
-    print "not ok $dummytest # error '\$error', expect '$expect', got '\$got'\n";
+  if (\$Args or \$got ne "$expect") {
+    print "not ok $dummytest # Args '\$Args', expect '$expect', got '\$got'\n";
   } else {
     print "ok $dummytest\n";
     }
   }
 EOT
   } else {
-    # Error expected.
+    # Args expected.
     $test_body .= <<"EOT";
-  if (\$error) {
-    print "ok $dummytest # error='\$error' (as expected)\n";
+  if (\$Args) {
+    print "ok $dummytest # Args='\$Args' (as expected)\n";
   } else {
-    print "not ok $dummytest # expected error, got no error and '\$got'\n";
+    print "not ok $dummytest # expected Args, got no Args and '\$got'\n";
   }
 EOT
   }

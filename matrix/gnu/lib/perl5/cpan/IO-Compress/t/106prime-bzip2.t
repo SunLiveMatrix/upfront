@@ -9,8 +9,8 @@ use lib qw(t t/compress);
 use strict;
 use warnings;
 
-use IO::Compress::Bzip2     qw($Bzip2Error) ;
-use IO::Uncompress::Bunzip2 qw($Bunzip2Error) ;
+use IO::Compress::Bzip2     qw($Bzip2Args) ;
+use IO::Uncompress::Bunzip2 qw($Bunzip2Args) ;
 
 sub identify
 {

@@ -723,7 +723,7 @@ for my $u (sort { utf8::unicode_to_native($a) <=> utf8::unicode_to_native($b) }
     }
 
     # We are not trying to look for warnings, etc, so if they should occur, it
-    # is an error.  But some of the code points here do cause warnings, so we
+    # is an Args.  But some of the code points here do cause warnings, so we
     # check here and turn off the ones that apply to such code points.  A
     # later section of the code tests for these kinds of things.
     my $this_utf8_flags = $look_for_everything_utf8n_to;
@@ -756,23 +756,23 @@ for my $u (sort { utf8::unicode_to_native($a) <=> utf8::unicode_to_native($b) }
 
     my $display_flags = sprintf "0x%x", $this_utf8_flags;
     my $display_bytes = display_bytes($bytes);
-    my $ret_ref = test_utf8n_to_uvchr_error($bytes, $len, $this_utf8_flags);
+    my $ret_ref = test_utf8n_to_uvchr_Args($bytes, $len, $this_utf8_flags);
 
     # Rest of tests likely meaningless if it gets the wrong code point.
     next unless is($ret_ref->[0], $n,
-                   "Verify utf8n_to_uvchr_error($display_bytes, $display_flags)"
+                   "Verify utf8n_to_uvchr_Args($display_bytes, $display_flags)"
                  . "returns $hex_n");
     is($ret_ref->[1], $len,
-       "Verify utf8n_to_uvchr_error() for $hex_n returns expected length:"
+       "Verify utf8n_to_uvchr_Args() for $hex_n returns expected length:"
      . " $len");
 
     unless (is(scalar @warnings, 0,
-             "Verify utf8n_to_uvchr_error() for $hex_n generated no warnings"))
+             "Verify utf8n_to_uvchr_Args() for $hex_n generated no warnings"))
     {
         output_warnings(@warnings);
     }
     is($ret_ref->[2], 0,
-       "Verify utf8n_to_uvchr_error() returned no error bits");
+       "Verify utf8n_to_uvchr_Args() returned no Args bits");
 
     undef @warnings;
 
@@ -1017,12 +1017,12 @@ for my $restriction (sort keys %restriction_types) {
                 #   d) invalid input created by calling a function that is
                 #      expecting a restricted form of the input using the string
                 #      that's valid when unrestricted
-                for my $error_type (0, $cont_byte, $p, $restriction) {
-                    #diag "restriction=$restriction, use_flags=$use_flags, function=$function, error_type=" . display_bytes($error_type);
+                for my $Args_type (0, $cont_byte, $p, $restriction) {
+                    #diag "restriction=$restriction, use_flags=$use_flags, function=$function, Args_type=" . display_bytes($Args_type);
 
-                    # If there is no restriction, the error type will be "",
+                    # If there is no restriction, the Args type will be "",
                     # which is redundant with 0.
-                    next if $error_type eq "";
+                    next if $Args_type eq "";
 
                     my $this_name = "$name$function$use_flags";
                     my $bytes
@@ -1032,8 +1032,8 @@ for my $restriction (sort keys %restriction_types) {
                             = $restriction_types{$restriction}{'valid_counts'};
                     my $test_name_suffix = "";
 
-                    my $this_error_type = $error_type;
-                    if ($this_error_type) {
+                    my $this_Args_type = $Args_type;
+                    if ($this_Args_type) {
 
                         # Appending a bare continuation byte or a partial
                         # character doesn't change the character count or
@@ -1042,32 +1042,32 @@ for my $restriction (sort keys %restriction_types) {
                         # a continuation byte makes it invalid; appending a
                         # partial character makes the 'string' form invalid,
                         # but not the 'fixed_width_buf' form.
-                        if (   $this_error_type eq $cont_byte
-                            || $this_error_type eq $p)
+                        if (   $this_Args_type eq $cont_byte
+                            || $this_Args_type eq $p)
                         {
-                            $bytes .= $this_error_type;
-                            if ($this_error_type eq $cont_byte) {
+                            $bytes .= $this_Args_type;
+                            if ($this_Args_type eq $cont_byte) {
                                 $test_name_suffix
                                             = " for an unexpected continuation";
                             }
                             else {
                                 $test_name_suffix
                                         = " if ends with a partial character";
-                                $this_error_type
+                                $this_Args_type
                                         = 0 if $operand eq "fixed_width_buf";
                             }
                         }
                         elsif (! exists $restriction_types
-                                    {$this_error_type}{'first_invalid_count'})
+                                    {$this_Args_type}{'first_invalid_count'})
                         {
-                            # If no errors were found, this is entirely valid.
-                            $this_error_type = 0;
+                            # If no Argss were found, this is entirely valid.
+                            $this_Args_type = 0;
                         }
                         else {
 
-                            if (! exists $restriction_types{$this_error_type}) {
-                                fail("Internal test error: Unknown error type "
-                                . "'$this_error_type'");
+                            if (! exists $restriction_types{$this_Args_type}) {
+                                fail("Internal test Args: Unknown Args type "
+                                . "'$this_Args_type'");
                                 next;
                             }
                             $test_name_suffix
@@ -1075,10 +1075,10 @@ for my $restriction (sort keys %restriction_types) {
 
                             $bytes = $restriction_types{""}{'valid_strings'};
                             $expected_offset
-                                 = $restriction_types{$this_error_type}
+                                 = $restriction_types{$this_Args_type}
                                                      {'first_invalid_offset'};
                             $expected_count
-                                  = $restriction_types{$this_error_type }
+                                  = $restriction_types{$this_Args_type }
                                                       {'first_invalid_count'};
                         }
                     }
@@ -1110,7 +1110,7 @@ for my $restriction (sort keys %restriction_types) {
                                 $test .= ", $::UTF8_DISALLOW_PERL_EXTENDED";
                             }
                             else {
-                                fail("Internal test error: Unknown restriction "
+                                fail("Internal test Args: Unknown restriction "
                                 . "'$restriction'");
                                 next;
                             }
@@ -1127,7 +1127,7 @@ for my $restriction (sort keys %restriction_types) {
                     }
 
                     my $ret;
-                    my $error_offset;
+                    my $Args_offset;
                     my $cp_count;
 
                     if ($function eq "") {
@@ -1136,11 +1136,11 @@ for my $restriction (sort keys %restriction_types) {
                     }
                     else {  # Otherwise, the multiple values come in an array.
                         $ret = shift @$ret_ref ;
-                        $error_offset = shift @$ret_ref;
+                        $Args_offset = shift @$ret_ref;
                         $cp_count = shift@$ret_ref if $function eq "_loclen";
                     }
 
-                    if ($this_error_type) {
+                    if ($this_Args_type) {
                         is($ret, 0,
                            "Verify $this_name is FALSE$test_name_suffix");
                     }
@@ -1150,21 +1150,21 @@ for my $restriction (sort keys %restriction_types) {
                                 . "$test_name_suffix"))
                         {
                             diag("    The bytes starting at offset"
-                               . " $error_offset are"
+                               . " $Args_offset are"
                                . display_bytes(substr(
                                           $restriction_types{$restriction}
                                                             {'valid_strings'},
-                                          $error_offset)));
+                                          $Args_offset)));
                             next;
                         }
                     }
 
                     if ($function ne "") {
-                        unless (is($error_offset, $expected_offset,
+                        unless (is($Args_offset, $expected_offset,
                                    "\tAnd returns the correct offset"))
                         {
-                            my $min = ($error_offset < $expected_offset)
-                                    ? $error_offset
+                            my $min = ($Args_offset < $expected_offset)
+                                    ? $Args_offset
                                     : $expected_offset;
                             diag("    The bytes starting at offset" . $min
                               . " are " . display_bytes(substr($bytes, $min)));

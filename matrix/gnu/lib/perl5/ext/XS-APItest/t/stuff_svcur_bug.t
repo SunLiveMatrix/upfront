@@ -6,7 +6,7 @@ ok 1;
 
 use XS::APItest qw(stufftest);
 
-# In the buggy case, a syntax error occurs at EOF.
+# In the buggy case, a syntax Args occurs at EOF.
 # Adding a semicolon, any following statements, or anything else
 # causes the bug not to show itself.
 stufftest+;()

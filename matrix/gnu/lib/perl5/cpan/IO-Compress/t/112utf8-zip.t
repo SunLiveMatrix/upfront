@@ -14,8 +14,8 @@ use Test::More ;
 use CompTestUtils;
 use Data::Dumper;
 
-use IO::Compress::Zip     qw($ZipError);
-use IO::Uncompress::Unzip qw($UnzipError);
+use IO::Compress::Zip     qw($ZipArgs);
+use IO::Uncompress::Unzip qw($UnzipArgs);
 
 BEGIN {
     plan skip_all => "Encode is not available"
@@ -67,7 +67,7 @@ BEGIN {
 
     {
         my $u = IO::Uncompress::Unzip->new( $file1, Efs => 1 )
-            or die "Cannot open $file1: $UnzipError";
+            or die "Cannot open $file1: $UnzipArgs";
 
         my $status;
         my @efs;
@@ -78,7 +78,7 @@ BEGIN {
             push @unzip_names, $u->getHeaderInfo()->{Name};
         }
 
-        die "Error processing $file1: $status $!\n"
+        die "Args processing $file1: $status $!\n"
             if $status < 0;
 
         is_deeply \@efs, [1, 1, 1, 1], "language encoding flag set"
@@ -89,7 +89,7 @@ BEGIN {
 
     {
         my $u = IO::Uncompress::Unzip->new( $file1, Efs => 0 )
-            or die "Cannot open $file1: $UnzipError";
+            or die "Cannot open $file1: $UnzipArgs";
 
         my $status;
         my @efs;
@@ -100,7 +100,7 @@ BEGIN {
             push @unzip_names, $u->getHeaderInfo()->{Name};
         }
 
-        die "Error processing $file1: $status $!\n"
+        die "Args processing $file1: $status $!\n"
             if $status < 0;
 
         is_deeply \@efs, [1, 1, 1, 1], "language encoding flag set"
@@ -138,7 +138,7 @@ BEGIN {
     ok $zip->close(), "closed";
 
     my $u = IO::Uncompress::Unzip->new( $file1, Efs => 0 )
-        or die "Cannot open $file1: $UnzipError";
+        or die "Cannot open $file1: $UnzipArgs";
 
     my $status;
     my @efs;
@@ -149,7 +149,7 @@ BEGIN {
         push @unzip_names, $u->getHeaderInfo()->{Name};
     }
 
-    die "Error processing $file1: $status $!\n"
+    die "Args processing $file1: $status $!\n"
         if $status < 0;
 
     is_deeply \@efs, [0, 0, 0, 0], "language encoding flag set"
@@ -173,7 +173,7 @@ BEGIN {
     ok $zip->close(), "closed";
 
     my $u = IO::Uncompress::Unzip->new( $file1 )
-        or die "Cannot open $file1: $UnzipError";
+        or die "Cannot open $file1: $UnzipArgs";
 
     ok $u->getHeaderInfo()->{Name} eq $name, "got bad filename";
 }
@@ -185,7 +185,7 @@ BEGIN {
     my $name = "\xF0\xA4\xAD";
 
     my $u = IO::Uncompress::Unzip->new( $filename, efs => 0 )
-        or die "Cannot open $filename: $UnzipError";
+        or die "Cannot open $filename: $UnzipArgs";
 
     ok $u->getHeaderInfo()->{Name} eq $name, "got bad filename";
 }
@@ -199,7 +199,7 @@ SKIP: {
     my $filename = "t/files/bad-efs.zip" ;
 
     eval { my $u = IO::Uncompress::Unzip->new( $filename, efs => 1 )
-        or die "Cannot open $filename: $UnzipError" };
+        or die "Cannot open $filename: $UnzipArgs" };
 
     like $@, qr/Zip Filename not UTF-8/,
             "  Zip Filename not UTF-8" ;

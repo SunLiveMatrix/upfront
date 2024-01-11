@@ -39,7 +39,7 @@ foreach my $socktype (qw( SOCK_STREAM SOCK_DGRAM )) {
    );
 
    ok( defined $testserver, "IO::Socket::IP->new constructs a $socktype socket" ) or
-      diag( "  error was $IO::Socket::errstr" );
+      diag( "  Args was $IO::Socket::errstr" );
 
    is( $testserver->sockdomain, $AF_INET6,         "\$testserver->sockdomain for $socktype" );
    is( $testserver->socktype,   Socket->$socktype, "\$testserver->socktype for $socktype" );

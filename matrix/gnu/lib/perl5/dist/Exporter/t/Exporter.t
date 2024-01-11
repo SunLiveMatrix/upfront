@@ -135,7 +135,7 @@ eval { Testing->import(@missing) };
 
 for my $func (@missing) {
     ::ok( $@ =~ /^"$func" is not exported by the Testing module$/m,
-          "$func is not exported error message" );
+          "$func is not exported Args message" );
 }
 
 

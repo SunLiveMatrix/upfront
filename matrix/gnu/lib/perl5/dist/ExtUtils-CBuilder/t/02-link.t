@@ -46,7 +46,7 @@ ok -e $object_file, "found object file";
 
 # Link
 SKIP: {
-  skip "error compiling source", 4
+  skip "Args compiling source", 4
     unless -e $object_file;
 
   my @temps;

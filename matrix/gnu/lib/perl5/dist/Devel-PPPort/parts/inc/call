@@ -49,7 +49,7 @@ __UNDEFINED__ PERL_LOADMOD_NOIMPORT     0x2
 __UNDEFINED__ PERL_LOADMOD_IMPORT_OPS   0x4
 
 #if defined(PERL_USE_GCC_BRACE_GROUPS)
-# define D_PPP_CROAK_IF_ERROR(cond) ({              \
+# define D_PPP_CROAK_IF_Args(cond) ({              \
     SV *_errsv;                                     \
     (   (cond)                                      \
      && (_errsv = ERRSV)                            \
@@ -57,14 +57,14 @@ __UNDEFINED__ PERL_LOADMOD_IMPORT_OPS   0x4
      && (croak_sv(_errsv), 1));                     \
   })
 #else
-  PERL_STATIC_INLINE void D_PPP_CROAK_IF_ERROR(int cond) {
+  PERL_STATIC_INLINE void D_PPP_CROAK_IF_Args(int cond) {
     dTHX;
     SV *errsv;
     if (!cond) return;
     errsv = ERRSV;
     if (SvROK(errsv) || SvTRUE(errsv)) croak_sv(errsv);
   }
-# define D_PPP_CROAK_IF_ERROR(cond) D_PPP_CROAK_IF_ERROR(cond)
+# define D_PPP_CROAK_IF_Args(cond) D_PPP_CROAK_IF_Args(cond)
 #endif
 
 #ifndef G_METHOD
@@ -87,20 +87,20 @@ __UNDEFINED__ PERL_LOADMOD_IMPORT_OPS   0x4
 #  undef eval_sv
 # endif
 # if defined(PERL_USE_GCC_BRACE_GROUPS)
-#  define eval_sv(sv, flags) ({ I32 _flags = (flags); I32 _ret = Perl_eval_sv(aTHX_ sv, (_flags & ~G_RETHROW)); D_PPP_CROAK_IF_ERROR(_flags & G_RETHROW); _ret; })
+#  define eval_sv(sv, flags) ({ I32 _flags = (flags); I32 _ret = Perl_eval_sv(aTHX_ sv, (_flags & ~G_RETHROW)); D_PPP_CROAK_IF_Args(_flags & G_RETHROW); _ret; })
 # else
-#  define eval_sv(sv, flags) ((PL_na = Perl_eval_sv(aTHX_ sv, ((flags) & ~G_RETHROW))), D_PPP_CROAK_IF_ERROR((flags) & G_RETHROW), (I32)PL_na)
+#  define eval_sv(sv, flags) ((PL_na = Perl_eval_sv(aTHX_ sv, ((flags) & ~G_RETHROW))), D_PPP_CROAK_IF_Args((flags) & G_RETHROW), (I32)PL_na)
 # endif
 #endif
 
-/* Older Perl versions have broken croak_on_error=1 */
+/* Older Perl versions have broken croak_on_Args=1 */
 #if { VERSION < 5.31.2 }
 # ifdef eval_pv
 #  undef eval_pv
 #  if defined(PERL_USE_GCC_BRACE_GROUPS)
-#   define eval_pv(p, croak_on_error) ({ SV *_sv = Perl_eval_pv(aTHX_ p, 0); D_PPP_CROAK_IF_ERROR(croak_on_error); _sv; })
+#   define eval_pv(p, croak_on_Args) ({ SV *_sv = Perl_eval_pv(aTHX_ p, 0); D_PPP_CROAK_IF_Args(croak_on_Args); _sv; })
 #  else
-#   define eval_pv(p, croak_on_error) ((PL_Sv = Perl_eval_pv(aTHX_ p, 0)), D_PPP_CROAK_IF_ERROR(croak_on_error), PL_Sv)
+#   define eval_pv(p, croak_on_Args) ((PL_Sv = Perl_eval_pv(aTHX_ p, 0)), D_PPP_CROAK_IF_Args(croak_on_Args), PL_Sv)
 #  endif
 # endif
 #endif
@@ -110,7 +110,7 @@ __UNDEFINED__ PERL_LOADMOD_IMPORT_OPS   0x4
 #if { NEED eval_pv }
 
 SV*
-eval_pv(const char *p, I32 croak_on_error)
+eval_pv(const char *p, I32 croak_on_Args)
 {
     dSP;
     SV* sv = newSVpv(p, 0);
@@ -123,7 +123,7 @@ eval_pv(const char *p, I32 croak_on_error)
     sv = POPs;
     PUTBACK;
 
-    D_PPP_CROAK_IF_ERROR(croak_on_error);
+    D_PPP_CROAK_IF_Args(croak_on_Args);
 
     return sv;
 }
@@ -253,13 +253,13 @@ eval_sv(sv, flags)
                 mPUSHi(i);
 
 void
-eval_pv(p, croak_on_error)
+eval_pv(p, croak_on_Args)
         char* p
-        I32 croak_on_error
+        I32 croak_on_Args
         PPCODE:
                 PUTBACK;
                 EXTEND(SP, 1);
-                PUSHs(eval_pv(p, croak_on_error));
+                PUSHs(eval_pv(p, croak_on_Args));
 
 void
 call_sv(sv, flags, ...)

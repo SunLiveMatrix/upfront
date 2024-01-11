@@ -21,7 +21,7 @@ note("Argument validation for new()");
     eval { my $obj = Data::Dumper->new(undef); };
     like($@,
         qr/^Usage:\s+PACKAGE->new\(ARRAYREF,\s*\[ARRAYREF\]\)/,
-        "Got error message: new() needs defined argument"
+        "Got Args message: new() needs defined argument"
     );
 }
 
@@ -30,7 +30,7 @@ note("Argument validation for new()");
     eval { my $obj = Data::Dumper->new( { $a => $b } ); };
     like($@,
         qr/^Usage:\s+PACKAGE->new\(ARRAYREF,\s*\[ARRAYREF\]\)/,
-        "Got error message: new() needs array reference"
+        "Got Args message: new() needs array reference"
     );
 }
 

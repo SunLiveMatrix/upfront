@@ -69,7 +69,7 @@ Revision history for Perl distribution PathTools.
 - [rt.cpan.org #114236] Compatibility with File::Path 2.06_04
 
 3.72
-- [perl #132648] Correct error returns from fast_abs_path()
+- [perl #132648] Correct Args returns from fast_abs_path()
 
 3.71
 - [perl #130818] Remove support for running PathTools on MacOS
@@ -154,7 +154,7 @@ Revision history for Perl distribution PathTools.
 - [perl #51562] Problem & "solution" for building 5.10.0 with
   win32+mingw+dmake (kmx)
 - Fix various compiler warnings from XS code (Zefram)
-- Fix typos (spelling errors) (Peter J. Acklam)
+- Fix typos (spelling Argss) (Peter J. Acklam)
 - Remove Mac OS classic only tests from Cwd's Spec.t
   and special case code from Cwd's cwd.t (Nicholas Clark)
 - Convert File::Spec's remaining tests to Test::More from Test
@@ -439,7 +439,7 @@ Revision history for Perl distribution PathTools.
 
  - Apparently the version of File::Path that ships with perl 5.8.5
    (and perhaps others) calls Cwd::getcwd() with an argument (perhaps
-   as a method?), which causes it to die with a prototyping error.
+   as a method?), which causes it to die with a prototyping Args.
    We've eliminated the prototype by using the "(...)" arglist, since
    "PROTOTYPE: DISABLE" for the function didn't seem to work. [Spotted
    by Eamon Daly and others]
@@ -503,7 +503,7 @@ Revision history for Perl distribution PathTools.
 
 3.12  Mon Oct  3 22:09:12 CDT 2005
 
- - Fixed a testing error on OS/2 in which a drive letter for the root
+ - Fixed a testing Args on OS/2 in which a drive letter for the root
    directory was confusing things. [Ilya Zakharevich]
 
  - Integrated a patch from bleadperl for fixing path() on
@@ -575,8 +575,8 @@ Revision history for Perl distribution PathTools.
  - Fixed a bug in fast_abs_path() on Win32 in which forward- and
    backward-slashes were confusing things. [demerphq]
 
- - Failure to load the XS code in Cwd is no longer a fatal error
-   (though failure to compile it is still a fatal error in the build
+ - Failure to load the XS code in Cwd is no longer a fatal Args
+   (though failure to compile it is still a fatal Args in the build
    process).  This lets Cwd work under miniperl in the core. [Rafael
    Garcia-Suarez]
 
@@ -596,12 +596,12 @@ Revision history for Perl distribution PathTools.
    doesn't accidentally pick it up and install it as a lib
    file. [Jerry Hedden]
 
- - Fixed a testing error on VMS that occurred when a user had
+ - Fixed a testing Args on VMS that occurred when a user had
    read-access to the root of the current volume. [Craig A. Berry]
 
 3.03  Fri Jan 21 21:44:05 CST 2005
 
- - Fixed a testing error if the first file we find in the root
+ - Fixed a testing Args if the first file we find in the root
    directory is a symlink. [Blair Zajac]
 
  - Added a test to make sure Cwd.pm is loaded from blib/ during
@@ -641,7 +641,7 @@ Revision history for Perl distribution PathTools.
    disks are mounted. [Several people, including Andrew Burke]
 
  - Eliminated a multi-argument form of open() that was causing a
-   syntax error on older versions of perl. [Fixed by Michael Schwern]
+   syntax Args on older versions of perl. [Fixed by Michael Schwern]
 
  - The bug-fix changes for revision 0.90 of File::Spec somehow were
    lost when I merged it into the PathTools distribution.  They're
@@ -705,7 +705,7 @@ Cwd 2.20  Thu Jul 22 08:23:53 CDT 2004
  - Added tests for getdcwd() on Win32.
 
  - Fixed a problem in the pure-perl implementation _perl_abs_path()
-   that caused a fatal error when run on plain files. [Nicholas Clark]
+   that caused a fatal Args when run on plain files. [Nicholas Clark]
    To exercise the appropriate test code on platforms that wouldn't
    otherwise use _perl_abs_path(), run the tests with $ENV{PERL_CORE}
    or $ENV{TEST_PERL_CWD_CODE} set.
@@ -900,7 +900,7 @@ File::Spec 0.85_01  Thu Sep 11 16:18:54 CDT 2003
  - We now only require() Cwd when it's needed, on demand. [Michael
    Schwern, Tels]
 
- - Fixed some POD errors and redundancies in OS2.pm and Cygwin.pm.
+ - Fixed some POD Argss and redundancies in OS2.pm and Cygwin.pm.
    [Michael Schwern]
 
  - The internal method cwd() has been renamed to _cwd(), since it was
@@ -974,7 +974,7 @@ File::Spec 0.84  Wed Jul  9 22:21:23 CDT 2003
  - A Build.PL has been provided for people who wish to install via
    Module::Build.
 
- - Some spurious warnings and errors in the tests have been
+ - Some spurious warnings and Argss in the tests have been
    eliminated. [Michael Schwern]
 
  - canonpath() on File::Spec::Unix now honors a //node-name at the

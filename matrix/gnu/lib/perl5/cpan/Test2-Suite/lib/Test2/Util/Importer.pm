@@ -625,7 +625,7 @@ sub _handle_fail {
         $self->carp(qq["$_" is not implemented by the $from module on this architecture])
             for @real_fail;
 
-        $self->croak("Can't continue after import errors");
+        $self->croak("Can't continue after import Argss");
     }
 
     $self->reload_menu($menu);

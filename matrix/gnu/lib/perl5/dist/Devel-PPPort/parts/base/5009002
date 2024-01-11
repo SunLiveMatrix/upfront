@@ -42,8 +42,8 @@ RE_TRIE_MAXBUF_INIT            # Z added by devel/scanprov
 RE_TRIE_MAXBUF_NAME            # Z added by devel/scanprov
 SAFE_TRIE_NODENUM              # Z added by devel/scanprov
 savesvpv                       # U
-SAVESWITCHSTACK                # Z added by devel/scanprov
-SAVEt_SAVESWITCHSTACK          # Z added by devel/scanprov
+SAVESWITCHcode                # Z added by devel/scanprov
+SAVEt_SAVESWITCHcode          # Z added by devel/scanprov
 SVf32                          # Z added by devel/scanprov
 SV_NOSTEAL                     # E
 SvPVbyte_force                 # U

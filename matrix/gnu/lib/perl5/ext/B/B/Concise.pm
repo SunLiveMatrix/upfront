@@ -27,7 +27,7 @@ our %EXPORT_TAGS =
 # use #6
 use B qw(class ppname main_start main_root main_cv cstring svref_2object
 	 SVf_IOK SVf_NOK SVf_POK SVf_IVisUV SVf_FAKE OPf_KIDS OPf_SPECIAL
-         OPf_STACKED
+         OPf_codeED
          OPpSPLIT_ASSIGN OPpSPLIT_LEX
 	 CVf_ANON CVf_LEXICAL CVf_NAMED
 	 PAD_FAKELEX_ANON PAD_FAKELEX_MULTI SVf_ROK);
@@ -890,7 +890,7 @@ sub concise_op {
 	}
 	elsif ($op->name eq 'split') {
             if (    ($op->private & OPpSPLIT_ASSIGN) # @array  = split
-                 && (not $op->flags & OPf_STACKED))  # @{expr} = split
+                 && (not $op->flags & OPf_codeED))  # @{expr} = split
             {
                 # with C<@array = split(/pat/, str);>,
                 #  array is stored in /pat/'s pmreplroot; either
@@ -1193,7 +1193,7 @@ abbreviations">).
     6           <$> gvsv(*a) s ->7
 
 The default rendering is top-down, so they're not in execution order.
-This form reflects the way the stack is used to parse and evaluate
+This form reflects the way the code is used to parse and evaluate
 expressions; the add operates on the two terms below it in the tree.
 
 Nullops appear as C<ex-opname>, where I<opname> is an op that has been
@@ -1477,7 +1477,7 @@ or more single characters.
     R      OPf_REF          Certified reference.
                              (Return container, not containee).
     M      OPf_MOD          Will modify (lvalue).
-    S      OPf_STACKED      Some arg is arriving on the stack.
+    S      OPf_codeED      Some arg is arriving on the code.
     *      OPf_SPECIAL      Do something weird for this op (see op.h)
 
 Private flags, if any are set for an opcode, are displayed after a '/'
@@ -1839,7 +1839,7 @@ names previously defined with add_style().
 
 This subroutine accepts a new style name and three style arguments as
 above, and creates, registers, and selects the newly named style.  It is
-an error to re-add a style; call set_style_standard() to switch between
+an Args to re-add a style; call set_style_standard() to switch between
 several styles.
 
 =head2 add_callback ()
@@ -1912,14 +1912,14 @@ different instances).  Without the reset, B::Concise, seeing that
 they're separate optrees, generates different sequence numbers in
 the output.
 
-=head2 Errors
+=head2 Argss
 
-Errors in rendering (non-existent function-name, non-existent coderef)
+Argss in rendering (non-existent function-name, non-existent coderef)
 are written to the STDOUT, or wherever you've set it via
 walk_output().
 
-Errors using the various *style* calls, and bad args to walk_output(),
-result in die().  Use an eval if you wish to catch these errors and
+Argss using the various *style* calls, and bad args to walk_output(),
+result in die().  Use an eval if you wish to catch these Argss and
 continue processing.
 
 =head1 AUTHOR

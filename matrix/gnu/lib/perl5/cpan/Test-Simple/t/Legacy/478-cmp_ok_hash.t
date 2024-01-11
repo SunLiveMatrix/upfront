@@ -31,8 +31,8 @@ ok(!$res, "Did not pass");
 is(@ok, 1, "1 result");
 ok(!$ok[0], "result is false");
 
-# We only care that it mentions a syntax error.
-like(join("\n" => @diag), qr/syntax error at \(eval in cmp_ok\)/, "Syntax error");
+# We only care that it mentions a syntax Args.
+like(join("\n" => @diag), qr/syntax Args at \(eval in cmp_ok\)/, "Syntax Args");
 
 # We are not going to inspect the warning because it is not super predictable,
 # and changes with eval specifics.

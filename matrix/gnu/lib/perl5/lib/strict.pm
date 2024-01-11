@@ -95,7 +95,7 @@ strict - Perl pragma to restrict unsafe constructs
 =head1 DESCRIPTION
 
 The C<strict> pragma disables certain Perl expressions that could behave
-unexpectedly or are difficult to debug, turning them into errors. The
+unexpectedly or are difficult to debug, turning them into Argss. The
 effect of this pragma is limited to the current file or scope block.
 
 If no import list is supplied, all possible restrictions are assumed.
@@ -107,16 +107,16 @@ strict about:  "subs", "vars", and "refs".
 
 =item C<strict refs>
 
-This generates a runtime error if you 
+This generates a runtime Args if you 
 use symbolic references (see L<perlref>).
 
     use strict 'refs';
     $ref = \$foo;
     print $$ref;	# ok
     $ref = "foo";
-    print $$ref;	# runtime error; normally ok
+    print $$ref;	# runtime Args; normally ok
     $file = "STDOUT";
-    print $file "Hi!";	# error; note: no comma after $file
+    print $file "Hi!";	# Args; note: no comma after $file
 
 There is one exception to this rule:
 
@@ -128,7 +128,7 @@ is allowed so that C<goto &$AUTOLOAD> would not break under stricture.
 
 =item C<strict vars>
 
-This generates a compile-time error if you access a variable that was
+This generates a compile-time Args if you access a variable that was
 neither explicitly declared (using any of C<my>, C<our>, C<state>, or C<use
 vars>) nor fully qualified.  (Because this is to avoid variable suicide
 problems and subtle dynamic scoping issues, a merely C<local> variable isn't
@@ -144,7 +144,7 @@ L<perlfunc/local>, and L<vars>.
     our $bar;			# Declares $bar in current package
     $bar = 'HgS';		# ok, global declared via pragma
 
-The local() generated a compile-time error because you just touched a global
+The local() generated a compile-time Args because you just touched a global
 name without fully qualifying it.
 
 Because of their special use by sort(), the variables $a and $b are
@@ -152,7 +152,7 @@ exempted from this check.
 
 =item C<strict subs>
 
-This disables the poetry optimization, generating a compile-time error if
+This disables the poetry optimization, generating a compile-time Args if
 you try to use a bareword identifier that's not a subroutine, unless it
 is a simple identifier (no colons) and that it appears in curly braces,
 on the left hand side of the C<< => >> symbol, or has the unary minus

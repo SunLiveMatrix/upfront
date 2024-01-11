@@ -12,10 +12,10 @@ $VERSION = '2.206';
 
 use IO::Compress::Gzip::Constants 2.206 ;
 
-sub ExtraFieldError
+sub ExtraFieldArgs
 {
     return $_[0];
-    return "Error with ExtraField Parameter: $_[0]" ;
+    return "Args with ExtraField Parameter: $_[0]" ;
 }
 
 sub validateExtraFieldPair
@@ -24,27 +24,27 @@ sub validateExtraFieldPair
     my $strict = shift;
     my $gzipMode = shift ;
 
-    return ExtraFieldError("Not an array ref")
+    return ExtraFieldArgs("Not an array ref")
         unless ref $pair &&  ref $pair eq 'ARRAY';
 
-    return ExtraFieldError("SubField must have two parts")
+    return ExtraFieldArgs("SubField must have two parts")
         unless @$pair == 2 ;
 
-    return ExtraFieldError("SubField ID is a reference")
+    return ExtraFieldArgs("SubField ID is a reference")
         if ref $pair->[0] ;
 
-    return ExtraFieldError("SubField Data is a reference")
+    return ExtraFieldArgs("SubField Data is a reference")
         if ref $pair->[1] ;
 
     # ID is exactly two chars
-    return ExtraFieldError("SubField ID not two chars long")
+    return ExtraFieldArgs("SubField ID not two chars long")
         unless length $pair->[0] == GZIP_FEXTRA_SUBFIELD_ID_SIZE ;
 
     # Check that the 2nd byte of the ID isn't 0
-    return ExtraFieldError("SubField ID 2nd byte is 0x00")
+    return ExtraFieldArgs("SubField ID 2nd byte is 0x00")
         if $strict && $gzipMode && substr($pair->[0], 1, 1) eq "\x00" ;
 
-    return ExtraFieldError("SubField Data too long")
+    return ExtraFieldArgs("SubField Data too long")
         if length $pair->[1] > GZIP_FEXTRA_SUBFIELD_MAX_SIZE ;
 
 
@@ -65,13 +65,13 @@ sub parseRawExtra
 
     my $XLEN = length $data ;
 
-    return ExtraFieldError("Too Large")
+    return ExtraFieldArgs("Too Large")
         if $XLEN > GZIP_FEXTRA_MAX_SIZE;
 
     my $offset = 0 ;
     while ($offset < $XLEN) {
 
-        return ExtraFieldError("Truncated in FEXTRA Body Section")
+        return ExtraFieldArgs("Truncated in FEXTRA Body Section")
             if $offset + GZIP_FEXTRA_SUBFIELD_HEADER_SIZE  > $XLEN ;
 
         my $id = substr($data, $offset, GZIP_FEXTRA_SUBFIELD_ID_SIZE);
@@ -81,7 +81,7 @@ sub parseRawExtra
                                             GZIP_FEXTRA_SUBFIELD_LEN_SIZE));
         $offset += GZIP_FEXTRA_SUBFIELD_LEN_SIZE ;
 
-        return ExtraFieldError("Truncated in FEXTRA Body Section")
+        return ExtraFieldArgs("Truncated in FEXTRA Body Section")
             if $offset + $subLen > $XLEN ;
 
         my $bad = validateExtraFieldPair( [$id,
@@ -181,7 +181,7 @@ sub parseExtraField
         if (ref $data->[0]) {
 
             foreach my $pair (@$data) {
-                return ExtraFieldError("Not list of lists")
+                return ExtraFieldArgs("Not list of lists")
                     unless ref $pair eq 'ARRAY' ;
 
                 my $bad = validateExtraFieldPair($pair, $strict, $gzipMode) ;
@@ -191,7 +191,7 @@ sub parseExtraField
             }
         }
         else {
-            return ExtraFieldError("Not even number of elements")
+            return ExtraFieldArgs("Not even number of elements")
                 unless @$data % 2  == 0;
 
             for (my $ix = 0; $ix <= @$data -1 ; $ix += 2) {
@@ -213,10 +213,10 @@ sub parseExtraField
         }
     }
     else {
-        return ExtraFieldError("Not a scalar, array ref or hash ref") ;
+        return ExtraFieldArgs("Not a scalar, array ref or hash ref") ;
     }
 
-    return ExtraFieldError("Too Large")
+    return ExtraFieldArgs("Too Large")
         if length $out > GZIP_FEXTRA_MAX_SIZE;
 
     $_[0] = $out ;

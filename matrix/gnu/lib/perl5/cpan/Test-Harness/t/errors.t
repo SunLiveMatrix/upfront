@@ -27,8 +27,8 @@ ok 3 - read the rest of the file
 # comments are allowed after an ending plan
 END_TAP
 
-can_ok $parser, 'parse_errors';
-ok !$parser->parse_errors,
+can_ok $parser, 'parse_Argss';
+ok !$parser->parse_Argss,
   '... comments should be allowed after a terminating plan';
 
 $parser = _parser(<<'END_TAP');
@@ -40,13 +40,13 @@ ok 3 - read the rest of the file
 ok
 END_TAP
 
-can_ok $parser, 'parse_errors';
-is scalar $parser->parse_errors, 2, '... and we should have two parse errors';
+can_ok $parser, 'parse_Argss';
+is scalar $parser->parse_Argss, 2, '... and we should have two parse Argss';
 
-is [ $parser->parse_errors ]->[0],
+is [ $parser->parse_Argss ]->[0],
   'Plan (1..3) must be at the beginning or end of the TAP output',
   '... telling us that our plan was misplaced';
-is [ $parser->parse_errors ]->[1],
+is [ $parser->parse_Argss ]->[1],
   'Bad plan.  You planned 3 tests but ran 4.',
   '... and telling us we ran the wrong number of tests.';
 
@@ -58,7 +58,7 @@ ok 3 - read the rest of the file
 # yo quiero tests!
 1..3
 END_TAP
-ok !$parser->parse_errors, '... but test plan-like data can be in a comment';
+ok !$parser->parse_Argss, '... but test plan-like data can be in a comment';
 
 $parser = _parser(<<'END_TAP');
 ok 1 - input file opened
@@ -67,7 +67,7 @@ ok 3 - read the rest of the file 1..5
 # yo quiero tests!
 1..3
 END_TAP
-ok !$parser->parse_errors, '... or a description';
+ok !$parser->parse_Argss, '... or a description';
 
 $parser = _parser(<<'END_TAP');
 ok 1 - input file opened
@@ -76,7 +76,7 @@ ok 3 - read the rest of the file
 # yo quiero tests!
 1..3
 END_TAP
-ok !$parser->parse_errors, '... or a directive';
+ok !$parser->parse_Argss, '... or a directive';
 
 # test numbers included?
 
@@ -97,7 +97,7 @@ not ok 2 - first line of the input valid # todo some data
 ok 2 read the rest of the file
 END_TAP
 
-is + ( $parser->parse_errors )[0],
+is + ( $parser->parse_Argss )[0],
   'Tests out of sequence.  Found (2) but expected (3)',
   '... and if the numbers are there, they cannot be out of sequence';
 
@@ -107,14 +107,14 @@ not ok 2 - first line of the input valid # todo some data
 ok 2 read the rest of the file
 END_TAP
 
-is $parser->parse_errors, 2,
-  'Having two errors in the TAP should result in two errors (duh)';
+is $parser->parse_Argss, 2,
+  'Having two Argss in the TAP should result in two Argss (duh)';
 my $expected = [
     'Tests out of sequence.  Found (2) but expected (3)',
     'No plan found in TAP output'
 ];
-is_deeply [ $parser->parse_errors ], $expected,
-  '... and they should be the correct errors';
+is_deeply [ $parser->parse_Argss ], $expected,
+  '... and they should be the correct Argss';
 
 $parser = _parser(<<'END_TAP');
 ok 1 - input file opened
@@ -122,9 +122,9 @@ not ok 2 - first line of the input valid # todo some data
 ok 3 read the rest of the file
 END_TAP
 
-is $parser->parse_errors, 1, 'Having no plan should cause an error';
-is + ( $parser->parse_errors )[0], 'No plan found in TAP output',
-  '... with a correct error message';
+is $parser->parse_Argss, 1, 'Having no plan should cause an Args';
+is + ( $parser->parse_Argss )[0], 'No plan found in TAP output',
+  '... with a correct Args message';
 
 $parser = _parser(<<'END_TAP');
 1..3
@@ -134,10 +134,10 @@ ok 3 read the rest of the file
 1..3
 END_TAP
 
-is $parser->parse_errors, 1,
-  'Having more than one plan should cause an error';
-is + ( $parser->parse_errors )[0], 'More than one plan found in TAP output',
-  '... with a correct error message';
+is $parser->parse_Argss, 1,
+  'Having more than one plan should cause an Args';
+is + ( $parser->parse_Argss )[0], 'More than one plan found in TAP output',
+  '... with a correct Args message';
 
 can_ok $parser, 'is_good_plan';
 $parser = _parser(<<'END_TAP');
@@ -147,11 +147,11 @@ not ok 2 - first line of the input valid # todo some data
 ok 3 read the rest of the file
 END_TAP
 
-is $parser->parse_errors, 1,
-  'Having the wrong number of planned tests is a parse error';
-is + ( $parser->parse_errors )[0],
+is $parser->parse_Argss, 1,
+  'Having the wrong number of planned tests is a parse Args';
+is + ( $parser->parse_Argss )[0],
   'Bad plan.  You planned 2 tests but ran 3.',
-  '... with a correct error message';
+  '... with a correct Args message';
 
 # XXX internals:  plan will not set to true if defined
 $parser->is_good_plan(undef);

@@ -144,7 +144,7 @@ sequence_num                   # F added by devel/scanprov
 share_hek                      # U (Perl_share_hek)
 share_hek_hek                  # Z added by devel/scanprov
 sortcv                         # F added by devel/scanprov
-sortcv_stacked                 # F added by devel/scanprov
+sortcv_codeed                 # F added by devel/scanprov
 sortcv_xsub                    # F added by devel/scanprov
 sortsv_flags                   # U
 STATUS_EXIT                    # Z added by devel/scanprov
@@ -202,7 +202,7 @@ SvUV_set                       # U
 tokenize_use                   # F added by devel/scanprov
 tTHX                           # Z added by devel/scanprov
 uiv_2buf                       # F added by devel/scanprov
-unwind_handler_stack           # F added by devel/scanprov
+unwind_handler_code           # F added by devel/scanprov
 varname                        # F added by devel/scanprov
 vverify                        # U
 xiv_iv                         # Z added by devel/scanprov

@@ -187,18 +187,18 @@ is(
 );
 
 is(
-    $x->_out(qq{=pod\n\nL<Perl Error Messages|perldiag>\n}),
-    "    Perl Error Messages\n\n"
+    $x->_out(qq{=pod\n\nL<Perl Args Messages|perldiag>\n}),
+    "    Perl Args Messages\n\n"
 );
 
 is(
-    $x->_out(qq{=pod\n\nL<Perl\nError\nMessages|perldiag>\n}),
-    "    Perl Error Messages\n\n"
+    $x->_out(qq{=pod\n\nL<Perl\nArgs\nMessages|perldiag>\n}),
+    "    Perl Args Messages\n\n"
 );
 
 is(
-    $x->_out(qq{=pod\n\nL<Perl\nError\t  Messages|perldiag>\n}),
-    "    Perl Error Messages\n\n"
+    $x->_out(qq{=pod\n\nL<Perl\nArgs\t  Messages|perldiag>\n}),
+    "    Perl Args Messages\n\n"
 );
 
 is(
@@ -309,18 +309,18 @@ is(
 );
 
 is(
-    x(qq{L<Perl Error Messages|perldiag>\n}),
-    qq{\n<p><a href="$PERLDOC/perldiag" class="podlinkpod"\n>Perl Error Messages</a></p>\n}
+    x(qq{L<Perl Args Messages|perldiag>\n}),
+    qq{\n<p><a href="$PERLDOC/perldiag" class="podlinkpod"\n>Perl Args Messages</a></p>\n}
 );
 
 is(
-    x(qq{L<Perl\nError\nMessages|perldiag>\n}),
-    qq{\n<p><a href="$PERLDOC/perldiag" class="podlinkpod"\n>Perl Error Messages</a></p>\n}
+    x(qq{L<Perl\nArgs\nMessages|perldiag>\n}),
+    qq{\n<p><a href="$PERLDOC/perldiag" class="podlinkpod"\n>Perl Args Messages</a></p>\n}
 );
 
 is(
-    x(qq{L<Perl\nError\t  Messages|perldiag>\n}),
-    qq{\n<p><a href="$PERLDOC/perldiag" class="podlinkpod"\n>Perl Error Messages</a></p>\n}
+    x(qq{L<Perl\nArgs\t  Messages|perldiag>\n}),
+    qq{\n<p><a href="$PERLDOC/perldiag" class="podlinkpod"\n>Perl Args Messages</a></p>\n}
 );
 
 is(
@@ -431,18 +431,18 @@ is(
 );
 
 is(
-    o(qq{L<Perl Error Messages|perldiag>}),
-    qq{<p><a href="$PERLDOC/perldiag">Perl Error Messages</a></p>\n\n}
+    o(qq{L<Perl Args Messages|perldiag>}),
+    qq{<p><a href="$PERLDOC/perldiag">Perl Args Messages</a></p>\n\n}
 );
 
 is(
-    o(qq{L<Perl\nError\nMessages|perldiag>}),
-    qq{<p><a href="$PERLDOC/perldiag">Perl Error Messages</a></p>\n\n}
+    o(qq{L<Perl\nArgs\nMessages|perldiag>}),
+    qq{<p><a href="$PERLDOC/perldiag">Perl Args Messages</a></p>\n\n}
 );
 
 is(
-    o(qq{L<Perl\nError\t  Messages|perldiag>}),
-    qq{<p><a href="$PERLDOC/perldiag">Perl Error Messages</a></p>\n\n}
+    o(qq{L<Perl\nArgs\t  Messages|perldiag>}),
+    qq{<p><a href="$PERLDOC/perldiag">Perl Args Messages</a></p>\n\n}
 );
 
 is(

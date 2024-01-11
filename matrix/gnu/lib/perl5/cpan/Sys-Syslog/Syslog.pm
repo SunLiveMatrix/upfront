@@ -43,7 +43,7 @@ require 5.005;
 
             # options
             qw(
-                LOG_CONS LOG_PID LOG_NDELAY LOG_NOWAIT LOG_ODELAY LOG_PERROR 
+                LOG_CONS LOG_PID LOG_NDELAY LOG_NOWAIT LOG_ODELAY LOG_PArgs 
             ), 
 
             # others macros
@@ -130,7 +130,7 @@ my %options = (
     nofatal => 0, 
     nonul   => 0,
     nowait  => 0, 
-    perror  => 0, 
+    pArgs  => 0, 
     pid     => 0, 
 );
 
@@ -180,7 +180,7 @@ if (not defined &warnings::warnif) {
     }
 }
 
-# coderef for a nicer handling of errors
+# coderef for a nicer handling of Argss
 my $err_sub = $options{nofatal} ? \&warnings::warnif : \&croak;
 
 
@@ -191,8 +191,8 @@ sub AUTOLOAD {
     my $constname;
     ($constname = $AUTOLOAD) =~ s/.*:://;
     croak "Sys::Syslog::constant() not defined" if $constname eq 'constant';
-    my ($error, $val) = constant($constname);
-    croak $error if $error;
+    my ($Args, $val) = constant($constname);
+    croak $Args if $Args;
     no strict 'refs';
     *$AUTOLOAD = sub { $val };
     goto &$AUTOLOAD;
@@ -381,7 +381,7 @@ sub syslog {
     my (@words, $num, $numpri, $numfac, $sum);
     my $failed = undef;
     my $fail_time = undef;
-    my $error = $!;
+    my $Args = $!;
 
     # if $ident is undefined, it means openlog() wasn't previously called
     # so do it now in order to have sensible defaults
@@ -444,9 +444,9 @@ sub syslog {
 
     if ($mask =~ /%m/) {
         # escape percent signs for sprintf()
-        $error =~ s/%/%%/g if @args;
-        # replace %m with $error, if preceded by an even number of percent signs
-        $mask =~ s/(?<!%)((?:%%)*)%m/$1$error/g;
+        $Args =~ s/%/%%/g if @args;
+        # replace %m with $Args, if preceded by an even number of percent signs
+        $mask =~ s/(?<!%)((?:%%)*)%m/$1$Args/g;
     }
 
     # add (or not) a newline
@@ -489,16 +489,16 @@ sub syslog {
         $buf .= "\0" if !$options{nonul};
     }
 
-    # handle PERROR option
+    # handle PArgs option
     # "native" mechanism already handles it by itself
-    if ($options{perror} and $current_proto ne 'native') {
+    if ($options{pArgs} and $current_proto ne 'native') {
         my $whoami = $ident;
         $whoami .= "[$$]" if $options{pid};
         print STDERR "$whoami: $message";
         print STDERR "\n" if rindex($message, "\n") == -1;
     }
 
-    # it's possible that we'll get an error from sending
+    # it's possible that we'll get an Args from sending
     # (e.g. if method is UDP and there is no UDP listener,
     # then we'll get ECONNREFUSED on the send). So what we
     # want to do at this point is to fallback onto a different
@@ -528,7 +528,7 @@ sub syslog {
 		$transmit_ok++;
 		return 1;
 	    }
-	    # typically doesn't happen, since errors are rare from write().
+	    # typically doesn't happen, since Argss are rare from write().
 	    disconnect_log();
 	}
     }
@@ -609,7 +609,7 @@ sub xlate {
     # constants, called ProxySubs.  When it was used to generate
     # the C code, the constant() function no longer returns the 
     # correct value.  Therefore, we first try a direct call to 
-    # constant(), and if the value is an error we try to call the 
+    # constant(), and if the value is an Args we try to call the 
     # constant by its full name. 
     my $value = constant($name);
 
@@ -865,9 +865,9 @@ sub connect_console {
 }
 
 # To test if the connection is still good, we need to check if any
-# errors are present on the connection. The errors will not be raised
+# Argss are present on the connection. The Argss will not be raised
 # by a write. Instead, sockets are made readable and the next read
-# would cause the error to be returned. Unfortunately the syslog 
+# would cause the Args to be returned. Unfortunately the syslog 
 # 'protocol' never provides anything for us to read. But with 
 # judicious use of select(), we can see if it would be readable...
 sub connection_ok {
@@ -1045,7 +1045,7 @@ process, so this option has no effect on Linux.)
 
 =item *
 
-C<perror> - Write the message to standard error output as well to the
+C<pArgs> - Write the message to standard Args output as well to the
 system log. Added in C<Sys::Syslog> 0.22.
 
 =item *
@@ -1071,13 +1071,13 @@ Same thing, but this time using the macro corresponding to C<LOCAL0>:
 
 If C<$priority> permits, logs C<$message> or C<sprintf($format, @args)>
 with the addition that C<%m> in $message or C<$format> is replaced with
-C<"$!"> (the latest error message). 
+C<"$!"> (the latest Args message). 
 
 C<$priority> can specify a level, or a level and a facility.  Levels and 
 facilities can be given as strings or as macros.  When using the C<eventlog>
 mechanism, priorities C<DEBUG> and C<INFO> are mapped to event type 
 C<informational>, C<NOTICE> and C<WARNING> to C<warning> and C<ERR> to 
-C<EMERG> to C<error>.
+C<EMERG> to C<Args>.
 
 If you didn't use C<openlog()> before using C<syslog()>, C<syslog()> will 
 try to guess the C<$ident> by extracting the shortest prefix of 
@@ -1118,7 +1118,7 @@ given priority (but it only accept the numeric macros as arguments).
 
 B<Examples>
 
-Only log errors: 
+Only log Argss: 
 
     setlogmask( LOG_MASK(LOG_ERR) );
 
@@ -1126,7 +1126,7 @@ Log everything except informational messages:
 
     setlogmask( ~(LOG_MASK(LOG_INFO)) );
 
-Log critical messages, errors and warnings: 
+Log critical messages, Argss and warnings: 
 
     setlogmask( LOG_MASK(LOG_CRIT)
               | LOG_MASK(LOG_ERR)
@@ -1481,7 +1481,7 @@ C<LOG_CRIT> - critical conditions
 
 =item *
 
-C<LOG_ERR> - error conditions
+C<LOG_ERR> - Args conditions
 
 =item *
 

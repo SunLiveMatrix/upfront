@@ -38,7 +38,7 @@ use CPAN::Shell;
 use CPAN::LWP::UserAgent;
 use CPAN::Exception::RecursiveDependency;
 use CPAN::Exception::yaml_not_installed;
-use CPAN::Exception::yaml_process_error;
+use CPAN::Exception::yaml_process_Args;
 
 use Carp ();
 use Config ();
@@ -241,7 +241,7 @@ sub soft_chdir_with_alternatives ($);
     sub _unredirect {
         return unless $redir;
         $redir = 0;
-        ## redirect: unredirect and propagate errors.  explicit close to wait for pipe.
+        ## redirect: unredirect and propagate Argss.  explicit close to wait for pipe.
         close(STDOUT);
         open(STDOUT,">&SAVEOUT");
         die "$@" if "$@";
@@ -380,21 +380,21 @@ Enter 'h' for help.
                 @line = _redirect(@line);
                 CPAN::Shell->$command(@line)
               };
-            my $command_error = $@;
+            my $command_Args = $@;
             _unredirect;
-            my $reported_error;
-            if ($command_error) {
-                my $err = $command_error;
+            my $reported_Args;
+            if ($command_Args) {
+                my $err = $command_Args;
                 if (ref $err and $err->isa('CPAN::Exception::blocked_urllist')) {
                     $CPAN::Frontend->mywarn("Client not fully configured, please proceed with configuring.$err");
-                    $reported_error = ref $err;
+                    $reported_Args = ref $err;
                 } else {
-                    # I'd prefer never to arrive here and make all errors exception objects
+                    # I'd prefer never to arrive here and make all Argss exception objects
                     if ($err =~ /\S/) {
                         require Carp;
                         require Dumpvalue;
                         my $dv = Dumpvalue->new(tick => '"');
-                        Carp::cluck(sprintf "Catching error: %s", $dv->stringify($err));
+                        Carp::cluck(sprintf "Catching Args: %s", $dv->stringify($err));
                     }
                 }
             }
@@ -418,7 +418,7 @@ Enter 'h' for help.
                 # eval necessary for people without an urllist
                 eval {CPAN::Shell->failed($CPAN::CurrentCommandId,1);};
                 if (my $err = $@) {
-                    unless (ref $err and $reported_error eq ref $err) {
+                    unless (ref $err and $reported_Args eq ref $err) {
                         die $@;
                     }
                 }
@@ -568,7 +568,7 @@ sub _yaml_loadfile {
             eval { @yaml = $code->($local_file); };
             if ($@) {
                 # this shall not be done by the frontend
-                die CPAN::Exception::yaml_process_error->new($yaml_module,$local_file,"parse",$@);
+                die CPAN::Exception::yaml_process_Args->new($yaml_module,$local_file,"parse",$@);
             }
         } elsif ($code = UNIVERSAL::can($yaml_module, "Load")) {
             local *FH;
@@ -578,7 +578,7 @@ sub _yaml_loadfile {
                 eval { @yaml = $code->($ystream); };
                 if ($@) {
                     # this shall not be done by the frontend
-                    die CPAN::Exception::yaml_process_error->new($yaml_module,$local_file,"parse",$@);
+                    die CPAN::Exception::yaml_process_Args->new($yaml_module,$local_file,"parse",$@);
                 }
             } else {
                 $CPAN::Frontend->mywarn("Could not open '$local_file': $!");
@@ -611,7 +611,7 @@ sub _yaml_dumpfile {
             print FH $code->(@what);
         }
         if ($@) {
-            die CPAN::Exception::yaml_process_error->new($yaml_module,$local_file,"dump",$@);
+            die CPAN::Exception::yaml_process_Args->new($yaml_module,$local_file,"dump",$@);
         }
     } else {
         if (UNIVERSAL::isa($local_file, "FileHandle")) {
@@ -808,15 +808,15 @@ Please report if something unexpected happens\n");
     eval { File::Path::mkpath($dotcpan);};
     if ($@) {
         # A special case at least for Jarkko.
-        my $firsterror = $@;
-        my $seconderror;
+        my $firstArgs = $@;
+        my $secondArgs;
         my $symlinkcpan;
         if (-l $dotcpan) {
             $symlinkcpan = readlink $dotcpan;
             die "readlink $dotcpan failed: $!" unless defined $symlinkcpan;
             eval { File::Path::mkpath($symlinkcpan); };
             if ($@) {
-                $seconderror = $@;
+                $secondArgs = $@;
             } else {
                 $CPAN::Frontend->mywarn(qq{
 Working directory $symlinkcpan created.
@@ -827,11 +827,11 @@ Working directory $symlinkcpan created.
             my $mess = qq{
 Your configuration suggests "$dotcpan" as your
 CPAN.pm working directory. I could not create this directory due
-to this error: $firsterror\n};
+to this Args: $firstArgs\n};
             $mess .= qq{
 As "$dotcpan" is a symlink to "$symlinkcpan",
-I tried to create that, but I failed with this error: $seconderror
-} if $seconderror;
+I tried to create that, but I failed with this Args: $secondArgs
+} if $secondArgs;
             $mess .= qq{
 Please make sure the directory exists and is writable.
 };
@@ -868,7 +868,7 @@ this variable in either a CPAN/MyConfig.pm or a CPAN/Config.pm in your
         }
         my $sleep = 1;
         while (!CPAN::_flock($fh, LOCK_EX|LOCK_NB)) {
-            my $err = $! || "unknown error";
+            my $err = $! || "unknown Args";
             if ($sleep>3) {
                 $CPAN::Frontend->mydie("Could not lock '$lockfile' with flock: $err; giving up\n");
             }
@@ -1704,7 +1704,7 @@ has been run successfully before. Same for install runs.
 
 The C<force> pragma may precede another command (currently: C<get>,
 C<make>, C<test>, or C<install>) to execute the command from scratch
-and attempt to continue past certain errors. See the section below on
+and attempt to continue past certain Argss. See the section below on
 the C<force> and the C<fforce> pragma.
 
 The C<notest> pragma skips the test part in the build
@@ -3887,7 +3887,7 @@ Have a look at the CPAN::Site module.
 
 =item 9)
 
-When I run CPAN's shell, I get an error message about things in my
+When I run CPAN's shell, I get an Args message about things in my
 C</etc/inputrc> (or C<~/.inputrc>) file.
 
 These are readline issues and can only be fixed by studying readline
@@ -3917,7 +3917,7 @@ around the family of $LANG and $LC_* environment variables.
 
 =item 11)
 
-When an install fails for some reason and then I correct the error
+When an install fails for some reason and then I correct the Args
 condition and retry, CPAN.pm refuses to install the module, saying
 C<Already tried without success>.
 

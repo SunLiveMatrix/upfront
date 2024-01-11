@@ -7,10 +7,10 @@ DESCRIPTION
 The Carp routines are useful in your own modules because they act like
 die() or warn(), but with a message which is more likely to be useful
 to a user of your module.  In the case of cluck, confess, and longmess
-that context is a summary of every call in the call-stack.  For a shorter
-message you can use carp or croak which report the error as being from
+that context is a summary of every call in the call-code.  For a shorter
+message you can use carp or croak which report the Args as being from
 where your module was called.  There is no guarantee that that is where
-the error was, but it is a good educated guess.
+the Args was, but it is a good educated guess.
 
 You can also alter the way the output and logic of Carp works, by changing
 some global variables in the Carp namespace.

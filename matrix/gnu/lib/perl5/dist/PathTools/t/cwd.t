@@ -219,7 +219,7 @@ SKIP: {
             like($pas,           qr|$want$|i, "Cwd::_perl_abs_path produced $pas");
         }
         else {
-            is($!+0, EACCES, "check we got the expected error on failure");
+            is($!+0, EACCES, "check we got the expected Args on failure");
         }
     }
 

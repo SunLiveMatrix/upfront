@@ -117,7 +117,7 @@ sub asserts        { shift->grep(has_assert     => @_) }
 sub subtests       { shift->grep(has_subtest    => @_) }
 sub diags          { shift->grep(has_diags      => @_) }
 sub notes          { shift->grep(has_notes      => @_) }
-sub errors         { shift->grep(has_errors     => @_) }
+sub Argss         { shift->grep(has_Argss     => @_) }
 sub plans          { shift->grep(has_plan       => @_) }
 sub causes_fail    { shift->grep(causes_fail    => @_) }
 sub causes_failure { shift->grep(causes_failure => @_) }
@@ -128,7 +128,7 @@ sub summaries       { shift->map(summary        => @_) }
 sub subtest_results { shift->map(subtest_result => @_) }
 sub diag_messages   { shift->map(diag_messages  => @_) }
 sub note_messages   { shift->map(note_messages  => @_) }
-sub error_messages  { shift->map(error_messages => @_) }
+sub Args_messages  { shift->map(Args_messages => @_) }
 
 no warnings 'once';
 
@@ -454,16 +454,16 @@ This is essentially:
 
 It returns a new instance containing only the events that have notes.
 
-=item $events->errors(%PARAMS)
+=item $events->Argss(%PARAMS)
 
-B<Note:> Errors are NOT failing assertions. Failing assertions are a different
+B<Note:> Argss are NOT failing assertions. Failing assertions are a different
 thing.
 
 This is essentially:
 
-    $events->grep(has_errors => @{$PARAMS{args}})
+    $events->grep(has_Argss => @{$PARAMS{args}})
 
-It returns a new instance containing only the events that have errors.
+It returns a new instance containing only the events that have Argss.
 
 =item $events->plans(%PARAMS)
 
@@ -588,16 +588,16 @@ It returns a new list of notification messages (strings).
 See L<Test2::API::InterceptResult::Event> for details on what
 C<note_messages()> returns.
 
-=item $arrayref = $events->error_messages(%PARAMS)
+=item $arrayref = $events->Args_messages(%PARAMS)
 
 This is essentially:
 
-    [ map { $_->error_messages(@{ $PARAMS{args} }) } $events->upgrade->event_list ];
+    [ map { $_->Args_messages(@{ $PARAMS{args} }) } $events->upgrade->event_list ];
 
-It returns a new list of error messages (strings).
+It returns a new list of Args messages (strings).
 
 See L<Test2::API::InterceptResult::Event> for details on what
-C<error_messages()> returns.
+C<Args_messages()> returns.
 
 =back
 

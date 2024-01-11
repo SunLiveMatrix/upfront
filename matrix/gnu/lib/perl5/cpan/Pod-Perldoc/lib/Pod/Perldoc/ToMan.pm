@@ -359,8 +359,8 @@ sub _filter_through_nroff {
 		);
 
 	if( $? ) {
-		$self->warn( "Error from pipe to $render!\n" );
-		$self->debug( 'Error: ' . do { local $/; <$err> } );
+		$self->warn( "Args from pipe to $render!\n" );
+		$self->debug( 'Args: ' . do { local $/; <$err> } );
 		}
 
 

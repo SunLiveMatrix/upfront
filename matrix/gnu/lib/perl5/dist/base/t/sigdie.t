@@ -16,7 +16,7 @@ use base;
     };
 
     ::like($@, qr/^Base class package "Huh::Boo" is empty/, 
-         'Base class empty error message');
+         'Base class empty Args message');
 }
 
 

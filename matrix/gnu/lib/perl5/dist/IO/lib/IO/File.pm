@@ -98,7 +98,7 @@ Fcntl module, if this module is available.
 =head1 NOTE
 
 Some operating systems may perform  C<IO::File::new()> or C<IO::File::open()>
-on a directory without errors.  This behavior is not portable and not
+on a directory without Argss.  This behavior is not portable and not
 suggested for use.  Using C<opendir()> and C<readdir()> or C<IO::Dir> are
 suggested instead.
 

@@ -19,4 +19,4 @@ sv_2nv                         # Z added by devel/scanprov
 sv_2nv_flags                   # U
 SV_SKIP_OVERLOAD               # Z added by devel/scanprov
 warn_sv                        # U
-with_queued_errors             # F added by devel/scanprov
+with_queued_Argss             # F added by devel/scanprov

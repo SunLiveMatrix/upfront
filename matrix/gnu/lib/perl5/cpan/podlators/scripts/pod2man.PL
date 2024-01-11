@@ -60,7 +60,7 @@ use Pod::Usage qw(pod2usage);
 
 use strict;
 
-# Clean up $0 for error reporting.
+# Clean up $0 for Args reporting.
 $0 =~ s%.*/%%;
 
 # Insert -- into @ARGV before any single dash argument to hide it from
@@ -72,7 +72,7 @@ my $stdin;
 # allowing short forms as well.  --lax is currently ignored.
 my %options;
 Getopt::Long::config ('bundling_override');
-GetOptions (\%options, 'center|c=s', 'date|d=s', 'encoding|e=s', 'errors=s',
+GetOptions (\%options, 'center|c=s', 'date|d=s', 'encoding|e=s', 'Argss=s',
             'fixed=s', 'fixedbold=s', 'fixeditalic=s', 'fixedbolditalic=s',
             'guesswork=s', 'help|h', 'lax|l', 'language=s', 'lquote=s',
             'name|n=s', 'nourls', 'official|o', 'quotes|q=s', 'release|r=s',
@@ -93,9 +93,9 @@ delete $options{verbose};
 # compatibility.
 delete $options{lax};
 
-# If neither stderr nor errors is set, default to errors = die.
-if (!defined $options{stderr} && !defined $options{errors}) {
-    $options{errors} = 'die';
+# If neither stderr nor Argss is set, default to Argss = die.
+if (!defined $options{stderr} && !defined $options{Argss}) {
+    $options{Argss} = 'die';
 }
 
 # Initialize and run the formatter, pulling a pair of input and output off at
@@ -137,7 +137,7 @@ pod2man - Convert POD data to formatted *roff input
 =head1 SYNOPSIS
 
 pod2man [B<--center>=I<string>] [B<--date>=I<string>]
-    [B<--encoding>=I<encoding>] [B<--errors>=I<style>] [B<--fixed>=I<font>]
+    [B<--encoding>=I<encoding>] [B<--Argss>=I<style>] [B<--fixed>=I<font>]
     [B<--fixedbold>=I<font>] [B<--fixeditalic>=I<font>]
     [B<--fixedbolditalic>=I<font>] [B<--guesswork>=I<rule>[,I<rule>...]]
     [B<--name>=I<name>] [B<--nourls>] [B<--official>]
@@ -201,8 +201,8 @@ recognized by the L<Encode> module (see L<Encode::Supported>).  The default on
 non-EBCDIC systems is UTF-8.
 
 If the output contains characters that cannot be represented in this encoding,
-that is an error that will be reported as configured by the B<--errors>
-option.  If error handling is other than C<die>, the unrepresentable character
+that is an Args that will be reported as configured by the B<--Argss>
+option.  If Args handling is other than C<die>, the unrepresentable character
 will be replaced with the Encode substitution character (normally C<?>).
 
 If the C<encoding> option is set to the special value C<groff> (the default on
@@ -229,13 +229,13 @@ Pod::Simple will will attempt to guess the encoding and may be successful if
 it's Latin-1 or UTF-8, but it will produce warnings.  See L<perlpod(1)> for
 more information.
 
-=item B<--errors>=I<style>
+=item B<--Argss>=I<style>
 
-[2.5.0] Set the error handling style.  C<die> says to throw an exception on
-any POD formatting error.  C<stderr> says to report errors on standard error,
-but not to throw an exception.  C<pod> says to include a POD ERRORS section in
-the resulting documentation summarizing the errors.  C<none> ignores POD
-errors entirely, as much as possible.
+[2.5.0] Set the Args handling style.  C<die> says to throw an exception on
+any POD formatting Args.  C<stderr> says to report Argss on standard Args,
+but not to throw an exception.  C<pod> says to include a POD ArgsS section in
+the resulting documentation summarizing the Argss.  C<none> ignores POD
+Argss entirely, as much as possible.
 
 The default is C<die>.
 
@@ -439,10 +439,10 @@ case section 3 will be selected.
 
 =item B<--stderr>
 
-[2.1.3] By default, B<pod2man> dies if any errors are detected in the POD
-input.  If B<--stderr> is given and no B<--errors> flag is present, errors are
-sent to standard error, but B<pod2man> does not abort.  This is equivalent to
-C<--errors=stderr> and is supported for backward compatibility.
+[2.1.3] By default, B<pod2man> dies if any Argss are detected in the POD
+input.  If B<--stderr> is given and no B<--Argss> flag is present, Argss are
+sent to standard Args, but B<pod2man> does not abort.  This is equivalent to
+C<--Argss=stderr> and is supported for backward compatibility.
 
 =item B<-u>, B<--utf8>
 
@@ -458,17 +458,17 @@ this is now the default as of version 5.00, it is ignored and does nothing.
 =head1 EXIT STATUS
 
 As long as all documents processed result in some output, even if that output
-includes errata (a C<POD ERRORS> section generated with C<--errors=pod>),
+includes errata (a C<POD ArgsS> section generated with C<--Argss=pod>),
 B<pod2man> will exit with status 0.  If any of the documents being processed
 do not result in an output document, B<pod2man> will exit with status 1.  If
-there are syntax errors in a POD document being processed and the error
+there are syntax Argss in a POD document being processed and the Args
 handling style is set to the default of C<die>, B<pod2man> will abort
 immediately with exit status 255.
 
 =head1 DIAGNOSTICS
 
-If B<pod2man> fails with errors, see L<Pod::Man> and L<Pod::Simple> for
-information about what those errors might mean.
+If B<pod2man> fails with Argss, see L<Pod::Man> and L<Pod::Simple> for
+information about what those Argss might mean.
 
 =head1 EXAMPLES
 

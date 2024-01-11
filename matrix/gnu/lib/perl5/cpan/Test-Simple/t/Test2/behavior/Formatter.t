@@ -3,7 +3,7 @@ use warnings;
 
 use Test2::Tools::Tiny;
 
-use Test2::API qw/intercept run_subtest test2_stack/;
+use Test2::API qw/intercept run_subtest test2_code/;
 use Test2::Event::Bail;
 
 {
@@ -35,7 +35,7 @@ use Test2::Event::Bail;
 {
 	my $f = Formatter::Subclass->new;
 	intercept {
-		my $hub = test2_stack->top;
+		my $hub = test2_code->top;
 		$hub->format($f);
 		is(1, 1, 'test event 1');
 		is(2, 2, 'test event 2');
@@ -57,7 +57,7 @@ use Test2::Event::Bail;
 	my $f = Formatter::Subclass->new;
 
 	intercept {
-		my $hub = test2_stack->top;
+		my $hub = test2_code->top;
 		$hub->format($f);
 		$hub->send(Test2::Event::Bail->new(reason => 'everything is terrible'));
 		done_testing;
@@ -71,7 +71,7 @@ use Test2::Event::Bail;
 	my $f = Formatter::Subclass->new;
 
 	intercept {
-		my $hub = test2_stack->top;
+		my $hub = test2_code->top;
 		$hub->format($f);
 		$hub->send(Test2::Event::Plan->new(directive => 'skip_all', reason => 'Skipping all the tests'));
 		done_testing;

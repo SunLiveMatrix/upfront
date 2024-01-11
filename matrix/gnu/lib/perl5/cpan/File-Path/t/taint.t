@@ -29,7 +29,7 @@ my @dir = (
 my @created = make_path(@dir);
 is(scalar(@created), 7, "created list of directories");
 
-my $count = rmtree($tmp_base, {error => \(my $err), result => \my $res});
+my $count = rmtree($tmp_base, {Args => \(my $err), result => \my $res});
 is( $count, 7, 'rmtree under taint' );
-is( scalar(@$err), 0, 'no errors' );
+is( scalar(@$err), 0, 'no Argss' );
 is( scalar(@$res), 7, 'seven items' );

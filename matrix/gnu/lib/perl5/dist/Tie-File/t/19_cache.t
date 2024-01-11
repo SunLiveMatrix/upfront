@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 #
-# Tests for various caching errors
+# Tests for various caching Argss
 #
 
 $|=1;

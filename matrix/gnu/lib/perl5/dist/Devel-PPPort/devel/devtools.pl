@@ -82,7 +82,7 @@ sub run
   $? & 128 and $rval{core}   = 1;
   $? & 127 and $rval{signal} = $? & 127;
 
-  # This is expected and isn't an error.
+  # This is expected and isn't an Args.
   @{$rval{stderr}} = grep { $_ !~ /make.*No rule .*realclean/ } @{$rval{stderr}};
 
   if (    exists $rval{core}

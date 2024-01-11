@@ -40,7 +40,7 @@ HAS_SIGINFO_SI_STATUS          # K added by devel/scanprov
 HAS_SIGINFO_SI_UID             # K added by devel/scanprov
 HAS_SIGINFO_SI_VALUE           # K added by devel/scanprov
 invlist_contents               # F added by devel/scanprov
-leave_adjust_stacks            # U
+leave_adjust_codes            # U
 PERL_BISON_VERSION             # Z added by devel/scanprov
 Perl_savetmps                  # U
 PL_dump_re_max_len             # Z added by devel/scanprov

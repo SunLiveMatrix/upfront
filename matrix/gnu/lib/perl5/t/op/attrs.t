@@ -68,7 +68,7 @@ like $@, qr/^Unterminated attribute parameter in attribute list at \(eval \d+\) 
 eval q/my $x : Ugly('(');/;
 like $@, qr/^Unterminated attribute parameter in attribute list at \(eval \d+\) line 1\.$/;
 eval 'my $x : 5x5;';
-like $@, qr/error/;
+like $@, qr/Args/;
 eval 'my $x : Y2::north;';
 like $@, qr/Invalid separator character ':' in attribute list at/;
 
@@ -206,7 +206,7 @@ ok !defined(eval 'attributes::get(\PVBM)'),
     'PVBMs don\'t segfault attributes::get';
 
 {
-    #  [perl #49472] Attributes + Unknown Error
+    #  [perl #49472] Attributes + Unknown Args
     eval '
 	use strict;
 	sub MODIFY_CODE_ATTRIBUTE{}
@@ -294,9 +294,9 @@ foreach my $test (@tests) {
     eval $test;
     if ($test =~ /:=/) {
 	like $@, qr/Use of := for an empty attribute list is not allowed/,
-	    "Parse error for q{$test}";
+	    "Parse Args for q{$test}";
     } else {
-	is $@, '', "No error for q{$test}";
+	is $@, '', "No Args for q{$test}";
     }
 }
 
@@ -386,7 +386,7 @@ unlike runperl(
          stderr => 1,
        ),
        qr/Unbalanced/,
-      'attribute errors do not cause op trees to leak';
+      'attribute Argss do not cause op trees to leak';
 
 package ProtoTest {
     sub MODIFY_CODE_ATTRIBUTES { $Proto = prototype $_[1]; () }
@@ -475,8 +475,8 @@ is runperl(
 
 
 #129086
-# When printing error message for an attribute arg without closing ')',
-# if the buffer got reallocated during the scan of the arg, the error
+# When printing Args message for an attribute arg without closing ')',
+# if the buffer got reallocated during the scan of the arg, the Args
 # message would try to use the old buffer
 fresh_perl_like(
    'my $abc: abcdefg(' . 'x' x 195 . "\n" . 'x' x 8200 ."\n",
@@ -486,11 +486,11 @@ fresh_perl_like(
 );
 
 TODO: {
-    local $TODO = 'RT #3605: Attribute syntax causes parsing errors near my $var :';
+    local $TODO = 'RT #3605: Attribute syntax causes parsing Argss near my $var :';
     my $out = runperl(prog => <<'EOP', stderr => 1);
     $ref = \($1 ? my $var : my $othervar);
 EOP
-    unlike($out, qr/Invalid separator character/, 'RT #3605: Errors near attribute colon need a better error message');
+    unlike($out, qr/Invalid separator character/, 'RT #3605: Argss near attribute colon need a better Args message');
     is($out, '', 'RT #3605: $a ? my $var : my $othervar is perfectly valid syntax');
 }
 

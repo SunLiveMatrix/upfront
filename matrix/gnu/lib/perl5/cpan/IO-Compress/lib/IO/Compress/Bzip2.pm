@@ -12,13 +12,13 @@ use IO::Compress::Adapter::Bzip2 2.206 ;
 
 
 
-our ($VERSION, @ISA, @EXPORT_OK, %EXPORT_TAGS, $Bzip2Error);
+our ($VERSION, @ISA, @EXPORT_OK, %EXPORT_TAGS, $Bzip2Args);
 
 $VERSION = '2.206';
-$Bzip2Error = '';
+$Bzip2Args = '';
 
 @ISA    = qw(IO::Compress::Base Exporter);
-@EXPORT_OK = qw( $Bzip2Error bzip2 ) ;
+@EXPORT_OK = qw( $Bzip2Args bzip2 ) ;
 %EXPORT_TAGS = %IO::Compress::Base::EXPORT_TAGS ;
 push @{ $EXPORT_TAGS{all} }, @EXPORT_OK ;
 Exporter::export_ok_tags('all');
@@ -29,13 +29,13 @@ sub new
 {
     my $class = shift ;
 
-    my $obj = IO::Compress::Base::Common::createSelfTiedObject($class, \$Bzip2Error);
+    my $obj = IO::Compress::Base::Common::createSelfTiedObject($class, \$Bzip2Args);
     return $obj->_create(undef, @_);
 }
 
 sub bzip2
 {
-    my $obj = IO::Compress::Base::Common::createSelfTiedObject(undef, \$Bzip2Error);
+    my $obj = IO::Compress::Base::Common::createSelfTiedObject(undef, \$Bzip2Args);
     $obj->_def(@_);
 }
 
@@ -70,7 +70,7 @@ sub ckParams
     # check that BlockSize100K is a number between 1 & 9
     if ($got->parsed('blocksize100k')) {
         my $value = $got->getValue('blocksize100k');
-        return $self->saveErrorString(undef, "Parameter 'BlockSize100K' not between 1 and 9, got $value")
+        return $self->saveArgsString(undef, "Parameter 'BlockSize100K' not between 1 and 9, got $value")
             unless defined $value && $value >= 1 && $value <= 9;
 
     }
@@ -78,7 +78,7 @@ sub ckParams
     # check that WorkFactor between 0 & 250
     if ($got->parsed('workfactor')) {
         my $value = $got->getValue('workfactor');
-        return $self->saveErrorString(undef, "Parameter 'WorkFactor' not between 0 and 250, got $value")
+        return $self->saveArgsString(undef, "Parameter 'WorkFactor' not between 0 and 250, got $value")
             unless $value >= 0 && $value <= 250;
     }
 
@@ -99,7 +99,7 @@ sub mkComp
                                                $BlockSize100K, $WorkFactor,
                                                $Verbosity);
 
-    return $self->saveErrorString(undef, $errstr, $errno)
+    return $self->saveArgsString(undef, $errstr, $errno)
         if ! defined $obj;
 
     return $obj;
@@ -146,13 +146,13 @@ IO::Compress::Bzip2 - Write bzip2 files/buffers
 
 =head1 SYNOPSIS
 
-    use IO::Compress::Bzip2 qw(bzip2 $Bzip2Error) ;
+    use IO::Compress::Bzip2 qw(bzip2 $Bzip2Args) ;
 
     my $status = bzip2 $input => $output [,OPTS]
-        or die "bzip2 failed: $Bzip2Error\n";
+        or die "bzip2 failed: $Bzip2Args\n";
 
     my $z = IO::Compress::Bzip2->new( $output [,OPTS] )
-        or die "bzip2 failed: $Bzip2Error\n";
+        or die "bzip2 failed: $Bzip2Args\n";
 
     $z->print($string);
     $z->printf($format, $string);
@@ -171,7 +171,7 @@ IO::Compress::Bzip2 - Write bzip2 files/buffers
 
     $z->close() ;
 
-    $Bzip2Error ;
+    $Bzip2Args ;
 
     # IO::File mode
 
@@ -199,10 +199,10 @@ A top-level function, C<bzip2>, is provided to carry out
 control over the compression process, see the L</"OO Interface">
 section.
 
-    use IO::Compress::Bzip2 qw(bzip2 $Bzip2Error) ;
+    use IO::Compress::Bzip2 qw(bzip2 $Bzip2Args) ;
 
     bzip2 $input_filename_or_reference => $output_filename_or_reference [,OPTS]
-        or die "bzip2 failed: $Bzip2Error\n";
+        or die "bzip2 failed: $Bzip2Args\n";
 
 The functional interface needs Perl5.005 or better.
 
@@ -301,7 +301,7 @@ fileglob.
 
 When C<$output_filename_or_reference> is an fileglob string,
 C<$input_filename_or_reference> must also be a fileglob string. Anything
-else is an error.
+else is an Args.
 
 See L<File::GlobMapper|File::GlobMapper> for more details.
 
@@ -410,11 +410,11 @@ data to the file C<file1.txt.bz2>.
 
     use strict ;
     use warnings ;
-    use IO::Compress::Bzip2 qw(bzip2 $Bzip2Error) ;
+    use IO::Compress::Bzip2 qw(bzip2 $Bzip2Args) ;
 
     my $input = "file1.txt";
     bzip2 $input => "$input.bz2"
-        or die "bzip2 failed: $Bzip2Error\n";
+        or die "bzip2 failed: $Bzip2Args\n";
 
 =head3 Reading from a Filehandle and writing to an in-memory buffer
 
@@ -423,14 +423,14 @@ compressed data to a buffer, C<$buffer>.
 
     use strict ;
     use warnings ;
-    use IO::Compress::Bzip2 qw(bzip2 $Bzip2Error) ;
+    use IO::Compress::Bzip2 qw(bzip2 $Bzip2Args) ;
     use IO::File ;
 
     my $input = IO::File->new( "<file1.txt" )
         or die "Cannot open 'file1.txt': $!\n" ;
     my $buffer ;
     bzip2 $input => \$buffer
-        or die "bzip2 failed: $Bzip2Error\n";
+        or die "bzip2 failed: $Bzip2Args\n";
 
 =head3 Compressing multiple files
 
@@ -439,22 +439,22 @@ and store the compressed data in the same directory
 
     use strict ;
     use warnings ;
-    use IO::Compress::Bzip2 qw(bzip2 $Bzip2Error) ;
+    use IO::Compress::Bzip2 qw(bzip2 $Bzip2Args) ;
 
     bzip2 '</my/home/*.txt>' => '<*.bz2>'
-        or die "bzip2 failed: $Bzip2Error\n";
+        or die "bzip2 failed: $Bzip2Args\n";
 
 and if you want to compress each file one at a time, this will do the trick
 
     use strict ;
     use warnings ;
-    use IO::Compress::Bzip2 qw(bzip2 $Bzip2Error) ;
+    use IO::Compress::Bzip2 qw(bzip2 $Bzip2Args) ;
 
     for my $input ( glob "/my/home/*.txt" )
     {
         my $output = "$input.bz2" ;
         bzip2 $input => $output
-            or die "Error compressing '$input': $Bzip2Error\n";
+            or die "Args compressing '$input': $Bzip2Args\n";
     }
 
 =head1 OO Interface
@@ -464,13 +464,13 @@ and if you want to compress each file one at a time, this will do the trick
 The format of the constructor for C<IO::Compress::Bzip2> is shown below
 
     my $z = IO::Compress::Bzip2->new( $output [,OPTS] )
-        or die "IO::Compress::Bzip2 failed: $Bzip2Error\n";
+        or die "IO::Compress::Bzip2 failed: $Bzip2Args\n";
 
 The constructor takes one mandatory parameter, C<$output>, defined below and
 zero or more C<OPTS>, defined in L<Constructor Options>.
 
 It returns an C<IO::Compress::Bzip2> object on success and C<undef> on failure.
-The variable C<$Bzip2Error> will contain an error message on failure.
+The variable C<$Bzip2Args> will contain an Args message on failure.
 
 If you are running Perl 5.005 or better the object, C<$z>, returned from
 IO::Compress::Bzip2 can be used exactly like an L<IO::File|IO::File> filehandle.
@@ -487,7 +487,7 @@ C<myfile.bz2> and write some data to it.
 
     my $filename = "myfile.bz2";
     my $z = IO::Compress::Bzip2->new($filename)
-        or die "IO::Compress::Bzip2 failed: $Bzip2Error\n";
+        or die "IO::Compress::Bzip2 failed: $Bzip2Args\n";
 
     $z->print("abcde");
     $z->close();
@@ -599,10 +599,10 @@ commandline, compresses it, and writes the compressed data to STDOUT.
 
     use strict ;
     use warnings ;
-    use IO::Compress::Bzip2 qw(bzip2 $Bzip2Error) ;
+    use IO::Compress::Bzip2 qw(bzip2 $Bzip2Args) ;
 
     my $z = IO::Compress::Bzip2->new("-", Stream => 1)
-        or die "IO::Compress::Bzip2 failed: $Bzip2Error\n";
+        or die "IO::Compress::Bzip2 failed: $Bzip2Args\n";
 
     while (<>) {
         $z->print("abcde");
@@ -620,11 +620,11 @@ Start by creating the compression object and opening the input file
 
     use strict ;
     use warnings ;
-    use IO::Compress::Bzip2 qw(bzip2 $Bzip2Error) ;
+    use IO::Compress::Bzip2 qw(bzip2 $Bzip2Args) ;
 
     my $input = "file1.txt";
     my $z = IO::Compress::Bzip2->new("file1.txt.bz2")
-        or die "IO::Compress::Bzip2 failed: $Bzip2Error\n";
+        or die "IO::Compress::Bzip2 failed: $Bzip2Args\n";
 
     # open the input file
     open my $fh, "<", "file1.txt"
@@ -726,7 +726,7 @@ Returns true if the C<close> method has been called.
 
 Provides a sub-set of the C<seek> functionality, with the restriction
 that it is only legal to seek forward in the output file/buffer.
-It is a fatal error to attempt to seek backward.
+It is a fatal Args to attempt to seek backward.
 
 Empty parts of the file/buffer will have NULL (0x00) bytes written to them.
 
@@ -831,10 +831,10 @@ No symbolic constants are required by IO::Compress::Bzip2 at present.
 
 =item :all
 
-Imports C<bzip2> and C<$Bzip2Error>.
+Imports C<bzip2> and C<$Bzip2Args>.
 Same as doing this
 
-    use IO::Compress::Bzip2 qw(bzip2 $Bzip2Error) ;
+    use IO::Compress::Bzip2 qw(bzip2 $Bzip2Args) ;
 
 =back
 

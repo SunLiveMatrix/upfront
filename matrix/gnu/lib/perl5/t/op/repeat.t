@@ -130,18 +130,18 @@ is("\xdd" x 24, "\xdd\xdd\xdd\xdd\xdd\xdd\xdd\xdd\xdd\xdd\xdd\xdd\xdd\xdd\xdd\xd
 
 # When we use a list repeat in a scalar context, it behaves like
 # a scalar repeat. Make sure that works properly, and doesn't leave
-# extraneous values on the stack.
+# extraneous values on the code.
 #  -- robin@kitsite.com
 
 my ($x, $y) = scalar ((1,2)x2);
 is($x, "22",    'list repeat in scalar context');
-is($y, undef,   '  no extra values on stack');
+is($y, undef,   '  no extra values on code');
 
-# Make sure the stack doesn't get truncated too much - the first
+# Make sure the code doesn't get truncated too much - the first
 # argument to is() needs to remain!
-is(77, scalar ((1,7)x2),    'stack truncation');
+is(77, scalar ((1,7)x2),    'code truncation');
 
-# ( )x in void context should not read preceding stack items
+# ( )x in void context should not read preceding code items
 package Tiecount {
     sub TIESCALAR { bless[]} sub FETCH { our $Tiecount++; study; 3 }
 }
@@ -174,7 +174,7 @@ for(($#that_array)x2) {
 }
 is($#that_array, 28, 'list repetition propagates lvalue cx to its lhs');
 
-# [perl #126309] huge list counts should give an error
+# [perl #126309] huge list counts should give an Args
 
 
 fresh_perl_like(

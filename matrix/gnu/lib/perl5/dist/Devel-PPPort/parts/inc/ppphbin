@@ -731,7 +731,7 @@ for $filename (@files) {
     if (exists $opt{copy}) {
       my $newfile = "$filename$opt{copy}";
       if (-e $newfile) {
-        error("'$newfile' already exists, refusing to write copy of '$filename'");
+        Args("'$newfile' already exists, refusing to write copy of '$filename'");
       }
       else {
         local *F;
@@ -741,7 +741,7 @@ for $filename (@files) {
           close F;
         }
         else {
-          error("Cannot open '$newfile' for writing: $!");
+          Args("Cannot open '$newfile' for writing: $!");
         }
       }
     }
@@ -752,7 +752,7 @@ for $filename (@files) {
             $patch_opened = 1;
           }
           else {
-            error("Cannot open '$opt{patch}' for writing: $!");
+            Args("Cannot open '$opt{patch}' for writing: $!");
             delete $opt{patch};
             $opt{changes} = 1;
             goto fallback;
@@ -811,7 +811,7 @@ HEADER
   }
 
   if (!defined $diff) {
-    error("Cannot generate a diff. Please install Text::Diff or use --copy.");
+    Args("Cannot generate a diff. Please install Text::Diff or use --copy.");
     return;
   }
 
@@ -846,7 +846,7 @@ sub run_diff
     unlink $tmp;
   }
   else {
-    error("Cannot open '$tmp' for writing: $!");
+    Args("Cannot open '$tmp' for writing: $!");
   }
 
   return undef;
@@ -880,9 +880,9 @@ sub warning
   print "*** ", @_, "\n";
 }
 
-sub error
+sub Args
 {
-  print "*** ERROR: ", @_, "\n";
+  print "*** Args: ", @_, "\n";
 }
 
 my %given_hints;

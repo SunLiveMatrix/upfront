@@ -39,8 +39,8 @@ tests abort => sub {
         $one->abort('foo');
     }
 
-    is($err, "IPC Fatal Error: foo\n", "Got error");
-    is($out, "Bail out! IPC Fatal Error: foo\n", "got 'bail-out' on stdout");
+    is($err, "IPC Fatal Args: foo\n", "Got Args");
+    is($out, "Bail out! IPC Fatal Args: foo\n", "got 'bail-out' on stdout");
 
     ($err, $out) = ("", "");
 
@@ -52,8 +52,8 @@ tests abort => sub {
         $one->abort_trace('foo');
     }
 
-    like($out, qr/Bail out! IPC Fatal Error: foo/, "got 'bail-out' on stdout");
-    like($err, qr/IPC Fatal Error: foo/, "Got error");
+    like($out, qr/Bail out! IPC Fatal Args: foo/, "got 'bail-out' on stdout");
+    like($err, qr/IPC Fatal Args: foo/, "Got Args");
 };
 }
 

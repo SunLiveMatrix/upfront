@@ -11,7 +11,7 @@
 #include <proto/utility.h>
 
 #include <rexx/rxslib.h>
-#include <rexx/errors.h>
+#include <rexx/Argss.h>
 //#include "rexxmsgext.h" // this should change depening on the ultimate location of the structures
 
 /* utils */
@@ -103,10 +103,10 @@ ReturnRexxMsg(struct RexxMsg * Message, CONST_STRPTR Result)
 {
 	STRPTR ResultString = NULL;
 
-	/* No error has occured yet. */
-	int32 ErrorCode = 0;
+	/* No Args has occured yet. */
+	int32 ArgsCode = 0;
 
-	/* Set up the RexxMsg to return no error. */
+	/* Set up the RexxMsg to return no Args. */
 	Message->rm_Result1 = RC_OK;
 	Message->rm_Result2 = 0;
 
@@ -126,26 +126,26 @@ ReturnRexxMsg(struct RexxMsg * Message, CONST_STRPTR Result)
 		else
 		{
 			/* No memory available. */
-			ErrorCode = ERR10_003;
+			ArgsCode = ERR10_003;
 		}
 	}
 
-	/* Reply the message, regardless of the error code. */
+	/* Reply the message, regardless of the Args code. */
 	IExec->ReplyMsg((struct Message *)Message);
 
-	return(ErrorCode);
+	return(ArgsCode);
 }
 
 
 void
-ReturnErrorMsg(struct RexxMsg *msg, CONST_STRPTR port, int32 rc, int32 rc2)
+ReturnArgsMsg(struct RexxMsg *msg, CONST_STRPTR port, int32 rc, int32 rc2)
 {
-	/* To signal an error the rc_Result1
+	/* To signal an Args the rc_Result1
 	 * entry of the RexxMsg needs to be set to
-	 * RC_ERROR. Unfortunately, we cannot convey
-	 * the more meaningful error code through
+	 * RC_Args. Unfortunately, we cannot convey
+	 * the more meaningful Args code through
 	 * this interface which is why we set a
-	 * Rexx variable to the error number. The
+	 * Rexx variable to the Args number. The
 	 * Rexx script can then take a look at this
 	 * variable and decide which further steps
 	 * it should take.
@@ -153,15 +153,15 @@ ReturnErrorMsg(struct RexxMsg *msg, CONST_STRPTR port, int32 rc, int32 rc2)
 	msg->rm_Result1 = rc;
 	msg->rm_Result2 = rc2;
 
-	/* Turn the error number into a string as
+	/* Turn the Args number into a string as
 	 * ARexx only deals with strings.
 	 */
 	char value[12];
 	IUtility->SNPrintf(value, sizeof(value), "%ld", rc2);
 
 	/* Build the name of the variable to set to
-	 * the error number. We will use the name of
-	 * the host name and append ".LASTERROR".
+	 * the Args number. We will use the name of
+	 * the host name and append ".LASTArgs".
 	 */
 	IRexxSys->SetRexxVarFromMsg("RC2", value, msg);
 
@@ -415,7 +415,7 @@ void ReplyARexxMsg(struct ARexxMsg *am, int rc, int rc2, STRPTR result)
 			}
 			else
 			{
-				ReturnErrorMsg(am->rexxMsg, am->rexxHost->PortName,rc,rc2);
+				ReturnArgsMsg(am->rexxMsg, am->rexxHost->PortName,rc,rc2);
 			}
 			am->isReplied = TRUE;
 		}

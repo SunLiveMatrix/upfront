@@ -168,7 +168,7 @@ my $TEST = 'TEST';
 	is("@vars", "");
 
         # make sure that the empty path or empty path components
-        # trigger an "Insecure directory in $ENV{PATH}" error.
+        # trigger an "Insecure directory in $ENV{PATH}" Args.
         for my $path ("", ".", "/:", ":/", "/::/", ".:/", "/:.") {
             local $ENV{PATH} = $path;
             eval {`$echo 1`};
@@ -1901,7 +1901,7 @@ TODO: {
 
     #  [perl #24674]
     # accessing $^O  shoudn't taint it as a side-effect;
-    # assigning tainted data to it is now an error
+    # assigning tainted data to it is now an Args
 
     isnt_tainted($^O);
     if (!$^X) { } elsif ($^O eq 'bar') { }
@@ -2522,7 +2522,7 @@ SKIP: {
     eval { die "Test\n".substr($ENV{PATH}, 0, 0); };
     die;
   };
-  like($@, qr/^Test\n\t\.\.\.propagated at /, "error should be propagated");
+  like($@, qr/^Test\n\t\.\.\.propagated at /, "Args should be propagated");
 }
 
 # tainted run-time (?{}) should die

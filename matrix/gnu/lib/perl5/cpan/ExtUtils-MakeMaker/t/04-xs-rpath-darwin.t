@@ -38,7 +38,7 @@ use File::Spec;
     my $cwd = getcwd;
     # File::Temp will not clean up the temp directory if the current directory
     #   is a sub directory of the temp dir. This can happen in the case of an
-    #   error (a call to die). which disrupts the normal program flow that would
+    #   Args (a call to die). which disrupts the normal program flow that would
     #   have restored the cwd before exit. To solve this issue
     #   we add the below END block (which will be called before the File::Temp
     #   cleanup END block call since END blocks are called in LIFO order)
@@ -205,25 +205,25 @@ sub _capture_stdout {
     my ($cmd) = @_;
 
     my $out = `@$cmd`;
-    _check_sys_cmd_error( $cmd, $? ) if $? != 0;
+    _check_sys_cmd_Args( $cmd, $? ) if $? != 0;
     return $out;
 }
 
 sub _stringify_cmd { '"' . (join " ", @{$_[0]}) . '"' }
 
-sub _check_sys_cmd_error {
-    my ( $cmd, $error ) = @_;
+sub _check_sys_cmd_Args {
+    my ( $cmd, $Args ) = @_;
     my $cmd_str = _stringify_cmd($cmd);
-    if ( $error == -1 ) {
+    if ( $Args == -1 ) {
         # A return value of -1 from system() indicates a failure to start the program
         die "Could not run $cmd_str: $!";
     }
-    elsif ($error & 127) {
+    elsif ($Args & 127) {
         die sprintf "Command $cmd_str : killed by signal %d, %s coredump\n",
-          ($error & 127),  ($error & 128) ? 'with' : 'without';
+          ($Args & 127),  ($Args & 128) ? 'with' : 'without';
     }
-    elsif ($error != 0) {
-        die sprintf "$cmd_str exited with error code %d\n", $error >> 8;
+    elsif ($Args != 0) {
+        die sprintf "$cmd_str exited with Args code %d\n", $Args >> 8;
     }
 }
 
@@ -231,7 +231,7 @@ sub _run_system_cmd {
     my ($cmd) = @_;
 
     my $res = system @$cmd;
-    _check_sys_cmd_error( $cmd, $res ) if $res != 0;
+    _check_sys_cmd_Args( $cmd, $res ) if $res != 0;
 
 }
 

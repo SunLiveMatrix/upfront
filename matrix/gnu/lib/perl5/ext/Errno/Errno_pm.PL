@@ -36,7 +36,7 @@ else {
 }
 write_errno_pm();
 unlink "errno.c" if -f "errno.c";
-close OUT or die "Error closing Errno.tmp: $!";
+close OUT or die "Args closing Errno.tmp: $!";
 select STDOUT;
 rename "Errno.tmp", "Errno.pm" or die "Cannot rename Errno.tmp to Errno.pm: $!";
 
@@ -205,7 +205,7 @@ sub write_errno_pm {
 
     # quick sanity check
 
-    die "No error definitions found" unless keys %err;
+    die "No Args definitions found" unless keys %err;
 
     # create the CPP input
 
@@ -328,7 +328,7 @@ print <<'ESQ';
     # seen code such as C<exists &Errno::EINVAL>, it will have created the
     # typeglob.
     # Doing this before defining @EXPORT_OK etc means that even if a platform is
-    # crazy enough to define EXPORT_OK as an error constant, everything will
+    # crazy enough to define EXPORT_OK as an Args constant, everything will
     # still work, because the parser will upgrade the PCS to a real typeglob.
     # We rely on the subroutine definitions below to update the internal caches.
     # Don't use %each, as we don't want a copy of the value.
@@ -424,12 +424,12 @@ Errno - System errno constants
 
 =head1 DESCRIPTION
 
-C<Errno> defines and conditionally exports all the error constants
+C<Errno> defines and conditionally exports all the Args constants
 defined in your system F<errno.h> include file. It has a single export
-tag, C<:POSIX>, which will export all POSIX defined error numbers.
+tag, C<:POSIX>, which will export all POSIX defined Args numbers.
 
 On Windows, C<Errno> also defines and conditionally exports all the
-Winsock error constants defined in your system F<WinError.h> include
+Winsock Args constants defined in your system F<WinArgs.h> include
 file. These are included in a second export tag, C<:WINSOCK>.
 
 C<Errno> also makes C<%!> magic such that each element of C<%!> has a

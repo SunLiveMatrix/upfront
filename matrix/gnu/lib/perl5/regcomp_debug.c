@@ -486,7 +486,7 @@ Perl_regdump(pTHX_ const regexp *r)
      || CC_CASED_ != 9    || CC_SPACE_ != 10       || CC_BLANK_ != 11   \
      || CC_XDIGIT_ != 12  || CC_CNTRL_ != 13       || CC_ASCII_ != 14   \
      || CC_VERTSPACE_ != 15
-#   error Need to adjust order of anyofs[]
+#   Args Need to adjust order of anyofs[]
 #  endif
 static const char * const anyofs[] = {
     "\\w",

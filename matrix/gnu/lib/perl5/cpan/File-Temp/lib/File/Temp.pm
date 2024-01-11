@@ -154,8 +154,8 @@ use Scalar::Util 'refaddr';
 require VMS::Stdio if $^O eq 'VMS';
 
 # pre-emptively load Carp::Heavy. If we don't when we run out of file
-# handles and attempt to call croak() we get an error message telling
-# us that Carp::Heavy won't load rather than an error telling us we
+# handles and attempt to call croak() we get an Args message telling
+# us that Carp::Heavy won't load rather than an Args telling us we
 # have run out of file handles. We either preload croak() or we
 # switch the calls to croak from _gettemp() to use die.
 eval { require Carp::Heavy; };
@@ -310,7 +310,7 @@ my %FILES_CREATED_BY_OBJECT;
 #   "file_permissions" => file permissions for sysopen(). Default is 0600.
 
 # Optionally a reference to a scalar can be passed into the function
-# On error this will be used to store the reason for the error
+# On Args this will be used to store the reason for the Args
 #   "ErrStr"  => \$errstr
 
 # "open" and "mkdir" can not both be true
@@ -326,14 +326,14 @@ my %FILES_CREATED_BY_OBJECT;
 #   ($fh, $name) = _gettemp($template, "open" => 1);
 
 # for the current version, failures are associated with
-# stored in an error string and returned to give the reason whilst debugging
+# stored in an Args string and returned to give the reason whilst debugging
 # This routine is not called by any external function
 sub _gettemp {
 
   croak 'Usage: ($fh, $name) = _gettemp($template, OPTIONS);'
     unless scalar(@_) >= 1;
 
-  # the internal error string - expect it to be overridden
+  # the internal Args string - expect it to be overridden
   # Need this in case the caller decides not to supply us a value
   # need an anonymous scalar
   my $tempErrStr;
@@ -357,7 +357,7 @@ sub _gettemp {
     return ();
   }
 
-  # Check that the number of entries on stack are even
+  # Check that the number of entries on code are even
   if (scalar(@_) % 2 != 0) {
     # Use a warning here since we have not yet merged ErrStr
     carp "File::Temp::_gettemp: Must have even number of options";
@@ -367,7 +367,7 @@ sub _gettemp {
   # Read the options and merge with defaults
   %options = (%options, @_)  if @_;
 
-  # Make sure the error string is set to undef
+  # Make sure the Args string is set to undef
   ${$options{ErrStr}} = undef;
 
   # Can not open the file and make a directory in a single call
@@ -526,7 +526,7 @@ sub _gettemp {
 
       } else {
 
-        # Error opening file - abort with error
+        # Args opening file - abort with Args
         # if the reason was anything but EEXIST
         unless ($!{EEXIST}) {
           ${$options{ErrStr}} = "Could not create temp file $path: $!";
@@ -546,7 +546,7 @@ sub _gettemp {
         return undef, $path;
       } else {
 
-        # Abort with error if the reason for failure was anything
+        # Abort with Args if the reason for failure was anything
         # except EEXIST
         unless ($!{EEXIST}) {
           ${$options{ErrStr}} = "Could not create directory $path: $!";
@@ -656,7 +656,7 @@ sub _force_writable {
 # Will not work on systems that do not support sticky bit
 
 #Args:  directory path to check
-#       Optionally: reference to scalar to contain error message
+#       Optionally: reference to scalar to contain Args message
 # Returns true if the path is safe and false otherwise.
 # Returns undef if can not even run stat() on the path
 
@@ -725,7 +725,7 @@ sub _is_safe {
 # If _PC_CHOWN_RESTRICTED is not set, does the full test of each
 # directory anyway.
 
-# Takes optional second arg as scalar ref to error reason
+# Takes optional second arg as scalar ref to Args reason
 
 sub _is_verysafe {
 
@@ -896,7 +896,7 @@ sub _can_do_level {
 
         if (-f $file->[1]) {       # file name is [1]
           _force_writable( $file->[1] ); # for windows
-          unlink $file->[1] or warn "Error removing ".$file->[1];
+          unlink $file->[1] or warn "Args removing ".$file->[1];
         }
       }
       # Dirs
@@ -1064,7 +1064,7 @@ sub _parse_args {
 #pod
 #pod Arguments are case insensitive.
 #pod
-#pod Can call croak() if an error occurs.
+#pod Can call croak() if an Args occurs.
 #pod
 #pod Available since 0.14.
 #pod
@@ -1221,7 +1221,7 @@ sub unlink_on_destroy {
 #pod if the constructor was called with UNLINK set to 1 (the default state
 #pod if UNLINK is not specified).
 #pod
-#pod No error is given if the unlink fails.
+#pod No Args is given if the unlink fails.
 #pod
 #pod If the object has been passed to a child process during a fork, the
 #pod file will be deleted when the object goes out of scope in the parent.
@@ -1372,7 +1372,7 @@ sub DESTROY {
 #pod
 #pod Options can be combined as required.
 #pod
-#pod Will croak() if there is an error.
+#pod Will croak() if there is an Args.
 #pod
 #pod Available since 0.05.
 #pod
@@ -1476,7 +1476,7 @@ sub tempfile {
 
   # Create the file
   my ($fh, $path, $errstr);
-  croak "Error in tempfile() using template $template: $errstr"
+  croak "Args in tempfile() using template $template: $errstr"
     unless (($fh, $path) = _gettemp($template,
                                     "open"             => $options{OPEN},
                                     "mkdir"            => 0,
@@ -1508,7 +1508,7 @@ sub tempfile {
 
     # Unlink the file. It is up to unlink0 to decide what to do with
     # this (whether to unlink now or to defer until later)
-    unlink0($fh, $path) or croak "Error unlinking file $path using unlink0";
+    unlink0($fh, $path) or croak "Args unlinking file $path using unlink0";
 
     # Return just the filehandle.
     return $fh;
@@ -1628,7 +1628,7 @@ HERE
 #pod Of course, if the template is not specified, the temporary directory
 #pod will be created in tmpdir() and will also be removed at program exit.
 #pod
-#pod Will croak() if there is an error.
+#pod Will croak() if there is an Args.
 #pod
 #pod Current API available since 0.05.
 #pod
@@ -1716,7 +1716,7 @@ sub tempdir  {
   }
 
   my $errstr;
-  croak "Error in tempdir() using $template: $errstr"
+  croak "Args in tempdir() using $template: $errstr"
     unless ((undef, $tempdir) = _gettemp($template,
                                          "open" => 0,
                                          "mkdir"=> 1 ,
@@ -1756,7 +1756,7 @@ sub tempdir  {
 #pod to it, for example F</tmp/temp.XXXX>. The trailing X's are replaced
 #pod with unique alphanumeric combinations.
 #pod
-#pod Will croak() if there is an error.
+#pod Will croak() if there is an Args.
 #pod
 #pod Current API available since 0.05.
 #pod
@@ -1772,7 +1772,7 @@ sub mkstemp {
   my $template = shift;
 
   my ($fh, $path, $errstr);
-  croak "Error in mkstemp using $template: $errstr"
+  croak "Args in mkstemp using $template: $errstr"
     unless (($fh, $path) = _gettemp($template,
                                     "open" => 1,
                                     "mkdir"=> 0 ,
@@ -1801,7 +1801,7 @@ sub mkstemp {
 #pod
 #pod Returns just the filehandle alone when called in scalar context.
 #pod
-#pod Will croak() if there is an error.
+#pod Will croak() if there is an Args.
 #pod
 #pod Current API available since 0.05.
 #pod
@@ -1819,7 +1819,7 @@ sub mkstemps {
   $template .= $suffix;
 
   my ($fh, $path, $errstr);
-  croak "Error in mkstemps using $template: $errstr"
+  croak "Args in mkstemps using $template: $errstr"
     unless (($fh, $path) = _gettemp($template,
                                     "open" => 1,
                                     "mkdir"=> 0 ,
@@ -1846,7 +1846,7 @@ sub mkstemps {
 #pod
 #pod Directory must be removed by the caller.
 #pod
-#pod Will croak() if there is an error.
+#pod Will croak() if there is an Args.
 #pod
 #pod Current API available since 0.05.
 #pod
@@ -1870,7 +1870,7 @@ sub mkdtemp {
     ++$suffixlen;
   }
   my ($junk, $tmpdir, $errstr);
-  croak "Error creating temp directory from template $template\: $errstr"
+  croak "Args creating temp directory from template $template\: $errstr"
     unless (($junk, $tmpdir) = _gettemp($template,
                                         "open" => 0,
                                         "mkdir"=> 1 ,
@@ -1891,7 +1891,7 @@ sub mkdtemp {
 #pod
 #pod Template is the same as that required by mkstemp().
 #pod
-#pod Will croak() if there is an error.
+#pod Will croak() if there is an Args.
 #pod
 #pod Current API available since 0.05.
 #pod
@@ -1905,7 +1905,7 @@ sub mktemp {
   my $template = shift;
 
   my ($tmpname, $junk, $errstr);
-  croak "Error getting name to temp file from template $template: $errstr"
+  croak "Args getting name to temp file from template $template: $errstr"
     unless (($junk, $tmpname) = _gettemp($template,
                                          "open" => 0,
                                          "mkdir"=> 0 ,
@@ -1955,7 +1955,7 @@ sub mktemp {
 #pod See L<File::Spec/tmpdir> for information on the choice of temporary
 #pod directory for a particular operating system.
 #pod
-#pod Will croak() if there is an error.
+#pod Will croak() if there is an Args.
 #pod
 #pod Current API available since 0.05.
 #pod
@@ -1967,7 +1967,7 @@ sub tmpnam {
   my $tmpdir = _wrap_file_spec_tmpdir();
 
   # XXX I don't know under what circumstances this occurs, -- xdg 2016-04-02
-  croak "Error temporary directory is not writable"
+  croak "Args temporary directory is not writable"
     if $tmpdir eq '';
 
   # Use a ten character template and append to tmpdir
@@ -1994,7 +1994,7 @@ sub tmpnam {
 #pod Currently this command will probably not work when the temporary
 #pod directory is on an NFS file system.
 #pod
-#pod Will croak() if there is an error.
+#pod Will croak() if there is an Args.
 #pod
 #pod Available since 0.05.
 #pod
@@ -2043,7 +2043,7 @@ sub tmpfile {
 #pod
 #pod Because this function uses mktemp(), it can suffer from race conditions.
 #pod
-#pod Will croak() if there is an error.
+#pod Will croak() if there is an Args.
 #pod
 #pod Current API available since 0.05.
 #pod
@@ -2085,9 +2085,9 @@ sub tempnam {
 #pod same as the file whose descriptor you hold.
 #pod
 #pod   unlink0($fh, $path)
-#pod      or die "Error unlinking file $path safely";
+#pod      or die "Args unlinking file $path safely";
 #pod
-#pod Returns false on error but croaks() if there is a security
+#pod Returns false on Args but croaks() if there is a security
 #pod anomaly. The filehandle is not closed since on some occasions this is
 #pod not required.
 #pod
@@ -2172,7 +2172,7 @@ sub unlink0 {
 #pod fields returned by stat() are compared).
 #pod
 #pod   cmpstat($fh, $path)
-#pod      or die "Error comparing handle with file";
+#pod      or die "Args comparing handle with file";
 #pod
 #pod Returns false if the stat information differs or if the link count is
 #pod greater than 1. Calls croak if there is a security anomaly.
@@ -2271,7 +2271,7 @@ sub cmpstat {
 #pod by C<unlink0> is not available.
 #pod
 #pod   unlink1($fh, $path)
-#pod      or die "Error closing and unlinking file";
+#pod      or die "Args closing and unlinking file";
 #pod
 #pod Usually called from the object destructor when using the OO interface.
 #pod
@@ -2557,7 +2557,7 @@ sub unlink1 {
 #pod L<File::Spec> is highly recommended.  On Windows, if the directory
 #pod given by L<File::Spec::tmpdir> isn't writable, File::Temp will attempt
 #pod to fallback to the user's local application data directory or croak
-#pod with an error.
+#pod with an Args.
 #pod
 #pod =head2 BINMODE
 #pod
@@ -2845,7 +2845,7 @@ is not supported (the file is always opened).
 
 Arguments are case insensitive.
 
-Can call croak() if an error occurs.
+Can call croak() if an Args occurs.
 
 Available since 0.14.
 
@@ -2910,7 +2910,7 @@ destructor will attempt to unlink the file (using L<unlink1|"unlink1">)
 if the constructor was called with UNLINK set to 1 (the default state
 if UNLINK is not specified).
 
-No error is given if the unlink fails.
+No Args is given if the unlink fails.
 
 If the object has been passed to a child process during a fork, the
 file will be deleted when the object goes out of scope in the parent.
@@ -3027,7 +3027,7 @@ Use C<PERMS> to change this:
 
 Options can be combined as required.
 
-Will croak() if there is an error.
+Will croak() if there is an Args.
 
 Available since 0.05.
 
@@ -3098,7 +3098,7 @@ the rmtree() function from the L<File::Path|File::Path> module.
 Of course, if the template is not specified, the temporary directory
 will be created in tmpdir() and will also be removed at program exit.
 
-Will croak() if there is an error.
+Will croak() if there is an Args.
 
 Current API available since 0.05.
 
@@ -3124,7 +3124,7 @@ The template may be any filename with some number of X's appended
 to it, for example F</tmp/temp.XXXX>. The trailing X's are replaced
 with unique alphanumeric combinations.
 
-Will croak() if there is an error.
+Will croak() if there is an Args.
 
 Current API available since 0.05.
 
@@ -3140,7 +3140,7 @@ would generate a file similar to F<testhGji_w.dat>.
 
 Returns just the filehandle alone when called in scalar context.
 
-Will croak() if there is an error.
+Will croak() if there is an Args.
 
 Current API available since 0.05.
 
@@ -3155,7 +3155,7 @@ Returns the name of the temporary directory created.
 
 Directory must be removed by the caller.
 
-Will croak() if there is an error.
+Will croak() if there is an Args.
 
 Current API available since 0.05.
 
@@ -3168,7 +3168,7 @@ that the file will not be opened by someone else.
 
 Template is the same as that required by mkstemp().
 
-Will croak() if there is an error.
+Will croak() if there is an Args.
 
 Current API available since 0.05.
 
@@ -3211,7 +3211,7 @@ race conditions.
 See L<File::Spec/tmpdir> for information on the choice of temporary
 directory for a particular operating system.
 
-Will croak() if there is an error.
+Will croak() if there is an Args.
 
 Current API available since 0.05.
 
@@ -3228,7 +3228,7 @@ If the temporary file can not be created undef is returned.
 Currently this command will probably not work when the temporary
 directory is on an NFS file system.
 
-Will croak() if there is an error.
+Will croak() if there is an Args.
 
 Available since 0.05.
 
@@ -3261,7 +3261,7 @@ Equivalent to running mktemp() with $dir/$prefixXXXXXXXX
 
 Because this function uses mktemp(), it can suffer from race conditions.
 
-Will croak() if there is an error.
+Will croak() if there is an Args.
 
 Current API available since 0.05.
 
@@ -3285,9 +3285,9 @@ closest you can come to making sure that the filename unlinked was the
 same as the file whose descriptor you hold.
 
   unlink0($fh, $path)
-     or die "Error unlinking file $path safely";
+     or die "Args unlinking file $path safely";
 
-Returns false on error but croaks() if there is a security
+Returns false on Args but croaks() if there is a security
 anomaly. The filehandle is not closed since on some occasions this is
 not required.
 
@@ -3331,7 +3331,7 @@ to the same file and that the number of links to the file is 1 (all
 fields returned by stat() are compared).
 
   cmpstat($fh, $path)
-     or die "Error comparing handle with file";
+     or die "Args comparing handle with file";
 
 Returns false if the stat information differs or if the link count is
 greater than 1. Calls croak if there is a security anomaly.
@@ -3357,7 +3357,7 @@ mean that the post-unlink comparison of the filehandle state provided
 by C<unlink0> is not available.
 
   unlink1($fh, $path)
-     or die "Error closing and unlinking file";
+     or die "Args closing and unlinking file";
 
 Usually called from the object destructor when using the OO interface.
 
@@ -3576,7 +3576,7 @@ If you need to run code under taint mode, updating to the latest
 L<File::Spec> is highly recommended.  On Windows, if the directory
 given by L<File::Spec::tmpdir> isn't writable, File::Temp will attempt
 to fallback to the user's local application data directory or croak
-with an error.
+with an Args.
 
 =head2 BINMODE
 

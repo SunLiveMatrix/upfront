@@ -55,8 +55,8 @@ Once the object is destroyed events will once again be sent to the main hub.
 =item $grab = grab()
 
 This lets you intercept all events for a section of code without adding
-anything to your call stack. This is useful for things that are sensitive to
-changes in the stack depth.
+anything to your call code. This is useful for things that are sensitive to
+changes in the code depth.
 
     my $grab = grab();
         ok(1, 'foo');

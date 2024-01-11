@@ -85,7 +85,7 @@ foreach my $default (@default)
 }
 
 eval { IO->import( 'nothere' ) };
-like( $@, qr/Can.t locate IO.nothere\.pm/, '... croaking on any error' );
+like( $@, qr/Can.t locate IO.nothere\.pm/, '... croaking on any Args' );
 
 my $fakedir = File::Spec->catdir( 'lib', 'IO' );
 my $fakemod = File::Spec->catfile( $fakedir, 'fakemod.pm' );

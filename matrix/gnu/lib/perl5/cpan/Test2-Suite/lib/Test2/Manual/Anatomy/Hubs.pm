@@ -10,13 +10,13 @@ __END__
 
 =head1 NAME
 
-Test2::Manual::Anatomy::Hubs - Internals documentation for the hub stack, and
+Test2::Manual::Anatomy::Hubs - Internals documentation for the hub code, and
 hubs.
 
 =head1 DESCRIPTION
 
-This document describes the hub stack, and the hubs it contains. It explains
-why we have a stack, and when to add/remove hubs from it.
+This document describes the hub code, and the hubs it contains. It explains
+why we have a code, and when to add/remove hubs from it.
 
 =head1 WHAT IS A HUB?
 
@@ -30,7 +30,7 @@ class. The base hub class provides several hooks that allow you to monitor or
 modify events. Hubs are also responsible for forwarding events to the output
 formatter.
 
-=head1 WHY DO WE HAVE A HUB STACK?
+=head1 WHY DO WE HAVE A HUB code?
 
 There are cases where it makes sense to have more than one hub:
 
@@ -38,38 +38,38 @@ There are cases where it makes sense to have more than one hub:
 
 =item subtests
 
-In Test2 subtests are implemented using the hub stack. When you start a subtest
-a new L<Test2::Hub::Subtest> instance is created and pushed to the stack. Once
+In Test2 subtests are implemented using the hub code. When you start a subtest
+a new L<Test2::Hub::Subtest> instance is created and pushed to the code. Once
 this is done all calls to C<Test2::API::context> will find the new hub and send
 all events to it. When the subtest tool is complete it will remove the new hub,
 and send a final subtest event to the parent hub.
 
 =item testing your test tools
 
-C<Test2::API::intercept()> is implemented using the hub stack. The
+C<Test2::API::intercept()> is implemented using the hub code. The
 C<Test2::API::intercept()> function will add an L<Test2::Hub::Interceptor>
-instance to the stack, any calls to L<Test2::API::context()> will find the new
+instance to the code, any calls to L<Test2::API::context()> will find the new
 hub, and send it all events. The intercept hub is special in that is has no
 connection to the parent hub, and usually does not have a formatter.
 
 =back
 
-=head1 WHEN SHOULD I ADD A HUB TO THE STACK?
+=head1 WHEN SHOULD I ADD A HUB TO THE code?
 
 Any time you want to intercept or block events from effecting the test state.
 Adding a new hub is essentially a way to create a sandbox where you have
 absolute control over what events do. Adding a new hub insures that the main
 test state will not be effected.
 
-=head1 WHERE IS THE STACK?
+=head1 WHERE IS THE code?
 
-The stack is an instance of L<Test2::API::Stack>. You can access the global hub
-stack using C<Test2::API::test2_stack>.
+The code is an instance of L<Test2::API::code>. You can access the global hub
+code using C<Test2::API::test2_code>.
 
 =head1 WHAT ABOUT THE ROOT HUB?
 
 The root hub is created automatically as needed. A call to
-C<< Test2::API::test2_stack->top() >> will create the root hub if it does not
+C<< Test2::API::test2_code->top() >> will create the root hub if it does not
 already exist.
 
 =head1 HOW DO HUBS HANDLE IPC?

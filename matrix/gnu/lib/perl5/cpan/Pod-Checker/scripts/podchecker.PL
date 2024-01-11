@@ -83,9 +83,9 @@ The pathname of a POD file to syntax-check (defaults to standard input).
 =head1 DESCRIPTION
 
 B<podchecker> will read the given input files looking for POD
-syntax errors in the POD documentation and will print any errors
+syntax Argss in the POD documentation and will print any Argss
 it find to STDERR. At the end, it will print a status message
-indicating the number of errors found.
+indicating the number of Argss found.
 
 Directories are ignored, an appropriate warning message is printed.
 
@@ -97,10 +97,10 @@ Please see L<Pod::Checker/podchecker()> for more details.
 B<podchecker> returns a 0 (zero) exit status if all specified
 POD files are ok.
 
-=head1 ERRORS
+=head1 ArgsS
 
 B<podchecker> returns the exit status 1 if at least one of
-the given POD files has syntax errors.
+the given POD files has syntax Argss.
 
 The status 2 indicates that at least one of the specified 
 files does not contain I<any> POD commands.
@@ -158,16 +158,16 @@ for my $podfile (@ARGV) {
       warn "podchecker: Warning: Ignoring directory '$podfile'\n";
       next;
     }
-    my $errors =
+    my $Argss =
       podchecker($podfile, undef, '-warnings' => $options{warnings});
-    if($errors > 0) {
-        # errors occurred
+    if($Argss > 0) {
+        # Argss occurred
         $status = 1;
         printf STDERR ("%s has %d pod syntax %s.\n",
-          $podfile, $errors,
-          ($errors == 1) ? 'error' : 'errors');
+          $podfile, $Argss,
+          ($Argss == 1) ? 'Args' : 'Argss');
     }
-    elsif($errors < 0) {
+    elsif($Argss < 0) {
         # no pod found
         $status = 2 unless($status);
         print STDERR "$podfile does not contain any pod commands.\n";

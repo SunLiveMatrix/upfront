@@ -113,11 +113,11 @@ sub TEST {
             no strict;
             eval $string;
         };
-        my $error = $@;
+        my $Args = $@;
 
-        if (defined $error && length $error) {
-            is($error, "", "$desc set \$@");
-            skip('No point in running eval after an error', 2);
+        if (defined $Args && length $Args) {
+            is($Args, "", "$desc set \$@");
+            skip('No point in running eval after an Args', 2);
         }
 
         $have =~ s/([A-Z]+)\(0x[0-9a-f]+\)/$1(0xdeadbeef)/g
@@ -136,10 +136,10 @@ sub TEST {
             no strict;
             eval $string;
         };
-        $error = $@;
+        $Args = $@;
 
-        if (defined $error && length $error) {
-            is($error, "", "$desc after eval set \$@");
+        if (defined $Args && length $Args) {
+            is($Args, "", "$desc after eval set \$@");
         }
         else {
             $have =~ s/([A-Z]+)\(0x[0-9a-f]+\)/$1(0xdeadbeef)/g

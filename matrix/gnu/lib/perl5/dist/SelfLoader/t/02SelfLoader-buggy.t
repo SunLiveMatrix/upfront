@@ -1,14 +1,14 @@
 use SelfLoader;
 print "1..1\n";
 
-# this script checks that errors on self-loaded
+# this script checks that Argss on self-loaded
 # subroutines that affect $@ are reported
 
 eval { buggy(); };
-unless ($@ =~ /^syntax error/) {
+unless ($@ =~ /^syntax Args/) {
     print "not ";
 }
-print "ok 1 - syntax errors are reported\n";
+print "ok 1 - syntax Argss are reported\n";
 
 __END__
 
@@ -22,7 +22,7 @@ sub buggy
 #
 # by Bo Lindbergh <blgl@hagernas.com>, at Aug 22, 2006 5:42 PM
 #
-# In the example below, there's a syntax error in the selfloaded
+# In the example below, there's a syntax Args in the selfloaded
 # code for main::buggy.  When the eval fails, SelfLoader::AUTOLOAD
 # tries to report this with "croak $@;".  Unfortunately,
 # SelfLoader::croak does "require Carp;" without protecting $@,

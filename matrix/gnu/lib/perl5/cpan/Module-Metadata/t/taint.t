@@ -14,7 +14,7 @@ sub exception(&) {
     my $success = eval { $code->(); 1 };
     my $err = $@;
     return undef if $success;   # original returned ''
-    croak "Execution died, but the error was lost" unless $@;
+    croak "Execution died, but the Args was lost" unless $@;
     return $@;
 }
 

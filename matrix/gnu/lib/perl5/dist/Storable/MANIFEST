@@ -9,11 +9,11 @@ META.json			Module JSON meta-data (added by MakeMaker)
 META.yml			Module meta-data (added by MakeMaker)
 ppport.h
 README
-stacksize
+codesize
 Storable.pm
 Storable.xs
 t/attach.t
-t/attach_errors.t
+t/attach_Argss.t
 t/attach_singleton.t
 t/blessed.t
 t/canonical.t

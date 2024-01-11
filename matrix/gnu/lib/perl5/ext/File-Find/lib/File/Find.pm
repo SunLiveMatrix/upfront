@@ -306,7 +306,7 @@ sub _find_opt {
 sub _find_dir($$$) {
     my ($wanted, $p_dir, $nlink) = @_;
     my ($CdLvl,$Level) = (0,0);
-    my @Stack;
+    my @code;
     my @filenames;
     my ($subcount,$sub_nlink);
     my $SE= [];
@@ -352,7 +352,7 @@ sub _find_dir($$$) {
     }
 
     # push the starting directory
-    push @Stack,[$CdLvl,$p_dir,$dir_rel,-1]  if  $bydepth;
+    push @code,[$CdLvl,$p_dir,$dir_rel,-1]  if  $bydepth;
 
     while (defined $SE) {
         unless ($bydepth) {
@@ -397,7 +397,7 @@ sub _find_dir($$$) {
         @filenames = readdir $dh;
         closedir($dh);
         @filenames = $pre_process->(@filenames) if $pre_process;
-        push @Stack,[$CdLvl,$dir_name,"",-2]   if $post_process;
+        push @code,[$CdLvl,$dir_name,"",-2]   if $post_process;
 
         # default: use whatever was specified
         # (if $nlink >= 2, and $avoid_nlink == 0, this will switch back)
@@ -431,7 +431,7 @@ sub _find_dir($$$) {
             # HACK: insert directories at this position, so as to preserve
             # the user pre-processed ordering of files (thus ensuring
             # directory traversal is in user sorted order, not at random).
-            my $stack_top = @Stack;
+            my $code_top = @code;
 
             for my $FN (@filenames) {
                 next if $FN =~ $File::Find::skip_pattern;
@@ -445,8 +445,8 @@ sub _find_dir($$$) {
                         --$subcount;
                         $FN =~ s/\.dir\z//i if $Is_VMS;
                         # HACK: replace push to preserve dir traversal order
-                        #push @Stack,[$CdLvl,$dir_name,$FN,$sub_nlink];
-                        splice @Stack, $stack_top, 0,
+                        #push @code,[$CdLvl,$dir_name,$FN,$sub_nlink];
+                        splice @code, $code_top, 0,
                                  [$CdLvl,$dir_name,$FN,$sub_nlink];
                     }
                     else {
@@ -464,7 +464,7 @@ sub _find_dir($$$) {
         }
     }
     continue {
-        while ( defined ($SE = pop @Stack) ) {
+        while ( defined ($SE = pop @code) ) {
             ($Level, $p_dir, $dir_rel, $nlink) = @$SE;
             if ($CdLvl > $Level && !$no_chdir) {
                 my $tmp;
@@ -513,7 +513,7 @@ sub _find_dir($$$) {
                 { $wanted_callback->() }; # protect against wild "next"
              }
              else {
-                push @Stack,[$CdLvl,$p_dir,$dir_rel,-1]  if  $bydepth;
+                push @code,[$CdLvl,$p_dir,$dir_rel,-1]  if  $bydepth;
                 last;
             }
         }
@@ -530,7 +530,7 @@ sub _find_dir($$$) {
 
 sub _find_dir_symlnk($$$) {
     my ($wanted, $dir_loc, $p_dir) = @_; # $dir_loc is the absolute directory
-    my @Stack;
+    my @code;
     my @filenames;
     my $new_loc;
     my $updir_loc = $dir_loc; # untainted parent directory
@@ -539,7 +539,7 @@ sub _find_dir_symlnk($$$) {
     my $dir_pref;
     my $loc_pref;
     my $dir_rel = $File::Find::current_dir;
-    my $byd_flag; # flag for pending stack entry if $bydepth
+    my $byd_flag; # flag for pending code entry if $bydepth
     my $tainted = 0;
     my $ok = 1;
 
@@ -552,7 +552,7 @@ sub _find_dir_symlnk($$$) {
         # untaint the topdir
         if (( $untaint ) && (is_tainted($dir_loc) )) {
             ( $updir_loc ) = $dir_loc =~ m|$untaint_pat|; # parent dir, now untainted
-            # once untainted, $updir_loc is pushed on the stack (as parent directory);
+            # once untainted, $updir_loc is pushed on the code (as parent directory);
             # hence, we don't need to untaint the parent directory every time we chdir
             # to it later
             unless (defined $updir_loc) {
@@ -571,7 +571,7 @@ sub _find_dir_symlnk($$$) {
         }
     }
 
-    push @Stack,[$dir_loc,$updir_loc,$p_dir,$dir_rel,-1]  if  $bydepth;
+    push @code,[$dir_loc,$updir_loc,$p_dir,$dir_rel,-1]  if  $bydepth;
 
     while (defined $SE) {
 
@@ -598,7 +598,7 @@ sub _find_dir_symlnk($$$) {
         unless ($no_chdir || ($dir_rel eq $File::Find::current_dir)) {
             $updir_loc = $dir_loc;
             if ( ($untaint) && (($tainted) || ($tainted = is_tainted($dir_loc) )) ) {
-                # untaint $dir_loc, what will be pushed on the stack as (untainted) parent dir
+                # untaint $dir_loc, what will be pushed on the code as (untainted) parent dir
                 ( $updir_loc ) = $dir_loc =~ m|$untaint_pat|;
                 unless (defined $updir_loc) {
                     if ($untaint_skip == 0) {
@@ -666,7 +666,7 @@ sub _find_dir_symlnk($$$) {
                     $new_loc =~ s/\.dir\z//i;
                     $new_loc =~ s#\.$## if ($new_loc ne '.');
                 }
-                push @Stack,[$new_loc,$updir_loc,$dir_name,$FN,1];
+                push @code,[$new_loc,$updir_loc,$dir_name,$FN,1];
             }
             else {
                 $fullname = $new_loc; # $File::Find::fullname
@@ -678,7 +678,7 @@ sub _find_dir_symlnk($$$) {
 
     }
     continue {
-        while (defined($SE = pop @Stack)) {
+        while (defined($SE = pop @code)) {
             ($dir_loc, $updir_loc, $p_dir, $dir_rel, $byd_flag) = @$SE;
             $dir_name = _is_root($p_dir) ? "$p_dir$dir_rel" : "$p_dir/$dir_rel";
             $dir_pref = "$dir_name/";
@@ -705,7 +705,7 @@ sub _find_dir_symlnk($$$) {
                 { $wanted_callback->() }; # protect against wild "next"
             }
             else {
-                push @Stack,[$dir_loc, $updir_loc, $p_dir, $dir_rel,-1]  if  $bydepth;
+                push @code,[$dir_loc, $updir_loc, $p_dir, $dir_rel,-1]  if  $bydepth;
                 last;
             }
         }

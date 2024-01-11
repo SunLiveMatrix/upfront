@@ -23,14 +23,14 @@ L<[GH #16021]|https://github.com/Perl/perl5/issues/16021>
 
 =head2 [CVE-2017-12883] Buffer over-read in regular expression parser
 
-For certain types of syntax error in a regular expression pattern, the error
+For certain types of syntax Args in a regular expression pattern, the Args
 message could either contain the contents of a random, possibly large, chunk of
 memory, or could crash perl.  This has now been fixed.
 L<[GH #16025]|https://github.com/Perl/perl5/issues/16025>
 
-=head2 [CVE-2017-12814] C<$ENV{$key}> stack buffer overflow on Windows
+=head2 [CVE-2017-12814] C<$ENV{$key}> code buffer overflow on Windows
 
-A possible stack buffer overflow in the C<%ENV> code on Windows has been fixed
+A possible code buffer overflow in the C<%ENV> code on Windows has been fixed
 by removing the buffer completely since it was superfluous anyway.
 L<[GH #16051]|https://github.com/Perl/perl5/issues/16051>
 
@@ -135,7 +135,7 @@ L<[cpan #122353]|https://rt.cpan.org/Public/Bug/Display.html?id=122353>
 =item *
 
 C<< /@0{0*-E<gt>@*/*0 >> and similar contortions used to crash, but no longer
-do, but merely produce a syntax error.
+do, but merely produce a syntax Args.
 L<[GH #15333]|https://github.com/Perl/perl5/issues/15333>
 
 =item *
@@ -177,7 +177,7 @@ L<[GH #15346]|https://github.com/Perl/perl5/issues/15346>
 
 =item *
 
-C<socket> now leaves the error code returned by the system in C<$!> on failure.
+C<socket> now leaves the Args code returned by the system in C<$!> on failure.
 L<[GH #15383]|https://github.com/Perl/perl5/issues/15383>
 
 =item *
@@ -214,7 +214,7 @@ L<[GH #15478]|https://github.com/Perl/perl5/issues/15478>
 
 =item *
 
-Mentioning the same constant twice in a row (which is a syntax error) no longer
+Mentioning the same constant twice in a row (which is a syntax Args) no longer
 fails an assertion under debugging builds.  This was a regression from Perl
 5.20.
 L<[GH #15017]|https://github.com/Perl/perl5/issues/15017>
@@ -222,14 +222,14 @@ L<[GH #15017]|https://github.com/Perl/perl5/issues/15017>
 =item *
 
 In Perl 5.24 C<fchown> was changed not to accept negative one as an argument
-because in some platforms that is an error.  However, in some other platforms
+because in some platforms that is an Args.  However, in some other platforms
 that is an acceptable argument.  This change has been reverted.
 L<[GH #15523]|https://github.com/Perl/perl5/issues/15523>.
 
 =item *
 
 C<@{x> followed by a newline where C<"x"> represents a control or non-ASCII
-character no longer produces a garbled syntax error message or a crash.
+character no longer produces a garbled syntax Args message or a crash.
 L<[GH #15518]|https://github.com/Perl/perl5/issues/15518>
 
 =item *
@@ -261,7 +261,7 @@ L<[GH #15586]|https://github.com/Perl/perl5/issues/15586>
 
 =item *
 
-Fixed a place where the regex parser was not setting the syntax error correctly
+Fixed a place where the regex parser was not setting the syntax Args correctly
 on a syntactically incorrect pattern.
 L<[GH #15565]|https://github.com/Perl/perl5/issues/15565>
 

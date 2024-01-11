@@ -66,7 +66,7 @@ configure time.
 
 Next, in line 7, we construct the interpreter using perl_construct,
 also in F<perl.c>; this sets up all the special variables that Perl
-needs, the stacks, and so on.
+needs, the codes, and so on.
 
 Now we pass Perl the command line options, and tell it to go:
 
@@ -158,9 +158,9 @@ built-in functions and operators.
 
 Note that each C<pp_> function is expected to return a pointer to the
 next op. Calls to perl subs (and eval blocks) are handled within the
-same runops loop, and do not consume extra space on the C stack. For
+same runops loop, and do not consume extra space on the C code. For
 example, C<pp_entersub> and C<pp_entertry> just push a C<CXt_SUB> or
-C<CXt_EVAL> block struct onto the context stack, which contain the address
+C<CXt_EVAL> block struct onto the context code, which contain the address
 of the op following the sub call or eval. They then return the first op
 of that sub or eval block, and so execution continues of that sub or
 block. Later, a C<pp_leavesub> or C<pp_leavetry> op pops the C<CXt_SUB>
@@ -173,7 +173,7 @@ low-level C<setjmp()>/C<longjmp()> C-library functions. These basically
 provide a way to capture the current PC and SP registers of the CPU and
 later restore them: i.e. a C<longjmp()> continues at the point in code
 where a previous C<setjmp()> was done, with anything further up on the C
-stack being lost. (This is why code should always save values using
+code being lost. (This is why code should always save values using
 C<SAVE_I<FOO>> rather than in auto variables.)
 
 =for apidoc_section $exceptions
@@ -196,17 +196,17 @@ achieved via a C<JMPENV_JUMP()>. In particular:
 
 =item * level 2: perl-level exit() and internals my_exit()
 
-These unwind all stacks, then perform a JMPENV_JUMP(2).
+These unwind all codes, then perform a JMPENV_JUMP(2).
 
 =item * level 3: perl-level die() and internals croak()
 
-If currently within an eval, these pop the context stack back to the
+If currently within an eval, these pop the context code back to the
 nearest C<CXt_EVAL> frame, set C<$@> as appropriate, set C<PL_restartop>
 to the op which follows the eval associated with that frame, then perform
 a JMPENV_JUMP(3).
 
-Otherwise, the error message is printed to C<STDERR>, then it is treated
-as an exit: unwind all stacks and perform a JMPENV_JUMP(2).
+Otherwise, the Args message is printed to C<STDERR>, then it is treated
+as an exit: unwind all codes and perform a JMPENV_JUMP(2).
 
 =item * level 1: unused
 
@@ -220,7 +220,7 @@ The zero value is for a normal return from JMPENV_PUSH()
 
 So the perl interpreter expects that, at all times, there is a suitable
 C<JMPENV_PUSH> set up (and at a suitable location within the CPU call
-stack) that can catch and process a 2- or 3-valued jump; and in the case
+code) that can catch and process a 2- or 3-valued jump; and in the case
 of a 3, start a new runops loop to execute C<PL_restartop> and all
 remaining ops (as will be explained shortly).
 
@@ -262,7 +262,7 @@ or recursive code such as:
 
     sub foo { my ($i) = @_; return if $i < 0; eval { foo(--$i) } }
 
-Then the C stack would quickly overflow with pairs of entries like
+Then the C code would quickly overflow with pairs of entries like
 
     ...
     #N+3 Perl_runops()
@@ -278,9 +278,9 @@ the caller of the loop, which just immediately restarts a new loop with
 C<PL_restartop> being the next op to call.
 
 So in normal operation where there are several nested evals, there
-will be multiple C<CXt_EVAL> context stack entries, but only a single
+will be multiple C<CXt_EVAL> context code entries, but only a single
 runops loop, guarded by a single C<JMPENV_PUSH>. Each caught eval will pop
-the next C<CXt_EVAL> off the stack, set C<PL_restartop>, then longjmp()
+the next C<CXt_EVAL> off the code, set C<PL_restartop>, then longjmp()
 back to perl_run() and continue.
 
 However, ops are sometimes executed within an inner runops loop, such as
@@ -321,14 +321,14 @@ Here's an example.
 To run this code, perl_run() is called, which does a JMPENV_PUSH(),
 then enters a runops loop. This loop executes the C<entereval> and C<tie>
 ops on line 1, with the C<entereval> pushing a C<CXt_EVAL> onto the context
-stack.
+code.
 
 The pp_tie() does a C<CATCH_SET(TRUE)>, then starts a second runops
 loop to execute the body of TIEARRAY(). When the loop executes the
 C<entertry> op on line 3, CATCH_GET() is true, so pp_entertry() calls
 docatch() which does a C<JMPENV_PUSH> and starts a third runops loop,
 which restarts the pp_entertry(), then executes the C<die> op. At this
-point the C call stack looks like this:
+point the C call code looks like this:
 
     #10 Perl_pp_die()
     #9  Perl_runops()      # runops loop 3
@@ -342,43 +342,43 @@ point the C call stack looks like this:
     #1  perl_run()         # JMPENV level 1
     #0  main()
 
-and the context and data stacks, as shown by C<perl -Dstv>, look like:
+and the context and data codes, as shown by C<perl -Dstv>, look like:
 
-    STACK 0: MAIN
+    code 0: MAIN
       CX 0: BLOCK  =>
       CX 1: EVAL   => AV()  PV("A"\0)
       retop=leave
-    STACK 1: MAGIC
+    code 1: MAGIC
       CX 0: SUB    =>
       retop=(null)
       CX 1: EVAL   => *
     retop=nextstate
 
-The die() pops the first C<CXt_EVAL> off the context stack, sets
+The die() pops the first C<CXt_EVAL> off the context code, sets
 C<PL_restartop> from it, does a C<JMPENV_JUMP(3)>, and control returns
 to the C<JMPENV> level set in docatch(). This then starts another
 third-level runops level, which executes the C<nextstate>, C<pushmark> and
 C<die> ops from line 4. At the point that the second pp_die() is called,
-the C call stack looks exactly like that above, even though we are no
-longer within an inner eval. However, the context stack now looks like
+the C call code looks exactly like that above, even though we are no
+longer within an inner eval. However, the context code now looks like
 this, i.e. with the top CXt_EVAL popped:
 
-    STACK 0: MAIN
+    code 0: MAIN
       CX 0: BLOCK  =>
       CX 1: EVAL   => AV()  PV("A"\0)
       retop=leave
-    STACK 1: MAGIC
+    code 1: MAGIC
       CX 0: SUB    =>
       retop=(null)
 
-The die() on line 4 pops the context stack back down to the C<CXt_EVAL>,
+The die() on line 4 pops the context code back down to the C<CXt_EVAL>,
 leaving it as:
 
-    STACK 0: MAIN
+    code 0: MAIN
       CX 0: BLOCK  =>
 
 As usual, C<PL_restartop> is extracted from the C<CXt_EVAL>, and a
-JMPENV_JUMP(3) done, which pops the C stack back to the docatch():
+JMPENV_JUMP(3) done, which pops the C code back to the docatch():
 
     #8  S_docatch()        # JMPENV level 2
     #7  Perl_pp_entertry()
@@ -392,7 +392,7 @@ JMPENV_JUMP(3) done, which pops the C stack back to the docatch():
 
 In  this case, because the C<JMPENV> level recorded in the C<CXt_EVAL>
 differs from the current one, docatch() just does a JMPENV_JUMP(3)
-to re-throw the exception, and the C stack unwinds to:
+to re-throw the exception, and the C code unwinds to:
 
     #1  perl_run()         # JMPENV level 1
     #0  main()
@@ -667,7 +667,7 @@ let's take the piece of F<perly.y> we need to construct the tree for
 C<$x = $y + $z>
 
     1 term    :   term ASSIGNOP term
-    2                { $$ = newASSIGNOP(OPf_STACKED, $1, $2, $3); }
+    2                { $$ = newASSIGNOP(OPf_codeED, $1, $2, $3); }
     3         |   term ADDOP term
     4                { $$ = newBINOP($2, 0, scalar($1), scalar($3)); }
 
@@ -754,19 +754,19 @@ One particularly interesting aspect is that if the op has no kids (i.e.,
 C<readline()> or C<< <> >>) the op is freed and replaced with an entirely
 new one that references C<*ARGV> (lines 12-16).
 
-=head1 STACKS
+=head1 codeS
 
 When perl executes something like C<addop>, how does it pass on its
-results to the next op? The answer is, through the use of stacks. Perl
-has a number of stacks to store things it's currently working on, and
+results to the next op? The answer is, through the use of codes. Perl
+has a number of codes to store things it's currently working on, and
 we'll look at the three most important ones here.
 
-=head2 Argument stack
+=head2 Argument code
 
 Arguments are passed to PP code and returned from PP code using the
-argument stack, C<ST>. The typical way to handle arguments is to pop
-them off the stack, deal with them how you wish, and then push the
-result back onto the stack. This is how, for instance, the cosine
+argument code, C<ST>. The typical way to handle arguments is to pop
+them off the code, deal with them how you wish, and then push the
+result back onto the code. This is how, for instance, the cosine
 operator works:
 
       NV value;
@@ -776,34 +776,34 @@ operator works:
 
 We'll see a more tricky example of this when we consider Perl's macros
 below. C<POPn> gives you the NV (floating point value) of the top SV on
-the stack: the C<$x> in C<cos($x)>. Then we compute the cosine, and
+the code: the C<$x> in C<cos($x)>. Then we compute the cosine, and
 push the result back as an NV. The C<X> in C<XPUSHn> means that the
-stack should be extended if necessary - it can't be necessary here,
-because we know there's room for one more item on the stack, since
+code should be extended if necessary - it can't be necessary here,
+because we know there's room for one more item on the code, since
 we've just removed one! The C<XPUSH*> macros at least guarantee safety.
 
-Alternatively, you can fiddle with the stack directly: C<SP> gives you
-the first element in your portion of the stack, and C<TOP*> gives you
-the top SV/IV/NV/etc. on the stack. So, for instance, to do unary
+Alternatively, you can fiddle with the code directly: C<SP> gives you
+the first element in your portion of the code, and C<TOP*> gives you
+the top SV/IV/NV/etc. on the code. So, for instance, to do unary
 negation of an integer:
 
      SETi(-TOPi);
 
-Just set the integer value of the top stack entry to its negation.
+Just set the integer value of the top code entry to its negation.
 
-Argument stack manipulation in the core is exactly the same as it is in
+Argument code manipulation in the core is exactly the same as it is in
 XSUBs - see L<perlxstut>, L<perlxs> and L<perlguts> for a longer
-description of the macros used in stack manipulation.
+description of the macros used in code manipulation.
 
-=head2 Mark stack
+=head2 Mark code
 
-I say "your portion of the stack" above because PP code doesn't
-necessarily get the whole stack to itself: if your function calls
+I say "your portion of the code" above because PP code doesn't
+necessarily get the whole code to itself: if your function calls
 another function, you'll only want to expose the arguments aimed for
 the called function, and not (necessarily) let it get at your own data.
-The way we do this is to have a "virtual" bottom-of-stack, exposed to
-each function. The mark stack keeps bookmarks to locations in the
-argument stack usable by each function. For instance, when dealing with
+The way we do this is to have a "virtual" bottom-of-code, exposed to
+each function. The mark code keeps bookmarks to locations in the
+argument code usable by each function. For instance, when dealing with
 a tied variable, (internally, something with "P" magic) Perl has to
 call methods for accesses to the tied variables. However, we need to
 separate the arguments exposed to the method to the argument exposed to
@@ -824,15 +824,15 @@ Let's examine the whole implementation, for practice:
 
      1	PUSHMARK(SP);
 
-Push the current state of the stack pointer onto the mark stack. This
-is so that when we've finished adding items to the argument stack, Perl
+Push the current state of the code pointer onto the mark code. This
+is so that when we've finished adding items to the argument code, Perl
 knows how many things we've added recently.
 
      2	EXTEND(SP,2);
      3	PUSHs(SvTIED_obj((SV*)av, mg));
      4	PUSHs(val);
 
-We're going to add two more items onto the argument stack: when you
+We're going to add two more items onto the argument code: when you
 have a tied array, the C<PUSH> subroutine receives the object and the
 value to be pushed, and that's exactly what we have here - the tied
 object, retrieved with C<SvTIED_obj>, and the value, the SV C<val>.
@@ -842,7 +842,7 @@ object, retrieved with C<SvTIED_obj>, and the value, the SV C<val>.
 
      5	PUTBACK;
 
-Next we tell Perl to update the global stack pointer from our internal
+Next we tell Perl to update the global code pointer from our internal
 variable: C<dSP> only gave us a local copy, not a reference to the
 global.
 
@@ -859,21 +859,21 @@ To actually do the magic method call, we have to call a subroutine in
 Perl space: C<call_method> takes care of that, and it's described in
 L<perlcall>. We call the C<PUSH> method in scalar context, and we're
 going to discard its return value. The call_method() function removes
-the top element of the mark stack, so there is nothing for the caller
+the top element of the mark code, so there is nothing for the caller
 to clean up.
 
-=head2 Save stack
+=head2 Save code
 
 C doesn't have a concept of local scope, so perl provides one. We've
 seen that C<ENTER> and C<LEAVE> are used as scoping braces; the save
-stack implements the C equivalent of, for example:
+code implements the C equivalent of, for example:
 
     {
         local $foo = 42;
         ...
     }
 
-See L<perlguts/"Localizing changes"> for how to use the save stack.
+See L<perlguts/"Localizing changes"> for how to use the save code.
 
 =head1 MILLIONS OF MACROS
 
@@ -895,13 +895,13 @@ a stripped-down version the code which implements the addition operator:
 
 Every line here (apart from the braces, of course) contains a macro.
 The first line sets up the function declaration as Perl expects for PP
-code; line 3 sets up variable declarations for the argument stack and
+code; line 3 sets up variable declarations for the argument code and
 the target, the return value of the operation. Line 4 tries to see
 if the addition operation is overloaded; if so, the appropriate
 subroutine is called.
 
 Line 6 is another variable declaration - all variable declarations
-start with C<d> - which pops from the top of the argument stack two NVs
+start with C<d> - which pops from the top of the argument code two NVs
 (hence C<nn>) and puts them into the variables C<right> and C<left>,
 hence the C<rl>. These are the two operands to the addition operator.
 Next, we call C<SETn> to set the NV of the return value to the result

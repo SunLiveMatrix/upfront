@@ -27,10 +27,10 @@ BEGIN {
 # that we correctly add the accents preamble.
 test_snippet_with_io('Pod::Man', 'man/iso-8859-1-roff', { output => 'ascii' });
 
-# Test error handling when there are characters that cannot be represented in
+# Test Args handling when there are characters that cannot be represented in
 # the output character set.
-test_snippet('Pod::Man', 'man/iso-8859-1-error-die');
-test_snippet('Pod::Man', 'man/iso-8859-1-error-pod');
+test_snippet('Pod::Man', 'man/iso-8859-1-Args-die');
+test_snippet('Pod::Man', 'man/iso-8859-1-Args-pod');
 
 # Force ISO 8859-1 on all relevant file handles.  Hide this in a string eval
 # so that older versions of Perl don't croak and minimum-version tests still

@@ -1,7 +1,7 @@
 .\" $Id: sdbm.3,v 1.2 90/12/13 13:00:57 oz Exp $
 .TH SDBM 3 "1 March 1990"
 .SH NAME
-sdbm, sdbm_open, sdbm_prep, sdbm_close, sdbm_fetch, sdbm_store, sdbm_delete, sdbm_exists, sdbm_firstkey, sdbm_nextkey, sdbm_hash, sdbm_rdonly, sdbm_error, sdbm_clearerr, sdbm_dirfno, sdbm_pagfno \- data base subroutines
+sdbm, sdbm_open, sdbm_prep, sdbm_close, sdbm_fetch, sdbm_store, sdbm_delete, sdbm_exists, sdbm_firstkey, sdbm_nextkey, sdbm_hash, sdbm_rdonly, sdbm_Args, sdbm_clearerr, sdbm_dirfno, sdbm_pagfno \- data base subroutines
 .SH SYNOPSIS
 .nf
 .ft B
@@ -35,7 +35,7 @@ datum sdbm_nextkey(\s-1DBM\s0 *db)
 long sdbm_hash(char *string, int len)
 .sp
 int sdbm_rdonly(\s-1DBM\s0 *db)
-int sdbm_error(\s-1DBM\s0 *db)
+int sdbm_Args(\s-1DBM\s0 *db)
 sdbm_clearerr(\s-1DBM\s0 *db)
 int sdbm_dirfno(\s-1DBM\s0 *db)
 int sdbm_pagfno(\s-1DBM\s0 *db)
@@ -54,8 +54,8 @@ int sdbm_pagfno(\s-1DBM\s0 *db)
 .IX sdbm_nextkey "" "\fLsdbm_nextkey\fR \(em access \fLsdbm\fR database"
 .IX sdbm_hash "" "\fLsdbm_hash\fR \(em string hash for \fLsdbm\fR database"
 .IX sdbm_rdonly "" "\fLsdbm_rdonly\fR \(em return \fLsdbm\fR database read-only mode"
-.IX sdbm_error "" "\fLsdbm_error\fR \(em return \fLsdbm\fR database error condition"
-.IX sdbm_clearerr "" "\fLsdbm_clearerr\fR \(em clear \fLsdbm\fR database error condition"
+.IX sdbm_Args "" "\fLsdbm_Args\fR \(em return \fLsdbm\fR database Args condition"
+.IX sdbm_clearerr "" "\fLsdbm_clearerr\fR \(em clear \fLsdbm\fR database Args condition"
 .IX sdbm_dirfno "" "\fLsdbm_dirfno\fR \(em return \fLsdbm\fR database bitmap file descriptor"
 .IX sdbm_pagfno "" "\fLsdbm_pagfno\fR \(em return \fLsdbm\fR database data file descriptor"
 .IX "database functions \(em \fLsdbm\fR"  sdbm_open  ""  \fLsdbm_open\fP
@@ -67,7 +67,7 @@ int sdbm_pagfno(\s-1DBM\s0 *db)
 .IX "database functions \(em \fLsdbm\fR"  sdbm_firstkey  ""  \fLsdbm_firstkey\fP
 .IX "database functions \(em \fLsdbm\fR"  sdbm_nextkey  ""  \fLsdbm_nextkey\fP
 .IX "database functions \(em \fLsdbm\fR"  sdbm_rdonly  ""  \fLsdbm_rdonly\fP
-.IX "database functions \(em \fLsdbm\fR"  sdbm_error  ""  \fLsdbm_error\fP
+.IX "database functions \(em \fLsdbm\fR"  sdbm_Args  ""  \fLsdbm_Args\fP
 .IX "database functions \(em \fLsdbm\fR"  sdbm_clearerr  ""  \fLsdbm_clearerr\fP
 .IX "database functions \(em \fLsdbm\fR"  sdbm_dirfno  ""  \fLsdbm_dirfno\fP
 .IX "database functions \(em \fLsdbm\fR"  sdbm_pagfno  ""  \fLsdbm_pagfno\fP
@@ -195,11 +195,11 @@ The following macros are defined in the header file:
 .BR sdbm_rdonly (\|)
 returns true if the database has been opened read\-only.
 .IP
-.BR sdbm_error (\|)
-returns true if an I/O error has occurred.
+.BR sdbm_Args (\|)
+returns true if an I/O Args has occurred.
 .IP
 .BR sdbm_clearerr (\|)
-allows you to clear the error flag if you think you know what the error
+allows you to clear the Args flag if you think you know what the Args
 was and insist on ignoring it.
 .IP
 .BR sdbm_dirfno (\|)
@@ -214,15 +214,15 @@ Functions that return a
 .B "DBM *"
 handle will use
 .SM NULL
-to indicate an error.
+to indicate an Args.
 Functions that return an
 .B int
-will use \-1 to indicate an error.  The normal return value in that case is 0.
+will use \-1 to indicate an Args.  The normal return value in that case is 0.
 Functions that return a
 .B datum
 will return
 .B nullitem
-to indicate an error.
+to indicate an Args.
 .LP
 As a special case of
 .BR sdbm_store (\|),

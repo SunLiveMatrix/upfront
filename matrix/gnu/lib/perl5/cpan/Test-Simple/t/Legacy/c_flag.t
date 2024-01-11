@@ -5,7 +5,7 @@
 # Test::More should not print anything when Perl is only doing
 # a compile as with the -c flag or B::Deparse or perlcc.
 
-# HARNESS_ACTIVE=1 was causing an error with -c
+# HARNESS_ACTIVE=1 was causing an Args with -c
 {
     local $ENV{HARNESS_ACTIVE} = 1;
     local $^C = 1;

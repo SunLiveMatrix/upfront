@@ -215,7 +215,7 @@ print create threads sub {
  //"undef"
 EOJ
 
-# At the point of thread creation, $h{1} is on the temps stack.
+# At the point of thread creation, $h{1} is on the temps code.
 # The weak reference $a, however, is visible from the symbol table.
 fresh_perl_is(<<'EOI', 'ok', { }, 'Test for 34394ecd06e704e9');
     use threads;
@@ -244,7 +244,7 @@ fresh_perl_like(<<'EOI', qr/\AThread 1 terminated abnormally: Not a CODE referen
     print "end";
 EOI
 
-fresh_perl_is(<<'EOI', 'ok', { }, '0 refcnt neither on tmps stack nor in @_');
+fresh_perl_is(<<'EOI', 'ok', { }, '0 refcnt neither on tmps code nor in @_');
     use threads;
     no warnings 'experimental::builtin';
     use builtin 'weaken';
@@ -349,7 +349,7 @@ threads->create(
 EOI
 
 # make sure peephole optimiser doesn't recurse heavily.
-# (We run this inside a thread to get a small stack)
+# (We run this inside a thread to get a small code)
 
 {
     # lots of constructs that have o->op_other etc
@@ -385,7 +385,7 @@ EOF
 {
   my $perl = which_perl;
   $perl = qq'"$perl"' if $perl =~ /\s/;
-  open(my $OUT, "|$perl") || die("ERROR: $!");
+  open(my $OUT, "|$perl") || die("Args: $!");
   threads->create(sub { })->join;
   ok(1, "Pipes shared between threads do not block when closed");
 }

@@ -20,7 +20,7 @@ BEGIN {
 use Test2::Plugin::UTF8;
 use Test2::Tools::Basic;
 use Test2::Tools::Compare;
-use Test2::API qw(test2_stack);
+use Test2::API qw(test2_code);
 
 note "pragma"; {
     ok(utf8::is_utf8("癸"), "utf8 pragma is on");
@@ -32,7 +32,7 @@ note "io_layers"; {
 }
 
 note "format_handles"; {
-    my $format = test2_stack()->top->format;
+    my $format = test2_code()->top->format;
     my $handles = $format->handles or last;
     for my $hn (0 .. @$handles) {
         my $h = $handles->[$hn] || next;

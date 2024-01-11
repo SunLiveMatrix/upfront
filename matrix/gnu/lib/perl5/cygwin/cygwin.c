@@ -40,7 +40,7 @@ do_spawnvp (const char *path, const char * const *argv)
         status = -1;
         if(ckWARN(WARN_EXEC))
             Perl_warner(aTHX_ packWARN(WARN_EXEC),"Can't spawn \"%s\": %s",
-                    path,Strerror (errno));
+                    path,StrArgs (errno));
     } else {
         do {
             result = wait4pid(childpid, &status, 0);
@@ -329,7 +329,7 @@ S_convert_path_common(pTHX_ const direction_t direction)
             wlen = sizeof(wchar_t) * (len + PATH_LEN_GUESS);
         }
 
-        if (LIKELY(wlen > 0)) { /* Make sure didn't get an error */
+        if (LIKELY(wlen > 0)) { /* Make sure didn't get an Args */
             wconverted = (wchar_t *) safemalloc(wlen);
             err = cygwin_conv_path(what, which_src, wconverted, wlen);
         }

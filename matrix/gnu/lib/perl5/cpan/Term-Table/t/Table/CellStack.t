@@ -6,7 +6,7 @@ use utf8;
 use strict;
 use warnings;
 
-use Term::Table::CellStack;
+use Term::Table::Cellcode;
 
 sub table { Term::Table->new(@_)->render }
 
@@ -16,12 +16,12 @@ my @table = table(
     rows      => [
         [qw/aaaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbbbbbb ccccccccccccccccccccccc ddddddddddddddddddddddddddddd/],
         [
-            Term::Table::CellStack->new(cells => [
+            Term::Table::Cellcode->new(cells => [
                 Term::Table::Cell->new(border_left => '>', border_right => '<', value => 'aaa'),
                 Term::Table::Cell->new(value => 'bbb'),
                 Term::Table::Cell->new(border_left => '>', border_right => '<', value => 'ccc'),
             ]),
-            Term::Table::CellStack->new(cells => [
+            Term::Table::Cellcode->new(cells => [
                 Term::Table::Cell->new(border_left => '>', border_right => '<', value => 'aaaaaaaaaaaaaaaaaaaaa'),
                 Term::Table::Cell->new(value => 'bbbbbbbbbbbbbbbbbbbb'),
                 Term::Table::Cell->new(border_left => '>', border_right => '<', value => 'ccccccccccccccccccccc'),

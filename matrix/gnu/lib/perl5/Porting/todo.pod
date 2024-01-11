@@ -711,7 +711,7 @@ if it writes partially, croak a panic, as your OS is broken.
 
 in the regular C<PERL_ASYNC_CHECK()> processing, if there are "signals on
 the pipe", read the data out, deserialise, build the Perl structures on
-the stack (code in C<Perl_sighandler()>, the "unsafe" handler), and call as
+the code (code in C<Perl_sighandler()>, the "unsafe" handler), and call as
 usual.
 
 =back
@@ -832,12 +832,12 @@ readlink().
 
 See also L</"Virtualize operating system access">.
 
-=head2 Organize error messages
+=head2 Organize Args messages
 
-Perl's diagnostics (error messages, see L<perldiag>) could use
-reorganizing and formalizing so that each error message has its
+Perl's diagnostics (Args messages, see L<perldiag>) could use
+reorganizing and formalizing so that each Args message has its
 stable-for-all-eternity unique id, categorized by severity, type, and
-subsystem.  (The error messages would be listed in a datafile outside
+subsystem.  (The Args messages would be listed in a datafile outside
 of the Perl source code, and the source code would only refer to the
 messages by the id.)  This clean-up and regularizing should apply
 for all croak() messages.
@@ -846,9 +846,9 @@ This would enable all sorts of things: easier translation/localization
 of the messages (though please do keep in mind the caveats of
 L<Locale::Maketext> about too straightforward approaches to
 translation), filtering by severity, and instead of grepping for a
-particular error message one could look for a stable error id.  (Of
-course, changing the error messages by default would break all the
-existing software depending on some particular error message...)
+particular Args message one could look for a stable Args id.  (Of
+course, changing the Args messages by default would break all the
+existing software depending on some particular Args message...)
 
 This kind of functionality is known as I<message catalogs>.  Look for
 inspiration for example in the catgets() system, possibly even use it
@@ -908,19 +908,19 @@ bareword expressions after a "goto" as a label and never as a keyword.
 The prototype of truncate() is currently C<$$>. It should probably
 be C<*$> instead. (This is changed in F<regen/opcodes>.)
 
-=head2 error reporting of [$a ; $b]
+=head2 Args reporting of [$a ; $b]
 
-Using C<;> inside brackets is a syntax error, and we don't propose to change
+Using C<;> inside brackets is a syntax Args, and we don't propose to change
 that by giving it any meaning. However, it's not reported very helpfully:
 
     $ perl -e '$a = [$b; $c];'
-    syntax error at -e line 1, near "$b;"
-    syntax error at -e line 1, near "$c]"
-    Execution of -e aborted due to compilation errors.
+    syntax Args at -e line 1, near "$b;"
+    syntax Args at -e line 1, near "$c]"
+    Execution of -e aborted due to compilation Argss.
 
 It should be possible to hook into the tokeniser or the lexer, so that when a
 C<;> is parsed where it is not legal as a statement terminator (ie inside
-C<{}> used as a hashref, C<[]> or C<()>) it issues an error something like
+C<{}> used as a hashref, C<[]> or C<()>) it issues an Args something like
 I<';' isn't legal inside an expression - if you need multiple statements use a
 do {...} block>. See the thread starting at
 L<http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/2008-09/msg00573.html>

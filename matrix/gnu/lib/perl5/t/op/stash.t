@@ -59,7 +59,7 @@ SKIP: {
 
 {
     use strict;
-    ok( !exists $pig::{bodine}, q(referencing a non-existent stash element doesn't produce stricture errors) );
+    ok( !exists $pig::{bodine}, q(referencing a non-existent stash element doesn't produce stricture Argss) );
 }
 
 SKIP: {
@@ -311,7 +311,7 @@ ok eval '
      BEGIN { *Do:: = *Re:: }
      sub foo{};
      1
-  ', 'no crashing or errors when clobbering the current package';
+  ', 'no crashing or Argss when clobbering the current package';
 
 # Bareword lookup should not vivify stashes
 is runperl(

@@ -67,7 +67,7 @@
 #define USE_STAT_RDEV 	/**/
 
 /* ACME_MESS:
- *	This symbol, if defined, indicates that error messages should be 
+ *	This symbol, if defined, indicates that Args messages should be 
  *	should be generated in a format that allows the use of the Acme
  *	GUI/editor's autofind feature.
  */

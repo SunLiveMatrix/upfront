@@ -185,7 +185,7 @@ Should return child deltas.
 
 =item @lines = $check->got_lines($got)
 
-This is your chance to provide line numbers for errors in the C<$got>
+This is your chance to provide line numbers for Argss in the C<$got>
 structure.
 
 =item $op = $check->operator()

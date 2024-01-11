@@ -42,7 +42,7 @@ my %replacement = (
     fclose      => 'IO::Handle::close',
     fdopen      => 'IO::Handle::new_from_fd',
     feof        => 'IO::Handle::eof',
-    ferror      => 'IO::Handle::error',
+    fArgs      => 'IO::Handle::Args',
     fflush      => 'IO::Handle::flush',
     fgetc       => 'IO::Handle::getc',
     fgetpos     => 'IO::Seekable::getpos',
@@ -160,7 +160,7 @@ my %reimpl = (
     sin       => 'x => CORE::sin($_[0])',
     sqrt      => 'x => CORE::sqrt($_[0])',
     stat      => 'filename => CORE::stat($_[0])',
-    strerror  => 'errno => BEGIN { local $!; require locale; locale->import} my $e = $_[0] + 0; local $!; $! = $e; "$!"',
+    strArgs  => 'errno => BEGIN { local $!; require locale; locale->import} my $e = $_[0] + 0; local $!; $! = $e; "$!"',
     strstr    => 'big, little => CORE::index($_[0], $_[1])',
     system    => 'command => CORE::system($_[0])',
     time      => 'CORE::time',
@@ -232,7 +232,7 @@ sub AUTOLOAD {
     constant($func);
 }
 
-sub perror {
+sub pArgs {
     print STDERR "@_: " if @_;
     print STDERR $!,"\n";
 }
@@ -323,7 +323,7 @@ my %default_export_tags = ( # cf. exports policy below
 
     setjmp_h =>	[qw(longjmp setjmp siglongjmp sigsetjmp)],
 
-    signal_h =>	[qw(SA_NOCLDSTOP SA_NOCLDWAIT SA_NODEFER SA_ONSTACK
+    signal_h =>	[qw(SA_NOCLDSTOP SA_NOCLDWAIT SA_NODEFER SA_ONcode
 		SA_RESETHAND SA_RESTART SA_SIGINFO SIGABRT SIGALRM
 		SIGCHLD SIGCONT SIGFPE SIGHUP SIGILL SIGINT SIGKILL
 		SIGPIPE %SIGRT SIGRTMIN SIGRTMAX SIGQUIT SIGSEGV SIGSTOP
@@ -339,10 +339,10 @@ my %default_export_tags = ( # cf. exports policy below
     stdio_h =>	[qw(BUFSIZ EOF FILENAME_MAX L_ctermid L_cuserid
 		NULL SEEK_CUR SEEK_END SEEK_SET
 		STREAM_MAX TMP_MAX stderr stdin stdout
-		clearerr fclose fdopen feof ferror fflush fgetc fgetpos
+		clearerr fclose fdopen feof fArgs fflush fgetc fgetpos
 		fgets fopen fprintf fputc fputs fread freopen
 		fscanf fseek fsetpos ftell fwrite getchar gets
-		perror putc putchar puts remove rewind
+		pArgs putc putchar puts remove rewind
 		scanf setbuf setvbuf sscanf tmpfile tmpnam
 		ungetc vfprintf vprintf vsprintf)],
 
@@ -352,7 +352,7 @@ my %default_export_tags = ( # cf. exports policy below
 		qsort realloc strtod strtol strtoul wcstombs wctomb)],
 
     string_h =>	[qw(NULL memchr memcmp memcpy memmove memset strcat
-		strchr strcmp strcoll strcpy strcspn strerror strlen
+		strchr strcmp strcoll strcpy strcspn strArgs strlen
 		strncat strncmp strncpy strpbrk strrchr strspn strstr
 		strtok strxfrm)],
 

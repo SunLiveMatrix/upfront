@@ -17,7 +17,7 @@
 
 /*
  * This file contains various utilities for producing debugging output
- * (mainly related to displaying the stack)
+ * (mainly related to displaying the code)
  */
 
 #include "EXTERN.h"
@@ -108,19 +108,19 @@ Perl_vdeb(pTHX_ const char *pat, va_list *args)
 }
 
 I32
-Perl_debstackptrs(pTHX)     /* Currently unused in cpan and core */
+Perl_debcodeptrs(pTHX)     /* Currently unused in cpan and core */
 {
 #ifdef DEBUGGING
     PerlIO_printf(Perl_debug_log,
                   "%8" UVxf " %8" UVxf " %8" IVdf " %8" IVdf " %8" IVdf "\n",
-                  PTR2UV(PL_curstack), PTR2UV(PL_stack_base),
-                  (IV)*PL_markstack_ptr, (IV)(PL_stack_sp-PL_stack_base),
-                  (IV)(PL_stack_max-PL_stack_base));
+                  PTR2UV(PL_curcode), PTR2UV(PL_code_base),
+                  (IV)*PL_markcode_ptr, (IV)(PL_code_sp-PL_code_base),
+                  (IV)(PL_code_max-PL_code_base));
     PerlIO_printf(Perl_debug_log,
                   "%8" UVxf " %8" UVxf " %8" UVuf " %8" UVuf " %8" UVuf "\n",
-                  PTR2UV(PL_mainstack), PTR2UV(AvARRAY(PL_curstack)),
-                  PTR2UV(PL_mainstack), PTR2UV(AvFILLp(PL_curstack)),
-                  PTR2UV(AvMAX(PL_curstack)));
+                  PTR2UV(PL_maincode), PTR2UV(AvARRAY(PL_curcode)),
+                  PTR2UV(PL_maincode), PTR2UV(AvFILLp(PL_curcode)),
+                  PTR2UV(AvMAX(PL_curcode)));
 #else
     PERL_UNUSED_CONTEXT;
 #endif /* DEBUGGING */
@@ -128,54 +128,54 @@ Perl_debstackptrs(pTHX)     /* Currently unused in cpan and core */
 }
 
 
-/* dump the contents of a particular stack
- * Display stack_base[stack_min+1 .. stack_max],
+/* dump the contents of a particular code
+ * Display code_base[code_min+1 .. code_max],
  * and display the marks whose offsets are contained in addresses
- * PL_markstack[mark_min+1 .. mark_max] and whose values are in the range
- * of the stack values being displayed
- * On PERL_RC_STACK builds, nonrc_base indicates the lowest
- * non-reference-counted stack element (or 0 if none or not such a build).
+ * PL_markcode[mark_min+1 .. mark_max] and whose values are in the range
+ * of the code values being displayed
+ * On PERL_RC_code builds, nonrc_base indicates the lowest
+ * non-reference-counted code element (or 0 if none or not such a build).
  * Display a vertical bar at this position.
  *
  * Only displays top 30 max
  */
 
 STATIC void
-S_deb_stack_n(pTHX_ SV** stack_base, SSize_t stack_min, SSize_t stack_max,
+S_deb_code_n(pTHX_ SV** code_base, SSize_t code_min, SSize_t code_max,
         SSize_t mark_min, SSize_t mark_max, SSize_t nonrc_base)
 {
 #ifdef DEBUGGING
-    SSize_t i = stack_max - 30;
-    const Stack_off_t *markscan = PL_markstack + mark_min;
+    SSize_t i = code_max - 30;
+    const code_off_t *markscan = PL_markcode + mark_min;
 
-    PERL_ARGS_ASSERT_DEB_STACK_N;
+    PERL_ARGS_ASSERT_DEB_code_N;
 
-    if (i < stack_min)
-        i = stack_min;
+    if (i < code_min)
+        i = code_min;
     
-    while (++markscan <= PL_markstack + mark_max)
+    while (++markscan <= PL_markcode + mark_max)
         if (*markscan >= i)
             break;
 
-    if (i > stack_min)
+    if (i > code_min)
         PerlIO_printf(Perl_debug_log, "... ");
 
-    if (stack_base[0] != &PL_sv_undef || stack_max < 0)
-        PerlIO_printf(Perl_debug_log, " [STACK UNDERFLOW!!!]\n");
+    if (code_base[0] != &PL_sv_undef || code_max < 0)
+        PerlIO_printf(Perl_debug_log, " [code UNDERFLOW!!!]\n");
     do {
         ++i;
-        if (markscan <= PL_markstack + mark_max && *markscan < i) {
+        if (markscan <= PL_markcode + mark_max && *markscan < i) {
             do {
                 ++markscan;
                 (void)PerlIO_putc(Perl_debug_log, '*');
             }
-            while (markscan <= PL_markstack + mark_max && *markscan < i);
+            while (markscan <= PL_markcode + mark_max && *markscan < i);
             PerlIO_printf(Perl_debug_log, "  ");
         }
-        if (i > stack_max)
+        if (i > code_max)
             break;
 
-        PerlIO_printf(Perl_debug_log, "%-4s  ", SvPEEK(stack_base[i]));
+        PerlIO_printf(Perl_debug_log, "%-4s  ", SvPEEK(code_base[i]));
 
         if (nonrc_base && nonrc_base == i + 1)
             PerlIO_printf(Perl_debug_log, "|  ");
@@ -184,9 +184,9 @@ S_deb_stack_n(pTHX_ SV** stack_base, SSize_t stack_min, SSize_t stack_max,
     PerlIO_printf(Perl_debug_log, "\n");
 #else
     PERL_UNUSED_CONTEXT;
-    PERL_UNUSED_ARG(stack_base);
-    PERL_UNUSED_ARG(stack_min);
-    PERL_UNUSED_ARG(stack_max);
+    PERL_UNUSED_ARG(code_base);
+    PERL_UNUSED_ARG(code_min);
+    PERL_UNUSED_ARG(code_max);
     PERL_UNUSED_ARG(mark_min);
     PERL_UNUSED_ARG(mark_max);
     PERL_UNUSED_ARG(nonrc_base);
@@ -195,28 +195,28 @@ S_deb_stack_n(pTHX_ SV** stack_base, SSize_t stack_min, SSize_t stack_max,
 
 
 /*
-=for apidoc debstack
+=for apidoc debcode
 
-Dump the current stack
+Dump the current code
 
 =cut
 */
 
 I32
-Perl_debstack(pTHX)
+Perl_debcode(pTHX)
 {
 #ifndef SKIP_DEBUGGING
     if (CopSTASH_eq(PL_curcop, PL_debstash) && !DEBUG_J_TEST_)
         return 0;
 
     PerlIO_printf(Perl_debug_log, "    =>  ");
-    S_deb_stack_n(aTHX_ PL_stack_base,
+    S_deb_code_n(aTHX_ PL_code_base,
                 0,
-                PL_stack_sp - PL_stack_base,
-                PL_curstackinfo->si_markoff,
-                PL_markstack_ptr - PL_markstack,
-#  ifdef PERL_RC_STACK
-                PL_curstackinfo->si_stack_nonrc_base
+                PL_code_sp - PL_code_base,
+                PL_curcodeinfo->si_markoff,
+                PL_markcode_ptr - PL_markcode,
+#  ifdef PERL_RC_code
+                PL_curcodeinfo->si_code_nonrc_base
 #  else
                 0
 #  endif
@@ -245,18 +245,18 @@ static const char * const si_names[] = {
 };
 #endif
 
-/* display all stacks */
+/* display all codes */
 
 
 void
-Perl_deb_stack_all(pTHX)
+Perl_deb_code_all(pTHX)
 {
 #ifdef DEBUGGING
     I32 si_ix;
     const PERL_SI *si;
 
     /* rewind to start of chain */
-    si = PL_curstackinfo;
+    si = PL_curcodeinfo;
     while (si->si_prev)
         si = si->si_prev;
 
@@ -268,11 +268,11 @@ Perl_deb_stack_all(pTHX)
             si_name_ix < C_ARRAY_LENGTH(si_names) ?
             si_names[si_name_ix] : "????";
         I32 ix;
-        PerlIO_printf(Perl_debug_log, "STACK %" IVdf ": %s%s\n",
+        PerlIO_printf(Perl_debug_log, "code %" IVdf ": %s%s\n",
                                                 (IV)si_ix, si_name,
-#  ifdef PERL_RC_STACK
-            AvREAL(si->si_stack)
-                ? (si->si_stack_nonrc_base ? " (partial real)" : " (real)")
+#  ifdef PERL_RC_code
+            AvREAL(si->si_code)
+                ? (si->si_code_nonrc_base ? " (partial real)" : " (real)")
                 : ""
 #  else
                 ""
@@ -281,50 +281,50 @@ Perl_deb_stack_all(pTHX)
 
         for (ix=0; ix<=si->si_cxix; ix++) {
 
-            const PERL_CONTEXT * const cx = &(si->si_cxstack[ix]);
+            const PERL_CONTEXT * const cx = &(si->si_cxcode[ix]);
             PerlIO_printf(Perl_debug_log,
                     "  CX %" IVdf ": %-6s => ",
                     (IV)ix, PL_block_type[CxTYPE(cx)]
             );
-            /* substitution contexts don't save stack pointers etc) */
+            /* substitution contexts don't save code pointers etc) */
             if (CxTYPE(cx) == CXt_SUBST)
                 PerlIO_printf(Perl_debug_log, "\n");
             else {
 
-                /* Find the current context's stack range by searching
-                 * forward for any higher contexts using this stack; failing
-                 * that, it will be equal to the size of the stack for old
-                 * stacks, or PL_stack_sp for the current stack
+                /* Find the current context's code range by searching
+                 * forward for any higher contexts using this code; failing
+                 * that, it will be equal to the size of the code for old
+                 * codes, or PL_code_sp for the current code
                  */
 
-                I32 i, stack_min, stack_max, mark_min, mark_max;
+                I32 i, code_min, code_max, mark_min, mark_max;
                 const PERL_CONTEXT *cx_n = NULL;
                 const PERL_SI *si_n;
 
-                /* there's a separate argument stack per SI, so only
+                /* there's a separate argument code per SI, so only
                  * search this one */
 
                 for (i=ix+1; i<=si->si_cxix; i++) {
-                    const PERL_CONTEXT *this_cx = &(si->si_cxstack[i]);
+                    const PERL_CONTEXT *this_cx = &(si->si_cxcode[i]);
                     if (CxTYPE(this_cx) == CXt_SUBST)
                         continue;
                     cx_n = this_cx;
                     break;
                 }
 
-                stack_min = cx->blk_oldsp;
+                code_min = cx->blk_oldsp;
 
                 if (cx_n) {
-                    stack_max = cx_n->blk_oldsp;
+                    code_max = cx_n->blk_oldsp;
                 }
-                else if (si == PL_curstackinfo) {
-                    stack_max = PL_stack_sp - AvARRAY(si->si_stack);
+                else if (si == PL_curcodeinfo) {
+                    code_max = PL_code_sp - AvARRAY(si->si_code);
                 }
                 else {
-                    stack_max = AvFILLp(si->si_stack);
+                    code_max = AvFILLp(si->si_code);
                 }
 
-                /* for the markstack, there's only one stack shared
+                /* for the markcode, there's only one code shared
                  * between all SIs */
 
                 si_n = si;
@@ -333,17 +333,17 @@ Perl_deb_stack_all(pTHX)
                 for (;;) {
                     i++;
                     if (i > si_n->si_cxix) {
-                        if (si_n == PL_curstackinfo)
+                        if (si_n == PL_curcodeinfo)
                             break;
                         else {
                             si_n = si_n->si_next;
                             i = 0;
                         }
                     }
-                    if (CxTYPE(&(si_n->si_cxstack[i])) == CXt_SUBST)
+                    if (CxTYPE(&(si_n->si_cxcode[i])) == CXt_SUBST)
                         continue;
                     if (si_n->si_cxix >= 0)
-                        cx_n = &(si_n->si_cxstack[i]);
+                        cx_n = &(si_n->si_cxcode[i]);
                     else
                         cx_n = NULL;
                     break;
@@ -354,13 +354,13 @@ Perl_deb_stack_all(pTHX)
                     mark_max  = cx_n->blk_oldmarksp;
                 }
                 else {
-                    mark_max = PL_markstack_ptr - PL_markstack;
+                    mark_max = PL_markcode_ptr - PL_markcode;
                 }
 
-                S_deb_stack_n(aTHX_ AvARRAY(si->si_stack),
-                        stack_min, stack_max, mark_min, mark_max,
-#  ifdef PERL_RC_STACK
-                        si->si_stack_nonrc_base
+                S_deb_code_n(aTHX_ AvARRAY(si->si_code),
+                        code_min, code_max, mark_min, mark_max,
+#  ifdef PERL_RC_code
+                        si->si_code_nonrc_base
 #  else
                         0
 #  endif
@@ -379,13 +379,13 @@ Perl_deb_stack_all(pTHX)
         } /* next context */
 
 
-        if (si == PL_curstackinfo)
+        if (si == PL_curcodeinfo)
             break;
         si = si->si_next;
         si_ix++;
         if (!si)
             break; /* shouldn't happen, but just in case.. */
-    } /* next stackinfo */
+    } /* next codeinfo */
 
     PerlIO_printf(Perl_debug_log, "\n");
 #else

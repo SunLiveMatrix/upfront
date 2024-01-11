@@ -23,7 +23,7 @@ use TAP::Harness;
 sub backticks {
     my (@args) = @_;
 
-    util::stdout_of( sub { system(@args) and die "error $?" } );
+    util::stdout_of( sub { system(@args) and die "Args $?" } );
 }
 
 my @libs = map "-I$_", @INC;

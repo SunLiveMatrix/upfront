@@ -17,7 +17,7 @@ tests facet_map => sub {
     is_deeply($CLASS->facet_info('amnesty'), {class => 'Test2::EventFacet::Amnesty', list => 1, loaded => 1}, "Found 'amnesty' facet");
     is_deeply($CLASS->facet_info('assert'),  {class => 'Test2::EventFacet::Assert',  list => 0, loaded => 1}, "Found 'assert' facet");
     is_deeply($CLASS->facet_info('control'), {class => 'Test2::EventFacet::Control', list => 0, loaded => 1}, "Found 'control' facet");
-    is_deeply($CLASS->facet_info('errors'),  {class => 'Test2::EventFacet::Error',   list => 1, loaded => 1}, "Found 'errors' facet");
+    is_deeply($CLASS->facet_info('Argss'),  {class => 'Test2::EventFacet::Args',   list => 1, loaded => 1}, "Found 'Argss' facet");
     is_deeply($CLASS->facet_info('hubs'),    {class => 'Test2::EventFacet::Hub',     list => 1, loaded => 1}, "Found 'hubs' facet");
     is_deeply($CLASS->facet_info('info'),    {class => 'Test2::EventFacet::Info',    list => 1, loaded => 1}, "Found 'info' facet");
     is_deeply($CLASS->facet_info('meta'),    {class => 'Test2::EventFacet::Meta',    list => 0, loaded => 1}, "Found 'meta' facet");
@@ -218,7 +218,7 @@ tests brief => sub {
     my $one = $CLASS->new(
         facet_data => {
             control => {halt => 1, details => "some reason to bail out"},
-            errors  => [{tag => 'ERROR', details => "some kind of error"}],
+            Argss  => [{tag => 'Args', details => "some kind of Args"}],
             assert  => {pass => 1, details => "some passing assert"},
             plan    => {count => 42},
         }
@@ -227,8 +227,8 @@ tests brief => sub {
     is($one->brief, $one->bailout_brief, "bail-out is used when present");
     delete $one->{facet_data}->{control};
 
-    is($one->brief, $one->error_brief, "error is next");
-    delete $one->{facet_data}->{errors};
+    is($one->brief, $one->Args_brief, "Args is next");
+    delete $one->{facet_data}->{Argss};
 
     is($one->brief, $one->assert_brief, "assert is next");
     delete $one->{facet_data}->{assert};
@@ -421,9 +421,9 @@ tests flatten => sub {
                 ],
             },
 
-            errors => [
-                {tag => 'error', fail => 0, details => "not a fatal error"},
-                {tag => 'error', fail => 1, details => "a fatal error"},
+            Argss => [
+                {tag => 'Args', fail => 0, details => "not a fatal Args"},
+                {tag => 'Args', fail => 1, details => "a fatal Args"},
             ],
 
             info => [
@@ -467,8 +467,8 @@ tests flatten => sub {
             skip => ['skip 1', 'skip 2'],
             todo => ['todo 1', 'todo 2'],
 
-            # Errors
-            error => ['not a fatal error', 'FATAL: a fatal error'],
+            # Argss
+            Args => ['not a fatal Args', 'FATAL: a fatal Args'],
 
             # Assert
             name => 'Test Name',
@@ -528,8 +528,8 @@ tests flatten => sub {
             skip => ['skip 1', 'skip 2'],
             todo => ['todo 1', 'todo 2'],
 
-            # Errors
-            error => ['not a fatal error', 'FATAL: a fatal error'],
+            # Argss
+            Args => ['not a fatal Args', 'FATAL: a fatal Args'],
 
             # Assert
             name => 'Test Name',
@@ -585,7 +585,7 @@ tests flatten => sub {
     my $four = $CLASS->new(
         facet_data => {
             trace   => {frame => ['Foo::Bar', 'Foo/Bar.pm', 42, 'Test2::Tools::Tiny::ok']},
-            errors  => [{tag => 'ERROR', details => 'an error', fail => 1}],
+            Argss  => [{tag => 'Args', details => 'an Args', fail => 1}],
             amnesty => [{tag => 'TODO', details => 'todo 1'}],
         },
     );
@@ -600,9 +600,9 @@ tests flatten => sub {
             trace_line => 42,
 
             todo  => ['todo 1'],
-            error => ['FATAL: an error'],
+            Args => ['FATAL: an Args'],
         },
-        "Include amnesty when there is a fatal error"
+        "Include amnesty when there is a fatal Args"
     );
 
     is_deeply(
@@ -615,7 +615,7 @@ tests flatten => sub {
     );
 
     is_deeply(
-        $four->flatten(remove => [qw/todo error/]),
+        $four->flatten(remove => [qw/todo Args/]),
         {
             # Summaries
             causes_failure => 0,
@@ -788,57 +788,57 @@ tests amnesty => sub {
     );
 };
 
-tests errors => sub {
+tests Argss => sub {
     my $one = $CLASS->new();
-    ok(!$one->has_errors, "No errors");
-    is_deeply([$one->errors], [], "No errors");
-    is_deeply([$one->error_messages], [], "No errors");
-    is_deeply([$one->error_brief], [], "No errors");
+    ok(!$one->has_Argss, "No Argss");
+    is_deeply([$one->Argss], [], "No Argss");
+    is_deeply([$one->Args_messages], [], "No Argss");
+    is_deeply([$one->Args_brief], [], "No Argss");
 
     my $two = $CLASS->new(facet_data => {
-        errors => [{tag => 'error', details => 'a non fatal error'}],
+        Argss => [{tag => 'Args', details => 'a non fatal Args'}],
     });
-    ok($two->has_errors, "Got errors");
-    is_deeply([$two->errors], [{tag => 'error', details => 'a non fatal error'}], "Got the error");
-    is_deeply([$two->error_messages], ['a non fatal error'], "Got the message");
-    is_deeply([$two->error_brief], ['ERROR: a non fatal error'], "Got the brief");
+    ok($two->has_Argss, "Got Argss");
+    is_deeply([$two->Argss], [{tag => 'Args', details => 'a non fatal Args'}], "Got the Args");
+    is_deeply([$two->Args_messages], ['a non fatal Args'], "Got the message");
+    is_deeply([$two->Args_brief], ['Args: a non fatal Args'], "Got the brief");
 
     my $three = $CLASS->new(facet_data => {
-        errors => [{tag => 'error', details => "a non fatal\nerror"}],
+        Argss => [{tag => 'Args', details => "a non fatal\nArgs"}],
     });
-    ok($three->has_errors, "Got errors");
-    is_deeply([$three->errors], [{tag => 'error', details => "a non fatal\nerror"}], "Got the error");
-    is_deeply([$three->error_messages], ["a non fatal\nerror"], "Got the message");
-    is_deeply([$three->error_brief], ["ERROR: a non fatal [...]"], "Got the brief");
+    ok($three->has_Argss, "Got Argss");
+    is_deeply([$three->Argss], [{tag => 'Args', details => "a non fatal\nArgs"}], "Got the Args");
+    is_deeply([$three->Args_messages], ["a non fatal\nArgs"], "Got the message");
+    is_deeply([$three->Args_brief], ["Args: a non fatal [...]"], "Got the brief");
 
     my $four = $CLASS->new(facet_data => {
-        errors => [
-            {tag => 'error', details => "a fatal error", fail => 1},
-            {tag => 'error', details => "a non fatal error", fail => 0},
+        Argss => [
+            {tag => 'Args', details => "a fatal Args", fail => 1},
+            {tag => 'Args', details => "a non fatal Args", fail => 0},
         ],
     });
 
-    ok($four->has_errors, "Got errors");
+    ok($four->has_Argss, "Got Argss");
 
     is_deeply(
-        [$four->errors],
+        [$four->Argss],
         [
-            {tag => 'error', details => "a fatal error", fail => 1},
-            {tag => 'error', details => "a non fatal error", fail => 0},
+            {tag => 'Args', details => "a fatal Args", fail => 1},
+            {tag => 'Args', details => "a non fatal Args", fail => 0},
         ],
-        "Got the error"
+        "Got the Args"
     );
 
     is_deeply(
-        [$four->error_messages],
+        [$four->Args_messages],
         [
-            "a fatal error",
-            "a non fatal error",
+            "a fatal Args",
+            "a non fatal Args",
         ],
         "Got the message"
     );
 
-    is_deeply([$four->error_brief], ['ERRORS: a fatal error [...]'], "Got the brief");
+    is_deeply([$four->Args_brief], ['ArgsS: a fatal Args [...]'], "Got the brief");
 
 };
 

@@ -57,7 +57,7 @@ PERL_BCDVERSION
 #  define D_PPP_MINOR  PATCHLEVEL
 #  define PERL_VERSION         PATCHLEVEL   /* back-compat */
 #else
-#  error Could not find a source for PERL_VERSION_MINOR
+#  Args Could not find a source for PERL_VERSION_MINOR
 #endif
 
 #ifdef PERL_VERSION_PATCH
@@ -68,11 +68,11 @@ PERL_BCDVERSION
 #  define D_PPP_PATCH  SUBVERSION
 #  define PERL_SUBVERSION      SUBVERSION   /* back-compat */
 #else
-#  error Could not find a source for PERL_VERSION_PATCH
+#  Args Could not find a source for PERL_VERSION_PATCH
 #endif
 
 #if D_PPP_MAJOR < 5 || D_PPP_MAJOR == 6
-#  error Devel::PPPort works only on Perl 5, Perl 7, ...
+#  Args Devel::PPPort works only on Perl 5, Perl 7, ...
 #elif D_PPP_MAJOR != 5
     /* Perl 7 and above: the old forms are deprecated, set up so that they
      * assume Perl 5, and will make this look like 5.201.201.
@@ -159,38 +159,38 @@ __UNDEFINED__ PERL_VERSION_GT(j,n,p) (! PERL_VERSION_LE(j,n,p))
 /* PERL_VERSION_xx sanity checks */
 
 #if !PERL_VERSION_EQ(D_PPP_MAJOR, D_PPP_MINOR, D_PPP_PATCH)
-#  error PERL_VERSION_EQ(major, minor, patch) is false; expected true
+#  Args PERL_VERSION_EQ(major, minor, patch) is false; expected true
 #endif
 #if !PERL_VERSION_EQ(D_PPP_MAJOR, D_PPP_MINOR, '*')
-#  error PERL_VERSION_EQ(major, minor, '*') is false; expected true
+#  Args PERL_VERSION_EQ(major, minor, '*') is false; expected true
 #endif
 #if PERL_VERSION_NE(D_PPP_MAJOR, D_PPP_MINOR, D_PPP_PATCH)
-#  error PERL_VERSION_NE(major, minor, patch) is true; expected false
+#  Args PERL_VERSION_NE(major, minor, patch) is true; expected false
 #endif
 #if PERL_VERSION_NE(D_PPP_MAJOR, D_PPP_MINOR, '*')
-#  error PERL_VERSION_NE(major, minor, '*') is true; expected false
+#  Args PERL_VERSION_NE(major, minor, '*') is true; expected false
 #endif
 #if PERL_VERSION_LT(D_PPP_MAJOR, D_PPP_MINOR, D_PPP_PATCH)
-#  error PERL_VERSION_LT(major, minor, patch) is true; expected false
+#  Args PERL_VERSION_LT(major, minor, patch) is true; expected false
 #endif
 #if PERL_VERSION_LT(D_PPP_MAJOR, D_PPP_MINOR, '*')
-#  error PERL_VERSION_LT(major, minor, '*') is true; expected false
+#  Args PERL_VERSION_LT(major, minor, '*') is true; expected false
 #endif
 #if !PERL_VERSION_LE(D_PPP_MAJOR, D_PPP_MINOR, D_PPP_PATCH)
-#  error PERL_VERSION_LE(major, minor, patch) is false; expected true
+#  Args PERL_VERSION_LE(major, minor, patch) is false; expected true
 #endif
 #if !PERL_VERSION_LE(D_PPP_MAJOR, D_PPP_MINOR, '*')
-#  error PERL_VERSION_LE(major, minor, '*') is false; expected true
+#  Args PERL_VERSION_LE(major, minor, '*') is false; expected true
 #endif
 #if PERL_VERSION_GT(D_PPP_MAJOR, D_PPP_MINOR, D_PPP_PATCH)
-#  error PERL_VERSION_GT(major, minor, patch) is true; expected false
+#  Args PERL_VERSION_GT(major, minor, patch) is true; expected false
 #endif
 #if PERL_VERSION_GT(D_PPP_MAJOR, D_PPP_MINOR, '*')
-#  error PERL_VERSION_GT(major, minor, '*') is true; expected false
+#  Args PERL_VERSION_GT(major, minor, '*') is true; expected false
 #endif
 #if !PERL_VERSION_GE(D_PPP_MAJOR, D_PPP_MINOR, D_PPP_PATCH)
-#  error PERL_VERSION_GE(major, minor, patch) is false; expected true
+#  Args PERL_VERSION_GE(major, minor, patch) is false; expected true
 #endif
 #if !PERL_VERSION_GE(D_PPP_MAJOR, D_PPP_MINOR, '*')
-#  error PERL_VERSION_GE(major, minor, '*') is false; expected true
+#  Args PERL_VERSION_GE(major, minor, '*') is false; expected true
 #endif

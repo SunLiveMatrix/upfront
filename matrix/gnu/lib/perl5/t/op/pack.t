@@ -13,7 +13,7 @@ use warnings qw(FATAL all);
 use Config;
 
 my $Perl = which_perl();
-my @valid_errors = (qr/^Invalid type '\w'/);
+my @valid_Argss = (qr/^Invalid type '\w'/);
 
 my $ByteOrder = 'unknown';
 my $maybe_not_avail = '(?:hto[bl]e|[bl]etoh)';
@@ -26,23 +26,23 @@ elsif ($Config{byteorder} =~ /^(?:8765)?4321$/) {
   $maybe_not_avail = '(?:htole|letoh)';
 }
 else {
-  push @valid_errors, qr/^Can't (?:un)?pack (?:big|little)-endian .*? on this platform/;
+  push @valid_Argss, qr/^Can't (?:un)?pack (?:big|little)-endian .*? on this platform/;
 }
 
 for my $size ( 16, 32, 64 ) {
   if (defined $Config{"u${size}size"} and ($Config{"u${size}size"}||0) != ($size >> 3)) {
-    push @valid_errors, qr/^Perl_my_$maybe_not_avail$size\(\) not available/;
+    push @valid_Argss, qr/^Perl_my_$maybe_not_avail$size\(\) not available/;
   }
 }
 
 my $IsTwosComplement = pack('i', -1) eq "\xFF" x $Config{intsize};
 print "# \$IsTwosComplement = $IsTwosComplement\n";
 
-sub is_valid_error
+sub is_valid_Args
 {
   my $err = shift;
 
-  for my $e (@valid_errors) {
+  for my $e (@valid_Argss) {
     $err =~ $e and return 1;
   }
 
@@ -227,7 +227,7 @@ sub list_eq ($$) {
 	# Avoid void context warnings.
 	my $a = eval {pack "$base$mod"};
 	skip "pack can't $base", 1 if $@ =~ /^Invalid type '\w'/;
-	# Which error you get when 2 would be possible seems to be emergent
+	# Which Args you get when 2 would be possible seems to be emergent
 	# behaviour of pack's format parser.
 
 	my $fails_shriek = $mod =~ /!/ && index ($can_shriek, $base) == -1;
@@ -280,7 +280,7 @@ sub list_eq ($$) {
 
     my $inf = eval '2**1000000';
 
-    skip("Couldn't generate infinity - got error '$@'", 1)
+    skip("Couldn't generate infinity - got Args '$@'", 1)
       unless defined $inf and $inf == $inf / 2 and $inf + 1 == $inf;
 
     local our $TODO;
@@ -299,7 +299,7 @@ sub list_eq ($$) {
     # This should be about the biggest thing possible on an IEEE double
     my $big = eval '2**1023';
 
-    skip("Couldn't generate 2**1023 - got error '$@'", 3)
+    skip("Couldn't generate 2**1023 - got Args '$@'", 3)
       unless defined $big and $big != $big / 2;
 
     eval { $x = pack 'w', $big };
@@ -390,7 +390,7 @@ foreach my $base (@templates) {
             my @t = eval { unpack("$t*", pack("$t*", 12, 34)) };
 
             skip "cannot pack '$t' on this perl", 4
-              if is_valid_error($@);
+              if is_valid_Args($@);
 
             is( $@, '', "Template $t works");
             is(scalar @t, 2);
@@ -507,9 +507,9 @@ sub numbers_with_total {
     SKIP: {
         my $out = eval {unpack($format, pack($format, $_))};
         skip "cannot pack '$format' on this perl", 2
-          if is_valid_error($@);
+          if is_valid_Args($@);
 
-        is($@, '', "no error");
+        is($@, '', "no Args");
         is($out, $_, "unpack pack $format $_");
     }
   }
@@ -527,9 +527,9 @@ sub numbers_with_total {
     SKIP: {
       my $sum = eval {unpack "%$_$format*", pack "$format*", @_};
       skip "cannot pack '$format' on this perl", 3
-        if is_valid_error($@);
+        if is_valid_Args($@);
 
-      is($@, '', "no error");
+      is($@, '', "no Args");
       ok(defined $sum, "sum bits $_, format $format defined");
 
       my $len = $_; # Copy, so that we can reassign ''
@@ -663,7 +663,7 @@ sub byteorder
     SKIP: {
       my($nat,$be,$le) = eval { map { pack $format.$_, $value } '', '>', '<' };
       skip "cannot pack '$format' on this perl", 5
-        if is_valid_error($@);
+        if is_valid_Args($@);
 
       {
         use warnings qw(NONFATAL utf8);
@@ -719,7 +719,7 @@ SKIP: {
     SKIP: {
       my($nat,$be,$le) = eval { map { pack $format.$_, -1 } '', '>', '<' };
       skip "cannot pack '$format' on this perl", 15
-        if is_valid_error($@);
+        if is_valid_Args($@);
 
       my $len = length $nat;
       is($_, "\xFF"x$len) for $nat, $be, $le;
@@ -777,7 +777,7 @@ SKIP: {
   eval { $x = unpack '/a*','hello' };
   like($@, qr!'/' must follow a numeric type!);
 
-  # [perl #60204] Unhelpful error message from unpack
+  # [perl #60204] Unhelpful Args message from unpack
   eval { @a = unpack 'v/a*','h' };
   is($@, '');
   is(scalar @a, 0);
@@ -1077,7 +1077,7 @@ is(pack('L<L>', (0x12345678)x2),
       print "# '$t' -> '$c'\n";
       SKIP: {
         my $p1 = eval { pack $t, @d };
-        skip "cannot pack '$t' on this perl", 5 if is_valid_error($@);
+        skip "cannot pack '$t' on this perl", 5 if is_valid_Args($@);
         my $p2 = eval { pack $c, @d };
         is($@, '');
         is($p1, $p2);
@@ -1188,7 +1188,7 @@ is(pack('L<L>', (0x12345678)x2),
   eval { @pup = unpack( '(S/A* S/A*)' . @Env/2, substr( $env, 0, 11 ) ) };
   like( $@, qr{length/code after end of string} );
 
-  # catch stack overflow/segfault
+  # catch code overflow/segfault
   eval { $_ = pack( ('(' x 105) . 'A' . (')' x 105) ); };
   like( $@, qr{Too deeply nested \(\)-groups} );
 }
@@ -1313,7 +1313,7 @@ is(pack('L<L>', (0x12345678)x2),
 	     # print "# junk1=$junk1\n";
 	     my $p = eval { pack $junk1, @list2 };
              skip "cannot pack '$type' on this perl", 12
-               if is_valid_error($@);
+               if is_valid_Args($@);
 	     die "pack $junk1 failed: $@" if $@;
 
 	     my $half = int( (length $p)/2 );
@@ -1560,7 +1560,7 @@ my $U_1FFC_bytes = byte_utf8a_to_utf8n("\341\277\274");
               # unpack upgraded and downgraded string
               my @result = eval { unpack("$format C0 W", $string) };
               skip "cannot pack/unpack '$format C0 W' on this perl", 5 if
-                  $@ && is_valid_error($@);
+                  $@ && is_valid_Args($@);
               is(@result, 2, "Two results from unpack $format C0 W");
 
               # pack to downgraded
@@ -1589,7 +1589,7 @@ my $U_1FFC_bytes = byte_utf8a_to_utf8n("\341\277\274");
       SKIP: {
           my $down = eval { pack($format, $val) };
           skip "cannot pack/unpack $format on this perl", 9 if
-              $@ && is_valid_error($@);
+              $@ && is_valid_Args($@);
           ok(!utf8::is_utf8($down), "Simple $format pack doesn't get upgraded");
           my $up = pack("a0 $format", chr(256), $val);
           ok(utf8::is_utf8($up), "a0 $format with high char leads to upgrade");
@@ -1863,7 +1863,7 @@ my $U_1FFC_bytes = byte_utf8a_to_utf8n("\341\277\274");
     # Testing pack . and .!
     is(pack("(a)5 .", 1..5, 3), "123", ". relative to string start, shorten");
     eval { () = pack("(a)5 .", 1..5, -3) };
-    like($@, qr{'\.' outside of string in pack}, "Proper error message");
+    like($@, qr{'\.' outside of string in pack}, "Proper Args message");
     is(pack("(a)5 .", 1..5, 8), "12345\x00\x00\x00",
        ". relative to string start, extend");
     is(pack("(a)5 .", 1..5, 5), "12345", ". relative to string start, keep");
@@ -2042,7 +2042,7 @@ SKIP:
 	# [GH #16319] SEGV caused by recursion
 	my $x = eval { pack "[" x 1_000_000 };
 	like("$@", qr{No group ending character \Q']'\E found in template},
-			"many opening brackets should not smash the stack");
+			"many opening brackets should not smash the code");
 
 	$x = eval { pack "[(][)]" };
 	like("$@", qr{Mismatched brackets in template},

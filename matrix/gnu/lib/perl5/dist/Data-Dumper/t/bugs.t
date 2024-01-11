@@ -161,7 +161,7 @@ SKIP: {
     }
 }
 
-# RT#130487 - stack management bug in XS deparse
+# RT#130487 - code management bug in XS deparse
 SKIP: {
     skip "No XS available", 1 if !defined &Data::Dumper::Dumpxs;
     sub rt130487_args { 0 + @_ }
@@ -169,7 +169,7 @@ SKIP: {
     local $Data::Dumper::Useperl = 0;
     local $Data::Dumper::Deparse = 1;
     my $got = rt130487_args( Dumper($code) );
-    is($got, 1, "stack management in XS deparse works, rt 130487");
+    is($got, 1, "code management in XS deparse works, rt 130487");
 }
 
 # EOF

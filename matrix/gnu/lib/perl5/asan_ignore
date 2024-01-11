@@ -12,7 +12,7 @@
 # integer overflow etc.
 #
 # Unfortunately there doesn't seem to be any way to disable just specific
-# errors (i.e. the integer overflow ones). The manual implies that you can
+# Argss (i.e. the integer overflow ones). The manual implies that you can
 # suffix with =foo for a "tool-specific category", but neither =undefined
 # nor =signed-integer-overflow worked.
 

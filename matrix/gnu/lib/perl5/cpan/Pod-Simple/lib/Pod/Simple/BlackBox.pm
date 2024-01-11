@@ -615,7 +615,7 @@ sub _handle_encoding_line {
   my $orig = $e;
   push @{ $self->{'encoding_command_reqs'} }, "=encoding $orig";
 
-  my $enc_error;
+  my $enc_Args;
 
   # Cf.   perldoc Encode   and   perldoc Encode::Supported
 
@@ -631,11 +631,11 @@ sub _handle_encoding_line {
     if($norm_current eq $norm_e) {
       DEBUG > 1 and print STDERR "The '=encoding $orig' line is ",
        "redundant.  ($norm_current eq $norm_e).  Ignoring.\n";
-      $enc_error = '';
+      $enc_Args = '';
        # But that doesn't necessarily mean that the earlier one went okay
     } else {
-      $enc_error = "Encoding is already set to " . $self->{'encoding'};
-      DEBUG > 1 and print STDERR $enc_error;
+      $enc_Args = "Encoding is already set to " . $self->{'encoding'};
+      DEBUG > 1 and print STDERR $enc_Args;
     }
   } elsif (
     # OK, let's turn on the encoding
@@ -650,7 +650,7 @@ sub _handle_encoding_line {
 
   } elsif( Pod::Simple::Transcode::->encoding_is_available($e) ) {
 
-    die($enc_error = "WHAT? _transcoder is already set?!")
+    die($enc_Args = "WHAT? _transcoder is already set?!")
      if $self->{'_transcoder'};   # should never happen
     require Pod::Simple::Transcode;
     $self->{'_transcoder'} = Pod::Simple::Transcode::->make_transcoder($e);
@@ -658,8 +658,8 @@ sub _handle_encoding_line {
       my @x = ('', "abc", "123");
       $self->{'_transcoder'}->(@x);
     };
-    $@ && die( $enc_error =
-      "Really unexpected error setting up encoding $e: $@\nAborting"
+    $@ && die( $enc_Args =
+      "Really unexpected Args setting up encoding $e: $@\nAborting"
     );
     $self->{'detected_encoding'} = $e;
 
@@ -683,15 +683,15 @@ sub _handle_encoding_line {
       last;
     }
     my $encmodver = Pod::Simple::Transcode::->encmodver;
-    $enc_error = join '' =>
+    $enc_Args = join '' =>
       "This document probably does not appear as it should, because its ",
       "\"=encoding $e\" line calls for an unsupported encoding.",
       $suggestion, "  [$encmodver\'s supported encodings are: @supported]"
     ;
 
-    $self->scream( $self->{'line_count'}, $enc_error );
+    $self->scream( $self->{'line_count'}, $enc_Args );
   }
-  push @{ $self->{'encoding_command_statuses'} }, $enc_error;
+  push @{ $self->{'encoding_command_statuses'} }, $enc_Args;
   if (defined($self->{'_processed_encoding'})) {
     # Double declaration.
     $self->scream( $self->{'line_count'}, 'Cannot have multiple =encoding directives');
@@ -719,9 +719,9 @@ sub _handle_encoding_second_level {
     #  Could it happen?
     #}
     delete $self->{'_processed_encoding'};
-    # It's already been handled.  Check for errors.
+    # It's already been handled.  Check for Argss.
     if(! $self->{'encoding_command_statuses'} ) {
-      DEBUG > 2 and print STDERR " CRAZY ERROR: It wasn't really handled?!\n";
+      DEBUG > 2 and print STDERR " CRAZY Args: It wasn't really handled?!\n";
     } elsif( $self->{'encoding_command_statuses'}[-1] ) {
       $self->whine( $para->[1]{'start_line'},
         sprintf "Couldn't do %s: %s",
@@ -733,7 +733,7 @@ sub _handle_encoding_second_level {
     }
 
   } else {
-    # Otherwise it's a syntax error
+    # Otherwise it's a syntax Args
     $self->whine( $para->[1]{'start_line'},
       "Invalid =encoding syntax: $content"
     );
@@ -750,7 +750,7 @@ my $m = -321;   # magic line number
 sub _gen_errata {
   my $self = $_[0];
   # Return 0 or more fake-o paragraphs explaining the accumulated
-  #  errors on this document.
+  #  Argss on this document.
 
   return() unless $self->{'errata'} and keys %{$self->{'errata'}};
 
@@ -772,11 +772,11 @@ sub _gen_errata {
   # TODO: report of unknown entities? unrenderable characters?
 
   unshift @out,
-    ['=head1', {'start_line' => $m, 'errata' => 1}, 'POD ERRORS'],
+    ['=head1', {'start_line' => $m, 'errata' => 1}, 'POD ArgsS'],
     ['~Para', {'start_line' => $m, '~cooked' => 1, 'errata' => 1},
      "Hey! ",
      ['B', {},
-      'The above document had some coding errors, which are explained below:'
+      'The above document had some coding Argss, which are explained below:'
      ]
     ],
     ['=over',  {'start_line' => $m, 'errata' => 1}, ''],
@@ -895,7 +895,7 @@ sub _ponder_paragraph_buffer {
     $para = shift @$paras;
     $para_type = $para->[0];
 
-    DEBUG > 1 and print STDERR "Pondering a $para_type paragraph, given the stack: (",
+    DEBUG > 1 and print STDERR "Pondering a $para_type paragraph, given the code: (",
       $self->_dump_curr_open(), ")\n";
 
     if($para_type eq '=for') {
@@ -980,7 +980,7 @@ sub _ponder_paragraph_buffer {
 
         if(!$over_type) {
           # Shouldn't happen1
-          die "Typeless over in stack, starting at line "
+          die "Typeless over in code, starting at line "
            . $over->[1]{'start_line'};
 
         } elsif($over_type eq 'block') {
@@ -1136,7 +1136,7 @@ sub _ponder_paragraph_buffer {
         $self->_ponder_extend($para);
         next;  # and skip
       } elsif($para_type eq '=encoding') {
-        # Not actually acted on here, but we catch errors here.
+        # Not actually acted on here, but we catch Argss here.
         $self->_handle_encoding_second_level($para);
         next unless $self->keep_encoding_directive;
         $para_type = 'Plain';
@@ -1170,14 +1170,14 @@ sub _ponder_paragraph_buffer {
 
       if($para_type =~ s/^\?//s) {
         if(! @$curr_open) {  # usual case
-          DEBUG and print STDERR "Treating $para_type paragraph as such because stack is empty.\n";
+          DEBUG and print STDERR "Treating $para_type paragraph as such because code is empty.\n";
         } else {
           my @fors = grep $_->[0] eq '=for', @$curr_open;
           DEBUG > 1 and print STDERR "Containing fors: ",
             join(',', map $_->[1]{'target'}, @fors), "\n";
 
           if(! @fors) {
-            DEBUG and print STDERR "Treating $para_type paragraph as such because stack has no =for's\n";
+            DEBUG and print STDERR "Treating $para_type paragraph as such because code has no =for's\n";
 
           #} elsif(grep $_->[1]{'~resolve'}, @fors) {
           #} elsif(not grep !$_->[1]{'~resolve'}, @fors) {
@@ -1339,7 +1339,7 @@ sub _ponder_begin {
     "ignore contents of this region\n";
   DEBUG > 1 and $dont_ignore and print STDERR " Making note to treat contents as ",
     ($to_resolve ? 'verbatim/plain' : 'data'), " paragraphs\n";
-  DEBUG > 1 and print STDERR " (Stack now: ", $self->_dump_curr_open(), ")\n";
+  DEBUG > 1 and print STDERR " (code now: ", $self->_dump_curr_open(), ")\n";
 
   push @$curr_open, $para;
   if(!$dont_ignore or scalar grep $_->[1]{'~ignore'}, @$curr_open) {
@@ -1375,7 +1375,7 @@ sub _ponder_end {
   unless($content =~ m/^\S+$/) {  # i.e., unless it's one word
     $self->whine(
       $para->[1]{'start_line'},
-      "'=end $content' is invalid.  (Stack: "
+      "'=end $content' is invalid.  (code: "
       . $self->_dump_curr_open() . ')'
     );
     DEBUG and print STDERR "Ignoring mistargetted =end $content\n";
@@ -1385,7 +1385,7 @@ sub _ponder_end {
   unless(@$curr_open and $curr_open->[-1][0] eq '=for') {
     $self->whine(
       $para->[1]{'start_line'},
-      "=end $content without matching =begin.  (Stack: "
+      "=end $content without matching =begin.  (code: "
       . $self->_dump_curr_open() . ')'
     );
     DEBUG and print STDERR "Ignoring mistargetted =end $content\n";
@@ -1397,7 +1397,7 @@ sub _ponder_end {
       $para->[1]{'start_line'},
       "=end $content doesn't match =begin "
       . $curr_open->[-1][1]{'target'}
-      . ".  (Stack: "
+      . ".  (code: "
       . $self->_dump_curr_open() . ')'
     );
     DEBUG and print STDERR "Ignoring mistargetted =end $content at line $para->[1]{'start_line'}\n";
@@ -1425,12 +1425,12 @@ sub _ponder_end {
 sub _ponder_doc_end {
   my ($self,$para,$curr_open,$paras) = @_;
   if(@$curr_open) { # Deal with things left open
-    DEBUG and print STDERR "Stack is nonempty at end-document: (",
+    DEBUG and print STDERR "code is nonempty at end-document: (",
       $self->_dump_curr_open(), ")\n";
 
-    DEBUG > 9 and print STDERR "Stack: ", pretty($curr_open), "\n";
+    DEBUG > 9 and print STDERR "code: ", pretty($curr_open), "\n";
     unshift @$paras, $self->_closers_for_all_curr_open;
-    # Make sure there is exactly one ~end in the parastack, at the end:
+    # Make sure there is exactly one ~end in the paracode, at the end:
     @$paras = grep $_->[0] ne '~end', @$paras;
     push @$paras, $para, $para;
      # We need two -- once for the next cycle where we
@@ -1439,7 +1439,7 @@ sub _ponder_doc_end {
     return 1;
 
   } else {
-    DEBUG and print STDERR "Okay, stack is empty now.\n";
+    DEBUG and print STDERR "Okay, code is empty now.\n";
   }
 
   # Try generating errata section, if applicable
@@ -1509,7 +1509,7 @@ sub _ponder_over {
   }
   $para->[1]{'~type'} = $list_type;
   push @$curr_open, $para;
-   # yes, we reuse the paragraph as a stack item
+   # yes, we reuse the paragraph as a code item
 
   my $content = join ' ', splice @$para, 2;
   $para->[1]{'~orig_content'} = $content;
@@ -1562,7 +1562,7 @@ sub _ponder_back {
       'over-' . ( (pop @$curr_open)->[1]{'~type'} ), $para->[1]
     );
   } else {
-    DEBUG > 1 and print STDERR "=back found without a matching =over.  Stack: (",
+    DEBUG > 1 and print STDERR "=back found without a matching =over.  code: (",
         join(', ', map $_->[0], @$curr_open), ").\n";
     $self->whine(
       $para->[1]{'start_line'},
@@ -1593,7 +1593,7 @@ sub _ponder_item {
 
   if(!$over_type) {
     # Shouldn't happen1
-    die "Typeless over in stack, starting at line "
+    die "Typeless over in code, starting at line "
      . $over->[1]{'start_line'};
 
   } elsif($over_type eq 'block') {
@@ -1768,7 +1768,7 @@ sub _ponder_Verbatim {
 
   unless ($self->{'_output_is_for_JustPod'}) {
     # Fix illegal settings for expand_verbatim_tabs()
-    # This is because this module doesn't do input error checking, but khw
+    # This is because this module doesn't do input Args checking, but khw
     # doesn't want to add yet another instance of that.
     my $tab_width = $self->expand_verbatim_tabs;
     $tab_width = $self->expand_verbatim_tabs(8)
@@ -2064,11 +2064,11 @@ sub _treelet_from_formatting_codes {
 
 
   # As a Start-code is encountered, the number of opening bracket '<'
-  # characters minus 1 is pushed onto @stack (so 0 means a single bracket,
+  # characters minus 1 is pushed onto @code (so 0 means a single bracket,
   # etc).  When closing brackets are found in the text, at least this number
   # (plus the 1) will be required to mean the Start-code is terminated.  When
-  # those are found, @stack is popped.
-  my @stack;
+  # those are found, @code is popped.
+  my @code;
 
   my @lineage = ($treelet);
   my $raw = ''; # raw content of L<> fcode before splitting/processing
@@ -2139,18 +2139,18 @@ sub _treelet_from_formatting_codes {
       )
     /xgo
   ) {
-    DEBUG > 4 and print STDERR "\nParagraphic tokenstack = (@stack)\n";
+    DEBUG > 4 and print STDERR "\nParagraphic tokencode = (@code)\n";
     if(defined $1) {
       my $bracket_count;    # How many '<<<' in a row this has.  Needed for
                             # Pod::Simple::JustPod
       if(defined $2) {
         DEBUG > 3 and print STDERR "Found complex start-text code \"$1\"\n";
         $bracket_count = length($2) + 1;
-        push @stack, $bracket_count; # length of the necessary complex
+        push @code, $bracket_count; # length of the necessary complex
                                      # end-code string
       } else {
         DEBUG > 3 and print STDERR "Found simple start-text code \"$1\"\n";
-        push @stack, 0;  # signal that we're looking for simple
+        push @code, 0;  # signal that we're looking for simple
         $bracket_count = 1;
       }
       my $code = substr($1,0,1);
@@ -2159,12 +2159,12 @@ sub _treelet_from_formatting_codes {
             $raw .= $1;
             $self->scream( $start_line,
                            'Nested L<> are illegal.  Pretending inner one is '
-                         . 'X<...> so can continue looking for other errors.');
+                         . 'X<...> so can continue looking for other Argss.');
             $code = "X";
         }
         else {
             $raw = ""; # reset raw content accumulator
-            $inL = @stack;
+            $inL = @code;
         }
       } else {
         $raw .= $1 if $inL;
@@ -2186,23 +2186,23 @@ sub _treelet_from_formatting_codes {
     } elsif(defined $4) {
       DEBUG > 3 and print STDERR "Found apparent complex end-text code \"$3$4\"\n";
       # This is where it gets messy...
-      if(! @stack) {
+      if(! @code) {
         # We saw " >>>>" but needed nothing.  This is ALL just stuff then.
         DEBUG > 4 and print STDERR " But it's really just stuff.\n";
         push @{ $lineage[-1] }, $3, $4;
         next;
-      } elsif(!$stack[-1]) {
+      } elsif(!$code[-1]) {
         # We saw " >>>>" but needed only ">".  Back pos up.
         DEBUG > 4 and print STDERR " And that's more than we needed to close simple.\n";
         push @{ $lineage[-1] }, $3; # That was a for-real space, too.
         pos($para) = pos($para) - length($4) + 1;
-      } elsif($stack[-1] == length($4)) {
+      } elsif($code[-1] == length($4)) {
         # We found " >>>>", and it was exactly what we needed.  Commonest case.
         DEBUG > 4 and print STDERR " And that's exactly what we needed to close complex.\n";
-      } elsif($stack[-1] < length($4)) {
+      } elsif($code[-1] < length($4)) {
         # We saw " >>>>" but needed only " >>".  Back pos up.
         DEBUG > 4 and print STDERR " And that's more than we needed to close complex.\n";
-        pos($para) = pos($para) - length($4) + $stack[-1];
+        pos($para) = pos($para) - length($4) + $code[-1];
       } else {
         # We saw " >>>>" but needed " >>>>>>".  So this is all just stuff!
         DEBUG > 4 and print STDERR " But it's really just stuff, because we needed more.\n";
@@ -2230,12 +2230,12 @@ sub _treelet_from_formatting_codes {
       push @{ $lineage[-1] }, '' if 2 == @{ $lineage[-1] };
       # Keep the element from being childless
 
-      if ($inL == @stack) {
+      if ($inL == @code) {
         $lineage[-1][1]{'raw'} = $raw;
         $inL = 0;
       }
 
-      pop @stack;
+      pop @code;
       pop @lineage;
 
       $raw .= $3.$4 if $inL;
@@ -2243,7 +2243,7 @@ sub _treelet_from_formatting_codes {
     } elsif(defined $5) {
       DEBUG > 3 and print STDERR "Found apparent simple end-text code \"$5\"\n";
 
-      if(@stack and ! $stack[-1]) {
+      if(@code and ! $code[-1]) {
         # We're indeed expecting a simple end-code
         DEBUG > 4 and print STDERR " It's indeed an end-code.\n";
 
@@ -2253,12 +2253,12 @@ sub _treelet_from_formatting_codes {
           push @{ $lineage[-1] }, ''; # keep it from being really childless
         }
 
-        if ($inL == @stack) {
+        if ($inL == @code) {
           $lineage[-1][1]{'raw'} = $raw;
           $inL = 0;
         }
 
-        pop @stack;
+        pop @code;
         pop @lineage;
       } else {
         DEBUG > 4 and print STDERR " It's just stuff.\n";
@@ -2282,14 +2282,14 @@ sub _treelet_from_formatting_codes {
     }
   }
 
-  if(@stack) { # Uhoh, some sequences weren't closed.
+  if(@code) { # Uhoh, some sequences weren't closed.
     my $x= "...";
-    while(@stack) {
+    while(@code) {
       push @{ $lineage[-1] }, '' if 2 == @{ $lineage[-1] };
       # Hmmmmm!
 
       my $code         = (pop @lineage)->[0];
-      my $ender_length =  pop @stack;
+      my $ender_length =  pop @code;
       if($ender_length) {
         --$ender_length;
         $x = $code . ("<" x $ender_length) . " $x " . (">" x $ender_length);
@@ -2332,7 +2332,7 @@ sub _stringify_lol {  # the real recursor
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-sub _dump_curr_open { # return a string representation of the stack
+sub _dump_curr_open { # return a string representation of the code
   my $curr_open = $_[0]{'curr_open'};
 
   return '[empty]' unless @$curr_open;
@@ -2425,7 +2425,7 @@ sub reinit {
   my $self = shift;
   foreach (qw(source_dead source_filename doc_has_started
 start_of_pod_block content_seen last_was_blank paras curr_open
-line_count pod_para_count in_pod ~tried_gen_errata all_errata errata errors_seen
+line_count pod_para_count in_pod ~tried_gen_errata all_errata errata Argss_seen
 Title)) {
 
     delete $self->{$_};

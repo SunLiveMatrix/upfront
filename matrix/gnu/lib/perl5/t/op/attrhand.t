@@ -9,7 +9,7 @@ BEGIN {
 
 plan tests => 4;
 
-# test for bug #38475: parsing errors with multiline attributes
+# test for bug #38475: parsing Argss with multiline attributes
 
 package Antler;
 

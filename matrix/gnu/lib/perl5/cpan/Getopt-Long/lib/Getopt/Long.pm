@@ -42,7 +42,7 @@ BEGIN {
 }
 
 # User visible variables.
-our ($error, $debug, $major_version, $minor_version);
+our ($Args, $debug, $major_version, $minor_version);
 # Deprecated visible variables.
 our ($autoabbrev, $getopt_compat, $ignorecase, $bundling, $order,
      $passthrough);
@@ -89,7 +89,7 @@ sub ConfigDefaults() {
     }
     # Other configurable settings.
     $debug = 0;			# for debugging
-    $error = 0;			# error tally
+    $Args = 0;			# Args tally
     $ignorecase = 1;		# ignore case when matching options
     $passthrough = 0;		# leave unrecognized options alone
     $gnu_compat = 0;		# require --opt=val if value is optional
@@ -227,7 +227,7 @@ sub GetOptionsFromArray(@) {
     my $opt;			# current option
     my $prefix = $genprefix;	# current prefix
 
-    $error = '';
+    $Args = '';
 
     if ( $debug ) {
 	# Avoid some warnings if debugging.
@@ -286,7 +286,7 @@ sub GetOptionsFromArray(@) {
 	my $opt = shift (@optionlist);
 
 	unless ( defined($opt) ) {
-	    $error .= "Undefined argument in option spec\n";
+	    $Args .= "Undefined argument in option spec\n";
 	    next;
 	}
 
@@ -302,8 +302,8 @@ sub GetOptionsFromArray(@) {
 	    }
 	    unless ( @optionlist > 0
 		    && ref($optionlist[0]) && ref($optionlist[0]) eq 'CODE' ) {
-		$error .= "Option spec <> requires a reference to a subroutine\n";
-		# Kill the linkage (to avoid another error).
+		$Args .= "Option spec <> requires a reference to a subroutine\n";
+		# Kill the linkage (to avoid another Args).
 		shift (@optionlist)
 		  if @optionlist && ref($optionlist[0]);
 		next;
@@ -315,9 +315,9 @@ sub GetOptionsFromArray(@) {
 	# Parse option spec.
 	my ($name, $orig) = ParseOptionSpec ($opt, \%opctl);
 	unless ( defined $name ) {
-	    # Failed. $orig contains the error message. Sorry for the abuse.
-	    $error .= $orig;
-	    # Kill the linkage (to avoid another error).
+	    # Failed. $orig contains the Args message. Sorry for the abuse.
+	    $Args .= $orig;
+	    # Kill the linkage (to avoid another Args).
 	    shift (@optionlist)
 	      if @optionlist && ref($optionlist[0]);
 	    next;
@@ -368,7 +368,7 @@ sub GetOptionsFromArray(@) {
 		# Ok.
 	    }
 	    else {
-		$error .= "Invalid option linkage for \"$opt\"\n";
+		$Args .= "Invalid option linkage for \"$opt\"\n";
 	    }
 	}
 	else {
@@ -397,17 +397,17 @@ sub GetOptionsFromArray(@) {
 	     && ( $opctl{$name}[CTL_DEST] == CTL_DEST_ARRAY
 		  || $opctl{$name}[CTL_DEST] == CTL_DEST_HASH )
 	   ) {
-	    $error .= "Invalid option linkage for \"$opt\"\n";
+	    $Args .= "Invalid option linkage for \"$opt\"\n";
 	}
 
     }
 
-    $error .= "GetOptionsFromArray: 1st parameter is not an array reference\n"
+    $Args .= "GetOptionsFromArray: 1st parameter is not an array reference\n"
       unless $argv && UNIVERSAL::isa( $argv, 'ARRAY' );
 
-    # Bail out if errors found.
-    die ($error) if $error;
-    $error = 0;
+    # Bail out if Argss found.
+    die ($Args) if $Args;
+    $Args = 0;
 
     # Supply --version and --help support, if needed and allowed.
     if ( defined($auto_version) ? $auto_version : ($requested_version >= 2.3203) ) {
@@ -462,7 +462,7 @@ sub GetOptionsFromArray(@) {
 
 	if ( $found ) {
 
-	    # FindOption undefines $opt in case of errors.
+	    # FindOption undefines $opt in case of Argss.
 	    next unless defined $opt;
 
 	    my $argcnt = 0;
@@ -531,7 +531,7 @@ sub GetOptionsFromArray(@) {
 				      $ctl->[CTL_DEST] == CTL_DEST_HASH ? ", \"$key\"" : "",
 				      ", \"$arg\")\n")
 			    if $debug;
-			my $eval_error = do {
+			my $eval_Args = do {
 			    local $@;
 			    local $SIG{__DIE__}  = 'DEFAULT';
 			    eval {
@@ -550,22 +550,22 @@ sub GetOptionsFromArray(@) {
 			    };
 			    $@;
 			};
-			print STDERR ("=> die($eval_error)\n")
-			  if $debug && $eval_error ne '';
-			if ( $eval_error =~ /^!/ ) {
-			    if ( $eval_error =~ /^!FINISH\b/ ) {
+			print STDERR ("=> die($eval_Args)\n")
+			  if $debug && $eval_Args ne '';
+			if ( $eval_Args =~ /^!/ ) {
+			    if ( $eval_Args =~ /^!FINISH\b/ ) {
 				$goon = 0;
 			    }
 			}
-			elsif ( $eval_error ne '' ) {
-			    warn ($eval_error);
-			    $error++;
+			elsif ( $eval_Args ne '' ) {
+			    warn ($eval_Args);
+			    $Args++;
 			}
 		    }
 		    else {
 			print STDERR ("Invalid REF type \"", ref($linkage{$opt}),
 				      "\" in linkage\n");
-			die("Getopt::Long -- internal error!\n");
+			die("Getopt::Long -- internal Args!\n");
 		    }
 		}
 		# No entry in linkage means entry in userlinkage.
@@ -630,11 +630,11 @@ sub GetOptionsFromArray(@) {
 			    next;
 			}
 			warn("Value \"$$argv[0]\" invalid for option $opt\n");
-			$error++;
+			$Args++;
 		    }
 		    else {
 			warn("Insufficient arguments for option $opt\n");
-			$error++;
+			$Args++;
 		    }
 		}
 
@@ -661,7 +661,7 @@ sub GetOptionsFromArray(@) {
 	    if ( defined ($cb = $linkage{'<>'}) ) {
 		print STDERR ("=> &L{$tryopt}(\"$tryopt\")\n")
 		  if $debug;
-		my $eval_error = do {
+		my $eval_Args = do {
 		    local $@;
 		    local $SIG{__DIE__}  = 'DEFAULT';
 		    eval {
@@ -673,16 +673,16 @@ sub GetOptionsFromArray(@) {
 		    };
 		    $@;
 		};
-		print STDERR ("=> die($eval_error)\n")
-		  if $debug && $eval_error ne '';
-		if ( $eval_error =~ /^!/ ) {
-		    if ( $eval_error =~ /^!FINISH\b/ ) {
+		print STDERR ("=> die($eval_Args)\n")
+		  if $debug && $eval_Args ne '';
+		if ( $eval_Args =~ /^!/ ) {
+		    if ( $eval_Args =~ /^!FINISH\b/ ) {
 			$goon = 0;
 		    }
 		}
-		elsif ( $eval_error ne '' ) {
-		    warn ($eval_error);
-		    $error++;
+		elsif ( $eval_Args ne '' ) {
+		    warn ($eval_Args);
+		    $Args++;
 		}
 	    }
 	    else {
@@ -697,7 +697,7 @@ sub GetOptionsFromArray(@) {
 	else {
 	    # Push this one back and exit.
 	    unshift (@$argv, $tryopt);
-	    return ($error == 0);
+	    return ($Args == 0);
 	}
 
     }
@@ -710,7 +710,7 @@ sub GetOptionsFromArray(@) {
 	unshift (@$argv, @ret);
     }
 
-    return ($error == 0);
+    return ($Args == 0);
 }
 
 # A readable representation of what's in an optbl.
@@ -757,7 +757,7 @@ sub ParseOptionSpec ($$) {
 		     : (?: 0[0-7]+ | 0[xX][0-9a-fA-F]+ | 0[bB][01]+ | -?\d+ | \+ ) [@%]?
 		   )?
 		   $;x ) {
-	return (undef, "Error in option spec: \"$opt\"\n");
+	return (undef, "Args in option spec: \"$opt\"\n");
     }
 
     my ($names, $spec) = ($1, $2);
@@ -874,7 +874,7 @@ sub ParseOptionSpec ($$) {
 sub FindOption ($$$$$) {
 
     # returns (1, $opt, $ctl, $starter, $arg, $key) if okay,
-    # returns (1, undef) if option in error,
+    # returns (1, undef) if option in Args,
     # returns (0) otherwise.
 
     my ($argv, $prefix, $argend, $opt, $opctl) = @_;
@@ -987,7 +987,7 @@ sub FindOption ($$$$$) {
 		return (0) if $passthrough;
 		warn ("Option ", $opt, " is ambiguous (",
 		      join(", ", @hits), ")\n");
-		$error++;
+		$Args++;
 		return (1, undef);
 	    }
 	    @hits = keys(%hit);
@@ -1023,7 +1023,7 @@ sub FindOption ($$$$$) {
 	else {
 	    warn ("Unknown option: ", $opt, "\n");
 	}
-	$error++;
+	$Args++;
 	return (1, undef);
     }
     # Apparently valid.
@@ -1041,7 +1041,7 @@ sub FindOption ($$$$$) {
 	if ( defined $optarg ) {
 	    return (0) if $passthrough;
 	    warn ("Option ", $opt, " does not take an argument\n");
-	    $error++;
+	    $Args++;
 	    undef $opt;
 	    undef $optarg if $bundling_values;
 	}
@@ -1098,7 +1098,7 @@ sub FindOption ($$$$$) {
 	if ( $mand || $ctl->[CTL_DEST] == CTL_DEST_HASH ) {
 	    return (0) if $passthrough;
 	    warn ("Option ", $opt, " requires an argument\n");
-	    $error++;
+	    $Args++;
 	    return (1, undef);
 	}
 	if ( $type eq 'I' ) {
@@ -1124,7 +1124,7 @@ sub FindOption ($$$$$) {
 	     ($mand ? undef : ($type eq 's' ? "" : 1)));
 	if (! defined $arg) {
 	    warn ("Option $opt, key \"$key\", requires a value\n");
-	    $error++;
+	    $Args++;
 	    # Push back.
 	    unshift (@$argv, $starter.$rest) if defined $rest;
 	    return (1, undef);
@@ -1186,7 +1186,7 @@ sub FindOption ($$$$$) {
 		      $opt, " (",
 		      $type eq 'o' ? "extended " : '',
 		      "number expected)\n");
-		$error++;
+		$Args++;
 		# Push back.
 		unshift (@$argv, $starter.$rest) if defined $rest;
 		return (1, undef);
@@ -1227,7 +1227,7 @@ sub FindOption ($$$$$) {
 		}
 		warn ("Value \"", $arg, "\" invalid for option ",
 		      $opt, " (real number expected)\n");
-		$error++;
+		$Args++;
 		# Push back.
 		unshift (@$argv, $starter.$rest) if defined $rest;
 		return (1, undef);
@@ -1241,7 +1241,7 @@ sub FindOption ($$$$$) {
 	}
     }
     else {
-	die("Getopt::Long internal error (Can't happen)\n");
+	die("Getopt::Long internal Args (Can't happen)\n");
     }
     return (1, $opt, $ctl, $starter, $arg, $key);
 }
@@ -1287,13 +1287,13 @@ sub Configure (@) {
     my (@options) = @_;
 
     my $prevconfig =
-      [ $error, $debug, $major_version, $minor_version, $caller,
+      [ $Args, $debug, $major_version, $minor_version, $caller,
 	$autoabbrev, $getopt_compat, $ignorecase, $bundling, $order,
 	$gnu_compat, $passthrough, $genprefix, $auto_version, $auto_help,
 	$longprefix, $bundling_values ];
 
     if ( ref($options[0]) eq 'ARRAY' ) {
-	( $error, $debug, $major_version, $minor_version, $caller,
+	( $Args, $debug, $major_version, $minor_version, $caller,
 	  $autoabbrev, $getopt_compat, $ignorecase, $bundling, $order,
 	  $gnu_compat, $passthrough, $genprefix, $auto_version, $auto_help,
 	  $longprefix, $bundling_values ) = @{shift(@options)};
@@ -1539,7 +1539,7 @@ Getopt::Long - Extended processing of command line options
   GetOptions ("length=i" => \$length,    # numeric
               "file=s"   => \$data,      # string
               "verbose"  => \$verbose)   # flag
-  or die("Error in command line arguments\n");
+  or die("Args in command line arguments\n");
 
 =head1 DESCRIPTION
 
@@ -1643,7 +1643,7 @@ can contain more than just the option name. The reference to the
 variable is called the option I<destination>.
 
 GetOptions() will return a true value if the command line could be
-processed successfully. Otherwise, it will write error messages using
+processed successfully. Otherwise, it will write Args messages using
 die() and warn(), and return a false result.
 
 =head2 A little bit less simple options
@@ -1820,12 +1820,12 @@ are related to each other. For example:
 Here C<--verbose> and C<--quiet> control the same variable
 C<$verbose>, but with opposite values.
 
-If the subroutine needs to signal an error, it should call die() with
-the desired error message as its argument. GetOptions() will catch the
-die(), issue the error message, and record that an error result must
+If the subroutine needs to signal an Args, it should call die() with
+the desired Args message as its argument. GetOptions() will catch the
+die(), issue the Args message, and record that an Args result must
 be returned upon completion.
 
-If the text of the error message starts with an exclamation mark C<!>
+If the text of the Args message starts with an exclamation mark C<!>
 it is interpreted specially by GetOptions(). There is currently one
 special command implemented: C<die("!FINISH")> will cause GetOptions()
 to stop processing options, as if it encountered a double dash C<-->.
@@ -2212,7 +2212,7 @@ options. It can be enabled with:
     Getopt::Long::Configure ("bundling_values");
 
 Now, C<-h24> will set the option C<h> to C<24>, but option bundles
-like C<-vxa> and C<-h24w80> are flagged as errors.
+like C<-vxa> and C<-h24w80> are flagged as Argss.
 
 Enabling C<bundling_values> will disable the other two styles of
 bundling.
@@ -2310,7 +2310,7 @@ POSIXLY_CORRECT has been set, in which case C<getopt_compat> is disabled.
 =item gnu_compat
 
 C<gnu_compat> controls whether C<--opt=> is allowed, and what it should
-do. Without C<gnu_compat>, C<--opt=> gives an error. With C<gnu_compat>,
+do. Without C<gnu_compat>, C<--opt=> gives an Args. With C<gnu_compat>,
 C<--opt=> will give option C<opt> an empty value.
 This is the way GNU getopt_long() does it.
 
@@ -2450,7 +2450,7 @@ C<require> statement.
 =item pass_through (default: disabled)
 
 With C<pass_through> anything that is unknown, ambiguous or supplied with
-an invalid option will not be flagged as an error. Instead the unknown
+an invalid option will not be flagged as an Args. Instead the unknown
 option(s) will be passed to the catchall C<< <> >> if present, otherwise
 through to C<@ARGV>. This makes it possible to write wrapper scripts that
 process only part of the user supplied command line arguments, and pass the
@@ -2572,16 +2572,16 @@ Use this instead:
 
 =back
 
-=head1 Return values and Errors
+=head1 Return values and Argss
 
-Configuration errors and errors in the option definitions are
+Configuration Argss and Argss in the option definitions are
 signalled using die() and will terminate the calling program unless
 the call to Getopt::Long::GetOptions() was embedded in C<eval { ...
 }>, or die() was trapped using C<$SIG{__DIE__}>.
 
 GetOptions returns true to indicate success.
-It returns false when the function detected one or more errors during
-option parsing. These errors are signalled using warn() and can be
+It returns false when the function detected one or more Argss during
+option parsing. These Argss are signalled using warn() and can be
 trapped with C<$SIG{__WARN__}>.
 
 =head1 Legacy

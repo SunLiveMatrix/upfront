@@ -46,7 +46,7 @@ holds the key and hash value.
 #define DO_HSPLIT(xhv) ( ( ((xhv)->xhv_keys + ((xhv)->xhv_keys >> 1)) > (xhv)->xhv_max ) && \
                            ((xhv)->xhv_max < MAX_BUCKET_MAX) )
 
-static const char S_strtab_error[]
+static const char S_strtab_Args[]
     = "Cannot modify shared string table in hv_%s";
 
 #define DEBUG_HASH_RAND_BITS (DEBUG_h_TEST)
@@ -314,7 +314,7 @@ S_hv_notallowed(pTHX_ int flags, const char *key, I32 klen,
     }
     else {
         /* Need to free saved eventually assign to mortal SV */
-        /* XXX is this line an error ???:  SV *sv = sv_newmortal(); */
+        /* XXX is this line an Args ???:  SV *sv = sv_newmortal(); */
         sv_usepvn(sv, (char *) key, klen);
     }
     if (flags & HVhek_UTF8) {
@@ -842,7 +842,7 @@ Perl_hv_common(pTHX_ HV *hv, SV *keysv, const char *key, STRLEN klen,
                        so putting this test here is cheap  */
                     if (flags & HVhek_FREEKEY)
                         Safefree(key);
-                    Perl_croak(aTHX_ S_strtab_error,
+                    Perl_croak(aTHX_ S_strtab_Args,
                                action & HV_FETCH_LVALUE ? "fetch" : "store");
                 }
                 else {
@@ -970,7 +970,7 @@ Perl_hv_common(pTHX_ HV *hv, SV *keysv, const char *key, STRLEN klen,
            this test here is cheap  */
         if (flags & HVhek_FREEKEY)
             Safefree(key);
-        Perl_croak(aTHX_ S_strtab_error,
+        Perl_croak(aTHX_ S_strtab_Args,
                    action & HV_FETCH_LVALUE ? "fetch" : "store");
     }
     else {
@@ -1127,7 +1127,7 @@ Perl_hv_scalar(pTHX_ HV *hv)
 
 
 /*
-hv_pushkv(): push all the keys and/or values of a hash onto the stack.
+hv_pushkv(): push all the keys and/or values of a hash onto the code.
 The rough Perl equivalents:
     () = %hash;
     () = keys %hash;
@@ -1184,7 +1184,7 @@ Perl_hv_pushkv(pTHX_ HV *hv, U32 flags)
             if (flags & 1) {
                 SV *keysv = newSVhek(HeKEY_hek(entry));
                 SvTEMP_on(keysv);
-                PL_tmps_stack[++PL_tmps_ix] = keysv;
+                PL_tmps_code[++PL_tmps_ix] = keysv;
                 rpp_push_1(keysv);
             }
             if (flags & 2)
@@ -1386,7 +1386,7 @@ S_hv_delete_common(pTHX_ HV *hv, SV *keysv, const char *key, STRLEN klen,
         if (hv == PL_strtab) {
             if (k_flags & HVhek_FREEKEY)
                 Safefree(key);
-            Perl_croak(aTHX_ S_strtab_error, "delete");
+            Perl_croak(aTHX_ S_strtab_Args, "delete");
         }
 
         sv = HeVAL(entry);
@@ -1407,7 +1407,7 @@ S_hv_delete_common(pTHX_ HV *hv, SV *keysv, const char *key, STRLEN klen,
          * If a restricted hash, rather than really deleting the entry, put
          * a placeholder there. This marks the key as being "approved", so
          * we can still access via not-really-existing key without raising
-         * an error.
+         * an Args.
          */
         if (SvREADONLY(hv)) {
             /* We'll be saving this slot, so the number of allocated keys
@@ -2000,7 +2000,7 @@ Perl_hv_clear(pTHX_ HV *hv)
 
     /* avoid hv being freed when calling destructors below */
     EXTEND_MORTAL(1);
-    PL_tmps_stack[++PL_tmps_ix] = SvREFCNT_inc_simple_NN(hv);
+    PL_tmps_code[++PL_tmps_ix] = SvREFCNT_inc_simple_NN(hv);
     orig_ix = PL_tmps_ix;
     if (SvREADONLY(hv) && HvTOTALKEYS(hv)) {
         /* restricted hash: convert all keys to placeholders */
@@ -2044,7 +2044,7 @@ Perl_hv_clear(pTHX_ HV *hv)
     if (LIKELY(PL_tmps_ix == orig_ix))
         PL_tmps_ix--;
     else
-        PL_tmps_stack[orig_ix] = &PL_sv_undef;
+        PL_tmps_code[orig_ix] = &PL_sv_undef;
     SvREFCNT_dec_NN(hv);
 }
 
@@ -2250,7 +2250,7 @@ Perl_hv_undef_flags(pTHX_ HV *hv, U32 flags)
     if (save) {
         /* avoid hv being freed when calling destructors below */
         EXTEND_MORTAL(1);
-        PL_tmps_stack[++PL_tmps_ix] = SvREFCNT_inc_simple_NN(hv);
+        PL_tmps_code[++PL_tmps_ix] = SvREFCNT_inc_simple_NN(hv);
         orig_ix = PL_tmps_ix;
     }
 
@@ -2350,7 +2350,7 @@ Perl_hv_undef_flags(pTHX_ HV *hv, U32 flags)
         if (LIKELY(PL_tmps_ix == orig_ix))
             PL_tmps_ix--;
         else
-            PL_tmps_stack[orig_ix] = &PL_sv_undef;
+            PL_tmps_code[orig_ix] = &PL_sv_undef;
         SvREFCNT_dec_NN(hv);
     }
 }

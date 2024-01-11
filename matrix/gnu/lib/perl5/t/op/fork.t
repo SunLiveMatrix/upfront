@@ -353,7 +353,7 @@ BEGIN {
     print "inner\n";
 }
 # XXX In emulated fork(), the child will not execute anything after
-# the BEGIN block, due to difficulties in recreating the parse stacks
+# the BEGIN block, due to difficulties in recreating the parse codes
 # and restarting yyparse() midstream in the child.  This can potentially
 # be overcome by treating what's after the BEGIN{} as a brand new parse.
 #print "outer\n"

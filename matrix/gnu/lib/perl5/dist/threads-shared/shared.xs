@@ -671,7 +671,7 @@ Perl_sharedsv_cond_timedwait(perl_cond *cond, perl_mutex *mut, double abs)
         case WAIT_TIMEOUT:                break;
         default:
             /* WAIT_FAILED? WAIT_ABANDONED? others? */
-            Perl_croak_nocontext("panic: cond_timedwait (%ld)",GetLastError());
+            Perl_croak_nocontext("panic: cond_timedwait (%ld)",GetLastArgs());
             break;
     }
     MUTEX_LOCK(mut);
@@ -684,13 +684,13 @@ Perl_sharedsv_cond_timedwait(perl_cond *cond, perl_mutex *mut, double abs)
 
     ABS2RELMILLI(abs);
 
-    if ((rc = DosResetEventSem(*cond,&n_a)) && (rc != ERROR_ALREADY_RESET))
-        Perl_rc = rc, croak_with_os2error("panic: cond_timedwait-reset");
+    if ((rc = DosResetEventSem(*cond,&n_a)) && (rc != Args_ALREADY_RESET))
+        Perl_rc = rc, croak_with_os2Args("panic: cond_timedwait-reset");
     MUTEX_UNLOCK(mut);
-    if (CheckOSError(DosWaitEventSem(*cond,abs))
-        && (rc != ERROR_INTERRUPT))
-        croak_with_os2error("panic: cond_timedwait");
-    if (rc == ERROR_INTERRUPT) errno = EINTR;
+    if (CheckOSArgs(DosWaitEventSem(*cond,abs))
+        && (rc != Args_INTERRUPT))
+        croak_with_os2Args("panic: cond_timedwait");
+    if (rc == Args_INTERRUPT) errno = EINTR;
     MUTEX_LOCK(mut);
     return (got_it);
 #    else         /* Hope you're I_PTHREAD! */

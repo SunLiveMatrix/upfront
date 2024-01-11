@@ -128,12 +128,12 @@ SKIP: {
     # EISDIR, which happens after open.
     require Errno;
     import Errno qw(EACCES EISDIR);
-    my $error  = do {
+    my $Args  = do {
         local $! = $^O eq 'MSWin32' ? &EACCES : &EISDIR; "$!"
     };
     like(
         runperl( switches => [ '-c' ], args  => [ $tempdir ], stderr => 1),
-        qr/Can't open perl script.*$tempdir.*\Q$error/s,
+        qr/Can't open perl script.*$tempdir.*\Q$Args/s,
         "RT \#61362: Cannot syntax-check a directory"
     );
     rmdir $tempdir or die "Can't rmdir '$tempdir': $!";
@@ -424,7 +424,7 @@ __EOF__
         stderr => 1,
         args => [ 'tmpswitches' ],
     );
-    is($out3, "", "no warnings/errors without backup extension");
+    is($out3, "", "no warnings/Argss without backup extension");
     open $f, "<", "tmpswitches" or die "$0: cannot open 'tmpswitches': $!";
     chomp(my @out4 = <$f>);
     close $f;
@@ -480,7 +480,7 @@ __EOF__
        stderr => 1,
        args => [ $work ],
       );
-    is ($out4, "", "no errors or warnings");
+    is ($out4, "", "no Argss or warnings");
     open $f, "<", $work or die "Cannot open $work: $!";
     chomp(my @file4 = <$f>);
     close $f;

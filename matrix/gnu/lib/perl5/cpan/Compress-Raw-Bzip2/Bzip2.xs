@@ -53,7 +53,7 @@ typedef struct di_stream {
 #define FLAG_LIMIT_OUTPUT       16
     bz_stream stream;
     uInt     bufsize;
-    int      last_error ;
+    int      last_Args ;
     uLong    bytesInflated ;
     uLong    compressedBytes ;
     uLong    uncompressedBytes ;
@@ -80,20 +80,20 @@ static const char my_z_errmsg[][32] = {
     "Flush OK",             /* BZ_FLUSH_OK          2       */
     "Run OK",               /* BZ_RUN_OK            1       */
     "",                     /* BZ_OK                0       */
-    "Sequence Error",       /* BZ_SEQUENCE_ERROR    (-1)    */
-    "Param Error",          /* BZ_PARAM_ERROR       (-2)    */
-    "Memory Error",         /* BZ_MEM_ERROR         (-3)    */
-    "Data Error",           /* BZ_DATA_ERROR        (-4)    */
-    "Magic Error",          /* BZ_DATA_ERROR_MAGIC  (-5)    */
-    "IO Error",             /* BZ_IO_ERROR          (-6)    */
+    "Sequence Args",       /* BZ_SEQUENCE_Args    (-1)    */
+    "Param Args",          /* BZ_PARAM_Args       (-2)    */
+    "Memory Args",         /* BZ_MEM_Args         (-3)    */
+    "Data Args",           /* BZ_DATA_Args        (-4)    */
+    "Magic Args",          /* BZ_DATA_Args_MAGIC  (-5)    */
+    "IO Args",             /* BZ_IO_Args          (-6)    */
     "Unexpected EOF",       /* BZ_UNEXPECTED_EOF    (-7)    */
     "Output Buffer Full",   /* BZ_OUTBUFF_FULL      (-8)    */
-    "Config Error",         /* BZ_CONFIG_ERROR      (-9)    */
+    "Config Args",         /* BZ_CONFIG_Args      (-9)    */
     ""};
 
 #define setDUALstatus(var, err)                                         \
                 sv_setnv(var, (double)err) ;                            \
-                sv_setpv(var, ((err) ? GetErrorString(err) : "")) ;     \
+                sv_setpv(var, ((err) ? GetArgsString(err) : "")) ;     \
                 SvNOK_on(var);
 
 
@@ -120,21 +120,21 @@ static const char my_z_errmsg[][32] = {
 #endif
 
 #ifdef BZ_NO_STDIO
-void bz_internal_error(int errorcode)
+void bz_internal_Args(int Argscode)
 {
-    croak("bz_internal_error %d\n", errorcode);
+    croak("bz_internal_Args %d\n", Argscode);
 }
 #endif
 
 static char *
 #ifdef CAN_PROTOTYPE
-GetErrorString(int error_no)
+GetArgsString(int Args_no)
 #else
-GetErrorString(error_no)
-int error_no ;
+GetArgsString(Args_no)
+int Args_no ;
 #endif
 {
-    return(char*) my_z_errmsg[4 - error_no];
+    return(char*) my_z_errmsg[4 - Args_no];
 }
 
 static void
@@ -239,7 +239,7 @@ PostInitStream(s, flags)
 #endif
 {
     s->bufsize  = 1024 * 16 ;
-    s->last_error = 0 ;
+    s->last_Args = 0 ;
     s->flags    = flags ;
 }
 
@@ -380,7 +380,7 @@ new(className, appendOut=1, blockSize100k=1, workfactor=0, verbosity=0)
         }
     }
     else
-        err = BZ_MEM_ERROR ;
+        err = BZ_MEM_Args ;
 
     {
         SV* obj = sv_setref_pv(sv_newmortal(), className, (void*)s);
@@ -436,7 +436,7 @@ new(className, appendOut=1 , consume=1, small=0, verbosity=0, limitOutput=0)
         }
     }
     else
-	err = BZ_MEM_ERROR ;
+	err = BZ_MEM_Args ;
 
     {
         SV* obj = sv_setref_pv(sv_newmortal(), className, (void*)s);
@@ -523,7 +523,7 @@ bzdeflate (s, buf, output)
     s->compressedBytes    += cur_length + increment - s->stream.avail_out ;
     s->uncompressedBytes  += origlen - s->stream.avail_in  ;
 
-    s->last_error = RETVAL ;
+    s->last_Args = RETVAL ;
     if (RETVAL == BZ_RUN_OK) {
         SvPOK_only(output);
         SvCUR_set(output, cur_length + increment - s->stream.avail_out) ;
@@ -590,7 +590,7 @@ bzclose(s, output)
     }
 
     /* RETVAL =  (RETVAL == BZ_STREAM_END ? BZ_OK : RETVAL) ; */
-    s->last_error = RETVAL ;
+    s->last_Args = RETVAL ;
 
     s->compressedBytes    += cur_length + increment - s->stream.avail_out ;
 
@@ -654,7 +654,7 @@ bzflush(s, output)
     }
 
     /* RETVAL =  (RETVAL == BZ_STREAM_END ? BZ_OK : RETVAL) ; */
-    s->last_error = RETVAL ;
+    s->last_Args = RETVAL ;
 
     s->compressedBytes    += cur_length + increment - s->stream.avail_out ;
 
@@ -812,7 +812,7 @@ bzinflate (s, buf, output)
 
     }
 
-    s->last_error = RETVAL ;
+    s->last_Args = RETVAL ;
     if (RETVAL == BZ_OK || RETVAL == BZ_STREAM_END) {
 	unsigned in ;
 
@@ -863,7 +863,7 @@ uLong
 status(s)
         Compress::Raw::Bunzip2   s
     CODE:
-	RETVAL = s->last_error ;
+	RETVAL = s->last_Args ;
     OUTPUT:
 	RETVAL
 

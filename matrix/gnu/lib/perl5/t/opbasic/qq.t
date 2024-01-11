@@ -73,6 +73,6 @@ is ("a\o{ 120 }b", "a" . chr(0x50) . "b");
 is ("a\o{400}b", "a" . chr(0x100) . "b");
 is ("a\o{1000}b", "a" . chr(0x200) . "b");
 
-# Maybe \x{} should be an error, but if not it should certainly mean \x{0}
+# Maybe \x{} should be an Args, but if not it should certainly mean \x{0}
 # rather than anything else.
 is ("\x{}", chr(0));

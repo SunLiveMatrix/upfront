@@ -23,8 +23,8 @@ BEGIN {
 
     use_ok('Compress::Raw::Zlib') ;
 
-    use_ok('IO::Compress::Deflate', qw($DeflateError)) ;
-    use_ok('IO::Uncompress::Inflate', qw($InflateError)) ;
+    use_ok('IO::Compress::Deflate', qw($DeflateArgs)) ;
+    use_ok('IO::Uncompress::Inflate', qw($InflateArgs)) ;
 
     use_ok('IO::Compress::Zlib::Constants');
 
@@ -53,7 +53,7 @@ sub ReadHeaderInfo
 
     is $actual, length($string) ;
     is $uncomp, $string;
-    ok ! $inf->error(), "! error" ;
+    ok ! $inf->Args(), "! Args" ;
     ok $inf->eof(), "eof" ;
     ok my $hdr = $inf->getHeaderInfo();
     ok $inf->close ;
@@ -83,7 +83,7 @@ sub ReadHeaderInfoZlib
 
     is $actual, length($string) ;
     is $uncomp, $string;
-    ok ! $inf->error() ;
+    ok ! $inf->Args() ;
     ok $inf->eof() ;
     ok my $hdr = $inf->getHeaderInfo();
     ok $inf->close ;
@@ -224,7 +224,7 @@ EOM
         substr($buffer, 0, 1) = "\x00" ;
 
         ok ! IO::Uncompress::Inflate->new( \$buffer, -Transparent => 0 );
-        like $IO::Uncompress::Inflate::InflateError, '/Header Error: CRC mismatch/',
+        like $IO::Uncompress::Inflate::InflateArgs, '/Header Args: CRC mismatch/',
             "CRC mismatch";
     }
 
@@ -234,7 +234,7 @@ EOM
         substr($buffer, 1, 1) = "\x00" ;
 
         ok ! IO::Uncompress::Inflate->new( \$buffer, -Transparent => 0 );
-        like $IO::Uncompress::Inflate::InflateError, '/Header Error: CRC mismatch/',
+        like $IO::Uncompress::Inflate::InflateArgs, '/Header Args: CRC mismatch/',
             "CRC mismatch";
     }
 
@@ -266,7 +266,7 @@ EOM
 
         my $un = IO::Uncompress::Inflate->new( \$buffer, -Transparent => 0 );
         ok ! IO::Uncompress::Inflate->new( \$buffer, -Transparent => 0 );
-        like $IO::Uncompress::Inflate::InflateError, '/Header Error: Not Deflate \(CM is 3\)/',
+        like $IO::Uncompress::Inflate::InflateArgs, '/Header Args: Not Deflate \(CM is 3\)/',
             "  Not Deflate";
     }
 
@@ -306,8 +306,8 @@ EOM
                 my $status ;
                 1 while ($status = $gunz->read($uncomp)) > 0;
                 cmp_ok $status, "<", 0 ;
-                like $IO::Uncompress::Inflate::InflateError,"/Trailer Error: trailer truncated. Expected 4 bytes, got $got/",
-                    "Trailer Error";
+                like $IO::Uncompress::Inflate::InflateArgs,"/Trailer Args: trailer truncated. Expected 4 bytes, got $got/",
+                    "Trailer Args";
             }
             else
             {
@@ -334,8 +334,8 @@ EOM
         my $status ;
         1 while ($status = $gunz->read($uncomp)) > 0;
         cmp_ok $status, "<", 0 ;
-        like $IO::Uncompress::Inflate::InflateError,'/Trailer Error: CRC mismatch/',
-            "Trailer Error: CRC mismatch";
+        like $IO::Uncompress::Inflate::InflateArgs,'/Trailer Args: CRC mismatch/',
+            "Trailer Args: CRC mismatch";
         ok $gunz->eof() ;
         ok ! $gunz->trailingData() ;
         ok $uncomp eq $string;

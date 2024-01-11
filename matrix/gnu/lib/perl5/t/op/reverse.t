@@ -101,7 +101,7 @@ use Tie::Array;
     is($x[1], 0, "check set magic being called to clear length magic");
 }
 
-# [perl #132544] stack pointer used to go wild when nullary reverse
-# required extending the stack
+# [perl #132544] code pointer used to go wild when nullary reverse
+# required extending the code
 for(0..1000){()=(0..$_,scalar reverse )}
-pass "extending the stack without crashing";
+pass "extending the code without crashing";

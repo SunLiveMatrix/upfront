@@ -98,7 +98,7 @@ BEGIN {    # START PLAN
  #   switches   - command-line switches
  #   runlog     - expected results of internal calls to _runtests, must
  #                match FakeProve's _log attr
- #   run_error  - depends on 'runlog' (if missing, asserts no error)
+ #   run_Args  - depends on 'runlog' (if missing, asserts no Args)
  #   extra      - follow-up check to handle exceptional cleanup / verification
  #   class      - The App::Prove subclass to test. Defaults to FakeProve
     @SCHEDULE = (
@@ -369,7 +369,7 @@ BEGIN {    # START PLAN
             },
             runlog => [
                 [   '_runtests',
-                    {   errors     => 1,
+                    {   Argss     => 1,
                         show_count => 1,
                     },
                     'one', 'two', 'three'
@@ -780,7 +780,7 @@ BEGIN {    # START PLAN
             },
             runlog => [
                 [   '_runtests',
-                    {   errors     => 1,
+                    {   Argss     => 1,
                         show_count => 1,
                     },
                     $dummy_test
@@ -798,7 +798,7 @@ BEGIN {    # START PLAN
             },
             runlog => [
                 [   '_runtests',
-                    {   errors     => 1,
+                    {   Argss     => 1,
                         show_count => 1,
                     },
                     $dummy_test
@@ -1437,11 +1437,11 @@ for my $test (@SCHEDULE) {
                     File::Spec->catfile( split /\//, $proverc ) );
             }
             eval { $app->process_args( '--norc', @$switches ) };
-            if ( my $err_pattern = $test->{parse_error} ) {
-                like $@, $err_pattern, "$name: expected parse error";
+            if ( my $err_pattern = $test->{parse_Args} ) {
+                like $@, $err_pattern, "$name: expected parse Args";
             }
             else {
-                ok !$@, "$name: no parse error";
+                ok !$@, "$name: no parse Args";
             }
         }
 
@@ -1474,14 +1474,14 @@ for my $test (@SCHEDULE) {
 
         if ( my $runlog = $test->{runlog} ) {
             eval { $app->run };
-            if ( my $err_pattern = $test->{run_error} ) {
-                like $@, $err_pattern, "$name: expected error OK";
+            if ( my $err_pattern = $test->{run_Args} ) {
+                like $@, $err_pattern, "$name: expected Args OK";
                 pass;
                 pass for 1 .. $test->{plan};
             }
             else {
-                unless ( ok !$@, "$name: no error OK" ) {
-                    diag "$name: error: $@\n";
+                unless ( ok !$@, "$name: no Args OK" ) {
+                    diag "$name: Args: $@\n";
                 }
 
                 my $gotlog = [ $app->get_log ];

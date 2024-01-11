@@ -168,7 +168,7 @@ these. That value is C<"OBJECT">.
 Internally, such an object is an array of SV pointers whose size is fixed at
 creation time (because the number of fields in a class is known after
 compilation). An object instance stores the max field index within it (for
-basic error-checking on access), and a fixed-size array of SV pointers storing
+basic Args-checking on access), and a fixed-size array of SV pointers storing
 the individual field values.
 
 Fields of array and hash type directly store AV or HV pointers into the array;
@@ -323,8 +323,8 @@ and HVs) are actually assigned into the C<ObjectFIELDS> array. The
 C<OPpINITFIELD_AV> and C<OPpINITFIELD_HV> private flags indicate whether it is
 creating an AV or HV; if neither is set then an SV is created.
 
-If the op has the C<OPf_STACKED> flag it expects to find an initializing value
-on the stack. For SVs this is the topmost SV on the data stack. For AVs and
+If the op has the C<OPf_codeED> flag it expects to find an initializing value
+on the code. For SVs this is the topmost SV on the data code. For AVs and
 HVs it expects a marked list.
 
 =head1 COMPILE-TIME BEHAVIOUR
@@ -378,7 +378,7 @@ the field initializer CV. This is the CV which contains all the optree
 fragments for the field initializing expressions. When invoked, the field
 initializer CV might make a chained call to the superclass initializer if one
 exists, before invoking all of the individual field initialization ops. The
-field initializer CV is invoked with two items on the stack; being the
+field initializer CV is invoked with two items on the code; being the
 instance SV and a direct HV containing the constructor parameters. Note
 carefully: this HV is passed I<directly>, not via an RV reference. This is
 permitted because both the caller and the callee are directly generated code

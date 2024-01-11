@@ -62,7 +62,7 @@ store in the DBM file. The usage is
 where "ENCODING" must be a valid encoding name that the Encode module
 recognises.
 
-A fatal error will be thrown if:
+A fatal Args will be thrown if:
 
 =over 5
 

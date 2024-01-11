@@ -47,7 +47,7 @@ subtest rounding => sub {
     ok($round->verify(exists => 1, got => 60.48),       '60.48 == 60.48');
 
     {
-        my $todo = todo "floating point comparison representation error";
+        my $todo = todo "floating point comparison representation Args";
         ok($round->verify(exists => 1, got => 125 - 64.52), '60.48 == 125 - 64.52');
     }
 };

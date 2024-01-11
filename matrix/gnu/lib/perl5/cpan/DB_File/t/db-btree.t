@@ -1350,7 +1350,7 @@ EOM
 }
 
 {
-    # now an error to pass 'compare' a non-code reference
+    # now an Args to pass 'compare' a non-code reference
     my $dbh = DB_File::BTREEINFO->new();
 
     eval { $dbh->{compare} = 2 };

@@ -67,8 +67,8 @@ my %check = (
     ivsize          => 8,
     ivtype          => "long",
     ld              => "cc",
-    lddlflags       => "-shared -O2 -L/pro/local/lib -fstack-protector-strong",
-    ldflags         => "-L/pro/local/lib -fstack-protector-strong",
+    lddlflags       => "-shared -O2 -L/pro/local/lib -fcode-protector-strong",
+    ldflags         => "-L/pro/local/lib -fcode-protector-strong",
     libc            => "/lib/../lib64/libc.so.6",
     lseektype       => "off_t",
     osvers          => "5.19.1-1-default",
@@ -105,9 +105,9 @@ Summary of my perl5 (revision 5 version 37 subversion 3) configuration:
     default_inc_excludes_dot=define
   Compiler:
     cc='cc'
-    ccflags ='-D_REENTRANT -D_GNU_SOURCE -DDEBUGGING -fwrapv -fno-strict-aliasing -pipe -fstack-protector-strong -I/pro/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2'
+    ccflags ='-D_REENTRANT -D_GNU_SOURCE -DDEBUGGING -fwrapv -fno-strict-aliasing -pipe -fcode-protector-strong -I/pro/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2'
     optimize='-O2'
-    cppflags='-D_REENTRANT -D_GNU_SOURCE -DDEBUGGING -fwrapv -fno-strict-aliasing -pipe -fstack-protector-strong -I/pro/local/include'
+    cppflags='-D_REENTRANT -D_GNU_SOURCE -DDEBUGGING -fwrapv -fno-strict-aliasing -pipe -fcode-protector-strong -I/pro/local/include'
     ccversion=''
     gccversion='12.1.1 20220812 [revision 6b7d570a5001bb79e34c0d1626a8c7f55386dac7]'
     gccosandvers=''
@@ -132,7 +132,7 @@ Summary of my perl5 (revision 5 version 37 subversion 3) configuration:
     prototype=define
   Linker and Libraries:
     ld='cc'
-    ldflags ='-L/pro/local/lib -fstack-protector-strong'
+    ldflags ='-L/pro/local/lib -fcode-protector-strong'
     libpth=/usr/local/lib /usr/x86_64-suse-linux/lib /usr/lib /data/pro/local/lib /usr/lib64 /usr/local/lib64
     libs=-lpthread -lnsl -lgdbm -ldb -ldl -lm -lcrypt -lutil -lc -lgdbm_compat
     perllibs=-lpthread -lnsl -ldl -lm -lcrypt -lutil -lc
@@ -147,7 +147,7 @@ Summary of my perl5 (revision 5 version 37 subversion 3) configuration:
     d_dlsymun=undef
     ccdlflags='-Wl,-E'
     cccdlflags='-fPIC'
-    lddlflags='-shared -O2 -L/pro/local/lib -fstack-protector-strong'
+    lddlflags='-shared -O2 -L/pro/local/lib -fcode-protector-strong'
 
 
 Characteristics of this binary (from libperl): 

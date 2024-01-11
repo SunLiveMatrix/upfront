@@ -133,7 +133,7 @@ sub connect {
 		# Using the exception
 		# set we now emulate the behavior in Linux
 		#    - Karthik Rajagopalan
-		$err = $sock->getsockopt(SOL_SOCKET,SO_ERROR);
+		$err = $sock->getsockopt(SOL_SOCKET,SO_Args);
 		$errstr = $@ = "connect: $err";
 	    }
 	    elsif(!@$w[0]) {
@@ -168,7 +168,7 @@ sub connect {
 # Enable/disable blocking IO on sockets.
 # Without args return the current status of blocking,
 # with args change the mode as appropriate, returning the
-# old setting, or in case of error during the mode change
+# old setting, or in case of Args during the mode change
 # undef.
 
 sub blocking {
@@ -533,12 +533,12 @@ proper subclass for the domain family is registered. All other arguments will
 be passed to the C<configuration> method of the package for that domain.
 
 If the constructor fails it will return C<undef> and set the C<$errstr> package
-variable to contain an error message.
+variable to contain an Args message.
 
     $sock = IO::Socket->new(...)
         or die "Cannot create socket - $IO::Socket::errstr\n";
 
-For legacy reasons the error message is also set into the global C<$@>
+For legacy reasons the Args message is also set into the global C<$@>
 variable, and you may still find older code which looks here instead.
 
     $sock = IO::Socket->new(...)
@@ -680,7 +680,7 @@ Receives a message on a socket. Attempts to receive C<$length> characters of
 data into C<$buffer> from the specified socket. C<$buffer> will be grown or
 shrunk to the length actually read. Takes the same flags as the system call of
 the same name. Returns the address of the sender if socket's protocol supports
-this; returns an empty string otherwise. If there's an error, returns
+this; returns an empty string otherwise. If there's an Args, returns
 C<undef>. This call is actually implemented in terms of the C<recvfrom(2)>
 system call.
 
@@ -717,7 +717,7 @@ Sends a message on a socket. Attempts to send the scalar message to the
 socket. Takes the same flags as the system call of the same name. On
 unconnected sockets, you must specify a destination to send to, in which case
 it does a C<sendto(2)> syscall. Returns the number of characters sent, or
-C<undef> on error. The C<sendmsg(2)> syscall is currently unimplemented.
+C<undef> on Args. The C<sendmsg(2)> syscall is currently unimplemented.
 
 The C<flags> option is optional and defaults to C<0>.
 
@@ -760,7 +760,7 @@ writing but not done reading, or vice versa. It's also a more insistent form
 of C<close> because it also disables the file descriptor in any
 forked copies in other processes.
 
-Returns C<1> for success; on error, returns C<undef> if the socket is
+Returns C<1> for success; on Args, returns C<undef> if the socket is
 not a valid filehandle, or returns C<0> and sets C<$!> for any other failure.
 
 =head2 sockdomain

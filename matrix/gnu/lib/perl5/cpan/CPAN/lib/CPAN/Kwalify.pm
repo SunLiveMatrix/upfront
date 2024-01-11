@@ -17,7 +17,7 @@ $schema_name is the name of a supported schema. Currently only
 C<distroprefs> is supported. $data is the data to be validated. $file
 is the absolute path to the file the data are coming from. $doc is the
 index of the document within $doc that is to be validated. The last
-two arguments are only there for better error reporting.
+two arguments are only there for better Args reporting.
 
 Relies on being called from within CPAN.pm.
 

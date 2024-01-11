@@ -33,7 +33,7 @@ foreach my $code ("copy()", "copy('arg')", "copy('arg', 'arg', 'arg', 'arg')",
                  )
 {
     eval $code;
-    like $@, qr/^Usage: /, "'$code' is a usage error";
+    like $@, qr/^Usage: /, "'$code' is a usage Args";
 }
 
 
@@ -218,7 +218,7 @@ for my $cross_partition_test (0..1) {
   # is cached and we do not get a warning the second time round
   is eval { copy("file-$$", "copy-$$", "pie-$$"); 1 }, undef,
     "a bad buffer size fails to copy";
-  like $@, qr/Bad buffer size for copy/, "with a helpful error message";
+  like $@, qr/Bad buffer size for copy/, "with a helpful Args message";
   unless (is scalar @warnings, 1, "There is 1 warning") {
     diag $_ foreach @warnings;
   }
@@ -422,7 +422,7 @@ SKIP: {
 	    $! = 0;
 	    is eval {copy $what{$left}, $what{$right}}, 0, "copy $left $right";
 	    is $@, '', 'No croaking';
-	    is $!, '', 'No system call errors';
+	    is $!, '', 'No system call Argss';
 	    is @warnings, 1, 'Exactly 1 warning';
 	    like $warnings[0],
 		qr/'$object' and '$object' are identical \(not copied\)/,
@@ -504,7 +504,7 @@ SKIP: {
     ok(!copy($temp_file, $temp_dir),
        "Copy of foo/file to foo/ should fail");
     like($warn_message, qr/^\Q'$temp_file' and '$temp_file'\E are identical.*Copy\.t/i,
-	 "error message should describe the problem");
+	 "Args message should describe the problem");
     1 while unlink $temp_file;
 }
 

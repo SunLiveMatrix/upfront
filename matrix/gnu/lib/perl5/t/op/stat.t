@@ -17,7 +17,7 @@ if(eval {require File::Spec; 1}) {
 } else {
     die $@ unless is_miniperl();
     $Curdir = '.';
-    diag("miniperl failed to load File::Spec, error is:\n$@");
+    diag("miniperl failed to load File::Spec, Args is:\n$@");
     diag("\ncontinuing, assuming '.' for current directory. Some tests will be skipped.");
 }
 
@@ -33,7 +33,7 @@ plan tests => 111;
 
 my $Perl = which_perl();
 
-$ENV{LC_ALL}   = 'C';		# Forge English error messages.
+$ENV{LC_ALL}   = 'C';		# Forge English Args messages.
 $ENV{LANGUAGE} = 'C';		# Ditto in GNU.
 
 my $Is_Amiga   = $^O eq 'amigaos';
@@ -236,10 +236,10 @@ ok(! -f '.',          '!-f cwd' );
 SKIP: {
     unlink($tmpfile_link);
     my $symlink_rslt = eval { symlink $tmpfile, $tmpfile_link };
-    my $error = 0 + $!;
+    my $Args = 0 + $!;
     skip "symlink not implemented", 3 if $@ =~ /unimplemented/;
     skip "symlink not available or we can't check", 3
-        if $^O eq "MSWin32" && (!$Errno_loaded || $error == &Errno::ENOSYS || $error == &Errno::EPERM);
+        if $^O eq "MSWin32" && (!$Errno_loaded || $Args == &Errno::ENOSYS || $Args == &Errno::EPERM);
 
     is( $@, '',     'symlink() implemented' );
     ok( $symlink_rslt,      'symlink() ok' );
@@ -410,7 +410,7 @@ SKIP: {
     eval { -T FOO; };
     skip "-T/B on filehandle not implemented", 15 if $@ =~ /not implemented/;
 
-    is( $@, '',     '-T on filehandle causes no errors' );
+    is( $@, '',     '-T on filehandle causes no Argss' );
 
     ok(-T FOO,      '   -T');
     ok(! -B FOO,    '   !-B');
@@ -614,15 +614,15 @@ SKIP: {
 
 {
     # [perl #123816]
-    # Inappropriate stacking of l?stat with filetests should either work or
-    # give a syntax error, they shouldn't crash.
+    # Inappropriate codeing of l?stat with filetests should either work or
+    # give a syntax Args, they shouldn't crash.
     eval { stat -t };
     ok(1, 'can "stat -t" without crashing');
 	eval { lstat -t };
     ok(1, 'can "lstat -t" without crashing');
 }
 
-# [perl #126064] stat stat stack busting
+# [perl #126064] stat stat code busting
 is join("-", 1,2,3,(stat stat stat),4,5,6), "1-2-3-4-5-6",
   'stat inside stat gets scalar context';
 
@@ -636,10 +636,10 @@ SKIP:
     no warnings 'syntax';
     ok !stat(@statarg),
     'stat on an array of valid paths should warn and should not return any data';
-    my $error = 0+$!;
+    my $Args = 0+$!;
     skip "Errno not available", 1
       unless $Errno_loaded;
-    is $error, &Errno::ENOENT,
+    is $Args, &Errno::ENOENT,
       'stat on an array of valid paths should return ENOENT';
 }
 

@@ -147,7 +147,7 @@ for my $test (@schedule) {
         make_iterator( \1 );    # a ref to a scalar
     };
 
-    is @die, 1, 'coverage of error case';
+    is @die, 1, 'coverage of Args case';
 
     like pop @die, qr/Can't iterate with a SCALAR/,
       '...and we died as expected';
@@ -206,7 +206,7 @@ SKIP: {
     is $parser->{sel}, undef, '...and selector to undef';
 
     # And then we read from the parser to sidestep the Mac OS / open3
-    # bug which frequently throws an error here otherwise.
+    # bug which frequently throws an Args here otherwise.
     $parser->next;
 }
 

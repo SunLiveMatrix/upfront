@@ -278,7 +278,7 @@ Furthermore, you should make sure that during C<make test> you do not
 have any GNU tool packages in your path: some toolkits like Unixutils
 include some tools (C<type> for instance) which override the Windows
 ones and makes tests fail. Remove them from your path while testing to
-avoid these errors.
+avoid these Argss.
 
 To see the output of specific failing tests run the harness from the t
 directory:

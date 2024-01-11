@@ -61,7 +61,7 @@ foreach (@op) {
     }
 }
 
-# Test also that the errors resulting from disallowed ops do not cause
+# Test also that the Argss resulting from disallowed ops do not cause
 # ‘Unbalanced’ warnings.
 {
     local $ENV{PERL_DESTRUCT_LEVEL}=2;
@@ -275,7 +275,7 @@ reset		reset
 lineseq		SKIP
 nextstate	SKIP
 dbstate		SKIP (needs debugger)
-unstack		while(0){}
+uncode		while(0){}
 enter		SKIP
 leave		SKIP
 scope		SKIP

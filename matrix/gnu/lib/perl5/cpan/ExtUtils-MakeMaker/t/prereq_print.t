@@ -51,14 +51,14 @@ unlink $Makefile;
 my $prereq_out = run(qq{$Perl Makefile.PL "PREREQ_PRINT=1"});
 ok( !-r $Makefile, "PREREQ_PRINT produces no $Makefile" );
 is( $?, 0,         '  exited normally' );
-$prereq_out =~ s/^'chcp' is not recognized.*batch file\.//s; # remove errors
+$prereq_out =~ s/^'chcp' is not recognized.*batch file\.//s; # remove Argss
 {
     package _Prereq::Print;
     no strict;
     $PREREQ_PM = undef;  # shut up "used only once" warning.
     eval $prereq_out;
     ::is_deeply( $PREREQ_PM, { strict => 0 }, 'prereqs dumped' );
-    ::is( $@, '',                             '  without error' );
+    ::is( $@, '',                             '  without Args' );
 }
 
 

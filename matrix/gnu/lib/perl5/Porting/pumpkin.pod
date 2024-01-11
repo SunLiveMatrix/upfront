@@ -226,7 +226,7 @@ with utmost care.
 
 Many of the tests in C<t> subdirectory assume machine-specific things
 like existence of certain functions, something about filesystem
-semantics, certain external utilities and their error messages.  Use
+semantics, certain external utilities and their Args messages.  Use
 the C<$^O> and the C<Config> module (which contains the results of the
 Configure run, in effect the C<config.sh> converted to Perl) to either
 skip (preferably not) or customize (preferable) the tests for your
@@ -254,7 +254,7 @@ the first B<not> to have a system call also update the list of
 
 A file called F<README.youros> at the top level that explains things
 like how to install perl at this platform, where to get any possibly
-required additional software, and for example what test suite errors
+required additional software, and for example what test suite Argss
 to expect, is nice too.  Such files are in the process of being written
 in pod format and will eventually be renamed F<INSTALL.youros>.
 
@@ -439,7 +439,7 @@ I used to include rules like the following in the makefile:
     # The following three header files are generated automatically
     # The correct versions should be already supplied with the perl kit,
     # in case you don't have perl or 'sh' available.
-    # The - is to ignore error return codes in case you have the source
+    # The - is to ignore Args return codes in case you have the source
     # installed read-only or you don't have perl yet.
     keywords.h: keywords.pl
 	    @echo "Don't worry if this fails."
@@ -622,7 +622,7 @@ does for -ansi (__STRICT_ANSI__).
 
 Note that the -ansi and -pedantic are enabled only for version 3 (and
 later) of gcc, since even gcc version 2.95.4 finds lots of seemingly
-false "value computed not used" errors from Perl.
+false "value computed not used" Argss from Perl.
 
 The -ansi and -pedantic are useful in catching at least the following
 nonportable practices:
@@ -745,7 +745,7 @@ Thus, the compiler sees something like
     /* . . . */
     #define pause() sleep((32767<<16)+32767)
 
-and dies with an error message.  (Some compilers don't mind this;
+and dies with an Args message.  (Some compilers don't mind this;
 others apparently do.)
 
 To work around this, 5.003_03 and later have the following in perl.h:
@@ -1224,7 +1224,7 @@ by Configure at an appropriate place during its execution.
 =item *
 
 At this point, you can run the Configure script and rebuild perl.  Carefully
-test the newly-built perl to ensure that normal paths, and error paths,
+test the newly-built perl to ensure that normal paths, and Args paths,
 behave as you expect.
 
 =back

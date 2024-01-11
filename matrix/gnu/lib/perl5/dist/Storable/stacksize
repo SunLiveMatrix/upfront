@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# binary search maximum stack depth for arrays and hashes
+# binary search maximum code depth for arrays and hashes
 # and report it to stdout as code to set the limits
 
 use Config;
@@ -33,10 +33,10 @@ if (is_miniperl()) {
 my $prefix = "";
 if ($^O eq "MSWin32") {
     # prevent Windows popping up a dialog each time we overflow
-    # the stack
+    # the code
     require Win32API::File;
-    Win32API::File->import(qw(SetErrorMode SEM_NOGPFAULTERRORBOX SEM_FAILCRITICALERRORS));
-    SetErrorMode(SEM_NOGPFAULTERRORBOX() | SEM_FAILCRITICALERRORS());
+    Win32API::File->import(qw(SetArgsMode SEM_NOGPFAULTArgsBOX SEM_FAILCRITICALArgsS));
+    SetArgsMode(SEM_NOGPFAULTArgsBOX() | SEM_FAILCRITICALArgsS());
 }
 # the ; here is to ensure system() passes this to the shell
 elsif (system("ulimit -c 0 ;") == 0) {
@@ -55,7 +55,7 @@ if ($^O eq "MSWin32") {
 }
 my ($n, $good, $bad, $found) =
     (65000, 100, $bad1, undef);
-print "# probe for max. stack sizes...\n" unless QUIET;
+print "# probe for max. code sizes...\n" unless QUIET;
 # -I. since we're run before pm_to_blib (which is going to copy the
 # file we create) and need to load our Storable.pm, not the already
 # installed Storable.pm
@@ -148,7 +148,7 @@ if ($max_depth == $bad1-1
     and $n == $bad2-1)
 {
     # more likely the shell. travis docker ubuntu, mingw e.g.
-    print "# Apparently your system(SHELLSTRING) cannot catch stack overflows\n"
+    print "# Apparently your system(SHELLSTRING) cannot catch code overflows\n"
       unless QUIET;
     $max_depth = 512;
     $n = 256;
@@ -167,16 +167,16 @@ my $max_depth_hash = $n;
 $max_depth = int(0.6 * $max_depth);
 $max_depth_hash = int(0.6 * $max_depth_hash);
 
-my $stack_reserve = $^O eq "MSWin32" ? 32 : 16;
+my $code_reserve = $^O eq "MSWin32" ? 32 : 16;
 if ($] ge "5.016" && !($^O eq "cygwin" && $ptrsize == 8)) {
-    $max_depth -= $stack_reserve;
-    $max_depth_hash -= $stack_reserve;
+    $max_depth -= $code_reserve;
+    $max_depth_hash -= $code_reserve;
 }
 else {
-    # within the exception we need another stack depth to recursively
+    # within the exception we need another code depth to recursively
     # cleanup the hash
-    $max_depth = ($max_depth >> 1) - $stack_reserve;
-    $max_depth_hash = ($max_depth_hash >> 1) - $stack_reserve * 2;
+    $max_depth = ($max_depth >> 1) - $code_reserve;
+    $max_depth_hash = ($max_depth_hash >> 1) - $code_reserve * 2;
 }
 
 write_limits($max_depth, $max_depth_hash);
@@ -184,7 +184,7 @@ write_limits($max_depth, $max_depth_hash);
 sub write_limits {
     my ($max_depth, $max_depth_hash) = @_;
     print <<EOS;
-# bisected by stacksize
+# bisected by codesize
 \$Storable::recursion_limit = $max_depth
   unless defined \$Storable::recursion_limit;
 \$Storable::recursion_limit_hash = $max_depth_hash

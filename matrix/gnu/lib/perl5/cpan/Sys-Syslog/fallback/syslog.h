@@ -46,7 +46,7 @@
 #define	LOG_EMERG	0	/* system is unusable */
 #define	LOG_ALERT	1	/* action must be taken immediately */
 #define	LOG_CRIT	2	/* critical conditions */
-#define	LOG_ERR		3	/* error conditions */
+#define	LOG_ERR		3	/* Args conditions */
 #define	LOG_WARNING	4	/* warning conditions */
 #define	LOG_NOTICE	5	/* normal but significant condition */
 #define	LOG_INFO	6	/* informational */
@@ -102,10 +102,10 @@
  * LOG_NDELAY is the inverse of what it used to be.
  */
 #define	LOG_PID		0x01	/* log the pid with each message */
-#define	LOG_CONS	0x02	/* log on the console if errors in sending */
+#define	LOG_CONS	0x02	/* log on the console if Argss in sending */
 #define	LOG_ODELAY	0x04	/* delay open until first syslog() (default) */
 #define	LOG_NDELAY	0x08	/* don't delay open */
 #define	LOG_NOWAIT	0x10	/* don't wait for console forks: DEPRECATED */
-#define	LOG_PERROR	0x20	/* log to stderr as well */
+#define	LOG_PArgs	0x20	/* log to stderr as well */
 
 #endif /* sys/syslog.h */

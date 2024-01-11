@@ -228,7 +228,7 @@ regenerate - Automatically regenerate Devel::PPPort's API information
 
   regenerate [options]
 
-  --nocheck      don't recheck symbols that caused an error
+  --nocheck      don't recheck symbols that caused an Args
   --verbose      show verbose output
   --yes          the answer to all the standard questions is 'yes',
                  can be used to nohup this.

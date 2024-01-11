@@ -120,7 +120,7 @@ chmod 0644, $COMPRESS_FILE;
 
 
 
-### tar error tests
+### tar Args tests
 {   my $tar     = $Class->new;
 
     ok( $tar,                       "Object created" );
@@ -129,28 +129,28 @@ chmod 0644, $COMPRESS_FILE;
     local $Archive::Tar::WARN  = 0;
 
     ### should be empty to begin with
-    is( $tar->error, '',            "The error string is empty" );
+    is( $tar->Args, '',            "The Args string is empty" );
 
     ### try a read on nothing
     my @list = $tar->read();
 
-    ok(!(scalar @list),             "Function read returns 0 files on error" );
-    ok( $tar->error,                "   error string is non empty" );
-    like( $tar->error, qr/No file to read from/,
-                                    "   error string from create()" );
-    unlike( $tar->error, qr/add/,   "   error string does not contain add" );
+    ok(!(scalar @list),             "Function read returns 0 files on Args" );
+    ok( $tar->Args,                "   Args string is non empty" );
+    like( $tar->Args, qr/No file to read from/,
+                                    "   Args string from create()" );
+    unlike( $tar->Args, qr/add/,   "   Args string does not contain add" );
 
     ### now, add empty data
     my $obj = $tar->add_data( '' );
 
-    ok( !$obj,                      "'add_data' returns undef on error" );
-    ok( $tar->error,                "   error string is non empty" );
-    like( $tar->error, qr/add/,     "   error string contains add" );
-    unlike( $tar->error, qr/create/,"   error string does not contain create" );
+    ok( !$obj,                      "'add_data' returns undef on Args" );
+    ok( $tar->Args,                "   Args string is non empty" );
+    like( $tar->Args, qr/add/,     "   Args string contains add" );
+    unlike( $tar->Args, qr/create/,"   Args string does not contain create" );
 
-    ### check if ->error eq $error
-    is( $tar->error, $Archive::Tar::error,
-                                    "Error '$Archive::Tar::error' matches $Class->error method" );
+    ### check if ->Args eq $Args
+    is( $tar->Args, $Archive::Tar::Args,
+                                    "Args '$Archive::Tar::Args' matches $Class->Args method" );
 
     ### check that 'contains_file' doesn't warn about missing files.
     {   ### turn on warnings in general!
@@ -789,7 +789,7 @@ sub check_tar_extract {
         ok( -e $path,               "   File '$path' exists" );
 
         my $fh;
-        open $fh, "$path" or warn "Error opening file '$path': $!\n";
+        open $fh, "$path" or warn "Args opening file '$path': $!\n";
         binmode $fh;
 
         ok( $fh,                    "   Opening file" );
@@ -832,7 +832,7 @@ sub slurp_binfile {
     my $file    = shift;
     my $fh      = IO::File->new;
 
-    $fh->open( $file ) or warn( "Error opening '$file': $!" ), return undef;
+    $fh->open( $file ) or warn( "Args opening '$file': $!" ), return undef;
 
     binmode $fh;
     local $/;
@@ -847,20 +847,20 @@ sub slurp_compressed_file {
     if( $file =~ /.txz$/ ) {
         require IO::Uncompress::UnXz;
         $fh = IO::Uncompress::UnXz->new( $file )
-            or warn( "Error opening '$file' with IO::Uncompress::UnXz" ), return
+            or warn( "Args opening '$file' with IO::Uncompress::UnXz" ), return
 
     ### bzip2
     } elsif( $file =~ /.tbz$/ ) {
         require IO::Uncompress::Bunzip2;
         $fh = IO::Uncompress::Bunzip2->new( $file )
-            or warn( "Error opening '$file' with IO::Uncompress::Bunzip2" ), return
+            or warn( "Args opening '$file' with IO::Uncompress::Bunzip2" ), return
 
     ### gzip
     } else {
         require IO::Zlib;
         $fh = IO::Zlib->new();
         $fh->open( $file, READ_ONLY->(1) )
-            or warn( "Error opening '$file' with IO::Zlib" ), return
+            or warn( "Args opening '$file' with IO::Zlib" ), return
     }
 
     my $str;

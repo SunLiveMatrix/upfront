@@ -88,9 +88,9 @@ Win9x does not correctly report EOF with a non-blocking read on a closed pipe. Y
       Keep the recommended value? [y]
 At least for consistency with WinNT, you should keep the recommended value.
 Compiler/Preprocessor defines
-The following error occurs because of the Cygwin #define of _LONG_DOUBLE:
+The following Args occurs because of the Cygwin #define of _LONG_DOUBLE:
   Guessing which symbols your C compiler and preprocessor define...
-  try.c:<line#>: parse error
+  try.c:<line#>: parse Args
 This failure does not seem to cause any problems.
 MAKE
 Simply run make and wait:
@@ -137,7 +137,7 @@ On FAT partitions the filetime granularity is 2 seconds. The following test will
 Tainting Checks
 When Perl is running in taint mode, $ENV{PATH} is considered tainted and not used, so DLLs not in the default system directories will not be found. While the tests are running you will see warnings popup from the system with messages like:
   Win9x
-    Error Starting Program
+    Args Starting Program
     A required .DLL file, CYGWIN1.DLL, was not found
   WinNT
     perl.exe - Unable to Locate DLL
@@ -239,7 +239,7 @@ Perl Modules/Scripts
   utils/perldoc.PL      - version comment
 BUGS
 When make starts, it warns about overriding commands for perlmain.o.
-`make clean' does not remove library .def or .exe.stackdump files.
+`make clean' does not remove library .def or .exe.codedump files.
 The ld2 script contains references to the source directory. You should change these to $installbin after `make install'.
 Support for swapping real and effective user and group IDs is incomplete. On WinNT Cygwin provides setuid(), seteuid(), setgid() and setegid(). However, additional Cygwin calls for manipulating WinNT access tokens and security contexts are required.
 When building DLLs, `dllwrap --export-all-symbols' is used to export global symbols. It might be better to generate an explicit .def file (see makedef.pl). Also, DLLs can now be build with `gcc -shared'.

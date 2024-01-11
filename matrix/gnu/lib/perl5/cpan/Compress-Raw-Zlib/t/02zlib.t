@@ -54,7 +54,7 @@ my $len   = length $hello ;
 test_zlib_header_matches_library();
 
 {
-    title "Error Cases" ;
+    title "Args Cases" ;
 
     eval { new Compress::Raw::Zlib::Deflate(-Level) };
     like $@,  mkErr("^Compress::Raw::Zlib::Deflate::new: Expected even number of parameters, got 1") ;
@@ -137,7 +137,7 @@ test_zlib_header_matches_library();
     ok $k, "Compress::Raw::Zlib::Inflate ok" ;
     cmp_ok $err, '==', Z_OK, "status is Z_OK" ;
 
-    ok ! defined $k->msg(), "No error messages" ;
+    ok ! defined $k->msg(), "No Args messages" ;
     is $k->total_in(), 0, "total_in() == 0" ;
     is $k->total_out(), 0, "total_out() == 0" ;
     my $GOT = '';
@@ -153,7 +153,7 @@ test_zlib_header_matches_library();
 
     cmp_ok $status, '==', Z_STREAM_END, "Got Z_STREAM_END" ;
     is $GOT, $hello, "uncompressed data matches ok" ;
-    ok ! defined $k->msg(), "No error messages" ;
+    ok ! defined $k->msg(), "No Args messages" ;
     is $k->total_in(), length $Answer, "total_in ok" ;
     is $k->total_out(), length $hello , "total_out ok";
 
@@ -472,7 +472,7 @@ SKIP:
     {
         my $byte = shift @Answer;
         $status = $k->inflateSync($byte) ;
-        last unless $status == Z_DATA_ERROR;
+        last unless $status == Z_DATA_Args;
     }
 
     cmp_ok $status, '==', Z_OK;
@@ -487,7 +487,7 @@ SKIP:
         last if $status == Z_STREAM_END or $status != Z_OK ;
     }
 
-    # Z_STREAM_END returned by 1.12.2, Z_DATA_ERROR for older zlib
+    # Z_STREAM_END returned by 1.12.2, Z_DATA_Args for older zlib
     # ZLIB_NG has the fix for all versions
     if (ZLIB_VERNUM >= ZLIB_1_2_12_0 ||  Compress::Raw::Zlib::is_zlibng)
     {
@@ -495,7 +495,7 @@ SKIP:
     }
     else
     {
-        cmp_ok $status, '==', Z_DATA_ERROR ;
+        cmp_ok $status, '==', Z_DATA_Args ;
     }
 
     is $GOT, $goodbye ;
@@ -522,14 +522,14 @@ SKIP:
 
     $GOT = '';
     $status = $k->inflate($rest, $GOT);
-    # Z_STREAM_END returned by 1.12.2, Z_DATA_ERROR for older zlib
+    # Z_STREAM_END returned by 1.12.2, Z_DATA_Args for older zlib
     if (ZLIB_VERNUM >= ZLIB_1_2_12_0 || Compress::Raw::Zlib::is_zlibng)
     {
         cmp_ok $status, '==', Z_STREAM_END ;
     }
     else
     {
-        cmp_ok $status, '==', Z_DATA_ERROR ;
+        cmp_ok $status, '==', Z_DATA_Args ;
     }
 
     is $GOT, $goodbye ;
@@ -556,7 +556,7 @@ SKIP:
     cmp_ok $status, '==', Z_OK ;
     $input .= $hello;
 
-    # error cases
+    # Args cases
     eval { $x->deflateParams() };
     like $@, mkErr('^Compress::Raw::Zlib::deflateParams needs Level and\/or Strategy');
 
@@ -920,7 +920,7 @@ SKIP:
 SKIP:
 {
 
-    title "gzip error mode";
+    title "gzip Args mode";
     # Create gzip -
     # read with no special windowbits setting - this will fail
     # then read with WANT_GZIP_OR_ZLIB - thi swill work
@@ -953,7 +953,7 @@ SKIP:
     cmp_ok $err, '==', Z_OK, "status is Z_OK" ;
 
     $status = $k->inflate($X, $GOT) ;
-    cmp_ok $status, '==', Z_DATA_ERROR, "Got Z_DATA_ERROR" ;
+    cmp_ok $status, '==', Z_DATA_Args, "Got Z_DATA_Args" ;
 
     $GOT = '';
     ($k, $err) = new Compress::Raw::Zlib::Inflate(
@@ -969,7 +969,7 @@ SKIP:
 
 SKIP:
 {
-    title "gzip/zlib error mode";
+    title "gzip/zlib Args mode";
     # Create zlib -
     # read with no WANT_GZIP windowbits setting - this will fail
     # then read with WANT_GZIP_OR_ZLIB - thi swill work
@@ -1001,7 +1001,7 @@ SKIP:
     cmp_ok $err, '==', Z_OK, "status is Z_OK" ;
 
     $status = $k->inflate($X, $GOT) ;
-    cmp_ok $status, '==', Z_DATA_ERROR, "Got Z_DATA_ERROR" ;
+    cmp_ok $status, '==', Z_DATA_Args, "Got Z_DATA_Args" ;
 
     $GOT = '';
     ($k, $err) = new Compress::Raw::Zlib::Inflate(

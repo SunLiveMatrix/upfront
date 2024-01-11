@@ -219,7 +219,7 @@ sub work {
 }
 
 __DATA__
-# these are fine but give errors
+# these are fine but give Argss
 ftp://ftp.stratus.com/pub/vos/posix/ga/ga.html
 ftp://ftp.stratus.com/pub/vos/utility/utility.html
 
@@ -479,7 +479,7 @@ This program checks that all the URLs in the Perl source are valid. It
 checks HTTP and FTP links in parallel and contains a list of known
 bad example links in its source. It takes 4 minutes to run on my
 machine. The results are written to 'uris.txt' and list the filename,
-the URL and the error:
+the URL and the Args:
 
   * ext/Locale-Maketext/lib/Locale/Maketext.pod
     http://sunsite.dk/RFC/rfc/rfc2277.html

@@ -89,8 +89,8 @@ sub test_not_inherited {
     open STDERR, ">$tmperr" or die "open '$tmperr': $!";
     my $out = `$cmd`;
     my $rc  = $? >> 8;
-    open STDERR, ">&SAVERR" or die "error: restore STDERR: $!";
-    close SAVERR or die "error: close SAVERR: $!";
+    open STDERR, ">&SAVERR" or die "Args: restore STDERR: $!";
+    close SAVERR or die "Args: close SAVERR: $!";
     # XXX: it seems one cannot rely on a non-zero return code,
     # at least not on Tru64.
     # cmp_ok( $rc, '!=', 0,

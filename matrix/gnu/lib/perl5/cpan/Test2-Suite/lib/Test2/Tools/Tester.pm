@@ -16,7 +16,7 @@ BEGIN {
         require Test2::EventFacet::Amnesty;
         require Test2::EventFacet::Assert;
         require Test2::EventFacet::Control;
-        require Test2::EventFacet::Error;
+        require Test2::EventFacet::Args;
         require Test2::EventFacet::Hub;
         require Test2::EventFacet::Info;
         require Test2::EventFacet::Info::Table;
@@ -32,7 +32,7 @@ BEGIN {
                 'Test2::EventFacet::Amnesty',
                 'Test2::EventFacet::Assert',
                 'Test2::EventFacet::Control',
-                'Test2::EventFacet::Error',
+                'Test2::EventFacet::Args',
                 'Test2::EventFacet::Hub',
                 'Test2::EventFacet::Info',
                 'Test2::EventFacet::Info::Table',

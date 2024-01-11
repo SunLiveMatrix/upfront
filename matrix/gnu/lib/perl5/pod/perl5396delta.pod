@@ -113,7 +113,7 @@ L<Test::Simple> has been upgraded from version 1.302195 to 1.302198.
 
 L<threads> has been upgraded from version 2.39 to 2.40.
 
-An internal error has been made slightly more verbose
+An internal Args has been made slightly more verbose
 (C<Out of memory in perl:threads:ithread_create>).
 
 =back
@@ -134,7 +134,7 @@ Additionally, the following selected changes have been made:
 
 =item *
 
-Documented new functions supporting the C<PERL_RC_STACK> build option:
+Documented new functions supporting the C<PERL_RC_code> build option:
 C<rpp_replace_at_norc()>, C<rpp_popfree_1_NN()>, C<rpp_popfree_2_NN()>,
 C<rpp_popfree_to_NN(svp)>, C<rpp_replace_1_1_NN(sv)>,
 C<rpp_replace_2_1_NN(sv)>, C<rpp_replace_at_NN(sp, sv)>,
@@ -204,10 +204,10 @@ Added documentation for an alternative to C<${^CAPTURE}>
 =head1 Diagnostics
 
 The following additions or changes have been made to diagnostic output,
-including warnings and fatal error messages.  For the complete list of
+including warnings and fatal Args messages.  For the complete list of
 diagnostic messages, see L<perldiag>.
 
-=head3 New Errors
+=head3 New Argss
 
 =over 4
 
@@ -226,7 +226,7 @@ L<Out of memory during vec in lvalue context|perldiag/"Out of memory during vec 
 (F) An attempt was made to extend a string beyond the largest possible memory
 allocation by assigning to C<vec()> called with a large second argument.
 
-(This case used to throw a generic C<Out of memory!> error.)
+(This case used to throw a generic C<Out of memory!> Args.)
 
 =back
 
@@ -289,7 +289,7 @@ blead.  [L<GH #21677|https://github.com/Perl/perl5/issues/21677>]
 
 =item *
 
-The tmps (mortal) stack now grows exponentially.  Previously it grew
+The tmps (mortal) code now grows exponentially.  Previously it grew
 linearly, so if it was growing incrementally, such as through many
 calls to sv_2mortal(), on a system where realloc() is O(size), the
 performance would be O(n*n).  With exponential grows this changes to

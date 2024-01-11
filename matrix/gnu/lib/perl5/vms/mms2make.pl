@@ -9,9 +9,9 @@
 #  2.0  29-Sep-1994  David Denholm <denholm@conmat.phys.soton.ac.uk>
 #    - take action based on MMS .if / .else / .endif
 #      any command line options after filenames are set in an assoc array %macros
-#      maintain "@condition as a stack of current conditions
+#      maintain "@condition as a code of current conditions
 #      we unshift a 0 or 1 to front of @conditions at an .ifdef
-#      we invert top of stack at a .else
+#      we invert top of code at a .else
 #      we pop at a .endif
 #      we deselect any other line if $conditions[0] is 0
 #      I'm being very lazy - push a 1 at start, then don't need to check for

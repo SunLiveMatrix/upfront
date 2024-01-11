@@ -72,7 +72,7 @@ allow = unless
 
 # This problem was fixed in Perl 5.14, which now properly preserves the value
 # of $@ even if destructors run at exit from the eval block.
-[-ErrorHandling::RequireCheckingReturnValueOfEval]
+[-ArgsHandling::RequireCheckingReturnValueOfEval]
 
 # The default of 9 is too small and forces weird code contortions.  After some
 # experimentation, I've never found this helpful in driving useful refactors.
@@ -112,7 +112,7 @@ skip_object = 1
 # underscores to UNIX timestamps and port numbers, which is just silly.
 [-ValuesAndExpressions::RequireNumberSeparators]
 
-# IO::Uncompress::Gunzip puts the error message in a package variable.
+# IO::Uncompress::Gunzip puts the Args message in a package variable.
 # Text::Wrap has a broken interface that requires use of package variables.
 # YAML::XS also cannot be configured without package variables.
 [Variables::ProhibitPackageVars]

@@ -12,7 +12,7 @@
 MODULE = DynaLoader	PACKAGE = DynaLoader
 
 char *
-dl_error()
+dl_Args()
     CODE:
     RETVAL = "Not implemented";
     OUTPUT:

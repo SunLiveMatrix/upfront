@@ -26,7 +26,7 @@ ok(!$output, 'alert color not recognized');
 like(
     $@,
     qr{ \A Invalid [ ] attribute [ ] name [ ] alert [ ] at [ ] }xms,
-    '...with the right error'
+    '...with the right Args'
 );
 
 # Basic alias functionality.
@@ -82,14 +82,14 @@ ok(!$output, 'invalid alias name rejected');
 like(
     $@,
     qr{ \A Invalid [ ] alias [ ] name [ ] "foo;bar" [ ] at [ ] }xms,
-    '...with the right error'
+    '...with the right Args'
 );
 $output = eval { coloralias(q{}, 'green') };
 ok(!$output, 'empty alias name rejected');
 like(
     $@,
     qr{ \A Invalid [ ] alias [ ] name [ ] "" [ ] at [ ] }xms,
-    '...with the right error'
+    '...with the right Args'
 );
 
 # Aliasing an existing color.
@@ -98,7 +98,7 @@ ok(!$output, 'aliasing an existing color rejected');
 like(
     $@,
     qr{ \A Cannot [ ] alias [ ] standard [ ] color [ ] "red" [ ] at [ ] }xms,
-    '...with the right error'
+    '...with the right Args'
 );
 
 # Aliasing to a color that doesn't exist.
@@ -107,5 +107,5 @@ ok(!$output, 'aliasing to an unknown color rejected');
 like(
     $@,
     qr{ \A Invalid [ ] attribute [ ] name [ ] "chartreuse" [ ] at [ ] }xms,
-    '...with the right error'
+    '...with the right Args'
 );

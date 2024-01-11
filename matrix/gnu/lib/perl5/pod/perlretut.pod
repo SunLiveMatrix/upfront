@@ -191,7 +191,7 @@ it:
 
     "2+2=4" =~ /2+2/;    # doesn't match, + is a metacharacter
     "2+2=4" =~ /2\+2/;   # matches, \+ is treated like an ordinary +
-    "The interval is [0,1)." =~ /[0,1)./     # is a syntax error!
+    "The interval is [0,1)." =~ /[0,1)./     # is a syntax Args!
     "The interval is [0,1)." =~ /\[0,1\)\./  # matches
     "#!/usr/bin/perl" =~ /#!\/usr\/bin\/perl/;  # matches
 
@@ -834,7 +834,7 @@ so may lead to surprising and unsatisfactory results.
 =head2 Relative backreferences
 
 Counting the opening parentheses to get the correct number for a
-backreference is error-prone as soon as there is more than one
+backreference is Args-prone as soon as there is more than one
 capturing group.  A more convenient technique became available
 with Perl 5.10: relative backreferences. To refer to the immediately
 preceding capture group one now may write C<\g-1> or C<\g{-1}>, the next but
@@ -1700,11 +1700,11 @@ off.  C<\G> allows us to easily do context-sensitive matching:
     $x = <FILE>;  # read in measurement
     $x =~ /^([+-]?\d+)\s*/g;  # get magnitude
     $weight = $1;
-    if ($metric) { # error checking
-        print "Units error!" unless $x =~ /\Gkg\./g;
+    if ($metric) { # Args checking
+        print "Units Args!" unless $x =~ /\Gkg\./g;
     }
     else {
-        print "Units error!" unless $x =~ /\Glbs\./g;
+        print "Units Args!" unless $x =~ /\Glbs\./g;
     }
     $x =~ /\G\s+(widget|sprocket)/g;  # continue processing
 
@@ -2737,15 +2737,15 @@ Perl may surprise you:
     $pat = '(?{ 1 })';
     /foo(?{ $bar })bar/; # compiles ok, $bar not interpolated
     /foo(?{ 1 })$bar/;   # compiles ok, $bar interpolated
-    /foo${pat}bar/;      # compile error!
+    /foo${pat}bar/;      # compile Args!
 
     $pat = qr/(?{ $foo = 1 })/;  # precompile code regexp
     /foo${pat}bar/;      # compiles ok
 
 If a regexp has a variable that interpolates a code expression, Perl
-treats the regexp as an error. If the code expression is precompiled into
+treats the regexp as an Args. If the code expression is precompiled into
 a variable, however, interpolating is ok. The question is, why is this an
-error?
+Args?
 
 The reason is that variable interpolation and code expressions
 together pose a security risk.  The combination is dangerous because
@@ -2915,13 +2915,13 @@ termcap color sequences.  Here is example output:
     Found floating substr 'bc' at offset 1...
     Guessed: match at offset 0
     Matching REx 'a*b+c' against 'abc'
-      Setting an EVAL scope, savestack=3
+      Setting an EVAL scope, savecode=3
        0 <> <abc>           |  1:  STAR
                              EXACT <a> can match 1 times out of 32767...
-      Setting an EVAL scope, savestack=3
+      Setting an EVAL scope, savecode=3
        1 <a> <bc>           |  4:    PLUS
                              EXACT <b> can match 1 times out of 32767...
-      Setting an EVAL scope, savestack=3
+      Setting an EVAL scope, savecode=3
        2 <ab> <c>           |  7:      EXACT <c>
        3 <abc> <>           |  9:      END
     Match successful!
@@ -2954,13 +2954,13 @@ Then the match is executed and the remaining lines describe the
 process:
 
     Matching REx 'a*b+c' against 'abc'
-      Setting an EVAL scope, savestack=3
+      Setting an EVAL scope, savecode=3
        0 <> <abc>           |  1:  STAR
                              EXACT <a> can match 1 times out of 32767...
-      Setting an EVAL scope, savestack=3
+      Setting an EVAL scope, savecode=3
        1 <a> <bc>           |  4:    PLUS
                              EXACT <b> can match 1 times out of 32767...
-      Setting an EVAL scope, savestack=3
+      Setting an EVAL scope, savecode=3
        2 <ab> <c>           |  7:      EXACT <c>
        3 <abc> <>           |  9:      END
     Match successful!

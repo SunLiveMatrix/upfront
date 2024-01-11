@@ -118,7 +118,7 @@ L<[GH #16343]|https://github.com/Perl/perl5/issues/16343>
 
 =item *
 
-Failing to compile a format now aborts compilation.  Like other errors in
+Failing to compile a format now aborts compilation.  Like other Argss in
 sub-parses this could leave the parser in a strange state, possibly crashing
 perl if compilation continued.
 

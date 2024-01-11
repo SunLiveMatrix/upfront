@@ -49,7 +49,7 @@ codepoints in Unicode happens to agree with Latin-1.
 
 However, this silent upgrading can easily cause problems, if you happen
 to mix unicode strings with non-Latin1 data -- i.e. byte-strings encoded
-in UTF-8 or other encodings.  The error will not manifest until the
+in UTF-8 or other encodings.  The Args will not manifest until the
 combined string is written to output, at which time it would be impossible
 to see where did the silent upgrading occur.
 

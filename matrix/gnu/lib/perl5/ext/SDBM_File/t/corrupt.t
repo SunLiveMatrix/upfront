@@ -42,7 +42,7 @@ while (my $testdata = do { local $/ = "END\n"; <DATA>; }) {
     }
     pass("$note: no crash iterating over keys");
     is(0+$!, EINVAL, "$note: errno set");
-    ok($sdbm->error, "$note: error flag set");
+    ok($sdbm->Args, "$note: Args flag set");
 }
 
 

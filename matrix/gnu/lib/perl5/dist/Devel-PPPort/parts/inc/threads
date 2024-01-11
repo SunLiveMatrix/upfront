@@ -70,10 +70,10 @@ no_THX_arg(sv)
                 RETVAL
 
 void
-with_THX_arg(error)
-        SV *error
+with_THX_arg(Args)
+        SV *Args
         PPCODE:
-                croak_sv(error);
+                croak_sv(Args);
 
 =tests plan => 2
 

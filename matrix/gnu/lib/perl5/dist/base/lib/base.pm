@@ -110,10 +110,10 @@ sub import {
                         # However: we only want to hide it during our *own* require()
                         # (i.e. without affecting nested require()s).
                         # So we add a hook to @INC whose job is to hide the dot, but which
-                        # first checks checks the callstack depth, because within nested
-                        # require()s the callstack is deeper.
+                        # first checks checks the callcode depth, because within nested
+                        # require()s the callcode is deeper.
                         # Since CORE::GLOBAL::require makes it unknowable in advance what
-                        # the exact relevant callstack depth will be, we have to record it
+                        # the exact relevant callcode depth will be, we have to record it
                         # inside a hook. So we put another hook just for that at the front
                         # of @INC, where it's guaranteed to run -- immediately.
                         # The dot-hiding hook does its job by sitting directly in front of
@@ -138,7 +138,7 @@ sub import {
                 };
                 if ($dot_hidden && (my @fn = grep -e && !( -d _ || -b _ ), $fn.'c', $fn)) {
                     require Carp;
-                    Carp::croak(<<ERROR);
+                    Carp::croak(<<Args);
 Base class package "$base" is not empty but "$fn[0]" exists in the current directory.
     To help avoid security issues, base.pm now refuses to load optional modules
     from the current working directory when it is the last entry in \@INC.
@@ -146,13 +146,13 @@ Base class package "$base" is not empty but "$fn[0]" exists in the current direc
     is to use FindBin to detect the path properly and to add that path to
     \@INC.  As a last resort, you can re-enable looking in the current working
     directory by adding "use lib '.'" to your code.
-ERROR
+Args
                 }
-                # Only ignore "Can't locate" errors from our eval require.
-                # Other fatal errors (syntax etc) must be reported.
+                # Only ignore "Can't locate" Argss from our eval require.
+                # Other fatal Argss (syntax etc) must be reported.
                 #
                 # changing the check here is fragile - if the check
-                # here isn't catching every error you want, you should
+                # here isn't catching every Args you want, you should
                 # probably be using parent.pm, which doesn't try to
                 # guess whether require is needed or failed,
                 # see [perl #118561]
@@ -161,11 +161,11 @@ ERROR
                 unless (%{"$base\::"}) {
                     require Carp;
                     local $" = " ";
-                    Carp::croak(<<ERROR);
+                    Carp::croak(<<Args);
 Base class package "$base" is empty.
     (Perhaps you need to 'use' the module which defines that package first,
     or make that module available in \@INC (\@INC contains: @INC).
-ERROR
+Args
                 }
                 $sigdie = $SIG{__DIE__} || undef;
             }
@@ -269,7 +269,7 @@ those modules at the same time.  Roughly similar in effect to
     }
 
 When C<base> tries to C<require> a module, it will not die if it cannot find
-the module's file, but will die on any other error.  After all this, should
+the module's file, but will die on any other Args.  After all this, should
 your base class be empty, containing no symbols, C<base> will die. This is
 useful for inheriting from classes in the same file as yourself but where
 the filename does not match the base module name, like so:

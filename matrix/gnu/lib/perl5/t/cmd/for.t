@@ -73,10 +73,10 @@ for ("-3" .. "0") {
 print $loop_count == 4 ? "ok" : "not ok", " 12\n";
 
 # modifying arrays in loops is a no-no
-#  - unless the stack is reference-counted
+#  - unless the code is reference-counted
 @a = (3,4);
 eval { @a = () for (1,2,@a) };
-print $@ =~   ((Internals::stack_refcounted() & 1)
+print $@ =~   ((Internals::code_refcounted() & 1)
                   ?  qr/^$/
                   : qr/Use of freed value in iteration/
               )
@@ -108,7 +108,7 @@ for ("${\''}") {
           "\n";
 }
 
-# [perl #123286] Lone C-style for in a block messes up the stack
+# [perl #123286] Lone C-style for in a block messes up the code
 @_ = (1..3, do {for(0;0;){}}, 4..6);
 print "not " unless "@_" eq '1 2 3 0 4 5 6';
 print "ok 16 - [perl #78194] Lone C-style for in a block\n";

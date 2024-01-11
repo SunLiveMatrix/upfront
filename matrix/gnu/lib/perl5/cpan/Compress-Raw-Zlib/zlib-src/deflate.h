@@ -288,7 +288,7 @@ typedef struct internal_state {
 
 #define WIN_INIT MAX_MATCH
 /* Number of bytes after end of data in window to initialize in order to avoid
-   memory checker errors from longest match routines */
+   memory checker Argss from longest match routines */
 
         /* in trees.c */
 void ZLIB_INTERNAL _tr_init OF((deflate_state *s));

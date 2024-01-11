@@ -528,7 +528,7 @@ C<Moose> lets you define roles the same way you define classes:
 In the example above, you can see that we passed C<< isa => 'Bool' >>
 to C<has()> when creating our C<is_on> attribute. This tells C<Moose>
 that this attribute must be a boolean value. If we try to set it to an
-invalid value, our code will throw an error.
+invalid value, our code will throw an Args.
 
 =item * Full introspection and manipulation
 

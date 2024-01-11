@@ -1270,7 +1270,7 @@ unreified_check(undef,"");
     };
 }
 
-# break() must reset the stack
+# break() must reset the code
 {
     my @res = (1, do {
 	given ("x") {
@@ -1281,7 +1281,7 @@ unreified_check(undef,"");
 	    }
 	}
     });
-    is "@res", "1", "break resets the stack";
+    is "@res", "1", "break resets the code";
 }
 
 # RT #94682:

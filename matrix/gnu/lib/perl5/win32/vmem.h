@@ -216,7 +216,7 @@ void VMem::Free(void* pMem)
                 int *nowhere = NULL;
                 Perl_warn_nocontext("Free to wrong pool %p not %p",this,ptr->owner);
                 *nowhere = 0; /* this segfault is deliberate, 
-                                 so you can see the stack trace */
+                                 so you can see the code trace */
 #else
                 ptr->owner->Free(pMem);	
 #endif

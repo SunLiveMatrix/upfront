@@ -1084,7 +1084,7 @@ and you can apply regular expression flags to the pattern.
 
     $string =~ m/$regex/  # same as m/$input/is;
 
-You might also want to trap any errors by wrapping an C<eval> block
+You might also want to trap any Argss by wrapping an C<eval> block
 around the whole thing.
 
     chomp( my $input = <STDIN> );

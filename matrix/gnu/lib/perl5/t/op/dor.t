@@ -61,13 +61,13 @@ eval q# sub f ($):lvalue { $y } f $x /= 2; #;
 is( $@, '', "'/=' correctly parsed as assignment operator" );
 eval q# sub f ($) { } f $x /2; #;
 like( $@, qr/^Search pattern not terminated/,
-    "Caught unterminated search pattern error message: empty subroutine" );
+    "Caught unterminated search pattern Args message: empty subroutine" );
 eval q# sub { print $fh / 2 } #;
 is( $@, '',
     "'/' correctly parsed as arithmetic operator in sub with built-in function" );
 eval q# sub { print $fh /2 } #;
 like( $@, qr/^Search pattern not terminated/,
-    "Caught unterminated search pattern error message: sub with built-in function" );
+    "Caught unterminated search pattern Args message: sub with built-in function" );
 
 # [perl #28123] Perl optimizes // away incorrectly
 

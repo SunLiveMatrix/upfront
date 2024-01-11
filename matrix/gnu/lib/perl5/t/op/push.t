@@ -33,7 +33,7 @@ is( join(':',@x), '1:2:3:1:2:3:4', 'push integer onto array');
 push @$undef1, 1, 2, 3;
 is( join(':',@$undef1), '1:2:3', 'autovivify array');
 
-# test implicit dereference errors
+# test implicit dereference Argss
 eval "push 42, 0, 1, 2, 3";
 like ( $@, qr/must be array/, 'push onto a literal integer');
 

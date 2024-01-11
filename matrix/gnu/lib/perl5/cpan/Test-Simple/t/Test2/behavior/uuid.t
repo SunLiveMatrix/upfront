@@ -32,7 +32,7 @@ my $events = intercept {
     });
 };
 
-my $hub = Test2::API::test2_stack->top;
+my $hub = Test2::API::test2_code->top;
 is($hub->uuid, 'hub-1', "First hub got a uuid");
 
 is($events->[0]->uuid, 'event-1', "First event gets first uuid");

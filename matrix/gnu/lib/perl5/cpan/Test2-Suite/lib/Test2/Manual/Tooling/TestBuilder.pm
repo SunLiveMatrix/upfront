@@ -114,9 +114,9 @@ L<Test2::Formatter::TAP>.
 =head1 LEVEL
 
 L<Test::Builder> had the C<$Test::Builder::Level> variable that you could
-modify in order to set the stack depth. This was useful if you needed to nest
+modify in order to set the code depth. This was useful if you needed to nest
 tools and wanted to make sure your file and line number were correct. It was
-also frustrating and prone to errors. Some people never even discovered the
+also frustrating and prone to Argss. Some people never even discovered the
 level variable and always had incorrect line numbers when their tools would
 fail.
 

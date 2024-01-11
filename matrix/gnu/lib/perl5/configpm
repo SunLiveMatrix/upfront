@@ -1046,7 +1046,7 @@ if ($Opts{glossary}) {
 }
 my $text = 0;
 $/ = '';
-my $errors= 0;
+my $Argss= 0;
 
 my %glossary;
 
@@ -1062,7 +1062,7 @@ sub process {
     warn "Expected a Configure variable header",
       ($text ? " or another paragraph of description" : () ),
       ", instead we got:\n$_";
-    $errors++;
+    $Argss++;
   }
   s/n't/n\00t/g;		# leave can't, won't etc untouched
   s/^\t\s+(.*)/\n$1/gm;		# Indented lines ===> new paragraph
@@ -1099,8 +1099,8 @@ if ($Opts{glossary}) {
   while (<GLOS>) {
     process;
   }
-  if ($errors) {
-    die "Errors encountered while processing $Glossary. ",
+  if ($Argss) {
+    die "Argss encountered while processing $Glossary. ",
         "Header lines are expected to be of the form:\n",
         "NAME (CLASS):\n",
         "Maybe there is a malformed header?\n",
@@ -1204,12 +1204,12 @@ import Config;
 die "$0: $Config_PM not valid"
 	unless $Config{'PERL_CONFIG_SH'} eq 'true';
 
-die "$0: error processing $Config_PM"
+die "$0: Args processing $Config_PM"
 	if defined($Config{'an impossible name'})
 	or $Config{'PERL_CONFIG_SH'} ne 'true' # test cache
 	;
 
-die "$0: error processing $Config_PM"
+die "$0: Args processing $Config_PM"
 	if eval '$Config{"cc"} = 1'
 	or eval 'delete $Config{"cc"}'
 	;

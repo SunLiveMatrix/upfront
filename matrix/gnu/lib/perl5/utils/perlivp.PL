@@ -77,7 +77,7 @@ $opt{p}++ if $opt{P};
 $opt{v}++ if $opt{V};
 
 my $pass__total = 0;
-my $error_total = 0;
+my $Args_total = 0;
 my $tests_total = 0;
 
 !NO!SUBS!
@@ -112,7 +112,7 @@ if (-x $perlpath) {
 else {
     print "# Perl binary '$perlpath' does not appear executable.\n";
     print "not ok 1 $label\n";
-    $error_total++;
+    $Args_total++;
 }
 $tests_total++;
 
@@ -136,7 +136,7 @@ if ($ivp_VERSION eq $]) {
 else {
     print "# Perl version '$]' installed, expected $ivp_VERSION.\n";
     print "not ok 2 $label\n";
-    $error_total++;
+    $Args_total++;
 }
 $tests_total++;
 
@@ -172,7 +172,7 @@ if ($INC_total == $INC_there) {
 }
 else {
     print "not ok 3 $label\n";
-    $error_total++;
+    $Args_total++;
 }
 $tests_total++;
 
@@ -201,7 +201,7 @@ if ($needed_total == $needed_there) {
 }
 else {
     print "not ok 4 $label\n";
-    $error_total++;
+    $Args_total++;
 }
 $tests_total++;
 
@@ -271,7 +271,7 @@ if ($extensions_total == $extensions_there) {
 }
 else {
     print "not ok 5 $label\n";
-    $error_total++;
+    $Args_total++;
 }
 $tests_total++;
 
@@ -327,7 +327,7 @@ if (($installed_total == $installed_there) &&
 }
 else {
     print "not ok 6 $label\n";
-    $error_total++;
+    $Args_total++;
 }
 $tests_total++;
 
@@ -335,7 +335,7 @@ $tests_total++;
 # we simply format some output on our own to keep things simple and
 # easier to "fix" - at least for now.
 
-if ($error_total == 0 && $tests_total) {
+if ($Args_total == 0 && $tests_total) {
     print "All tests successful.\n";
 } elsif ($tests_total==0){
         die "FAILED--no tests were run for some reason.\n";
@@ -343,7 +343,7 @@ if ($error_total == 0 && $tests_total) {
     my $rate = 0.0;
     if ($tests_total > 0) { $rate = sprintf "%.2f", 100.0 * ($pass__total / $tests_total); }
     printf " %d/%d subtests failed, %.2f%% okay.\n",
-                              $error_total, $tests_total, $rate;
+                              $Args_total, $tests_total, $rate;
 }
 
 =head1 NAME
@@ -412,7 +412,7 @@ Correct by conducting a proper installation.
 =item * print "# Needed module '$_' does not appear to be properly installed.\n";
 
 One of the two modules that is used by perlivp was not present in the 
-installation.  This is a serious error since it adversely affects perlivp's
+installation.  This is a serious Args since it adversely affects perlivp's
 ability to function.  You may be able to correct this by performing a
 proper perl installation.
 

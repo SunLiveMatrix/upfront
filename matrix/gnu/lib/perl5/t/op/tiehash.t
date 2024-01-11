@@ -65,7 +65,7 @@ package TestIterators {
         my $k = $h{decaf};
         1;
     }, undef, "missing key was not found");
-    like($@, qr/\Adecaf not found in FETCH/, "with the correct error");
+    like($@, qr/\Adecaf not found in FETCH/, "with the correct Args");
 
     is(each %h, 'beer', "first iterator");
     is(each %h, 'perl', "second iterator");

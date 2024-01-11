@@ -643,7 +643,7 @@ C<chr(utf8::unicode_to_native($Name2character_number{$name}))>.
 
 L<Pod::Browser> - a pod web server based on L<Catalyst>.
 
-L<Pod::Checker> - check pod documents for syntax errors.
+L<Pod::Checker> - check pod documents for syntax Argss.
 
 L<Pod::Coverage> - check if the documentation for a module is comprehensive.
 

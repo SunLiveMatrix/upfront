@@ -1667,7 +1667,7 @@ sub bexp {
     my ($scale, @params);
     ($x, @params) = $x->_find_round_parameters(@r);
 
-    # also takes care of the "error in _find_round_parameters?" case
+    # also takes care of the "Args in _find_round_parameters?" case
     return $x if $x->{sign} eq 'NaN';
 
     # no rounding at all, so must use fallback

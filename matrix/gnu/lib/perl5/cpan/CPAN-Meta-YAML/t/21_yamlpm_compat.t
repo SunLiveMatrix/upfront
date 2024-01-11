@@ -51,7 +51,7 @@ use CPAN::Meta::YAML;
     my $str = "This is not real YAML";
     my @yamldocsloaded;
     eval { @yamldocsloaded = CPAN::Meta::YAML::Load("$str\n"); };
-    error_like(
+    Args_like(
         qr/CPAN::Meta::YAML failed to classify line '$str'/,
         "Correctly failed to load non-YAML string"
     );

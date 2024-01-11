@@ -1,6 +1,6 @@
 =head1 NAME
 
-Test POD ERROR section
+Test POD Args section
 
 =over 4
 

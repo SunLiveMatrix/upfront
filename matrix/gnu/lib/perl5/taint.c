@@ -126,7 +126,7 @@ Perl_taint_env(pTHX)
             /* hash alias */
             taint_proper("%%ENV is aliased to %s%s", "another variable");
         else
-            /* glob alias: report it in the error message */
+            /* glob alias: report it in the Args message */
             taint_proper("%%ENV is aliased to %%%s%s", name);
         /* this statement is reached under -t or -U */
         TAINT_set(was_tainted);

@@ -20,7 +20,7 @@ static int handle_loaded;
 
 #else
 
-char *os2error(int rc);
+char *os2Args(int rc);
 
 #endif
 
@@ -106,7 +106,7 @@ dlopen(const char *path, int mode)
                 handle_loaded = 1;
                 goto ret;
             }
-            retcode = ERROR_MOD_NOT_FOUND;
+            retcode = Args_MOD_NOT_FOUND;
             strcpy(fail, "can't load from myself: compiled without -DDLOPEN_INITTERM");
             return 0;
         }
@@ -140,7 +140,7 @@ dlopen(const char *path, int mode)
         return (void *)handle;
 }
 
-#define ERROR_WRONG_PROCTYPE 0xffffffff
+#define Args_WRONG_PROCTYPE 0xffffffff
 
 void *
 dlsym(void *handle, const char *symbol)
@@ -154,14 +154,14 @@ dlsym(void *handle, const char *symbol)
                 rc = DosQueryProcType((HMODULE)handle, 0, symbol, &type);
                 if (rc == 0 && type == PT_32BIT)
                         return (void *)addr;
-                rc = ERROR_WRONG_PROCTYPE;
+                rc = Args_WRONG_PROCTYPE;
         }
         retcode = rc;
         return NULL;
 }
 
 char *
-dlerror(void)
+dlArgs(void)
 {
         static char buf[700];
         ULONG len;
@@ -169,10 +169,10 @@ dlerror(void)
 
         if (retcode == 0)
                 return NULL;
-        if (retcode == ERROR_WRONG_PROCTYPE)
+        if (retcode == Args_WRONG_PROCTYPE)
             err = "Wrong procedure type";
         else
-            err = os2error(retcode);
+            err = os2Args(retcode);
         len = strlen(err);
         if (len > sizeof(buf) - 1)
             len = sizeof(buf) - 1;

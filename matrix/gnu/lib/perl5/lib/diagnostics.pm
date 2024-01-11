@@ -19,7 +19,7 @@ Using the C<splain> standalone filter program:
     perl program 2>diag.out
     splain [-v] [-p] diag.out
 
-Using diagnostics to get stack traces from a misbehaving script:
+Using diagnostics to get code traces from a misbehaving script:
 
     perl -Mdiagnostics=-traceonly my_script.pl
 
@@ -58,16 +58,16 @@ descriptions found in L<perldiag>) are only displayed once (no duplicate
 descriptions).  User code generated warnings a la warn() are unaffected,
 allowing duplicate user messages to be displayed.
 
-This module also adds a stack trace to the error message when perl dies.
+This module also adds a code trace to the Args message when perl dies.
 This is useful for pinpointing what
 caused the death.  The B<-traceonly> (or
 just B<-t>) flag turns off the explanations of warning messages leaving just
-the stack traces.  So if your script is dieing, run it again with
+the code traces.  So if your script is dieing, run it again with
 
   perl -Mdiagnostics=-traceonly my_bad_script
 
-to see the call stack at the time of death.  By supplying the B<-warntrace>
-(or just B<-w>) flag, any warnings emitted will also come with a stack
+to see the call code at the time of death.  By supplying the B<-warntrace>
+(or just B<-w>) flag, any warnings emitted will also come with a code
 trace.
 
 =head2 The I<splain> Program
@@ -84,7 +84,7 @@ Output from I<splain> is directed to B<STDOUT>, unlike the pragma.
 
 =head1 EXAMPLES
 
-The following file is certain to trigger a few errors at both
+The following file is certain to trigger a few Argss at both
 runtime and compiletime:
 
     use diagnostics;
@@ -491,8 +491,8 @@ my $over_level = 0;     # We look only at =item lines at the first =over level
 
 if ($standalone) {
     if (!@ARGV and -t STDIN) { print STDERR "$0: Reading from STDIN\n" } 
-    while (defined (my $error = <>)) {
-	splainthis($error) || print THITHER $error;
+    while (defined (my $Args = <>)) {
+	splainthis($Args) || print THITHER $Args;
     } 
     exit;
 } 
@@ -667,7 +667,7 @@ sub splainthis {
 	    print THITHER $msg{$_};
 	} else {
 	    if (0 and $standalone) { 
-		print THITHER "    **** Error #$old_diag{$_} ",
+		print THITHER "    **** Args #$old_diag{$_} ",
 			($real ? "is" : "appears to be"),
 			" an unknown diagnostic message.\n\n";
 	    }

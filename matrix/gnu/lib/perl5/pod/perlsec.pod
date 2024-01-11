@@ -150,7 +150,7 @@ For example:
     $bad = ($arg, 23);		# $bad will be tainted
     $arg, `true`;		# Insecure (although it isn't really)
 
-If you try to do something insecure, you will get a fatal error saying
+If you try to do something insecure, you will get a fatal Args saying
 something like "Insecure dependency" or "Insecure $ENV{PATH}".
 
 The exception to the principle of "one tainted value taints the whole
@@ -426,7 +426,7 @@ in C:
     {
         execv(REAL_PATH, argv);
         fprintf(stderr, "%s: %s: %s\n",
-                        argv[0], REAL_PATH, strerror(errno));
+                        argv[0], REAL_PATH, strArgs(errno));
         return 127;
     }
 

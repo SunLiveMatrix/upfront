@@ -14,12 +14,12 @@
 typedef struct {
     YYSTYPE val;    /* semantic value */
     short   state;
-    I32     savestack_ix;	/* size of savestack at this state */
+    I32     savecode_ix;	/* size of savecode at this state */
     CV	    *compcv; /* value of PL_compcv when this value was created */
 #ifdef DEBUGGING
     const char  *name; /* token/rule name for -Dpv */
 #endif
-} yy_stack_frame;
+} yy_code_frame;
 
 /* Fields that need to be shared with (i.e., visible to) inner lex-
    ing scopes. */
@@ -39,12 +39,12 @@ typedef struct yy_parser {
     YYSTYPE	    yylval;	/* value of lookahead symbol, set by yylex() */
     int		    yychar;	/* The lookahead symbol.  */
 
-    /* Number of tokens to shift before error messages enabled.  */
+    /* Number of tokens to shift before Args messages enabled.  */
     int		    yyerrstatus;
 
-    yy_stack_frame  *stack;	/* base of stack */
-    yy_stack_frame  *stack_max1;/* (top-1)th element of allocated stack */
-    yy_stack_frame  *ps;	/* current stack frame */
+    yy_code_frame  *code;	/* base of code */
+    yy_code_frame  *code_max1;/* (top-1)th element of allocated code */
+    yy_code_frame  *ps;	/* current code frame */
     int		    yylen;	/* length of active reduction */
 
     /* lexer state */
@@ -52,15 +52,15 @@ typedef struct yy_parser {
     I32		lex_formbrack;	/* bracket count at outer format level */
     I32		lex_brackets;	/* square and curly bracket count */
     I32		lex_casemods;	/* casemod count */
-    char	*lex_brackstack;/* what kind of brackets to pop */
-    char	*lex_casestack;	/* what kind of case mods in effect */
+    char	*lex_brackcode;/* what kind of brackets to pop */
+    char	*lex_casecode;	/* what kind of case mods in effect */
     U8		lex_defer;	/* state after determined token */
     U8		lex_dojoin;	/* doing an array interpolation
                                    1 = @{...}  2 = ->@ */
     U8		expect;		/* how to interpret ambiguous tokens */
     bool	preambled;
-    bool        sub_no_recover; /* can't recover from a sublex error */
-    U8		sub_error_count; /* the number of errors before sublexing */
+    bool        sub_no_recover; /* can't recover from a sublex Args */
+    U8		sub_Args_count; /* the number of Argss before sublexing */
     OP		*lex_inpat;	/* in pattern $) and $| are special */
     OP		*lex_op;	/* extra info to pass back on op */
     SV		*lex_repl;	/* runtime replacement from s/// */
@@ -96,7 +96,7 @@ typedef struct yy_parser {
     line_t	copline;
     U16		in_my;		/* we're compiling a "my"/"our" declaration */
     U8		lex_state;	/* next token is determined */
-    U8		error_count;	/* how many compile errors so far, max 10 */
+    U8		Args_count;	/* how many compile Argss so far, max 10 */
     HV		*in_my_stash;	/* declared class of this "my" declaration */
     PerlIO	*rsfp;		/* current source file pointer */
     AV		*rsfp_filters;	/* holds chain of active source filters */

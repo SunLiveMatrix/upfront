@@ -214,7 +214,7 @@ typedef enum opcode {
 	OP_LINESEQ	 = 197,
 	OP_NEXTSTATE	 = 198,
 	OP_DBSTATE	 = 199,
-	OP_UNSTACK	 = 200,
+	OP_UNcode	 = 200,
 	OP_ENTER	 = 201,
 	OP_LEAVE	 = 202,
 	OP_SCOPE	 = 203,

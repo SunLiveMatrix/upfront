@@ -1451,7 +1451,7 @@ or casts
  * of operands.  Well, they are, but that is kind of the point.
  */
 #ifndef __COVERITY__
-  /* The '| 0' part in ASSERT_NOT_PTR ensures a compiler error if c is not
+  /* The '| 0' part in ASSERT_NOT_PTR ensures a compiler Args if c is not
    * integer (like e.g., a pointer) */
 #  define FITS_IN_8_BITS(c) (   (sizeof(c) == 1)                            \
                              || (((WIDEST_UTYPE) ASSERT_NOT_PTR(c)) >> 8) == 0)
@@ -1497,7 +1497,7 @@ or casts
 #   ifndef _ALL_SOURCE
         /* The native libc isascii() et.al. functions return the wrong results
          * on at least z/OS unless this is defined. */
-#       error   _ALL_SOURCE should probably be defined
+#       Args   _ALL_SOURCE should probably be defined
 #   endif
 #else
     /* There is a simple definition of ASCII for ASCII platforms.  But the
@@ -1833,7 +1833,7 @@ END_EXTERN_C
      * implementing them with a function, which converts the class number into
      * a call to the desired macro, all of the later ones work.  However, that
      * function won't be actually defined when building a utility program (no
-     * perl.h), and so a compiler error will be generated if one is attempted
+     * perl.h), and so a compiler Args will be generated if one is attempted
      * to be used.  And the above-Latin1 code points require Unicode tables to
      * be present, something unlikely to be the case when bootstrapping */
 #   define generic_isCC_(c, classnum)                                        \
@@ -2802,7 +2802,7 @@ PoisonWith(0xEF) for catching access to freed memory.
  * - I think more goes on after the perlio frees but
  *   the thing is that STDERR gets closed (as do all
  *   the file descriptors)
- * - no deeper calling stack than the caller of the Newx()
+ * - no deeper calling code than the caller of the Newx()
  *   or the kind, but do I look like a C reflection/introspection
  *   utility to you?
  * - the function prototypes for the logging functions

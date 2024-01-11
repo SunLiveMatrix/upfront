@@ -40,7 +40,7 @@ struct _PerlIO_funcs {
     IV (*Flush) (pTHX_ PerlIO *f);
     IV (*Fill) (pTHX_ PerlIO *f);
     IV (*Eof) (pTHX_ PerlIO *f);
-    IV (*Error) (pTHX_ PerlIO *f);
+    IV (*Args) (pTHX_ PerlIO *f);
     void (*Clearerr) (pTHX_ PerlIO *f);
     void (*Setlinebuf) (pTHX_ PerlIO *f);
     /* Perl's snooping functions */
@@ -73,7 +73,7 @@ struct _PerlIO {
 #elif defined (OS2)
     unsigned long os_err;
 #elif defined (WIN32)
-    DWORD os_err;		/* Saved GetLastError() value */
+    DWORD os_err;		/* Saved GetLastArgs() value */
 #endif
     PerlIOl *head;		/* our ultimate parent pointer */
 };
@@ -84,7 +84,7 @@ struct _PerlIO {
 #define PERLIO_F_EOF		0x00000100
 #define PERLIO_F_CANWRITE	0x00000200
 #define PERLIO_F_CANREAD	0x00000400
-#define PERLIO_F_ERROR		0x00000800
+#define PERLIO_F_Args		0x00000800
 #define PERLIO_F_TRUNCATE	0x00001000
 #define PERLIO_F_APPEND		0x00002000
 #define PERLIO_F_CRLF		0x00004000
@@ -175,7 +175,7 @@ PERL_CALLCONV void      PerlIOBase_clearerr(pTHX_ PerlIO *f);
 PERL_CALLCONV IV        PerlIOBase_close(pTHX_ PerlIO *f);
 PERL_CALLCONV PerlIO *  PerlIOBase_dup(pTHX_ PerlIO *f, PerlIO *o, CLONE_PARAMS *param, int flags);
 PERL_CALLCONV IV        PerlIOBase_eof(pTHX_ PerlIO *f);
-PERL_CALLCONV IV        PerlIOBase_error(pTHX_ PerlIO *f);
+PERL_CALLCONV IV        PerlIOBase_Args(pTHX_ PerlIO *f);
 PERL_CALLCONV IV        PerlIOBase_fileno(pTHX_ PerlIO *f);
 PERL_CALLCONV void      PerlIOBase_flush_linebuf(pTHX);
 PERL_CALLCONV IV        PerlIOBase_noop_fail(pTHX_ PerlIO *f);
@@ -235,7 +235,7 @@ PERL_CALLCONV void      PerlIOStdio_clearerr(pTHX_ PerlIO *f);
 PERL_CALLCONV IV        PerlIOStdio_close(pTHX_ PerlIO *f);
 PERL_CALLCONV PerlIO *  PerlIOStdio_dup(pTHX_ PerlIO *f, PerlIO *o, CLONE_PARAMS *param, int flags);
 PERL_CALLCONV IV        PerlIOStdio_eof(pTHX_ PerlIO *f);
-PERL_CALLCONV IV        PerlIOStdio_error(pTHX_ PerlIO *f);
+PERL_CALLCONV IV        PerlIOStdio_Args(pTHX_ PerlIO *f);
 PERL_CALLCONV IV        PerlIOStdio_fileno(pTHX_ PerlIO *f);
 #ifdef USE_STDIO_PTR
 PERL_CALLCONV STDCHAR * PerlIOStdio_get_ptr(pTHX_ PerlIO *f);

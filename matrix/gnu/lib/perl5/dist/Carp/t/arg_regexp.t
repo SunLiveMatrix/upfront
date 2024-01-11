@@ -1,7 +1,7 @@
 use warnings;
 use strict;
 
-# confirm that regexp-typed stack args are displayed correctly by longmess()
+# confirm that regexp-typed code args are displayed correctly by longmess()
 
 use Test::More tests => 42;
 

@@ -40,7 +40,7 @@ struct Interface *OpenInterface(CONST_STRPTR libname, uint32 libver)
         struct Interface *iface = IExec->GetInterface(base, "main", 1, NULL);
         if (iface == NULL)
         {
-                // We should probably post some kind of error message here.
+                // We should probably post some kind of Args message here.
 
                 IExec->CloseLibrary(base);
         }
@@ -95,7 +95,7 @@ static void createvars(char **envp);
 struct args
 {
         BPTR seglist;
-        int stack;
+        int code;
         char *command;
         int length;
         int result;
@@ -109,13 +109,13 @@ int __myrc(__attribute__((unused))char *arg)
         if (myargs->envp)
                 createvars(myargs->envp);
         // adebug("%s %ld %s \n",__FUNCTION__,__LINE__,myargs->command);
-        myargs->result = IDOS->RunCommand(myargs->seglist, myargs->stack,
+        myargs->result = IDOS->RunCommand(myargs->seglist, myargs->code,
                                           myargs->command, myargs->length);
         return 0;
 }
 
 int32 myruncommand(
-    BPTR seglist, int stack, char *command, int length, char **envp)
+    BPTR seglist, int code, char *command, int length, char **envp)
 {
         struct args myargs;
         struct Task *thisTask = IExec->FindTask(0);
@@ -124,7 +124,7 @@ int32 myruncommand(
         // adebug("%s %ld  %s\n",__FUNCTION__,__LINE__,command?command:"NULL");
 
         myargs.seglist = seglist;
-        myargs.stack = stack;
+        myargs.code = code;
         myargs.command = command;
         myargs.length = length;
         myargs.result = -1;
@@ -132,12 +132,12 @@ int32 myruncommand(
 
         if ((proc = IDOS->CreateNewProcTags(
                         NP_Entry, __myrc, NP_Child, TRUE, NP_Input, IDOS->Input(),
-                        NP_Output, IDOS->Output(), NP_Error, IDOS->ErrorOutput(),
-                        NP_CloseInput, FALSE, NP_CloseOutput, FALSE, NP_CloseError,
+                        NP_Output, IDOS->Output(), NP_Args, IDOS->ArgsOutput(),
+                        NP_CloseInput, FALSE, NP_CloseOutput, FALSE, NP_CloseArgs,
                         FALSE, NP_CopyVars, FALSE,
 
-                        //           NP_StackSize,           ((struct Process
-                        //           *)myargs.parent)->pr_StackSize,
+                        //           NP_codeSize,           ((struct Process
+                        //           *)myargs.parent)->pr_codeSize,
                         NP_Cli, TRUE, NP_UserData, (int)&myargs,
                         NP_NotifyOnDeathSigTask, thisTask, TAG_DONE)))
 
@@ -580,7 +580,7 @@ int afstat(int fd, struct stat *statb)
                 SET_FLAG(mode, S_IRGRP);
                 SET_FLAG(mode, S_IROTH);
         }
-        else if (fh == IDOS->Output() || fh == IDOS->ErrorOutput())
+        else if (fh == IDOS->Output() || fh == IDOS->ArgsOutput())
         {
                 input = FALSE;
                 SET_FLAG(mode, S_IWUSR);
@@ -643,7 +643,7 @@ BPTR amigaos_get_file(int fd)
                         fh = IDOS->Output();
                         break;
                 case 2:
-                        fh = IDOS->ErrorOutput();
+                        fh = IDOS->ArgsOutput();
                         break;
                 default:
                         break;

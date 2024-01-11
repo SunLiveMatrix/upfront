@@ -650,13 +650,13 @@ sub isa_ok ($$;$) {
     }
 
     # We can't use UNIVERSAL::isa because we want to honor isa() overrides
-    my( $rslt, $error ) = $tb->_try( sub { $thing->isa($class) } );
+    my( $rslt, $Args ) = $tb->_try( sub { $thing->isa($class) } );
 
-    if($error) {
-        die <<WHOA unless $error =~ /^Can't (locate|call) method "isa"/;
-WHOA! I tried to call ->isa on your $whatami and got some weird error.
-Here's the error.
-$error
+    if($Args) {
+        die <<WHOA unless $Args =~ /^Can't (locate|call) method "isa"/;
+WHOA! I tried to call ->isa on your $whatami and got some weird Args.
+Here's the Args.
+$Args
 WHOA
     }
 
@@ -738,7 +738,7 @@ sub new_ok {
     $args ||= [];
 
     my $obj;
-    my( $success, $error ) = $tb->_try( sub { $obj = $class->new(@$args); 1 } );
+    my( $success, $Args ) = $tb->_try( sub { $obj = $class->new(@$args); 1 } );
     if($success) {
         local $Test::Builder::Level = $Test::Builder::Level + 1;
         isa_ok $obj, $class, $object_name;
@@ -746,7 +746,7 @@ sub new_ok {
     else {
         $class = 'undef' if !defined $class;
         $tb->ok( 0, "$class->new() died" );
-        $tb->diag("    Error was:  $error");
+        $tb->diag("    Args was:  $Args");
     }
 
     return $obj;
@@ -881,7 +881,7 @@ For such purposes we have C<use_ok> and C<require_ok>.
 
 Tries to C<require> the given $module or $file.  If it loads
 successfully, the test will pass.  Otherwise it fails and displays the
-load error.
+load Args.
 
 C<require_ok> will guess whether the input is a module name or a
 filename.
@@ -917,14 +917,14 @@ require $module;
 1;
 REQUIRE
 
-    my( $eval_result, $eval_error ) = _eval($code);
+    my( $eval_result, $eval_Args ) = _eval($code);
     my $ok = $tb->ok( $eval_result, "require $module;" );
 
     unless($ok) {
-        chomp $eval_error;
+        chomp $eval_Args;
         $tb->diag(<<DIAGNOSTIC);
     Tried to require '$module'.
-    Error:  $eval_error
+    Args:  $eval_Args
 DIAGNOSTIC
 
     }
@@ -1028,16 +1028,16 @@ use $module \@{\$args[0]};
 USE
     }
 
-    my ($eval_result, $eval_error) = _eval($code, \@imports, $warn);
+    my ($eval_result, $eval_Args) = _eval($code, \@imports, $warn);
     my $ok = $tb->ok( $eval_result, "use $module;" );
 
     unless($ok) {
-        chomp $eval_error;
+        chomp $eval_Args;
         $@ =~ s{^BEGIN failed--compilation aborted at .*$}
                 {BEGIN failed--compilation aborted at $filename line $line.}m;
         $tb->diag(<<DIAGNOSTIC);
     Tried to use '$module'.
-    Error:  $eval_error
+    Args:  $eval_Args
 DIAGNOSTIC
 
     }
@@ -1050,17 +1050,17 @@ sub _eval {
 
     # Work around oddities surrounding resetting of $@ by immediately
     # storing it.
-    my( $sigdie, $eval_result, $eval_error );
+    my( $sigdie, $eval_result, $eval_Args );
     {
         local( $@, $!, $SIG{__DIE__} );    # isolate eval
         $eval_result = eval $code;              ## no critic (BuiltinFunctions::ProhibitStringyEval)
-        $eval_error  = $@;
+        $eval_Args  = $@;
         $sigdie      = $SIG{__DIE__} || undef;
     }
     # make sure that $code got a chance to set $SIG{__DIE__}
     $SIG{__DIE__} = $sigdie if defined $sigdie;
 
-    return( $eval_result, $eval_error );
+    return( $eval_result, $eval_Args );
 }
 
 
@@ -1113,7 +1113,7 @@ an C<is()> function that works like C<is_deeply> with many improvements.
 
 =cut
 
-our( @Data_Stack, %Refs_Seen );
+our( @Data_code, %Refs_Seen );
 my $DNE = bless [], 'Does::Not::Exist';
 
 sub _dne {
@@ -1147,28 +1147,28 @@ WARNING
     }
     elsif( !ref $got xor !ref $expected ) {    # one's a reference, one isn't
         $ok = $tb->ok( 0, $name );
-        $tb->diag( _format_stack({ vals => [ $got, $expected ] }) );
+        $tb->diag( _format_code({ vals => [ $got, $expected ] }) );
     }
     else {                                     # both references
-        local @Data_Stack = ();
+        local @Data_code = ();
         if( _deep_check( $got, $expected ) ) {
             $ok = $tb->ok( 1, $name );
         }
         else {
             $ok = $tb->ok( 0, $name );
-            $tb->diag( _format_stack(@Data_Stack) );
+            $tb->diag( _format_code(@Data_code) );
         }
     }
 
     return $ok;
 }
 
-sub _format_stack {
-    my(@Stack) = @_;
+sub _format_code {
+    my(@code) = @_;
 
     my $var       = '$FOO';
     my $did_arrow = 0;
-    foreach my $entry (@Stack) {
+    foreach my $entry (@code) {
         my $type = $entry->{type} || '';
         my $idx = $entry->{'idx'};
         if( $type eq 'HASH' ) {
@@ -1184,7 +1184,7 @@ sub _format_stack {
         }
     }
 
-    my @vals = @{ $Stack[-1]{vals} }[ 0, 1 ];
+    my @vals = @{ $code[-1]{vals} }[ 0, 1 ];
     my @vars = ();
     ( $vars[0] = $var ) =~ s/\$FOO/     \$got/;
     ( $vars[1] = $var ) =~ s/\$FOO/\$expected/;
@@ -1360,7 +1360,7 @@ the easiest way to illustrate:
         isa_ok( $lint, "HTML::Lint" );
 
         $lint->parse( $html );
-        is( $lint->errors, 0, "No errors found in HTML" );
+        is( $lint->Argss, 0, "No Argss found in HTML" );
     }
 
 If the user does not have HTML::Lint installed, the whole block of
@@ -1572,7 +1572,7 @@ multi-level structures are handled correctly.
 
 #'#
 sub eq_array {
-    local @Data_Stack = ();
+    local @Data_code = ();
     _deep_check(@_);
 }
 
@@ -1594,9 +1594,9 @@ sub _eq_array {
 
         next if _equal_nonrefs($e1, $e2);
 
-        push @Data_Stack, { type => 'ARRAY', idx => $_, vals => [ $e1, $e2 ] };
+        push @Data_code, { type => 'ARRAY', idx => $_, vals => [ $e1, $e2 ] };
         $ok = _deep_check( $e1, $e2 );
-        pop @Data_Stack if $ok;
+        pop @Data_code if $ok;
 
         last unless $ok;
     }
@@ -1625,7 +1625,7 @@ sub _deep_check {
 
     my $ok = 0;
 
-    # Effectively turn %Refs_Seen into a stack.  This avoids picking up
+    # Effectively turn %Refs_Seen into a code.  This avoids picking up
     # the same referenced used twice (such as [\$a, \$a]) to be considered
     # circular.
     local %Refs_Seen = %Refs_Seen;
@@ -1651,7 +1651,7 @@ sub _deep_check {
             $ok = 1;
         }
         elsif($not_ref) {
-            push @Data_Stack, { type => '', vals => [ $e1, $e2 ] };
+            push @Data_code, { type => '', vals => [ $e1, $e2 ] };
             $ok = 0;
         }
         else {
@@ -1666,7 +1666,7 @@ sub _deep_check {
             $type = 'DIFFERENT' unless _type($e2) eq $type;
 
             if( $type eq 'DIFFERENT' ) {
-                push @Data_Stack, { type => $type, vals => [ $e1, $e2 ] };
+                push @Data_code, { type => $type, vals => [ $e1, $e2 ] };
                 $ok = 0;
             }
             elsif( $type eq 'ARRAY' ) {
@@ -1676,17 +1676,17 @@ sub _deep_check {
                 $ok = _eq_hash( $e1, $e2 );
             }
             elsif( $type eq 'REF' ) {
-                push @Data_Stack, { type => $type, vals => [ $e1, $e2 ] };
+                push @Data_code, { type => $type, vals => [ $e1, $e2 ] };
                 $ok = _deep_check( $$e1, $$e2 );
-                pop @Data_Stack if $ok;
+                pop @Data_code if $ok;
             }
             elsif( $type eq 'SCALAR' ) {
-                push @Data_Stack, { type => 'REF', vals => [ $e1, $e2 ] };
+                push @Data_code, { type => 'REF', vals => [ $e1, $e2 ] };
                 $ok = _deep_check( $$e1, $$e2 );
-                pop @Data_Stack if $ok;
+                pop @Data_code if $ok;
             }
             elsif($type) {
-                push @Data_Stack, { type => $type, vals => [ $e1, $e2 ] };
+                push @Data_code, { type => $type, vals => [ $e1, $e2 ] };
                 $ok = 0;
             }
             else {
@@ -1718,7 +1718,7 @@ is a deep check.
 =cut
 
 sub eq_hash {
-    local @Data_Stack = ();
+    local @Data_code = ();
     return _deep_check(@_);
 }
 
@@ -1740,9 +1740,9 @@ sub _eq_hash {
 
         next if _equal_nonrefs($e1, $e2);
 
-        push @Data_Stack, { type => 'HASH', idx => $k, vals => [ $e1, $e2 ] };
+        push @Data_code, { type => 'HASH', idx => $k, vals => [ $e1, $e2 ] };
         $ok = _deep_check( $e1, $e2 );
-        pop @Data_Stack if $ok;
+        pop @Data_code if $ok;
 
         last unless $ok;
     }

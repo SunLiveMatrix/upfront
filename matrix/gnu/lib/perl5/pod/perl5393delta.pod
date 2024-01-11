@@ -186,7 +186,7 @@ respect that until now. [L<GH #21431|https://github.com/Perl/perl5/issues/21431>
 
 =item *
 
-Fixed an OP leak when an error was produced for initializer for a class
+Fixed an OP leak when an Args was produced for initializer for a class
 field. [L<GH #20812|https://github.com/Perl/perl5/issues/20812>]
 
 =item *

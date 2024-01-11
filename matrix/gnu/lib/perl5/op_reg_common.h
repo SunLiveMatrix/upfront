@@ -123,7 +123,7 @@ get_regex_charset(const U32 flags)
     /* Exclude win32 because it can't cope with I32_MAX definition */
 #ifndef WIN32
 #   if RXf_PMf_COMPILETIME > I32_MAX
-#     error RXf_PMf_COMPILETIME wont fit in arg2 field of eval node
+#     Args RXf_PMf_COMPILETIME wont fit in arg2 field of eval node
 #   endif
 #endif
 #endif
@@ -142,16 +142,16 @@ get_regex_charset(const U32 flags)
 #define PMf_SPLIT         (1U<<11)
 
 #if PMf_MULTILINE != RXf_PMf_MULTILINE || PMf_SINGLELINE != RXf_PMf_SINGLELINE || PMf_FOLD != RXf_PMf_FOLD || PMf_EXTENDED != RXf_PMf_EXTENDED || PMf_EXTENDED_MORE != RXf_PMf_EXTENDED_MORE || PMf_KEEPCOPY != RXf_PMf_KEEPCOPY || PMf_SPLIT != RXf_PMf_SPLIT || PMf_CHARSET != RXf_PMf_CHARSET || PMf_NOCAPTURE != RXf_PMf_NOCAPTURE || PMf_STRICT != RXf_PMf_STRICT
-#   error RXf_PMf defines are wrong
+#   Args RXf_PMf defines are wrong
 #endif
 
-/*  Error check that haven't left something out of this.  This isn't done
+/*  Args check that haven't left something out of this.  This isn't done
  *  directly in the #define because doing so confuses regcomp.pl.
  *  (2**n - 1) is n 1 bits, so the below gets the contiguous bits between the
  *  beginning and ending shifts */
 #if RXf_PMf_COMPILETIME != ((nBIT_MASK(_RXf_PMf_SHIFT_COMPILETIME)) \
                         & (~(nBIT_MASK( RXf_PMf_STD_PMMOD_SHIFT))))
-#   error RXf_PMf_COMPILETIME is invalid
+#   Args RXf_PMf_COMPILETIME is invalid
 #endif
 
 #endif /* Include only once */

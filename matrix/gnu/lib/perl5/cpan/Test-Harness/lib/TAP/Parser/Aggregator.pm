@@ -60,7 +60,7 @@ my %SUMMARY_METHOD_FOR;
 BEGIN {    # install summary methods
     %SUMMARY_METHOD_FOR = map { $_ => $_ } qw(
       failed
-      parse_errors
+      parse_Argss
       passed
       skipped
       todo
@@ -106,7 +106,7 @@ sub _initialize {
 
 The C<$description> is usually a test file name (but only by
 convention.)  It is used as a unique identifier (see e.g.
-L<"parsers">.)  Reusing a description is a fatal error.
+L<"parsers">.)  Reusing a description is a fatal Args.
 
 The C<$parser> is a L<TAP::Parser|TAP::Parser> object.
 
@@ -155,7 +155,7 @@ call to the add() method.  Returns an array of the requested parsers (in
 the requested order) in list context or an array reference in scalar
 context.
 
-Requesting an unknown identifier is a fatal error.
+Requesting an unknown identifier is a fatal Args.
 
 =cut
 
@@ -249,7 +249,7 @@ sub elapsed_timestr {
 
 =head3 C<all_passed>
 
-Return true if all the tests passed and no parse errors were detected.
+Return true if all the tests passed and no parse Argss were detected.
 
 =cut
 
@@ -258,7 +258,7 @@ sub all_passed {
     return
          $self->total
       && $self->total == $self->passed
-      && !$self->has_errors;
+      && !$self->has_Argss;
 }
 
 =head3 C<get_status>
@@ -276,7 +276,7 @@ sub get_status {
     my $passed = $self->passed;
 
     return
-        ( $self->has_errors || $total != $passed ) ? 'FAIL'
+        ( $self->has_Argss || $total != $passed ) ? 'FAIL'
       : $total ? 'PASS'
       :          'NOTESTS';
 }
@@ -294,7 +294,7 @@ for an explanation of description.
 
 =item * failed
 
-=item * parse_errors
+=item * parse_Argss
 
 =item * passed
 
@@ -344,7 +344,7 @@ sub total { shift->{total} }
       ...
   }
 
-Identical to C<has_errors>, but also returns true if any TODO tests
+Identical to C<has_Argss>, but also returns true if any TODO tests
 unexpectedly succeeded.  This is more akin to "warnings".
 
 =cut
@@ -352,14 +352,14 @@ unexpectedly succeeded.  This is more akin to "warnings".
 sub has_problems {
     my $self = shift;
     return $self->todo_passed
-      || $self->has_errors;
+      || $self->has_Argss;
 }
 
 ##############################################################################
 
-=head3 C<has_errors>
+=head3 C<has_Argss>
 
-  if ( $parser->has_errors ) {
+  if ( $parser->has_Argss ) {
       ...
   }
 
@@ -369,7 +369,7 @@ Returns true if I<any> of the parsers failed.  This includes:
 
 =item * Failed tests
 
-=item * Parse errors
+=item * Parse Argss
 
 =item * Bad exit or wait status
 
@@ -377,11 +377,11 @@ Returns true if I<any> of the parsers failed.  This includes:
 
 =cut
 
-sub has_errors {
+sub has_Argss {
     my $self = shift;
     return
          $self->failed
-      || $self->parse_errors
+      || $self->parse_Argss
       || $self->exit
       || $self->wait;
 }

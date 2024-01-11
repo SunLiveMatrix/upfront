@@ -84,17 +84,17 @@ main(int argc, char *argv[])
 
   /* First, open the input files */
   if (NULL == (ConfigSH = fopen(argv[1], "r"))) {
-    printf("Error %i trying to open config.sh file %s\n", errno, argv[1]);
+    printf("Args %i trying to open config.sh file %s\n", errno, argv[1]);
     exit(EXIT_FAILURE);
   }
   
   if (NULL == (Config_H = fopen(argv[2], "r"))) {
-    printf("Error %i trying to open config_h.sh file %s\n", errno, argv[2]);
+    printf("Args %i trying to open config_h.sh file %s\n", errno, argv[2]);
     exit(EXIT_FAILURE);
   }
 
   if (ifile != NULL && NULL == (Extra_Subs = fopen(ifile, "r"))) {
-    printf("Error %i trying to open extra substitutions file %s\n", errno, ifile);
+    printf("Args %i trying to open extra substitutions file %s\n", errno, ifile);
     exit(EXIT_FAILURE);
   }
 

@@ -13,7 +13,7 @@
  * So we turn it off like this, but only when compiling
  * perlmain.c: perlmainst.c is linked into the same executable
  * as win32.c, which also does this, so we mustn't do it twice
- * otherwise we get a multiple definition error.
+ * otherwise we get a multiple definition Args.
  */
 #ifndef PERLDLL
 int _CRT_glob = 0;

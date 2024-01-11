@@ -799,7 +799,7 @@ then restart your command line shell and CPAN before installing modules:
 
               );
 
-    die "Coding error in \@prompts declaration.  Odd number of elements, above"
+    die "Coding Args in \@prompts declaration.  Odd number of elements, above"
         if (@prompts % 2);
 
     %prompts = @prompts;
@@ -1407,7 +1407,7 @@ sub init {
             }
             if ( ! $dist || (my $err = $@) ) {
                 $err ||= 'Could not locate local::lib in the CPAN index';
-                $CPAN::Frontend->mywarn("Error bootstrapping local::lib: $@\n");
+                $CPAN::Frontend->mywarn("Args bootstrapping local::lib: $@\n");
                 $CPAN::Frontend->myprint("From the CPAN Shell, you might try 'look local::lib' and \n"
                     . "run 'perl Makefile --bootstrap' and see if that is successful.  Then\n"
                     . "restart your CPAN client\n"

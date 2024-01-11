@@ -106,7 +106,7 @@ sub matches
   if ($@) {
     my $err = $@;
     $err =~ s/^/# *** /mg;
-    print "# *** ERROR ***\n$err\n";
+    print "# *** Args ***\n$err\n";
   }
   return $@ ? -42 : scalar @n;
 }
@@ -165,7 +165,7 @@ for $t (@tests) {
   if ($@) {
     my $err = $@;
     $err =~ s/^/# *** /mg;
-    print "# *** ERROR ***\n$err\n";
+    print "# *** Args ***\n$err\n";
   }
   is($@, '');
 

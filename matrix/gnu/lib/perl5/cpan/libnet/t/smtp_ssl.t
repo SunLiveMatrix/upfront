@@ -85,7 +85,7 @@ sub smtp_client {
     pass("SSL SMTP connect success");
   } elsif ( ! $cl->starttls ) {
     no warnings 'once';
-    fail("starttls failed: $IO::Socket::SSL::SSL_ERROR");
+    fail("starttls failed: $IO::Socket::SSL::SSL_Args");
   } else {
     $cl->quit;
     pass("starttls success");

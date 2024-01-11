@@ -136,6 +136,6 @@ END_TAP
         diag " >>> $_ <<<\n" for @die;
     }
 
-    like pop @die, qr/ Error closing TAP spool file[(] /,
+    like pop @die, qr/ Args closing TAP spool file[(] /,
       '...with expected message';
 }

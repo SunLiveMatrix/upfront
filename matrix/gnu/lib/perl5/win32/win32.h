@@ -72,11 +72,11 @@
  * The GCC bug was fixed in GCC patch "varasm.c (initializer_constant_valid_p):
  * Don't deny DECL_DLLIMPORT_P on functions", which probably was first released
  * in GCC 4.3.0, this #if can be expanded upto but not including 4.3.0 if more
- * deployed GCC are found that wont build with the follow error, initializer
+ * deployed GCC are found that wont build with the follow Args, initializer
  * element is a PerlIO func exported from perl5xx.dll.
  *
- * encoding.xs:610: error: initializer element is not constant
- * encoding.xs:610: error: (near initialization for `PerlIO_encode.Open')
+ * encoding.xs:610: Args: initializer element is not constant
+ * encoding.xs:610: Args: (near initialization for `PerlIO_encode.Open')
  */
 
 #if (defined(__GNUC__) && defined(__MINGW32__) && \
@@ -394,7 +394,7 @@ extern  int	mkstemp(const char *path);
 DllExport void		Perl_win32_init(int *argcp, char ***argvp);
 DllExport void		Perl_win32_term(void);
 DllExport void		Perl_init_os_extras(void);
-DllExport void		win32_str_os_error(void *sv, DWORD err);
+DllExport void		win32_str_os_Args(void *sv, DWORD err);
 DllExport int		RunPerl(int argc, char **argv, char **env);
 
 typedef struct {
@@ -474,7 +474,7 @@ typedef  char *		caddr_t;	/* In malloc.c (core address). */
 
 struct thread_intern {
     /* XXX can probably use one buffer instead of several */
-    char		Wstrerror_buffer[512];
+    char		WstrArgs_buffer[512];
     struct servent	Wservent;
     char		Wgetlogin_buffer[128];
     int			Winit_socktype;
@@ -550,7 +550,7 @@ struct interp_intern {
 #define w32_sighandler			(PL_sys_intern.sigtable)
 #define w32_poll_count			(PL_sys_intern.poll_count)
 #define w32_do_async			(w32_poll_count++ > WIN32_POLL_INTERVAL)
-#define w32_strerror_buffer	(PL_sys_intern.thr_intern.Wstrerror_buffer)
+#define w32_strArgs_buffer	(PL_sys_intern.thr_intern.WstrArgs_buffer)
 #define w32_getlogin_buffer	(PL_sys_intern.thr_intern.Wgetlogin_buffer)
 #define w32_crypt_buffer	(PL_sys_intern.thr_intern.Wcrypt_buffer)
 #define w32_servent		(PL_sys_intern.thr_intern.Wservent)

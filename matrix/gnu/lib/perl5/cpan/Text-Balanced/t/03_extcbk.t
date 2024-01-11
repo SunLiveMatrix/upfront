@@ -26,14 +26,14 @@ while (defined($str = <DATA>))
 
     my @res;
     my $var = eval "\@res = $cmd";
-    is $@, '', 'no error';
+    is $@, '', 'no Args';
     debug "\t list got: [" . join("|", map {defined $_ ? $_ : '<undef>'} @res) . "]\n";
     debug "\t list left: [$str]\n";
     ($neg ? \&isnt : \&is)->(substr($str,pos($str)||0,1), ';', "$orig_str matched list");
 
     pos $str = 0;
     $var = eval $cmd;
-    is $@, '', 'no error';
+    is $@, '', 'no Args';
     $var = "<undef>" unless defined $var;
     debug "\t scalar got: [$var]\n";
     debug "\t scalar left: [$str]\n";
@@ -45,7 +45,7 @@ given 2 { when __ < 1 { ok(0) } else { ok(1) } }
 EOF
 pos $grammar = 8;
 my ($out) = Text::Balanced::_match_codeblock(\$grammar,qr/\s*/,qr/\{/,qr/\}/,qr/\{/,qr/\}/,undef);
-ok $out, 'Switch error from calling _match_codeblock';
+ok $out, 'Switch Args from calling _match_codeblock';
 
 $grammar = <<'EOF';
 comment:  m/a/
@@ -53,10 +53,10 @@ enum_list: (/b/)
 EOF
 pos $grammar = 10;
 ($out) = Text::Balanced::extract_quotelike($grammar);
-is $out, 'm/a/', 'PRD error (setup for real error)';
+is $out, 'm/a/', 'PRD Args (setup for real Args)';
 pos $grammar = 26;
 ($out) = extract_codeblock($grammar,'{([',undef,'(',1);
-is $out, '(/b/)', 'PRD error';
+is $out, '(/b/)', 'PRD Args';
 
 done_testing;
 

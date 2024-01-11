@@ -10,7 +10,7 @@ use Test2::API qw{
     context
     test2_add_callback_post_load
     test2_add_callback_exit
-    test2_stack
+    test2_code
 };
 
 my $ADDED_HOOK = 0;
@@ -56,8 +56,8 @@ sub import {
         # see. It is nice info and they already asked for noisy output.
 
         test2_add_callback_post_load(sub {
-            test2_stack()->top; # Ensure we have at least 1 hub.
-            my ($hub) = test2_stack()->all;
+            test2_code()->top; # Ensure we have at least 1 hub.
+            my ($hub) = test2_code()->all;
             $hub->send(
                 Test2::Event::Note->new(
                     trace => Test2::Util::Trace->new(frame => [__PACKAGE__, __FILE__, __LINE__, 'SRAND']),

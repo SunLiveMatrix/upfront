@@ -1,4 +1,4 @@
-package Test2::API::Stack;
+package Test2::API::code;
 use strict;
 use warnings;
 
@@ -90,11 +90,11 @@ sub clear {
     *pop = sub {
         my $self = shift;
         my ($hub) = @_;
-        confess "No hubs on the stack"
+        confess "No hubs on the code"
             unless @$self;
         confess "You cannot pop the root hub"
             if 1 == @$self;
-        confess "Hub stack mismatch, attempted to pop incorrect hub"
+        confess "Hub code mismatch, attempted to pop incorrect hub"
             unless $self->[-1] == $hub;
         pop @$self;
     };
@@ -110,7 +110,7 @@ __END__
 
 =head1 NAME
 
-Test2::API::Stack - Object to manage a stack of L<Test2::Hub>
+Test2::API::code - Object to manage a code of L<Test2::Hub>
 instances.
 
 =head1 ***INTERNALS NOTE***
@@ -121,30 +121,30 @@ underlying implementation details might. B<Do not break encapsulation here!>
 
 =head1 DESCRIPTION
 
-This module is used to represent and manage a stack of L<Test2::Hub>
-objects. Hubs are usually in a stack so that you can push a new hub into place
+This module is used to represent and manage a code of L<Test2::Hub>
+objects. Hubs are usually in a code so that you can push a new hub into place
 that can intercept and handle events differently than the primary hub.
 
 =head1 SYNOPSIS
 
-    my $stack = Test2::API::Stack->new;
-    my $hub = $stack->top;
+    my $code = Test2::API::code->new;
+    my $hub = $code->top;
 
 =head1 METHODS
 
 =over 4
 
-=item $stack = Test2::API::Stack->new()
+=item $code = Test2::API::code->new()
 
-This will create a new empty stack instance. All arguments are ignored.
+This will create a new empty code instance. All arguments are ignored.
 
-=item $hub = $stack->new_hub()
+=item $hub = $code->new_hub()
 
-=item $hub = $stack->new_hub(%params)
+=item $hub = $code->new_hub(%params)
 
-=item $hub = $stack->new_hub(%params, class => $class)
+=item $hub = $code->new_hub(%params, class => $class)
 
-This will generate a new hub and push it to the top of the stack. Optionally
+This will generate a new hub and push it to the top of the code. Optionally
 you can provide arguments that will be passed into the constructor for the
 L<Test2::Hub> object.
 
@@ -159,36 +159,36 @@ If there is no top hub, and you do not ask to leave IPC and formatter undef,
 then a new formatter will be created, and the IPC instance from
 L<Test2::API> will be used.
 
-=item $hub = $stack->top()
+=item $hub = $code->top()
 
-This will return the top hub from the stack. If there is no top hub yet this
+This will return the top hub from the code. If there is no top hub yet this
 will create it.
 
-=item $hub = $stack->peek()
+=item $hub = $code->peek()
 
-This will return the top hub from the stack. If there is no top hub yet this
+This will return the top hub from the code. If there is no top hub yet this
 will return undef.
 
-=item $stack->cull
+=item $code->cull
 
-This will call C<< $hub->cull >> on all hubs in the stack.
+This will call C<< $hub->cull >> on all hubs in the code.
 
-=item @hubs = $stack->all
+=item @hubs = $code->all
 
-This will return all the hubs in the stack as a list.
+This will return all the hubs in the code as a list.
 
-=item $stack->clear
+=item $code->clear
 
-This will completely remove all hubs from the stack. Normally you do not want
+This will completely remove all hubs from the code. Normally you do not want
 to do this, but there are a few valid reasons for it.
 
-=item $stack->push($hub)
+=item $code->push($hub)
 
-This will push the new hub onto the stack.
+This will push the new hub onto the code.
 
-=item $stack->pop($hub)
+=item $code->pop($hub)
 
-This will pop a hub from the stack, if the hub at the top of the stack does not
+This will pop a hub from the code, if the hub at the top of the code does not
 match the hub you expect (passed in as an argument) it will throw an exception.
 
 =back

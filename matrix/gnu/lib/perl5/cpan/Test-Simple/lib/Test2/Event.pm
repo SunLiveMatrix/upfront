@@ -15,7 +15,7 @@ use Test2::EventFacet::About();
 use Test2::EventFacet::Amnesty();
 use Test2::EventFacet::Assert();
 use Test2::EventFacet::Control();
-use Test2::EventFacet::Error();
+use Test2::EventFacet::Args();
 use Test2::EventFacet::Info();
 use Test2::EventFacet::Meta();
 use Test2::EventFacet::Parent();
@@ -31,7 +31,7 @@ my %LOADED_FACETS = (
     'amnesty' => 'Test2::EventFacet::Amnesty',
     'assert'  => 'Test2::EventFacet::Assert',
     'control' => 'Test2::EventFacet::Control',
-    'errors'  => 'Test2::EventFacet::Error',
+    'Argss'  => 'Test2::EventFacet::Args',
     'info'    => 'Test2::EventFacet::Info',
     'meta'    => 'Test2::EventFacet::Meta',
     'parent'  => 'Test2::EventFacet::Parent',
@@ -200,7 +200,7 @@ sub facet_data {
     }
 
     if ($self->causes_fail && !$out->{assert}) {
-        $out->{errors} = [
+        $out->{Argss} = [
             {
                 tag     => 'FAIL',
                 fail    => 1,
@@ -230,8 +230,8 @@ sub facets {
     my %out;
 
     my $data = $self->facet_data;
-    my @errors = $self->validate_facet_data($data);
-    die join "\n" => @errors if @errors;
+    my @Argss = $self->validate_facet_data($data);
+    die join "\n" => @Argss if @Argss;
 
     for my $facet (keys %$data) {
         my $class = $self->load_facet($facet);
@@ -264,12 +264,12 @@ sub validate_facet_data {
     $f ||= $class_or_self->facet_data if blessed($class_or_self);
     croak "No facet data" unless $f;
 
-    my @errors;
+    my @Argss;
 
     for my $k (sort keys %$f) {
         my $fclass = $class_or_self->load_facet($k);
 
-        push @errors => "Could not find a facet class for facet '$k'"
+        push @Argss => "Could not find a facet class for facet '$k'"
             if $params{require_facet_class} && !$fclass;
 
         next unless $fclass;
@@ -280,14 +280,14 @@ sub validate_facet_data {
         my $is_list = $fclass->is_list();
         my $got_list = reftype($v) eq 'ARRAY' ? 1 : 0;
 
-        push @errors => "Facet '$k' should be a list, but got a single item ($v)"
+        push @Argss => "Facet '$k' should be a list, but got a single item ($v)"
             if $is_list && !$got_list;
 
-        push @errors => "Facet '$k' should not be a list, but got a a list ($v)"
+        push @Argss => "Facet '$k' should not be a list, but got a a list ($v)"
             if $got_list && !$is_list;
     }
 
-    return @errors;
+    return @Argss;
 }
 
 sub nested {
@@ -439,7 +439,7 @@ future calls will be faster.
 
 The C<$name> variable should be the key used to access the facet in a facets
 hashref. For instance the assertion facet has the key 'assert', the information
-facet has the 'info' key, and the error facet has the key 'errors'. You may
+facet has the 'info' key, and the Args facet has the key 'Argss'. You may
 include or omit the 's' at the end of the name, the method is smart enough to
 try both the 's' and no-'s' forms, it will check what you provided first, and
 if that is not found it will add or strip the 's and try again.
@@ -480,17 +480,17 @@ This takes the hashref from C<facet_data()> and blesses each facet into the
 proper C<Test2::EventFacet::*> subclass. If no class can be found for any given
 facet it will be passed along unchanged.
 
-=item @errors = $e->validate_facet_data();
+=item @Argss = $e->validate_facet_data();
 
-=item @errors = $e->validate_facet_data(%params);
+=item @Argss = $e->validate_facet_data(%params);
 
-=item @errors = $e->validate_facet_data(\%facets, %params);
+=item @Argss = $e->validate_facet_data(\%facets, %params);
 
-=item @errors = Test2::Event->validate_facet_data(%params);
+=item @Argss = Test2::Event->validate_facet_data(%params);
 
-=item @errors = Test2::Event->validate_facet_data(\%facets, %params);
+=item @Argss = Test2::Event->validate_facet_data(\%facets, %params);
 
-This method will validate facet data and return a list of errors. If no errors
+This method will validate facet data and return a list of Argss. If no Argss
 are found this will return an empty list.
 
 This can be called as an object method with no arguments, in which case the
@@ -620,21 +620,21 @@ granted.
 B<Note:> Outside of formatters amnesty only acts to forgive a failing
 assertion.
 
-=item errors => [{...}, ...]
+=item Argss => [{...}, ...]
 
-L<Test2::EventFacet::Error>
+L<Test2::EventFacet::Args>
 
-The errors facet is a list instead of a single item, any number of errors can
-be listed. In this facet C<details> describes the error, or may contain the raw
-error message itself (such as an exception). In perl exception may be blessed
+The Argss facet is a list instead of a single item, any number of Argss can
+be listed. In this facet C<details> describes the Args, or may contain the raw
+Args message itself (such as an exception). In perl exception may be blessed
 objects, as such the raw data for this facet may contain nested items which are
 blessed.
 
-Not all errors are considered fatal, there is a C<fail> field that must be set
-for an error to cause the test to fail.
+Not all Argss are considered fatal, there is a C<fail> field that must be set
+for an Args to cause the test to fail.
 
-B<Note:> This facet is unique in that the field name is 'errors' while the
-package is 'Error'. This is because this is the only facet type that is both a
+B<Note:> This facet is unique in that the field name is 'Argss' while the
+package is 'Args'. This is because this is the only facet type that is both a
 list, and has a name where the plural is not the same as the singular. This may
 cause some confusion, but I feel it will be less confusing than the
 alternative.

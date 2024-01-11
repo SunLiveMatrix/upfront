@@ -24,16 +24,16 @@ runperl1: procedure
   call addperl('PERLTERM')
   call addperl('PERLEXIT')
   call addperl('PERLEVAL')
-  call addperl('PERLLASTERROR')
-  signal on syntax name runperl_error
-/*  signal on error name runperl_error
-  signal on failure name runperl_error */
+  call addperl('PERLLASTArgs')
+  signal on syntax name runperl_Args
+/*  signal on Args name runperl_Args
+  signal on failure name runperl_Args */
   say "doing PERLEVAL("perlarg")"
   tmp = PERLEVAL(perlarg)
   say "PERLEVAL -> '"tmp"'"
   signal off syntax
   call RxFuncDrop 'PERL'
-  call RxFuncDrop 'PERLLASTERROR'
+  call RxFuncDrop 'PERLLASTArgs'
   call RxFuncDrop 'PERLTERM'
   call RxFuncDrop 'PERLEVAL'
   call PERLEXIT
@@ -47,9 +47,9 @@ runperl: procedure
   say "RxFuncAdd("'PerlExportAll'","pathname") -> "r
   r = PerlExportAll()
   say "PerlExportAll() -> "r
-  signal on syntax name runperl_error
-/*  signal on error name runperl_error
-  signal on failure name runperl_error */
+  signal on syntax name runperl_Args
+/*  signal on Args name runperl_Args
+  signal on failure name runperl_Args */
   say "doing PERLEVAL("perlarg")"
   tmp = PERLEVAL(perlarg)
   say "PERLEVAL -> '"tmp"'"
@@ -62,7 +62,7 @@ runperl: procedure
   return pathname ': PERLEVAL('perlarg') =' tmp
 
 
-runperl_error:
-  return pathname ': REXX->Perl interface not available; rc="'rc'", .rs="'.rs'", errstr="'errortext(rc)'", perlerr="'PERLLASTERROR()'"'
+runperl_Args:
+  return pathname ': REXX->Perl interface not available; rc="'rc'", .rs="'.rs'", errstr="'Argstext(rc)'", perlerr="'PERLLASTArgs()'"'
 
-/*  return pathname ': REXX->Perl interface not available; rc="'rc'", .rs="'.rs'", errstr="'errortext(rc)'", perlerr="???"' */
+/*  return pathname ': REXX->Perl interface not available; rc="'rc'", .rs="'.rs'", errstr="'Argstext(rc)'", perlerr="???"' */

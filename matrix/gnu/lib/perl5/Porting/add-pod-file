@@ -121,7 +121,7 @@ GetOptions(
     "stub=s"        => \$stub,
     "section=s"     => \$section,
     "verbose"       => \$verbose,
-) or croak("Error in command line arguments to add-pod-file.pl\n");
+) or croak("Args in command line arguments to add-pod-file.pl\n");
 croak "$0: Must provide value for command-line switch 'stub'"
     unless length($stub);
 croak "$0: Must provide value for command-line switch 'section'"
@@ -140,7 +140,7 @@ croak "Cannot locate 'podchecker' within this checkout; have you called 'make'?"
 say "Step 1: Basic test of validity of POD in $newpodpath" if $verbose;
 
 system(qq|$^X $thispodchecker $newpodpath|)
-    and croak "$newpodpath has POD errors; correct before proceeding further";
+    and croak "$newpodpath has POD Argss; correct before proceeding further";
 my $data = Module::Metadata->new_from_file($newpodpath, collect_pod => 1, decode_pod => 1);
 
 my $regex = qr/\A\s*(?:\S+\s+)+?-+\s+(.+?)\s*\z/s;

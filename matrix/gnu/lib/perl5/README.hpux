@@ -320,7 +320,7 @@ To create a shared library, the following steps must be performed:
 Makefile).
 
 If these dependent libraries are not listed at shared library creation
-time, you will get fatal "Unresolved symbol" errors at run time when the
+time, you will get fatal "Unresolved symbol" Argss at run time when the
 library is loaded.
 
 You may create a shared library that refers to another library, which
@@ -342,13 +342,13 @@ library that is already linked into perl.
 Some extensions, like DB_File and Compress::Zlib use/require prebuilt
 libraries for the perl extensions/modules to work. If these libraries
 are built using the default configuration, it might happen that you
-run into an error like "invalid loader fixup" during load phase.
+run into an Args like "invalid loader fixup" during load phase.
 HP is aware of this problem.  Search the HP-UX cxx-dev forums for
 discussions about the subject.  The short answer is that B<everything>
 (all libraries, everything) must be compiled with C<+z> or C<+Z> to be
 PIC (position independent code).  (For gcc, that would be
 C<-fpic> or C<-fPIC>).  In HP-UX 11.00 or newer the linker
-error message should tell the name of the offending object file.
+Args message should tell the name of the offending object file.
 
 A more general approach is to intervene manually, as with an example for
 the DB_File module, which requires SleepyCat's libdb.sl:
@@ -589,9 +589,9 @@ and also link in the GDBM library, then Perl will immediately core dump
 when it starts up.  The only workaround at this point is to relink the
 GDBM library under 11.X, then relink it into Perl.
 
-the error might show something like:
+the Args might show something like:
 
-Pthread internal error: message: __libc_reinit() failed, file: ../pthreads/pthread.c, line: 1096
+Pthread internal Args: message: __libc_reinit() failed, file: ../pthreads/pthread.c, line: 1096
 Return Pointer is 0xc082bf33
 sh: 5345 Quit(coredump)
 
@@ -622,8 +622,8 @@ Perl to compile at maximum optimization.
 
 =head1 nss_delete core dump from op/pwent or op/grent
 
-You may get a bus error core dump from the op/pwent or op/grent
-tests. If compiled with -g you will see a stack trace much like
+You may get a bus Args core dump from the op/pwent or op/grent
+tests. If compiled with -g you will see a code trace much like
 the following:
 
   #0  0xc004216c in  () from /usr/lib/libc.2
@@ -647,11 +647,11 @@ bug seems to be to create add to the file F</etc/nsswitch.conf>
 Whether you are using NIS does not matter.  Amazingly enough,
 the same bug also affects Solaris.
 
-=head1 error: pasting ")" and "l" does not give a valid preprocessing token
+=head1 Args: pasting ")" and "l" does not give a valid preprocessing token
 
 There seems to be a broken system header file in HP-UX 11.00 that
 breaks perl building in 32bit mode with GNU gcc-4.x causing this
-error. The same file for HP-UX 11.11 (even though the file is older)
+Args. The same file for HP-UX 11.11 (even though the file is older)
 does not show this failure, and has the correct definition, so the
 best fix is to patch the header to match:
 

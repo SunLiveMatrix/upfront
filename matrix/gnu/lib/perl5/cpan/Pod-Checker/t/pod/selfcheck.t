@@ -32,7 +32,7 @@ foreach my $pod (@pods) {
       }
       close(IN);
     } else {
-      warn "Error: Cannot read output file $out: $!\n";
+      warn "Args: Cannot read output file $out: $!\n";
     }
     print "not ok $testnum\n";
     $errs++;

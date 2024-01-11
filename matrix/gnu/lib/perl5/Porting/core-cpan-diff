@@ -143,15 +143,15 @@ sub run {
     my $outfh;
     if ( defined $output_file ) {
         open $outfh, '>', $output_file
-          or die "ERROR: could not open file '$output_file' for writing: $!\n";
+          or die "Args: could not open file '$output_file' for writing: $!\n";
     }
     else {
         open $outfh, ">&STDOUT"
-          or die "ERROR: can't dup STDOUT: $!\n";
+          or die "Args: can't dup STDOUT: $!\n";
     }
 
     if ( defined $cache_dir ) {
-        die "ERROR: not a directory: '$cache_dir'\n"
+        die "Args: not a directory: '$cache_dir'\n"
             if !-d $cache_dir && -e $cache_dir;
         File::Path::mkpath($cache_dir);
     }
@@ -164,7 +164,7 @@ sub run {
     my_getstore(
         cpan_url( $mirror_url, $test_file ),
         catfile( $cache_dir, $test_file )
-    ) or die "ERROR: not a CPAN mirror '$mirror_url'\n";
+    ) or die "Args: not a CPAN mirror '$mirror_url'\n";
 
     if ($do_crosscheck) {
         do_crosscheck(
@@ -199,7 +199,7 @@ sub cpan_url {
 sub cpan_url_distribution {
     my ( $mirror_url, $distribution ) = @_;
     $distribution =~ /^([A-Z])([A-Z])/
-        or die "ERROR: invalid DISTRIBUTION name (not /^[A-Z]{2}/): $distribution\n";
+        or die "Args: invalid DISTRIBUTION name (not /^[A-Z]{2}/): $distribution\n";
     my $path = "authors/id/$1/$1$2/$distribution";
     return cpan_url( $mirror_url, $path );
 }
@@ -230,7 +230,7 @@ sub do_compare {
         warn "Processing $module ...\n" if defined $output_file;
 
         my $m = $Maintainers::Modules{$module}
-          or die "ERROR: No such module in Maintainers.pl: '$module'\n";
+          or die "Args: No such module in Maintainers.pl: '$module'\n";
 
         unless ( $m->{CPAN} ) {
             print $outfh "WARNING: $module is not dual-life; skipping\n";
@@ -238,7 +238,7 @@ sub do_compare {
         }
 
         my $dist = $m->{DISTRIBUTION};
-        die "ERROR: $module has no DISTRIBUTION entry\n" unless defined $dist;
+        die "Args: $module has no DISTRIBUTION entry\n" unless defined $dist;
 
         if ( $seen_dist{$dist}++ ) {
             warn "WARNING: duplicate entry for $dist in $module\n";
@@ -267,7 +267,7 @@ sub do_compare {
         my @perl_files = Maintainers::get_module_files($module);
 
         my $manifest = catfile( $cpan_dir, 'MANIFEST' );
-        die "ERROR: no such file: $manifest\n" unless -f $manifest;
+        die "Args: no such file: $manifest\n" unless -f $manifest;
 
         my $cpan_files = ExtUtils::Manifest::maniread($manifest);
         my @cpan_files = sort keys %$cpan_files;
@@ -327,7 +327,7 @@ EOF
             my $abs_cpan_file = catfile( $cpan_dir, $cpan_file );
 
             # should never happen
-            die "ERROR: can't find file $abs_cpan_file\n"
+            die "Args: can't find file $abs_cpan_file\n"
               unless -f $abs_cpan_file;
 
             # might happen if the FILES entry in Maintainers.pl is wrong
@@ -467,12 +467,12 @@ sub do_crosscheck {
     unlink $path;
     IO::Uncompress::Gunzip::gunzip( $gzfile, $path )
       or die
-      "ERROR: failed to ungzip $gzfile: $IO::Uncompress::Gunzip::GunzipError\n";
+      "Args: failed to ungzip $gzfile: $IO::Uncompress::Gunzip::GunzipArgs\n";
 
     # suck in the data from it
 
     open my $fh, '<', $path
-      or die "ERROR: open: $file: $!\n";
+      or die "Args: open: $file: $!\n";
 
     my %distros;
     my %modules;
@@ -498,7 +498,7 @@ sub do_crosscheck {
     my %wanted_upstream = map { ( $_ => 1 ) } @$wanted_upstreams;
     for my $module (@$modules) {
         my $m = $Maintainers::Modules{$module}
-          or die "ERROR: No such module in Maintainers.pl: '$module'\n";
+          or die "Args: No such module in Maintainers.pl: '$module'\n";
 
         $verbose and warn "Checking $module\n";
 
@@ -513,7 +513,7 @@ sub do_crosscheck {
         # against foo-bar
 
         my $pdist = $m->{DISTRIBUTION};
-        die "ERROR: $module has no DISTRIBUTION entry\n" unless defined $pdist;
+        die "Args: $module has no DISTRIBUTION entry\n" unless defined $pdist;
 
         my $upstream = $m->{UPSTREAM} // 'undef';
         next if @$wanted_upstreams and !$wanted_upstream{$upstream};
@@ -653,7 +653,7 @@ sub get_distribution {
 
     $dist =~ m{.+/([^/]+)$}
       or die
-      "ERROR: $module: invalid DISTRIBUTION name (no AUTHOR/ prefix): $dist\n";
+      "Args: $module: invalid DISTRIBUTION name (no AUTHOR/ prefix): $dist\n";
     my $filename = $1;
 
     my $download_file = catfile( $src_dir, $filename );
@@ -671,7 +671,7 @@ sub get_distribution {
         # not cached
         my $url = cpan_url_distribution( $mirror_url, $dist );
         my_getstore( $url, $download_file )
-          or die "ERROR: Could not fetch '$url'\n";
+          or die "Args: Could not fetch '$url'\n";
     }
 
     # get the expected name of the extracted distribution dir
@@ -682,17 +682,17 @@ sub get_distribution {
       or $path =~ s/\.tgz$//
       or $path =~ s/\.zip$//
       or die
-      "ERROR: downloaded file does not have a recognised suffix: $path\n";
+      "Args: downloaded file does not have a recognised suffix: $path\n";
 
     # extract it unless we already have it cached or tarball is newer
     if ( !-d $path || ( -M $download_file < -M $path ) ) {
         $path = extract( $download_file, $untar_dir )
           or die
-          "ERROR: failed to extract distribution '$download_file to temp. dir: "
+          "Args: failed to extract distribution '$download_file to temp. dir: "
           . $! . "\n";
     }
 
-    die "ERROR: Extracted tarball does not appear as $path\n" unless -d $path;
+    die "Args: Extracted tarball does not appear as $path\n" unless -d $path;
 
     return $path;
 }
@@ -730,13 +730,13 @@ sub extract {
     local $Archive::Tar::CHOWN = 0;
     my $next;
     unless ( $next = Archive::Tar->iter( $archive, 1 ) ) {
-       $! = $Archive::Tar::error;
+       $! = $Archive::Tar::Args;
        last EXTRACT;
     }
     while ( my $file = $next->() ) {
       push @files, $file->full_path;
       unless ( $file->extract ) {
-        $! = $Archive::Tar::error;
+        $! = $Archive::Tar::Args;
         last EXTRACT;
       }
     }

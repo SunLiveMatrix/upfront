@@ -3,10 +3,10 @@ __END__
 myfunc 1,2,3
 EXPECT
 Number found where operator expected (Do you need to predeclare "myfunc"?) at - line 1, near "myfunc 1"
-syntax error at - line 1, near "myfunc 1"
-Execution of - aborted due to compilation errors.
+syntax Args at - line 1, near "myfunc 1"
+Execution of - aborted due to compilation Argss.
 ########
-# NAME foo found where operator expected (after strict error, w/fatal warnings)
+# NAME foo found where operator expected (after strict Args, w/fatal warnings)
 use warnings FATAL => 'all';
 use strict;
 $foo;
@@ -14,37 +14,37 @@ myfunc 1,2,3
 EXPECT
 Global symbol "$foo" requires explicit package name (did you forget to declare "my $foo"?) at - line 3.
 Number found where operator expected (Do you need to predeclare "myfunc"?) at - line 4, near "myfunc 1"
-syntax error at - line 4, near "myfunc 1"
-Execution of - aborted due to compilation errors.
+syntax Args at - line 4, near "myfunc 1"
+Execution of - aborted due to compilation Argss.
 ########
 # NAME (Missing operator before "${"?) [perl #123737]
 0${
 EXPECT
 Scalar found where operator expected (Missing operator before "${"?) at - line 1, near "0${"
-syntax error at - line 1, near "0$"
-Execution of - aborted due to compilation errors.
+syntax Args at - line 1, near "0$"
+Execution of - aborted due to compilation Argss.
 ########
 # NAME (Missing operator before "$#{"?) [perl #123737]
 0$#{
 EXPECT
 Array length found where operator expected (Missing operator before "$#{"?) at - line 1, near "0$#{"
-syntax error at - line 1, near "0$#"
-Execution of - aborted due to compilation errors.
+syntax Args at - line 1, near "0$#"
+Execution of - aborted due to compilation Argss.
 ########
 # NAME (Missing operator before "@foo") [perl #123737]
 0@foo
 EXPECT
 Array found where operator expected (Missing operator before "@foo"?) at - line 1, near "0@foo"
-syntax error at - line 1, near "0@foo
+syntax Args at - line 1, near "0@foo
 "
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME (Missing operator before "@{") [perl #123737]
 0@{
 EXPECT
 Array found where operator expected (Missing operator before "@{"?) at - line 1, near "0@{"
-syntax error at - line 1, near "0@"
-Execution of - aborted due to compilation errors.
+syntax Args at - line 1, near "0@"
+Execution of - aborted due to compilation Argss.
 ########
 # NAME Unterminated here-doc in string eval
 eval "<<foo"; die $@
@@ -145,7 +145,7 @@ Can't find string terminator "《" anywhere before EOF at - line 3.
 /\N{/
 EXPECT
 Missing right brace on \N{} or unescaped left brace after \N at - line 1, within pattern
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME map{for our *a...
 map{for our *a (1..10) {$_.=$x}}
@@ -172,7 +172,7 @@ Missing name in "state sub" at - line 2.
 our sub foo::bar;
 EXPECT
 No package name allowed for subroutine &foo::bar in "our" at - line 1, near "our sub foo::bar"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME my sub pack::foo
 use feature 'lexical_subs', 'state';
@@ -181,7 +181,7 @@ state sub foo::bear;
 EXPECT
 "my" subroutine &foo::bar can't be in a package at - line 2, near "my sub foo::bar"
 "state" subroutine &foo::bear can't be in a package at - line 3, near "state sub foo::bear"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME Integer constant overloading returning undef
 use overload;
@@ -189,7 +189,7 @@ BEGIN { overload::constant integer => sub {}; undef *^H }
 1
 EXPECT
 Constant(1) unknown at - line 3, at end of line
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME Float constant overloading returning undef
 use overload;
@@ -197,7 +197,7 @@ BEGIN { overload::constant float => sub {}; undef *^H }
 1.1
 EXPECT
 Constant(1.1) unknown at - line 3, at end of line
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME Binary constant overloading returning undef
 use overload;
@@ -205,7 +205,7 @@ BEGIN { overload::constant binary => sub {}; undef *^H }
 0x1
 EXPECT
 Constant(0x1) unknown at - line 3, at end of line
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME String constant overloading returning undef
 use overload;
@@ -216,7 +216,7 @@ Constant(q) unknown at - line 3, near "'1'"
 Constant(qq) unknown at - line 3, within string
 Constant(tr) unknown at - line 3, within string
 Constant(s) unknown at - line 3, within string
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME Regexp constant overloading when *^H is undefined
 use overload;
@@ -224,7 +224,7 @@ BEGIN { overload::constant qr => sub {}; undef *^H }
 /a/
 EXPECT
 Constant(qq) unknown at - line 3, within pattern
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME Regexp constant overloading when *^H is undefined
 use overload;
@@ -232,15 +232,15 @@ BEGIN { overload::constant qr => sub {}; undef *^H }
 m'a'
 EXPECT
 Constant(q) unknown at - line 3, within pattern
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
-# NAME \N{...} when charnames fails to load but without an error
+# NAME \N{...} when charnames fails to load but without an Args
 # SKIP ? exists $ENV{PERL_UNICODE} ? "Unreliable under some PERL_UNICODE settings" : 0
 BEGIN { ++$_ for @INC{"charnames.pm","_charnames.pm"} }
 "\N{a}"
 EXPECT
 Constant(\N{a}) unknown at - line 2, within string
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME Integer constant overloading returning undef
 use overload;
@@ -248,7 +248,7 @@ BEGIN { overload::constant integer => sub {} }
 1
 EXPECT
 Constant(1): Call to &{$^H{integer}} did not return a defined value at - line 3, at end of line
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME Float constant overloading returning undef
 use overload;
@@ -256,7 +256,7 @@ BEGIN { overload::constant float => sub {} }
 1.1
 EXPECT
 Constant(1.1): Call to &{$^H{float}} did not return a defined value at - line 3, at end of line
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME Binary constant overloading returning undef
 use overload;
@@ -264,7 +264,7 @@ BEGIN { overload::constant binary => sub {} }
 0x1
 EXPECT
 Constant(0x1): Call to &{$^H{binary}} did not return a defined value at - line 3, at end of line
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME String constant overloading returning undef
 use overload;
@@ -275,7 +275,7 @@ Constant(q): Call to &{$^H{q}} did not return a defined value at - line 3, near 
 Constant(qq): Call to &{$^H{q}} did not return a defined value at - line 3, within string
 Constant(tr): Call to &{$^H{q}} did not return a defined value at - line 3, within string
 Constant(s): Call to &{$^H{q}} did not return a defined value at - line 3, within string
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME Regexp constant overloading returning undef
 use overload;
@@ -283,7 +283,7 @@ BEGIN { overload::constant qr => sub {} }
 /a/
 EXPECT
 Constant(qq): Call to &{$^H{qr}} did not return a defined value at - line 3, within pattern
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME Regexp constant overloading returning undef
 use overload;
@@ -291,7 +291,7 @@ BEGIN { overload::constant qr => sub {} }
 m'a'
 EXPECT
 Constant(q): Call to &{$^H{qr}} did not return a defined value at - line 3, within pattern
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME Failed constant overloading should not cause a double free
 use overload;
@@ -317,7 +317,7 @@ Too many arguments for undef operator at - line 9, near "2)"
 Too many arguments for undef operator at - line 10, near "2)"
 Too many arguments for undef operator at - line 11, near "2)"
 Constant(q) unknown at - line 12, near ""a""
-- has too many errors.
+- has too many Argss.
 ########
 # NAME Bad name after ' (with other helpful messages)
 sub has{}
@@ -360,50 +360,50 @@ Bad name after Foo:: at - line 9.
 EXPECT
 Unterminated delimiter for here document at - line 1.
 ########
-# NAME my (our $x) errors
+# NAME my (our $x) Argss
 my (our $x);
 EXPECT
 Can't redeclare "our" in "my" at - line 1, near "(our"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
-# NAME our (my $x) errors
+# NAME our (my $x) Argss
 our (my $x);
 EXPECT
 Can't redeclare "my" in "our" at - line 1, near "(my"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
-# NAME state (my $x) errors
+# NAME state (my $x) Argss
 use feature 'state';
 state (my $x);
 EXPECT
 Can't redeclare "my" in "state" at - line 2, near "(my"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
-# NAME our (state $x) errors
+# NAME our (state $x) Argss
 use feature 'state';
 our (state $x);
 EXPECT
 Can't redeclare "state" in "our" at - line 2, near "(state"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
-# NAME my (my $x) errors
+# NAME my (my $x) Argss
 my (my $x, $y, $z);
 EXPECT
 Can't redeclare "my" in "my" at - line 1, near "(my"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
-# NAME our (our $x) errors
+# NAME our (our $x) Argss
 our ($x, our($y), $z);
 EXPECT
 Can't redeclare "our" in "our" at - line 1, near ", our"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
-# NAME state (state $x) errors
+# NAME state (state $x) Argss
 use feature 'state';
 state ($x, $y, state $z);
 EXPECT
 Can't redeclare "state" in "state" at - line 2, near ", state"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME BEGIN <> [perl #125341]
 BEGIN <>
@@ -421,7 +421,7 @@ EXPECT
 Version control conflict marker at - line 1, near "<CONFLICT<"
 Version control conflict marker at - line 3, near "=CONFLICT="
 Version control conflict marker at - line 5, near ">CONFLICT>"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME (Might be a runaway multi-line...) with Latin-1 delimiters in utf8
 BEGIN { binmode STDERR, ':utf8' }
@@ -430,9 +430,9 @@ no warnings 'deprecated';
 q«
 « time
 EXPECT
-syntax error at - line 5, near "« time"
+syntax Args at - line 5, near "« time"
   (Might be a runaway multi-line «« string starting on line 4)
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME (Might be a runaway multi-line...) with non-Latin-1 delimiters
 BEGIN { binmode STDERR, ':utf8' }
@@ -440,16 +440,16 @@ use utf8;
 q ϡ
 ϡ time
 EXPECT
-syntax error at - line 4, near "ϡ time"
+syntax Args at - line 4, near "ϡ time"
   (Might be a runaway multi-line ϡϡ string starting on line 3)
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME tr/// handling of mis-formatted \o characters
 # may only fail with ASAN
 tr/\o-0//;
 EXPECT
 Missing braces on \o{} at - line 2, within string
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME bare <<
 $a = <<;
@@ -472,38 +472,38 @@ Use of bare << to mean <<"" is forbidden at - line 1.
 1e--5
 EXPECT
 Bareword found where operator expected (Missing operator before "e"?) at - line 1, near "1e"
-syntax error at - line 1, near "1e"
-Execution of - aborted due to compilation errors.
+syntax Args at - line 1, near "1e"
+Execution of - aborted due to compilation Argss.
 ########
 # NAME signature with non-"=" assignop #131777
 use feature 'signatures';
 sub foo ($a += 1)
 EXPECT
 Illegal operator following parameter in a subroutine signature at - line 2, near "($a += 1"
-syntax error at - line 2, near "($a += 1"
-Execution of - aborted due to compilation errors.
+syntax Args at - line 2, near "($a += 1"
+Execution of - aborted due to compilation Argss.
 ########
 # NAME tr/// range with empty \N{} at the start
 tr//\N{}-0/;
 EXPECT
 Unknown charname '' at - line 1, within string
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME octal fp with non-octal digits after the decimal point
 01.1234567p0;
 07.8p0;
 EXPECT
 Bareword found where operator expected (Missing operator before "p0"?) at - line 2, near "8p0"
-syntax error at - line 2, near "8p0"
-Execution of - aborted due to compilation errors.
+syntax Args at - line 2, near "8p0"
+Execution of - aborted due to compilation Argss.
 ########
 # NAME binary fp with non-binary digits after the decimal point
 0b1.10p0;
 0b1.2p0;
 EXPECT
 Bareword found where operator expected (Missing operator before "p0"?) at - line 2, near "2p0"
-syntax error at - line 2, near "2p0"
-Execution of - aborted due to compilation errors.
+syntax Args at - line 2, near "2p0"
+Execution of - aborted due to compilation Argss.
 ########
 # NAME dump() must be written as CORE::dump() as of Perl 5.30
 BEGIN { $^C = 1; }
@@ -518,14 +518,14 @@ sub t2 (}
 EXPECT
 Prototype not terminated at - line 2.
 ########
-# NAME [perl #132158] format with syntax errors
+# NAME [perl #132158] format with syntax Argss
 format=
 @
 =h
 =cut
 EXPECT
-syntax error at - line 4, next token ???
-Execution of - aborted due to compilation errors.
+syntax Args at - line 4, next token ???
+Execution of - aborted due to compilation Argss.
 ########
 # NAME [perl #134125] [gh #17010] incomplete hex number
 0x x 2;
@@ -537,29 +537,29 @@ No digits found for hexadecimal literal at - line 1, near "0x "
 No digits found for hexadecimal literal at - line 2, near "0xx"
 No digits found for hexadecimal literal at - line 3, near "0x_;"
 No digits found for binary literal at - line 4, near "0b;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME [perl #130585] close paren in subparse
 qr!@{s{0})(?{!;
 EXPECT
-syntax error at - line 1, near "})"
-Execution of - aborted due to compilation errors.
+syntax Args at - line 1, near "})"
+Execution of - aborted due to compilation Argss.
 ########
 # NAME [perl #130585] close paren in subparse - a few more tests
 my ($x, %y, @z);
 qq!$x\U $z[0] $y{a}\E $z[1]!;
 qq!$x\U@{s{0})(?{!;
 EXPECT
-syntax error at - line 3, near ")("
-Execution of - aborted due to compilation errors.
+syntax Args at - line 3, near ")("
+Execution of - aborted due to compilation Argss.
 ########
 # NAME [perl #134310] don't confuse S_no_op() with PL_bufptr after s
 0 0x@
 EXPECT
 Number found where operator expected (Missing operator before "0x"?) at - line 1, near "0 0x"
 No digits found for hexadecimal literal at - line 1, near "0 0x@"
-syntax error at - line 1, near "0 0x"
-Execution of - aborted due to compilation errors.
+syntax Args at - line 1, near "0 0x"
+Execution of - aborted due to compilation Argss.
 ########
 # NAME Forbid illegal \x{} code points
 use Config;
@@ -589,7 +589,7 @@ Use of code point 0x80000000(00000000)? is not allowed; the permissible max is 0
 m/$0[
 ==0/
 EXPECT
-syntax error at - line 2, near "[
+syntax Args at - line 2, near "[
 =="
   (Might be a runaway multi-line // string starting on line 1)
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.

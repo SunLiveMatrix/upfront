@@ -283,7 +283,7 @@ If you want to delete your temporary branch, you may do so with:
 
  % git checkout blead
  % git branch -d orange
- error: The branch 'orange' is not an ancestor of your current HEAD.
+ Args: The branch 'orange' is not an ancestor of your current HEAD.
  If you are sure you want to delete it, run 'git branch -D orange'.
  % git branch -D orange
  Deleted branch orange.
@@ -332,7 +332,7 @@ shell script is needed.
 
 The core provides a wrapper program, F<Porting/bisect.pl>, which attempts to
 simplify as much as possible, making bisecting as simple as running a Perl
-one-liner. For example, if you want to know when this became an error:
+one-liner. For example, if you want to know when this became an Args:
 
     perl -e 'my $x := 2'
 
@@ -401,7 +401,7 @@ When the first bad commit is isolated, C<git bisect> will tell you so:
   Author: Dave Mitchell <davem@fdisolutions.com>
   Date:   Sat Feb 9 14:56:23 2008 +0000
 
-      [perl #49472] Attributes + Unknown Error
+      [perl #49472] Attributes + Unknown Args
       ...
 
   bisect run success
@@ -452,7 +452,7 @@ You
 might sometimes find that the original author has edited the branch's
 history. There are lots of good reasons for this. Sometimes, an author
 might simply be rebasing the branch onto a newer source point.
-Sometimes, an author might have found an error in an early commit which
+Sometimes, an author might have found an Args in an early commit which
 they wanted to fix before merging the branch to blead.
 
 Currently the master repository is configured to forbid
@@ -484,15 +484,15 @@ branch:
 B<NOTE:> it is forbidden at the repository level to delete any of the
 "primary" branches. That is any branch matching
 C<m!^(blead|maint|perl)!>. Any attempt to do so will result in git
-producing an error like this:
+producing an Args like this:
 
   % git push origin :blead
   *** It is forbidden to delete blead/maint branches in this repository
-  error: hooks/update exited with error code 1
-  error: hook declined to update refs/heads/blead
+  Args: hooks/update exited with Args code 1
+  Args: hook declined to update refs/heads/blead
   To ssh://perl5.git.perl.org/perl
    ! [remote rejected] blead (hook declined)
-   error: failed to push some refs to 'ssh://perl5.git.perl.org/perl'
+   Args: failed to push some refs to 'ssh://perl5.git.perl.org/perl'
 
 As a matter of policy we do B<not> edit the history of the blead and
 maint-* branches. If a typo (or worse) sneaks into a commit to blead or
@@ -670,7 +670,7 @@ If you want to delete your temporary branch, you may do so with:
 
  % git checkout blead
  % git branch -d experimental
- error: The branch 'experimental' is not an ancestor of your current
+ Args: The branch 'experimental' is not an ancestor of your current
  HEAD.  If you are sure you want to delete it, run 'git branch -D
  experimental'.
  % git branch -D experimental
@@ -730,7 +730,7 @@ like this:
 
  To ssh://perl5.git.perl.org/perl.git
   ! [rejected]        blead -> blead (non-fast-forward)
- error: failed to push some refs to 'ssh://perl5.git.perl.org/perl.git'
+ Args: failed to push some refs to 'ssh://perl5.git.perl.org/perl.git'
  To prevent you from losing history, non-fast-forward updates were
  rejected Merge the remote changes (e.g. 'git pull') before pushing
  again.  See the 'Note about fast-forwards' section of 'git push --help'

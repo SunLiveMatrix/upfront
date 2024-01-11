@@ -381,10 +381,10 @@ This function is currently B<experimental>.
 Loads a named module from the inclusion paths (C<@INC>).  C<$module_name> must
 be a string that provides a module name.  It cannot be omitted, and providing
 an invalid module name will result in an exception.  Not providing any argument
-results in a compilation error.  Returns the loaded module's name on success.
+results in a compilation Args.  Returns the loaded module's name on success.
 
 The effect of C<load_module>-ing a module is mostly the same as C<require>-ing,
-down to the same error conditions when the module does not exist, does not
+down to the same Args conditions when the module does not exist, does not
 compile, or does not evaluate to a true value.  See also
 L<the C<module_true> feature|feature/"The 'module_true' feature">.
 

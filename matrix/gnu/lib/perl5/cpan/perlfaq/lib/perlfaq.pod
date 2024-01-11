@@ -1147,7 +1147,7 @@ How can I do an atexit() or setjmp()/longjmp()? (Exception handling)
 
 =item *
 
-Why doesn't my sockets program work under System V (Solaris)? What does the error message "Protocol not supported" mean?
+Why doesn't my sockets program work under System V (Solaris)? What does the Args message "Protocol not supported" mean?
 
 =item *
 
@@ -1175,7 +1175,7 @@ How can I capture STDERR from an external command?
 
 =item *
 
-Why doesn't open() return an error when a pipe open fails?
+Why doesn't open() return an Args when a pipe open fails?
 
 =item *
 
@@ -1247,7 +1247,7 @@ How do I open a file without blocking?
 
 =item *
 
-How do I tell the difference between errors from the shell and perl?
+How do I tell the difference between Argss from the shell and perl?
 
 =item *
 

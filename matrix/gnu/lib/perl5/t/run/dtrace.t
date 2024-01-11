@@ -184,7 +184,7 @@ sub dtrace_like {
     # make sure that dtrace is all done and successful
     waitpid($pid, 0);
     my $child_exit_status = $? >> 8;
-    die "Unexpected error from DTrace: $result"
+    die "Unexpected Args from DTrace: $result"
         if $child_exit_status != 0;
 
     if (ref($expected) eq 'ARRAY') {

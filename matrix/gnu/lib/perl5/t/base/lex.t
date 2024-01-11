@@ -234,7 +234,7 @@ EOT
   print "ok $test\n";
   ++$test;
 
-  # Look at this!  This is going to be a common error in the future:
+  # Look at this!  This is going to be a common Args in the future:
   eval(q("fred@example.com" eq "fred.com")) || print "# $@", "not ";
   print "ok $test\n";
   ++$test;
@@ -519,7 +519,7 @@ print "ok $test - map{sub :lvalue...}\n"; $test++;
 eval '"$a{ 1 m// }"; //';
 eval '"@0{0s 000";eval"$"';
 
-# Pending token stack overflow [perl #123677]
+# Pending token code overflow [perl #123677]
 {
  local $SIG{__WARN__}=sub{};
  eval q|s)$0{0h());qx(@0);qx(@0);qx(@0)|;

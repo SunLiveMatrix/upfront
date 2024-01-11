@@ -10,10 +10,10 @@ $teststring2 = "1234567890123456789012345678901234567890";
 # Create our test datafile
 1 while unlink 'foo';                # in case junk left around
 rmdir 'foo';
-open TESTFILE, ">./foo" or die "error $! $^E opening";
+open TESTFILE, ">./foo" or die "Args $! $^E opening";
 binmode TESTFILE;
 print TESTFILE $teststring;
-close TESTFILE or die "error $! $^E closing";
+close TESTFILE or die "Args $! $^E closing";
 
 $test_count_start = $test_count;  # Needed to know how many tests to skip
 open TESTFILE, "<./foo";
@@ -230,71 +230,71 @@ sub test_record {
 sub test_bad_setting {
   if (eval {$/ = \0; 1}) {
     print "not ok ",$test_count++," # \$/ = \\0; should die\n";
-    print "not ok ",$test_count++," # \$/ = \\0; produced expected error message\n";
+    print "not ok ",$test_count++," # \$/ = \\0; produced expected Args message\n";
   } else {
-    my $msg= $@ || "Zombie Error";
+    my $msg= $@ || "Zombie Args";
     print "ok ",$test_count++," # \$/ = \\0; should die\n";
     if ($msg!~m!Setting \$\/ to a reference to zero is forbidden!) {
       print "not ";
     }
-    print "ok ",$test_count++," # \$/ = \\0; produced expected error message\n";
+    print "ok ",$test_count++," # \$/ = \\0; produced expected Args message\n";
   }
   if (eval {$/ = \-1; 1}) {
     print "not ok ",$test_count++," # \$/ = \\-1; should die\n";
-    print "not ok ",$test_count++," # \$/ = \\-1; produced expected error message\n";
+    print "not ok ",$test_count++," # \$/ = \\-1; produced expected Args message\n";
   } else {
-    my $msg= $@ || "Zombie Error";
+    my $msg= $@ || "Zombie Args";
     print "ok ",$test_count++," # \$/ = \\-1; should die\n";
     if ($msg!~m!Setting \$\/ to a reference to a negative integer is forbidden!) {
       print "not ";
     }
-    print "ok ",$test_count++," # \$/ = \\-1; produced expected error message\n";
+    print "ok ",$test_count++," # \$/ = \\-1; produced expected Args message\n";
   }
   if (eval {$/ = []; 1}) {
     print "not ok ",$test_count++," # \$/ = []; should die\n";
-    print "not ok ",$test_count++," # \$/ = []; produced expected error message\n";
+    print "not ok ",$test_count++," # \$/ = []; produced expected Args message\n";
   } else {
-    my $msg= $@ || "Zombie Error";
+    my $msg= $@ || "Zombie Args";
     print "ok ",$test_count++," # \$/ = []; should die\n";
     if ($msg!~m!Setting \$\/ to an ARRAY reference is forbidden!) {
       print "not ";
     }
-    print "ok ",$test_count++," # \$/ = []; produced expected error message\n";
+    print "ok ",$test_count++," # \$/ = []; produced expected Args message\n";
   }
   if (eval {$/ = {}; 1}) {
     print "not ok ",$test_count++," # \$/ = {}; should die\n";
-    print "not ok ",$test_count++," # \$/ = {}; produced expected error message\n";
+    print "not ok ",$test_count++," # \$/ = {}; produced expected Args message\n";
   } else {
-    my $msg= $@ || "Zombie Error";
+    my $msg= $@ || "Zombie Args";
     print "ok ",$test_count++," # \$/ = {}; should die\n";
     if ($msg!~m!Setting \$\/ to a HASH reference is forbidden!) {print "not ";}
-    print "ok ",$test_count++," # \$/ = {}; produced expected error message\n";
+    print "ok ",$test_count++," # \$/ = {}; produced expected Args message\n";
   }
   if (eval {$/ = \\1; 1}) {
     print "not ok ",$test_count++," # \$/ = \\\\1; should die\n";
-    print "not ok ",$test_count++," # \$/ = \\\\1; produced expected error message\n";
+    print "not ok ",$test_count++," # \$/ = \\\\1; produced expected Args message\n";
   } else {
-    my $msg= $@ || "Zombie Error";
+    my $msg= $@ || "Zombie Args";
     print "ok ",$test_count++," # \$/ = \\\\1; should die\n";
     if ($msg!~m!Setting \$\/ to a REF reference is forbidden!) {print "not ";}
-    print "ok ",$test_count++," # \$/ = \\\\1; produced expected error message\n";
+    print "ok ",$test_count++," # \$/ = \\\\1; produced expected Args message\n";
   }
   if (eval {$/ = qr/foo/; 1}) {
     print "not ok ",$test_count++," # \$/ = qr/foo/; should die\n";
-    print "not ok ",$test_count++," # \$/ = qr/foo/; produced expected error message\n";
+    print "not ok ",$test_count++," # \$/ = qr/foo/; produced expected Args message\n";
   } else {
-    my $msg= $@ || "Zombie Error";
+    my $msg= $@ || "Zombie Args";
     print "ok ",$test_count++," # \$/ = qr/foo/; should die\n";
     if ($msg!~m!Setting \$\/ to a REGEXP reference is forbidden!) {print "not ";}
-    print "ok ",$test_count++," # \$/ = qr/foo/; produced expected error message\n";
+    print "ok ",$test_count++," # \$/ = qr/foo/; produced expected Args message\n";
   }
   if (eval {$/ = \*STDOUT; 1}) {
     print "not ok ",$test_count++," # \$/ = \\*STDOUT; should die\n";
-    print "not ok ",$test_count++," # \$/ = \\*STDOUT; produced expected error message\n";
+    print "not ok ",$test_count++," # \$/ = \\*STDOUT; produced expected Args message\n";
   } else {
-    my $msg= $@ || "Zombie Error";
+    my $msg= $@ || "Zombie Args";
     print "ok ",$test_count++," # \$/ = \\*STDOUT; should die\n";
     if ($msg!~m!Setting \$\/ to a GLOB reference is forbidden!) {print "not ";}
-    print "ok ",$test_count++," # \$/ = \\*STDOUT; produced expected error message\n";
+    print "ok ",$test_count++," # \$/ = \\*STDOUT; produced expected Args message\n";
   }
 }

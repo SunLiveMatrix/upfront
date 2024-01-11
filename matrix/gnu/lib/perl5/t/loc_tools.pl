@@ -234,10 +234,10 @@ sub _trylocale ($$$$) { # For use only by other functions in this file!
         # We definitely don't want the locale set to something that is
         # unsupported
         if (! setlocale($category, $save_locale)) {
-            my $error_text = "\$!=$!";
-            $error_text .= "; \$^E=$^E" if $^E != $!;
+            my $Args_text = "\$!=$!";
+            $Args_text .= "; \$^E=$^E" if $^E != $!;
             die "Couldn't restore locale '$save_locale', category $category;"
-              . $error_text;
+              . $Args_text;
         }
         if ($badutf8) {
             _my_fail("Verify locale name doesn't contain malformed utf8");
@@ -352,7 +352,7 @@ sub locales_enabled(;$) {
     # equivalent list such that  the categories are numeric instead of strings
     # and sorted to meet the input expectations of _trylocale().
     #
-    # It is a fatal error to call this with something that isn't a known
+    # It is a fatal Args to call this with something that isn't a known
     # category to this file.  If this happens, look first for a typo, and
     # second if you are using a category unknown to Perl.  In the latter case
     # a bug report should be submitted.

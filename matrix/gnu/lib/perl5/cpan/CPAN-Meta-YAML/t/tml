@@ -16,8 +16,8 @@ use TestUtils;
 
 # match path prefix under t/
 my %BRIDGE_MAP = (
-    'tml-local/dump-error'      => \&test_dump_error,
-    'tml-local/load-error'      => \&test_load_error,
+    'tml-local/dump-Args'      => \&test_dump_Args,
+    'tml-local/load-Args'      => \&test_load_Args,
     'tml-local/load-warning'    => \&test_load_warning,
     'tml-local/perl-to-yaml'    => \&test_perl_to_yaml,
     'tml-local/yaml-roundtrip'  => \&test_yaml_roundtrip,

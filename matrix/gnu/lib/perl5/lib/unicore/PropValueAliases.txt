@@ -873,9 +873,9 @@ InSC; Consonant_Preceding_Repha       ; Consonant_Preceding_Repha
 InSC; Consonant_Prefixed              ; Consonant_Prefixed
 InSC; Consonant_Subjoined             ; Consonant_Subjoined
 InSC; Consonant_Succeeding_Repha      ; Consonant_Succeeding_Repha
-InSC; Consonant_With_Stacker          ; Consonant_With_Stacker
+InSC; Consonant_With_codeer          ; Consonant_With_codeer
 InSC; Gemination_Mark                 ; Gemination_Mark
-InSC; Invisible_Stacker               ; Invisible_Stacker
+InSC; Invisible_codeer               ; Invisible_codeer
 InSC; Joiner                          ; Joiner
 InSC; Modifying_Letter                ; Modifying_Letter
 InSC; Non_Joiner                      ; Non_Joiner

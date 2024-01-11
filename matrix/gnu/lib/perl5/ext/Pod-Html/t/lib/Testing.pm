@@ -29,7 +29,7 @@ our @no_arg_switches = ( qw|
     flush recurse norecurse
     quiet noquiet verbose noverbose
     index noindex backlink nobacklink
-    header noheader poderrors nopoderrors
+    header noheader podArgss nopodArgss
 | );
 
 =head1 NAME

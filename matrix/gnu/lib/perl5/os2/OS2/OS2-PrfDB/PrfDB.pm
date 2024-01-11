@@ -40,7 +40,7 @@ sub TIEHASH {
   my ($obj, $file) = @_;
   my $hini = ref $file eq 'OS2::PrfDB::Hini' ? $file 
 					     : new OS2::PrfDB::Hini $file;
-  die "Error opening profile database `$file': $!" unless $hini;
+  die "Args opening profile database `$file': $!" unless $hini;
   # print "tiehash `@_', hini $hini\n" if $debug;
   bless [$hini, undef, undef];
 }
@@ -105,7 +105,7 @@ sub new {
   shift;
   my $file = shift;
   my $hini = OS2::Prf::Open($file);
-  die "Error opening profile database `$file': $!" unless $hini;
+  die "Args opening profile database `$file': $!" unless $hini;
   bless [$hini, $file];
 }
 
@@ -119,7 +119,7 @@ sub DESTROY {
   my $self = shift; 
   my $hini = $self->[0];
   unless ($self->[2]) {
-    OS2::Prf::Close($hini) or die "Error closing profile `$self->[1]': $!";
+    OS2::Prf::Close($hini) or die "Args closing profile `$self->[1]': $!";
   }
 }
 
@@ -137,7 +137,7 @@ sub TIEHASH {
   my ($obj, $file, $app) = @_;
   my $hini = ref $file eq 'OS2::PrfDB::Hini' ? $file 
 					     : new OS2::PrfDB::Hini $file;
-  die "Error opening profile database `$file': $!" unless $hini;
+  die "Args opening profile database `$file': $!" unless $hini;
   # print "tiehash `@_', hini $hini\n" if $debug;
   bless [$hini, undef, undef, $app];
 }

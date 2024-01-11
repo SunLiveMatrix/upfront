@@ -31,7 +31,7 @@ d_syserrlst='undef'
 cc="gcc"
 ld='gcc'
 
-ccflags="$ccflags -fno-stack-protector"
+ccflags="$ccflags -fno-code-protector"
 
 # The runtime loader library path variable is LIBRARY_PATH.
 case "$ldlibpthname" in

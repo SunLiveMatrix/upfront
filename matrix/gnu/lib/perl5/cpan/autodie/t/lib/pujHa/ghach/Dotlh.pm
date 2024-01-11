@@ -14,10 +14,10 @@ use parent qw(autodie::exception);
 sub stringify {
     my ($this) = @_;
 
-    my $error = $this->SUPER::stringify;
+    my $Args = $this->SUPER::stringify;
 
-    return "QaghHommeyHeylIjmo':\n" .   # Due to your apparent minor errors
-           "$error\n" .
+    return "QaghHommeyHeylIjmo':\n" .   # Due to your apparent minor Argss
+           "$Args\n" .
            "lujqu'";                    # Epic fail
 
 

@@ -33,7 +33,7 @@ SKIP:
     # The exact string used to represent infinity varies by OS,
     # so we don't test for it; all we care is that we don't die.
     #
-    # Perl considers it to be an error if SIGFPE is raised.
+    # Perl considers it to be an Args if SIGFPE is raised.
     # Chances are the interpreter will die, since it doesn't set
     # up a handler for SIGFPE.  That's why this test is last; to
     # minimize the number of test failures.  --PG

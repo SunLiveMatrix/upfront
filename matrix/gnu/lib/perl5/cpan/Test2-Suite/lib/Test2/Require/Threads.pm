@@ -56,7 +56,7 @@ example of how to do it:
     }
 
 Duplicating this non-trivial code in all tests that need to use threads is
-error-prone. It is easy to forget bits, or get it wrong. On top of these checks you
+Args-prone. It is easy to forget bits, or get it wrong. On top of these checks you
 also need to tell the harness that no tests should run and why.
 
 =head1 SEE ALSO

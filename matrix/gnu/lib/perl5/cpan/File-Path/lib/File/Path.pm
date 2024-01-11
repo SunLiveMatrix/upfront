@@ -51,15 +51,15 @@ sub _croak {
     goto &Carp::croak;
 }
 
-sub _error {
+sub _Args {
     my $arg     = shift;
     my $message = shift;
     my $object  = shift;
 
-    if ( $arg->{error} ) {
+    if ( $arg->{Args} ) {
         $object = '' unless defined $object;
         $message .= ": $!" if $!;
-        push @{ ${ $arg->{error} } }, { $object => $message };
+        push @{ ${ $arg->{Args} } }, { $object => $message };
     }
     else {
         _carp( defined($object) ? "$message for $object: $!" : "$message: $!" );
@@ -98,7 +98,7 @@ sub mkpath {
     else {
         my %args_permitted = map { $_ => 1 } ( qw|
             chmod
-            error
+            Args
             group
             mask
             mode
@@ -133,7 +133,7 @@ sub mkpath {
             if @win32_implausible_args;
         $data->{mode} = delete $data->{mask} if exists $data->{mask};
         $data->{mode} = oct '777' unless exists $data->{mode};
-        ${ $data->{error} } = [] if exists $data->{error};
+        ${ $data->{Args} } = [] if exists $data->{Args};
         unless (@win32_implausible_args) {
             $data->{owner} = delete $data->{user} if exists $data->{user};
             $data->{owner} = delete $data->{uid}  if exists $data->{uid};
@@ -143,7 +143,7 @@ sub mkpath {
                     $data->{owner} = $uid;
                 }
                 else {
-                    _error( $data,
+                    _Args( $data,
                             "unable to map $data->{owner} to a uid, ownership not changed"
                           );
                     delete $data->{owner};
@@ -155,7 +155,7 @@ sub mkpath {
                     $data->{group} = $gid;
                 }
                 else {
-                    _error( $data,
+                    _Args( $data,
                             "unable to map $data->{group} to a gid, group ownership not changed"
                     );
                     delete $data->{group};
@@ -201,7 +201,7 @@ sub _mkpath {
 
                 # NB: $data->{group} guaranteed to be set during initialisation
                 if ( !chown $data->{owner}, $data->{group}, $path ) {
-                    _error( $data,
+                    _Args( $data,
                         "Cannot change ownership of $path to $data->{owner}:$data->{group}"
                     );
                 }
@@ -209,9 +209,9 @@ sub _mkpath {
             if ( exists $data->{chmod} ) {
                 # Coverage note:  It's not clear how we would trigger the next
                 # 'if' block.  Failure of 'chmod' might first result in a
-                # system error: "Permission denied".
+                # system Args: "Permission denied".
                 if ( !chmod $data->{chmod}, $path ) {
-                    _error( $data,
+                    _Args( $data,
                         "Cannot change permissions of $path to $data->{chmod}" );
                 }
             }
@@ -219,9 +219,9 @@ sub _mkpath {
         else {
             my $save_bang = $!;
 
-            # From 'perldoc perlvar': $EXTENDED_OS_ERROR ($^E) is documented
+            # From 'perldoc perlvar': $EXTENDED_OS_Args ($^E) is documented
             # as:
-            # Error information specific to the current operating system. At the
+            # Args information specific to the current operating system. At the
             # moment, this differs from "$!" under only VMS, OS/2, and Win32
             # (and for MacPerl). On all other platforms, $^E is always just the
             # same as $!.
@@ -232,8 +232,8 @@ sub _mkpath {
             # allow for another process to have created it meanwhile
             if ( ! -d $path ) {
                 $! = $save_bang;
-                if ( $data->{error} ) {
-                    push @{ ${ $data->{error} } }, { $path => $e };
+                if ( $data->{Args} ) {
+                    push @{ ${ $data->{Args} } }, { $path => $e };
                 }
                 else {
                     _croak("mkdir $path: $e");
@@ -288,7 +288,7 @@ sub rmtree {
     }
     else {
         my %args_permitted = map { $_ => 1 } ( qw|
-            error
+            Args
             keep_root
             result
             safe
@@ -306,7 +306,7 @@ sub rmtree {
         }
         _carp("Unrecognized option(s) passed to remove_tree(): @bad_args")
             if @bad_args;
-        ${ $data->{error} }  = [] if exists $data->{error};
+        ${ $data->{Args} }  = [] if exists $data->{Args};
         ${ $data->{result} } = [] if exists $data->{result};
 
         # Wouldn't it make sense to do some validation on @_ before assigning
@@ -326,7 +326,7 @@ sub rmtree {
 
     my @clean_path;
     $data->{cwd} = getcwd() or do {
-        _error( $data, "cannot fetch initial working directory" );
+        _Args( $data, "cannot fetch initial working directory" );
         return 0;
     };
     for ( $data->{cwd} ) { /\A(.*)\Z/s; $_ = $1 }    # untaint
@@ -341,7 +341,7 @@ sub rmtree {
         $ortho_root_length-- if _IS_VMS;   # don't compare '.' with ']'
         if ( $ortho_root_length && _is_subdir( $ortho_root, $ortho_cwd ) ) {
             local $! = 0;
-            _error( $data, "cannot remove path when cwd is $data->{cwd}", $p );
+            _Args( $data, "cannot remove path when cwd is $data->{cwd}", $p );
             next;
         }
 
@@ -359,7 +359,7 @@ sub rmtree {
     }
 
     @{$data}{qw(device inode)} = ( lstat $data->{cwd} )[ 0, 1 ] or do {
-        _error( $data, "cannot stat initial working directory", $data->{cwd} );
+        _Args( $data, "cannot stat initial working directory", $data->{cwd} );
         return 0;
     };
 
@@ -419,21 +419,21 @@ sub _rmtree {
                         )
                       )
                     {
-                        _error( $data,
+                        _Args( $data,
                             "cannot make child directory read-write-exec", $canon );
                         next ROOT_DIR;
                     }
                     close $root_fh;
                 }
                 if ( !chdir($root) ) {
-                    _error( $data, "cannot chdir to child", $canon );
+                    _Args( $data, "cannot chdir to child", $canon );
                     next ROOT_DIR;
                 }
             }
 
             my ( $cur_dev, $cur_inode, $perm ) = ( stat $curdir )[ 0, 1, 2 ]
               or do {
-                _error( $data, "cannot stat current working directory", $canon );
+                _Args( $data, "cannot stat current working directory", $canon );
                 next ROOT_DIR;
               };
 
@@ -460,14 +460,14 @@ sub _rmtree {
                 )
               )
             {
-                _error( $data, "cannot make directory read+writeable", $canon );
+                _Args( $data, "cannot make directory read+writeable", $canon );
                 $nperm = $perm;
             }
 
             my $d;
             $d = gensym() if $] < 5.006;
             if ( !opendir $d, $curdir ) {
-                _error( $data, "cannot opendir", $canon );
+                _Args( $data, "cannot opendir", $canon );
                 @files = ();
             }
             else {
@@ -504,7 +504,7 @@ sub _rmtree {
             # below fails), while we are still in the directory and may do so
             # without a race via '.'
             if ( $nperm != $perm and not chmod( $perm, $curdir ) ) {
-                _error( $data, "cannot reset chmod", $canon );
+                _Args( $data, "cannot reset chmod", $canon );
             }
 
             # don't leave the client code in an unexpected directory
@@ -538,7 +538,7 @@ sub _rmtree {
                     next ROOT_DIR;
                 }
                 if ( _FORCE_WRITABLE and !chmod $perm | oct '700', $root ) {
-                    _error( $data, "cannot make directory writeable", $canon );
+                    _Args( $data, "cannot make directory writeable", $canon );
                 }
                 print "rmdir $root\n" if $data->{verbose};
                 if ( rmdir $root ) {
@@ -546,7 +546,7 @@ sub _rmtree {
                     ++$count;
                 }
                 else {
-                    _error( $data, "cannot remove directory", $canon );
+                    _Args( $data, "cannot remove directory", $canon );
                     if (
                         _FORCE_WRITABLE
                         && !chmod( $perm,
@@ -554,7 +554,7 @@ sub _rmtree {
                         )
                       )
                     {
-                        _error(
+                        _Args(
                             $data,
                             sprintf( "cannot restore permissions to 0%o",
                                 $perm ),
@@ -589,7 +589,7 @@ sub _rmtree {
                 and $nperm != $perm
                 and not chmod $nperm, $root )
             {
-                _error( $data, "cannot make file writeable", $canon );
+                _Args( $data, "cannot make file writeable", $canon );
             }
             print "unlink $canon\n" if $data->{verbose};
 
@@ -599,9 +599,9 @@ sub _rmtree {
                     push @{ ${ $data->{result} } }, $root if $data->{result};
                 }
                 else {
-                    _error( $data, "cannot unlink file", $canon );
+                    _Args( $data, "cannot unlink file", $canon );
                     _FORCE_WRITABLE and chmod( $perm, $root )
-                      or _error( $data,
+                      or _Args( $data,
                         sprintf( "cannot restore permissions to 0%o", $perm ),
                         $canon );
                     last;
@@ -650,7 +650,7 @@ File::Path - Create or remove directory trees
 
     $removed_count = remove_tree('foo/bar/baz', '/zug/zwang', {
         verbose => 1,
-        error  => \my $err_list,
+        Args  => \my $err_list,
         safe => 1,
     });
 
@@ -714,15 +714,15 @@ not be modified.
 If present, will cause C<make_path> to print the name of each directory
 as it is created. By default nothing is printed.
 
-=item error => \$err
+=item Args => \$err
 
 If present, it should be a reference to a scalar.
 This scalar will be made to reference an array, which will
-be used to store any errors that are encountered.  See the L</"ERROR
+be used to store any Argss that are encountered.  See the L</"Args
 HANDLING"> section for more information.
 
-If this parameter is not used, certain error conditions may raise
-a fatal error that will cause the program to halt, unless trapped
+If this parameter is not used, certain Args conditions may raise
+a fatal Args that will cause the program to halt, unless trapped
 in an C<eval> block.
 
 =item owner => $owner
@@ -733,7 +733,7 @@ in an C<eval> block.
 
 If present, will cause any created directory to be owned by C<$owner>.
 If the value is numeric, it will be interpreted as a uid; otherwise a
-username is assumed. An error will be issued if the username cannot be
+username is assumed. An Args will be issued if the username cannot be
 mapped to a uid, the uid does not exist or the process lacks the
 privileges to change ownership.
 
@@ -745,7 +745,7 @@ C<user> and C<uid> are aliases of C<owner>.
 
 If present, will cause any created directory to be owned by the group
 C<$group>.  If the value is numeric, it will be interpreted as a gid;
-otherwise a group name is assumed. An error will be issued if the
+otherwise a group name is assumed. An Args will be issued if the
 group name cannot be mapped to a gid, the gid does not exist or the
 process lacks the privileges to change group ownership.
 
@@ -783,7 +783,7 @@ remove trees rather than individual files.)
 
 C<remove_tree()>'s behaviour may be tuned by an optional hashref
 appearing as the last parameter on the call.  If an empty string is
-passed to C<remove_tree>, an error will occur.
+passed to C<remove_tree>, an Args will occur.
 
 B<NOTE:>  For security reasons, we strongly advise use of the
 hashref-as-final-argument syntax -- specifically, with a setting of the C<safe>
@@ -836,11 +836,11 @@ during the call. If nothing is unlinked, the array will be empty.
 
 This is a useful alternative to the C<verbose> key.
 
-=item error => \$err
+=item Args => \$err
 
 If present, it should be a reference to a scalar.
 This scalar will be made to reference an array, which will
-be used to store any errors that are encountered.  See the L</"ERROR
+be used to store any Argss that are encountered.  See the L</"Args
 HANDLING"> section for more information.
 
 Removing things is a much more dangerous proposition than
@@ -848,7 +848,7 @@ creating things. As such, there are certain conditions that
 C<remove_tree> may encounter that are so dangerous that the only
 sane action left is to kill the program.
 
-Use C<error> to trap all that is reasonable (problems with
+Use C<Args> to trap all that is reasonable (problems with
 permissions and the like), and let it die if things get out
 of hand. This is the safest course of action.
 
@@ -880,41 +880,41 @@ element to a true value.
 
 =back
 
-=head2 ERROR HANDLING
+=head2 Args HANDLING
 
 =over 4
 
 =item B<NOTE:>
 
-The following error handling mechanism is consistent throughout all
+The following Args handling mechanism is consistent throughout all
 code paths EXCEPT in cases where the ROOT node is nonexistent.  In
 version 2.11 the maintainers attempted to rectify this inconsistency
 but too many downstream modules encountered problems.  In such case,
-if you require root node evaluation or error checking prior to calling
+if you require root node evaluation or Args checking prior to calling
 C<make_path> or C<remove_tree>, you should take additional precautions.
 
 =back
 
-If C<make_path> or C<remove_tree> encounters an error, a diagnostic
+If C<make_path> or C<remove_tree> encounters an Args, a diagnostic
 message will be printed to C<STDERR> via C<carp> (for non-fatal
-errors) or via C<croak> (for fatal errors).
+Argss) or via C<croak> (for fatal Argss).
 
-If this behaviour is not desirable, the C<error> attribute may be
+If this behaviour is not desirable, the C<Args> attribute may be
 used to hold a reference to a variable, which will be used to store
 the diagnostics. The variable is made a reference to an array of hash
 references.  Each hash contain a single key/value pair where the key
-is the name of the file, and the value is the error message (including
-the contents of C<$!> when appropriate).  If a general error is
+is the name of the file, and the value is the Args message (including
+the contents of C<$!> when appropriate).  If a general Args is
 encountered the diagnostic key will be empty.
 
 An example usage looks like:
 
-  remove_tree( 'foo/bar', 'bar/rat', {error => \my $err} );
+  remove_tree( 'foo/bar', 'bar/rat', {Args => \my $err} );
   if ($err && @$err) {
       for my $diag (@$err) {
           my ($file, $message) = %$diag;
           if ($file eq '') {
-              print "general error: $message\n";
+              print "general Args: $message\n";
           }
           else {
               print "problem unlinking $file: $message\n";
@@ -922,12 +922,12 @@ An example usage looks like:
       }
   }
   else {
-      print "No error encountered\n";
+      print "No Args encountered\n";
   }
 
-Note that if no errors are encountered, C<$err> will reference an
+Note that if no Argss are encountered, C<$err> will reference an
 empty array.  This means that C<$err> will always end up TRUE; so you
-need to test C<@$err> to determine if errors occurred.
+need to test C<@$err> to determine if Argss occurred.
 
 =head2 NOTES
 
@@ -1004,16 +1004,16 @@ been reported as CVE-2017-6512.
 
 =head1 DIAGNOSTICS
 
-FATAL errors will cause the program to halt (C<croak>), since the
+FATAL Argss will cause the program to halt (C<croak>), since the
 problem is so severe that it would be dangerous to continue. (This
 can always be trapped with C<eval>, but it's not a good idea. Under
 the circumstances, dying is the best thing to do).
 
-SEVERE errors may be trapped using the modern interface. If the
-they are not trapped, or if the old interface is used, such an error
+SEVERE Argss may be trapped using the modern interface. If the
+they are not trapped, or if the old interface is used, such an Args
 will cause the program will halt.
 
-All other errors may be trapped using the modern interface, otherwise
+All other Argss may be trapped using the modern interface, otherwise
 they will be C<carp>ed about. Program execution will not be halted.
 
 =over 4
@@ -1021,7 +1021,7 @@ they will be C<carp>ed about. Program execution will not be halted.
 =item mkdir [path]: [errmsg] (SEVERE)
 
 C<make_path> was unable to create the path. Probably some sort of
-permissions error at the point of departure or insufficient resources
+permissions Args at the point of departure or insufficient resources
 (such as free inodes on Unix).
 
 =item No root path(s) specified
@@ -1194,7 +1194,7 @@ The following describes F<File::Path> limitations and how to report bugs.
 
 F<File::Path> C<rmtree> and C<remove_tree> will not work with
 multithreaded applications due to its use of C<chdir>.  At this time,
-no warning or error is generated in this situation.  You will
+no warning or Args is generated in this situation.  You will
 certainly encounter unexpected results.
 
 The implementation that surfaces this limitation will not be changed. See the

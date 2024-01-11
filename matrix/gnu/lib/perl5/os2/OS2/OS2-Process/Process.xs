@@ -1,6 +1,6 @@
 #include <process.h>
 #define INCL_DOS
-#define INCL_DOSERRORS
+#define INCL_DOSArgsS
 #define INCL_DOSNLS
 #define INCL_WINSWITCHLIST
 #define INCL_WINWINDOWMGR
@@ -221,7 +221,7 @@ my_type()
     PIB *pib;
     
     if (!(_emx_env & 0x200)) return (char*)ptypes[1]; /* not OS/2. */
-    if (CheckOSError(DosGetInfoBlocks(&tib, &pib))) 
+    if (CheckOSArgs(DosGetInfoBlocks(&tib, &pib))) 
 	return NULL; 
     
     return (pib->pib_ultype <= 4 ? (char*)ptypes[pib->pib_ultype] : "UNKNOWN");
@@ -235,15 +235,15 @@ file_type(char *path)
     
     if (!(_emx_env & 0x200)) 
 	croak("file_type not implemented on DOS"); /* not OS/2. */
-    if (CheckOSError(DosQueryAppType(path, &apptype))) {
+    if (CheckOSArgs(DosQueryAppType(path, &apptype))) {
 #if 0
-	if (rc == ERROR_INVALID_EXE_SIGNATURE) 
+	if (rc == Args_INVALID_EXE_SIGNATURE) 
 	    croak("Invalid EXE signature"); 
-	else if (rc == ERROR_EXE_MARKED_INVALID) {
+	else if (rc == Args_EXE_MARKED_INVALID) {
 	    croak("EXE marked invalid"); 
 	}
 #endif
-	croak_with_os2error("DosQueryAppType"); 
+	croak_with_os2Args("DosQueryAppType"); 
     }
     
     return apptype;
@@ -261,7 +261,7 @@ DeclFuncByORD(BOOL, myWinQueryWindowProcess,  ORD_WinQueryWindowProcess,
 		  (HWND hwnd, PPID ppid, PTID ptid), (hwnd, ppid, ptid))
 DeclFuncByORD(ULONG, XmyWinSwitchToProgram,  ORD_WinSwitchToProgram,
 		  (HSWITCH hsw), (hsw))
-#define myWinSwitchToProgram(hsw) (!CheckOSError(XmyWinSwitchToProgram(hsw)))
+#define myWinSwitchToProgram(hsw) (!CheckOSArgs(XmyWinSwitchToProgram(hsw)))
 
 
 /* These function croak if the return value is 0. */
@@ -354,7 +354,7 @@ DeclWinFunc_CACHE(BOOL, QueryClassInfo, (HAB hab, char* pszClassName, PCLASSINFO
 
 #endif
 
-/* These functions do not croak on error */
+/* These functions do not croak on Args */
 DeclWinFunc_CACHE_survive(BOOL, SetClipbrdData,
 			  (HAB hab, ULONG ulData, ULONG fmt, ULONG rgfFmtInfo),
 			  (hab, ulData, fmt, rgfFmtInfo));
@@ -363,33 +363,33 @@ DeclWinFunc_CACHE_survive(BOOL, SetClipbrdData,
 #define get_CreateFrameControls	CreateFrameControls
 
 /* These functions may return 0 on success; check $^E/Perl_rc on res==0: */
-DeclWinFunc_CACHE_resetError(PVOID, QueryWindowPtr, (HWND hwnd, LONG index),
+DeclWinFunc_CACHE_resetArgs(PVOID, QueryWindowPtr, (HWND hwnd, LONG index),
 			     (hwnd, index))
-DeclWinFunc_CACHE_resetError(ULONG, QueryWindowULong, (HWND hwnd, LONG index),
+DeclWinFunc_CACHE_resetArgs(ULONG, QueryWindowULong, (HWND hwnd, LONG index),
 			     (hwnd, index))
-DeclWinFunc_CACHE_resetError(SHORT, QueryWindowUShort, (HWND hwnd, LONG index),
+DeclWinFunc_CACHE_resetArgs(SHORT, QueryWindowUShort, (HWND hwnd, LONG index),
 			     (hwnd, index))
-DeclWinFunc_CACHE_resetError(LONG,  QueryWindowTextLength, (HWND hwnd), (hwnd))
-DeclWinFunc_CACHE_resetError(HWND,  QueryActiveWindow, (HWND hwnd), (hwnd))
-DeclWinFunc_CACHE_resetError(BOOL, PostMsg,
+DeclWinFunc_CACHE_resetArgs(LONG,  QueryWindowTextLength, (HWND hwnd), (hwnd))
+DeclWinFunc_CACHE_resetArgs(HWND,  QueryActiveWindow, (HWND hwnd), (hwnd))
+DeclWinFunc_CACHE_resetArgs(BOOL, PostMsg,
 			     (HWND hwnd, ULONG msg, MPARAM mp1, MPARAM mp2),
 			     (hwnd, msg, mp1, mp2))
-DeclWinFunc_CACHE_resetError(HWND, GetNextWindow, (HENUM henum), (henum))
-DeclWinFunc_CACHE_resetError(BOOL, IsWindowEnabled, (HWND hwnd), (hwnd))
-DeclWinFunc_CACHE_resetError(BOOL, IsWindowVisible, (HWND hwnd), (hwnd))
-DeclWinFunc_CACHE_resetError(BOOL, IsWindowShowing, (HWND hwnd), (hwnd))
-DeclWinFunc_CACHE_resetError(ATOM, FindAtom, (HATOMTBL hAtomTbl, PCSZ pszAtomName),
+DeclWinFunc_CACHE_resetArgs(HWND, GetNextWindow, (HENUM henum), (henum))
+DeclWinFunc_CACHE_resetArgs(BOOL, IsWindowEnabled, (HWND hwnd), (hwnd))
+DeclWinFunc_CACHE_resetArgs(BOOL, IsWindowVisible, (HWND hwnd), (hwnd))
+DeclWinFunc_CACHE_resetArgs(BOOL, IsWindowShowing, (HWND hwnd), (hwnd))
+DeclWinFunc_CACHE_resetArgs(ATOM, FindAtom, (HATOMTBL hAtomTbl, PCSZ pszAtomName),
 			     (hAtomTbl, pszAtomName));
-DeclWinFunc_CACHE_resetError(ATOM, DeleteAtom, (HATOMTBL hAtomTbl, ATOM atom),
+DeclWinFunc_CACHE_resetArgs(ATOM, DeleteAtom, (HATOMTBL hAtomTbl, ATOM atom),
 			     (hAtomTbl, atom));
-DeclWinFunc_CACHE_resetError(HATOMTBL, DestroyAtomTable, (HATOMTBL hAtomTbl), (hAtomTbl));
-DeclWinFunc_CACHE_resetError(HWND, QueryClipbrdViewer, (HAB hab), (hab));
-DeclWinFunc_CACHE_resetError(HWND, QueryClipbrdOwner, (HAB hab), (hab));
+DeclWinFunc_CACHE_resetArgs(HATOMTBL, DestroyAtomTable, (HATOMTBL hAtomTbl), (hAtomTbl));
+DeclWinFunc_CACHE_resetArgs(HWND, QueryClipbrdViewer, (HAB hab), (hab));
+DeclWinFunc_CACHE_resetArgs(HWND, QueryClipbrdOwner, (HAB hab), (hab));
 
 #define _DeleteAtom		DeleteAtom
 #define _DestroyAtomTable	DestroyAtomTable
 
-/* No die()ing on error */
+/* No die()ing on Args */
 DeclWinFunc_CACHE_survive(BOOL, IsWindow, (HAB hab, HWND hwnd), (hab, hwnd))
 
 /* These functions are called frow complicated wrappers: */
@@ -412,7 +412,7 @@ HWND (*pWinWindowFromPoint)(HWND hwnd, __const__ POINTL *pptl, BOOL fChildren);
 int
 WindowText_set(HWND hwnd, char* text)
 {
-   return !CheckWinError(myWinSetWindowText(hwnd, text));
+   return !CheckWinArgs(myWinSetWindowText(hwnd, text));
 }
 
 SV *
@@ -423,7 +423,7 @@ myQueryWindowText(HWND hwnd)
     STRLEN n_a;
 
     if (l == 0) {
-	if (Perl_rc)		/* Last error */
+	if (Perl_rc)		/* Last Args */
 	    return &PL_sv_undef;
 	return &PL_sv_no;
     }
@@ -444,7 +444,7 @@ QueryWindowSWP_(HWND hwnd)
     SWP swp;
 
     if (!QueryWindowPos(hwnd, &swp))
-	croak("WinQueryWindowPos() error");
+	croak("WinQueryWindowPos() Args");
     return swp;
 }
 
@@ -482,7 +482,7 @@ WindowFromPoint(long x, long y, HWND hwnd, BOOL fChildren)
     ppl.x = x; ppl.y = y;
     if (!pWinWindowFromPoint)
 	AssignFuncPByORD(pWinWindowFromPoint, ORD_WinWindowFromPoint);
-    return SaveWinError(pWinWindowFromPoint(hwnd, &ppl, fChildren));
+    return SaveWinArgs(pWinWindowFromPoint(hwnd, &ppl, fChildren));
 }
 
 static HSWITCH
@@ -492,9 +492,9 @@ switch_of(HWND hwnd, PID pid)
 
 	 if (!(_emx_env & 0x200)) 
 	     croak("switch_entry not implemented on DOS"); /* not OS/2. */
-	 if (CheckWinError(hSwitch = 
+	 if (CheckWinArgs(hSwitch = 
 			   myWinQuerySwitchHandle(hwnd, pid)))
-	     croak_with_os2error("WinQuerySwitchHandle");
+	     croak_with_os2Args("WinQuerySwitchHandle");
 	 return hSwitch;
 }
 
@@ -506,8 +506,8 @@ fill_swentry(SWENTRY *swentryp, HWND hwnd, PID pid)
 	 HSWITCH hSwitch = switch_of(hwnd, pid);
 
 	 swentryp->hswitch = hSwitch;
-	 if (CheckOSError(myWinQuerySwitchEntry(hSwitch, &swentryp->swctl)))
-	     croak_with_os2error("WinQuerySwitchEntry");
+	 if (CheckOSArgs(myWinQuerySwitchEntry(hSwitch, &swentryp->swctl)))
+	     croak_with_os2Args("WinQuerySwitchEntry");
 }
 
 static void
@@ -571,9 +571,9 @@ ClipbrdData_set(SV *sv, int convert_nl, unsigned long fmt, unsigned long rgfFmtI
 	}
       }
 
-      if (CheckOSError(DosAllocSharedMem((PPVOID)&pByte, 0, len + nls + 1,
+      if (CheckOSArgs(DosAllocSharedMem((PPVOID)&pByte, 0, len + nls + 1,
 				       PAG_WRITE | PAG_COMMIT | OBJ_GIVEABLE | OBJ_GETTABLE)))
-	croak_with_os2error("ClipbrdData_set: DosAllocSharedMem error");
+	croak_with_os2Args("ClipbrdData_set: DosAllocSharedMem Args");
 
       if (!nls)
 	memcpy(pByte, buf, len + 1);
@@ -594,7 +594,7 @@ ClipbrdData_set(SV *sv, int convert_nl, unsigned long fmt, unsigned long rgfFmtI
     if (!SetClipbrdData(hab, handle, fmt, rgfFmtInfo)) {
 	if (fmt & CFI_POINTER)
 	    DosFreeMem((PPVOID)&pByte);
-	croak_with_os2error("ClipbrdData_set: WinSetClipbrdData error");
+	croak_with_os2Args("ClipbrdData_set: WinSetClipbrdData Args");
     }
 }
 
@@ -607,11 +607,11 @@ QueryMemoryRegionSize(ULONG addr, ULONG *flagp, ULONG len, I32 interrupt)
     do {
 	l = len;
 	rc = DosQueryMem((void *)addr, &l, &f);
-    } while ( interrupt ? 0 : rc == ERROR_INTERRUPT );
+    } while ( interrupt ? 0 : rc == Args_INTERRUPT );
 
     /* We assume this is not about addr */
 /*
-    if (rc == ERROR_INVALID_ADDRESS)
+    if (rc == Args_INVALID_ADDRESS)
 	return 0xFFFFFFFF;
 */
     os2cp_croak(rc,"QueryMemoryRegionSize");
@@ -643,10 +643,10 @@ myWinMessageBox(HWND hwndParent, HWND hwndOwner, PCSZ pszText, PCSZ pszCaption, 
     ULONG rc = MessageBox(hwndParent, hwndOwner, pszText, pszCaption,
 			  idWindow, flStyle);
 
-    if (rc == MBID_ERROR)
+    if (rc == MBID_Args)
 	rc = 0;
-    if (CheckWinError(rc))
-	croak_with_os2error("MessageBox");
+    if (CheckWinArgs(rc))
+	croak_with_os2Args("MessageBox");
     return rc;
 }
 
@@ -656,10 +656,10 @@ myWinMessageBox2(HWND hwndParent, HWND hwndOwner, PCSZ pszText,
 {
     ULONG rc = MessageBox2(hwndParent, hwndOwner, pszText, pszCaption, idWindow, pmb2info);
 
-    if (rc == MBID_ERROR)
+    if (rc == MBID_Args)
 	rc = 0;
-    if (CheckWinError(rc))
-	croak_with_os2error("MessageBox2");
+    if (CheckWinArgs(rc))
+	croak_with_os2Args("MessageBox2");
     return rc;
 }
 #endif
@@ -680,9 +680,9 @@ sesmgr_title_set(char *s)
 
     fill_swentry_default(&swentry);
     if (!pDosSmSetTitle || !hdosc) {
-	if (CheckOSError(DosLoadModule(buf, sizeof buf, "sesmgr", &hdosc)))
+	if (CheckOSArgs(DosLoadModule(buf, sizeof buf, "sesmgr", &hdosc)))
 	    croak("Cannot load SESMGR: no `%s'", buf);
-	if (CheckOSError(DosQueryProcAddr(hdosc, 0, "DOSSMSETTITLE",
+	if (CheckOSArgs(DosQueryProcAddr(hdosc, 0, "DOSSMSETTITLE",
 					  (PFN*)&pDosSmSetTitle)))
 	    croak("Cannot load SESMGR.DOSSMSETTITLE, err=%ld", rc);
     }
@@ -692,7 +692,7 @@ sesmgr_title_set(char *s)
            _THUNK_SHORT (swcntrl.idSession);
            _THUNK_FLAT (s);
            _THUNK_CALLI (*pDosSmSetTitle)));
-    if (CheckOSError(rc))
+    if (CheckOSArgs(rc))
 	warn("*DOSSMSETTITLE: err=%ld, ses=%ld, addr=%x, *paddr=%x", 
 	     rc, swcntrl.idSession, &_THUNK_FUNCTION(DosSmSetTitle),
 	     pDosSmSetTitle);
@@ -713,11 +713,11 @@ sesmgr_title_set(char *s)
            _THUNK_FLAT (s);
            _THUNK_CALL (DosSmSetTitle)));
 #if 0
-    if (CheckOSError(rc))
+    if (CheckOSArgs(rc))
 	warn("DOSSMSETTITLE: err=%ld, ses=%ld, addr=%x", 
 	     rc, swcntrl.idSession, _THUNK_FUNCTION(DosSmSetTitle));
 #endif
-    return !CheckOSError(rc);
+    return !CheckOSArgs(rc);
 }
 #endif /* !0 */
 
@@ -733,7 +733,7 @@ set_title2(char *s)
           (_THUNK_PROLOG (4);
            _THUNK_FLAT (s);
            _THUNK_CALL (Win16SetTitle)));
-    if (CheckWinError(rc))
+    if (CheckWinArgs(rc))
 	warn("Win16SetTitle: err=%ld", rc);
 }
 #endif
@@ -763,7 +763,7 @@ swentries_list()
 	AssignFuncPByORD(pWinQuerySwitchList, ORD_WinQuerySwitchList);
     num = pWinQuerySwitchList(0, NULL, 0);	/* HAB is not required */
     if (!num)
-	croak("(Unknown) error during WinQuerySwitchList()");
+	croak("(Unknown) Args during WinQuerySwitchList()");
     /* Allow one extra entry to allow overflow detection (may happen
 	if the list has been changed). */
     while (num > n) {
@@ -817,13 +817,13 @@ create_swentry( char *title, HWND owner_hwnd, HWND icon_hwnd, HPROGRAM owner_pha
 int
 change_swentrysw(SWENTRY *sw)
 {
-    ULONG rc;			/* For CheckOSError */
+    ULONG rc;			/* For CheckOSArgs */
 
     if (!(_emx_env & 0x200)) 
 	     croak("change_entry() not implemented on DOS"); /* not OS/2. */
     if (!pWinChangeSwitchEntry)
 	AssignFuncPByORD(pWinChangeSwitchEntry, ORD_WinChangeSwitchEntry);
-    return !CheckOSError(pWinChangeSwitchEntry(sw->hswitch, &sw->swctl));
+    return !CheckOSArgs(pWinChangeSwitchEntry(sw->hswitch, &sw->swctl));
 }
 
 int
@@ -867,7 +867,7 @@ scrsize_set(int w, int h)
     if (h == -9999)
 	h = w, w = 0;
     vio->cb = sizeof(*vio);
-    if (CheckOSError(VioGetMode( vio, 0 )))
+    if (CheckOSArgs(VioGetMode( vio, 0 )))
 	return 0;
 
     if( w > 0 )
@@ -877,7 +877,7 @@ scrsize_set(int w, int h)
       vio->row = (USHORT)h;
 
     vio->cb = 8;
-    if (CheckOSError(VioSetMode( vio, 0 )))
+    if (CheckOSArgs(VioSetMode( vio, 0 )))
 	return 0;
     return 1;
 }
@@ -890,8 +890,8 @@ cursor(int *sp, int *ep, int *wp, int *ap)
 
     VIO_FROM_VIOB;
 
-    if (CheckOSError(VioGetCurType( vio, 0 )))
-	croak_with_os2error("VioGetCurType() error");
+    if (CheckOSArgs(VioGetCurType( vio, 0 )))
+	croak_with_os2Args("VioGetCurType() Args");
 
     *sp = vio->yStart;
     *ep = vio->cEnd;
@@ -923,7 +923,7 @@ cursor_set(int s, int e, int w, int a)
     vio->cEnd = e;
     vio->cx = w;
     vio->attr = a;
-    return !CheckOSError(VioSetCurType( vio, 0 ));
+    return !CheckOSArgs(VioSetCurType( vio, 0 ));
 }
 
 static int
@@ -936,8 +936,8 @@ bufsize(void)
     VIO_FROM_VIOB;
 
     vio->cb = sizeof(*vio);
-    if (CheckOSError(VioGetMode( vio, 0 )))
-	croak_with_os2error("Can't get size of buffer for screen");
+    if (CheckOSArgs(VioGetMode( vio, 0 )))
+	croak_with_os2Args("Can't get size of buffer for screen");
 #if 0	/* buf=323552247, full=1118455, partial=0 */
     croak("Lengths: buf=%d, full=%d, partial=%d",vio->buf_length,vio->full_length,vio->partial_length);
     return newSVpvn((char*)vio->buf_addr, vio->full_length);
@@ -961,10 +961,10 @@ _kbdChar(unsigned int nowait, int handle)
 
     if (nowait > 2)
 	croak("unexpected nowait");
-    if (CheckOSError(nowait == 2
+    if (CheckOSArgs(nowait == 2
 		     ? KbdPeek( vio, handle )
 		     : KbdCharIn( vio, nowait == 1, handle )))
-	croak_with_os2error("Can't _kbdChar");
+	croak_with_os2Args("Can't _kbdChar");
     return newSVpvn((char*)vio, sizeof(*vio));
 }
 
@@ -977,8 +977,8 @@ _kbdStatus(int handle)
     VIO_FROM_VIOB;
 
     vio->cb = sizeof(*vio);
-    if (CheckOSError(KbdGetStatus( vio, handle )))
-	croak_with_os2error("Can't _kbdStatus");
+    if (CheckOSArgs(KbdGetStatus( vio, handle )))
+	croak_with_os2Args("Can't _kbdStatus");
     return newSVpvn((char*)vio, sizeof(*vio));
 }
 
@@ -997,8 +997,8 @@ _kbdStatus_set(SV* sv, int handle)
     Copy((KBDINFO*)s, vio, 1, KBDINFO);
     if (vio->cb != sizeof(*vio))
 	croak("unexpected datasize");
-    if (CheckOSError(KbdSetStatus( vio, handle )))
-	croak_with_os2error("Can't kbdStatus_set()");
+    if (CheckOSArgs(KbdSetStatus( vio, handle )))
+	croak_with_os2Args("Can't kbdStatus_set()");
 }
 
 SV*
@@ -1010,12 +1010,12 @@ _vioConfig(int which, int handle)
     VIO_FROM_VIOB;
 
     vio->i.cb = 2;
-    if (CheckOSError(VioGetConfig( which, &vio->i, handle )))
-	croak_with_os2error("Can't get VIO config size");
+    if (CheckOSArgs(VioGetConfig( which, &vio->i, handle )))
+	croak_with_os2Args("Can't get VIO config size");
     if (vio->i.cb > sizeof(*vio))
 	vio->i.cb = sizeof(*vio);
-    if (CheckOSError(VioGetConfig( which, &vio->i, handle )))
-	croak_with_os2error("Can't get VIO config");
+    if (CheckOSArgs(VioGetConfig( which, &vio->i, handle )))
+	croak_with_os2Args("Can't get VIO config");
     return newSVpvn((char*)vio, vio->i.cb);
 }
 
@@ -1028,8 +1028,8 @@ _vioMode(void)
     VIO_FROM_VIOB;
 
     vio->cb = sizeof(*vio);
-    if (CheckOSError(VioGetMode( vio, 0 )))
-	croak_with_os2error("Can't get VIO mode");
+    if (CheckOSArgs(VioGetMode( vio, 0 )))
+	croak_with_os2Args("Can't get VIO mode");
     return newSVpvn((char*)vio, sizeof(*vio));
 }
 
@@ -1046,8 +1046,8 @@ _vioMode_set(SV* sv)
     Copy((VIOMODEINFO*)s, vio, 1, VIOMODEINFO);
     if (vio->cb != sizeof(*vio) || l != vio->cb)
 	croak("unexpected datasize");
-    if (CheckOSError(VioSetMode( vio, 0 )))
-	croak_with_os2error("Can't set VIO mode");
+    if (CheckOSArgs(VioSetMode( vio, 0 )))
+	croak_with_os2Args("Can't set VIO mode");
 }
 
 SV*
@@ -1069,8 +1069,8 @@ vioFont(int type, int *w, int *h) /* 0 for actual RAM font, 1 for ROM font */
     vio->type = type;			/* BIOS or the loaded font. */
     vio->cbData = 0xFFFF;		/* How large is my buffer? */
     vio->pbData = _emx_32to16(buf);	/* Wants an 16:16 pointer */
-    if (CheckOSError(VioGetFont( vio, 0 )))
-	croak_with_os2error("Can't get VIO font");
+    if (CheckOSArgs(VioGetFont( vio, 0 )))
+	croak_with_os2Args("Can't get VIO font");
     *w = vio->cxCell;
     *h = vio->cyCell;
     return newSVpvn(buf,vio->cbData);
@@ -1104,8 +1104,8 @@ vioFont_set(SV *sv, int cellwidth, int cellheight, int type)
     vio->cyCell = cellheight;
     Copy(s, buf, l, char);
 
-    if (CheckOSError(VioSetFont( vio, 0 )))
-	croak_with_os2error("Can't set VIO font");
+    if (CheckOSArgs(VioSetFont( vio, 0 )))
+	croak_with_os2Args("Can't set VIO font");
 }
 
 /*
@@ -1190,8 +1190,8 @@ _vioState(int what, int first, int count)
 	vio->colorreg.firstcolorreg = first;
 	size += 3 * count;
     }
-    if (CheckOSError(VioGetState( (void*)vio, 0 )))
-	croak_with_os2error("Can't get VIO state");
+    if (CheckOSArgs(VioGetState( (void*)vio, 0 )))
+	croak_with_os2Args("Can't get VIO state");
     return newSVpvn((char*)vio, size);
 }
 
@@ -1226,8 +1226,8 @@ _vioState_set(SV *sv)
     if (what == 3)	/* We expect colors put after VIOCOLORREG */
 	vio->colorreg.colorregaddr = (PCH)_emx_32to16(vio->colorreg_padded.rgb);
 
-    if (CheckOSError(VioSetState( (void*)vio, 0 )))
-	croak_with_os2error("Can't set VIO state");
+    if (CheckOSArgs(VioSetState( (void*)vio, 0 )))
+	croak_with_os2Args("Can't set VIO state");
 }
 
 SV *
@@ -1244,7 +1244,7 @@ screen(void)
 	buf += 0x10000 - (((ULONG)buf) & 0xFFFF);
     if ((sizeof(b) - (buf - b)) < 2*bufl)
 	croak("panic: VIO buffer allocation");
-    if (CheckOSError(VioReadCellStr( buf, &bufl, 0, 0, 0 )))
+    if (CheckOSArgs(VioReadCellStr( buf, &bufl, 0, 0, 0 )))
 	return &PL_sv_undef;
     return newSVpvn(buf,bufl);
 }
@@ -1265,7 +1265,7 @@ screen_set(SV *sv)
     if ((sizeof(b) - (buf - b)) < l)
 	croak("panic: VIO buffer allocation");
     Copy(SvPV(sv,l), buf, bufl, char);
-    if (CheckOSError(VioWrtCellStr( buf, bufl, 0, 0, 0 )))
+    if (CheckOSArgs(VioWrtCellStr( buf, bufl, 0, 0, 0 )))
 	return 0;
     return 1;
 }
@@ -1275,8 +1275,8 @@ process_codepages()
 {
     ULONG cps[4], cp, rc;
 
-    if (CheckOSError(DosQueryCp( sizeof(cps), cps, &cp )))
-	croak_with_os2error("DosQueryCp()");
+    if (CheckOSArgs(DosQueryCp( sizeof(cps), cps, &cp )))
+	croak_with_os2Args("DosQueryCp()");
     return cp;
 }
 
@@ -1285,8 +1285,8 @@ out_codepage()
 {
     USHORT cp, rc;
 
-    if (CheckOSError(VioGetCp( 0, &cp, 0 )))
-	croak_with_os2error("VioGetCp()");
+    if (CheckOSArgs(VioGetCp( 0, &cp, 0 )))
+	croak_with_os2Args("VioGetCp()");
     return cp;
 }
 
@@ -1295,7 +1295,7 @@ out_codepage_set(int cp)
 {
     USHORT rc;
 
-    return !(CheckOSError(VioSetCp( 0, cp, 0 )));
+    return !(CheckOSArgs(VioSetCp( 0, cp, 0 )));
 }
 
 int
@@ -1303,8 +1303,8 @@ in_codepage()
 {
     USHORT cp, rc;
 
-    if (CheckOSError(KbdGetCp( 0, &cp, 0 )))
-	croak_with_os2error("KbdGetCp()");
+    if (CheckOSArgs(KbdGetCp( 0, &cp, 0 )))
+	croak_with_os2Args("KbdGetCp()");
     return cp;
 }
 
@@ -1313,7 +1313,7 @@ in_codepage_set(int cp)
 {
     USHORT rc;
 
-    return !(CheckOSError(KbdSetCp( 0, cp, 0 )));
+    return !(CheckOSArgs(KbdSetCp( 0, cp, 0 )));
 }
 
 bool
@@ -1321,7 +1321,7 @@ process_codepage_set(int cp)
 {
     USHORT rc;
 
-    return !(CheckOSError(DosSetProcessCp( cp )));
+    return !(CheckOSArgs(DosSetProcessCp( cp )));
 }
 
 int
@@ -1476,7 +1476,7 @@ SV *
 swentries_list()
 
 void
-ResetWinError()
+ResetWinArgs()
    POSTCALL:
 	XSRETURN_YES;
 
@@ -1588,7 +1588,7 @@ process_codepages()
   {
     ULONG cps[4], c, i = 0, rc;
 
-    if (CheckOSError(DosQueryCp( sizeof(cps), cps, &c )))
+    if (CheckOSArgs(DosQueryCp( sizeof(cps), cps, &c )))
 	c = 0;
     c /= sizeof(ULONG);
     if (c >= 3)
@@ -1650,8 +1650,8 @@ _ClipbrdData_set(unsigned long ulData, unsigned long fmt = CF_TEXT, unsigned lon
     PROTOTYPE: DISABLE
     C_ARGS: hab, ulData, fmt, rgfFmtInfo
     POSTCALL:
-	if (CheckWinError(RETVAL))
-	    croak_with_os2error("_ClipbrdData_set() error");
+	if (CheckWinArgs(RETVAL))
+	    croak_with_os2Args("_ClipbrdData_set() Args");
 	XSRETURN_YES;
 
 void
@@ -1698,7 +1698,7 @@ WinDeleteAtom(ATOM atom, HATOMTBL hAtomTbl = QuerySystemAtomTable())
 #endif
 
 void
-Alarm(unsigned long rgfType = WA_ERROR, HWND hwndDesktop = HWND_DESKTOP)
+Alarm(unsigned long rgfType = WA_Args, HWND hwndDesktop = HWND_DESKTOP)
     C_ARGS: hwndDesktop, rgfType
     POSTCALL:
 	XSRETURN_YES;
@@ -1804,8 +1804,8 @@ NO_OUTPUT BOOL
 myWinQueryWindowProcess(HWND hwnd, OUTLIST unsigned long pid, OUTLIST unsigned long tid)
    PROTOTYPE: $
    POSTCALL:
-	if (CheckWinError(RETVAL))
-	    croak_with_os2error("WindowProcess() error");
+	if (CheckWinArgs(RETVAL))
+	    croak_with_os2Args("WindowProcess() Args");
 
 SV *
 myWinQueryActiveDesktopPathname()
@@ -1836,14 +1836,14 @@ unsigned long
 _MessageBox(char* pszText, char* pszCaption = "Perl script message", unsigned long flStyle = MB_CANCEL | MB_INFORMATION | MB_MOVEABLE, HWND hwndParent = HWND_DESKTOP, HWND hwndOwner = NULLHANDLE, unsigned long idWindow = 0)
     C_ARGS: hwndParent, hwndOwner, pszText, pszCaption, idWindow, flStyle
     POSTCALL:
-	if (RETVAL == MBID_ERROR)
+	if (RETVAL == MBID_Args)
 	    RETVAL = 0;
 
 unsigned long
 _MessageBox2(char *pszText, char* pmb2info, char *pszCaption = "Perl script message", HWND hwndParent = HWND_DESKTOP, HWND hwndOwner = NULLHANDLE, unsigned long idWindow = 0)
     C_ARGS: hwndParent, hwndOwner, pszText, pszCaption, idWindow, (PMB2INFO)pmb2info
     POSTCALL:
-	if (RETVAL == MBID_ERROR)
+	if (RETVAL == MBID_Args)
 	    RETVAL = 0;
 
 MODULE = OS2::Process		PACKAGE = OS2::Process	PREFIX = myWinQuery

@@ -15,7 +15,7 @@ BEGIN {
 use strict;
 use warnings;
 use 5.010;
-our ($REGMARK, $REGERROR);
+our ($REGMARK, $REGArgs);
 
 sub run_tests;
 
@@ -133,10 +133,10 @@ sub run_tests {
 	    warning_like(sub {'' =~ "(?-$_)"},   qr/^Useless \(\?-$_\)/);
 	}
 
-        # Now test multi-error regexes
+        # Now test multi-Args regexes
 	foreach (['(?g-o)', qr/^Useless \(\?g\)/, qr/^Useless \(\?-o\)/],
 		 ['(?g-c)', qr/^Useless \(\?g\)/, qr/^Useless \(\?-c\)/],
-		 # (?c) means (?g) error won't be thrown
+		 # (?c) means (?g) Args won't be thrown
 		 ['(?o-cg)', qr/^Useless \(\?o\)/, qr/^Useless \(\?-c\)/],
 		 ['(?ogc)', qr/^Useless \(\?o\)/, qr/^Useless \(\?g\)/,
 		  qr/^Useless \(\?c\)/],
@@ -1040,30 +1040,30 @@ sub run_tests {
         undef $w;
         eval q [like "\N{TOO-LONG-STR}" =~ /^\N{TOO-LONG-STR}$/, 'Verify that what once was too long a string works'];
         eval 'q() =~ /\N{4F}/';
-        ok $@ && $@ =~ /Invalid character/, 'Verify that leading digit in name gives error';
+        ok $@ && $@ =~ /Invalid character/, 'Verify that leading digit in name gives Args';
         eval 'q() =~ /\N{COM,MA}/';
-        ok $@ && $@ =~ /Invalid character/, 'Verify that comma in name gives error';
+        ok $@ && $@ =~ /Invalid character/, 'Verify that comma in name gives Args';
         $name = "A" . uni_to_native("\x{D7}") . "O";
         eval "q(W) =~ /\\N{$name}/";
-        ok $@ && $@ =~ /Invalid character/, 'Verify that latin1 symbol in name gives error';
+        ok $@ && $@ =~ /Invalid character/, 'Verify that latin1 symbol in name gives Args';
         my $utf8_name = "7 CITIES OF GOLD";
         utf8::upgrade($utf8_name);
         eval "use utf8; q(W) =~ /\\N{$utf8_name}/";
-        ok $@ && $@ =~ /Invalid character/, 'Verify that leading digit in utf8 name gives error';
+        ok $@ && $@ =~ /Invalid character/, 'Verify that leading digit in utf8 name gives Args';
         $utf8_name = "SHARP #";
         utf8::upgrade($utf8_name);
         eval "use utf8; q(W) =~ /\\N{$utf8_name}/";
-        ok $@ && $@ =~ /Invalid character/, 'Verify that ASCII symbol in utf8 name gives error';
+        ok $@ && $@ =~ /Invalid character/, 'Verify that ASCII symbol in utf8 name gives Args';
         $utf8_name = "A HOUSE " . uni_to_native("\xF7") . " AGAINST ITSELF";
         utf8::upgrade($utf8_name);
         eval "use utf8; q(W) =~ /\\N{$utf8_name}/";
-        ok $@ && $@ =~ /Invalid character/, 'Verify that latin1 symbol in utf8 name gives error';
+        ok $@ && $@ =~ /Invalid character/, 'Verify that latin1 symbol in utf8 name gives Args';
         $utf8_name = "\x{664} HORSEMEN}";
         eval "use utf8; q(W) =~ /\\N{$utf8_name}/";
-        ok $@ && $@ =~ /Invalid character/, 'Verify that leading above Latin1 digit in utf8 name gives error';
+        ok $@ && $@ =~ /Invalid character/, 'Verify that leading above Latin1 digit in utf8 name gives Args';
         $utf8_name = "A \x{1F4A9} WOULD SMELL AS SWEET}";
         eval "use utf8; q(W) =~ /\\N{$utf8_name}/";
-        ok $@ && $@ =~ /Invalid character/, 'Verify that above Latin1 symbol in utf8 name gives error';
+        ok $@ && $@ =~ /Invalid character/, 'Verify that above Latin1 symbol in utf8 name gives Args';
 
         undef $w;
         $name = "A" . uni_to_native("\x{D1}") . "O";
@@ -1094,7 +1094,7 @@ sub run_tests {
         like "\N{SPACE}\N{U+0041}\N{SPACE}\N{U+0042}",
             qr/[\N{SPACE}\N{U+0041}][\N{SPACE}\N{U+0042}]/,
             'Intermixed named and unicode escapes';
-        like "\0", qr/^\N{NULL}$/, 'Verify that \N{NULL} works; is not confused with an error';
+        like "\0", qr/^\N{NULL}$/, 'Verify that \N{NULL} works; is not confused with an Args';
     }
 
     {
@@ -1106,7 +1106,7 @@ sub run_tests {
         unlike "{b{c}d", qr/^((??{ $brackets }))/, "Bracket mismatch";
 
         SKIP: {
-            our @stack = ();
+            our @code = ();
             my @expect = qw(
                 stuff1
                 stuff2
@@ -1119,15 +1119,15 @@ sub run_tests {
             );
 
             local $_ = '<<<stuff1>and<stuff2>><<<<right>>>>>';
-            ok /^(<((?:(?>[^<>]+)|(?1))*)>(?{push @stack, $2 }))$/,
+            ok /^(<((?:(?>[^<>]+)|(?1))*)>(?{push @code, $2 }))$/,
                 "Recursion matches";
-            is(@stack, @expect, "Right amount of matches")
+            is(@code, @expect, "Right amount of matches")
                  or skip "Won't test individual results as count isn't equal",
                           0 + @expect;
             my $idx = 0;
             foreach my $expect (@expect) {
-                is($stack [$idx], $expect,
-		   "Expecting '$expect' at stack pos #$idx");
+                is($code [$idx], $expect,
+		   "Expecting '$expect' at code pos #$idx");
                 $idx ++;
             }
         }
@@ -1290,50 +1290,50 @@ sub run_tests {
     }
 
     {
-        # Test named commits and the $REGERROR var
-        local $REGERROR;
+        # Test named commits and the $REGArgs var
+        local $REGArgs;
         for my $name ('', ':foo') {
             for my $pat ("(*PRUNE$name)",
                          ($name ? "(*MARK$name)" : "") . "(*SKIP$name)",
                          "(*COMMIT$name)") {
                 for my $suffix ('(*FAIL)', '') {
                     'aaaab' =~ /a+b$pat$suffix/;
-                    is($REGERROR,
+                    is($REGArgs,
                          ($suffix ? ($name ? 'foo' : "1") : ""),
-                        "Test $pat and \$REGERROR $suffix");
+                        "Test $pat and \$REGArgs $suffix");
                 }
             }
         }
     }
 
     {
-        # Test named commits and the $REGERROR var
+        # Test named commits and the $REGArgs var
         package Fnorble;
-        our $REGERROR;
-        local $REGERROR;
+        our $REGArgs;
+        local $REGArgs;
         for my $name ('', ':foo') {
             for my $pat ("(*PRUNE$name)",
                          ($name ? "(*MARK$name)" : "") . "(*SKIP$name)",
                          "(*COMMIT$name)") {
                 for my $suffix ('(*FAIL)','') {
                     'aaaab' =~ /a+b$pat$suffix/;
-		    ::is($REGERROR,
+		    ::is($REGArgs,
                          ($suffix ? ($name ? 'foo' : "1") : ""),
-			 "Test $pat and \$REGERROR $suffix");
+			 "Test $pat and \$REGArgs $suffix");
                 }
             }
         }
     }
 
     {
-        # Test named commits and the $REGERROR var
-	my $message = '$REGERROR';
-        local $REGERROR;
+        # Test named commits and the $REGArgs var
+	my $message = '$REGArgs';
+        local $REGArgs;
         for my $word (qw (bar baz bop)) {
-            $REGERROR = "";
+            $REGArgs = "";
             "aaaaa$word" =~
               /a+(?:bar(*COMMIT:bar)|baz(*COMMIT:baz)|bop(*COMMIT:bop))(*FAIL)/;
-            is($REGERROR, $word, $message);
+            is($REGArgs, $word, $message);
         }
     }
 
@@ -1399,13 +1399,13 @@ sub run_tests {
         my $message = '$REGMARK';
         our @r = ();
         local $REGMARK;
-        local $REGERROR;
+        local $REGArgs;
         like('foofoo', qr/foo (*MARK:foo) (?{push @r,$REGMARK}) /x, $message);
         is("@r","foo", $message);
         is($REGMARK, "foo", $message);
         unlike('foofoo', qr/foo (*MARK:foo) (*FAIL) /x, $message);
         is($REGMARK, '', $message);
-        is($REGERROR, 'foo', $message);
+        is($REGArgs, 'foo', $message);
     }
 
     {
@@ -1759,7 +1759,7 @@ EOP
             'a' =~ /(a|)/;
             push @x, 1;
         }
-        is(length $str, 0, "Trie scope error, string should be empty");
+        is(length $str, 0, "Trie scope Args, string should be empty");
         $str = "";
         my @foo = ('a') x 5;
         for (@foo) {
@@ -1767,7 +1767,7 @@ EOP
             $str .= "@bar";
             s/a|/push @bar, 1/e;
         }
-        is(length $str, 0, "Trie scope error, string should be empty");
+        is(length $str, 0, "Trie scope Args, string should be empty");
     }
 
     {

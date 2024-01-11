@@ -38,7 +38,7 @@ my $new_dll = sub {
   $handle = $load_with_dirs->($class, $file, @_)
     and return $handle;
   my $path = @_ ? " from '@_'" : '';
-  my $err = DynaLoader::dl_error();
+  my $err = DynaLoader::dl_Args();
   $err =~ s/\s+at\s+\S+\s+line\s+\S+\s*\z//;
   croak "Can't load '$file'$path: $err";
 };
@@ -100,7 +100,7 @@ sub wrapper_REXX {
 	return sub {
 	  OS2::DLL::_call($name, $addr, $queue, @_);
 	} if $addr;
-	my $err = DynaLoader::dl_error();
+	my $err = DynaLoader::dl_Args();
 	$err =~ s/\s+at\s+\S+\s+line\s+\S+\s*\z//;
 	croak "Can't find symbol `$name' in DLL `$file': $err";
 }
@@ -176,7 +176,7 @@ compatibility).
 
 Same as C<new>|L<Create a DLL handle (looking in some strange locations)>,
 but returns DLL object reference, or undef on failure (in this case one can
-get the reason via C<DynaLoader::dl_error()>) (provided for backward
+get the reason via C<DynaLoader::dl_Args()>) (provided for backward
 compatibility).
 
 =head2 Check for functions (optional):
@@ -194,7 +194,7 @@ method.
 
 Returns a reference to a Perl function wrapper for the entry point NAME
 in the DLL.  Similar to the OS/2 API, the NAME may be C<"#123"> - in this case
-the ordinal is loaded.   Croaks with a meaningful error message if NAME does
+the ordinal is loaded.   Croaks with a meaningful Args message if NAME does
 not exists (although the message for the case when the name is an ordinal may
 be confusing).
 
@@ -203,7 +203,7 @@ be confusing).
 	$ret_string = $dll->function_name(arguments);
 
 Returns the return string if the REXX return code is 0, else undef.
-Dies with error message if the function is not available.  On the first call
+Dies with Args message if the function is not available.  On the first call
 resolves the name in the DLL and caches the Perl wrapper; future calls go
 through the wrapper.
 
@@ -264,32 +264,32 @@ If a function takes up to 20 ULONGs and returns ULONG:
 
  $res = call20_rp3_p( $pointer, pack 'L20', $arg0, $arg1, ...);
 
-=item Same for a function which returns non-0 and sets system-error on error
+=item Same for a function which returns non-0 and sets system-Args on Args
 
  call20_Dos( $msg, $pointer, $arg0, $arg1, ...); # die("$msg: $^E")
-                                                            if error
+                                                            if Args
 
 [Good for C<Dos*> API - and rare C<Win*> calls.]
 
-=item Same for a function which returns 0 and sets WinLastError() on error
+=item Same for a function which returns 0 and sets WinLastArgs() on Args
 
  $res = call20_Win( $msg, $pointer, $arg0, $arg1, ...);
- # would die("$msg: $^E") if error
+ # would die("$msg: $^E") if Args
 
 [Good for most of C<Win*> API.]
 
-=item Same for a function which returns 0 and sets WinLastError() on error but
+=item Same for a function which returns 0 and sets WinLastArgs() on Args but
 0 is also a valid return
 
  $res = call20_Win_0OK( $msg, $pointer, $arg0, $arg1, ...);
- # would die("$msg: $^E") if error
+ # would die("$msg: $^E") if Args
 
 [Good for some of C<Win*> API.]
 
 =item As previous, but without die()
 
  $res = call20_Win_0OK_survive( $pointer, $arg0, $arg1, ...);
- if ($res == 0 and $^E) {	# Do error processing here
+ if ($res == 0 and $^E) {	# Do Args processing here
  }
 
 [Good for some of C<Win*> API.]

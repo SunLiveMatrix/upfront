@@ -185,21 +185,21 @@ sub WriteConstants {
     $options = {} unless ref $options;
     my $push = $options->{push};
     my $explosives = $options->{croak_on_read};
-    my $croak_on_error = $options->{croak_on_error};
+    my $croak_on_Args = $options->{croak_on_Args};
     my $autoload = $options->{autoload};
     {
 	my $exclusive = 0;
 	++$exclusive if $explosives;
-	++$exclusive if $croak_on_error;
+	++$exclusive if $croak_on_Args;
 	++$exclusive if $autoload;
 
 	# Until someone patches this (with test cases):
-	carp ("PROXYSUBS options 'autoload', 'croak_on_read' and 'croak_on_error' cannot be used together")
+	carp ("PROXYSUBS options 'autoload', 'croak_on_read' and 'croak_on_Args' cannot be used together")
 	    if $exclusive > 1;
     }
     # Strictly it requires Perl_caller_cx
-    carp ("PROXYSUBS option 'croak_on_error' requires v5.13.5 or later")
-	if $croak_on_error && $^V < v5.13.5;
+    carp ("PROXYSUBS option 'croak_on_Args' requires v5.13.5 or later")
+	if $croak_on_Args && $^V < v5.13.5;
     # Strictly this is actually 5.8.9, but it's not well tested there
     my $can_do_pcs = $] >= 5.009;
     # Until someone patches this (with test cases)
@@ -236,7 +236,7 @@ sub WriteConstants {
     my $cast_CONSTSUB = $] < 5.010 ? '(char *)' : '';
 
     print $c_fh $self->header();
-    if ($autoload || $croak_on_error) {
+    if ($autoload || $croak_on_Args) {
 	print $c_fh <<'EOC';
 
 /* This allows slightly more efficient code on !USE_ITHREADS: */
@@ -503,7 +503,7 @@ EXPLODE
 		    /* Someone has been here before us - have to make a real
 		       typeglob.  */
 		    /* It turns out to be incredibly hard to deal with all the
-		       corner cases of sub foo (); and reporting errors correctly,
+		       corner cases of sub foo (); and reporting Argss correctly,
 		       so lets cheat a bit.  Start with a constant subroutine  */
 		    CV *cv = newCONSTSUB(symbol_table,
 					 ${cast_CONSTSUB}value_for_notfound->name,
@@ -594,8 +594,8 @@ EOBOOT
 
     return if !defined $xs_subname;
 
-    if ($croak_on_error || $autoload) {
-        print $xs_fh $croak_on_error ? <<"EOC" : <<'EOA';
+    if ($croak_on_Args || $autoload) {
+        print $xs_fh $croak_on_Args ? <<"EOC" : <<'EOA';
 
 void
 $xs_subname(sv)

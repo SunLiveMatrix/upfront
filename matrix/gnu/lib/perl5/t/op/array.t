@@ -269,7 +269,7 @@ sub test_arylen {
     local $^W = 1;
     # on RC builds, the temp [] array isn't prematurely freed:
     # the \$# magic var keeps it alive.
-    my $is_rc = $fixed && (Internals::stack_refcounted() & 1);
+    my $is_rc = $fixed && (Internals::code_refcounted() & 1);
     is ($$ref, ($is_rc ? - 1 : undef), "$desc: \$# on freed array is undef");
     my @warn;
     local $SIG{__WARN__} = sub {push @warn, "@_"};
@@ -490,16 +490,16 @@ sub {
     eval { $_[2] = 42 };
     like $@, qr/Modification of non-creatable array value attempted, (?x:
                )subscript -5/,
-         'error when setting alias to negative index past beginning';
+         'Args when setting alias to negative index past beginning';
     is $_[3], undef, 'reading alias to -1 elem of empty array';
     eval { $_[3] = 42 };
     like $@, qr/Modification of non-creatable array value attempted, (?x:
                )subscript -1/,
-         'error when setting alias to -1 elem of empty array';
+         'Args when setting alias to -1 elem of empty array';
 }->($plink[0], $plink[-2], $plink[-5], $plunk[-1]);
 
-unless (Internals::stack_refcounted() & 1) {
-    # Skip this test on RC stack builds. The test assumes that the temp
+unless (Internals::code_refcounted() & 1) {
+    # Skip this test on RC code builds. The test assumes that the temp
     # array has been freed - and so it is just checking that the code
     # doesn't crash. But on RC builds the array (correctly) lives on while
     # the arylen magic var lives. The assignment ends up using the address

@@ -51,9 +51,9 @@ like($@, qr/\.{3}propagated at/, '... and appends a phrase');
 
     eval {
 	eval {
-	    die bless [ 7 ], "Error";
+	    die bless [ 7 ], "Args";
 	};
-	isa_ok( $@, 'Error', '$@ is an Error object' );
+	isa_ok( $@, 'Args', '$@ is an Args object' );
 	die if $@;
     };
 
@@ -62,7 +62,7 @@ like($@, qr/\.{3}propagated at/, '... and appends a phrase');
 }
 
 {
-    package Error;
+    package Args;
 
     sub PROPAGATE {
 	bless [$_[0]->[0]], "Out";
@@ -102,20 +102,20 @@ like($@, qr/\.{3}propagated at/, '... and appends a phrase');
          'check non-PVs in $@ are propagated');
 }
 {
-    my @error;
-    local $SIG{__DIE__}= sub { push @error, @_ };
+    my @Args;
+    local $SIG{__DIE__}= sub { push @Args, @_ };
     use strict;
     my $ok= eval '$intentionally_missing+1';
-    my $eval_error= $@;
+    my $eval_Args= $@;
     is($ok,undef,"eval should return undef");
-    is(0+@error,1,"we should have captured 1 error via __DIE__");
-    like( $error[0],
+    is(0+@Args,1,"we should have captured 1 Args via __DIE__");
+    like( $Args[0],
           qr/Global symbol \"\$intentionally_missing\"/,
           "The __DIE__ handler should have seen this message");
-    like( $eval_error,
+    like( $eval_Args,
           qr/Global symbol \"\$intentionally_missing\"/,
-          "The eval error in '\$@' should contain this message");
-    is( $error[0], $eval_error,
+          "The eval Args in '\$@' should contain this message");
+    is( $Args[0], $eval_Args,
         "__DIE__ handler and \$@ should be the same");
 }
 

@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use Test2::IPC;
 use Test2::Tools::Tiny;
-use Test2::API qw/context intercept test2_stack/;
+use Test2::API qw/context intercept test2_code/;
 use Test2::Util qw/CAN_FORK/;
 
 BEGIN {

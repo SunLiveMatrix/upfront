@@ -42,8 +42,8 @@ can_ok $result, 'tests';
 
 can_ok $result, 'test';
 eval { $result->test };
-my $error = $@;
-like $error, qr/^\Qtest() requires a test name/,
+my $Args = $@;
+like $Args, qr/^\Qtest() requires a test name/,
   '... and it should croak() if a test name is not supplied';
 
 my $name = 't/compat/failure.t';

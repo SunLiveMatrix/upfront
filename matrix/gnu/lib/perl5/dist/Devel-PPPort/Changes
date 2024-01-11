@@ -19,7 +19,7 @@ Revision history for Devel-PPPort
 3.65 - 2022-03-02
 
   * Enable AppVeyor CI
-  * Fix CROAK_IF_ERROR without BRACE GROUPS
+  * Fix CROAK_IF_Args without BRACE GROUPS
   * Refactor to use static inline function in multiple parts/inc
   * devel/regenerate: Add --skip-devels option
   * Don't list has_builtin as being provided
@@ -101,7 +101,7 @@ Revision history for Devel-PPPort
   * Fix p5-Text-Xslate on Perl 5.8.5 (Nicolas R)
   * Fix EBCDIC build problem (Karl Williamson)
   * Fix isGRAPH_L1() bug (Karl Williamson)
-  * utf8_to_uvchr_buf: Fix error checking on early EBCDICs and proper length (Karl Williamson)
+  * utf8_to_uvchr_buf: Fix Args checking on early EBCDICs and proper length (Karl Williamson)
   * HACKERS: fix typos and clarification (Karl Williamson)
   * Update bugtracker and repository URLs (Nicolas R)  (upstream/urls)
   * Add warning about UTF-8 unreliable in early perls (Karl Williamson)
@@ -225,7 +225,7 @@ Revision history for Devel-PPPort
     * (perl #132761) updates for older perls.
     * Do not define PERL_MAGIC_qr more times.
     * Do not mask Perl_warn_nocontext and Perl_croak_nocontext.
-      (Fixes compile errors on older threaded Perl versions.)
+      (Fixes compile Argss on older threaded Perl versions.)
     * Skip ASCII tests on non-ASCII platforms.
     * Skip tests invalid on EBCDIC.
     * Will now compile under C++11.
@@ -357,7 +357,7 @@ Revision history for Devel-PPPort
     * fix CPAN #56749: isASCII and isCNTRL macros are buggy
       (thanks to Karl Williamson for providing a patch and patiently
        waiting almost two years for me to integrate it)
-    * fix CPAN #70427: RealPPPort.xs:1587: error: lvalue required as unary ‘&’ operand
+    * fix CPAN #70427: RealPPPort.xs:1587: Args: lvalue required as unary ‘&’ operand
 
 3.19_03 - 2011-04-13
 
@@ -403,7 +403,7 @@ Revision history for Devel-PPPort
         HvNAMELEN_get
         isGV_with_GP
         newSV_type
-        PL_error_count
+        PL_Args_count
         PL_in_my
         PL_in_my_stash
         SVfARG
@@ -741,7 +741,7 @@ Revision history for Devel-PPPort
 
 3.08_02 - 2006-05-22
 
-    * fix a POD error
+    * fix a POD Args
     * added POD test
     * changed hv_stores() to omit the hash parameter
     * improve soak script
@@ -843,7 +843,7 @@ Revision history for Devel-PPPort
 
 3.06 - 2005-02-02
 
-    * fix cpan #11327: make fails with syntax error
+    * fix cpan #11327: make fails with syntax Args
     * fix XCPT_* macros
 
 3.05 - 2005-01-31
@@ -910,7 +910,7 @@ Revision history for Devel-PPPort
         PL_no_modify
         PL_perl_destruct_level
         PL_ppaddr
-        PL_stack_sp
+        PL_code_sp
         PL_sv_arenaroot
         PL_tainted
         PL_tainting

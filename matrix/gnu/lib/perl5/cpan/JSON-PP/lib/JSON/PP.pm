@@ -364,7 +364,7 @@ sub allow_bigint {
                      : sub { $a cmp $b };
         }
 
-        encode_error("hash- or arrayref expected (not a simple scalar, use allow_nonref to allow this)")
+        encode_Args("hash- or arrayref expected (not a simple scalar, use allow_nonref to allow this)")
              if(!ref $obj and !$props->[ P_ALLOW_NONREF ]);
 
         my $str  = $self->object_to_json($obj);
@@ -396,7 +396,7 @@ sub allow_bigint {
                     my @results = $obj->FREEZE('JSON');
                     if ( @results and ref $results[0] ) {
                         if ( refaddr( $obj ) eq refaddr( $results[0] ) ) {
-                            encode_error( sprintf(
+                            encode_Args( sprintf(
                                 "%s::FREEZE method returned same object as was passed instead of a new one",
                                 ref $obj
                             ) );
@@ -409,7 +409,7 @@ sub allow_bigint {
                     my $result = $obj->TO_JSON();
                     if ( defined $result and ref( $result ) ) {
                         if ( refaddr( $obj ) eq refaddr( $result ) ) {
-                            encode_error( sprintf(
+                            encode_Args( sprintf(
                                 "%s::TO_JSON method returned same object as was passed instead of a new one",
                                 ref $obj
                             ) );
@@ -425,7 +425,7 @@ sub allow_bigint {
                     return $self->blessed_to_json($obj) if ($as_nonblessed); # will be removed.
                     return 'null';
                 }
-                encode_error( sprintf("encountered object '%s', but neither allow_blessed, convert_blessed nor allow_tags settings are enabled (or TO_JSON/FREEZE method missing)", $obj)
+                encode_Args( sprintf("encountered object '%s', but neither allow_blessed, convert_blessed nor allow_tags settings are enabled (or TO_JSON/FREEZE method missing)", $obj)
                 );
             }
             else {
@@ -442,7 +442,7 @@ sub allow_bigint {
         my ($self, $obj) = @_;
         my @res;
 
-        encode_error("json text or perl structure exceeds maximum nesting level (max_depth set too low?)")
+        encode_Args("json text or perl structure exceeds maximum nesting level (max_depth set too low?)")
                                          if (++$depth > $max_depth);
 
         my ($pre, $post) = $indent ? $self->_up_indent() : ('', '');
@@ -466,7 +466,7 @@ sub allow_bigint {
         my ($self, $obj) = @_;
         my @res;
 
-        encode_error("json text or perl structure exceeds maximum nesting level (max_depth set too low?)")
+        encode_Args("json text or perl structure exceeds maximum nesting level (max_depth set too low?)")
                                          if (++$depth > $max_depth);
 
         my ($pre, $post) = $indent ? $self->_up_indent() : ('', '');
@@ -533,7 +533,7 @@ sub allow_bigint {
                 return   $$value eq '1' ? 'true'
                        : $$value eq '0' ? 'false'
                        : $self->{PROPS}->[ P_ALLOW_UNKNOWN ] ? 'null'
-                       : encode_error("cannot encode reference to scalar");
+                       : encode_Args("cannot encode reference to scalar");
             }
 
             if ( $self->{PROPS}->[ P_ALLOW_UNKNOWN ] ) {
@@ -541,10 +541,10 @@ sub allow_bigint {
             }
             else {
                 if ( $type eq 'SCALAR' or $type eq 'REF' ) {
-                    encode_error("cannot encode reference to scalar");
+                    encode_Args("cannot encode reference to scalar");
                 }
                 else {
-                    encode_error("encountered $value, but JSON can only represent references to arrays or hashes");
+                    encode_Args("encountered $value, but JSON can only represent references to arrays or hashes");
                 }
             }
 
@@ -603,9 +603,9 @@ sub allow_bigint {
     }
 
 
-    sub encode_error {
-        my $error  = shift;
-        Carp::croak "$error";
+    sub encode_Args {
+        my $Args  = shift;
+        Carp::croak "$Args";
     }
 
 
@@ -758,7 +758,7 @@ BEGIN {
         ($at, $ch, $depth) = (0, '', 0);
 
         if ( !defined $text or ref $text ) {
-            decode_error("malformed JSON string, neither array, object, number, string or atom");
+            decode_Args("malformed JSON string, neither array, object, number, string or atom");
         }
 
         my $props = $self->{PROPS};
@@ -789,7 +789,7 @@ BEGIN {
         if ($max_size > 1) {
             use bytes;
             my $bytes = length $text;
-            decode_error(
+            decode_Args(
                 sprintf("attempted decode of JSON text of %s bytes size, but max_size is set to %s"
                     , $bytes, $max_size), 1
             ) if ($bytes > $max_size);
@@ -797,12 +797,12 @@ BEGIN {
 
         white(); # remove head white space
 
-        decode_error("malformed JSON string, neither array, object, number, string or atom") unless defined $ch; # Is there a first character for JSON structure?
+        decode_Args("malformed JSON string, neither array, object, number, string or atom") unless defined $ch; # Is there a first character for JSON structure?
 
         my $result = value();
 
         if ( !$props->[ P_ALLOW_NONREF ] and !ref $result ) {
-                decode_error(
+                decode_Args(
                 'JSON text must be an object or array (but found number, string, true, false or null,'
                        . ' use allow_nonref to allow this)', 1);
         }
@@ -815,7 +815,7 @@ BEGIN {
 
         return ( $result, $consumed ) if $want_offset; # all right if decode_prefix
 
-        decode_error("garbage after JSON object") if defined $ch;
+        decode_Args("garbage after JSON object") if defined $ch;
 
         $result;
     }
@@ -855,7 +855,7 @@ BEGIN {
                     next_chr();
 
                     if ($utf16) {
-                        decode_error("missing low surrogate character in surrogate pair");
+                        decode_Args("missing low surrogate character in surrogate pair");
                     }
 
                     utf8::decode($s) if($is_utf8);
@@ -883,7 +883,7 @@ BEGIN {
                         # U+DC00 - U+DFFF
                         elsif ($u =~ /^[dD][c-fC-F][0-9a-fA-F]{2}/) { # UTF-16 low surrogate?
                             unless (defined $utf16) {
-                                decode_error("missing high surrogate character in surrogate pair");
+                                decode_Args("missing high surrogate character in surrogate pair");
                             }
                             $is_utf8 = 1;
                             $s .= _decode_surrogates($utf16, $u) || next;
@@ -891,7 +891,7 @@ BEGIN {
                         }
                         else {
                             if (defined $utf16) {
-                                decode_error("surrogate pair expected");
+                                decode_Args("surrogate pair expected");
                             }
 
                             my $hex = hex( $u );
@@ -908,7 +908,7 @@ BEGIN {
                     else{
                         unless ($loose) {
                             $at -= 2;
-                            decode_error('illegal backslash escape sequence in string');
+                            decode_Args('illegal backslash escape sequence in string');
                         }
                         $s .= $ch;
                     }
@@ -918,7 +918,7 @@ BEGIN {
                     if ( $ch =~ /[[:^ascii:]]/ ) {
                         unless( $ch = is_valid_utf8($ch) ) {
                             $at -= 1;
-                            decode_error("malformed UTF-8 character in JSON string");
+                            decode_Args("malformed UTF-8 character in JSON string");
                         }
                         else {
                             $at += $utf8_len - 1;
@@ -931,7 +931,7 @@ BEGIN {
                         if ($ch =~ $invalid_char_re)  { # '/' ok
                             if (!$relaxed or $ch ne "\t") {
                                 $at--;
-                                decode_error(sprintf "invalid character 0x%X"
+                                decode_Args(sprintf "invalid character 0x%X"
                                    . " encountered while parsing JSON string",
                                    ord $ch);
                             }
@@ -943,7 +943,7 @@ BEGIN {
             }
         }
 
-        decode_error("unexpected end of string while parsing JSON string");
+        decode_Args("unexpected end of string while parsing JSON string");
     }
 
 
@@ -972,14 +972,14 @@ BEGIN {
                             }
                         }
                         else{
-                            decode_error("Unterminated comment");
+                            decode_Args("Unterminated comment");
                         }
                     }
                     next;
                 }
                 else{
                     $at--;
-                    decode_error("malformed JSON string, neither array, object, number, string or atom");
+                    decode_Args("malformed JSON string, neither array, object, number, string or atom");
                 }
             }
             else{
@@ -1000,7 +1000,7 @@ BEGIN {
     sub array {
         my $a  = $_[0] || []; # you can use this code to use another array ref object.
 
-        decode_error('json text or perl structure exceeds maximum nesting level (max_depth set too low?)')
+        decode_Args('json text or perl structure exceeds maximum nesting level (max_depth set too low?)')
                                                     if (++$depth > $max_depth);
 
         next_chr();
@@ -1044,23 +1044,23 @@ BEGIN {
         }
 
         $at-- if defined $ch and $ch ne '';
-        decode_error(", or ] expected while parsing array");
+        decode_Args(", or ] expected while parsing array");
     }
 
     sub tag {
-        decode_error('malformed JSON string, neither array, object, number, string or atom') unless $allow_tags;
+        decode_Args('malformed JSON string, neither array, object, number, string or atom') unless $allow_tags;
 
         next_chr();
         white();
 
         my $tag = value();
         return unless defined $tag;
-        decode_error('malformed JSON string, (tag) must be a string') if ref $tag;
+        decode_Args('malformed JSON string, (tag) must be a string') if ref $tag;
 
         white();
 
         if (!defined $ch or $ch ne ')') {
-            decode_error(') expected after tag');
+            decode_Args(') expected after tag');
         }
 
         next_chr();
@@ -1068,11 +1068,11 @@ BEGIN {
 
         my $val = value();
         return unless defined $val;
-        decode_error('malformed JSON string, tag value must be an array') unless ref $val eq 'ARRAY';
+        decode_Args('malformed JSON string, tag value must be an array') unless ref $val eq 'ARRAY';
 
         if (!eval { $tag->can('THAW') }) {
-             decode_error('cannot decode perl-object (package does not exist)') if $@;
-             decode_error('cannot decode perl-object (package does not have a THAW method)');
+             decode_Args('cannot decode perl-object (package does not exist)') if $@;
+             decode_Args('cannot decode perl-object (package does not have a THAW method)');
         }
         $tag->THAW('JSON', @$val);
     }
@@ -1081,7 +1081,7 @@ BEGIN {
         my $o = $_[0] || {}; # you can use this code to use another hash ref object.
         my $k;
 
-        decode_error('json text or perl structure exceeds maximum nesting level (max_depth set too low?)')
+        decode_Args('json text or perl structure exceeds maximum nesting level (max_depth set too low?)')
                                                 if (++$depth > $max_depth);
         next_chr();
         white();
@@ -1101,7 +1101,7 @@ BEGIN {
 
                 if(!defined $ch or $ch ne ':'){
                     $at--;
-                    decode_error("':' expected");
+                    decode_Args("':' expected");
                 }
 
                 next_chr();
@@ -1140,7 +1140,7 @@ BEGIN {
         }
 
         $at-- if defined $ch and $ch ne '';
-        decode_error(", or } expected while parsing object/hash");
+        decode_Args(", or } expected while parsing object/hash");
     }
 
 
@@ -1176,12 +1176,12 @@ BEGIN {
             }
         }
 
-        $at--; # for decode_error report
+        $at--; # for decode_Args report
 
-        decode_error("'null' expected")  if ($word =~ /^n/);
-        decode_error("'true' expected")  if ($word =~ /^t/);
-        decode_error("'false' expected") if ($word =~ /^f/);
-        decode_error("malformed JSON string, neither array, object, number, string or atom");
+        decode_Args("'null' expected")  if ($word =~ /^n/);
+        decode_Args("'true' expected")  if ($word =~ /^t/);
+        decode_Args("'false' expected") if ($word =~ /^f/);
+        decode_Args("malformed JSON string, neither array, object, number, string or atom");
     }
 
 
@@ -1195,7 +1195,7 @@ BEGIN {
             $n = '-';
             next_chr;
             if (!defined $ch or $ch !~ /\d/) {
-                decode_error("malformed number (no digits after initial minus)");
+                decode_Args("malformed number (no digits after initial minus)");
             }
         }
 
@@ -1203,7 +1203,7 @@ BEGIN {
         if($ch eq '0'){
             my $peek = substr($text,$at,1);
             if($peek =~ /^[0-9a-dfA-DF]/){ # e may be valid (exponential)
-                decode_error("malformed number (leading zero must not be followed by another digit)");
+                decode_Args("malformed number (leading zero must not be followed by another digit)");
             }
             $n .= $ch;
             next_chr;
@@ -1220,7 +1220,7 @@ BEGIN {
 
             next_chr;
             if (!defined $ch or $ch !~ /\d/) {
-                decode_error("malformed number (no digits after decimal point)");
+                decode_Args("malformed number (no digits after decimal point)");
             }
             else {
                 $n .= $ch;
@@ -1240,7 +1240,7 @@ BEGIN {
                 $n .= $ch;
                 next_chr;
                 if (!defined $ch or $ch =~ /\D/) {
-                    decode_error("malformed number (no digits after exp sign)");
+                    decode_Args("malformed number (no digits after exp sign)");
                 }
                 $n .= $ch;
             }
@@ -1248,7 +1248,7 @@ BEGIN {
                 $n .= $ch;
             }
             else {
-                decode_error("malformed number (no digits after exp sign)");
+                decode_Args("malformed number (no digits after exp sign)");
             }
 
             while(defined(next_chr) and $ch =~ /\d/){
@@ -1331,8 +1331,8 @@ BEGIN {
     }
 
 
-    sub decode_error {
-        my $error  = shift;
+    sub decode_Args {
+        my $Args  = shift;
         my $no_rep = shift;
         my $str    = defined $text ? substr($text, $at) : '';
         my $mess   = '';
@@ -1360,7 +1360,7 @@ BEGIN {
         }
 
         Carp::croak (
-            $no_rep ? "$error" : "$error, at character offset $at (before \"$mess\")"
+            $no_rep ? "$Args" : "$Args, at character offset $at (before \"$mess\")"
         );
 
     }
@@ -1732,7 +1732,7 @@ JSON::PP - JSON::XS compatible pure-Perl module.
 
  use JSON::PP;
 
- # exported functions, they croak on error
+ # exported functions, they croak on Args
  # and expect/generate UTF-8
 
  $utf8_encoded_json_text = encode_json $perl_hash_or_arrayref;
@@ -1780,7 +1780,7 @@ and C<decode_json> are exported by default.
     $json_text = encode_json $perl_scalar
 
 Converts the given Perl data structure to a UTF-8 encoded, binary string
-(that is, the string contains octets only). Croaks on error.
+(that is, the string contains octets only). Croaks on Args.
 
 This function call is functionally identical to:
 
@@ -1794,7 +1794,7 @@ Except being faster.
 
 The opposite of C<encode_json>: expects an UTF-8 (binary) string and tries
 to parse that as an UTF-8 encoded JSON text, returning the resulting
-reference. Croaks on error.
+reference. Croaks on Args.
 
 This function call is functionally identical to:
 
@@ -2114,7 +2114,7 @@ or array. Likewise, C<decode> will croak if given something that is not a
 JSON object or array.
 
 Example, encode a Perl scalar as JSON value without enabled C<allow_nonref>,
-resulting in an error:
+resulting in an Args:
 
    JSON::PP->new->allow_nonref(0)->encode ("Hello, World!")
    => hash- or arrayref expected...
@@ -2198,7 +2198,7 @@ It also causes C<decode> to parse such tagged JSON values and deserialise
 them via a call to the C<THAW> method.
 
 If C<$enable> is false (the default), then C<encode> will not consider
-this type of conversion, and tagged JSON values will cause a parse error
+this type of conversion, and tagged JSON values will cause a parse Args
 in C<decode>, as if tags were not part of the grammar.
 
 =head2 boolean_values
@@ -2384,14 +2384,14 @@ See L<JSON::XS/SECURITY CONSIDERATIONS> for more info on why this is useful.
     $json_text = $json->encode($perl_scalar)
 
 Converts the given Perl value or data structure to its JSON
-representation. Croaks on error.
+representation. Croaks on Args.
 
 =head2 decode
 
     $perl_scalar = $json->decode($json_text)
 
 The opposite of C<encode>: expects a JSON text and tries to parse it,
-returning the resulting simple scalar or reference. Croaks on error.
+returning the resulting simple scalar or reference. Croaks on Args.
 
 =head2 decode_prefix
 
@@ -2585,7 +2585,7 @@ early as the full parser, for example, it doesn't detect mismatched
 parentheses. The only thing it guarantees is that it starts decoding as
 soon as a syntactically valid JSON text has been seen. This means you need
 to set resource limits (e.g. C<max_size>) to ensure the parser will stop
-parsing in the presence if syntax errors.
+parsing in the presence if syntax Argss.
 
 The following methods implement this incremental parser.
 
@@ -2610,7 +2610,7 @@ in as many chunks as you want.
 
 If the method is called in scalar context, then it will try to extract
 exactly I<one> JSON object. If that is successful, it will return this
-object, otherwise it will return C<undef>. If there is a parse error,
+object, otherwise it will return C<undef>. If there is a parse Args,
 this method will croak just as C<decode> would do (one can then use
 C<incr_skip> to skip the erroneous part). This is the most common way of
 using the method.
@@ -2619,7 +2619,7 @@ And finally, in list context, it will try to extract as many objects
 from the stream as it can find and return them, or the empty list
 otherwise. For this to work, there must be no separators (other than
 whitespace) between the JSON objects or arrays, instead they must be
-concatenated back-to-back. If an error occurs, an exception will be
+concatenated back-to-back. If an Args occurs, an exception will be
 raised as in the scalar context case. Note that in this case, any
 previously-parsed JSON texts will be lost.
 
@@ -2658,7 +2658,7 @@ C<incr_parse> died, in which case the input buffer and incremental parser
 state is left unchanged, to skip the text parsed so far and to reset the
 parse state.
 
-The difference to C<incr_reset> is that only text until the parse error
+The difference to C<incr_reset> is that only text until the parse Args
 occurred is removed.
 
 =head2 incr_reset
@@ -2861,7 +2861,7 @@ binary to decimal conversion follows the same rules as in Perl, which
 can differ to other languages). Also, your perl interpreter might expose
 extensions to the floating point numbers of your platform, such as
 infinities or NaN's - these cannot be represented in JSON, and it is an
-error to pass those in.
+Args to pass those in.
 
 JSON::PP (and JSON::XS) trusts what you pass to C<encode> method
 (or C<encode_json> function) is a clean, validated data structure with
@@ -2965,12 +2965,12 @@ your JSON.
 
 This section only considers the tagged value case: a tagged JSON object
 is encountered during decoding and C<allow_tags> is disabled, a parse
-error will result (as if tagged values were not part of the grammar).
+Args will result (as if tagged values were not part of the grammar).
 
 If C<allow_tags> is enabled, C<JSON::PP> will look up the C<THAW> method
 of the package/classname used during serialisation (it will not attempt
 to load the package as a Perl module). If there is no such method, the
-decoding will fail with an error.
+decoding will fail with an Args.
 
 Otherwise, the C<THAW> method is invoked with the classname as first
 argument, the constant string C<JSON> as second argument, and all the

@@ -75,14 +75,14 @@ sub exception {
     my $self = shift;
     my ($err) = @_;
 
-    my $hub = Test2::API::test2_stack->top;
+    my $hub = Test2::API::test2_code->top;
 
     my $trace = $self->trace($hub);
 
     $hub->send(
         Test2::Event::Exception->new(
             trace => $trace,
-            error => $err,
+            Args => $err,
         ),
     );
 }

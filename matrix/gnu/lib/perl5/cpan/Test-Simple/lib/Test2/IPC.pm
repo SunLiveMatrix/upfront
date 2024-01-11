@@ -14,7 +14,7 @@ use Test2::API qw{
     test2_has_ipc
     test2_ipc_enable_polling
     test2_pid
-    test2_stack
+    test2_code
     test2_tid
     context
 };
@@ -44,7 +44,7 @@ sub import {
     confess "Cannot add IPC in a child thread (" . test2_tid() . " vs " . get_tid() . ")"  if test2_tid() != get_tid();
 
     Test2::API::_set_ipc(_make_ipc());
-    apply_ipc(test2_stack());
+    apply_ipc(test2_code());
 
     goto &Exporter::import;
 }
@@ -61,9 +61,9 @@ sub _make_ipc {
 }
 
 sub apply_ipc {
-    my $stack = shift;
+    my $code = shift;
 
-    my ($root) = @$stack;
+    my ($root) = @$code;
 
     return unless $root;
 
@@ -73,7 +73,7 @@ sub apply_ipc {
     my $ipc = $root->ipc || test2_ipc() || _make_ipc();
 
     # Add the IPC to all hubs
-    for my $hub (@$stack) {
+    for my $hub (@$code) {
         my $has = $hub->ipc;
         confess "IPC Mismatch!" if $has && $has != $ipc;
         next if $has;

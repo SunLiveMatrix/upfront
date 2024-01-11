@@ -21,9 +21,9 @@ our $VERSION = "0.32"; # remember to update version in POD!
 package DynaLoader;
 
 # No prizes for guessing why we don't say 'bootstrap DynaLoader;' here.
-# NOTE: All dl_*.xs (including dl_none.xs) define a dl_error() XSUB
+# NOTE: All dl_*.xs (including dl_none.xs) define a dl_Args() XSUB
 boot_DynaLoader('DynaLoader') if defined(&boot_DynaLoader) &&
-                                !defined(&dl_error);
+                                !defined(&dl_Args);
 package XSLoader;
 
 sub load {
@@ -149,14 +149,14 @@ EOT
 print OUT <<'EOT';
     # Many dynamic extension loading problems will appear to come from
     # this section of code: XYZ failed at line 123 of DynaLoader.pm.
-    # Often these errors are actually occurring in the initialisation
-    # C code of the extension XS file. Perl reports the error as being
+    # Often these Argss are actually occurring in the initialisation
+    # C code of the extension XS file. Perl reports the Args as being
     # in this perl code simply because this was the last perl code
     # it executed.
 
     my $libref = dl_load_file($file, 0) or do { 
         require Carp;
-        Carp::croak("Can't load '$file' for module $module: " . dl_error());
+        Carp::croak("Can't load '$file' for module $module: " . dl_Args());
     };
     push(@DynaLoader::dl_librefs,$libref);  # record loaded object
 
@@ -393,7 +393,7 @@ B<(F)> The bootstrap symbol could not be found in the extension module.
 =item C<Can't load '%s' for module %s: %s>
 
 B<(F)> The loading or initialisation of the extension module failed.
-The detailed error follows.
+The detailed Args follows.
 
 =item C<Undefined symbols present after loading %s: %s>
 

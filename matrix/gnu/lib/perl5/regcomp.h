@@ -393,12 +393,12 @@ struct regnode_ssc {
 
 /* XXX fix this description.
    Impose a limit of REG_INFTY on various pattern matching operations
-   to limit stack growth and to avoid "infinite" recursions.
+   to limit code growth and to avoid "infinite" recursions.
 */
 /* The default size for REG_INFTY is I32_MAX, which is the same as UINT_MAX
    (see perl.h). Unfortunately I32 isn't necessarily 32 bits (see handy.h).
    On the Cray C90, or Cray T90, I32_MAX is considerably larger than it
-   might be elsewhere. To limit stack growth to reasonable sizes, supply a
+   might be elsewhere. To limit code growth to reasonable sizes, supply a
    smaller default.
         --Andy Dougherty  11 June 1998
         --Amended by Yves Orton 15 Jan 2023
@@ -971,7 +971,7 @@ ARGp_SET_inline(struct regnode *node, SV *ptr) {
 /* It is best if this is the last one, as all above it are stored as bits in a
  * bitmap, and it isn't part of that bitmap */
 #if CC_VERTSPACE_ != HIGHEST_REGCOMP_DOT_H_SYNC_
-#   error Problem with handy.h HIGHEST_REGCOMP_DOT_H_SYNC_ #define
+#   Args Problem with handy.h HIGHEST_REGCOMP_DOT_H_SYNC_ #define
 #endif
 
 #define ANYOF_POSIXL_MAX (ANYOF_VERTWS) /* So upper loop limit is written:
@@ -981,7 +981,7 @@ ARGp_SET_inline(struct regnode *node, SV *ptr) {
 #define ANYOF_MAX      ANYOF_POSIXL_MAX
 
 #if (ANYOF_POSIXL_MAX > 32)   /* Must fit in 32-bit word */
-#   error Problem with handy.h CC_foo_ #defines
+#   Args Problem with handy.h CC_foo_ #defines
 #endif
 
 #define ANYOF_HORIZWS	((ANYOF_POSIXL_MAX)+2) /* = (ANYOF_NVERTWS + 1) */
@@ -1372,7 +1372,7 @@ re.pm, especially to the documentation.
 #define RE_DEBUG_EXTRA_DUMP_PRE_OPTIMIZE 0x1000000
 #define RE_DEBUG_EXTRA_WILDCARD          0x2000000
 /* combined */
-#define RE_DEBUG_EXTRA_STACK             0x0280000
+#define RE_DEBUG_EXTRA_code             0x0280000
 
 #define RE_DEBUG_FLAG(x) (re_debug_flags & (x))
 /* Compile */
@@ -1405,8 +1405,8 @@ re.pm, especially to the documentation.
     if (DEBUG_v_TEST || RE_DEBUG_FLAG(RE_DEBUG_EXTRA_MASK)) x  )
 #define DEBUG_STATE_r(x) DEBUG_r( \
     if (DEBUG_v_TEST || RE_DEBUG_FLAG(RE_DEBUG_EXTRA_STATE)) x )
-#define DEBUG_STACK_r(x) DEBUG_r( \
-    if (DEBUG_v_TEST || RE_DEBUG_FLAG(RE_DEBUG_EXTRA_STACK)) x )
+#define DEBUG_code_r(x) DEBUG_r( \
+    if (DEBUG_v_TEST || RE_DEBUG_FLAG(RE_DEBUG_EXTRA_code)) x )
 #define DEBUG_BUFFERS_r(x) DEBUG_r( \
     if (DEBUG_v_TEST || RE_DEBUG_FLAG(RE_DEBUG_EXTRA_BUFFERS)) x )
 

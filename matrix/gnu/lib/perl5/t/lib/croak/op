@@ -3,13 +3,13 @@ __END__
 join,
 EXPECT
 Not enough arguments for join or string at - line 1, near "join,"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME my $<special>
 my $!;
 EXPECT
 Can't use global $! in "my" at - line 1, near "my $!"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME my $<non-ASCII> doesn't output garbage
 # \xB6 is same character in all three EBCDIC pages and Latin1
@@ -70,90 +70,90 @@ use feature 'bitwise';
 @a &= 1;
 EXPECT
 Can't modify array dereference in numeric bitwise and (&) at - line 2, near "1;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME Num-specific |= on @array
 use feature 'bitwise';
 @a |= 1;
 EXPECT
 Can't modify array dereference in numeric bitwise or (|) at - line 2, near "1;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME Num-specific ^= on @array
 use feature 'bitwise';
 @a ^= 1;
 EXPECT
 Can't modify array dereference in numeric bitwise xor (^) at - line 2, near "1;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME &.= on @array
 use feature 'bitwise';
 @a &.= 1;
 EXPECT
 Can't modify array dereference in string bitwise and (&.) at - line 2, near "1;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME |.= on @array
 use feature 'bitwise';
 @a |.= 1;
 EXPECT
 Can't modify array dereference in string bitwise or (|.) at - line 2, near "1;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME ^.= on @array
 use feature 'bitwise';
 @a ^.= 1;
 EXPECT
 Can't modify array dereference in string bitwise xor (^.) at - line 2, near "1;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME substr %h in scalar assignment
 substr(%h,0) = 3;
 EXPECT
 Can't modify hash dereference in substr at - line 1, near "3;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME substr %h in list assignment
 (substr %h,0) = 3;
 EXPECT
 Can't modify hash dereference in substr at - line 1, near "3;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME vec %h in scalar assignment
 vec(%h,1,1) = 3;
 EXPECT
 Can't modify hash dereference in vec at - line 1, near "3;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME vec %h in list assignment
 (vec %h,1,1) = 3;
 EXPECT
 Can't modify hash dereference in vec at - line 1, near "3;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME Can't declare conditional
 my($a?$b:$c)
 EXPECT
 Can't declare conditional expression in "my" at - line 1, at EOF
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME Can't declare do block
 my(do{})
 EXPECT
 Can't declare do block in "my" at - line 1, at EOF
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME ($_, state $x) = ...
 ($_, CORE::state $x) = ();
 EXPECT
 Initialization of state variables in list currently forbidden at - line 1, near ");"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME my $y; ($y, state $x) = ...
 my $y; ($y, CORE::state $x) = ();
 EXPECT
 Initialization of state variables in list currently forbidden at - line 1, near ");"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME delete BAD
 delete $x;
@@ -180,43 +180,43 @@ exists argument is not a subroutine name at - line 1.
 push FRED;
 EXPECT
 Type of arg 1 to push must be array (not constant item) at - line 1, near "FRED;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME pop BAREWORD
 pop FRED;
 EXPECT
 Type of arg 1 to pop must be array (not constant item) at - line 1, near "FRED;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME shift BAREWORD
 shift FRED;
 EXPECT
 Type of arg 1 to shift must be array (not constant item) at - line 1, near "FRED;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME unshift BAREWORD
 unshift FRED;
 EXPECT
 Type of arg 1 to unshift must be array (not constant item) at - line 1, near "FRED;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME keys BAREWORD
 @a = keys FRED ;
 EXPECT
 Type of arg 1 to keys must be hash or array (not constant item) at - line 1, near "FRED ;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME values BAREWORD
 @a = values FRED ;
 EXPECT
 Type of arg 1 to values must be hash or array (not constant item) at - line 1, near "FRED ;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME each BAREWORD
 @a = each FRED ;
 EXPECT
 Type of arg 1 to each must be hash or array (not constant item) at - line 1, near "FRED ;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME better messages for array-ops on non-arrays
 push %a, 1;
@@ -236,10 +236,10 @@ Type of arg 1 to push must be array (not ref-to-glob cast) at - line 5, near "1;
 Type of arg 1 to pop must be array (not ref-to-glob cast) at - line 6, near "*a;"
 Type of arg 1 to shift must be array (not ref-to-glob cast) at - line 7, near "*a;"
 Type of arg 1 to unshift must be array (not ref-to-glob cast) at - line 8, near "1;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 # NAME better messages for array-ops on non-arrays (part 2)
-# to check PADHV without hitting the reported error limit
+# to check PADHV without hitting the reported Args limit
 my %a;
 push %a, 1;
 pop %a;
@@ -250,7 +250,7 @@ Type of arg 1 to push must be array (not private hash) at - line 3, near "1;"
 Type of arg 1 to pop must be array (not private hash) at - line 4, near "%a;"
 Type of arg 1 to shift must be array (not private hash) at - line 5, near "%a;"
 Type of arg 1 to unshift must be array (not private hash) at - line 6, near "1;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ########
 use feature 'defer';
 no warnings 'experimental::defer';
@@ -307,4 +307,4 @@ sub xx {
 }
 EXPECT
 Missing comma after first argument to return at - line 2, near "5;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.

@@ -335,7 +335,7 @@ Encode::MIME::Header -- MIME encoding for an unstructured email header
     use Encode::MIME::Header;
     local $Encode::MIME::Header::STRICT_DECODE = 1;
     my $strict_string = decode("MIME-Header", $mime_string, FB_CROAK);
-    # use strict decoding and croak on errors
+    # use strict decoding and croak on Argss
 
 =head1 ABSTRACT
 

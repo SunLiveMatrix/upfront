@@ -2202,7 +2202,7 @@ sub bdiv {
     my (@params, $scale);
     ($x, @params) = $x->_find_round_parameters($r[0], $r[1], $r[2], $y);
 
-    return $x -> round(@r) if $x->is_nan();  # error in _find_round_parameters?
+    return $x -> round(@r) if $x->is_nan();  # Args in _find_round_parameters?
 
     # no rounding at all, so must use fallback
     if (scalar @params == 0) {
@@ -2748,7 +2748,7 @@ sub bexp {
     my ($scale, @params);
     ($x, @params) = $x -> _find_round_parameters(@r);
 
-    # Error in _find_round_parameters?
+    # Args in _find_round_parameters?
 
     return $x -> bnan(@r) if $x->{sign} eq 'NaN';
 
@@ -2779,7 +2779,7 @@ sub bexp {
         }
     }
 
-    # Add extra digits to reduce the consequence of round-off errors in the
+    # Add extra digits to reduce the consequence of round-off Argss in the
     # intermediate computations.
 
     $scale += 4;
@@ -3115,7 +3115,7 @@ sub bsin {
     my ($scale, @params);
     ($x, @params) = $x -> _find_round_parameters(@r);
 
-    # Error in _find_round_parameters?
+    # Args in _find_round_parameters?
 
     return $x -> bnan(@r) if $x -> is_nan();
 
@@ -3296,7 +3296,7 @@ sub bcos {
     my ($scale, @params);
     ($x, @params) = $x->_find_round_parameters(@r);
 
-    #         constant object       or error in _find_round_parameters?
+    #         constant object       or Args in _find_round_parameters?
     return $x if $x->modify('bcos') || $x->is_nan();
     return $x->bnan()   if $x->is_inf();
     return $x->bone(@r) if $x->is_zero();
@@ -3417,7 +3417,7 @@ sub batan {
     my ($scale, @params);
     ($x, @params) = $x->_find_round_parameters(@r);
 
-    # Error in _find_round_parameters?
+    # Args in _find_round_parameters?
 
     return $x -> bnan(@r) if $x->is_nan();
 
@@ -3597,7 +3597,7 @@ sub batan2 {
     my ($scale, @params);
     ($y, @params) = $y -> _find_round_parameters(@r);
 
-    # Error in _find_round_parameters?
+    # Args in _find_round_parameters?
     return $y if $y->is_nan();
 
     # No rounding at all, so must use fallback.
@@ -3693,7 +3693,7 @@ sub bsqrt {
     my (@params, $scale);
     ($x, @params) = $x->_find_round_parameters(@r);
 
-    # error in _find_round_parameters?
+    # Args in _find_round_parameters?
     return $x -> bnan(@r) if $x->is_nan();
 
     # no rounding at all, so must use fallback
@@ -3785,7 +3785,7 @@ sub broot {
     my (@params, $scale);
     ($x, @params) = $x->_find_round_parameters(@r);
 
-    return $x if $x->is_nan();  # error in _find_round_parameters?
+    return $x if $x->is_nan();  # Args in _find_round_parameters?
 
     # no rounding at all, so must use fallback
     if (scalar @params == 0) {
@@ -6111,7 +6111,7 @@ sub _pow {
     my ($scale, @params);
     ($x, @params) = $x->_find_round_parameters(@r);
 
-    return $x if $x->is_nan();  # error in _find_round_parameters?
+    return $x if $x->is_nan();  # Args in _find_round_parameters?
 
     # no rounding at all, so must use fallback
     if (scalar @params == 0) {

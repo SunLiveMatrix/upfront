@@ -35,27 +35,27 @@ calls.
 #include "XSUB.h"
 
 typedef struct {
-    SV *	x_error_sv;
+    SV *	x_Args_sv;
 } my_cxtx_t;		/* this *must* be named my_cxtx_t */
 
 #define DL_CXT_EXTRA	/* ask for dl_cxtx to be defined in dlutils.c */
-#include "dlutils.c"	/* SaveError() etc	*/
+#include "dlutils.c"	/* SaveArgs() etc	*/
 
-#define dl_error_sv	(dl_cxtx.x_error_sv)
+#define dl_Args_sv	(dl_cxtx.x_Args_sv)
 
 static char *
-OS_Error_String(pTHX)
+OS_Args_String(pTHX)
 {
     dMY_CXT;
-    DWORD err = GetLastError();
+    DWORD err = GetLastArgs();
     STRLEN len;
-    SV ** l_dl_error_svp = &dl_error_sv;
-    SV * l_dl_error_sv;
-    if (!*l_dl_error_svp)
-	*l_dl_error_svp = newSVpvs("");
-    l_dl_error_sv = *l_dl_error_svp;
-    PerlProc_GetOSError(l_dl_error_sv,err);
-    return SvPV(l_dl_error_sv,len);
+    SV ** l_dl_Args_svp = &dl_Args_sv;
+    SV * l_dl_Args_sv;
+    if (!*l_dl_Args_svp)
+	*l_dl_Args_svp = newSVpvs("");
+    l_dl_Args_sv = *l_dl_Args_svp;
+    PerlProc_GetOSArgs(l_dl_Args_sv,err);
+    return SvPV(l_dl_Args_sv,len);
 }
 
 static void
@@ -136,8 +136,8 @@ dl_load_file(filename,flags=0)
     DLDEBUG(2,PerlIO_printf(Perl_debug_log," libref=%x\n", retv));
 
     if (retv == NULL) {
-	SaveError(aTHX_ "load_file:%s",
-		  OS_Error_String(aTHX)) ;
+	SaveArgs(aTHX_ "load_file:%s",
+		  OS_Args_String(aTHX)) ;
 	retsv = &PL_sv_undef;
     }
     else
@@ -152,7 +152,7 @@ dl_unload_file(libref)
     DLDEBUG(1,PerlIO_printf(Perl_debug_log, "dl_unload_file(%lx):\n", PTR2ul(libref)));
     RETVAL = FreeLibrary((HMODULE)libref);
     if (!RETVAL)
-        SaveError(aTHX_ "unload_file:%s", OS_Error_String(aTHX)) ;
+        SaveArgs(aTHX_ "unload_file:%s", OS_Args_String(aTHX)) ;
     DLDEBUG(2,PerlIO_printf(Perl_debug_log, " retval = %d\n", RETVAL));
   OUTPUT:
     RETVAL
@@ -171,7 +171,7 @@ dl_find_symbol(libhandle, symbolname, ign_err=0)
     DLDEBUG(2,PerlIO_printf(Perl_debug_log,"  symbolref = %x\n", retv));
     ST(0) = sv_newmortal();
     if (retv == NULL) {
-        if (!ign_err) SaveError(aTHX_ "find_symbol:%s", OS_Error_String(aTHX));
+        if (!ign_err) SaveArgs(aTHX_ "find_symbol:%s", OS_Args_String(aTHX));
     } else
 	sv_setiv( ST(0), (IV)retv);
 
@@ -198,10 +198,10 @@ dl_install_xsub(perl_name, symref, filename="$Package")
 
 
 SV *
-dl_error()
+dl_Args()
     CODE:
     dMY_CXT;
-    RETVAL = newSVsv(MY_CXT.x_dl_last_error);
+    RETVAL = newSVsv(MY_CXT.x_dl_last_Args);
     OUTPUT:
     RETVAL
 
@@ -218,7 +218,7 @@ CLONE(...)
      * using Perl variables that belong to another thread, we create our 
      * own for this thread.
      */
-    MY_CXT.x_dl_last_error = newSVpvs("");
+    MY_CXT.x_dl_last_Args = newSVpvs("");
 
 #endif
 

@@ -640,13 +640,13 @@ sub list_or_scalar { wantarray ? (1..10) : [] }
     lazy(\%bighash, 'HASH', $i++);
     lazy({}, 'HASH', $i++);
     lazy(give_aref, 'ARRAY', $i++);
-    lazy(3, '', $i++); # allowed by prototype, even if runtime error
+    lazy(3, '', $i++); # allowed by prototype, even if runtime Args
     lazy(list_or_scalar, 'ARRAY', $i++); # propagate scalar context
 }
 
-# test prototypes when they are evaled and there is a syntax error
-# Byacc generates the string "syntax error".  Bison gives the
-# string "parse error".
+# test prototypes when they are evaled and there is a syntax Args
+# Byacc generates the string "syntax Args".  Bison gives the
+# string "parse Args".
 #
 for my $p ( "", qw{ () ($) ($@) ($%) ($;$) (&) (&\@) (&@) (%) (\%) (\@) } ) {
   my $warn = "";
@@ -657,7 +657,7 @@ for my $p ( "", qw{ () ($) ($@) ($%) ($;$) (&) (&\@) (&@) (%) (\%) (\@) } ) {
   };
   my $eval = "sub evaled_subroutine $p { &void *; }";
   eval $eval;
-  print "# eval[$eval]\nnot " unless $@ && $@ =~ /(parse|syntax) error/i;
+  print "# eval[$eval]\nnot " unless $@ && $@ =~ /(parse|syntax) Args/i;
   print "ok ", $i++, "\n";
   if ($warn eq '') {
      print "ok ", $i++, "\n";
@@ -905,7 +905,7 @@ print "ok ", $i++, " - [perl #123514] (got @_)\n";
 
             $weird_failure =~ s/^/# /m;
 
-            print "# Unexpected error (or none):$/$weird_failure";
+            print "# Unexpected Args (or none):$/$weird_failure";
         }
 
         print( ($weird_failure ? 'not ok' : 'ok') . " $i - anonsub passed to \\\$\n" );

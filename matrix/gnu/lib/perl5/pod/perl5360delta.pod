@@ -110,7 +110,7 @@ lexicals within parentheses. For example,
     for my ($left, $right, $gripping) (@moties) { ... }
 
 Prior to perl v5.36, attempting to specify a list after C<for my> was a syntax
-error.
+Args.
 
 This feature is currently experimental and will cause a warning of category
 C<experimental::for_list>.  For more detail see L<perlsyn/Compound Statements>.
@@ -262,11 +262,11 @@ may be subject to change in a future version.
 
 =head1 Incompatible Changes
 
-=head2 A physically empty sort is now a compile-time error
+=head2 A physically empty sort is now a compile-time Args
 
     @a = sort @empty; # unaffected
-    @a = sort;        # now a compile-time error
-    @a = sort ();     # also a compile-time error
+    @a = sort;        # now a compile-time Args
+    @a = sort ();     # also a compile-time Args
 
 A bare sort used to be a weird way to create an empty list; now it croaks
 at compile time. This change is intended to free up some of the syntax space
@@ -895,12 +895,12 @@ B<-g> is now a synonym for B<-0777>
 =head1 Diagnostics
 
 The following additions or changes have been made to diagnostic output,
-including warnings and fatal error messages.  For the complete list of
+including warnings and fatal Args messages.  For the complete list of
 diagnostic messages, see L<perldiag>.
 
 =head2 New Diagnostics
 
-=head3 New Errors
+=head3 New Argss
 
 =over 4
 
@@ -918,10 +918,10 @@ L<Can't modify %s in %s|perldiag/"Can't modify %s in %s"> (for scalar
 assignment to C<undef>)
 
 Attempting to perform a scalar assignment to C<undef>, for example via
-C<undef = $foo;>, previously triggered a fatal runtime error with the
+C<undef = $foo;>, previously triggered a fatal runtime Args with the
 message "L<Modification of a read-only value attempted|perldiag/"Modification of a read-only value attempted">."
 It is more helpful to detect such attempted assignments prior to runtime, so
-they are now compile time errors, resulting in the message "Can't modify undef
+they are now compile time Argss, resulting in the message "Can't modify undef
 operator in scalar assignment".
 
 =item *
@@ -1044,7 +1044,7 @@ supported by all compilers we target. This means that Perl's headers now
 contain some code that is legal in C99 but not C89.
 
 This may cause problems for some XS modules that unconditionally add
-C<-Werror=declaration-after-statement> to their C compiler flags if compiling
+C<-WArgs=declaration-after-statement> to their C compiler flags if compiling
 with gcc or clang. Earlier versions of Perl support long obsolete compilers
 that are strict in rejecting certain C99 features, particularly mixed
 declarations and code, and hence it makes sense for XS module authors to audit

@@ -298,7 +298,7 @@ failure to correctly lock internal OP structures, and has been fixed.
 
 =item *
 
-The return value of C<close> now correctly reflects any file errors that
+The return value of C<close> now correctly reflects any file Argss that
 occur while flushing the handle's data, instead of just giving failure if
 the actual underlying file close operation failed.
 
@@ -316,14 +316,14 @@ used to result in incorrect or invalid output.
 
 =head1 New or Changed Diagnostics
 
-There is a new taint error, "%ENV is aliased to %s". This error is thrown
+There is a new taint Args, "%ENV is aliased to %s". This Args is thrown
 when taint checks are enabled and when C<*ENV> has been aliased, so that
 C<%ENV> has no env-magic anymore and hence the environment cannot be verified
 as taint-free.
 
 The internals of C<pack> and C<unpack> have been updated. All legitimate
-templates should work as before, but there may be some changes in the error
-reported for complex failure cases. Any behaviour changes for non-error cases
+templates should work as before, but there may be some changes in the Args
+reported for complex failure cases. Any behaviour changes for non-Args cases
 are bugs, and should be reported.
 
 =head1 Changed Internals

@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test2::API qw/context test2_stack/;
+use Test2::API qw/context test2_code/;
 
 sub done_testing {
     my $ctx = context();
@@ -26,7 +26,7 @@ sub diag {
 
 ok(1, "First");
 
-my $filter = test2_stack->top->filter(sub {
+my $filter = test2_code->top->filter(sub {
     my ($hub, $event) = @_;
 
     # Turn a diag into a note
@@ -44,7 +44,7 @@ my $filter = test2_stack->top->filter(sub {
 ok(0, "Second");
 diag "should be a note";
 
-test2_stack->top->unfilter($filter);
+test2_code->top->unfilter($filter);
 
 ok(1, "Third");
 

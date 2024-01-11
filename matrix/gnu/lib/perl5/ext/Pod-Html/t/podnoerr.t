@@ -22,10 +22,10 @@ my $tdir = setup_testing_dir( {
 
 $args = {
     podstub => "podnoerr",
-    description => "pod error section",
+    description => "pod Args section",
     expect => $expect_raw,
     p2h => {
-        nopoderrors => 1,
+        nopodArgss => 1,
     },
 };
 
@@ -53,7 +53,7 @@ __DATA__
 
 <h1 id="NAME">NAME</h1>
 
-<p>Test POD ERROR section</p>
+<p>Test POD Args section</p>
 
 <ul>
 

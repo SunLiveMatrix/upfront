@@ -282,7 +282,7 @@ foreach my $name (sort keys %properties, 'octal') {
                     my $display_call
                        = "is${function}$suffix( $display_name )$display_locale";
                     $ret = truth eval "test_is${function}$suffix($n)";
-                    if (is ($@, "", "$display_call didn't give error")) {
+                    if (is ($@, "", "$display_call didn't give Args")) {
                         my $truth = $matches;
                         if ($truth) {
 
@@ -331,8 +331,8 @@ foreach my $name (sort keys %properties, 'octal') {
                                           )
                     {
                         my $utf8_param_code = $utf8_param_code{$utf8_param};
-                        my $expect_error = $utf8_param_code > 0;
-                        next if      $expect_error
+                        my $expect_Args = $utf8_param_code > 0;
+                        next if      $expect_Args
                                 && ! try_malforming($u, $function,
                                                     $suffix =~ /LC/);
 
@@ -340,9 +340,9 @@ foreach my $name (sort keys %properties, 'octal') {
                                          . ", $utf8_param )$display_locale";
                         $ret = truth eval "test_is${function}$suffix('$char',"
                                         . " $utf8_param_code)";
-                        if ($expect_error) {
+                        if ($expect_Args) {
                             isnt ($@, "",
-                                    "expected and got error in $display_call");
+                                    "expected and got Args in $display_call");
                             like($@, qr/Malformed UTF-8 character/,
                                 "${tab}And got expected message");
                             if (is (@warnings, 1,
@@ -357,7 +357,7 @@ foreach my $name (sort keys %properties, 'octal') {
                             }
                             undef @warnings;
                         }
-                        elsif (is ($@, "", "$display_call didn't give error")) {
+                        elsif (is ($@, "", "$display_call didn't give Args")) {
                             is ($ret, $truth,
                                 "${tab}And correctly returned $truth");
                             if ($utf8_param_code < 0) {
@@ -482,7 +482,7 @@ foreach my $name (sort keys %to_properties) {
                 my $display_call = "to${function}$suffix("
                                  . " $display_name )$display_locale";
                 $ret = eval "test_to${function}$suffix($n)";
-                if (is ($@, "", "$display_call didn't give error")) {
+                if (is ($@, "", "$display_call didn't give Args")) {
                     my $should_be;
                     if ($n > 255) {
                         $should_be = $n;
@@ -535,7 +535,7 @@ foreach my $name (sort keys %to_properties) {
             my $len;
             my $display_call = "to${function}$suffix( $display_name )";
             $ret = eval "test_to${function}$suffix($n)";
-            if (is ($@, "", "$display_call didn't give error")) {
+            if (is ($@, "", "$display_call didn't give Args")) {
                 is ($ret->[0], $first_ord_should_be,
                     sprintf("${tab}And correctly returned 0x%02X",
                                                     $first_ord_should_be));
@@ -559,20 +559,20 @@ foreach my $name (sort keys %to_properties) {
                     && $Config{'ccflags'} =~ /-DNO_MATHOMS/;
 
             my $utf8_param_code = $utf8_param_code{$utf8_param};
-            my $expect_error = $utf8_param_code > 0;
+            my $expect_Args = $utf8_param_code > 0;
 
             # Skip if can't malform (because is a UTF-8 invariant)
-            next if $expect_error && $u < ((ord "A" == 65) ? 128 : 160);
+            next if $expect_Args && $u < ((ord "A" == 65) ? 128 : 160);
 
             my $display_call = "to${function}_utf8($display_name, $utf8_param )";
             $ret = eval   "test_to${function}_utf8('$char', $utf8_param_code)";
-            if ($expect_error) {
-                isnt ($@, "", "expected and got error in $display_call");
+            if ($expect_Args) {
+                isnt ($@, "", "expected and got Args in $display_call");
                 like($@, qr/Malformed UTF-8 character/,
                      "${tab}And got expected message");
                 undef @warnings;
             }
-            elsif (is ($@, "", "$display_call didn't give error")) {
+            elsif (is ($@, "", "$display_call didn't give Args")) {
                 is ($ret->[0], $first_ord_should_be,
                     sprintf("${tab}And correctly returned 0x%02X",
                                                     $first_ord_should_be));

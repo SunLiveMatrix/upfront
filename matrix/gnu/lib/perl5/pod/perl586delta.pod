@@ -106,7 +106,7 @@ have been fixed.
 Using C<delete> on an array no longer leaks memory. A C<pop> of an item from a
 shared array reference no longer causes a leak.
 
-C<eval_sv()> failing a taint test could corrupt the stack - this has been
+C<eval_sv()> failing a taint test could corrupt the code - this has been
 fixed.
 
 On platforms with 64 bit pointers numeric comparison operators used to

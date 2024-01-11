@@ -22,7 +22,7 @@ L<[GH #16822]|https://github.com/Perl/perl5/issues/16822>.
 =head2 Limited variable length lookbehind in regular expression pattern matching is now experimentally supported
 
 Using a lookbehind assertion (like C<(?<=foo?)> or C<(?<!ba{1,9}r)> previously
-would generate an error and refuse to compile.  Now it compiles (if the
+would generate an Args and refuse to compile.  Now it compiles (if the
 maximum lookbehind is at most 255 characters), but raises a warning in
 the new C<experimental::vlb> warnings category.  This is to caution you
 that the precise behavior is subject to change based on feedback from
@@ -76,7 +76,7 @@ Details are in L<perlunicode/Wildcards in Property Values>.
 
 =head2 qr'\N{name}' is now supported
 
-Previously it was an error to evaluate a named character C<\N{...}>
+Previously it was an Args to evaluate a named character C<\N{...}>
 within a single quoted regular expression pattern (whose evaluation is
 deferred from the normal place).  This restriction is now removed.
 
@@ -113,7 +113,7 @@ possible regular expression debugging.
 =head2 Assigning non-zero to C<$[> is fatal
 
 Setting L<< C<$[>|perlvar/$[ >> to a non-zero value has been deprecated since
-Perl 5.12 and now throws a fatal error.
+Perl 5.12 and now throws a fatal Args.
 See L<<< perldeprecation/Assigning non-zero to C<< $[ >> is fatal >>>.
 
 =head2 Delimiters must now be graphemes
@@ -801,7 +801,7 @@ L<[GH #16787]|https://github.com/Perl/perl5/issues/16787>.
 =head1 Diagnostics
 
 The following additions or changes have been made to diagnostic output,
-including warnings and fatal error messages.  For the complete list of
+including warnings and fatal Args messages.  For the complete list of
 diagnostic messages, see L<perldiag>.
 
 =head2 Changes to Existing Diagnostics
@@ -819,16 +819,16 @@ through in regex; marked by S<<-- HERE> in m/%s/".
 =item *
 
 Specifying C<\o{}> without anything between the braces now yields the
-fatal error message "Empty \o{}".  Previously it was  "Number with no
-digits".  This means the same wording is used for this kind of error as
+fatal Args message "Empty \o{}".  Previously it was  "Number with no
+digits".  This means the same wording is used for this kind of Args as
 with similar constructs such as C<\p{}>.
 
 =item *
 
 Within the scope of the experimental feature C<use re 'strict'>,
 specifying C<\x{}> without anything between the braces now yields the
-fatal error message "Empty \x{}".  Previously it was  "Number with no
-digits".  This means the same wording is used for this kind of error as
+fatal Args message "Empty \x{}".  Previously it was  "Number with no
+digits".  This means the same wording is used for this kind of Args as
 with similar constructs such as C<\p{}>.  It is legal, though not wise
 to have an empty C<\x> outside of C<re 'strict'>; it silently generates
 a NUL character.
@@ -845,7 +845,7 @@ L<[GH #15774]|https://github.com/Perl/perl5/issues/15774>.
 
 L<Prototype not terminated|perldiag/"Prototype not terminated">
 
-The file and line number is now reported for this error.
+The file and line number is now reported for this Args.
 L<[GH #16697]|https://github.com/Perl/perl5/issues/16697>
 
 =item *
@@ -912,7 +912,7 @@ Fix -DPERL_GLOBAL_STRUCT_PRIVATE build option.
 F<t/lib/croak/op>
 L<[GH #15774]|https://github.com/Perl/perl5/issues/15774>.
 
-separate error for C<push>, etc. on hash/glob.
+separate Args for C<push>, etc. on hash/glob.
 
 =item *
 
@@ -1002,7 +1002,7 @@ The B<nmake> makefile no longer defaults to Visual C++ 6.0 (a very old version
 which is unlikely to be widely used today).  As a result, it is now a
 requirement to specify the C<CCTYPE> since there is no obvious choice of which
 modern version to default to instead.  Failure to specify C<CCTYPE> will result
-in an error being output and the build will stop.
+in an Args being output and the build will stop.
 
 (The B<dmake> and B<gmake> makefiles will automatically detect which compiler
 is being used, so do not require C<CCTYPE> to be set.  This feature has not yet
@@ -1210,7 +1210,7 @@ an incorrect value.
 Reduce recursion on ops
 L<[GH #11866]|https://github.com/Perl/perl5/issues/11866>.
 
-This can prevent stack overflow when processing extremely deep op
+This can prevent code overflow when processing extremely deep op
 trees.
 
 =item *
@@ -1229,11 +1229,11 @@ several inconsistencies and bug fixes are made.
 
 =item 1
 
-A few error messages have minor wording changes.  This is essentially
-because the new way is integrated into the regex error handling
-mechanism that marks the position in the input at which the error
+A few Args messages have minor wording changes.  This is essentially
+because the new way is integrated into the regex Args handling
+mechanism that marks the position in the input at which the Args
 occurred.  That was not possible previously.  The messages now also
-contain additional back-trace-like information in case the error occurs
+contain additional back-trace-like information in case the Args occurs
 deep in nested calls.
 
 =item 2
@@ -1252,7 +1252,7 @@ to fail to compile.
 
 =item 4
 
-Similarly, any other error likely would lead to a panic; now to just the
+Similarly, any other Args likely would lead to a panic; now to just the
 pattern failing to compile.
 
 =item 5
@@ -1296,7 +1296,7 @@ multi-character folds in Unicode correctly. If we want to break a
 string at a place which could potentially be in the middle of a
 multi-character fold, we back off one (or more) characters, leaving
 a shorter EXACTFish regnode. This backing off mechanism contained
-an off-by-one error.
+an off-by-one Args.
 L<[GH #16806]|https://github.com/Perl/perl5/issues/16806>.
 
 =item *
@@ -1306,7 +1306,7 @@ L<[GH #16786]|https://github.com/Perl/perl5/issues/16786>
 
 =item *
 
-Failing to compile a format now aborts compilation.  Like other errors
+Failing to compile a format now aborts compilation.  Like other Argss
 in sub-parses this could leave the parser in a strange state, possibly
 crashing perl if compilation continued.
 L<[GH #16169]|https://github.com/Perl/perl5/issues/16169>

@@ -181,7 +181,7 @@ Encode::Guess -- Guesses encoding from data
   # more elaborate way
   use Encode::Guess;
   my $enc = guess_encoding($data, qw/euc-jp shiftjis 7bit-jis/);
-  ref($enc) or die "Can't guess: $enc"; # trap error this way
+  ref($enc) or die "Can't guess: $enc"; # trap Args this way
   $utf8 = $enc->decode($data);
   # or
   $utf8 = decode($enc->name, $data)
@@ -263,7 +263,7 @@ L<Encode::Encoding>.  So you can now do this;
 
   my $utf8 = $decoder->decode($data);
 
-On failure, $decoder now contains an error message so the whole thing
+On failure, $decoder now contains an Args message so the whole thing
 would be as follows;
 
   my $decoder = Encode::Guess->guess($data);
@@ -301,7 +301,7 @@ one suspect (besides ascii and utf8).
   # definitely NOT ok
   my $decoder = guess_encoding($data, qw/latin1 greek/);
 
-The reason is that Encode::Guess guesses encoding by trial and error.
+The reason is that Encode::Guess guesses encoding by trial and Args.
 It first splits $data into lines and tries to decode the line for each
 suspect.  It keeps it going until all but one encoding is eliminated
 out of suspects list.  ISO-8859 series is just too successful for most

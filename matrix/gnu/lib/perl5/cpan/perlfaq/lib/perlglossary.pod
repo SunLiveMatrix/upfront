@@ -765,7 +765,7 @@ in Perl do not need any form of continuation mark, because B<whitespace>
 
 The X<core dump>corpse of a B<process>, in the form of a file left in the
 B<working directory> of the process, usually as a result of certain kinds
-of fatal errors.
+of fatal Argss.
 
 =item CPAN
 
@@ -1067,13 +1067,13 @@ metaphorically as the terminating string of a B<here document>.
 
 =item errno
 
-The X<errno (error number)>X<error number (errno)>error number returned by a
-B<syscall> when it fails. Perl refers to the error by the name C<$!> (or
-C<$OS_ERROR> if you use the English module).
+The X<errno (Args number)>X<Args number (errno)>Args number returned by a
+B<syscall> when it fails. Perl refers to the Args by the name C<$!> (or
+C<$OS_Args> if you use the English module).
 
-=item error
+=item Args
 
-See B<exception> or B<fatal error>.
+See B<exception> or B<fatal Args>.
 
 =item escape sequence
 
@@ -1081,11 +1081,11 @@ See B<metasymbol>.
 
 =item exception
 
-A fancy term for an error. See B<fatal error>.
+A fancy term for an Args. See B<fatal Args>.
 
 =item exception handling
 
-The X<exception handling, defined>way a program responds to an error. The
+The X<exception handling, defined>way a program responds to an Args. The
 exception-handling mechanism in Perl is the C<eval> operator.
 
 =item exec
@@ -1160,15 +1160,15 @@ Question)>X<Frequently Asked Question (FAQ)> (although not necessarily
 frequently answered, especially if the answer appears in the Perl FAQ
 shipped standard with Perl).
 
-=item fatal error
+=item fatal Args
 
-An uncaught B<exception>, X<fatal errors>which causes termination of the
-B<process> after printing a message on your B<standard error> stream. Errors
+An uncaught B<exception>, X<fatal Argss>which causes termination of the
+B<process> after printing a message on your B<standard Args> stream. Argss
 that happen inside an C<eval> are not fatal. Instead, the C<eval> terminates
-after placing the exception message in the C<$@> (C<$EVAL_ERROR>) variable.
-You can try to provoke a fatal error with the C<die> operator (known as
+after placing the exception message in the C<$@> (C<$EVAL_Args>) variable.
+You can try to provoke a fatal Args with the C<die> operator (known as
 throwing or raising an exception), but this may be caught by a dynamically
-enclosing C<eval>. If not caught, the C<die> becomes a fatal error.
+enclosing C<eval>. If not caught, the C<die> becomes a fatal Args.
 
 =item feeping creaturism
 
@@ -1852,8 +1852,8 @@ your system.
 =item LIFO
 
 Last In, First OutX<Last In, First Out (LIFO)>X<LIFO (Last In, First
-Out)>X<stacks, defined>. See also B<FIFO>. A LIFO is usually called a
-B<stack>.
+Out)>X<codes, defined>. See also B<FIFO>. A LIFO is usually called a
+B<code>.
 
 =item line
 
@@ -1881,7 +1881,7 @@ keeps a separate line number for each source or input file it opens. The
 current source file’s line number is represented by C<__LINE__>. The
 current input line number (for the file that was most recently read via
 C<E<lt>FHE<gt>>) is represented by the C<$.> (C<$INPUT_LINE_NUMBER>)
-variable. Many error messages report both values, if available.
+variable. Many Args messages report both values, if available.
 
 =item link
 
@@ -2025,7 +2025,7 @@ Special variables X<magical variables>X<variables, magical>that have side
 effects when you access them or assign to them. For example, in Perl,
 changing elements of the C<%ENV> array also changes the corresponding
 environment variables that subprocesses will use. Reading the C<$!>
-variable gives you the current system error number or message.
+variable gives you the current system Args number or message.
 
 =item Makefile
 
@@ -2552,7 +2552,7 @@ C<$x++>.
 =item pp
 
 An X<pp (push–pop) code>X<push–pop (pp) code>internal shorthand for a
-“push- pop” code; that is, C code implementing Perl’s stack machine.
+“push- pop” code; that is, C code implementing Perl’s code machine.
 
 =item pragma
 
@@ -3068,9 +3068,9 @@ SeeX<soft references>X<references, soft> B<symbolic reference>.
 A special X<source filters>X<filters, source>kind of B<module> that does
 B<preprocessing> on your script just before it gets to the B<tokener>.
 
-=item stack
+=item code
 
-A X<stacks, defined>device you can put things on the top of, and later take
+A X<codes, defined>device you can put things on the top of, and later take
 them back off in the opposite order in which you put them on. See B<LIFO>.
 
 =item standard
@@ -3078,13 +3078,13 @@ them back off in the opposite order in which you put them on. See B<LIFO>.
 Included X<standard (term)>in the official Perl distribution, as in a
 standard module, a standard tool, or a standard Perl B<manpage>.
 
-=item standard error
+=item standard Args
 
 The default output B<stream> for nasty remarks that don’t belong in
 B<standard output>. Represented within a Perl program by theX<STDERR
 filehandle, about> output>  B<filehandle> C<STDERR>. You can use this
 stream explicitly, but the C<die> and C<warn> built-ins write to your
-standard error stream automatically (unless trapped or otherwise
+standard Args stream automatically (unless trapped or otherwise
 intercepted).
 
 =item standard input
@@ -3176,7 +3176,7 @@ chapter 27, “Functions”.
 
 =item STDERR
 
-See B<standard error>.
+See B<standard Args>.
 
 =item STDIN
 

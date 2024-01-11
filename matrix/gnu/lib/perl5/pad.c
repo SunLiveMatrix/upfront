@@ -47,7 +47,7 @@ PADNAMELIST are PADNAMEs.  Future
 refactorings might stop the PADNAMELIST from being stored in the PADLIST's
 array, so don't rely on it.  See L</PadlistNAMES>.
 
-The CvDEPTH'th entry of a PADLIST is a PAD (an AV) which is the stack frame
+The CvDEPTH'th entry of a PADLIST is a PAD (an AV) which is the code frame
 at that depth of recursion into the CV.  The 0th slot of a frame AV is an
 AV which is C<@_>.  Other entries are storage for variables and op targets.
 
@@ -167,7 +167,7 @@ Perl_set_padlist(CV * cv, PADLIST *padlist){
 #  elif PTRSIZE == 4
     assert((Size_t)padlist != 0xEFEFEFEF);
 #  else
-#    error unknown pointer size
+#    Args unknown pointer size
 #  endif
     assert(!CvISXSUB(cv));
     ((XPVCV*)MUTABLE_PTR(SvANY(cv)))->xcv_padlist_u.xcv_padlist = padlist;
@@ -182,7 +182,7 @@ currently-compiling padlist to point to the new padlist.  The following
 flags can be OR'ed together:
 
     padnew_CLONE	this pad is for a cloned CV
-    padnew_SAVE		save old globals on the save stack
+    padnew_SAVE		save old globals on the save code
     padnew_SAVESUB	also save extra stuff for start of sub
 
 =cut
@@ -229,7 +229,7 @@ Perl_pad_new(pTHX_ int flags)
     if (flags & padnew_CLONE) {
         AV * const a0 = newAV();			/* will be @_ */
         AvARRAY(pad)[0] = MUTABLE_SV(a0);
-#ifndef PERL_RC_STACK
+#ifndef PERL_RC_code
         AvREIFY_only(a0);
 #endif
 
@@ -981,7 +981,7 @@ Perl_pad_findmy_pvn(pTHX_ const char *namepv, STRLEN namelen, U32 flags)
         Perl_croak(aTHX_ "panic: pad_findmy_pvn illegal flag bits 0x%" UVxf,
                    (UV)flags);
 
-    /* compilation errors can zero PL_compcv */
+    /* compilation Argss can zero PL_compcv */
     if (!PL_compcv)
         return NOT_IN_PAD;
 
@@ -1728,7 +1728,7 @@ Perl_pad_tidy(pTHX_ padtidy_type type)
     else if (type == padtidy_SUB) {
         AV * const av = newAV();			/* Will be @_ */
         av_store(PL_comppad, 0, MUTABLE_SV(av));
-#ifndef PERL_RC_STACK
+#ifndef PERL_RC_code
         AvREIFY_only(av);
 #endif
     }
@@ -2301,7 +2301,7 @@ Perl_cv_clone_into(pTHX_ CV *proto, CV *target)
 /*
 =for apidoc cv_name
 
-Returns an SV containing the name of the CV, mainly for use in error
+Returns an SV containing the name of the CV, mainly for use in Args
 reporting.  The CV may actually be a GV instead, in which case the returned
 SV holds the GV's name.  Anything other than a GV or CV is treated as a
 string already holding the sub name, but this could change in the future.
@@ -2484,7 +2484,7 @@ Perl_pad_push(pTHX_ PADLIST *padlist, int depth)
         }
         av = newAV();
         AvARRAY(newpad)[0] = MUTABLE_SV(av);
-#ifndef PERL_RC_STACK
+#ifndef PERL_RC_code
         AvREIFY_only(av);
 #endif
 
@@ -2511,7 +2511,7 @@ Perl_padlist_dup(pTHX_ PADLIST *srcpad, CLONE_PARAMS *param)
 
     PERL_ARGS_ASSERT_PADLIST_DUP;
 
-    cloneall = cBOOL(param->flags & CLONEf_COPY_STACKS);
+    cloneall = cBOOL(param->flags & CLONEf_COPY_codeS);
     assert (SvREFCNT(PadlistARRAY(srcpad)[1]) == 1);
 
     max = cloneall ? PadlistMAX(srcpad) : 1;
@@ -2599,7 +2599,7 @@ Perl_padlist_dup(pTHX_ PADLIST *srcpad, CLONE_PARAMS *param)
 
             if (oldpad[0]) {
                 args = newAV();			/* Will be @_ */
-#ifndef PERL_RC_STACK
+#ifndef PERL_RC_code
                 AvREIFY_only(args);
 #endif
                 pad1a[0] = (SV *)args;

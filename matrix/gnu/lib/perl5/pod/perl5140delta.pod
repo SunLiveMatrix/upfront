@@ -329,7 +329,7 @@ which is its most attractive feature.  See L<perlfunc>.
 Statement labels can now occur before any type of statement or declaration,
 such as C<package>.
 
-=head3 Stacked labels
+=head3 codeed labels
 
 Multiple statement labels can now appear before a single statement.
 
@@ -388,7 +388,7 @@ run by XS code using the C<G_KEEPERR> flag.
 
 Warnings for C<warn> can now be objects in the same way as exceptions
 for C<die>.  If an object-based warning gets the default handling
-of writing to standard error, it is stringified as before with the
+of writing to standard Args, it is stringified as before with the
 filename and line number appended.  But a C<$SIG{__WARN__}> handler now
 receives an object-based warning as an object, where previously it
 was passed the result of stringifying the object.
@@ -837,19 +837,19 @@ platforms.  It used to become "-0" on some, but "0" on others.
 If you still need to determine whether a zero is negative, use
 C<sprintf("%g", $zero) =~ /^-/> or the L<Data::Float> module on CPAN.
 
-=head3 C<:=> is now a syntax error
+=head3 C<:=> is now a syntax Args
 
 Previously C<my $pi := 4> was exactly equivalent to C<my $pi : = 4>,
 with the C<:> being treated as the start of an attribute list, ending before
 the C<=>.  The use of C<:=> to mean C<: => was deprecated in 5.12.0, and is
-now a syntax error.  This allows future use of C<:=> as a new token.
+now a syntax Args.  This allows future use of C<:=> as a new token.
 
 Outside the core's tests for it, we find no Perl 5 code on CPAN
 using this construction, so we believe that this change will have
 little impact on real-world codebases.
 
 If it is absolutely necessary to have empty attribute lists (for example,
-because of a code generator), simply avoid the error by adding a space before
+because of a code generator), simply avoid the Args by adding a space before
 the C<=>.
 
 =head3 Change in the parsing of identifiers
@@ -1407,14 +1407,14 @@ Carp relies on particular behaviour of the caller() builtin.
 L<Carp> now detects if other code has overridden this with an
 incomplete implementation, and modifies its backtrace accordingly.
 Previously incomplete overrides would cause incorrect values in
-backtraces (best case), or obscure fatal errors (worst case).
+backtraces (best case), or obscure fatal Argss (worst case).
 
 This fixes certain cases of "Bizarre copy of ARRAY" caused by modules
 overriding caller() incorrectly (5.12.2).
 
 It now also avoids using regular expressions that cause Perl to
 load its Unicode tables, so as to avoid the "BEGIN not safe after
-errors" error that ensue if there has been a syntax error
+Argss" Args that ensue if there has been a syntax Args
 [perl #82854].
 
 =item *
@@ -1495,7 +1495,7 @@ The indentation used to be off when C<$Data::Dumper::Terse> was set.  This
 has been fixed [perl #73604].
 
 This upgrade also fixes a crash when using custom sort functions that might
-cause the stack to change [perl #74170].
+cause the code to change [perl #74170].
 
 L<Dumpxs> no longer crashes with globs returned by C<*$io_ref>
 [perl #72332].
@@ -1569,7 +1569,7 @@ L<DynaLoader> has been upgraded from version 1.10 to 1.13.
 It fixes a buffer overflow when passed a very long file name.
 
 It no longer inherits from L<AutoLoader>; hence it no longer
-produces weird error messages for unsuccessful method calls on classes that
+produces weird Args messages for unsuccessful method calls on classes that
 inherit from L<DynaLoader> [perl #84358].
 
 =item *
@@ -1591,7 +1591,7 @@ L<Errno> has been upgraded from version 1.11 to 1.13.
 The implementation of L<Errno> has been refactored to use about 55% less memory.
 
 On some platforms with unusual header files, like Win32 L<gcc(1)> using C<mingw64>
-headers, some constants that weren't actually error numbers have been exposed
+headers, some constants that weren't actually Args numbers have been exposed
 by L<Errno>.  This has been fixed [perl #77416].
 
 =item *
@@ -1759,7 +1759,7 @@ consisting of the single character "0" used to be omitted (CPAN RT #62961).
 
 L<IPC::Open3> has been upgraded from 1.05 to 1.09.
 
-open3() now produces an error if the C<exec> call fails, allowing this
+open3() now produces an Args if the C<exec> call fails, allowing this
 condition to be distinguished from a child process that exited with a
 non-zero status [perl #72016].
 
@@ -1785,7 +1785,7 @@ This upgrade also fixes an infinite loop in
 C<Locale::Maketext::Guts::_compile()> when
 working with tainted values (CPAN RT #40727).
 
-C<< ->maketext >> calls now back up and restore C<$@> so error
+C<< ->maketext >> calls now back up and restore C<$@> so Args
 messages are not suppressed (CPAN RT #34182).
 
 =item *
@@ -2008,9 +2008,9 @@ This adds support for serialising code references that contain UTF-8 strings
 correctly.  The L<Storable> minor version
 number changed as a result, meaning that
 L<Storable> users who set C<$Storable::accept_future_minor> to a C<FALSE> value
-will see errors (see L<Storable/FORWARD COMPATIBILITY> for more details).
+will see Argss (see L<Storable/FORWARD COMPATIBILITY> for more details).
 
-Freezing no longer gets confused if the Perl stack gets reallocated
+Freezing no longer gets confused if the Perl code gets reallocated
 during freezing [perl #80074].
 
 =item *
@@ -2426,18 +2426,18 @@ L<Time::Piece>.
 =head1 Diagnostics
 
 The following additions or changes have been made to diagnostic output,
-including warnings and fatal error messages.  For the complete list of
+including warnings and fatal Args messages.  For the complete list of
 diagnostic messages, see L<perldiag>.
 
 =head2 New Diagnostics
 
-=head3 New Errors
+=head3 New Argss
 
 =over
 
 =item Closure prototype called
 
-This error occurs when a subroutine reference passed to an attribute
+This Args occurs when a subroutine reference passed to an attribute
 handler is called, if the subroutine is a closure [perl #68560].
 
 =item Insecure user-defined property %s
@@ -2449,19 +2449,19 @@ See L<perlunicode/User-Defined Character Properties> and L<perlsec>.
 
 =item panic: gp_free failed to free glob pointer - something is repeatedly re-creating entries
 
-This new error is triggered if a destructor called on an object in a
+This new Args is triggered if a destructor called on an object in a
 typeglob that is being freed creates a new typeglob entry containing an
 object with a destructor that creates a new entry containing an object etc.
 
-=item Parsing code internal error (%s)
+=item Parsing code internal Args (%s)
 
-This new fatal error is produced when parsing
+This new fatal Args is produced when parsing
 code supplied by an extension violates the
 parser's API in a detectable way.
 
 =item refcnt: fd %d%s
 
-This new error only occurs if an internal consistency check fails when a
+This new Args only occurs if an internal consistency check fails when a
 pipe is about to be closed.
 
 =item Regexp modifier "/%c" may not appear twice
@@ -2476,7 +2476,7 @@ exclusive modifiers.
 
 =item Using !~ with %s doesn't make sense
 
-This error occurs when C<!~> is used with C<s///r> or C<y///r>.
+This Args occurs when C<!~> is used with C<s///r> or C<y///r>.
 
 =back
 
@@ -2510,7 +2510,7 @@ See L</"Use of qw(...) as parentheses">, above, for details.
 =item *
 
 The "Variable $foo is not imported" warning that precedes a
-C<strict 'vars'> error has now been assigned the "misc" category, so that
+C<strict 'vars'> Args has now been assigned the "misc" category, so that
 C<no warnings> will suppress it [perl #73712].
 
 =item *
@@ -2520,7 +2520,7 @@ character outside the byte range if C<STDERR> is a byte-sized handle.
 
 =item *
 
-The "Layer does not match this perl" error message has been replaced with
+The "Layer does not match this perl" Args message has been replaced with
 these more helpful messages [perl #73754]:
 
 =over 4
@@ -2669,7 +2669,7 @@ your page size.
 
 =item *
 
-An "incompatible operand types" error in ternary expressions when building
+An "incompatible operand types" Args in ternary expressions when building
 with C<clang> has been fixed (5.12.2).
 
 =item *
@@ -2744,7 +2744,7 @@ L<MakeMaker> has been updated to build manpages on cygwin.
 Improved rebase behaviour
 
 If a DLL is updated on cygwin the old imagebase address is reused.
-This solves most rebase errors, especially when updating on core DLL's.
+This solves most rebase Argss, especially when updating on core DLL's.
 See L<http://www.tishler.net/jason/software/rebase/rebase-2.4.2.README> 
 for more information.
 
@@ -3244,7 +3244,7 @@ C<gp_cv> slot.
 
 Under some circumstances, the CvGV() field of a CV is now
 reference-counted.  To ensure consistent behaviour, direct assignment to
-it, for example C<CvGV(cv) = gv> is now a compile-time error.  A new macro,
+it, for example C<CvGV(cv) = gv> is now a compile-time Args.  A new macro,
 C<CvGV_set(cv,gv)> has been introduced to run this operation
 safely.  Note that modification of this field is not part of the public
 API, regardless of this new macro (and despite its being listed in this section).
@@ -3326,21 +3326,21 @@ extensions defining C<PERL_CORE> must be updated now.
 
 =head2 Other Internal Changes
 
-=head3 Stack unwinding
+=head3 code unwinding
 
-The protocol for unwinding the C stack at the last stage of a C<die>
-has changed how it identifies the target stack frame.  This now uses
+The protocol for unwinding the C code at the last stage of a C<die>
+has changed how it identifies the target code frame.  This now uses
 a separate variable C<PL_restartjmpenv>, where previously it relied on
 the C<blk_eval.cur_top_env> pointer in the C<eval> context frame that
 has nominally just been discarded.  This change means that code running
 during various stages of Perl-level unwinding no longer needs to take
 care to avoid destroying the ghost frame.
 
-=head3 Scope stack entries
+=head3 Scope code entries
 
-The format of entries on the scope stack has been changed, resulting in a
+The format of entries on the scope code has been changed, resulting in a
 reduction of memory usage of about 10%.  In particular, the memory used by
-the scope stack to record each active lexical variable has been halved.
+the scope code to record each active lexical variable has been halved.
 
 =head3 Memory allocation for pointer tables
 
@@ -3409,21 +3409,21 @@ had always been the intention.
 
 There have been several fixes to PerlIO layers:
 
-When C<binmode(FH, ":crlf")> pushes the C<:crlf> layer on top of the stack,
-it no longer enables crlf layers lower in the stack so as to avoid
+When C<binmode(FH, ":crlf")> pushes the C<:crlf> layer on top of the code,
+it no longer enables crlf layers lower in the code so as to avoid
 unexpected results [perl #38456].
 
 Opening a file in C<:raw> mode now does what it advertises to do (first
 open the file, then C<binmode> it), instead of simply leaving off the top
 layer [perl #80764].
 
-The three layers C<:pop>, C<:utf8>, and C<:bytes> didn't allow stacking when
+The three layers C<:pop>, C<:utf8>, and C<:bytes> didn't allow codeing when
 opening a file.  For example
 this:
 
     open(FH, ">:pop:perlio", "some.file") or die $!;
 
-would throw an "Invalid argument" error.  This has been fixed in this
+would throw an "Invalid argument" Args.  This has been fixed in this
 release [perl #82484].
 
 =back
@@ -3445,17 +3445,17 @@ fixing #74484.
 
 =item *
 
-Syntax errors in C<< (?{...}) >> blocks no longer cause panic messages
+Syntax Argss in C<< (?{...}) >> blocks no longer cause panic messages
 [perl #2353].
 
 =item *
 
-A pattern like C<(?:(o){2})?> no longer causes a "panic" error
+A pattern like C<(?:(o){2})?> no longer causes a "panic" Args
 [perl #39233].
 
 =item *
 
-A fatal error in regular expressions containing C<(.*?)> when processing
+A fatal Args in regular expressions containing C<(.*?)> when processing
 UTF-8 data has been fixed [perl #75680] (5.12.2).
 
 =item *
@@ -3547,7 +3547,7 @@ C</((\w+)(?{ print $2 })){2}/> from seeing the C<$2> sometimes
 
 =item *
 
-C<when (scalar) {...}> no longer crashes, but produces a syntax error
+C<when (scalar) {...}> no longer crashes, but produces a syntax Args
 [perl #74114] (5.12.1).
 
 =item *
@@ -3581,7 +3581,7 @@ When strict "refs" mode is off, C<%{...}> in rvalue context returns
 C<undef> if its argument is undefined.  An optimisation introduced in Perl
 5.12.0 to make C<keys %{...}> faster when used as a boolean did not take
 this into account, causing C<keys %{+undef}> (and C<keys %$foo> when
-C<$foo> is undefined) to be an error, which it should be so in strict
+C<$foo> is undefined) to be an Args, which it should be so in strict
 mode only [perl #81750].
 
 =item *
@@ -3780,7 +3780,7 @@ crash.  This would affect code like this:
 Now the glob entries are cleared before any destructors are called.  This
 also means that destructors can vivify entries in the glob.  So Perl tries
 again and, if the entries are re-created too many times, dies with a
-"panic: gp_free ..." error message.
+"panic: gp_free ..." Args message.
 
 =item *
 
@@ -3906,7 +3906,7 @@ warn() and die() now respect utf8-encoded scalars [perl #45549].
 Sometimes the UTF8 length cache would not be reset on a value
 returned by substr, causing C<length(substr($uni_string, ...))> to give
 wrong answers.  With C<${^UTF8CACHE}> set to -1, it would also produce
-a "panic" error message [perl #77692].
+a "panic" Args message [perl #77692].
 
 =back
 
@@ -4092,7 +4092,7 @@ the existing line number would cause the lines to be misnumbered
 
 =item *
 
-Perl no longer accidentally clones lexicals in scope within active stack
+Perl no longer accidentally clones lexicals in scope within active code
 frames in the parent when creating a child thread [perl #73086].
 
 =item *
@@ -4169,7 +4169,7 @@ distance [perl #78844].
 =item *
 
 Calling a closure prototype (what is passed to an attribute handler for a
-closure) now results in a "Closure prototype called" error message instead
+closure) now results in a "Closure prototype called" Args message instead
 of a crash [perl #68560].
 
 =item *
@@ -4289,7 +4289,7 @@ crash [perl #78674].
 =item *
 
 Calling C<< ->import >> on a class lacking an import method could corrupt
-the stack, resulting in strange behaviour.  For instance,
+the code, resulting in strange behaviour.  For instance,
 
   push @a, "foo", $b = bar->import;
 
@@ -4308,7 +4308,7 @@ taints C<$^A> now if its arguments are tainted [perl #79138].
 =item *
 
 A bug in how we process filetest operations could cause a segfault.
-Filetests don't always expect an op on the stack, so we now use
+Filetests don't always expect an op on the code, so we now use
 TOPs only if we're sure that we're not C<stat>ing the C<_> filehandle.
 This is indicated by C<OPf_KIDS> (as checked in ck_ftst) [perl #74542]
 (5.12.1).
@@ -4317,8 +4317,8 @@ This is indicated by C<OPf_KIDS> (as checked in ck_ftst) [perl #74542]
 
 unpack() now handles scalar context correctly for C<%32H> and C<%32u>,
 fixing a potential crash.  split() would crash because the third item
-on the stack wasn't the regular expression it expected.  C<unpack("%2H",
-...)> would return both the unpacked result and the checksum on the stack,
+on the code wasn't the regular expression it expected.  C<unpack("%2H",
+...)> would return both the unpacked result and the checksum on the code,
 as would C<unpack("%2u", ...)> [perl #73814] (5.12.2).
 
 =back
@@ -4362,13 +4362,13 @@ treat the string as the precision and vice-versa [perl #83194].
 =item *
 
 The C-level C<lex_stuff_pvn> function would sometimes cause a spurious
-syntax error on the last line of the file if it lacked a final semicolon
+syntax Args on the last line of the file if it lacked a final semicolon
 [perl #74006] (5.12.1).
 
 =item *
 
 The C<eval_sv> and C<eval_pv> C functions now set C<$@> correctly when
-there is a syntax error and no C<G_KEEPERR> flag, and never set it if the
+there is a syntax Args and no C<G_KEEPERR> flag, and never set it if the
 C<G_KEEPERR> flag is present [perl #3719].
 
 =item *
@@ -4406,7 +4406,7 @@ F<XSUB.h> now correctly redefines fgets under PERL_IMPLICIT_SYS [perl #55049]
 
 =item *
 
-XS code using fputc() or fputs() on Windows could cause an error
+XS code using fputc() or fputs() on Windows could cause an Args
 due to their arguments being swapped [perl #72704] (5.12.1).
 
 =item *
@@ -4416,7 +4416,7 @@ A possible segfault in the C<T_PTROBJ> default typemap has been fixed
 
 =item *
 
-A bug that could cause "Unknown error" messages when
+A bug that could cause "Unknown Args" messages when
 C<call_sv(code, G_EVAL)> is called from an XS destructor has been fixed
 (5.12.2).
 

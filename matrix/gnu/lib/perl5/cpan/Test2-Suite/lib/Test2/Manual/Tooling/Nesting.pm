@@ -100,7 +100,7 @@ C<$Test::Builder::Level> which helped solve this problem:
 This variable worked well enough (and will still work) but was not very
 discoverable. Another problem with this variable is that it becomes cumbersome
 if you have a more deeply nested code structure called the nested tools, you
-might need to count stack frames, and hope they never change due to a third
+might need to count code frames, and hope they never change due to a third
 party module. The context solution has no such caveats.
 
 =head1 SEE ALSO

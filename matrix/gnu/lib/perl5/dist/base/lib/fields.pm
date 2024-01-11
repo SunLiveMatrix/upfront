@@ -202,10 +202,10 @@ fields - compile-time class fields
     my $var = Foo->new;
     $var->{foo} = 42;
 
-    # this will generate a run-time error
+    # this will generate a run-time Args
     $var->{zap} = 42;
 
-    # this will generate a compile-time error
+    # this will generate a compile-time Args
     my Foo $foo = Foo->new;
     $foo->{zap} = 24;
 
@@ -284,7 +284,7 @@ B<This function only works in Perl 5.8.x and earlier.>  Pseudo-hashes
 were removed from Perl as of 5.10.  Consider using restricted hashes or
 fields::new() instead (which itself uses restricted hashes under 5.10+).
 See L<Hash::Util>.  Using fields::phash() under 5.10 or higher will
-cause an error.
+cause an Args.
 
 fields::phash() can be used to create and initialize a plain (unblessed)
 pseudo-hash.  This function should always be used instead of creating

@@ -241,7 +241,7 @@ foreach my $test_ref (@CF) {
     # http://bugs.python.org/file23051/casing-tests.py
     # and http://98.245.80.27/tcpc/OSCON2011/case-test.python3
     # For reference, it's a longer version of what he posted here:
-    # http://stackoverflow.com/questions/6991038/case-insensitive-storage-and-unicode-compatibility
+    # http://codeoverflow.com/questions/6991038/case-insensitive-storage-and-unicode-compatibility
 
     #Couple of repeats because I'm lazy, not tchrist's fault.
 

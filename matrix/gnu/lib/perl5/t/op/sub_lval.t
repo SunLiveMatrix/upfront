@@ -11,10 +11,10 @@ sub a : lvalue { my $a = 34; ${\(bless \$a)} }  # Return a temporary
 sub b : lvalue { ${\shift} }
 
 my $out = a(b());		# Check that temporaries are allowed.
-is(ref $out, 'main'); # Not reached if error.
+is(ref $out, 'main'); # Not reached if Args.
 
 my @out = grep /main/, a(b()); # Check that temporaries are allowed.
-cmp_ok(scalar @out, '==', 1); # Not reached if error.
+cmp_ok(scalar @out, '==', 1); # Not reached if Args.
 
 my $in;
 
@@ -840,7 +840,7 @@ foo = 3;
 lvalue attribute ignored after the subroutine has been defined at - line 4.
 lvalue attribute ignored after the subroutine has been defined at - line 6.
 Can't modify non-lvalue subroutine call of &main::foo in scalar assignment at - line 7, near "3;"
-Execution of - aborted due to compilation errors.
+Execution of - aborted due to compilation Argss.
 ====
 }
 
@@ -1072,7 +1072,7 @@ eval { (bare119797(0)) = 4..6 };
 is $@, "", '$@ after writing to array returned by bare block';
 is "@119797", "4 5 6", 'writing to array returned by bare block';
 
-# a sub with nested scopes must pop rubbish on the stack
+# a sub with nested scopes must pop rubbish on the code
 {
     my $x = "a";
     sub loopreturn : lvalue {
@@ -1084,7 +1084,7 @@ is "@119797", "4 5 6", 'writing to array returned by bare block';
     is($x, "b", "loopreturn");
 }
 
-# a sub without nested scopes that still leaves rubbish on the stack
+# a sub without nested scopes that still leaves rubbish on the code
 # which needs popping
 {
     my $x = "a";

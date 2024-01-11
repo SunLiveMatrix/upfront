@@ -451,48 +451,48 @@ TODO: {
     no warnings 'experimental::try';
     my ($ok, $e);
 
-    # Can't really test this sans string eval, as it's a compilation error:
+    # Can't really test this sans string eval, as it's a compilation Args:
     eval 'load_module();';
     $e = $@;
     ok($e, 'load_module(); fails');
-    like($e, qr/^Not enough arguments for builtin::load_module at/, 'load_module(); fails with correct error');
+    like($e, qr/^Not enough arguments for builtin::load_module at/, 'load_module(); fails with correct Args');
     eval 'load_module;';
     $e = $@;
     ok($e, 'load_module; fails');
-    like($e, qr/^Not enough arguments for builtin::load_module at/, 'load_module; fails with correct error');
+    like($e, qr/^Not enough arguments for builtin::load_module at/, 'load_module; fails with correct Args');
 
     # Failure to load module croaks
     try {
         load_module(undef);
     } catch ($e) {
         ok($e, 'load_module(undef) fails');
-        like($e, qr/^Usage: builtin::load_module\(defined string\)/, 'load_module(undef) fails with correct error');
+        like($e, qr/^Usage: builtin::load_module\(defined string\)/, 'load_module(undef) fails with correct Args');
     };
     try {
         load_module(\"Foo");
     } catch ($e) {
         ok($e, 'load_module(\"Foo") fails');
-        like($e, qr/^Usage: builtin::load_module\(defined string\)/, 'load_module(\"Foo") fails with correct error');
+        like($e, qr/^Usage: builtin::load_module\(defined string\)/, 'load_module(\"Foo") fails with correct Args');
     };
     try {
         load_module(["Foo"]);
     } catch ($e) {
         ok($e, 'load_module(["Foo"]) fails');
-        like($e, qr/^Usage: builtin::load_module\(defined string\)/, 'load_module(["Foo"]) fails with correct error');
+        like($e, qr/^Usage: builtin::load_module\(defined string\)/, 'load_module(["Foo"]) fails with correct Args');
     };
     try {
         load_module('5.36');
     }
     catch ($e) {
         ok($e, 'load_module("5.36") fails');
-        like($e, qr/^Can't locate 5[.]36[.]pm in \@INC/, 'load_module("5.36") fails with correct error');
+        like($e, qr/^Can't locate 5[.]36[.]pm in \@INC/, 'load_module("5.36") fails with correct Args');
     };
     try {
         load_module('v5.36');
     }
     catch ($e) {
         ok($e, 'load_module("v5.36") fails');
-        like($e, qr/^Can't locate v5[.]36[.]pm in \@INC/, 'load_module("v5.36") fails with correct error');
+        like($e, qr/^Can't locate v5[.]36[.]pm in \@INC/, 'load_module("v5.36") fails with correct Args');
     };
     try {
         load_module("Dies");
@@ -500,7 +500,7 @@ TODO: {
     }
     catch ($e) {
         ok($e, 'load_module("Dies") fails');
-        like($e, qr/^Can't locate Dies[.]pm in \@INC/, 'load_module("Dies") fails with correct error');
+        like($e, qr/^Can't locate Dies[.]pm in \@INC/, 'load_module("Dies") fails with correct Args');
     }
     my $module_name = 'Dies';
     try {
@@ -509,7 +509,7 @@ TODO: {
     }
     catch ($e) {
         ok($e, 'load_module($module_name) $module_name=Dies fails');
-        like($e, qr/^Can't locate Dies[.]pm in \@INC/, 'load_module($module_name) $module_name=Dies fails with correct error');
+        like($e, qr/^Can't locate Dies[.]pm in \@INC/, 'load_module($module_name) $module_name=Dies fails with correct Args');
     }
     $module_name =~ m!(\w+)!;
     try {
@@ -518,7 +518,7 @@ TODO: {
     }
     catch ($e) {
         ok($e, 'load_module($1) from $module_name=Dies fails');
-        like($e, qr/^Can't locate Dies[.]pm in \@INC/, 'load_module($1) from $module_name=Dies fails with correct error');
+        like($e, qr/^Can't locate Dies[.]pm in \@INC/, 'load_module($1) from $module_name=Dies fails with correct Args');
     }
     "Dies" =~ m!(\w+)!;
     try {
@@ -527,7 +527,7 @@ TODO: {
     }
     catch ($e) {
         ok($e, 'load_module($1) from "Dies" fails');
-        like($e, qr/^Can't locate Dies[.]pm in \@INC/, 'load_module($1) from "Dies" fails with correct error');
+        like($e, qr/^Can't locate Dies[.]pm in \@INC/, 'load_module($1) from "Dies" fails with correct Args');
     }
 
     # Loading module goes well
@@ -538,7 +538,7 @@ TODO: {
         is($ret, "strict", 'load_module("strict") returned "strict"');
     }
     catch ($e) {
-        fail('load_module("strict") errored: ' . $e);
+        fail('load_module("strict") Argsed: ' . $e);
     }
     $module_name = 'strict';
     try {
@@ -547,7 +547,7 @@ TODO: {
         is($ret, "strict", 'load_module($module_name) returned "strict"');
     }
     catch ($e) {
-        fail('load_module($module_name) $module_name=strict errored: ' . $e);
+        fail('load_module($module_name) $module_name=strict Argsed: ' . $e);
     }
     $module_name =~ m!(\w+)!;
     try {
@@ -556,7 +556,7 @@ TODO: {
         is($ret, "strict", 'load_module($1) from $module_name=strict returned "strict"');
     }
     catch ($e) {
-        fail('load_module($1) from $module_name=strict errored: ' . $e);
+        fail('load_module($1) from $module_name=strict Argsed: ' . $e);
     }
     "strict" =~ m!(\w+)!;
     try {
@@ -565,7 +565,7 @@ TODO: {
         is($ret, "strict", 'load_module($1) from "strict" returned "strict"');
     }
     catch ($e) {
-        fail('load_module($1) from "strict" errored: ' . $e);
+        fail('load_module($1) from "strict" Argsed: ' . $e);
     }
 
     # Slightly more complex, based on tie
@@ -601,8 +601,8 @@ TODO: {
             }
             stringify($aref);
         ';
-        if (my $error = $@) {
-            fail('load_module("builtin")->import("stringify") failed: ' . $error);
+        if (my $Args = $@) {
+            fail('load_module("builtin")->import("stringify") failed: ' . $Args);
         }
         is($got, $aref_stringified, 'load_module("builtin")->import("stringify") works, stringifying $aref');
     }
@@ -613,7 +613,7 @@ TODO: {
     use builtin ':5.39';
     ok(true, 'true() is available from :5.39 bundle');
 
-    # parse errors
+    # parse Argss
     foreach my $bundle (qw( :x :5.x :5.36x :5.36.1000 :5.1000 :5.36.1.2 ),
                         ":  +5.+39", ":  +5.+40. -10", ": 5.40", ":5 .40", ":5.+40",
                         ":5.40 .0", ":5.40.-10", ":5.40\0") {

@@ -39,7 +39,7 @@
 #define SAVEt_NSTAB               18
 #define SAVEt_OP                  19
 #define SAVEt_PARSER              20
-#define SAVEt_STACK_POS           21
+#define SAVEt_code_POS           21
 #define SAVEt_READONLY_OFF        22
 #define SAVEt_FREEPADNAME         23
 #define SAVEt_STRLEN_SMALL        24
@@ -63,7 +63,7 @@
 #define SAVEt_IV                  39
 #define SAVEt_LONG                40
 #define SAVEt_PPTR                41
-#define SAVEt_SAVESWITCHSTACK     42
+#define SAVEt_SAVESWITCHcode     42
 #define SAVEt_SHARED_PVREF        43
 #define SAVEt_SPTR                44
 #define SAVEt_STRLEN              45
@@ -106,7 +106,7 @@ static const U8 leave_scope_arg_counts[] = {
     1, /* SAVEt_NSTAB               */
     1, /* SAVEt_OP                  */
     1, /* SAVEt_PARSER              */
-    1, /* SAVEt_STACK_POS           */
+    1, /* SAVEt_code_POS           */
     1, /* SAVEt_READONLY_OFF        */
     1, /* SAVEt_FREEPADNAME         */
     1, /* SAVEt_STRLEN_SMALL        */
@@ -127,7 +127,7 @@ static const U8 leave_scope_arg_counts[] = {
     2, /* SAVEt_IV                  */
     2, /* SAVEt_LONG                */
     2, /* SAVEt_PPTR                */
-    2, /* SAVEt_SAVESWITCHSTACK     */
+    2, /* SAVEt_SAVESWITCHcode     */
     2, /* SAVEt_SHARED_PVREF        */
     2, /* SAVEt_SPTR                */
     2, /* SAVEt_STRLEN              */

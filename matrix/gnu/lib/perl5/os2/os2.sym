@@ -4,7 +4,7 @@ Perl_OS2_init
 OS2_Perl_data
 dlopen
 dlsym
-dlerror
+dlArgs
 dlclose
 my_tmpfile
 my_tmpnam

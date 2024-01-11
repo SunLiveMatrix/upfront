@@ -346,7 +346,7 @@ EXTCONST char* const PL_op_name[] INIT({
 	"lineseq",
 	"nextstate",
 	"dbstate",
-	"unstack",
+	"uncode",
 	"enter",
 	"leave",
 	"scope",
@@ -1203,7 +1203,7 @@ INIT({
 	Perl_pp_lineseq,	/* implemented by Perl_pp_null */
 	Perl_pp_nextstate,
 	Perl_pp_dbstate,
-	Perl_pp_unstack,
+	Perl_pp_uncode,
 	Perl_pp_enter,
 	Perl_pp_leave,
 	Perl_pp_scope,	/* implemented by Perl_pp_null */
@@ -1629,7 +1629,7 @@ INIT({
 	Perl_ck_null,		/* lineseq */
 	Perl_ck_null,		/* nextstate */
 	Perl_ck_null,		/* dbstate */
-	Perl_ck_null,		/* unstack */
+	Perl_ck_null,		/* uncode */
 	Perl_ck_null,		/* enter */
 	Perl_ck_null,		/* leave */
 	Perl_ck_null,		/* scope */
@@ -2054,7 +2054,7 @@ EXTCONST U32 PL_opargs[] INIT({
 	0x00000400,	/* lineseq */
 	0x00000a04,	/* nextstate */
 	0x00000a04,	/* dbstate */
-	0x00000004,	/* unstack */
+	0x00000004,	/* uncode */
 	0x00000000,	/* enter */
 	0x00000400,	/* leave */
 	0x00000400,	/* scope */
@@ -2308,7 +2308,7 @@ END_EXTERN_C
 #define OPpDONT_INIT_GV         0x04
 #define OPpENTERSUB_HASTARG     0x04
 #define OPpEVAL_UNICODE         0x04
-#define OPpFT_STACKED           0x04
+#define OPpFT_codeED           0x04
 #define OPpINITFIELD_HV         0x04
 #define OPpLVREF_ELEM           0x04
 #define OPpSLICEWARNING         0x04
@@ -2322,7 +2322,7 @@ END_EXTERN_C
 #define OPpCONST_STRICT         0x08
 #define OPpENTERSUB_AMPER       0x08
 #define OPpEVAL_BYTES           0x08
-#define OPpFT_STACKING          0x08
+#define OPpFT_codeING          0x08
 #define OPpITER_DEF             0x08
 #define OPpLVREF_ITER           0x08
 #define OPpMAYBE_LVSUB          0x08
@@ -2759,7 +2759,7 @@ EXTCONST I16  PL_op_private_bitdef_ix[] = {
       -1, /* lineseq */
      197, /* nextstate */
      197, /* dbstate */
-      -1, /* unstack */
+      -1, /* uncode */
       -1, /* enter */
      198, /* leave */
       -1, /* scope */
@@ -3286,7 +3286,7 @@ EXTCONST U8 PL_op_private_valid[] = {
     /* LINESEQ    */ (0),
     /* NEXTSTATE  */ (OPpHUSH_VMSISH),
     /* DBSTATE    */ (OPpHUSH_VMSISH),
-    /* UNSTACK    */ (0),
+    /* UNcode    */ (0),
     /* ENTER      */ (0),
     /* LEAVE      */ (OPpREFCOUNTED|OPpLVALUE),
     /* SCOPE      */ (0),
@@ -3358,33 +3358,33 @@ EXTCONST U8 PL_op_private_valid[] = {
     /* GETPEERNAME */ (OPpARG1_MASK),
     /* LSTAT      */ (OPpARG1_MASK),
     /* STAT       */ (OPpARG1_MASK),
-    /* FTRREAD    */ (OPpARG1_MASK|OPpFT_ACCESS|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTRWRITE   */ (OPpARG1_MASK|OPpFT_ACCESS|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTREXEC    */ (OPpARG1_MASK|OPpFT_ACCESS|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTEREAD    */ (OPpARG1_MASK|OPpFT_ACCESS|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTEWRITE   */ (OPpARG1_MASK|OPpFT_ACCESS|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTEEXEC    */ (OPpARG1_MASK|OPpFT_ACCESS|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTIS       */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTSIZE     */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTMTIME    */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTATIME    */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTCTIME    */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTROWNED   */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTEOWNED   */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTZERO     */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTSOCK     */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTCHR      */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTBLK      */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTFILE     */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTDIR      */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTPIPE     */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTSUID     */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTSGID     */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTSVTX     */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTLINK     */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTTTY      */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTTEXT     */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
-    /* FTBINARY   */ (OPpARG1_MASK|OPpFT_STACKED|OPpFT_STACKING|OPpFT_AFTER_t),
+    /* FTRREAD    */ (OPpARG1_MASK|OPpFT_ACCESS|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTRWRITE   */ (OPpARG1_MASK|OPpFT_ACCESS|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTREXEC    */ (OPpARG1_MASK|OPpFT_ACCESS|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTEREAD    */ (OPpARG1_MASK|OPpFT_ACCESS|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTEWRITE   */ (OPpARG1_MASK|OPpFT_ACCESS|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTEEXEC    */ (OPpARG1_MASK|OPpFT_ACCESS|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTIS       */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTSIZE     */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTMTIME    */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTATIME    */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTCTIME    */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTROWNED   */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTEOWNED   */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTZERO     */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTSOCK     */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTCHR      */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTBLK      */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTFILE     */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTDIR      */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTPIPE     */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTSUID     */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTSGID     */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTSVTX     */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTLINK     */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTTTY      */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTTEXT     */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
+    /* FTBINARY   */ (OPpARG1_MASK|OPpFT_codeED|OPpFT_codeING|OPpFT_AFTER_t),
     /* CHDIR      */ (OPpARG4_MASK|OPpTARGET_MY),
     /* CHOWN      */ (OPpARG4_MASK|OPpTARGET_MY),
     /* CHROOT     */ (OPpARG1_MASK|OPpTARGET_MY),

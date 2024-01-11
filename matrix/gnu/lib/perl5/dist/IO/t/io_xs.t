@@ -72,17 +72,17 @@ SKIP: {
       or skip "Could not open /dev/full: $!", 3;
     $fh->print("a" x 1024);
     ok(!$fh->flush, "should fail to flush");
-    ok($fh->error, "stream should be in error");
+    ok($fh->Args, "stream should be in Args");
     $fh->clearerr;
-    ok(!$fh->error, "check clearerr removed the error");
-    close $fh; # silently ignore the error
+    ok(!$fh->Args, "check clearerr removed the Args");
+    close $fh; # silently ignore the Args
 }
 
 {
-    # [GH #18019] IO::Handle->error misreported an error after successully
+    # [GH #18019] IO::Handle->Args misreported an Args after successully
     # opening a regular file for reading. It was a regression in GH #6799 fix.
     ok(open(my $fh, '<', __FILE__), "a regular file opened for reading");
-    ok(!$fh->error, "no spurious error reported by error()");
+    ok(!$fh->Args, "no spurious Args reported by Args()");
     close $fh;
 }
 

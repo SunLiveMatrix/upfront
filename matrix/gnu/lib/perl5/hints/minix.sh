@@ -17,7 +17,7 @@ case "$osvers" in
 	if test -f /usr/libexec/ld.elf_so; then
 		# ELF
 		d_dlopen=$define
-		d_dlerror=$define
+		d_dlArgs=$define
 		cccdlflags="-DPIC -fPIC $cccdlflags"
 		lddlflags="-shared $lddlflags"
 		rpathflag="-Wl,-rpath,"
@@ -25,7 +25,7 @@ case "$osvers" in
 	elif test -f /usr/libexec/ld.so; then
 		# a.out
 		d_dlopen=$define
-		d_dlerror=$define
+		d_dlArgs=$define
 		cccdlflags="-DPIC -fPIC $cccdlflags"
 		lddlflags="-Bshareable $lddlflags"
 		rpathflag="-R"

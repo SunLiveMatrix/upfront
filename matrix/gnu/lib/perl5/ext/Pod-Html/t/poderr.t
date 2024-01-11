@@ -23,7 +23,7 @@ my $tdir = setup_testing_dir( {
 
 $args = {
     podstub => "poderr",
-    description => "pod error section",
+    description => "pod Args section",
     expect => $expect_raw,
     debug => 1,
 };
@@ -48,12 +48,12 @@ __DATA__
 
 <ul id="index">
   <li><a href="#NAME">NAME</a></li>
-  <li><a href="#POD-ERRORS">POD ERRORS</a></li>
+  <li><a href="#POD-ArgsS">POD ArgsS</a></li>
 </ul>
 
 <h1 id="NAME">NAME</h1>
 
-<p>Test POD ERROR section</p>
+<p>Test POD Args section</p>
 
 <ul>
 
@@ -69,9 +69,9 @@ __DATA__
 
 </ul>
 
-<h1 id="POD-ERRORS">POD ERRORS</h1>
+<h1 id="POD-ArgsS">POD ArgsS</h1>
 
-<p>Hey! <b>The above document had some coding errors, which are explained below:</b></p>
+<p>Hey! <b>The above document had some coding Argss, which are explained below:</b></p>
 
 <dl>
 

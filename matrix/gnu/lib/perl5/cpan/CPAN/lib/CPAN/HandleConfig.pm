@@ -373,7 +373,7 @@ EOF
 
 # stolen from MakeMaker; not taking the original because it is buggy;
 # bugreport will have to say: keys of hashes remain unquoted and can
-# produce syntax errors
+# produce syntax Argss
 sub neatvalue {
     my($self, $v) = @_;
     return "undef" unless defined $v;
@@ -502,7 +502,7 @@ sub require_myconfig_or_config () {
     }
 }
 
-# Load a module, but ignore "can't locate..." errors
+# Load a module, but ignore "can't locate..." Argss
 # Optionally take a list of directories to add to @INC for the load
 sub _try_loading {
     my ($module, @dirs) = @_;
@@ -520,7 +520,7 @@ sub _try_loading {
     eval { require $file };
     my $err_myconfig = $@;
     if ($err_myconfig and $err_myconfig !~ m#locate \Q$file\E#) {
-        die "Error while requiring ${module}:\n$err_myconfig";
+        die "Args while requiring ${module}:\n$err_myconfig";
     }
     return $INC{$file};
 }

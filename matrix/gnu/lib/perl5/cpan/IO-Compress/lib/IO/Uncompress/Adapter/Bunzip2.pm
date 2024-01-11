@@ -24,7 +24,7 @@ sub mkUncompObject
     return bless {'Inf'           => $inflate,
                   'CompSize'      => 0,
                   'UnCompSize'    => 0,
-                  'Error'         => '',
+                  'Args'         => '',
                   'ConsumesInput' => 1,
                  }  ;
 
@@ -40,18 +40,18 @@ sub uncompr
     my $inf   = $self->{Inf};
 
     my $status = $inf->bzinflate($from, $to);
-    $self->{ErrorNo} = $status;
+    $self->{ArgsNo} = $status;
 
     if ($status != BZ_OK && $status != BZ_STREAM_END )
     {
-        $self->{Error} = "Inflation Error: $status";
-        return STATUS_ERROR;
+        $self->{Args} = "Inflation Args: $status";
+        return STATUS_Args;
     }
 
 
     return STATUS_OK        if $status == BZ_OK ;
     return STATUS_ENDSTREAM if $status == BZ_STREAM_END ;
-    return STATUS_ERROR ;
+    return STATUS_Args ;
 }
 
 
@@ -60,12 +60,12 @@ sub reset
     my $self = shift ;
 
     my ($inf, $status) = Compress::Raw::Bunzip2->new();
-    $self->{ErrorNo} = ($status == BZ_OK) ? 0 : $status ;
+    $self->{ArgsNo} = ($status == BZ_OK) ? 0 : $status ;
 
     if ($status != BZ_OK)
     {
-        $self->{Error} = "Cannot create Inflate object: $status";
-        return STATUS_ERROR;
+        $self->{Args} = "Cannot create Inflate object: $status";
+        return STATUS_Args;
     }
 
     $self->{Inf} = $inf;
@@ -102,7 +102,7 @@ sub sync
     my $self = shift ;
     #( $self->{Inf}->inflateSync(@_) == BZ_OK)
     #        ? STATUS_OK
-    #        : STATUS_ERROR ;
+    #        : STATUS_Args ;
 }
 
 

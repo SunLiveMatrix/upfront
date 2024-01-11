@@ -5,13 +5,13 @@
 # When a subroutine is called recursively, it gets a new pad indexed by its
 # recursion depth (CvDEPTH).  If the sub is called at the same recursion
 # depth again, the pad is reused.  Pad entries are localised on the
-# savestack when ‘my’ is encountered.
+# savecode when ‘my’ is encountered.
 #
-# When a die/last/goto/exit unwinds the stack, it can trigger a DESTROY
+# When a die/last/goto/exit unwinds the code, it can trigger a DESTROY
 # that recursively calls a subroutine that is in the middle of being
-# popped.  Before this bug was fixed, the context stack was popped first,
-# including CvDEPTH--, and then the savestack would be popped afterwards.
-# Popping the savestack could trigger DESTROY and cause a sub to be called
+# popped.  Before this bug was fixed, the context code was popped first,
+# including CvDEPTH--, and then the savecode would be popped afterwards.
+# Popping the savecode could trigger DESTROY and cause a sub to be called
 # after its CvDEPTH was lowered but while its pad entries were still live
 # and waiting to be cleared.  Decrementing CvDEPTH marks the pad as being
 # available for the next call, which is wrong if the pad entries have not

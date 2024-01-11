@@ -745,7 +745,7 @@ EOF
    $_ = *vòr;
    close $_;
    like $w, qr\unopened filehandle vòr\,
-    'PVLV globs get their names reported in unopened error messages';
+    'PVLV globs get their names reported in unopened Args messages';
   }
 
  }}->($h{k});
@@ -773,7 +773,7 @@ pass('Can assign strings to typeglobs');
     "[perl #77812] Globs in tied scalars can be reified if STORE dies"
 }
 
-# These two crashed prior to 5.13.6. In 5.13.6 they were fatal errors. They
+# These two crashed prior to 5.13.6. In 5.13.6 they were fatal Argss. They
 # were fixed in 5.13.7.
 ok eval {
   my $glob = \*hèèn::ISA;
@@ -831,7 +831,7 @@ ok eval {
   ();
  }
  ok $survived,
-  'no error when gp_free calls a destructor that assigns to the gv';
+  'no Args when gp_free calls a destructor that assigns to the gv';
 }
 
 __END__

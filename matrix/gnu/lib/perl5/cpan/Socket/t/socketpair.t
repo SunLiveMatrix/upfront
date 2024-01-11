@@ -137,7 +137,7 @@ my @gripping = (chr 255, chr 127);
         ok (eof $righth, "right is at EOF");
         local $TODO = "Known problems with unix sockets on $^O"
             if $^O eq 'unicos' || $^O eq 'unicosmk';
-        is ($!, '', 'and $! should report no error');
+        is ($!, '', 'and $! should report no Args');
         alarm 60;
     }
 
@@ -180,7 +180,7 @@ my @gripping = (chr 255, chr 127);
 
 # And now datagrams
 # I suspect we also need a self destruct time-bomb for these, as I don't see any
-# guarantee that the stack won't drop a UDP packet, even if it is for localhost.
+# guarantee that the code won't drop a UDP packet, even if it is for localhost.
 
 SKIP: {
     skip "alarm doesn't interrupt I/O on this Perl", 24 if "$]" < 5.008;

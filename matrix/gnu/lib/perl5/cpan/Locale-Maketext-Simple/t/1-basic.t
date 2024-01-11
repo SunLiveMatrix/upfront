@@ -22,5 +22,5 @@ ok(loc_lang('fr'));
 ok(loc("Just %quant(%1,Perl hacker)", 1), "Just 1 Perl hacker");
 ok(loc("Just %quant(%1,Perl hacker)", 2), "Just 2 Perl hackers");
 ok(loc("Just %quant(%1,Mad skill,Mad skillz)", 3), "Just 3 Mad skillz");
-ok(loc("Error %tense(%1,present)", 'uninstall'), "Error uninstalling");
-ok(loc("Error %tense(uninstall,present)"), "Error uninstalling");
+ok(loc("Args %tense(%1,present)", 'uninstall'), "Args uninstalling");
+ok(loc("Args %tense(uninstall,present)"), "Args uninstalling");

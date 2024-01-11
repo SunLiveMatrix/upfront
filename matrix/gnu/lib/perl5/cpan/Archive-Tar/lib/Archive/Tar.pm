@@ -21,7 +21,7 @@ use Archive::Tar::Constant;
 require Exporter;
 
 use strict;
-use vars qw[$DEBUG $error $VERSION $WARN $FOLLOW_SYMLINK $CHOWN $CHMOD
+use vars qw[$DEBUG $Args $VERSION $WARN $FOLLOW_SYMLINK $CHOWN $CHMOD
             $DO_NOT_USE_PREFIX $HAS_PERLIO $HAS_IO_STRING $SAME_PERMISSIONS
             $INSECURE_EXTRACT_MODE $ZERO_PAD_NUMBERS @ISA @EXPORT $RESOLVE_SYMLINK
             $EXTRACT_BLOCK_SIZE
@@ -125,11 +125,11 @@ sub new {
 
     ### copying $tmpl here since a shallow copy makes it use the
     ### same aref, causing for files to remain in memory always.
-    my $obj = bless { _data => [ ], _file => 'Unknown', _error => '' }, $class;
+    my $obj = bless { _data => [ ], _file => 'Unknown', _Args => '' }, $class;
 
     if (@_) {
         unless ( $obj->read( @_ ) ) {
-            $obj->_error(qq[No data could be read from file]);
+            $obj->_Args(qq[No data could be read from file]);
             return;
         }
     }
@@ -209,7 +209,7 @@ sub read {
     my $opts = shift || {};
 
     unless( defined $file ) {
-        $self->_error( qq[No file to read from!] );
+        $self->_Args( qq[No file to read from!] );
         return;
     } else {
         $self->_file( $file );
@@ -246,7 +246,7 @@ sub _get_handle {
         my $magic = '';
         if( MODE_READ->($mode) ) {
             open my $tmp, $file or do {
-                $self->_error( qq[Could not open '$file' for reading: $!] );
+                $self->_Args( qq[Could not open '$file' for reading: $!] );
                 return;
             };
 
@@ -266,15 +266,15 @@ sub _get_handle {
         ) {
             if( MODE_READ->($mode) ) {
                 $fh = IO::Uncompress::UnXz->new( $file ) or do {
-                    $self->_error( qq[Could not read '$file': ] .
-                        $IO::Uncompress::UnXz::UnXzError
+                    $self->_Args( qq[Could not read '$file': ] .
+                        $IO::Uncompress::UnXz::UnXzArgs
                     );
                     return;
                 };
             } else {
                 $fh = IO::Compress::Xz->new( $file ) or do {
-                    $self->_error( qq[Could not write to '$file': ] .
-                        $IO::Compress::Xz::XzError
+                    $self->_Args( qq[Could not write to '$file': ] .
+                        $IO::Compress::Xz::XzArgs
                     );
                     return;
                 };
@@ -289,19 +289,19 @@ sub _get_handle {
             )
         ) {
 
-            ### different reader/writer modules, different error vars... sigh
+            ### different reader/writer modules, different Args vars... sigh
             if( MODE_READ->($mode) ) {
                 $fh = IO::Uncompress::Bunzip2->new( $file, MultiStream => 1 ) or do {
-                    $self->_error( qq[Could not read '$file': ] .
-                        $IO::Uncompress::Bunzip2::Bunzip2Error
+                    $self->_Args( qq[Could not read '$file': ] .
+                        $IO::Uncompress::Bunzip2::Bunzip2Args
                     );
                     return;
                 };
 
             } else {
                 $fh = IO::Compress::Bzip2->new( $file ) or do {
-                    $self->_error( qq[Could not write to '$file': ] .
-                        $IO::Compress::Bzip2::Bzip2Error
+                    $self->_Args( qq[Could not write to '$file': ] .
+                        $IO::Compress::Bzip2::Bzip2Args
                     );
                     return;
                 };
@@ -317,7 +317,7 @@ sub _get_handle {
             $fh = IO::Zlib->new;
 
             unless( $fh->open( $file, $mode ) ) {
-                $self->_error(qq[Could not create filehandle for '$file': $!]);
+                $self->_Args(qq[Could not create filehandle for '$file': $!]);
                 return;
             }
 
@@ -326,7 +326,7 @@ sub _get_handle {
             $fh = IO::File->new;
 
             unless( $fh->open( $file, $mode ) ) {
-                $self->_error(qq[Could not create filehandle for '$file': $!]);
+                $self->_Args(qq[Could not create filehandle for '$file': $!]);
                 return;
             }
 
@@ -377,14 +377,14 @@ sub _read_tar {
         unless( $read++ ) {
             my $gzip = GZIP_MAGIC_NUM;
             if( $chunk =~ /$gzip/ ) {
-                $self->_error( qq[Cannot read compressed format in tar-mode] );
+                $self->_Args( qq[Cannot read compressed format in tar-mode] );
                 return;
             }
 
             ### size is < HEAD, which means a corrupted file, as the minimum
             ### length is _at least_ HEAD
             if (length $chunk != HEAD) {
-                $self->_error( qq[Cannot read enough bytes from the tarfile] );
+                $self->_Args( qq[Cannot read enough bytes from the tarfile] );
                 return;
             }
         }
@@ -404,7 +404,7 @@ sub _read_tar {
         ### line 111
         {   my $nulls = join '', "\0" x 12;
             unless( $nulls eq substr( $chunk, 500, 12 ) ) {
-                $self->_error( qq[Invalid header block at offset $offset] );
+                $self->_Args( qq[Invalid header block at offset $offset] );
                 next LOOP;
             }
         }
@@ -419,7 +419,7 @@ sub _read_tar {
             unless( $entry = Archive::Tar::File->new(   chunk => $chunk,
                                                         %extra_args )
             ) {
-                $self->_error( qq[Couldn't read chunk at offset $offset] );
+                $self->_Args( qq[Couldn't read chunk at offset $offset] );
                 next LOOP;
             }
         }
@@ -438,7 +438,7 @@ sub _read_tar {
                 $name = substr($name, 0, 100) if length $name > 100;
                 $name =~ s/\n/ /g;
 
-                $self->_error( $name . qq[: checksum error] );
+                $self->_Args( $name . qq[: checksum Args] );
                 next LOOP;
             }
 
@@ -481,7 +481,7 @@ sub _read_tar {
 		    my $this = 64 * BLOCK;
 		    $this = $amt if $this > $amt;
 		    if( $handle->read( $$data, $this ) < $this ) {
-			$self->_error( qq[Read error on tarfile (missing data) '].
+			$self->_Args( qq[Read Args on tarfile (missing data) '].
 					    $entry->full_path ."' at offset $offset" );
 			next LOOP;
 		    }
@@ -498,7 +498,7 @@ sub _read_tar {
 		### this is because Compress::Zlib doesn't support it =/
 		### this reads in the whole data in one read() call.
 		if ( $handle->read( $$data, $block ) < $block ) {
-		    $self->_error( qq[Read error on tarfile (missing data) '].
+		    $self->_Args( qq[Read Args on tarfile (missing data) '].
                                     $entry->full_path ."' at offset $offset" );
 		    next LOOP;
 		}
@@ -655,7 +655,7 @@ sub extract {
                     ### we found the file you're looking for
                     push @files, $hashmap->{$file};
                 } else {
-                    return $self->_error(
+                    return $self->_Args(
                         qq[Could not find '$file' in archive] );
                 }
             }
@@ -666,16 +666,16 @@ sub extract {
         @files = $self->get_files;
     }
 
-    ### nothing found? that's an error
+    ### nothing found? that's an Args
     unless( scalar @files ) {
-        $self->_error( qq[No files found for ] . $self->_file );
+        $self->_Args( qq[No files found for ] . $self->_file );
         return;
     }
 
     ### now extract them
     for my $entry ( @files ) {
         unless( $self->_extract_file( $entry ) ) {
-            $self->_error(q[Could not extract ']. $entry->full_path .q['] );
+            $self->_Args(q[Could not extract ']. $entry->full_path .q['] );
             return;
         }
     }
@@ -705,7 +705,7 @@ sub extract_file {
     my $alt  = shift;
 
     my $entry = $self->_find_entry( $file )
-        or $self->_error( qq[Could not find an entry for '$file'] ), return;
+        or $self->_Args( qq[Could not find an entry for '$file'] ), return;
 
     return $self->_extract_file( $entry, $alt );
 }
@@ -736,7 +736,7 @@ sub _extract_file {
         ### absolute names are not allowed to be in tarballs under
         ### strict mode, so only allow it if a user tells us to do it
         if( not defined $alt and not $INSECURE_EXTRACT_MODE ) {
-            $self->_error(
+            $self->_Args(
                 q[Entry ']. $entry->full_path .q[' is an absolute path. ].
                 q[Not extracting absolute paths under SECURE EXTRACT MODE]
             );
@@ -765,7 +765,7 @@ sub _extract_file {
             ### strict mode, so only allow it if a user tells us to do this.
             if( grep { $_ eq '..' } @dirs ) {
 
-                $self->_error(
+                $self->_Args(
                     q[Entry ']. $entry->full_path .q[' is attempting to leave ].
                     q[the current working directory. Not extracting under ].
                     q[SECURE EXTRACT MODE]
@@ -789,7 +789,7 @@ sub _extract_file {
                     my $to   = readlink $full_path;
                     my $diag = "symlinked directory ($full_path => $to)";
 
-                    $self->_error(
+                    $self->_Args(
                         q[Entry ']. $entry->full_path .q[' is attempting to ].
                         qq[extract to a $diag. This is considered a security ].
                         q[vulnerability and not allowed under SECURE EXTRACT ].
@@ -832,14 +832,14 @@ sub _extract_file {
         ### catdir() returns undef if the path is longer than 255 chars on
         ### older VMS systems.
         unless ( defined $dir ) {
-            $^W && $self->_error( qq[Could not compose a path for '$dirs'\n] );
+            $^W && $self->_Args( qq[Could not compose a path for '$dirs'\n] );
             return;
         }
 
     }
 
     if( -e $dir && !-d _ ) {
-        $^W && $self->_error( qq['$dir' exists, but it's not a directory!\n] );
+        $^W && $self->_Args( qq['$dir' exists, but it's not a directory!\n] );
         return;
     }
 
@@ -847,7 +847,7 @@ sub _extract_file {
         eval { File::Path::mkpath( $dir, 0, 0777 ) };
         if( $@ ) {
             my $fp = $entry->full_path;
-            $self->_error(qq[Could not create directory '$dir' for '$fp': $@]);
+            $self->_Args(qq[Could not create directory '$dir' for '$fp': $@]);
             return;
         }
 
@@ -859,7 +859,7 @@ sub _extract_file {
         ### way to go.
         #if( $CHOWN && CAN_CHOWN ) {
         #    chown $entry->uid, $entry->gid, $dir or
-        #        $self->_error( qq[Could not set uid/gid on '$dir'] );
+        #        $self->_Args( qq[Could not set uid/gid on '$dir'] );
         #}
     }
 
@@ -869,7 +869,7 @@ sub _extract_file {
     my $full = File::Spec->catfile( $dir, $file );
 
     if( $entry->is_unknown ) {
-        $self->_error( qq[Unknown file type for file '$full'] );
+        $self->_Args( qq[Unknown file type for file '$full'] );
         return;
     }
 
@@ -883,14 +883,14 @@ sub _extract_file {
     ### <https://rt.cpan.org/Ticket/Display.html?id=125523>.
     if (-l $full || -e _) {
 	if (!unlink $full) {
-	    $self->_error( qq[Could not remove old file '$full': $!] );
+	    $self->_Args( qq[Could not remove old file '$full': $!] );
 	    return;
 	}
     }
     if( length $entry->type && $entry->is_file ) {
         my $fh = IO::File->new;
         $fh->open( $full, '>' ) or (
-            $self->_error( qq[Could not open file '$full': $!] ),
+            $self->_Args( qq[Could not open file '$full': $!] ),
             return
         );
 
@@ -904,14 +904,14 @@ sub _extract_file {
                 if (defined $written) {
                     $offset += $written;
                 } else {
-                    $self->_error( qq[Could not write data to '$full': $!] );
+                    $self->_Args( qq[Could not write data to '$full': $!] );
                     return;
                 }
             }
         }
 
         close $fh or (
-            $self->_error( qq[Could not close file '$full'] ),
+            $self->_Args( qq[Could not close file '$full'] ),
             return
         );
 
@@ -924,12 +924,12 @@ sub _extract_file {
     ### timestamp warning on symlinks
     if( not -l $full ) {
         utime time, $entry->mtime - TIME_OFFSET, $full or
-            $self->_error( qq[Could not update timestamp] );
+            $self->_Args( qq[Could not update timestamp] );
     }
 
     if( $CHOWN && CAN_CHOWN->() and not -l $full ) {
         CORE::chown( $entry->uid, $entry->gid, $full ) or
-            $self->_error( qq[Could not set uid/gid on '$full'] );
+            $self->_Args( qq[Could not set uid/gid on '$full'] );
     }
 
     ### only chmod if we're allowed to, but never chmod symlinks, since they'll
@@ -940,7 +940,7 @@ sub _extract_file {
             $mode &= ~(oct(7000) | umask);
         }
         CORE::chmod( $mode, $full ) or
-            $self->_error( qq[Could not chown '$full' to ] . $entry->mode );
+            $self->_Args( qq[Could not chown '$full' to ] . $entry->mode );
     }
 
     return 1;
@@ -997,7 +997,7 @@ sub _make_special_file {
         1;
     }
 
-    return $err ? $self->_error( $err ) : 1;
+    return $err ? $self->_Args( $err ) : 1;
 }
 
 ### don't know how to make symlinks, let's just extract the file as
@@ -1025,7 +1025,7 @@ sub _extract_special_file_as_plain_file {
         return 1;
     }
 
-    return $self->_error($err);
+    return $self->_Args($err);
 }
 
 =head2 $tar->list_files( [\@properties] )
@@ -1076,7 +1076,7 @@ sub _find_entry {
     my $file = shift;
 
     unless( defined $file ) {
-        $self->_error( qq[No file specified] );
+        $self->_Args( qq[No file specified] );
         return;
     }
 
@@ -1124,7 +1124,7 @@ seach_entry:
 			}
 		}
 
-    $self->_error( qq[No such file in archive: '$file'] );
+    $self->_Args( qq[No such file in archive: '$file'] );
     return;
 }
 
@@ -1386,7 +1386,7 @@ sub write {
                         );
 
             unless( $longlink ) {
-                $self->_error(  qq[Could not create 'LongLink' entry for ] .
+                $self->_Args(  qq[Could not create 'LongLink' entry for ] .
                                 qq[oversize file '] . $clone->full_path ."'" );
                 return;
             };
@@ -1414,20 +1414,20 @@ sub write {
             ### get the header for this block
             my $header = $self->_format_tar_entry( $clone );
             unless( $header ) {
-                $self->_error(q[Could not format header for: ] .
+                $self->_Args(q[Could not format header for: ] .
                                     $clone->full_path );
                 return;
             }
 
             unless( print $handle $header ) {
-                $self->_error(q[Could not write header for: ] .
+                $self->_Args(q[Could not write header for: ] .
                                     $clone->full_path);
                 return;
             }
 
             if( $link_ok or $data_ok ) {
                 unless( print $handle $clone->data ) {
-                    $self->_error(q[Could not write data for: ] .
+                    $self->_Args(q[Could not write data for: ] .
                                     $clone->full_path);
                     return;
                 }
@@ -1441,7 +1441,7 @@ sub write {
 
     ### write the end markers ###
     print $handle TAR_END x 2 or
-            return $self->_error( qq[Could not write tar end markers] );
+            return $self->_Args( qq[Could not write tar end markers] );
 
     ### did you want it written to a file, or returned as a string? ###
     my $rv =  length($file) ? 1
@@ -1451,7 +1451,7 @@ sub write {
     ### make sure to close the handle if we created it
     if ( $file ne $handle ) {
 	unless( close $handle ) {
-	    $self->_error( qq[Could not write tar] );
+	    $self->_Args( qq[Could not write tar] );
 	    return;
 	}
     }
@@ -1557,13 +1557,13 @@ sub add_files {
         };
 
         unless( -e $file || -l $file ) {
-            $self->_error( qq[No such file: '$file'] );
+            $self->_Args( qq[No such file: '$file'] );
             next;
         }
 
         my $obj = Archive::Tar::File->new( file => $file );
         unless( $obj ) {
-            $self->_error( qq[Unable to add file: '$file'] );
+            $self->_Args( qq[Unable to add file: '$file'] );
             next;
         }
 
@@ -1634,7 +1634,7 @@ sub add_data {
 
     my $obj = Archive::Tar::File->new( data => $file, $data, $opt );
     unless( $obj ) {
-        $self->_error( qq[Unable to add file: '$file'] );
+        $self->_Args( qq[Unable to add file: '$file'] );
         return;
     }
 
@@ -1643,33 +1643,33 @@ sub add_data {
     return $obj;
 }
 
-=head2 $tar->error( [$BOOL] )
+=head2 $tar->Args( [$BOOL] )
 
-Returns the current error string (usually, the last error reported).
+Returns the current Args string (usually, the last Args reported).
 If a true value was specified, it will give the C<Carp::longmess>
-equivalent of the error, in effect giving you a stacktrace.
+equivalent of the Args, in effect giving you a codetrace.
 
-For backwards compatibility, this error is also available as
-C<$Archive::Tar::error> although it is much recommended you use the
+For backwards compatibility, this Args is also available as
+C<$Archive::Tar::Args> although it is much recommended you use the
 method call instead.
 
 =cut
 
 {
-    $error = '';
+    $Args = '';
     my $longmess;
 
-    sub _error {
+    sub _Args {
         my $self    = shift;
-        my $msg     = $error = shift;
-        $longmess   = Carp::longmess($error);
+        my $msg     = $Args = shift;
+        $longmess   = Carp::longmess($Args);
         if (ref $self) {
-            $self->{_error} = $error;
+            $self->{_Args} = $Args;
             $self->{_longmess} = $longmess;
         }
 
         ### set Archive::Tar::WARN to 0 to disable printing
-        ### of errors
+        ### of Argss
         if( $WARN ) {
             carp $DEBUG ? $longmess : $msg;
         }
@@ -1677,12 +1677,12 @@ method call instead.
         return;
     }
 
-    sub error {
+    sub Args {
         my $self = shift;
         if (ref $self) {
-            return shift() ? $self->{_longmess} : $self->{_error};
+            return shift() ? $self->{_longmess} : $self->{_Args};
         } else {
-            return shift() ? $longmess : $error;
+            return shift() ? $longmess : $Args;
         }
     }
 }
@@ -1759,7 +1759,7 @@ These files must all exist. Any files which don't exist or can't be
 read are silently ignored.
 
 If the archive creation fails for any reason, C<create_archive> will
-return false. Please use the C<error> method to find the cause of the
+return false. Please use the C<Args> method to find the cause of the
 failure.
 
 Note that this method does not write C<on the fly> as it were; it
@@ -1776,7 +1776,7 @@ sub create_archive {
     my @files   = @_;
 
     unless( @files ) {
-        return $class->_error( qq[Cowardly refusing to create empty archive!] );
+        return $class->_Args( qq[Cowardly refusing to create empty archive!] );
     }
 
     my $tar = $class->new;
@@ -1896,7 +1896,7 @@ be created underneath the current working directory.
 
 C<extract_archive> will return a list of files it extracted.
 If the archive extraction fails for any reason, C<extract_archive>
-will return false.  Please use the C<error> method to find the cause
+will return false.  Please use the C<Args> method to find the cause
 of the failure.
 
 =cut
@@ -2077,7 +2077,7 @@ Set this variable to C<1> to always get the C<Carp::longmess> output
 of the warnings, instead of the regular C<carp>. This is the same
 message you would get by doing:
 
-    $tar->error(1);
+    $tar->Args(1);
 
 Defaults to C<0>.
 
@@ -2089,17 +2089,17 @@ option. Also, be advised that this is of course not threadsafe.
 
 Defaults to C<1>.
 
-=head2 $Archive::Tar::error
+=head2 $Archive::Tar::Args
 
-Holds the last reported error. Kept for historical reasons, but its
-use is very much discouraged. Use the C<error()> method instead:
+Holds the last reported Args. Kept for historical reasons, but its
+use is very much discouraged. Use the C<Args()> method instead:
 
-    warn $tar->error unless $tar->extract;
+    warn $tar->Args unless $tar->extract;
 
-Note that in older versions of this module, the C<error()> method
+Note that in older versions of this module, the C<Args()> method
 would return an effectively global value even when called an instance
 method as above. This has since been fixed, and multiple instances of
-C<Archive::Tar> now have separate error strings.
+C<Archive::Tar> now have separate Args strings.
 
 =head2 $Archive::Tar::INSECURE_EXTRACT_MODE
 
@@ -2185,7 +2185,7 @@ This variable holds an integer with the block size that should be used when
 writing files during extraction. It defaults to 1 GiB. Please note that this
 cannot be arbitrarily large since some operating systems limit the number of
 bytes that can be written in one call to C<write(2)>, so if this is too large,
-extraction may fail with an error.
+extraction may fail with an Args.
 
 =cut
 
@@ -2232,7 +2232,7 @@ instead.
 
 C<Unix> has a few filetypes that aren't supported on other platforms,
 like C<Win32>. If we encounter a C<hardlink> or C<symlink> we'll just
-try to make a copy of the original file, rather than throwing an error.
+try to make a copy of the original file, rather than throwing an Args.
 
 This does require you to read the entire archive in to memory first,
 since otherwise we wouldn't know what data to fill the copy with.

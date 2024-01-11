@@ -29,23 +29,23 @@ $VERSION = eval $VERSION;
 		BZ_FLUSH_OK
 		BZ_FINISH_OK
 		BZ_STREAM_END
-		BZ_SEQUENCE_ERROR
-		BZ_PARAM_ERROR
-		BZ_MEM_ERROR
-		BZ_DATA_ERROR
-		BZ_DATA_ERROR_MAGIC
-		BZ_IO_ERROR
+		BZ_SEQUENCE_Args
+		BZ_PARAM_Args
+		BZ_MEM_Args
+		BZ_DATA_Args
+		BZ_DATA_Args_MAGIC
+		BZ_IO_Args
 		BZ_UNEXPECTED_EOF
 		BZ_OUTBUFF_FULL
-		BZ_CONFIG_ERROR
+		BZ_CONFIG_Args
 
     );
 
 sub AUTOLOAD {
     my($constname);
     ($constname = $AUTOLOAD) =~ s/.*:://;
-    my ($error, $val) = constant($constname);
-    Carp::croak $error if $error;
+    my ($Args, $val) = constant($constname);
+    Carp::croak $Args if $Args;
     no strict 'refs';
     *{$AUTOLOAD} = sub { $val };
     goto &{$AUTOLOAD};
@@ -165,7 +165,7 @@ and a C<$status> of C<BZ_OK> in a list context. In scalar context it
 returns the deflation object, C<$z>, only.
 
 If not successful, the returned compression object, C<$z>, will be
-I<undef> and C<$status> will hold the a I<bzip2> error code.
+I<undef> and C<$status> will hold the a I<bzip2> Args code.
 
 Below is a list of the valid options:
 
@@ -221,7 +221,7 @@ Defaults to 0.
 Reads the contents of C<$input>, compresses it and writes the compressed
 data to C<$output>.
 
-Returns C<BZ_RUN_OK> on success and a C<bzip2> error code on failure.
+Returns C<BZ_RUN_OK> on success and a C<bzip2> Args code on failure.
 
 If C<appendOutput> is enabled in the constructor for the bzip2 object, the
 compressed data will be appended to C<$output>. If not enabled, C<$output>
@@ -231,14 +231,14 @@ will be truncated before the compressed data is written to it.
 
 Flushes any pending compressed data to C<$output>.
 
-Returns C<BZ_RUN_OK> on success and a C<bzip2> error code on failure.
+Returns C<BZ_RUN_OK> on success and a C<bzip2> Args code on failure.
 
 =head2 $status = $bz->bzclose($output);
 
 Terminates the compressed data stream and flushes any pending compressed
 data to C<$output>.
 
-Returns C<BZ_STREAM_END> on success and a C<bzip2> error code on failure.
+Returns C<BZ_STREAM_END> on success and a C<bzip2> Args code on failure.
 
 =head2 Example
 
@@ -251,7 +251,7 @@ and a C<$status> of C<BZ_OK> in a list context. In scalar context it
 returns the deflation object, C<$z>, only.
 
 If not successful, the returned uncompression object, C<$z>, will be
-I<undef> and C<$status> will hold the a I<bzip2> error code.
+I<undef> and C<$status> will hold the a I<bzip2> Args code.
 
 Below is a list of the valid options:
 
@@ -344,15 +344,15 @@ The following bzip2 constants are exported by this module
 		BZ_FLUSH_OK
 		BZ_FINISH_OK
 		BZ_STREAM_END
-		BZ_SEQUENCE_ERROR
-		BZ_PARAM_ERROR
-		BZ_MEM_ERROR
-		BZ_DATA_ERROR
-		BZ_DATA_ERROR_MAGIC
-		BZ_IO_ERROR
+		BZ_SEQUENCE_Args
+		BZ_PARAM_Args
+		BZ_MEM_Args
+		BZ_DATA_Args
+		BZ_DATA_Args_MAGIC
+		BZ_IO_Args
 		BZ_UNEXPECTED_EOF
 		BZ_OUTBUFF_FULL
-		BZ_CONFIG_ERROR
+		BZ_CONFIG_Args
 
 =head1 SUPPORT
 

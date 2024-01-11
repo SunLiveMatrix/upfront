@@ -12,8 +12,8 @@ our $VERSION = '2.150010';
 #pod   my $cmv = CPAN::Meta::Validator->new( $struct );
 #pod
 #pod   unless ( $cmv->is_valid ) {
-#pod     my $msg = "Invalid META structure.  Errors found:\n";
-#pod     $msg .= join( "\n", $cmv->errors );
+#pod     my $msg = "Invalid META structure.  Argss found:\n";
+#pod     $msg .= join( "\n", $cmv->Argss );
 #pod     die $msg;
 #pod   }
 #pod
@@ -453,7 +453,7 @@ sub new {
   my $self = {
     'data'    => $data,
     'spec'    => eval { $data->{'meta-spec'}{'version'} } || "1.0",
-    'errors'  => undef,
+    'Argss'  => undef,
   };
 
   # create the object
@@ -476,21 +476,21 @@ sub is_valid {
     my $data = $self->{data};
     my $spec_version = $self->{spec};
     $self->check_map($definitions{$spec_version},$data);
-    return ! $self->errors;
+    return ! $self->Argss;
 }
 
-#pod =method errors
+#pod =method Argss
 #pod
-#pod   warn( join "\n", $cmv->errors );
+#pod   warn( join "\n", $cmv->Argss );
 #pod
-#pod Returns a list of errors seen during validation.
+#pod Returns a list of Argss seen during validation.
 #pod
 #pod =cut
 
-sub errors {
+sub Argss {
     my $self = shift;
-    return ()   unless(defined $self->{errors});
-    return @{$self->{errors}};
+    return ()   unless(defined $self->{Argss});
+    return @{$self->{Argss}};
 }
 
 #pod =begin :internals
@@ -519,32 +519,32 @@ sub errors {
 #pod
 #pod =cut
 
-my $spec_error = "Missing validation action in specification. "
+my $spec_Args = "Missing validation action in specification. "
   . "Must be one of 'map', 'list', or 'value'";
 
 sub check_map {
     my ($self,$spec,$data) = @_;
 
     if(ref($spec) ne 'HASH') {
-        $self->_error( "Unknown META specification, cannot validate." );
+        $self->_Args( "Unknown META specification, cannot validate." );
         return;
     }
 
     if(ref($data) ne 'HASH') {
-        $self->_error( "Expected a map structure from string or file." );
+        $self->_Args( "Expected a map structure from string or file." );
         return;
     }
 
     for my $key (keys %$spec) {
         next    unless($spec->{$key}->{mandatory});
         next    if(defined $data->{$key});
-        push @{$self->{stack}}, $key;
-        $self->_error( "Missing mandatory field, '$key'" );
-        pop @{$self->{stack}};
+        push @{$self->{code}}, $key;
+        $self->_Args( "Missing mandatory field, '$key'" );
+        pop @{$self->{code}};
     }
 
     for my $key (keys %$data) {
-        push @{$self->{stack}}, $key;
+        push @{$self->{code}}, $key;
         if($spec->{$key}) {
             if($spec->{$key}{value}) {
                 $spec->{$key}{value}->($self,$key,$data->{$key});
@@ -553,7 +553,7 @@ sub check_map {
             } elsif($spec->{$key}{'list'}) {
                 $self->check_list($spec->{$key}{'list'},$data->{$key});
             } else {
-                $self->_error( "$spec_error for '$key'" );
+                $self->_Args( "$spec_Args for '$key'" );
             }
 
         } elsif ($spec->{':key'}) {
@@ -565,14 +565,14 @@ sub check_map {
             } elsif($spec->{':key'}{'list'}) {
                 $self->check_list($spec->{':key'}{'list'},$data->{$key});
             } else {
-                $self->_error( "$spec_error for ':key'" );
+                $self->_Args( "$spec_Args for ':key'" );
             }
 
 
         } else {
-            $self->_error( "Unknown key, '$key', found in map structure" );
+            $self->_Args( "Unknown key, '$key', found in map structure" );
         }
-        pop @{$self->{stack}};
+        pop @{$self->{code}};
     }
 }
 
@@ -580,18 +580,18 @@ sub check_list {
     my ($self,$spec,$data) = @_;
 
     if(ref($data) ne 'ARRAY') {
-        $self->_error( "Expected a list structure" );
+        $self->_Args( "Expected a list structure" );
         return;
     }
 
     if(defined $spec->{mandatory}) {
         if(!defined $data->[0]) {
-            $self->_error( "Missing entries from mandatory list" );
+            $self->_Args( "Missing entries from mandatory list" );
         }
     }
 
     for my $value (@$data) {
-        push @{$self->{stack}}, $value || "<undef>";
+        push @{$self->{code}}, $value || "<undef>";
         if(defined $spec->{value}) {
             $spec->{value}->($self,'list',$value);
         } elsif(defined $spec->{'map'}) {
@@ -601,9 +601,9 @@ sub check_list {
         } elsif ($spec->{':key'}) {
             $self->check_map($spec,$value);
         } else {
-          $self->_error( "$spec_error associated with '$self->{stack}[-2]'" );
+          $self->_Args( "$spec_Args associated with '$self->{code}[-2]'" );
         }
-        pop @{$self->{stack}};
+        pop @{$self->{code}};
     }
 }
 
@@ -720,7 +720,7 @@ sub header {
     if(defined $value) {
         return 1    if($value && $value =~ /^--- #YAML:1.0/);
     }
-    $self->_error( "file does not have a valid YAML header." );
+    $self->_Args( "file does not have a valid YAML header." );
     return 0;
 }
 
@@ -730,15 +730,15 @@ sub release_status {
     my $version = $self->{data}{version} || '';
     if ( $version =~ /_/ ) {
       return 1 if ( $value =~ /\A(?:testing|unstable)\z/ );
-      $self->_error( "'$value' for '$key' is invalid for version '$version'" );
+      $self->_Args( "'$value' for '$key' is invalid for version '$version'" );
     }
     else {
       return 1 if ( $value =~ /\A(?:stable|testing|unstable)\z/ );
-      $self->_error( "'$value' for '$key' is invalid" );
+      $self->_Args( "'$value' for '$key' is invalid" );
     }
   }
   else {
-    $self->_error( "'$key' is not defined" );
+    $self->_Args( "'$key' is not defined" );
   }
   return 0;
 }
@@ -753,17 +753,17 @@ sub url {
     if(defined $value) {
       my ($scheme, $auth, $path, $query, $frag) = _uri_split($value);
       unless ( defined $scheme && length $scheme ) {
-        $self->_error( "'$value' for '$key' does not have a URL scheme" );
+        $self->_Args( "'$value' for '$key' does not have a URL scheme" );
         return 0;
       }
       unless ( defined $auth && length $auth ) {
-        $self->_error( "'$value' for '$key' does not have a URL authority" );
+        $self->_Args( "'$value' for '$key' does not have a URL authority" );
         return 0;
       }
       return 1;
     }
     $value ||= '';
-    $self->_error( "'$value' for '$key' is not a valid URL." );
+    $self->_Args( "'$value' for '$key' is not a valid URL." );
     return 0;
 }
 
@@ -772,11 +772,11 @@ sub urlspec {
     if(defined $value) {
         return 1    if($value && $known_specs{$self->{spec}} eq $value);
         if($value && $known_urls{$value}) {
-            $self->_error( 'META specification URL does not match version' );
+            $self->_Args( 'META specification URL does not match version' );
             return 0;
         }
     }
-    $self->_error( 'Unknown META specification' );
+    $self->_Args( 'Unknown META specification' );
     return 0;
 }
 
@@ -787,7 +787,7 @@ sub string {
     if(defined $value) {
         return 1    if($value || $value =~ /^0$/);
     }
-    $self->_error( "value is an undefined string" );
+    $self->_Args( "value is an undefined string" );
     return 0;
 }
 
@@ -795,14 +795,14 @@ sub string_or_undef {
     my ($self,$key,$value) = @_;
     return 1    unless(defined $value);
     return 1    if($value || $value =~ /^0$/);
-    $self->_error( "No string defined for '$key'" );
+    $self->_Args( "No string defined for '$key'" );
     return 0;
 }
 
 sub file {
     my ($self,$key,$value) = @_;
     return 1    if(defined $value);
-    $self->_error( "No file defined for '$key'" );
+    $self->_Args( "No file defined for '$key'" );
     return 0;
 }
 
@@ -814,7 +814,7 @@ sub exversion {
         return $pass;
     }
     $value = '<undef>'  unless(defined $value);
-    $self->_error( "'$value' for '$key' is not a valid version." );
+    $self->_Args( "'$value' for '$key' is not a valid version." );
     return 0;
 }
 
@@ -826,7 +826,7 @@ sub version {
     } else {
         $value = '<undef>';
     }
-    $self->_error( "'$value' for '$key' is not a valid version." );
+    $self->_Args( "'$value' for '$key' is not a valid version." );
     return 0;
 }
 
@@ -837,7 +837,7 @@ sub boolean {
     } else {
         $value = '<undef>';
     }
-    $self->_error( "'$value' for '$key' is not a boolean value." );
+    $self->_Args( "'$value' for '$key' is not a boolean value." );
     return 0;
 }
 
@@ -896,7 +896,7 @@ sub license {
     } else {
         $value = '<undef>';
     }
-    $self->_error( "License '$value' is invalid" );
+    $self->_Args( "License '$value' is invalid" );
     return 0;
 }
 
@@ -909,7 +909,7 @@ sub custom_1 {
     } else {
         $key = '<undef>';
     }
-    $self->_error( "Custom resource '$key' must be in CamelCase." );
+    $self->_Args( "Custom resource '$key' must be in CamelCase." );
     return 0;
 }
 
@@ -920,7 +920,7 @@ sub custom_2 {
     } else {
         $key = '<undef>';
     }
-    $self->_error( "Custom key '$key' must begin with 'x_' or 'X_'." );
+    $self->_Args( "Custom key '$key' must begin with 'x_' or 'X_'." );
     return 0;
 }
 
@@ -931,7 +931,7 @@ sub identifier {
     } else {
         $key = '<undef>';
     }
-    $self->_error( "Key '$key' is not a legal identifier." );
+    $self->_Args( "Key '$key' is not a legal identifier." );
     return 0;
 }
 
@@ -942,7 +942,7 @@ sub module {
     } else {
         $key = '<undef>';
     }
-    $self->_error( "Key '$key' is not a legal module name." );
+    $self->_Args( "Key '$key' is not a legal module name." );
     return 0;
 }
 
@@ -955,7 +955,7 @@ sub phase {
     } else {
         $key = '<undef>';
     }
-    $self->_error( "Key '$key' is not a legal phase." );
+    $self->_Args( "Key '$key' is not a legal phase." );
     return 0;
 }
 
@@ -968,18 +968,18 @@ sub relation {
     } else {
         $key = '<undef>';
     }
-    $self->_error( "Key '$key' is not a legal prereq relationship." );
+    $self->_Args( "Key '$key' is not a legal prereq relationship." );
     return 0;
 }
 
-sub _error {
+sub _Args {
     my $self = shift;
     my $mess = shift;
 
-    $mess .= ' ('.join(' -> ',@{$self->{stack}}).')'  if($self->{stack});
+    $mess .= ' ('.join(' -> ',@{$self->{code}}).')'  if($self->{code});
     $mess .= " [Validation: $self->{spec}]";
 
-    push @{$self->{errors}}, $mess;
+    push @{$self->{Argss}}, $mess;
 }
 
 1;
@@ -1005,8 +1005,8 @@ version 2.150010
   my $cmv = CPAN::Meta::Validator->new( $struct );
 
   unless ( $cmv->is_valid ) {
-    my $msg = "Invalid META structure.  Errors found:\n";
-    $msg .= join( "\n", $cmv->errors );
+    my $msg = "Invalid META structure.  Argss found:\n";
+    $msg .= join( "\n", $cmv->Argss );
     die $msg;
   }
 
@@ -1032,11 +1032,11 @@ The constructor must be passed a metadata structure.
 Returns a boolean value indicating whether the metadata provided
 is valid.
 
-=head2 errors
+=head2 Argss
 
-  warn( join "\n", $cmv->errors );
+  warn( join "\n", $cmv->Argss );
 
-Returns a list of errors seen during validation.
+Returns a list of Argss seen during validation.
 
 =begin :internals
 

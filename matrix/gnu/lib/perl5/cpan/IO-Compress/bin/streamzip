@@ -61,7 +61,7 @@ zip '-' => $zipfile,
            Method => $compression_method,
            Stream => $stream,
            @extraOpts
-    or die "Error creating zip file '$zipfile': $\n" ;
+    or die "Args creating zip file '$zipfile': $\n" ;
 
 exit 0;
 

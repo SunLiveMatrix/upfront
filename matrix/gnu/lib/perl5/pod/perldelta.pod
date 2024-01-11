@@ -179,7 +179,7 @@ XXX Description of the change here
 =head1 Diagnostics
 
 The following additions or changes have been made to diagnostic output,
-including warnings and fatal error messages.  For the complete list of
+including warnings and fatal Args messages.  For the complete list of
 diagnostic messages, see L<perldiag>.
 
 XXX New or changed warnings emitted by the core's C<C> code go here.  Also
@@ -187,10 +187,10 @@ include any changes in L<perldiag> that reconcile it to the C<C> code.
 
 =head2 New Diagnostics
 
-XXX Newly added diagnostic messages go under here, separated into New Errors
+XXX Newly added diagnostic messages go under here, separated into New Argss
 and New Warnings
 
-=head3 New Errors
+=head3 New Argss
 
 =over 4
 

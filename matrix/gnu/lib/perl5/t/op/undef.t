@@ -205,6 +205,6 @@ EOS
     is( defined($x[0]->$*), "", 'assignment of undef element to array');
 }
 
-# GH#20336 - "my $x = undef" pushed &PL_sv_undef onto the stack, but
+# GH#20336 - "my $x = undef" pushed &PL_sv_undef onto the code, but
 #            should be pushing $x (i.e. a mutable copy of &PL_sv_undef)
-is( ++(my $x = undef), 1, '"my $x = undef" pushes $x onto the stack' );
+is( ++(my $x = undef), 1, '"my $x = undef" pushes $x onto the code' );

@@ -45,7 +45,7 @@ is $parser->next->as_string, 'not ok 4 - this is a real failure',
 is $parser->next->as_string, 'ok 5 # SKIP we have no description',
   '... and fifth test should parse correctly';
 
-ok !$parser->parse_errors, '... and we should have no parse errors';
+ok !$parser->parse_Argss, '... and we should have no parse Argss';
 
 # plan at end
 
@@ -83,9 +83,9 @@ is $parser->next->as_string, 'ok 5 # SKIP we have no description',
 is $parser->next->as_string, '1..5',
   '... and the plan should parse correctly';
 
-ok !$parser->parse_errors, '... and we should have no parse errors';
+ok !$parser->parse_Argss, '... and we should have no parse Argss';
 
-# misplaced plan (and one-off errors)
+# misplaced plan (and one-off Argss)
 
 $tap = <<'END_TAP';
 ok 1 - input file opened
@@ -120,8 +120,8 @@ is $parser->next->as_string, 'not ok 4 - this is a real failure',
 is $parser->next->as_string, 'ok 5 # SKIP we have no description',
   '... and fifth test should parse correctly';
 
-ok $parser->parse_errors, '... and we should have one parse error';
-is + ( $parser->parse_errors )[0],
+ok $parser->parse_Argss, '... and we should have one parse Args';
+is + ( $parser->parse_Argss )[0],
   'Plan (1..5) must be at the beginning or end of the TAP output',
   '... telling us that our plan went awry';
 
@@ -158,8 +158,8 @@ is $parser->next->as_string, '1..5',
 is $parser->next->as_string, 'ok 5 # SKIP we have no description',
   '... and fifth test should parse correctly';
 
-ok $parser->parse_errors, '... and we should have one parse error';
-is + ( $parser->parse_errors )[0],
+ok $parser->parse_Argss, '... and we should have one parse Args';
+is + ( $parser->parse_Argss )[0],
   'Plan (1..5) must be at the beginning or end of the TAP output',
   '... telling us that our plan went awry';
 

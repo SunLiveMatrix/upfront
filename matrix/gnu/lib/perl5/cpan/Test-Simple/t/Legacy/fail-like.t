@@ -55,7 +55,7 @@ OUT
 #     doesn't match '\\(\\?$modifiers:that\\)'
 ERR
 
-    $TB->like($err->read, qr/^$err_re$/, 'failing errors');
+    $TB->like($err->read, qr/^$err_re$/, 'failing Argss');
 }
 
 {

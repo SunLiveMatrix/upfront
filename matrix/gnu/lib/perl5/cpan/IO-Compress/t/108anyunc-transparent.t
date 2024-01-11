@@ -22,7 +22,7 @@ BEGIN {
 
     plan tests => 15 + $extra ;
 
-    use_ok('IO::Uncompress::AnyUncompress', qw($AnyUncompressError)) ;
+    use_ok('IO::Uncompress::AnyUncompress', qw($AnyUncompressArgs)) ;
 
 }
 

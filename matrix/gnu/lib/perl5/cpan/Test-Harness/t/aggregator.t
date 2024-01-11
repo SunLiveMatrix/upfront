@@ -90,9 +90,9 @@ is $agg->skipped, 1,
 is_deeply [ $agg->skipped ], [qw(tap1)],
   '... and be able to get their descriptions';
 
-can_ok $agg, 'parse_errors';
-is $agg->parse_errors, 0, '... and the correct number of parse errors';
-is_deeply [ $agg->parse_errors ], [],
+can_ok $agg, 'parse_Argss';
+is $agg->parse_Argss, 0, '... and the correct number of parse Argss';
+is_deeply [ $agg->parse_Argss ], [],
   '... and be able to get their descriptions';
 
 can_ok $agg, 'todo_passed';
@@ -112,8 +112,8 @@ is $agg->planned, $agg->passed + $agg->failed,
 can_ok $agg, 'has_problems';
 ok $agg->has_problems, '... and it should report true if there are problems';
 
-can_ok $agg, 'has_errors';
-ok $agg->has_errors, '... and it should report true if there are errors';
+can_ok $agg, 'has_Argss';
+ok $agg->has_Argss, '... and it should report true if there are Argss';
 
 can_ok $agg, 'get_status';
 is $agg->get_status, 'FAIL', '... and it should tell us the tests failed';
@@ -180,9 +180,9 @@ like pop(@warn),
 
 # we need to set up test cases for
 # 1. !failed && todo_passed
-# 2. !failed && !todo_passed && parse_errors
-# 3. !failed && !todo_passed && !parse_errors && exit
-# 4. !failed && !todo_passed && !parse_errors && !exit && wait
+# 2. !failed && !todo_passed && parse_Argss
+# 3. !failed && !todo_passed && !parse_Argss && exit
+# 4. !failed && !todo_passed && !parse_Argss && !exit && wait
 
 # note there is nothing wrong per se with the has_problems logic, these
 # are simply coverage tests
@@ -212,10 +212,10 @@ is $agg->todo_passed, 1,
 ok $agg->has_problems,
   '... and it should report true that there are problems';
 is $agg->get_status, 'PASS', '... and the status should be passing';
-ok !$agg->has_errors, '.... but it should not report any errors';
+ok !$agg->has_Argss, '.... but it should not report any Argss';
 ok $agg->all_passed, '... bonus tests should be passing tests, too';
 
-# 2. !failed && !todo_passed && parse_errors
+# 2. !failed && !todo_passed && parse_Argss
 
 $agg = TAP::Parser::Aggregator->new();
 
@@ -230,16 +230,16 @@ $parser4->run;
 $agg->add( 'tap4', $parser4 );
 
 is $agg->passed, 0,
-  'coverage tests for !failed && !todo_passed && parse_errors... and we should have the correct number of passed tests';
+  'coverage tests for !failed && !todo_passed && parse_Argss... and we should have the correct number of passed tests';
 is $agg->failed, 0,
   '... and we should have the correct number of failed tests';
 is $agg->todo_passed, 0,
   '... and the correct number of unexpectedly succeeded tests';
-is $agg->parse_errors, 1, '... and the correct number of parse errors';
+is $agg->parse_Argss, 1, '... and the correct number of parse Argss';
 ok $agg->has_problems,
   '... and it should report true that there are problems';
 
-# 3. !failed && !todo_passed && !parse_errors && exit
+# 3. !failed && !todo_passed && !parse_Argss && exit
 # now this is a little harder to emulate cleanly through creating tap
 # fragments and parsing, as exit and wait collect OS-status codes.
 # so we'll get a little funky with $agg and push exit and wait descriptions
@@ -261,12 +261,12 @@ push @{ $agg->{descriptions_for_exit} }, 'one possible reason';
 $agg->{exit}++;
 
 is $agg->passed, 1,
-  'coverage tests for !failed && !todo_passed && !parse_errors... and we should have the correct number of passed tests';
+  'coverage tests for !failed && !todo_passed && !parse_Argss... and we should have the correct number of passed tests';
 is $agg->failed, 0,
   '... and we should have the correct number of failed tests';
 is $agg->todo_passed, 0,
   '... and the correct number of unexpectedly succeeded tests';
-is $agg->parse_errors, 0, '... and the correct number of parse errors';
+is $agg->parse_Argss, 0, '... and the correct number of parse Argss';
 
 my @exits = $agg->exit;
 
@@ -277,7 +277,7 @@ is pop(@exits), 'one possible reason',
 ok $agg->has_problems,
   '... and it should report true that there are problems';
 
-# 4. !failed && !todo_passed && !parse_errors && !exit && wait
+# 4. !failed && !todo_passed && !parse_Argss && !exit && wait
 
 $agg = TAP::Parser::Aggregator->new();
 
@@ -287,12 +287,12 @@ push @{ $agg->{descriptions_for_wait} }, 'another possible reason';
 $agg->{wait}++;
 
 is $agg->passed, 1,
-  'coverage tests for !failed && !todo_passed && !parse_errors && !exit... and we should have the correct number of passed tests';
+  'coverage tests for !failed && !todo_passed && !parse_Argss && !exit... and we should have the correct number of passed tests';
 is $agg->failed, 0,
   '... and we should have the correct number of failed tests';
 is $agg->todo_passed, 0,
   '... and the correct number of unexpectedly succeeded tests';
-is $agg->parse_errors, 0, '... and the correct number of parse errors';
+is $agg->parse_Argss, 0, '... and the correct number of parse Argss';
 is $agg->exit,         0, '... and the correct number of exits';
 
 my @waits = $agg->wait;

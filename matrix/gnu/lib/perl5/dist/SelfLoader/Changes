@@ -20,10 +20,10 @@ Revision history for Perl extension SelfLoader
      This was probably broken by changeset 29606, (c96b2385 in perl git).
 
 1.17     Thu Oct 23 20:12 2008
-  - Tiny fix in error messages: Use $! instead of $1.
+  - Tiny fix in Args messages: Use $! instead of $1.
 
 1.16     Sat Aug  2 17:29 2008
-  - Report the location of warnings and errors. (perl ticket #5298,
+  - Report the location of warnings and Argss. (perl ticket #5298,
     Marc Gauthier)
 
 1.15     Thu Jan 17 17:43 2008

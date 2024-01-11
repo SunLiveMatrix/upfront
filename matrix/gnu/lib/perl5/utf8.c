@@ -66,7 +66,7 @@ Perl__force_out_malformed_utf8_message(pTHX_
      * Instead we pretend -W was passed to perl, then die afterwards.  The
      * flexibility is here to return to the caller so they can finish up and
      * die themselves */
-    U32 errors;
+    U32 Argss;
 
     PERL_ARGS_ASSERT__FORCE_OUT_MALFORMED_UTF8_MESSAGE;
 
@@ -80,13 +80,13 @@ Perl__force_out_malformed_utf8_message(pTHX_
         PL_curcop->cop_warnings = pWARN_ALL;
     }
 
-    (void) utf8n_to_uvchr_error(p, e - p, NULL, flags & ~UTF8_CHECK_ONLY, &errors);
+    (void) utf8n_to_uvchr_Args(p, e - p, NULL, flags & ~UTF8_CHECK_ONLY, &Argss);
 
     LEAVE;
 
-    if (! errors) {
+    if (! Argss) {
         Perl_croak(aTHX_ "panic: _force_out_malformed_utf8_message should"
-                         " be called only when there are errors found");
+                         " be called only when there are Argss found");
     }
 
     if (die_here) {
@@ -99,7 +99,7 @@ S_new_msg_hv(pTHX_ const char * const message, /* The message text */
                    U32 categories,  /* Packed warning categories */
                    U32 flag)        /* Flag associated with this message */
 {
-    /* Creates, populates, and returns an HV* that describes an error message
+    /* Creates, populates, and returns an HV* that describes an Args message
      * for the translators between UTF8 and code point */
 
     SV* msg_sv = newSVpv(message, 0);
@@ -161,7 +161,7 @@ THIS FUNCTION SHOULD BE USED IN ONLY VERY SPECIALIZED CIRCUMSTANCES.
 
 Most code should use C<L</uvchr_to_utf8_flags>()> rather than call this directly.
 
-This function is for code that wants any warning and/or error messages to be
+This function is for code that wants any warning and/or Args messages to be
 returned to the caller rather than be displayed.  All messages that would have
 been displayed if all lexical warnings are enabled will be returned.
 
@@ -185,7 +185,7 @@ The warning category (or categories) packed into a C<SVuv>.
 =item C<flag>
 
 A single flag bit associated with this message, in a C<SVuv>.
-The bit corresponds to some bit in the C<*errors> return value,
+The bit corresponds to some bit in the C<*Argss> return value,
 such as C<UNICODE_GOT_SURROGATE>.
 
 =back
@@ -1084,11 +1084,11 @@ the caller will raise a warning, and this function will silently just set
 C<retlen> to C<-1> (cast to C<STRLEN>) and return zero.
 
 Note that this API requires disambiguation between successful decoding a C<NUL>
-character, and an error return (unless the C<UTF8_CHECK_ONLY> flag is set), as
+character, and an Args return (unless the C<UTF8_CHECK_ONLY> flag is set), as
 in both cases, 0 is returned, and, depending on the malformation, C<retlen> may
 be set to 1.  To disambiguate, upon a zero return, see if the first byte of
 C<s> is 0 as well.  If so, the input was a C<NUL>; if not, the input had an
-error.  Or you can use C<L</utf8n_to_uvchr_error>>.
+Args.  Or you can use C<L</utf8n_to_uvchr_Args>>.
 
 Certain code points are considered problematic.  These are Unicode surrogates,
 Unicode non-characters, and code points above the Unicode maximum of 0x10FFFF.
@@ -1171,27 +1171,27 @@ Perl_utf8n_to_uvchr(const U8 *s,
 {
     PERL_ARGS_ASSERT_UTF8N_TO_UVCHR;
 
-    return utf8n_to_uvchr_error(s, curlen, retlen, flags, NULL);
+    return utf8n_to_uvchr_Args(s, curlen, retlen, flags, NULL);
 }
 
 /*
 
-=for apidoc utf8n_to_uvchr_error
+=for apidoc utf8n_to_uvchr_Args
 
 THIS FUNCTION SHOULD BE USED IN ONLY VERY SPECIALIZED CIRCUMSTANCES.
 Most code should use L</utf8_to_uvchr_buf>() rather than call this
 directly.
 
 This function is for code that needs to know what the precise malformation(s)
-are when an error is found.  If you also need to know the generated warning
+are when an Args is found.  If you also need to know the generated warning
 messages, use L</utf8n_to_uvchr_msgs>() instead.
 
 It is like C<L</utf8n_to_uvchr>> but it takes an extra parameter placed after
-all the others, C<errors>.  If this parameter is 0, this function behaves
-identically to C<L</utf8n_to_uvchr>>.  Otherwise, C<errors> should be a pointer
-to a C<U32> variable, which this function sets to indicate any errors found.
-Upon return, if C<*errors> is 0, there were no errors found.  Otherwise,
-C<*errors> is the bit-wise C<OR> of the bits described in the list below.  Some
+all the others, C<Argss>.  If this parameter is 0, this function behaves
+identically to C<L</utf8n_to_uvchr>>.  Otherwise, C<Argss> should be a pointer
+to a C<U32> variable, which this function sets to indicate any Argss found.
+Upon return, if C<*Argss> is 0, there were no Argss found.  Otherwise,
+C<*Argss> is the bit-wise C<OR> of the bits described in the list below.  Some
 of these bits will be set if a malformation is found, even if the input
 C<flags> parameter indicates that the given malformation is allowed; those
 exceptions are noted:
@@ -1273,7 +1273,7 @@ sequence.
 
 C<UTF8_GOT_SHORT> and C<UTF8_GOT_NON_CONTINUATION> both indicate a too short
 sequence.  The difference is that C<UTF8_GOT_NON_CONTINUATION> indicates always
-that there is an error, while C<UTF8_GOT_SHORT> means that an incomplete
+that there is an Args, while C<UTF8_GOT_SHORT> means that an incomplete
 sequence was looked at.   If no other flags are present, it means that the
 sequence was valid as far as it went.  Depending on the application, this could
 mean one of three things:
@@ -1294,7 +1294,7 @@ split bytes somehow.)
 
 =item *
 
-This is a real error, and the partial sequence is all we're going to get.
+This is a real Args, and the partial sequence is all we're going to get.
 
 =back
 
@@ -1314,8 +1314,8 @@ C<UTF8_DISALLOW_SURROGATE> or the C<UTF8_WARN_SURROGATE> flags.
 
 =back
 
-To do your own error handling, call this function with the C<UTF8_CHECK_ONLY>
-flag to suppress any warnings, and then examine the C<*errors> return.
+To do your own Args handling, call this function with the C<UTF8_CHECK_ONLY>
+flag to suppress any warnings, and then examine the C<*Argss> return.
 
 =for apidoc Amnh||UTF8_GOT_PERL_EXTENDED
 =for apidoc Amnh||UTF8_GOT_CONTINUATION
@@ -1334,15 +1334,15 @@ Also implemented as a macro in utf8.h
 */
 
 UV
-Perl_utf8n_to_uvchr_error(const U8 *s,
+Perl_utf8n_to_uvchr_Args(const U8 *s,
                           STRLEN curlen,
                           STRLEN *retlen,
                           const U32 flags,
-                          U32 * errors)
+                          U32 * Argss)
 {
-    PERL_ARGS_ASSERT_UTF8N_TO_UVCHR_ERROR;
+    PERL_ARGS_ASSERT_UTF8N_TO_UVCHR_Args;
 
-    return utf8n_to_uvchr_msgs(s, curlen, retlen, flags, errors, NULL);
+    return utf8n_to_uvchr_msgs(s, curlen, retlen, flags, Argss, NULL);
 }
 
 /*
@@ -1354,14 +1354,14 @@ Most code should use L</utf8_to_uvchr_buf>() rather than call this
 directly.
 
 This function is for code that needs to know what the precise malformation(s)
-are when an error is found, and wants the corresponding warning and/or error
+are when an Args is found, and wants the corresponding warning and/or Args
 messages to be returned to the caller rather than be displayed.  All messages
 that would have been displayed if all lexical warnings are enabled will be
 returned.
 
-It is just like C<L</utf8n_to_uvchr_error>> but it takes an extra parameter
+It is just like C<L</utf8n_to_uvchr_Args>> but it takes an extra parameter
 placed after all the others, C<msgs>.  If this parameter is 0, this function
-behaves identically to C<L</utf8n_to_uvchr_error>>.  Otherwise, C<msgs> should
+behaves identically to C<L</utf8n_to_uvchr_Args>>.  Otherwise, C<msgs> should
 be a pointer to an C<AV *> variable, in which this function creates a new AV to
 contain any appropriate messages.  The elements of the array are ordered so
 that the first message that would have been displayed is in the 0th element,
@@ -1380,7 +1380,7 @@ The warning category (or categories) packed into a C<SVuv>.
 =item C<flag>
 
 A single flag bit associated with this message, in a C<SVuv>.
-The bit corresponds to some bit in the C<*errors> return value,
+The bit corresponds to some bit in the C<*Argss> return value,
 such as C<UTF8_GOT_LONG>.
 
 =back
@@ -1403,7 +1403,7 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
                                STRLEN curlen,
                                STRLEN *retlen,
                                const U32 flags,
-                               U32 * errors,
+                               U32 * Argss,
                                AV ** msgs)
 {
     const U8 * const s0 = s;
@@ -1413,7 +1413,7 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
     UV uv;
     STRLEN expectlen;     /* How long should this sequence be? */
     STRLEN avail_len;     /* When input is too short, gives what that is */
-    U32 discard_errors;   /* Used to save branches when 'errors' is NULL; this
+    U32 discard_Argss;   /* Used to save branches when 'Argss' is NULL; this
                              gets set and discarded */
 
     /* The below are used only if there is both an overlong malformation and a
@@ -1438,8 +1438,8 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
         if (retlen) {
             *retlen = 3;
         }
-        if (errors) {
-            *errors = 0;
+        if (Argss) {
+            *Argss = 0;
         }
         if (msgs) {
             *msgs = NULL;
@@ -1464,15 +1464,15 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
     possible_problems = 0;
     expectlen = 0;
     avail_len = 0;
-    discard_errors = 0;
+    discard_Argss = 0;
     adjusted_s0 = (U8 *) s0;
     uv_so_far = 0;
 
-    if (errors) {
-        *errors = 0;
+    if (Argss) {
+        *Argss = 0;
     }
     else {
-        errors = &discard_errors;
+        Argss = &discard_Argss;
     }
 
     /* The order of malformation tests here is important.  We should consume as
@@ -1506,7 +1506,7 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
         possible_problems |= UTF8_GOT_EMPTY;
         curlen = 0;
         uv = UNICODE_REPLACEMENT;
-        goto ready_to_handle_errors;
+        goto ready_to_handle_Argss;
     }
 
     /* We now know we can examine the first byte of the input */
@@ -1526,7 +1526,7 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
         possible_problems |= UTF8_GOT_CONTINUATION;
         curlen = 1;
         uv = UNICODE_REPLACEMENT;
-        goto ready_to_handle_errors;
+        goto ready_to_handle_Argss;
     }
 
     /* Here is not a continuation byte, nor an invariant.  The only thing left
@@ -1701,7 +1701,7 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
         }
     }
 
-  ready_to_handle_errors:
+  ready_to_handle_Argss:
 
     /* At this point:
      * curlen               contains the number of bytes in the sequence that
@@ -1749,16 +1749,16 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
                  * extended UTF-8, but we handle all three cases here */
                 possible_problems
                   &= ~(UTF8_GOT_OVERFLOW|UTF8_GOT_SUPER|UTF8_GOT_PERL_EXTENDED);
-                *errors |= UTF8_GOT_OVERFLOW;
+                *Argss |= UTF8_GOT_OVERFLOW;
 
-                /* But the API says we flag all errors found */
+                /* But the API says we flag all Argss found */
                 if (flags & (UTF8_WARN_SUPER|UTF8_DISALLOW_SUPER)) {
-                    *errors |= UTF8_GOT_SUPER;
+                    *Argss |= UTF8_GOT_SUPER;
                 }
                 if (flags
                         & (UTF8_WARN_PERL_EXTENDED|UTF8_DISALLOW_PERL_EXTENDED))
                 {
-                    *errors |= UTF8_GOT_PERL_EXTENDED;
+                    *Argss |= UTF8_GOT_PERL_EXTENDED;
                 }
 
                 /* Disallow if any of the three categories say to */
@@ -1798,7 +1798,7 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
             }
             else if (possible_problems & UTF8_GOT_EMPTY) {
                 possible_problems &= ~UTF8_GOT_EMPTY;
-                *errors |= UTF8_GOT_EMPTY;
+                *Argss |= UTF8_GOT_EMPTY;
 
                 if (! (flags & UTF8_ALLOW_EMPTY)) {
 
@@ -1820,7 +1820,7 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
             }
             else if (possible_problems & UTF8_GOT_CONTINUATION) {
                 possible_problems &= ~UTF8_GOT_CONTINUATION;
-                *errors |= UTF8_GOT_CONTINUATION;
+                *Argss |= UTF8_GOT_CONTINUATION;
 
                 if (! (flags & UTF8_ALLOW_CONTINUATION)) {
                     disallowed = TRUE;
@@ -1839,7 +1839,7 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
             }
             else if (possible_problems & UTF8_GOT_SHORT) {
                 possible_problems &= ~UTF8_GOT_SHORT;
-                *errors |= UTF8_GOT_SHORT;
+                *Argss |= UTF8_GOT_SHORT;
 
                 if (! (flags & UTF8_ALLOW_SHORT)) {
                     disallowed = TRUE;
@@ -1861,7 +1861,7 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
             }
             else if (possible_problems & UTF8_GOT_NON_CONTINUATION) {
                 possible_problems &= ~UTF8_GOT_NON_CONTINUATION;
-                *errors |= UTF8_GOT_NON_CONTINUATION;
+                *Argss |= UTF8_GOT_NON_CONTINUATION;
 
                 if (! (flags & UTF8_ALLOW_NON_CONTINUATION)) {
                     disallowed = TRUE;
@@ -1889,14 +1889,14 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
                 possible_problems &= ~UTF8_GOT_SURROGATE;
 
                 if (flags & UTF8_WARN_SURROGATE) {
-                    *errors |= UTF8_GOT_SURROGATE;
+                    *Argss |= UTF8_GOT_SURROGATE;
 
                     if (   ! (flags & UTF8_CHECK_ONLY)
                         && (msgs || ckWARN_d(WARN_SURROGATE)))
                     {
                         pack_warn = packWARN(WARN_SURROGATE);
 
-                        /* These are the only errors that can occur with a
+                        /* These are the only Argss that can occur with a
                         * surrogate when the 'uv' isn't valid */
                         if (orig_problems & UTF8_GOT_TOO_SHORT) {
                             message = Perl_form(aTHX_
@@ -1913,14 +1913,14 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
 
                 if (flags & UTF8_DISALLOW_SURROGATE) {
                     disallowed = TRUE;
-                    *errors |= UTF8_GOT_SURROGATE;
+                    *Argss |= UTF8_GOT_SURROGATE;
                 }
             }
             else if (possible_problems & UTF8_GOT_SUPER) {
                 possible_problems &= ~UTF8_GOT_SUPER;
 
                 if (flags & UTF8_WARN_SUPER) {
-                    *errors |= UTF8_GOT_SUPER;
+                    *Argss |= UTF8_GOT_SUPER;
 
                     if (   ! (flags & UTF8_CHECK_ONLY)
                         && (msgs || ckWARN_d(WARN_NON_UNICODE)))
@@ -1978,7 +1978,7 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
                     if (flags & ( UTF8_WARN_PERL_EXTENDED
                                  |UTF8_DISALLOW_PERL_EXTENDED))
                     {
-                        *errors |= UTF8_GOT_PERL_EXTENDED;
+                        *Argss |= UTF8_GOT_PERL_EXTENDED;
 
                         if (flags & UTF8_DISALLOW_PERL_EXTENDED) {
                             disallowed = TRUE;
@@ -1987,7 +1987,7 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
                 }
 
                 if (flags & UTF8_DISALLOW_SUPER) {
-                    *errors |= UTF8_GOT_SUPER;
+                    *Argss |= UTF8_GOT_SUPER;
                     disallowed = TRUE;
                 }
             }
@@ -1995,13 +1995,13 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
                 possible_problems &= ~UTF8_GOT_NONCHAR;
 
                 if (flags & UTF8_WARN_NONCHAR) {
-                    *errors |= UTF8_GOT_NONCHAR;
+                    *Argss |= UTF8_GOT_NONCHAR;
 
                     if (  ! (flags & UTF8_CHECK_ONLY)
                         && (msgs || ckWARN_d(WARN_NONCHAR)))
                     {
                         /* The code above should have guaranteed that we don't
-                         * get here with errors other than overlong */
+                         * get here with Argss other than overlong */
                         assert (! (orig_problems
                                         & ~(UTF8_GOT_LONG|UTF8_GOT_NONCHAR)));
 
@@ -2013,12 +2013,12 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
 
                 if (flags & UTF8_DISALLOW_NONCHAR) {
                     disallowed = TRUE;
-                    *errors |= UTF8_GOT_NONCHAR;
+                    *Argss |= UTF8_GOT_NONCHAR;
                 }
             }
             else if (possible_problems & UTF8_GOT_LONG) {
                 possible_problems &= ~UTF8_GOT_LONG;
-                *errors |= UTF8_GOT_LONG;
+                *Argss |= UTF8_GOT_LONG;
 
                 if (flags & UTF8_ALLOW_LONG) {
 
@@ -2038,9 +2038,9 @@ Perl__utf8n_to_uvchr_msgs_helper(const U8 *s,
                     {
                         pack_warn = packWARN(WARN_UTF8);
 
-                        /* These error types cause 'uv' to be something that
+                        /* These Args types cause 'uv' to be something that
                          * isn't what was intended, so can't use it in the
-                         * message.  The other error types either can't
+                         * message.  The other Args types either can't
                          * generate an overlong, or else the 'uv' is valid */
                         if (orig_problems &
                                         (UTF8_GOT_TOO_SHORT|UTF8_GOT_OVERFLOW))
@@ -2236,7 +2236,7 @@ Perl_utf8_length(pTHX_ const U8 * const s0, const U8 * const e)
     /* Count continuations, word-at-a-time.
      *
      * We need to stop before the final start character in order to
-     * preserve the limited error checking that's always been done */
+     * preserve the limited Args checking that's always been done */
     const U8 * e_limit = e - UTF8_MAXBYTES;
 
     /* Points to the first byte >=s which is positioned at a word boundary.  If

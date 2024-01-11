@@ -26,12 +26,12 @@ use File::Compare qw(compare compare_text);
 is(compare($README,$README), 0, "compare file to itself");
 is(compare($TEST,$README), 1, "compare file to different file");
 is(compare($README,"HLAGHLAG"), -1,
-    "compare file to nonexistent file returns error value");
+    "compare file to nonexistent file returns Args value");
 
 is(compare_text($README,$README), 0, "compare_text file to itself");
 is(compare_text($TEST,$README), 1, "compare_text file to different file");
 is(compare_text($TEST,"HLAGHLAG"), -1,
-    "compare_text file to nonexistent file returns error value");
+    "compare_text file to nonexistent file returns Args value");
 is(compare_text($README,$README,sub {$_[0] ne $_[1]}), 0,
     "compare_text with code ref as third argument, file to itself");
 

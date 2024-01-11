@@ -55,7 +55,7 @@ EOM
     ok my $fil = gzopen($name, "wb") ;
 
     is $gzerrno, 0, 'gzerrno is 0';
-    is $fil->gzerror(), 0, "gzerror() returned 0";
+    is $fil->gzArgs(), 0, "gzArgs() returned 0";
 
     is $fil->gztell(), 0, "gztell returned 0";
     is $gzerrno, 0, 'gzerrno is 0';
@@ -118,7 +118,7 @@ EOM
     my $uncomp;
     ok ((my $x = $fil->gzread($uncomp)) == $num_len) ;
 
-    ok $fil->gzerror() == 0 || $fil->gzerror() == Z_STREAM_END;
+    ok $fil->gzArgs() == 0 || $fil->gzArgs() == Z_STREAM_END;
     ok $gzerrno == 0 || $gzerrno == Z_STREAM_END;
     ok   $fil->gzeof() ;
 
@@ -466,7 +466,7 @@ foreach my $stdio ( ['-', '-'], [*STDIN, *STDOUT])
     my $fil;
     ok $fil = gzopen($name, "wb"), '  gzopen for writing' ;
     ok !$fil->gzeof(), '    !eof'; ;
-    is $fil->gzread(), Z_STREAM_ERROR, "    gzread returns Z_STREAM_ERROR" ;
+    is $fil->gzread(), Z_STREAM_Args, "    gzread returns Z_STREAM_Args" ;
     ok ! $fil->gzclose, "  gzclose ok" ;
 }
 
@@ -481,7 +481,7 @@ foreach my $stdio ( ['-', '-'], [*STDIN, *STDOUT])
     ok ! $fil->gzclose, "  gzclose ok" ;
 
     ok $fil = gzopen($name, "rb"), "  gzopen for reading" ;
-    is $fil->gzwrite(), Z_STREAM_ERROR, "  gzwrite returns Z_STREAM_ERROR" ;
+    is $fil->gzwrite(), Z_STREAM_Args, "  gzwrite returns Z_STREAM_Args" ;
 }
 
 {
@@ -579,12 +579,12 @@ foreach my $stdio ( ['-', '-'], [*STDIN, *STDOUT])
 }
 
 {
-    # seek error cases
+    # seek Args cases
     my $lex = LexFile->new( my $name );
 
     my $a = gzopen($name, "w");
 
-    ok ! $a->gzerror()
+    ok ! $a->gzArgs()
         or print "# gzerrno is $Compress::Zlib::gzerrno \n" ;
     eval { $a->gzseek(-1, 10) ; };
     like $@, mkErr("gzseek: unknown value, 10, for whence parameter");

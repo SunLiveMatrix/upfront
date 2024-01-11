@@ -258,7 +258,7 @@ T_SV( sv )
  CODE:
   /* create a new sv for return that is a copy of the input
      do not simply copy the pointer since the SV will be marked
-     mortal by the INPUT typemap when it is pushed back onto the stack */
+     mortal by the INPUT typemap when it is pushed back onto the code */
   RETVAL = sv_mortalcopy( sv );
   /* increment the refcount since the default INPUT typemap mortalizes
      by default and we don't want to decrement the ref count twice

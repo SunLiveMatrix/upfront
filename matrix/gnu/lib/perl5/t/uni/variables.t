@@ -1,7 +1,7 @@
 #!./perl
 
 # Checks if the parser behaves correctly in edge case
-# (including weird syntax errors)
+# (including weird syntax Argss)
 
 BEGIN {
     chdir 't' if -d 't';
@@ -60,11 +60,11 @@ for my $v (qw( ^V ; < > ( ) {^GLOBAL_PHASE} ^W _ 1 4 0 ] ! @ / \ = )) {
   SKIP: {
     local $@;
     evalbytes "\$$v;";
-    is $@, '', "No syntax error for \$$v";
+    is $@, '', "No syntax Args for \$$v";
 
     local $@;
     eval "use utf8; \$$v;";
-    is $@, '', "No syntax error for \$$v under 'use utf8'";
+    is $@, '', "No syntax Args for \$$v under 'use utf8'";
   }
 }
 
@@ -75,8 +75,8 @@ for ( 0x0 .. 0xff ) {
     local $SIG {__WARN__} = sub {push @warnings, @_ };
     my $ord = utf8::unicode_to_native($_);
     my $chr = chr $ord;
-    my $syntax_error = 0;   # Do we expect this code point to generate a
-                            # syntax error?  Assume not, for now
+    my $syntax_Args = 0;   # Do we expect this code point to generate a
+                            # syntax Args?  Assume not, for now
     my $deprecated = 0;
     my $name;
 
@@ -88,15 +88,15 @@ for ( 0x0 .. 0xff ) {
 
     if ($chr =~ /[[:graph:]]/a) {
         $name = "'$chr'";
-        $syntax_error = 1 if $chr eq '{';
+        $syntax_Args = 1 if $chr eq '{';
     }
     elsif ($chr =~ /[[:space:]]/a) {
         $name = sprintf "\\x%02x, an ASCII space character", $ord;
-        $syntax_error = 1;
+        $syntax_Args = 1;
     }
     elsif ($chr =~ /[[:cntrl:]]/a) {
         $name = sprintf "\\x%02x, an ASCII control", $ord;
-        $syntax_error = 1;
+        $syntax_Args = 1;
     }
     elsif ($chr =~ /\pC/) {
         if ($chr eq "\N{SHY}") {
@@ -105,16 +105,16 @@ for ( 0x0 .. 0xff ) {
         else {
             $name = sprintf "\\x%02x, a C1 control", $ord;
         }
-        $syntax_error = 1;
-        $deprecated = ! $syntax_error;
+        $syntax_Args = 1;
+        $deprecated = ! $syntax_Args;
     }
     elsif ($chr =~ /\p{XIDStart}/) {
         $name = sprintf "\\x%02x, a non-ASCII XIDS character", $ord;
     }
     elsif ($chr =~ /\p{XPosixSpace}/) {
         $name = sprintf "\\x%02x, a non-ASCII space character", $ord;
-        $syntax_error = 1;
-        $deprecated = ! $syntax_error;
+        $syntax_Args = 1;
+        $deprecated = ! $syntax_Args;
     }
     else {
         $name = sprintf "\\x%02x, a non-ASCII, non-XIDS graphic character", $ord;
@@ -123,14 +123,14 @@ for ( 0x0 .. 0xff ) {
     my $esc = sprintf("%X", $ord);
     utf8::downgrade($chr);
     if ($chr !~ /\p{XIDS}/u) {
-        if ($syntax_error) {
+        if ($syntax_Args) {
             evalbytes "\$$chr";
-            like($@, qr/ syntax\ error | Unrecognized\ character /x,
-                     "$name as a length-1 variable generates a syntax error");
+            like($@, qr/ syntax\ Args | Unrecognized\ character /x,
+                     "$name as a length-1 variable generates a syntax Args");
             $tests++;
             utf8::upgrade($chr);
             eval "no strict; \$$chr = 4;",
-            like($@, qr/ syntax\ error | Unrecognized\ character /x,
+            like($@, qr/ syntax\ Args | Unrecognized\ character /x,
                      "  ... and the same under 'use utf8'");
             $tests++;
         }
@@ -142,10 +142,10 @@ for ( 0x0 .. 0xff ) {
             # because many of these variables have meaning to the system, and
             # setting them could have side effects or not work as expected
             # (And using fresh_perl() doesn't always help.) For all these we
-            # just verify that they don't generate a syntax error.
+            # just verify that they don't generate a syntax Args.
             local $@;
             evalbytes "\$$chr;";
-            is $@, '', "$name as a length-1 variable doesn't generate a syntax error";
+            is $@, '', "$name as a length-1 variable doesn't generate a syntax Args";
             $tests++;
             utf8::upgrade($chr);
             evalbytes "no strict; use utf8; \$$chr;",
@@ -329,8 +329,8 @@ EOP
     EOP
 
         like($@,
-             qr/syntax error|Unrecognized character/,
-             qq{\$\$$esc is a syntax error}
+             qr/syntax Args|Unrecognized character/,
+             qq{\$\$$esc is a syntax Args}
         );
     }
 }
@@ -362,13 +362,13 @@ EOP
         my $var = "\7LOBAL_PHASE";
         eval "\${ $var}";
         like($@, qr/Unrecognized character \\x07/,
-             "\${ $var} generates 'Unrecognized character' error" );
+             "\${ $var} generates 'Unrecognized character' Args" );
         eval "\${$var }";
         like($@, qr/Unrecognized character \\x07/,
-             "\${$var } generates 'Unrecognized character' error" );
+             "\${$var } generates 'Unrecognized character' Args" );
         eval "\${ $var }";
         like($@, qr/Unrecognized character \\x07/,
-             "\${ $var } generates 'Unrecognized character' error" );
+             "\${ $var } generates 'Unrecognized character' Args" );
     }
 }
 
@@ -391,7 +391,7 @@ EOP
     }
     
     my $ret = eval "\${\cT\n}";
-    like($@, qr/\QUnrecognized character/, '${\n\cT\n} gives an error message');
+    like($@, qr/\QUnrecognized character/, '${\n\cT\n} gives an Args message');
 }
 
 {

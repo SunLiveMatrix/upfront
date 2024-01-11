@@ -66,7 +66,7 @@ SKIP: {
     $input .= $hello;
     is $x->gzwrite($hello), $len_hello, "gzwrite returned $len_hello" ;
 
-    # Error cases
+    # Args cases
     eval { $x->gzsetparams() };
     like $@, mkErr('^Usage: Compress::Zlib::gzFile::gzsetparams\(file, level, strategy\)');
 
@@ -83,7 +83,7 @@ SKIP: {
 
     # calling gzsetparams on reading is not allowed.
     $status = $k->gzsetparams(Z_BEST_SPEED, Z_HUFFMAN_ONLY) ;
-    cmp_ok $status, '==', Z_STREAM_ERROR, "status is Z_STREAM_ERROR" ;
+    cmp_ok $status, '==', Z_STREAM_Args, "status is Z_STREAM_Args" ;
 
     my $len = length $input ;
     my $uncompressed;
@@ -135,7 +135,7 @@ foreach my $CompressClass ('IO::Compress::Gzip',
     my $len = length $input ;
     my $uncompressed;
     is $k->read($uncompressed, $len), $len
-       or diag "$IO::Uncompress::Gunzip::GunzipError" ;
+       or diag "$IO::Uncompress::Gunzip::GunzipArgs" ;
 
     ok $uncompressed eq  $input, "got expected uncompressed data"
         or diag("unc len = " . length($uncompressed) . ", input len = " .

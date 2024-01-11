@@ -27,58 +27,58 @@ $VERSION = '2.206';
 sub saveStatus
 {
     my $self   = shift ;
-    ${ *$self->{ErrorNo} } = shift() + 0 ;
-    ${ *$self->{Error} } = '' ;
+    ${ *$self->{ArgsNo} } = shift() + 0 ;
+    ${ *$self->{Args} } = '' ;
 
-    return ${ *$self->{ErrorNo} } ;
+    return ${ *$self->{ArgsNo} } ;
 }
 
 
-sub saveErrorString
+sub saveArgsString
 {
     my $self   = shift ;
     my $retval = shift ;
-    ${ *$self->{Error} } = shift ;
-    ${ *$self->{ErrorNo} } = shift() + 0 if @_ ;
+    ${ *$self->{Args} } = shift ;
+    ${ *$self->{ArgsNo} } = shift() + 0 if @_ ;
 
     return $retval;
 }
 
-sub croakError
+sub croakArgs
 {
     my $self   = shift ;
-    $self->saveErrorString(0, $_[0]);
+    $self->saveArgsString(0, $_[0]);
     Carp::croak $_[0];
 }
 
-sub closeError
+sub closeArgs
 {
     my $self = shift ;
     my $retval = shift ;
 
-    my $errno = *$self->{ErrorNo};
-    my $error = ${ *$self->{Error} };
+    my $errno = *$self->{ArgsNo};
+    my $Args = ${ *$self->{Args} };
 
     $self->close();
 
-    *$self->{ErrorNo} = $errno ;
-    ${ *$self->{Error} } = $error ;
+    *$self->{ArgsNo} = $errno ;
+    ${ *$self->{Args} } = $Args ;
 
     return $retval;
 }
 
 
 
-sub error
+sub Args
 {
     my $self   = shift ;
-    return ${ *$self->{Error} } ;
+    return ${ *$self->{Args} } ;
 }
 
-sub errorNo
+sub ArgsNo
 {
     my $self   = shift ;
-    return ${ *$self->{ErrorNo} } ;
+    return ${ *$self->{ArgsNo} } ;
 }
 
 
@@ -90,14 +90,14 @@ sub writeAt
 
     if (defined *$self->{FH}) {
         my $here = tell(*$self->{FH});
-        return $self->saveErrorString(undef, "Cannot seek to end of output filehandle: $!", $!)
+        return $self->saveArgsString(undef, "Cannot seek to end of output filehandle: $!", $!)
             if $here < 0 ;
         seek(*$self->{FH}, $offset, IO::Handle::SEEK_SET)
-            or return $self->saveErrorString(undef, "Cannot seek to end of output filehandle: $!", $!) ;
+            or return $self->saveArgsString(undef, "Cannot seek to end of output filehandle: $!", $!) ;
         defined *$self->{FH}->write($data, length $data)
-            or return $self->saveErrorString(undef, $!, $!) ;
+            or return $self->saveArgsString(undef, $!, $!) ;
         seek(*$self->{FH}, $here, IO::Handle::SEEK_SET)
-            or return $self->saveErrorString(undef, "Cannot seek to end of output filehandle: $!", $!) ;
+            or return $self->saveArgsString(undef, "Cannot seek to end of output filehandle: $!", $!) ;
     }
     else {
         substr(${ *$self->{Buffer} }, $offset, length($data)) = $data ;
@@ -131,7 +131,7 @@ sub output
     if (length $data) {
         if ( defined *$self->{FH} ) {
                 defined *$self->{FH}->write( $data, length $data )
-                or return $self->saveErrorString(0, $!, $!);
+                or return $self->saveArgsString(0, $!, $!);
         }
         else {
                 ${ *$self->{Buffer} } .= $data ;
@@ -174,7 +174,7 @@ sub checkParams
             *$self->{OneShot} ? $self->getOneShotParams()
                               : (),
         },
-        @_) or $self->croakError("${class}: " . $got->getError())  ;
+        @_) or $self->croakArgs("${class}: " . $got->getArgs())  ;
 
     return $got ;
 }
@@ -187,7 +187,7 @@ sub _create
     *$obj->{Closed} = 1 ;
 
     my $class = ref $obj;
-    $obj->croakError("$class: Missing Output parameter")
+    $obj->croakArgs("$class: Missing Output parameter")
         if ! @_ && ! $got ;
 
     my $outValue = shift ;
@@ -232,10 +232,10 @@ sub _create
     # If output is a file, check that it is writable
     #no warnings;
     #if ($outType eq 'filename' && -e $outValue && ! -w _)
-    #  { return $obj->saveErrorString(undef, "Output file '$outValue' is not writable" ) }
+    #  { return $obj->saveArgsString(undef, "Output file '$outValue' is not writable" ) }
 
     $obj->ckParams($got)
-        or $obj->croakError("${class}: " . $obj->error());
+        or $obj->croakArgs("${class}: " . $obj->Args());
 
     if ($got->getValue('encode')) {
         my $want_encoding = $got->getValue('encode');
@@ -270,7 +270,7 @@ sub _create
                 if ($appendOutput)
                 {
                     seek(*$obj->{FH}, 0, IO::Handle::SEEK_END)
-                        or return $obj->saveErrorString(undef, "Cannot seek to end of output filehandle: $!", $!) ;
+                        or return $obj->saveArgsString(undef, "Cannot seek to end of output filehandle: $!", $!) ;
 
                 }
             }
@@ -280,7 +280,7 @@ sub _create
                 $mode = '>>'
                     if $appendOutput;
                 *$obj->{FH} = IO::File->new( "$mode $outValue" )
-                    or return $obj->saveErrorString(undef, "cannot open file '$outValue': $!", $!) ;
+                    or return $obj->saveArgsString(undef, "cannot open file '$outValue': $!", $!) ;
                 *$obj->{StdIO} = ($outValue eq '-');
                 setBinModeOutput(*$obj->{FH}) ;
             }
@@ -313,13 +313,13 @@ sub ckOutputParam
     my $from = shift ;
     my $outType = IO::Compress::Base::Common::whatIsOutput($_[0]);
 
-    $self->croakError("$from: output parameter not a filename, filehandle or scalar ref")
+    $self->croakArgs("$from: output parameter not a filename, filehandle or scalar ref")
         if ! $outType ;
 
-    #$self->croakError("$from: output filename is undef or null string")
+    #$self->croakArgs("$from: output filename is undef or null string")
         #if $outType eq 'filename' && (! defined $_[0] || $_[0] eq '')  ;
 
-    $self->croakError("$from: output buffer is read-only")
+    $self->croakArgs("$from: output buffer is read-only")
         if $outType eq 'buffer' && Scalar::Util::readonly(${ $_[0] });
 
     return 1;
@@ -333,14 +333,14 @@ sub _def
     my $class= (caller)[0] ;
     my $name = (caller(1))[3] ;
 
-    $obj->croakError("$name: expected at least 1 parameters\n")
+    $obj->croakArgs("$name: expected at least 1 parameters\n")
         unless @_ >= 1 ;
 
     my $input = shift ;
     my $haveOut = @_ ;
     my $output = shift ;
 
-    my $x = IO::Compress::Base::Validator->new($class, *$obj->{Error}, $name, $input, $output)
+    my $x = IO::Compress::Base::Validator->new($class, *$obj->{Args}, $name, $input, $output)
         or return undef ;
 
     push @_, $output if $haveOut && $x->{Hash};
@@ -427,7 +427,7 @@ sub _singleTarget
 
 
         defined $z->_wr2($input, $inputIsFilename)
-            or return $z->closeError(undef) ;
+            or return $z->closeArgs(undef) ;
 
         return $z->close() ;
     }
@@ -445,7 +445,7 @@ sub _singleTarget
             if ( $afterFirst ++ )
             {
                 defined addInterStream($obj, $element, $isFilename)
-                    or return $obj->closeError(undef) ;
+                    or return $obj->closeArgs(undef) ;
             }
             else
             {
@@ -457,7 +457,7 @@ sub _singleTarget
             }
 
             defined $obj->_wr2($element, $isFilename)
-                or return $obj->closeError(undef) ;
+                or return $obj->closeArgs(undef) ;
 
             *$obj->{Got} = $keep->clone();
         }
@@ -494,7 +494,7 @@ sub _wr2
         if ( ! $isFilehandle )
         {
             $fh = IO::File->new( "<$input" )
-                or return $self->saveErrorString(undef, "cannot open file '$input': $!", $!) ;
+                or return $self->saveArgsString(undef, "cannot open file '$input': $!", $!) ;
         }
         binmode $fh ;
 
@@ -507,7 +507,7 @@ sub _wr2
                 or return undef ;
         }
 
-        return $self->saveErrorString(undef, $!, $!)
+        return $self->saveArgsString(undef, $!, $!)
             if ! defined $status ;
 
         if ( (!$isFilehandle || *$self->{AutoClose}) && $input ne '-')
@@ -587,7 +587,7 @@ sub syswrite
 
     my $buffer ;
     if (ref $_[0] ) {
-        $self->croakError( *$self->{ClassName} . "::write: not a scalar reference" )
+        $self->croakArgs( *$self->{ClassName} . "::write: not a scalar reference" )
             unless ref $_[0] eq 'SCALAR' ;
         $buffer = $_[0] ;
     }
@@ -603,11 +603,11 @@ sub syswrite
 
         if (@_ > 2) {
             $offset = $_[2] || 0;
-            $self->croakError(*$self->{ClassName} . "::write: offset outside string")
+            $self->croakArgs(*$self->{ClassName} . "::write: offset outside string")
                 if $offset > $slen;
             if ($offset < 0) {
                 $offset += $slen;
-                $self->croakError( *$self->{ClassName} . "::write: offset outside string") if $offset < 0;
+                $self->croakArgs( *$self->{ClassName} . "::write: offset outside string") if $offset < 0;
             }
             my $rem = $slen - $offset;
             $len = $rem if $rem < $len;
@@ -642,9 +642,9 @@ sub syswrite
     my $outBuffer='';
     my $status = *$self->{Compress}->compr($buffer, $outBuffer) ;
 
-    return $self->saveErrorString(undef, *$self->{Compress}{Error},
-                                         *$self->{Compress}{ErrorNo})
-        if $status == STATUS_ERROR;
+    return $self->saveArgsString(undef, *$self->{Compress}{Args},
+                                         *$self->{Compress}{ArgsNo})
+        if $status == STATUS_Args;
 
     *$self->{CompSize}->add(length $outBuffer) ;
 
@@ -690,9 +690,9 @@ sub _flushCompressed
 
     my $outBuffer='';
     my $status = *$self->{Compress}->flush($outBuffer, @_) ;
-    return $self->saveErrorString(0, *$self->{Compress}{Error},
-                                    *$self->{Compress}{ErrorNo})
-        if $status == STATUS_ERROR;
+    return $self->saveArgsString(0, *$self->{Compress}{Args},
+                                    *$self->{Compress}{ArgsNo})
+        if $status == STATUS_Args;
 
     if ( defined *$self->{FH} ) {
         *$self->{FH}->clearerr();
@@ -714,7 +714,7 @@ sub flush
 
     if ( defined *$self->{FH} ) {
         defined *$self->{FH}->flush()
-            or return $self->saveErrorString(0, $!, $!);
+            or return $self->saveArgsString(0, $!, $!);
     }
 
     return 1;
@@ -735,7 +735,7 @@ sub _newStream
         or return 0 ;
 
     $self->ckParams($got)
-        or $self->croakError("newStream: $self->{Error}");
+        or $self->croakArgs("newStream: $self->{Args}");
 
     if ($got->getValue('encode')) {
         my $want_encoding = $got->getValue('encode');
@@ -798,8 +798,8 @@ sub _writeTrailer
 
     my $status = *$self->{Compress}->close($trailer) ;
 
-    return $self->saveErrorString(0, *$self->{Compress}{Error}, *$self->{Compress}{ErrorNo})
-        if $status == STATUS_ERROR;
+    return $self->saveArgsString(0, *$self->{Compress}{Args}, *$self->{Compress}{ArgsNo})
+        if $status == STATUS_Args;
 
     *$self->{CompSize}->add(length $trailer) ;
 
@@ -840,7 +840,7 @@ sub close
         if ((! *$self->{Handle} || *$self->{AutoClose}) && ! *$self->{StdIO}) {
             $! = 0 ;
             *$self->{FH}->close()
-                or return $self->saveErrorString(0, $!, $!);
+                or return $self->saveArgsString(0, $!, $!);
         }
         delete *$self->{FH} ;
         # This delete can set $! in older Perls, so reset the errno
@@ -920,14 +920,14 @@ sub seek
         $target = $here + $position ;
     }
     else {
-        $self->croakError(*$self->{ClassName} . "::seek: unknown value, $whence, for whence parameter");
+        $self->croakArgs(*$self->{ClassName} . "::seek: unknown value, $whence, for whence parameter");
     }
 
     # short circuit if seeking to current offset
     return 1 if $target == $here ;
 
     # Outlaw any attempt to seek backwards
-    $self->croakError(*$self->{ClassName} . "::seek: cannot seek backwards")
+    $self->croakArgs(*$self->{ClassName} . "::seek: cannot seek backwards")
         if $target < $here ;
 
     # Walk the file to the new offset

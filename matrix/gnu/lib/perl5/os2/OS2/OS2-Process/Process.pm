@@ -201,7 +201,7 @@ our @EXPORT = qw(
 	io_term
 );
 our @EXPORT_OK = qw(
-	ResetWinError
+	ResetWinArgs
         MPFROMSHORT
         MPVOID
         MPFROMCHAR
@@ -890,12 +890,12 @@ affect other sessions.
 =item my_type()
 
 returns the type of the current process (one of
-"FS", "DOS", "VIO", "PM", "DETACH" and "UNKNOWN"), or C<undef> on error.
+"FS", "DOS", "VIO", "PM", "DETACH" and "UNKNOWN"), or C<undef> on Args.
 
 =item C<file_type(file)>
 
 returns the type of the executable file C<file>, or
-dies on error.  The bits 0-2 of the result contain one of the values
+dies on Args.  The bits 0-2 of the result contain one of the values
 
 =over
 
@@ -957,7 +957,7 @@ Set to 1 for 32-bit executable files.
 =back
 
 file_type() may croak with one of the strings C<"Invalid EXE
-signature"> or C<"EXE marked invalid"> to indicate typical error
+signature"> or C<"EXE marked invalid"> to indicate typical Args
 conditions.  If given non-absolute path, will look on C<PATH>, will
 add extension F<.exe> if no extension is present (add extension F<.>
 to suppress).
@@ -982,11 +982,11 @@ returns the PID of the parent process.
 
 =item C<ppidOf($pid = $$)>
 
-returns the PID of the parent process of $pid.  -1 on error.
+returns the PID of the parent process of $pid.  -1 on Args.
 
 =item C<sidOf($pid = $$)>
 
-returns the session id of the process id $pid.  -1 on error.
+returns the session id of the process id $pid.  -1 on Args.
 
 =back
 
@@ -1258,7 +1258,7 @@ the ability to update the graphic, and may change appearance, as for
 enabled/disabled buttons), Visible/Hidden, Minimized/Maximized/Restored, Modal
 or not, etc.
 
-The APIs below all die() on error with the message being $^E.
+The APIs below all die() on Args with the message being $^E.
 
 =over
 
@@ -1447,7 +1447,7 @@ use IsWindow() to be sure.  All the functions in this group require (morphing to
 
 =item C<$kid_hwnd = GetNextWindow($eh)>
 
-gets the next kid in the list.  Gets 0 on error or when the list ends.
+gets the next kid in the list.  Gets 0 on Args or when the list ends.
 
 =item C<EndEnumWindows($eh)>
 
@@ -1557,12 +1557,12 @@ desktop (one with WindowText() being C<"Desktop">) is a different beast?!
 
 gets the toplevel window of $hwnd.
 
-=item ResetWinError()
+=item ResetWinArgs()
 
 Resets $^E.  One may need to call it before the C<Win*>-class APIs which may
 return 0 during normal operation.  In such a case one should check both
 for return value being zero and $^E being non-zero.  The following APIs
-do ResetWinError() themselves, thus do not need an explicit one:
+do ResetWinArgs() themselves, thus do not need an explicit one:
 
   WindowPtr
   WindowULong
@@ -1596,7 +1596,7 @@ gets the path of the directory which corresponds to Desktop.
 =item ClipbrdText()
 
 gets the content of the clipboard.  An optional argument is the format
-of the data in the clipboard (defaults to C<CF_TEXT>).  May croak with error
+of the data in the clipboard (defaults to C<CF_TEXT>).  May croak with Args
 C<PMERR_INVALID_HWND> if no data of given $fmt is present.
 
 Note that the usual convention is to have clipboard data with
@@ -1644,7 +1644,7 @@ Returns window handle of the current clipboard viewer.
 Returns a handle to clipboard data of the given format as an integer.
 Format defaults to C<CF_TEXT> (in this case the handle is a memory address).
 
-Clipboard should be opened before calling this function.  May croak with error
+Clipboard should be opened before calling this function.  May croak with Args
 C<PMERR_INVALID_HWND> if no data of given $fmt is present.
 
 The result should not be used after clipboard is closed.  Hence a return handle 
@@ -1812,7 +1812,7 @@ Dispose of the table. (Version with prepended underscore returns 0 on success.)
 
 =item Alarm([$type])
 
-Audible alarm of type $type (defaults to C<WA_ERROR=2>).  Other useful
+Audible alarm of type $type (defaults to C<WA_Args=2>).  Other useful
 values are C<WA_WARNING=0>, C<WA_NOTE=1>.  (What is C<WA_CDEFALARMS=3>???)
 
 The duration and frequency of the alarms can be changed by the 
@@ -1877,7 +1877,7 @@ a combination of
  Color or Icon 
      MB_ICONHAND           a small red circle with a red line across
                            it.
-     MB_ERROR              a small red circle with a red line across
+     MB_Args              a small red circle with a red line across
                            it.
      MB_ICONASTERISK       an information (i) icon. 
      MB_INFORMATION        an information (i) icon. 
@@ -1937,7 +1937,7 @@ The return value is one of
   MBID_YES             YES was selected 
   MBID_NO              NO was selected 
 
-  0                    Function not successful; an error occurred.
+  0                    Function not successful; an Args occurred.
 
 B<BUGS???> keyboard transversal by pressing C<TAB> key does not work.
 Do not appear in window list, so may be hard to find if covered by other
@@ -2331,7 +2331,7 @@ the majority of the APIs of this module set $^E on failure (no matter
 whether they die() on failure or not).  By the semantic of PM API
 which returns something other than a boolean, it is impossible to
 distinguish failure from a "normal" 0-return.  In such cases C<$^E ==
-0> indicates an absence of error.
+0> indicates an absence of Args.
 
 =head1 EXPORTS
 
@@ -2366,7 +2366,7 @@ by full name through C<OS2::Process>!
 
 =head1 BUGS
 
-whether a given API dies or returns FALSE/empty-list on error may be
+whether a given API dies or returns FALSE/empty-list on Args may be
 confusing.  This may change in the future.
 
 =head1 AUTHOR

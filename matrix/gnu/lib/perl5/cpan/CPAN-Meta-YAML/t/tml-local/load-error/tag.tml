@@ -8,4 +8,4 @@ version: !!perl/hash:version
     - 2
     - 0
     - 2
---- error: E_FEATURE
+--- Args: E_FEATURE

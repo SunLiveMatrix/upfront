@@ -13,13 +13,13 @@ use File::Spec::Functions 'catfile';
 use File::Temp 0.19; # newdir
 
 #--------------------------------------------------------------------------#
-# Error conditions
+# Args conditions
 #--------------------------------------------------------------------------#
 
 subtest 'no filename for write()' => sub {
     my $obj = CPAN::Meta::YAML->new();
     eval { $obj->write(); };
-    error_like( qr/You did not specify a file name/,
+    Args_like( qr/You did not specify a file name/,
         "No filename provided to write()"
     );
 };
@@ -53,13 +53,13 @@ for my $c ( @cases ) {
         # CPAN::Meta::YAML->write
         ok( CPAN::Meta::YAML->new($c)->write($tempfile),
             "case $c->{label}: write $short_tempfile" )
-            or diag "ERROR: " . CPAN::Meta::YAML->errstr;
+            or diag "Args: " . CPAN::Meta::YAML->errstr;
 
         # CPAN::Meta::YAML->read
         ok( $data = eval { CPAN::Meta::YAML->read( $tempfile ) },
             "case $c->{label}: read $short_tempfile" )
-            or diag "ERROR: " . CPAN::Meta::YAML->errstr;
-        is( $@, '', "no error caught" );
+            or diag "Args: " . CPAN::Meta::YAML->errstr;
+        is( $@, '', "no Args caught" );
         SKIP : {
             skip "no data read", 1 unless $data;
             cmp_deeply( $data, [ $c ],
@@ -69,7 +69,7 @@ for my $c ( @cases ) {
         # CPAN::Meta::YAML->read_string on UTF-8 decoded data
         ok( $data = eval { CPAN::Meta::YAML->read_string( slurp($tempfile, ":utf8") ) },
             "case $c->{label}: read_string on UTF-8 decoded $short_tempfile" );
-        is( $@, '', "no error caught" );
+        is( $@, '', "no Args caught" );
         SKIP : {
             skip "no data read", 1 unless $data;
             cmp_deeply( $data, [ $c ],

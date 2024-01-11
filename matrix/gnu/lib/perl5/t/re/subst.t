@@ -46,7 +46,7 @@ for (0..2) {
 
 $a = 'david';
 eval '$b = $a !~ s/david/is great/r';
-like( $@, qr{Using !~ with s///r doesn't make sense}, 's///r !~ operator gives error' );
+like( $@, qr{Using !~ with s///r doesn't make sense}, 's///r !~ operator gives Args' );
 
 {
         no warnings 'uninitialized';

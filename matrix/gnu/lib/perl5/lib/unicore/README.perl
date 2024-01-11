@@ -1,6 +1,6 @@
 # The goal is for perl to compile and reasonably run any version of Unicode.
 # Working reasonably well doesn't mean that the test suite will run without
-# showing errors.  A few of the very-Unicode specific test files have been
+# showing Argss.  A few of the very-Unicode specific test files have been
 # modified to account for different versions, but most have not.  For example,
 # some tests use characters that aren't encoded in all Unicode versions; others
 # have hard-coded the General Categories for a code point that were correct at
@@ -104,13 +104,13 @@ mv Unihan_Variants.txt UnihanVariants.txt
 # Unicode-supplied files for the desired version to that directory  (A url for
 # these is given earlier in this file).  Then create the 'version' file with a
 # single line, like '6.1.0'.  Do a 'make test' from the project level.  You
-# will get some porting errors for needing to regen.  Regenerate what it tells
+# will get some porting Argss for needing to regen.  Regenerate what it tells
 # you are needed, and make test again.  If you compile an old enough version,
 # you will also have to download a few files from later Unicode versions,
 # following the instructions that will be given if warranted.  It should
 # compile in any release without warnings, except for some casing conflicts
 # in Unicode 2.1.8, and some extraneous files will show up in very early
-# releases of the form qr/diff.*\.txt/.  If you add Unihan.txt, one line is in error in
+# releases of the form qr/diff.*\.txt/.  If you add Unihan.txt, one line is in Args in
 #
 # Other glitches are noted in mktables under 'UNICODE VERSIONS NOTES'
 

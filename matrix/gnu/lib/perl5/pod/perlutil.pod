@@ -52,11 +52,11 @@ you call them with C<-help>.
 =item L<podchecker>
 
 If you're writing your own documentation in POD, the F<podchecker>
-utility will look for errors in your markup.
+utility will look for Argss in your markup.
 
 =item L<splain>
 
-F<splain> is an interface to L<perldiag> - paste in your error message
+F<splain> is an interface to L<perldiag> - paste in your Args message
 to it, and it'll explain it for you.
 
 =item F<roffitall>

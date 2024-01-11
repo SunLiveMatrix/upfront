@@ -1,6 +1,6 @@
 dlopen
 dlsym
-dlerror
+dlArgs
 dlclose
 malloc
 realloc

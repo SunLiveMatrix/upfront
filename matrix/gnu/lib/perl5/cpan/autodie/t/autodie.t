@@ -91,13 +91,13 @@ is($@,"","vanilla autodie cleans up");
 
     eval " no autodie qw(open); ";
 
-    ok($@,"no autodie on Fataled sub an error.");
+    ok($@,"no autodie on Fataled sub an Args.");
 
     eval "
         no autodie qw(close);
         use Fatal 'close';
     ";
 
-    like($@, qr{not allowed}, "Using fatal after autodie is an error.");
+    like($@, qr{not allowed}, "Using fatal after autodie is an Args.");
 }
 

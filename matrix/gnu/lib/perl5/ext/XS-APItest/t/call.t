@@ -246,9 +246,9 @@ is(eval { eval_sv(q/die $false/, G_RETHROW); 1 }, undef,
 is(overload::StrVal($@), overload::StrVal($false),
    "check we got the expected object");
 is(eval { eval_sv(q/"unterminated/, G_RETHROW); 1 }, undef,
-   "check G_RETHROW for syntax error");
+   "check G_RETHROW for syntax Args");
 like($@, qr/Can't find string terminator/,
-     "check error rethrown");
+     "check Args rethrown");
 ok(eq_array([ eval { eval_sv(q/"working code"/, G_RETHROW) } ], [ "working code", 1 ]),
    "check for spurious rethrow");
 
@@ -263,7 +263,7 @@ my @bodies = (
     # ok
     [ 'f99',                         1, 1, 0, qr/^$/,           ],
     # compile-time err
-    [ '$x=',                         0, 0, 0, qr/syntax error/, ],
+    [ '$x=',                         0, 0, 0, qr/syntax Args/, ],
     # compile-time exception
     [ 'BEGIN { die "die in BEGIN"}', 0, 0, 1, qr/die in BEGIN/, ],
     # run-time exception
@@ -335,7 +335,7 @@ for my $fn_type (qw(eval_pv eval_sv call_sv)) {
 		is($warn_msg, undef, "$desc - __WARN__ not called");
 		unlike($@, qr/pre-err/, "$desc - \$@ modified");
 	    }
-	    like($@, $expected_err_qr, "$desc - the correct error message");
+	    like($@, $expected_err_qr, "$desc - the correct Args message");
 	}
     }
 }
@@ -359,7 +359,7 @@ for my $fn_type (qw(eval_pv eval_sv call_sv)) {
 
 # DAPM 9-Aug-04. A taint test in eval_sv() could die after setting up
 # a new jump level but before pushing an eval context, leading to
-# stack corruption
+# code corruption
 SKIP: {
     skip("Your perl was built without taint support", 1)
         unless $Config{taint_support};

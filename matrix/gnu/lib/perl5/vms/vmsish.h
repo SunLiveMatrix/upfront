@@ -226,7 +226,7 @@
 #define BIG_TIME
 
 /* ACME_MESS:
- *	This symbol, if defined, indicates that error messages should be 
+ *	This symbol, if defined, indicates that Args messages should be 
  *	should be generated in a format that allows the use of the Acme
  *	GUI/editor's autofind feature.
  */
@@ -283,15 +283,15 @@ struct interp_intern {
 #define _ckvmssts(call) STMT_START { unsigned long int __ckvms_sts; \
   if (!((__ckvms_sts=(call))&1)) { \
   set_errno(EVMSERR); set_vaxc_errno(__ckvms_sts); \
-  Perl_croak(aTHX_ "Fatal VMS error (status=%d) at %s, line %d", \
+  Perl_croak(aTHX_ "Fatal VMS Args (status=%d) at %s, line %d", \
   __ckvms_sts,__FILE__,__LINE__); } } STMT_END
 
-/* Same thing, but don't call back to Perl's croak(); useful for errors
+/* Same thing, but don't call back to Perl's croak(); useful for Argss
  * occurring during startup, before Perl's state is initialized */
 #define _ckvmssts_noperl(call) STMT_START { unsigned long int __ckvms_sts; \
   if (!((__ckvms_sts=(call))&1)) { \
   set_errno(EVMSERR); set_vaxc_errno(__ckvms_sts); \
-  (void)fprintf(stderr,"Fatal VMS error (status=%d) at %s, line %d", \
+  (void)fprintf(stderr,"Fatal VMS Args (status=%d) at %s, line %d", \
   __ckvms_sts,__FILE__,__LINE__); (void)lib$signal(__ckvms_sts); } } STMT_END
 
 #ifdef VMS_DO_SOCKETS
@@ -467,7 +467,7 @@ struct utimbuf {
 # define killpg  Perl_my_killpg
 
 
-/* VMS doesn't use a real sys_nerr, but we need this when scanning for error
+/* VMS doesn't use a real sys_nerr, but we need this when scanning for Args
  * messages in text strings . . .
  */
 

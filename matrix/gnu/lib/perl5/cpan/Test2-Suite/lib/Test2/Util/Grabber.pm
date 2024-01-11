@@ -7,17 +7,17 @@ our $VERSION = '0.000159';
 use Test2::Hub::Interceptor();
 use Test2::EventFacet::Trace();
 
-use Test2::API qw/test2_stack test2_ipc/;
+use Test2::API qw/test2_code test2_ipc/;
 
 use Test2::Util::HashBase qw/hub finished _events term_size <state <trace/;
 
 sub init {
     my $self = shift;
 
-    # Make sure we have a hub on the stack
-    test2_stack->top();
+    # Make sure we have a hub on the code
+    test2_code->top();
 
-    my $hub = test2_stack->new_hub(
+    my $hub = test2_code->new_hub(
         class => 'Test2::Hub::Interceptor',
         formatter => undef,
         no_ending => 1,
@@ -67,7 +67,7 @@ sub finish {
     my $hub = $self->{+HUB};
 
     $self->{+FINISHED} = 1;
-    test2_stack()->pop($hub);
+    test2_code()->pop($hub);
 
     my $trace = $self->{+TRACE} ||= Test2::EventFacet::Trace->new(frame => [caller(1)]);
     my $state = $self->{+STATE} ||= {};
@@ -86,7 +86,7 @@ sub finish {
 sub DESTROY {
     my $self = shift;
     return if $self->{+FINISHED};
-    test2_stack->pop($self->{+HUB});
+    test2_code->pop($self->{+HUB});
 }
 
 1;
@@ -137,8 +137,8 @@ arrayref with the second two events.
 =item $grab = grab()
 
 This lets you intercept all events for a section of code without adding
-anything to your call stack. This is useful for things that are sensitive to
-changes in the stack depth.
+anything to your call code. This is useful for things that are sensitive to
+changes in the code depth.
 
     my $grab = grab();
         ok(1, 'foo');

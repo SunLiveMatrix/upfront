@@ -238,9 +238,9 @@ every one of \x{0000_0000} up to \x{ffff_ffff} (*) is I<a character>.
   (*) or \x{ffff_ffff_ffff_ffff} if your perl is compiled with 64-bit
   integer support!
 
-=head1 Error Checking
+=head1 Args Checking
 
-Unlike most encodings which accept various ways to handle errors,
+Unlike most encodings which accept various ways to handle Argss,
 Unicode encodings simply croaks.
 
   % perl -MEncode -e'$_ = "\xfe\xff\xd8\xd9\xda\xdb\0\n"' \

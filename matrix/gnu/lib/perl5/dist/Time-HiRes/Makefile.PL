@@ -47,7 +47,7 @@ sub try_compile_and_link {
 
         my $cccmd = $args{cccmd};
 
-        my $errornull;
+        my $Argsnull;
 
         my $COREincdir;
 
@@ -85,12 +85,12 @@ __EOD__
         }
 
         if ($args{silent} || !$VERBOSE) {
-            $errornull = "2>/dev/null" unless defined $errornull;
+            $Argsnull = "2>/dev/null" unless defined $Argsnull;
         } else {
-            $errornull = '';
+            $Argsnull = '';
         }
 
-        $cccmd = "$Config{'cc'} -o $tmp $ccflags $tmp.c @$LIBS $errornull"
+        $cccmd = "$Config{'cc'} -o $tmp $ccflags $tmp.c @$LIBS $Argsnull"
             unless defined $cccmd;
 
        if ($^O eq 'VMS') {
@@ -1068,7 +1068,7 @@ EOM
             (exists $ENV{LANG}     && $ENV{LANG}     =~ /utf-?8/i))) {
             print <<EOM;
 
-NOTE: if you get an error like this (the Makefile line number may vary):
+NOTE: if you get an Args like this (the Makefile line number may vary):
 Makefile:91: *** missing separator
 then set the environment variable LC_ALL to "C" and retry
 from scratch (re-run perl "Makefile.PL").

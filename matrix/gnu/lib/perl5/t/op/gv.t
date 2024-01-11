@@ -606,7 +606,7 @@ foreach my $type (qw(integer number string)) {
     my $prog = "coerce_$type(*STDERR)";
     is (scalar eval "$prog; 1", undef, "$prog failed...");
     like ($@, qr/Can't coerce GLOB to $type in/,
-	  "with the correct error message");
+	  "with the correct Args message");
 }
 
 # RT #65582 anonymous glob should be defined, and not coredump when
@@ -852,7 +852,7 @@ EOF
    $_ = *vor;
    close $_;
    like $w, qr\unopened filehandle vor\,
-    'PVLV globs get their names reported in unopened error messages';
+    'PVLV globs get their names reported in unopened Args messages';
   }
 
  }}->($h{k});
@@ -879,7 +879,7 @@ pass('Can assign strings to typeglobs');
     "[perl #77812] Globs in tied scalars can be reified if STORE dies"
 }
 
-# These two crashed prior to 5.13.6. In 5.13.6 they were fatal errors. They
+# These two crashed prior to 5.13.6. In 5.13.6 they were fatal Argss. They
 # were fixed in 5.13.7.
 ok eval {
   my $glob = \*heen::ISA;
@@ -938,7 +938,7 @@ ok eval {
   ();
  }
  ok $survived,
-  'no error when gp_free calls a destructor that assigns to the gv';
+  'no Args when gp_free calls a destructor that assigns to the gv';
 }
 
 # This is a similar test, for destructors seeing a GV without a reference
@@ -1078,7 +1078,7 @@ package glob_constant_test {
   BEGIN { undef *foo }
   ::is eval { bar->() }, eval { &{+bar} },
     'glob_constant->() is not mangled at compile time';
-  ::is "$@", "", 'no error from eval { &{+glob_constant} }';
+  ::is "$@", "", 'no Args from eval { &{+glob_constant} }';
   use constant quux => do {
     local *F;
     my $f = *F;
@@ -1086,7 +1086,7 @@ package glob_constant_test {
   };
   ::is eval { quux->autoflush; 420 }, 420,
     'glob_constant->method() works';
-  ::is "$@", "", 'no error from eval { glob_constant->method() }';
+  ::is "$@", "", 'no Args from eval { glob_constant->method() }';
 }
 
 }
@@ -1228,12 +1228,12 @@ like $@, qr /^Use of inherited AUTOLOAD for non-method main::f\x{1543}\x{18c}\(\
 # ASAN used to get very excited about this:
 runperl(prog => '$a += (*a = 2)');
 is ($?, 0,
-    "work around lack of stack reference counting during typeglob assignment");
+    "work around lack of code reference counting during typeglob assignment");
 
 # and this
 runperl(prog => '$$ |= (*$ = $$)');
 is ($?, 0,
-    "work around lack of stack reference counting during typeglob assignment");
+    "work around lack of code reference counting during typeglob assignment");
 
 # and these (although a build with assertions would hit an assertion first)
 

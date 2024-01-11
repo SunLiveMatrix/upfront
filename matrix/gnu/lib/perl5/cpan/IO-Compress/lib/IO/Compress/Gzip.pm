@@ -23,13 +23,13 @@ BEGIN
       { *noUTF8 = sub {} }
 }
 
-our ($VERSION, @ISA, @EXPORT_OK, %EXPORT_TAGS, %DEFLATE_CONSTANTS, $GzipError);
+our ($VERSION, @ISA, @EXPORT_OK, %EXPORT_TAGS, %DEFLATE_CONSTANTS, $GzipArgs);
 
 $VERSION = '2.206';
-$GzipError = '' ;
+$GzipArgs = '' ;
 
 @ISA    = qw(IO::Compress::RawDeflate Exporter);
-@EXPORT_OK = qw( $GzipError gzip ) ;
+@EXPORT_OK = qw( $GzipArgs gzip ) ;
 %EXPORT_TAGS = %IO::Compress::RawDeflate::DEFLATE_CONSTANTS ;
 
 push @{ $EXPORT_TAGS{all} }, @EXPORT_OK ;
@@ -39,7 +39,7 @@ sub new
 {
     my $class = shift ;
 
-    my $obj = IO::Compress::Base::Common::createSelfTiedObject($class, \$GzipError);
+    my $obj = IO::Compress::Base::Common::createSelfTiedObject($class, \$GzipArgs);
 
     $obj->_create(undef, @_);
 }
@@ -47,7 +47,7 @@ sub new
 
 sub gzip
 {
-    my $obj = IO::Compress::Base::Common::createSelfTiedObject(undef, \$GzipError);
+    my $obj = IO::Compress::Base::Common::createSelfTiedObject(undef, \$GzipArgs);
     return $obj->_def(@_);
 }
 
@@ -106,31 +106,31 @@ sub ckParams
         if ($got->parsed('name') && defined $got->getValue('name')) {
             my $name = $got->getValue('name');
 
-            return $self->saveErrorString(undef, "Null Character found in Name",
-                                                Z_DATA_ERROR)
+            return $self->saveArgsString(undef, "Null Character found in Name",
+                                                Z_DATA_Args)
                 if $strict && $name =~ /\x00/ ;
 
-            return $self->saveErrorString(undef, "Non ISO 8859-1 Character found in Name",
-                                                Z_DATA_ERROR)
+            return $self->saveArgsString(undef, "Non ISO 8859-1 Character found in Name",
+                                                Z_DATA_Args)
                 if $strict && $name =~ /$GZIP_FNAME_INVALID_CHAR_RE/o ;
         }
 
         if ($got->parsed('comment') && defined $got->getValue('comment')) {
             my $comment = $got->getValue('comment');
 
-            return $self->saveErrorString(undef, "Null Character found in Comment",
-                                                Z_DATA_ERROR)
+            return $self->saveArgsString(undef, "Null Character found in Comment",
+                                                Z_DATA_Args)
                 if $strict && $comment =~ /\x00/ ;
 
-            return $self->saveErrorString(undef, "Non ISO 8859-1 Character found in Comment",
-                                                Z_DATA_ERROR)
+            return $self->saveArgsString(undef, "Non ISO 8859-1 Character found in Comment",
+                                                Z_DATA_Args)
                 if $strict && $comment =~ /$GZIP_FCOMMENT_INVALID_CHAR_RE/o;
         }
 
         if ($got->parsed('os_code') ) {
             my $value = $got->getValue('os_code');
 
-            return $self->saveErrorString(undef, "OS_Code must be between 0 and 255, got '$value'")
+            return $self->saveArgsString(undef, "OS_Code must be between 0 and 255, got '$value'")
                 if $value < 0 || $value > 255 ;
 
         }
@@ -148,7 +148,7 @@ sub ckParams
         my $data = $got->getValue('extrafield') ;
         if (defined $data) {
             my $bad = IO::Compress::Zlib::Extra::parseExtraField($data, $strict, 1) ;
-            return $self->saveErrorString(undef, "Error with ExtraField Parameter: $bad", Z_DATA_ERROR)
+            return $self->saveArgsString(undef, "Args with ExtraField Parameter: $bad", Z_DATA_Args)
                 if $bad ;
 
             $got->setValue('extrafield' => $data) ;
@@ -169,7 +169,7 @@ sub getInverseClass
 {
     no warnings 'once';
     return ('IO::Uncompress::Gunzip',
-                \$IO::Uncompress::Gunzip::GunzipError);
+                \$IO::Uncompress::Gunzip::GunzipArgs);
 }
 
 sub getFileInfo
@@ -281,13 +281,13 @@ IO::Compress::Gzip - Write RFC 1952 files/buffers
 
 =head1 SYNOPSIS
 
-    use IO::Compress::Gzip qw(gzip $GzipError) ;
+    use IO::Compress::Gzip qw(gzip $GzipArgs) ;
 
     my $status = gzip $input => $output [,OPTS]
-        or die "gzip failed: $GzipError\n";
+        or die "gzip failed: $GzipArgs\n";
 
     my $z = IO::Compress::Gzip->new( $output [,OPTS] )
-        or die "gzip failed: $GzipError\n";
+        or die "gzip failed: $GzipArgs\n";
 
     $z->print($string);
     $z->printf($format, $string);
@@ -308,7 +308,7 @@ IO::Compress::Gzip - Write RFC 1952 files/buffers
 
     $z->close() ;
 
-    $GzipError ;
+    $GzipArgs ;
 
     # IO::File mode
 
@@ -339,10 +339,10 @@ A top-level function, C<gzip>, is provided to carry out
 control over the compression process, see the L</"OO Interface">
 section.
 
-    use IO::Compress::Gzip qw(gzip $GzipError) ;
+    use IO::Compress::Gzip qw(gzip $GzipArgs) ;
 
     gzip $input_filename_or_reference => $output_filename_or_reference [,OPTS]
-        or die "gzip failed: $GzipError\n";
+        or die "gzip failed: $GzipArgs\n";
 
 The functional interface needs Perl5.005 or better.
 
@@ -449,7 +449,7 @@ fileglob.
 
 When C<$output_filename_or_reference> is an fileglob string,
 C<$input_filename_or_reference> must also be a fileglob string. Anything
-else is an error.
+else is an Args.
 
 See L<File::GlobMapper|File::GlobMapper> for more details.
 
@@ -558,11 +558,11 @@ data to the file C<file1.txt.gz>.
 
     use strict ;
     use warnings ;
-    use IO::Compress::Gzip qw(gzip $GzipError) ;
+    use IO::Compress::Gzip qw(gzip $GzipArgs) ;
 
     my $input = "file1.txt";
     gzip $input => "$input.gz"
-        or die "gzip failed: $GzipError\n";
+        or die "gzip failed: $GzipArgs\n";
 
 =head3 Reading from a Filehandle and writing to an in-memory buffer
 
@@ -571,14 +571,14 @@ compressed data to a buffer, C<$buffer>.
 
     use strict ;
     use warnings ;
-    use IO::Compress::Gzip qw(gzip $GzipError) ;
+    use IO::Compress::Gzip qw(gzip $GzipArgs) ;
     use IO::File ;
 
     my $input = IO::File->new( "<file1.txt" )
         or die "Cannot open 'file1.txt': $!\n" ;
     my $buffer ;
     gzip $input => \$buffer
-        or die "gzip failed: $GzipError\n";
+        or die "gzip failed: $GzipArgs\n";
 
 =head3 Compressing multiple files
 
@@ -587,22 +587,22 @@ and store the compressed data in the same directory
 
     use strict ;
     use warnings ;
-    use IO::Compress::Gzip qw(gzip $GzipError) ;
+    use IO::Compress::Gzip qw(gzip $GzipArgs) ;
 
     gzip '</my/home/*.txt>' => '<*.gz>'
-        or die "gzip failed: $GzipError\n";
+        or die "gzip failed: $GzipArgs\n";
 
 and if you want to compress each file one at a time, this will do the trick
 
     use strict ;
     use warnings ;
-    use IO::Compress::Gzip qw(gzip $GzipError) ;
+    use IO::Compress::Gzip qw(gzip $GzipArgs) ;
 
     for my $input ( glob "/my/home/*.txt" )
     {
         my $output = "$input.gz" ;
         gzip $input => $output
-            or die "Error compressing '$input': $GzipError\n";
+            or die "Args compressing '$input': $GzipArgs\n";
     }
 
 =head1 OO Interface
@@ -612,13 +612,13 @@ and if you want to compress each file one at a time, this will do the trick
 The format of the constructor for C<IO::Compress::Gzip> is shown below
 
     my $z = IO::Compress::Gzip->new( $output [,OPTS] )
-        or die "IO::Compress::Gzip failed: $GzipError\n";
+        or die "IO::Compress::Gzip failed: $GzipArgs\n";
 
 The constructor takes one mandatory parameter, C<$output>, defined below and
 zero or more C<OPTS>, defined in L<Constructor Options>.
 
 It returns an C<IO::Compress::Gzip> object on success and C<undef> on failure.
-The variable C<$GzipError> will contain an error message on failure.
+The variable C<$GzipArgs> will contain an Args message on failure.
 
 If you are running Perl 5.005 or better the object, C<$z>, returned from
 IO::Compress::Gzip can be used exactly like an L<IO::File|IO::File> filehandle.
@@ -635,7 +635,7 @@ C<myfile.gz> and write some data to it.
 
     my $filename = "myfile.gz";
     my $z = IO::Compress::Gzip->new($filename)
-        or die "IO::Compress::Gzip failed: $GzipError\n";
+        or die "IO::Compress::Gzip failed: $GzipArgs\n";
 
     $z->print("abcde");
     $z->close();
@@ -720,7 +720,7 @@ This option is used to compress input data and append it to an existing
 compressed data stream in C<$output>. The end result is a single compressed
 data stream stored in C<$output>.
 
-It is a fatal error to attempt to use this option when C<$output> is not an
+It is a fatal Args to attempt to use this option when C<$output> is not an
 RFC 1952 data stream.
 
 There are a number of other limitations with the C<Merge> option:
@@ -730,7 +730,7 @@ There are a number of other limitations with the C<Merge> option:
 =item 1
 
 This module needs to have been built with zlib 1.2.1 or better to work. A
-fatal error will be thrown if C<Merge> is used with an older version of
+fatal Args will be thrown if C<Merge> is used with an older version of
 zlib.
 
 =item 2
@@ -963,7 +963,7 @@ NULL.
 =item *
 
 If an C<ExtraField> option is specified and it is a simple scalar, the
-structure will not be checked. The only error is if the length is too big.
+structure will not be checked. The only Args is if the length is too big.
 
 =item *
 
@@ -983,10 +983,10 @@ commandline, compresses it, and writes the compressed data to STDOUT.
 
     use strict ;
     use warnings ;
-    use IO::Compress::Gzip qw(gzip $GzipError) ;
+    use IO::Compress::Gzip qw(gzip $GzipArgs) ;
 
     my $z = IO::Compress::Gzip->new("-", Stream => 1)
-        or die "IO::Compress::Gzip failed: $GzipError\n";
+        or die "IO::Compress::Gzip failed: $GzipArgs\n";
 
     while (<>) {
         $z->print("abcde");
@@ -1004,11 +1004,11 @@ Start by creating the compression object and opening the input file
 
     use strict ;
     use warnings ;
-    use IO::Compress::Gzip qw(gzip $GzipError) ;
+    use IO::Compress::Gzip qw(gzip $GzipArgs) ;
 
     my $input = "file1.txt";
     my $z = IO::Compress::Gzip->new("file1.txt.gz")
-        or die "IO::Compress::Gzip failed: $GzipError\n";
+        or die "IO::Compress::Gzip failed: $GzipArgs\n";
 
     # open the input file
     open my $fh, "<", "file1.txt"
@@ -1118,7 +1118,7 @@ Returns true if the C<close> method has been called.
 
 Provides a sub-set of the C<seek> functionality, with the restriction
 that it is only legal to seek forward in the output file/buffer.
-It is a fatal error to attempt to seek backward.
+It is a fatal Args to attempt to seek backward.
 
 Empty parts of the file/buffer will have NULL (0x00) bytes written to them.
 
@@ -1232,10 +1232,10 @@ C<IO::Compress::Gzip>. None are imported by default.
 
 =item :all
 
-Imports C<gzip>, C<$GzipError> and all symbolic
+Imports C<gzip>, C<$GzipArgs> and all symbolic
 constants that can be used by C<IO::Compress::Gzip>. Same as doing this
 
-    use IO::Compress::Gzip qw(gzip $GzipError :constants) ;
+    use IO::Compress::Gzip qw(gzip $GzipArgs :constants) ;
 
 =item :constants
 

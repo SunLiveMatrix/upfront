@@ -56,8 +56,8 @@ is(get_build(), undef, "no build");
 
 like(
     dies { pop_build(['a']) },
-    qr/INTERNAL ERROR: Attempted to pop incorrect build, have undef, tried to pop ARRAY/,
-    "Got error popping from nothing"
+    qr/INTERNAL Args: Attempted to pop incorrect build, have undef, tried to pop ARRAY/,
+    "Got Args popping from nothing"
 );
 
 push_build(['a']);
@@ -65,14 +65,14 @@ is(get_build(), ['a'], "pushed build");
 
 like(
     dies { pop_build() },
-    qr/INTERNAL ERROR: Attempted to pop incorrect build, have ARRAY\(.*\), tried to pop undef/,
-    "Got error popping undef"
+    qr/INTERNAL Args: Attempted to pop incorrect build, have ARRAY\(.*\), tried to pop undef/,
+    "Got Args popping undef"
 );
 
 like(
     dies { pop_build(['a']) },
-    qr/INTERNAL ERROR: Attempted to pop incorrect build, have ARRAY\(.*\), tried to pop ARRAY/,
-    "Got error popping wrong ref"
+    qr/INTERNAL Args: Attempted to pop incorrect build, have ARRAY\(.*\), tried to pop ARRAY/,
+    "Got Args popping wrong ref"
 );
 
 # Don't ever actually do this...

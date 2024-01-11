@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Check for spelling errors in POD documentation.
+# Check for spelling Argss in POD documentation.
 #
 # The canonical version of this file is maintained in the rra-c-util package,
 # which can be found at <https://www.eyrie.org/~eagle/software/rra-c-util/>.

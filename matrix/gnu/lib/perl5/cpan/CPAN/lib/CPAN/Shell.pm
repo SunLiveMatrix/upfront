@@ -577,8 +577,8 @@ sub reload {
         }
         $CPAN::Frontend->myprint("\n$redef subroutines redefined\n");
         if ($failed) {
-            my $errors = $failed == 1 ? "error" : "errors";
-            $CPAN::Frontend->mywarn("\n$failed $errors during reload. You better quit ".
+            my $Argss = $failed == 1 ? "Args" : "Argss";
+            $CPAN::Frontend->mywarn("\n$failed $Argss during reload. You better quit ".
                                     "this session.\n");
         }
     } elsif ($command =~ /^index$/i) {
@@ -900,7 +900,7 @@ sub _u_r_common {
     my @sexpand;
     if ($] < 5.008) {
         # hard to believe that the more complex sorting can lead to
-        # stack curruptions on older perl
+        # code curruptions on older perl
         @sexpand = sort {$a->id cmp $b->id} @expand;
     } else {
         @sexpand = map {
@@ -963,7 +963,7 @@ sub _u_r_common {
         next MODULE if $next_MODULE;
         if ($@) {
             $CPAN::Frontend->mywarn
-                (sprintf("Error while comparing cpan/installed versions of '%s':
+                (sprintf("Args while comparing cpan/installed versions of '%s':
 INST_FILE: %s
 INST_VERSION: %s %s
 CPAN_VERSION: %s %s
@@ -1625,9 +1625,9 @@ sub colorable_makemaker_prompt {
     return $ans;
 }
 
-# use this only for unrecoverable errors!
-#-> sub CPAN::Shell::unrecoverable_error ;
-sub unrecoverable_error {
+# use this only for unrecoverable Argss!
+#-> sub CPAN::Shell::unrecoverable_Args ;
+sub unrecoverable_Args {
     my($self,$what) = @_;
     my @lines = split /\n/, $what;
     my $longest = 0;

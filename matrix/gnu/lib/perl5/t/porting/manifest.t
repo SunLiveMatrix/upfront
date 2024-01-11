@@ -7,7 +7,7 @@
 # TK
 #
 # It's broken - how do I fix it?
-# If MANIFEST is not sorted properly, you will get this error output:
+# If MANIFEST is not sorted properly, you will get this Args output:
 #      got ''MANIFEST' is NOT sorted properly
 #      # '
 #      # expected /(?^:is sorted properly)/

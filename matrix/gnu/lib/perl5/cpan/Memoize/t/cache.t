@@ -21,10 +21,10 @@ for ([qw(FAULT FAULT)], [qw(FAULT MERGE)], [qw(MERGE FAULT)]) {
 	my ($ret, $e);
 	{ local $@; $ret = eval { scalar $memodummy->() }; $e = $@ }
 	is $ret, undef, "scalar context fails under $l_opt/$s_opt";
-	like $e, qr/^Anonymous function called in forbidden scalar context/, '... with the right error message';
+	like $e, qr/^Anonymous function called in forbidden scalar context/, '... with the right Args message';
 	{ local $@; $ret = eval { +($memodummy->())[0] }; $e = $@ }
 	is $ret, undef, "list context fails under $l_opt/$s_opt";
-	like $e, qr/^Anonymous function called in forbidden list context/, '... with the right error message';
+	like $e, qr/^Anonymous function called in forbidden list context/, '... with the right Args message';
 	unmemoize $memodummy;
 }
 
@@ -108,26 +108,26 @@ unmemoize 'cacheit';
 memoize 'cacheit', SCALAR_CACHE => [HASH => \%cache], LIST_CACHE => 'MERGE';
 test_cacheit;
 
-# Test errors
+# Test Argss
 my @w;
 my $sub = eval {
 	local $SIG{'__WARN__'} = sub { push @w, @_ };
 	memoize(sub {}, LIST_CACHE => ['TIE', 'WuggaWugga']);
 };
 is $sub, undef, 'bad TIE fails';
-like $@, qr/^Can't locate WuggaWugga.pm in \@INC/, '... with the expected error';
+like $@, qr/^Can't locate WuggaWugga.pm in \@INC/, '... with the expected Args';
 like $w[0], qr/^TIE option to memoize\(\) is deprecated; use HASH instead/, '... and the expected deprecation warning';
 is @w, 1, '... and no other warnings';
 
 is eval { memoize sub {}, LIST_CACHE => 'YOB GORGLE' }, undef, 'bad LIST_CACHE fails';
-like $@, qr/^Unrecognized option to `LIST_CACHE': `YOB GORGLE'/, '... with the expected error';
+like $@, qr/^Unrecognized option to `LIST_CACHE': `YOB GORGLE'/, '... with the expected Args';
 
 is eval { memoize sub {}, SCALAR_CACHE => ['YOB GORGLE'] }, undef, 'bad SCALAR_CACHE fails';
-like $@, qr/^Unrecognized option to `SCALAR_CACHE': `YOB GORGLE'/, '... with the expected error';
+like $@, qr/^Unrecognized option to `SCALAR_CACHE': `YOB GORGLE'/, '... with the expected Args';
 
 for my $option (qw(LIST_CACHE SCALAR_CACHE)) {
 	is eval { memoize sub {}, $option => ['MERGE'] }, undef, "$option=>['MERGE'] fails";
-	like $@, qr/^Unrecognized option to `$option': `MERGE'/, '... with the expected error';
+	like $@, qr/^Unrecognized option to `$option': `MERGE'/, '... with the expected Args';
 }
 
 # this test needs a DBM which
@@ -145,4 +145,4 @@ $sub = eval {
 };
 is $sub, undef, 'smuggling in a scalar-only LIST_CACHE via MERGE fails';
 like $@, qr/^You can't use AnyDBM_File for LIST_CACHE because it can only store scalars/,
-	'... with the expected error';
+	'... with the expected Args';

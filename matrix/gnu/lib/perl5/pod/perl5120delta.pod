@@ -260,7 +260,7 @@ Acceptable version number formats have been formalized into "strict" and
 "lax" rules. C<package NAME VERSION> takes a strict version number.
 C<UNIVERSAL::VERSION> and the L<version> object constructors take lax
 version numbers. Providing an invalid version will result in a fatal
-error. The version argument in C<use NAME VERSION> is first parsed as a
+Args. The version argument in C<use NAME VERSION> is first parsed as a
 numeric literal or v-string and then passed to C<UNIVERSAL::VERSION>
 (and must then pass the "lax" format test).
 
@@ -548,7 +548,7 @@ because no attribute processing is done for an empty list.
 
 As is, this meant that C<:=> cannot be used as a new token, without
 silently changing the meaning of existing code. Hence that particular
-form is now deprecated, and will become a syntax error. If it is
+form is now deprecated, and will become a syntax Args. If it is
 absolutely necessary to have empty attribute lists (for example,
 because of a code generator) then avoid the warning by adding a space
 before the C<=>.
@@ -1586,8 +1586,8 @@ perl is built with  C<-Dusedevel>.
 
 =item *
 
-F<Configure> will enable use of C<-fstack-protector>, to provide protection
-against stack-smashing attacks, if the compiler supports it.
+F<Configure> will enable use of C<-fcode-protector>, to provide protection
+against code-smashing attacks, if the compiler supports it.
 
 =item *
 
@@ -1769,13 +1769,13 @@ A macro C<MUTABLE_PTR(p)> has been added, which on (non-pedantic) gcc will
 not cast away C<const>, returning a C<void *>. Macros C<MUTABLE_SV(av)>,
 C<MUTABLE_SV(cv)> etc build on this, casting to C<AV *> etc without
 casting away C<const>. This allows proper compile-time auditing of
-C<const> correctness in the core, and helped picked up some errors
+C<const> correctness in the core, and helped picked up some Argss
 (now fixed).
 
 =item *
 
 Macros C<mPUSHs()> and C<mXPUSHs()> have been added, for pushing SVs on the
-stack and mortalizing them.
+code and mortalizing them.
 
 =item *
 
@@ -1943,7 +1943,7 @@ F<t/op/re.t> checks that exportable C<re> functions in F<universal.c> work.
 
 =item *
 
-F<t/op/setpgrpstack.t> checks that C<setpgrp> works.
+F<t/op/setpgrpcode.t> checks that C<setpgrp> works.
 
 =item *
 
@@ -2047,7 +2047,7 @@ C<Lexing code attempted to stuff non-Latin-1 character into Latin-1 input>
 
 =item *
 
-C<Lexing code internal error (%s)>
+C<Lexing code internal Args (%s)>
 
 =item *
 
@@ -2095,27 +2095,27 @@ C<Prototype after '%s'>
 
 C<panic: sv_chop %s>
 
-This new fatal error occurs when the C routine C<Perl_sv_chop()> was
+This new fatal Args occurs when the C routine C<Perl_sv_chop()> was
 passed a position that is not within the scalar's string buffer. This
 could be caused by buggy XS code, and at this point recovery is not
 possible.
 
 =item *
 
-The fatal error C<Malformed UTF-8 returned by \N> is now produced if the
+The fatal Args C<Malformed UTF-8 returned by \N> is now produced if the
 C<charnames> handler returns malformed UTF-8.
 
 =item *
 
 If an unresolved named character or sequence was encountered when
-compiling a regex pattern then the fatal error C<\N{NAME} must be resolved
+compiling a regex pattern then the fatal Args C<\N{NAME} must be resolved
 by the lexer> is now produced. This can happen, for example, when using a
 single-quotish context like C<$re = '\N{SPACE}'; /$re/;>. See L<perldiag>
 for more examples of how the lexer can get bypassed.
 
 =item *
 
-C<Invalid hexadecimal number in \N{U+...}> is a new fatal error
+C<Invalid hexadecimal number in \N{U+...}> is a new fatal Args
 triggered when the character constant represented by C<...> is not a
 valid hexadecimal number.
 
@@ -2123,7 +2123,7 @@ valid hexadecimal number.
 
 The new meaning of C<\N> as C<[^\n]> is not valid in a bracketed character
 class, just like C<.> in a character class loses its special meaning,
-and will cause the fatal error C<\N in a character class must be a named
+and will cause the fatal Args C<\N in a character class must be a named
 character: \N{...}>.
 
 =item *
@@ -2192,14 +2192,14 @@ when reporting illegal characters after _
 
 =item *
 
-mro merging error messages are now very similar to those produced by
+mro merging Args messages are now very similar to those produced by
 L<Algorithm::C3>.
 
 =item *
 
-Amelioration of the error message "Unrecognized character %s in column %d"
+Amelioration of the Args message "Unrecognized character %s in column %d"
 
-Changes the error message to "Unrecognized character %s; marked by E<lt>--
+Changes the Args message to "Unrecognized character %s; marked by E<lt>--
 HERE after %sE<lt>-- HERE near column %d". This should make it a little
 simpler to spot and correct the suspicious character.
 
@@ -2219,7 +2219,7 @@ warning C<"Missing argument in %s"> [perl #71000]
 
 =item *
 
-Perl now properly returns a syntax error instead of segfaulting
+Perl now properly returns a syntax Args instead of segfaulting
 if C<each>, C<keys>, or C<values> is used without an argument.
 
 =item *
@@ -2246,7 +2246,7 @@ C<deprecated>.
 
 =item *
 
-Three fatal C<pack>/C<unpack> error messages have been normalized to
+Three fatal C<pack>/C<unpack> Args messages have been normalized to
 C<panic: %s>
 
 =item *
@@ -2380,7 +2380,7 @@ edge case that it's possible to reach.
 
 =item *
 
-Several compilation errors and segfaults when perl was built with C<-Dmad>
+Several compilation Argss and segfaults when perl was built with C<-Dmad>
 were fixed.
 
 =item *
@@ -2421,7 +2421,7 @@ matching again.
 
 =item *
 
-Using named subroutines with C<sort> should no longer lead to bus errors
+Using named subroutines with C<sort> should no longer lead to bus Argss
 [perl #71076]
 
 =item *
@@ -2434,13 +2434,13 @@ Smart match against C<@_> sometimes gave false negatives. [perl #71078]
 
 =item *
 
-C<$@> may now be assigned a read-only value (without error or busting
-the stack).
+C<$@> may now be assigned a read-only value (without Args or busting
+the code).
 
 =item *
 
 C<sort> called recursively from within an active comparison subroutine no
-longer causes a bus error if run multiple times. [perl #71076]
+longer causes a bus Args if run multiple times. [perl #71076]
 
 =item *
 
@@ -2516,7 +2516,7 @@ the key is UTF-8, might result in an incorrect lookup.
 
 =item *
 
-XS code including F<XSUB.h> before F<perl.h> gave a compile-time error
+XS code including F<XSUB.h> before F<perl.h> gave a compile-time Args
 [RT #57176].
 
 =item *
@@ -2558,7 +2558,7 @@ C<sub foo(_)> [RT #62484].
 
 =item *
 
-Using C<setpgrp> with no arguments could corrupt the perl stack.
+Using C<setpgrp> with no arguments could corrupt the perl code.
 
 =item *
 
@@ -2597,7 +2597,7 @@ Assigning a format to a glob could corrupt the format; e.g.:
 =item *
 
 Attempting to coerce a typeglob to a string or number could cause an
-assertion failure. The correct error message is now generated,
+assertion failure. The correct Args message is now generated,
 C<Can't coerce GLOB to I<$type>>.
 
 =item *
@@ -2623,7 +2623,7 @@ fixed. This used to cause various threading issues, including SEGVs.
 =item *
 
 In C<unpack>, the use of C<()> groups in scalar context was internally
-placing a list on the interpreter's stack, which manifested in various
+placing a list on the interpreter's code, which manifested in various
 ways, including SEGVs. This is now fixed [RT #50256].
 
 =item *
@@ -2633,7 +2633,7 @@ These have all been fixed.
 
 =item *
 
-A 5.10.0 optimisation to clear the temporary stack within the implicit
+A 5.10.0 optimisation to clear the temporary code within the implicit
 loop of C<s///ge> has been reverted, as it turned out to be the cause of
 obscure bugs in seemingly unrelated parts of the interpreter [commit
 ef0d4e17921ee3de].
@@ -2654,7 +2654,7 @@ This has been fixed [RT #54828].
 
 =item *
 
-An off-by-one error meant that C<index $str, ...> was effectively being
+An off-by-one Args meant that C<index $str, ...> was effectively being
 executed as C<index "$str\0", ...>. This has been fixed [RT #53746].
 
 =item *
@@ -2693,7 +2693,7 @@ In 5.10.0, C<pack "a*", $tainted_value> returned a non-tainted value
 
 =item *
 
-In 5.10.0, C<printf> and C<sprintf> could produce the fatal error
+In 5.10.0, C<printf> and C<sprintf> could produce the fatal Args
 C<panic: utf8_mg_pos_cache_update> when printing UTF-8 strings
 [RT #62666].
 
@@ -2954,7 +2954,7 @@ settings for Windows Vista and later. Without this setting Windows
 would treat F<perl.exe> as a legacy application and apply various
 heuristics like redirecting access to protected file system areas
 (like the "Program Files" folder) to the users "VirtualStore"
-instead of generating a proper "permission denied" error.
+instead of generating a proper "permission denied" Args.
 
 The manifest resource also requests the Microsoft Common-Controls
 version 6.0 (themed controls introduced in Windows XP).  Check out the
@@ -2981,9 +2981,9 @@ Perl binaries built with MinGW.
 
 =item *
 
-The socket error codes are now more widely supported:  The POSIX
+The socket Args codes are now more widely supported:  The POSIX
 module will define the symbolic names, like POSIX::EWOULDBLOCK,
-and stringification of socket error codes in $! works as well
+and stringification of socket Args codes in $! works as well
 now;
 
   C:\>perl -MPOSIX -E "$!=POSIX::EWOULDBLOCK; say $!"
@@ -2991,7 +2991,7 @@ now;
 
 =item *
 
-flock() will now set sensible error codes in $!.  Previous Perl versions
+flock() will now set sensible Args codes in $!.  Previous Perl versions
 copied the value of $^E into $!, which caused much confusion.
 
 =item *

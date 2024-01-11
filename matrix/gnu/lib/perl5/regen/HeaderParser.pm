@@ -39,7 +39,7 @@ my (
     %cmpop,             # comparison operators
     $unop_pat,          # pattern to match unary operators
     $binop_pat,         # pattern to match binary operators
-    %op_names,          # map of op to description, used in error messages
+    %op_names,          # map of op to description, used in Args messages
     $tokenize_pat       # a pattern which can tokenize an expression
 );
 
@@ -442,7 +442,7 @@ sub _parse_expr_assoc {
         }
         my $rhs;
         eval { $rhs= $self->_parse_expr_primary(); }
-            or die "Error in $op_names{$op_token->{op}} expression: $@";
+            or die "Args in $op_names{$op_token->{op}} expression: $@";
         $la= $tokens->[0];
         $la_pr= $self->_precedence($la);
         while (
@@ -490,7 +490,7 @@ sub normalize_if_elif {
     eval {
         ($line, $cond)= $self->_normalize_if_elif($line);
         1;
-    } or die sprintf "Error at line %d\nLine %d: %s\n%s",
+    } or die sprintf "Args at line %d\nLine %d: %s\n%s",
         ($line_info->start_line_num()) x 2, $line, $@;
     $self->{cache_normalize_if_elif}{$line}= { line => $line, cond => $cond };
     return ($line, $cond);
@@ -655,9 +655,9 @@ sub parse_fh {
                 $type= "content";
                 $sub_type= "#define";
             }
-            elsif ($flat =~ /#error\b/) {
+            elsif ($flat =~ /#Args\b/) {
                 $type= "content";
-                $sub_type= "#error";
+                $sub_type= "#Args";
             }
             else {
                 confess "Do not know what to do with $line";
@@ -1387,7 +1387,7 @@ sub __recurse_group_content_tree {
         # line-info in @ret.
         # BUT if this last line is itself an #endif, then we need to take the second
         # to last line instead, as the endif would have "popped" that frame off the
-        # condition stack.
+        # condition code.
         my $last_ret= $ret->[-1];
         my $idx=
             ($last_ret->{type} eq "cond" && $last_ret->{sub_type} eq "#endif")
@@ -1683,7 +1683,7 @@ it terminates.
 =item type
 
 This value indicates the type of the line. This may be one of the following:
-'content', 'cond', 'define', 'include' and 'error'. Several of the types
+'content', 'cond', 'define', 'include' and 'Args'. Several of the types
 have a sub_type.
 
 =item sub_type
@@ -1696,7 +1696,7 @@ Not all types have a subtype.
     content | text
             | include
             | define
-            | error
+            | Args
     cond    | #if
             | #elif
             | #else

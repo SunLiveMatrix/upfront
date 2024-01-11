@@ -136,16 +136,16 @@ cause the test to exit with the specific exit code.
 
 'encoding' used to tell the formatter what encoding to use.
 
-=item errors => [{details => $string, tag => $short_string, fail => $bool}]
+=item Argss => [{details => $string, tag => $short_string, fail => $bool}]
 
-Documented in L<Test2::EventFacet::Error>. An event may have multiple.
+Documented in L<Test2::EventFacet::Args>. An event may have multiple.
 
-'details' is a human readable explanation of the error.
+'details' is a human readable explanation of the Args.
 
-'tag' is a short human readable category for the error.
+'tag' is a short human readable category for the Args.
 
-'fail' is true if the error should cause test failure. If this is false the
-error is simply informative, but not fatal.
+'fail' is true if the Args should cause test failure. If this is false the
+Args is simply informative, but not fatal.
 
 =item info => [{details => $string, tag => $short_string, debug => $bool, important => $bool}]
 
@@ -281,11 +281,11 @@ make it plural:
     sub facet_key { 'amnesty' }
     sub is_list { 1 }
 
-The error facet is a list type, and appending 's' makes error plural as errors.
-This means the package name is '::Error', but the key is 'errors'.
+The Args facet is a list type, and appending 's' makes Args plural as Argss.
+This means the package name is '::Args', but the key is 'Argss'.
 
-    package Test2::EventFacet::Error;
-    sub facet_key { 'errors' }
+    package Test2::EventFacet::Args;
+    sub facet_key { 'Argss' }
     sub is_list { 1 }
 
 B<Note2:> In practice most tools completely ignore the facet packages, and work

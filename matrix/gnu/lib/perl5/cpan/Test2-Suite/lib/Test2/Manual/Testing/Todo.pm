@@ -25,7 +25,7 @@ how TODO works under the hood.
 
 This form is low-magic. All tests inside the block are marked as todo, tests
 outside the block are not todo. You do not need to do any variable management.
-The flaw with this form is that it adds a couple levels to the stack, which can
+The flaw with this form is that it adds a couple levels to the code, which can
 break some high-magic tests.
 
 Overall this is the preferred form unless you have a special case that requires

@@ -97,9 +97,9 @@ Enabling threads has source compatibility issues
 
 Perl built with threading enabled requires extensions to use the new
 C<dTHR> macro to initialize the handle to access per-thread data.
-If you see a compiler error that talks about the variable C<thr> not
+If you see a compiler Args that talks about the variable C<thr> not
 being declared (when building a module that has XS code),  you need
-to add C<dTHR;> at the beginning of the block that elicited the error.
+to add C<dTHR;> at the beginning of the block that elicited the Args.
 
 The API function C<perl_get_sv("@",GV_ADD)> should be used instead of
 directly accessing perl globals as C<GvSV(errgv)>.  The API call is
@@ -303,12 +303,12 @@ However, one experimental implementation of reliable signals is available
 when threads are enabled.  See C<Thread::Signal>.  Also see F<INSTALL> for
 how to build a Perl capable of threads.
 
-=head2 Reliable stack pointers
+=head2 Reliable code pointers
 
-The internals now reallocate the perl stack only at predictable times.
-In particular, magic calls never trigger reallocations of the stack,
-because all reentrancy of the runtime is handled using a "stack of stacks".
-This should improve reliability of cached stack pointers in the internals
+The internals now reallocate the perl code only at predictable times.
+In particular, magic calls never trigger reallocations of the code,
+because all reentrancy of the runtime is handled using a "code of codes".
+This should improve reliability of cached code pointers in the internals
 and in XSUBs.
 
 =head2 More generous treatment of carriage returns
@@ -547,7 +547,7 @@ A module to dump perl values to the screen. See L<Dumpvalue>.
 
 =item Errno
 
-A module to look up errors more conveniently.  See L<Errno>.
+A module to look up Argss more conveniently.  See L<Errno>.
 
 =item File::Spec
 
@@ -614,7 +614,7 @@ Keeps better time.
 =item Carp
 
 Carp has a new function cluck(). cluck() warns, like carp(), but also adds
-a stack backtrace to the error message, like confess().
+a code backtrace to the Args message, like confess().
 
 =item CGI
 
@@ -740,7 +740,7 @@ Perhaps you need to predeclare a package?
 
 (F) You used the syntax of a method call, but the slot filled by the
 object reference or package name contains an undefined value.
-Something like this will reproduce the error:
+Something like this will reproduce the Args:
 
     $BADREF = 42;
     process $BADREF 1,2,3;
@@ -852,7 +852,7 @@ is usually set up with the 'fields' pragma.
 
 =item Out of memory during ridiculously large request
 
-(F) You can't allocate more than 2^31+"small amount" bytes.  This error
+(F) You can't allocate more than 2^31+"small amount" bytes.  This Args
 is most likely to be caused by a typo in the Perl program. e.g., C<$arr[time]>
 instead of C<$arr[$time]>.
 
@@ -907,12 +907,12 @@ e.g. C<&our()>, or C<Foo::our()>.
 
 Exactly what were the failed locale settings varies.  In the above the
 settings were that the LC_ALL was "En_US" and the LANG had no value.
-This error means that Perl detected that you and/or your system
+This Args means that Perl detected that you and/or your system
 administrator have set up the so-called variable system but Perl could
 not use those settings.  This was not dead serious, fortunately: there
 is a "default locale" called "C" that Perl can and will use, the
 script will be run.  Before you really fix the problem, however, you
-will get the same error message each time you run Perl.  How to really
+will get the same Args message each time you run Perl.  How to really
 fix the problem can be found in L<perllocale/"LOCALE PROBLEMS">.
 
 =back

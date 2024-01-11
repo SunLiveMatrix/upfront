@@ -77,7 +77,7 @@ void makeMaps_d ( DState* s )
    if (groupPos == 0) {                           \
       groupNo++;                                  \
       if (groupNo >= nSelectors)                  \
-         RETURN(BZ_DATA_ERROR);                   \
+         RETURN(BZ_DATA_Args);                   \
       groupPos = BZ_G_SIZE;                       \
       gSel = s->selector[groupNo];                \
       gMinlen = s->minLens[gSel];                 \
@@ -90,7 +90,7 @@ void makeMaps_d ( DState* s )
    GET_BITS(label1, zvec, zn);                    \
    while (1) {                                    \
       if (zn > 20 /* the longest code */)         \
-         RETURN(BZ_DATA_ERROR);                   \
+         RETURN(BZ_DATA_Args);                   \
       if (zvec <= gLimit[zn]) break;              \
       zn++;                                       \
       GET_BIT(label2, zj);                        \
@@ -98,7 +98,7 @@ void makeMaps_d ( DState* s )
    };                                             \
    if (zvec - gBase[zn] < 0                       \
        || zvec - gBase[zn] >= BZ_MAX_ALPHA_SIZE)  \
-      RETURN(BZ_DATA_ERROR);                      \
+      RETURN(BZ_DATA_Args);                      \
    lval = gPerm[zvec - gBase[zn]];                \
 }
 
@@ -196,17 +196,17 @@ Int32 BZ2_decompress ( DState* s )
    switch (s->state) {
 
       GET_UCHAR(BZ_X_MAGIC_1, uc);
-      if (uc != BZ_HDR_B) RETURN(BZ_DATA_ERROR_MAGIC);
+      if (uc != BZ_HDR_B) RETURN(BZ_DATA_Args_MAGIC);
 
       GET_UCHAR(BZ_X_MAGIC_2, uc);
-      if (uc != BZ_HDR_Z) RETURN(BZ_DATA_ERROR_MAGIC);
+      if (uc != BZ_HDR_Z) RETURN(BZ_DATA_Args_MAGIC);
 
       GET_UCHAR(BZ_X_MAGIC_3, uc)
-      if (uc != BZ_HDR_h) RETURN(BZ_DATA_ERROR_MAGIC);
+      if (uc != BZ_HDR_h) RETURN(BZ_DATA_Args_MAGIC);
 
       GET_BITS(BZ_X_MAGIC_4, s->blockSize100k, 8)
       if (s->blockSize100k < (BZ_HDR_0 + 1) ||
-          s->blockSize100k > (BZ_HDR_0 + 9)) RETURN(BZ_DATA_ERROR_MAGIC);
+          s->blockSize100k > (BZ_HDR_0 + 9)) RETURN(BZ_DATA_Args_MAGIC);
       s->blockSize100k -= BZ_HDR_0;
 
       if (s->smallDecompress) {
@@ -214,26 +214,26 @@ Int32 BZ2_decompress ( DState* s )
          s->ll4  = (UChar*) BZALLOC(
                       ((1 + s->blockSize100k * 100000) >> 1) * sizeof(UChar)
                    );
-         if (s->ll16 == NULL || s->ll4 == NULL) RETURN(BZ_MEM_ERROR);
+         if (s->ll16 == NULL || s->ll4 == NULL) RETURN(BZ_MEM_Args);
       } else {
          s->tt  = (UInt32*) BZALLOC( s->blockSize100k * 100000 * sizeof(Int32) );
-         if (s->tt == NULL) RETURN(BZ_MEM_ERROR);
+         if (s->tt == NULL) RETURN(BZ_MEM_Args);
       }
 
       GET_UCHAR(BZ_X_BLKHDR_1, uc);
 
       if (uc == 0x17) goto endhdr_2;
-      if (uc != 0x31) RETURN(BZ_DATA_ERROR);
+      if (uc != 0x31) RETURN(BZ_DATA_Args);
       GET_UCHAR(BZ_X_BLKHDR_2, uc);
-      if (uc != 0x41) RETURN(BZ_DATA_ERROR);
+      if (uc != 0x41) RETURN(BZ_DATA_Args);
       GET_UCHAR(BZ_X_BLKHDR_3, uc);
-      if (uc != 0x59) RETURN(BZ_DATA_ERROR);
+      if (uc != 0x59) RETURN(BZ_DATA_Args);
       GET_UCHAR(BZ_X_BLKHDR_4, uc);
-      if (uc != 0x26) RETURN(BZ_DATA_ERROR);
+      if (uc != 0x26) RETURN(BZ_DATA_Args);
       GET_UCHAR(BZ_X_BLKHDR_5, uc);
-      if (uc != 0x53) RETURN(BZ_DATA_ERROR);
+      if (uc != 0x53) RETURN(BZ_DATA_Args);
       GET_UCHAR(BZ_X_BLKHDR_6, uc);
-      if (uc != 0x59) RETURN(BZ_DATA_ERROR);
+      if (uc != 0x59) RETURN(BZ_DATA_Args);
 
       s->currBlockNo++;
       if (s->verbosity >= 2)
@@ -260,9 +260,9 @@ Int32 BZ2_decompress ( DState* s )
       s->origPtr = (s->origPtr << 8) | ((Int32)uc);
 
       if (s->origPtr < 0)
-         RETURN(BZ_DATA_ERROR);
+         RETURN(BZ_DATA_Args);
       if (s->origPtr > 10 + 100000*s->blockSize100k)
-         RETURN(BZ_DATA_ERROR);
+         RETURN(BZ_DATA_Args);
 
       /*--- Receive the mapping table ---*/
       for (i = 0; i < 16; i++) {
@@ -281,21 +281,21 @@ Int32 BZ2_decompress ( DState* s )
                if (uc == 1) s->inUse[i * 16 + j] = True;
             }
       makeMaps_d ( s );
-      if (s->nInUse == 0) RETURN(BZ_DATA_ERROR);
+      if (s->nInUse == 0) RETURN(BZ_DATA_Args);
       alphaSize = s->nInUse+2;
 
       /*--- Now the selectors ---*/
       GET_BITS(BZ_X_SELECTOR_1, nGroups, 3);
-      if (nGroups < 2 || nGroups > BZ_N_GROUPS) RETURN(BZ_DATA_ERROR);
+      if (nGroups < 2 || nGroups > BZ_N_GROUPS) RETURN(BZ_DATA_Args);
       GET_BITS(BZ_X_SELECTOR_2, nSelectors, 15);
-      if (nSelectors < 1) RETURN(BZ_DATA_ERROR);
+      if (nSelectors < 1) RETURN(BZ_DATA_Args);
       for (i = 0; i < nSelectors; i++) {
          j = 0;
          while (True) {
             GET_BIT(BZ_X_SELECTOR_3, uc);
             if (uc == 0) break;
             j++;
-            if (j >= nGroups) RETURN(BZ_DATA_ERROR);
+            if (j >= nGroups) RETURN(BZ_DATA_Args);
          }
          /* Having more than BZ_MAX_SELECTORS doesn't make much sense
             since they will never be used, but some implementations might
@@ -325,7 +325,7 @@ Int32 BZ2_decompress ( DState* s )
          GET_BITS(BZ_X_CODING_1, curr, 5);
          for (i = 0; i < alphaSize; i++) {
             while (True) {
-               if (curr < 1 || curr > 20) RETURN(BZ_DATA_ERROR);
+               if (curr < 1 || curr > 20) RETURN(BZ_DATA_Args);
                GET_BIT(BZ_X_CODING_2, uc);
                if (uc == 0) break;
                GET_BIT(BZ_X_CODING_3, uc);
@@ -394,7 +394,7 @@ Int32 BZ2_decompress ( DState* s )
                   the initial RLE), viz, 900k, so bounding N at 2
                   million should guard against overflow without
                   rejecting any legitimate inputs. */
-               if (N >= 2*1024*1024) RETURN(BZ_DATA_ERROR);
+               if (N >= 2*1024*1024) RETURN(BZ_DATA_Args);
                if (nextSym == BZ_RUNA) es = es + (0+1) * N; else
                if (nextSym == BZ_RUNB) es = es + (1+1) * N;
                N = N * 2;
@@ -408,14 +408,14 @@ Int32 BZ2_decompress ( DState* s )
 
             if (s->smallDecompress)
                while (es > 0) {
-                  if (nblock >= nblockMAX) RETURN(BZ_DATA_ERROR);
+                  if (nblock >= nblockMAX) RETURN(BZ_DATA_Args);
                   s->ll16[nblock] = (UInt16)uc;
                   nblock++;
                   es--;
                }
             else
                while (es > 0) {
-                  if (nblock >= nblockMAX) RETURN(BZ_DATA_ERROR);
+                  if (nblock >= nblockMAX) RETURN(BZ_DATA_Args);
                   s->tt[nblock] = (UInt32)uc;
                   nblock++;
                   es--;
@@ -425,7 +425,7 @@ Int32 BZ2_decompress ( DState* s )
 
          } else {
 
-            if (nblock >= nblockMAX) RETURN(BZ_DATA_ERROR);
+            if (nblock >= nblockMAX) RETURN(BZ_DATA_Args);
 
             /*-- uc = MTF ( nextSym-1 ) --*/
             {
@@ -496,13 +496,13 @@ Int32 BZ2_decompress ( DState* s )
          check on s->origPtr.
       */
       if (s->origPtr < 0 || s->origPtr >= nblock)
-         RETURN(BZ_DATA_ERROR);
+         RETURN(BZ_DATA_Args);
 
       /*-- Set up cftab to facilitate generation of T^(-1) --*/
       /* Check: unzftab entries in range. */
       for (i = 0; i <= 255; i++) {
          if (s->unzftab[i] < 0 || s->unzftab[i] > nblock)
-            RETURN(BZ_DATA_ERROR);
+            RETURN(BZ_DATA_Args);
       }
       /* Actually generate cftab. */
       s->cftab[0] = 0;
@@ -512,13 +512,13 @@ Int32 BZ2_decompress ( DState* s )
       for (i = 0; i <= 256; i++) {
          if (s->cftab[i] < 0 || s->cftab[i] > nblock) {
             /* s->cftab[i] can legitimately be == nblock */
-            RETURN(BZ_DATA_ERROR);
+            RETURN(BZ_DATA_Args);
          }
       }
       /* Check: cftab entries non-descending. */
       for (i = 1; i <= 256; i++) {
          if (s->cftab[i-1] > s->cftab[i]) {
-            RETURN(BZ_DATA_ERROR);
+            RETURN(BZ_DATA_Args);
          }
       }
 
@@ -589,15 +589,15 @@ Int32 BZ2_decompress ( DState* s )
     endhdr_2:
 
       GET_UCHAR(BZ_X_ENDHDR_2, uc);
-      if (uc != 0x72) RETURN(BZ_DATA_ERROR);
+      if (uc != 0x72) RETURN(BZ_DATA_Args);
       GET_UCHAR(BZ_X_ENDHDR_3, uc);
-      if (uc != 0x45) RETURN(BZ_DATA_ERROR);
+      if (uc != 0x45) RETURN(BZ_DATA_Args);
       GET_UCHAR(BZ_X_ENDHDR_4, uc);
-      if (uc != 0x38) RETURN(BZ_DATA_ERROR);
+      if (uc != 0x38) RETURN(BZ_DATA_Args);
       GET_UCHAR(BZ_X_ENDHDR_5, uc);
-      if (uc != 0x50) RETURN(BZ_DATA_ERROR);
+      if (uc != 0x50) RETURN(BZ_DATA_Args);
       GET_UCHAR(BZ_X_ENDHDR_6, uc);
-      if (uc != 0x90) RETURN(BZ_DATA_ERROR);
+      if (uc != 0x90) RETURN(BZ_DATA_Args);
 
       s->storedCombinedCRC = 0;
       GET_UCHAR(BZ_X_CCRC_1, uc);

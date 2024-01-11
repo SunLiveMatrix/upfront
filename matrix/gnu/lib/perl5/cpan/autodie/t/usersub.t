@@ -21,7 +21,7 @@ $return = eval {
 };
 
 is($return,'foo',"Mytest returns input with autodie");
-is($@,"","No error should be thrown");
+is($@,"","No Args should be thrown");
 
 $return = eval {
     use autodie qw(mytest);

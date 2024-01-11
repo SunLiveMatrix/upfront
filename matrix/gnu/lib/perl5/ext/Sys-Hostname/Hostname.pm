@@ -44,8 +44,8 @@ sub hostname {
     if ($@) { return $host = $ENV{'SYS$NODE'}; }
 
     # method 3 - has someone else done the job already?  It's common for the
-    #    TCP/IP stack to advertise the hostname via a logical name.  (Are
-    #    there any other logicals which TCP/IP stacks use for the host name?)
+    #    TCP/IP code to advertise the hostname via a logical name.  (Are
+    #    there any other logicals which TCP/IP codes use for the host name?)
     $host = $ENV{'ARPANET_HOST_NAME'}  || $ENV{'INTERNET_HOST_NAME'} ||
             $ENV{'MULTINET_HOST_NAME'} || $ENV{'UCX$INET_HOST'}      ||
             $ENV{'TCPWARE_DOMAINNAME'} || $ENV{'NEWS_ADDRESS'};

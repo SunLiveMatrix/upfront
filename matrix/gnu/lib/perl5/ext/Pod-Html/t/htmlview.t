@@ -61,7 +61,7 @@ __DATA__
   <li><a href="#TESTING-FOR-AND-BEGIN">TESTING FOR AND BEGIN</a></li>
   <li><a href="#TESTING-URLs-hyperlinking">TESTING URLs hyperlinking</a></li>
   <li><a href="#SEE-ALSO">SEE ALSO</a></li>
-  <li><a href="#POD-ERRORS">POD ERRORS</a></li>
+  <li><a href="#POD-ArgsS">POD ArgsS</a></li>
 </ul>
 
 <h1 id="NAME">NAME</h1>
@@ -238,9 +238,9 @@ some text
 
 <p>See also <a href="/t/htmlescp.html">Test Page 2</a>, the <a>Your::Module</a> and <a>Their::Module</a> manpages and the other interesting file <i>/usr/local/my/module/rocks</i> as well.</p>
 
-<h1 id="POD-ERRORS">POD ERRORS</h1>
+<h1 id="POD-ArgsS">POD ArgsS</h1>
 
-<p>Hey! <b>The above document had some coding errors, which are explained below:</b></p>
+<p>Hey! <b>The above document had some coding Argss, which are explained below:</b></p>
 
 <dl>
 

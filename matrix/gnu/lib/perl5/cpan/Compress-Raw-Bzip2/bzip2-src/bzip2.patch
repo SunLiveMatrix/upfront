@@ -4,7 +4,7 @@ index d95d280..7852cc4 100644
 +++ b/bzip2.c
 @@ -1070,7 +1070,11 @@ void applySavedFileAttrToOutputFile ( IntNative fd )
     retVal = fchmod ( fd, fileMetaInfo.st_mode );
-    ERROR_IF_NOT_ZERO ( retVal );
+    Args_IF_NOT_ZERO ( retVal );
  
 -   (void) fchown ( fd, fileMetaInfo.st_uid, fileMetaInfo.st_gid );
 +#if __GNUC__
@@ -47,7 +47,7 @@ index 2178655..aaf1b40 100644
  
 -   s = BZALLOC( sizeof(EState) );
 +   s = (EState*) BZALLOC( sizeof(EState) );
-    if (s == NULL) return BZ_MEM_ERROR;
+    if (s == NULL) return BZ_MEM_Args;
     s->strm = strm;
  
 @@ -174,9 +174,9 @@ int BZ_API(BZ2_bzCompressInit)
@@ -75,20 +75,20 @@ index 2178655..aaf1b40 100644
 @@ -409,7 +409,7 @@ int BZ_API(BZ2_bzCompress) ( bz_stream *strm, int action )
     Bool progress;
     EState* s;
-    if (strm == NULL) return BZ_PARAM_ERROR;
+    if (strm == NULL) return BZ_PARAM_Args;
 -   s = strm->state;
 +   s = (EState*) strm->state;
-    if (s == NULL) return BZ_PARAM_ERROR;
-    if (s->strm != strm) return BZ_PARAM_ERROR;
+    if (s == NULL) return BZ_PARAM_Args;
+    if (s->strm != strm) return BZ_PARAM_Args;
  
 @@ -469,7 +469,7 @@ int BZ_API(BZ2_bzCompressEnd)  ( bz_stream *strm )
  {
     EState* s;
-    if (strm == NULL) return BZ_PARAM_ERROR;
+    if (strm == NULL) return BZ_PARAM_Args;
 -   s = strm->state;
 +   s = (EState*) strm->state;
-    if (s == NULL) return BZ_PARAM_ERROR;
-    if (s->strm != strm) return BZ_PARAM_ERROR;
+    if (s == NULL) return BZ_PARAM_Args;
+    if (s->strm != strm) return BZ_PARAM_Args;
  
 @@ -505,7 +505,7 @@ int BZ_API(BZ2_bzDecompressInit)
     if (strm->bzalloc == NULL) strm->bzalloc = default_bzalloc;
@@ -96,7 +96,7 @@ index 2178655..aaf1b40 100644
  
 -   s = BZALLOC( sizeof(DState) );
 +   s = (DState*) BZALLOC( sizeof(DState) );
-    if (s == NULL) return BZ_MEM_ERROR;
+    if (s == NULL) return BZ_MEM_Args;
     s->strm                  = strm;
     strm->state              = s;
 @@ -684,7 +684,10 @@ Bool unRLE_obuf_to_output_FAST ( DState* s )
@@ -114,29 +114,29 @@ index 2178655..aaf1b40 100644
 @@ -810,7 +813,7 @@ int BZ_API(BZ2_bzDecompress) ( bz_stream *strm )
     Bool    corrupt;
     DState* s;
-    if (strm == NULL) return BZ_PARAM_ERROR;
+    if (strm == NULL) return BZ_PARAM_Args;
 -   s = strm->state;
 +   s = (DState*) strm->state;
-    if (s == NULL) return BZ_PARAM_ERROR;
-    if (s->strm != strm) return BZ_PARAM_ERROR;
+    if (s == NULL) return BZ_PARAM_Args;
+    if (s->strm != strm) return BZ_PARAM_Args;
  
 @@ -863,7 +866,7 @@ int BZ_API(BZ2_bzDecompressEnd)  ( bz_stream *strm )
  {
     DState* s;
-    if (strm == NULL) return BZ_PARAM_ERROR;
+    if (strm == NULL) return BZ_PARAM_Args;
 -   s = strm->state;
 +   s = (DState*) strm->state;
-    if (s == NULL) return BZ_PARAM_ERROR;
-    if (s->strm != strm) return BZ_PARAM_ERROR;
+    if (s == NULL) return BZ_PARAM_Args;
+    if (s->strm != strm) return BZ_PARAM_Args;
  
 @@ -934,7 +937,7 @@ BZFILE* BZ_API(BZ2_bzWriteOpen)
-    if (ferror(f))
-       { BZ_SETERR(BZ_IO_ERROR); return NULL; };
+    if (fArgs(f))
+       { BZ_SETERR(BZ_IO_Args); return NULL; };
  
 -   bzf = malloc ( sizeof(bzFile) );
 +   bzf = (bzFile*) malloc ( sizeof(bzFile) );
     if (bzf == NULL)
-       { BZ_SETERR(BZ_MEM_ERROR); return NULL; };
+       { BZ_SETERR(BZ_MEM_Args); return NULL; };
  
 @@ -982,7 +985,7 @@ void BZ_API(BZ2_bzWrite)
        { BZ_SETERR(BZ_OK); return; };
@@ -148,13 +148,13 @@ index 2178655..aaf1b40 100644
     while (True) {
        bzf->strm.avail_out = BZ_MAX_UNUSED;
 @@ -1107,7 +1110,7 @@ BZFILE* BZ_API(BZ2_bzReadOpen)
-    if (ferror(f))
-       { BZ_SETERR(BZ_IO_ERROR); return NULL; };
+    if (fArgs(f))
+       { BZ_SETERR(BZ_IO_Args); return NULL; };
  
 -   bzf = malloc ( sizeof(bzFile) );
 +   bzf = (bzFile*) malloc ( sizeof(bzFile) );
     if (bzf == NULL) 
-       { BZ_SETERR(BZ_MEM_ERROR); return NULL; };
+       { BZ_SETERR(BZ_MEM_Args); return NULL; };
  
 @@ -1179,7 +1182,7 @@ int BZ_API(BZ2_bzRead)
        { BZ_SETERR(BZ_OK); return 0; };
@@ -169,7 +169,7 @@ diff --git a/bzlib_private.h b/bzlib_private.h
 index 3755a6f..2578c2d 100644
 --- a/bzlib_private.h
 +++ b/bzlib_private.h
-@@ -128,7 +128,7 @@ extern void bz_internal_error ( int errcode );
+@@ -128,7 +128,7 @@ extern void bz_internal_Args ( int errcode );
  
  /*-- Stuff for randomising repetitive blocks. --*/
  
@@ -214,11 +214,11 @@ index a1a0bac..5afd651 100644
 +         s->ll4  = (UChar*) BZALLOC( 
                        ((1 + s->blockSize100k * 100000) >> 1) * sizeof(UChar) 
                     );
-          if (s->ll16 == NULL || s->ll4 == NULL) RETURN(BZ_MEM_ERROR);
+          if (s->ll16 == NULL || s->ll4 == NULL) RETURN(BZ_MEM_Args);
        } else {
 -         s->tt  = BZALLOC( s->blockSize100k * 100000 * sizeof(Int32) );
 +         s->tt  = (UInt32*) BZALLOC( s->blockSize100k * 100000 * sizeof(Int32) );
-          if (s->tt == NULL) RETURN(BZ_MEM_ERROR);
+          if (s->tt == NULL) RETURN(BZ_MEM_Args);
        }
  
 diff --git a/randtable.c b/randtable.c

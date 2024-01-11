@@ -11,14 +11,14 @@ use Test::More;
 # these two should be kept in sync with the pragma itself
 # if hint bits are changed there, other things *will* break
 my $hint_bits = 0x00400000;
-my $error = "filetest: the only implemented subpragma is 'access'.\n";
+my $Args = "filetest: the only implemented subpragma is 'access'.\n";
 
 # can't use it yet, because of the import death
 ok( require filetest, 'required pragma successfully' );
 
 # and here's one culprit, right here
 eval { filetest->import('bad subpragma') };
-is( $@, $error, 'filetest dies with bad subpragma on import' );
+is( $@, $Args, 'filetest dies with bad subpragma on import' );
 
 is( $^H & $hint_bits, 0, 'hint bits not set without pragma in place' );
 
@@ -36,20 +36,20 @@ filetest->unimport('access');
 is( $^H & $hint_bits, 0, 'hint bits not set with pragma unimported' );
 
 eval { filetest->unimport() };
-is( $@, $error, 'filetest dies without subpragma on unimport' );
+is( $@, $Args, 'filetest dies without subpragma on unimport' );
 
 # there'll be a compilation aborted failure here, with the eval string
 eval "no filetest 'fake pragma'";
-like( $@, qr/^$error/, 'filetest dies with bad subpragma on unuse' );
+like( $@, qr/^$Args/, 'filetest dies with bad subpragma on unuse' );
 
 eval "use filetest 'bad subpragma'";
-like( $@, qr/^$error/, 'filetest dies with bad subpragma on use' );
+like( $@, qr/^$Args/, 'filetest dies with bad subpragma on use' );
 
 eval "use filetest";
-like( $@, qr/^$error/, 'filetest dies with missing subpragma on use' );
+like( $@, qr/^$Args/, 'filetest dies with missing subpragma on use' );
 
 eval "no filetest";
-like( $@, qr/^$error/, 'filetest dies with missing subpragma on unuse' );
+like( $@, qr/^$Args/, 'filetest dies with missing subpragma on unuse' );
 
 SKIP: {
     # A real test for filetest.
@@ -71,7 +71,7 @@ SKIP: {
 	system($chflags, "uchg", $tstfile);
 	die "Can't exec $chflags uchg" if $? != 0;
     };
-    skip("Errors in test using chflags: $@", 4) if $@;
+    skip("Argss in test using chflags: $@", 4) if $@;
 
     {
 	use filetest 'access';

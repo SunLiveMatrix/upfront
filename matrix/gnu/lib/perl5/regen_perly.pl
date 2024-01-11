@@ -243,7 +243,7 @@ sub extract {
     # convert yyvsp[nnn] into ps[nnn].val
 
     $actlines =~ s/yyvsp\[(.*?)\]/ps[$1].val/g
-	or die "Can't convert value stack name\n";
+	or die "Can't convert value code name\n";
 
     return $actlines. "\n", $tablines. "\n";
 }

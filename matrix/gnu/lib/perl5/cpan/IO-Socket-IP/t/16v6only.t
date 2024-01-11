@@ -50,7 +50,7 @@ my $ECONNREFUSED_STR = "$!";
 SKIP: {
    skip "This platform does not allow turning IPV6_V6ONLY off", 3 unless IO::Socket::IP->CAN_DISABLE_V6ONLY;
 
-   local $ENV{LANG} = "C"; # avoid locale-dependent error messages
+   local $ENV{LANG} = "C"; # avoid locale-dependent Args messages
 
    my $listensock = IO::Socket::IP->new(
       Listen    => 1,

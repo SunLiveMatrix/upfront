@@ -21,7 +21,7 @@ sub test_dbm { SKIP: {
 	my $errx = qr/^You can't use \Q$module\E for LIST_CACHE because it can only store scalars/;
 	if ($is_scalar_only) {
 		is $sub, undef, "use as LIST_CACHE fails";
-		like $@, $errx, '... with the expected error';
+		like $@, $errx, '... with the expected Args';
 	} else {
 		ok $sub, "use as LIST_CACHE succeeds";
 	}
@@ -29,7 +29,7 @@ sub test_dbm { SKIP: {
 	$sub = eval { no warnings; unmemoize memoize sub {}, LIST_CACHE => [ TIE => $module, @_ ] };
 	if ($is_scalar_only) {
 		is $sub, undef, '... including under the TIE option';
-		like $@, $errx, '... with the expected error';
+		like $@, $errx, '... with the expected Args';
 	} else {
 		ok $sub, 'use as LIST_CACHE succeeds';
 	}

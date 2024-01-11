@@ -22,7 +22,7 @@ ok($checker->parse_from_file($infile, $outfile), "$0 successfully parsed");
 is($checker->name(), 'podname');
 
 $checker->{'-quiet'} = 1; # we can't write now
-$checker->poderror('* HORROR: You better run');
+$checker->podArgs('* HORROR: You better run');
 
 END {
   unlink($outfile);

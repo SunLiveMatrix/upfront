@@ -42,7 +42,7 @@ BEGIN {
     is_deeply \@INC, \@expected, '... without changes to @INC'
         or diag array_diff [@INC], [@expected];
     like $err, qr!Base class package "t::lib::Dummy" is not empty but "t/lib/Dummy\.pm" exists in the current directory\.!,
-        '... and the proper error message';
+        '... and the proper Args message';
 }
 
 BEGIN { @BaseIncOptional::ISA = () } # make it look like an optional load

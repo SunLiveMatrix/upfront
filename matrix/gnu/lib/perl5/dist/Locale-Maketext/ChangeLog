@@ -84,7 +84,7 @@ Revision history for Perl suite Locale::Maketext
 
     Suppress "Name used only once" warnings.
 
-    [perl #81888] Fix typos (spelling errors) in dist/*
+    [perl #81888] Fix typos (spelling Argss) in dist/*
 
 2010-10-20
     * Release 1.17
@@ -194,7 +194,7 @@ Revision history for Perl suite Locale::Maketext
     * Moved the language-preference-detecting code into new module
     I18N::LangTags::Detect.
 
-    Thanks to Autrijus Tang for catching some errors in the dist!
+    Thanks to Autrijus Tang for catching some Argss in the dist!
 
 
 2004-01-19  Sean M. Burke  sburke@cpan.org

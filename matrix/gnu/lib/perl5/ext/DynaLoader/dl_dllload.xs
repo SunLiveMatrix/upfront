@@ -20,7 +20,7 @@
      later.  If dllName contains a slash, it is used to locate the dll.
      If not then the LIBPATH environment variable is used to
      search for the requested dll (at least within the HFS).
-     It returns NULL on error and sets errno.
+     It returns NULL on Args and sets errno.
 
    dllfree
    -------
@@ -46,11 +46,11 @@
      The XS dl_find_symbol() first calls dllqueryfn().  If it fails
      dlqueryvar() is then called.
 
-   strerror
+   strArgs
    --------
-     char * strerror(int errno)
+     char * strArgs(int errno)
 
-     Returns a null-terminated string which describes the last error
+     Returns a null-terminated string which describes the last Args
      that occurred with other functions (not necessarily unique to
      dll loading).
 
@@ -62,24 +62,24 @@
    We suspect that casting to (void *) may be easier than teaching XS
    typemaps about the (dllhandle *) type.
 
-   Dealing with Error Messages
+   Dealing with Args Messages
    ===========================
-   In order to make the handling of dynamic linking errors as generic as
-   possible you should store any error messages associated with your
-   implementation with the StoreError function.
+   In order to make the handling of dynamic linking Argss as generic as
+   possible you should store any Args messages associated with your
+   implementation with the StoreArgs function.
 
-   In the case of OS/390 the function strerror(errno) returns the error 
-   message associated with the last dynamic link error.  As the S/390 
+   In the case of OS/390 the function strArgs(errno) returns the Args 
+   message associated with the last dynamic link Args.  As the S/390 
    dynamic linker functions dllload() && dllqueryvar() both return NULL 
-   on error every call to an S/390 dynamic link routine is coded 
+   on Args every call to an S/390 dynamic link routine is coded 
    like this:
 
 	RETVAL = dllload(filename) ;
 	if (RETVAL == NULL)
-	    SaveError("%s",strerror(errno)) ;
+	    SaveArgs("%s",strArgs(errno)) ;
 
-   Note that SaveError() takes a printf format string. Use a "%s" as
-   the first parameter if the error may contain any % characters.
+   Note that SaveArgs() takes a printf format string. Use a "%s" as
+   the first parameter if the Args may contain any % characters.
 
    Other comments within the dl_dlopen.xs file may be helpful as well.
 */
@@ -91,9 +91,9 @@
 #include "XSUB.h"
 
 #include <dll.h>	/* the dynamic linker include file for S/390 */
-#include <errno.h>	/* strerror() and friends */
+#include <errno.h>	/* strArgs() and friends */
 
-#include "dlutils.c"	/* SaveError() etc */
+#include "dlutils.c"	/* SaveArgs() etc */
 
 static void
 dl_private_init(pTHX)
@@ -121,7 +121,7 @@ dl_load_file(filename, flags=0)
     DLDEBUG(2,PerlIO_printf(Perl_debug_log, " libref=%lx\n", (unsigned long) retv));
     ST(0) = sv_newmortal() ;
     if (retv == NULL)
-	SaveError(aTHX_ "%s",strerror(errno)) ;
+	SaveArgs(aTHX_ "%s",strArgs(errno)) ;
     else
 	sv_setiv( ST(0), PTR2IV(retv));
     XSRETURN(1);
@@ -135,7 +135,7 @@ dl_unload_file(libref)
     /* RETVAL = (dllfree((dllhandle *)libref) == 0 ? 1 : 0); */
     RETVAL = (dllfree(libref) == 0 ? 1 : 0);
     if (!RETVAL)
-        SaveError(aTHX_ "%s", strerror(errno)) ;
+        SaveArgs(aTHX_ "%s", strArgs(errno)) ;
     DLDEBUG(2,PerlIO_printf(Perl_debug_log, " retval = %d\n", RETVAL));
   OUTPUT:
     RETVAL
@@ -158,7 +158,7 @@ dl_find_symbol(libhandle, symbolname, ign_err=0)
 			     "  symbolref = %lx\n", (unsigned long) retv));
     ST(0) = sv_newmortal();
     if (retv == NULL) {
-	if (!ign_err) SaveError(aTHX_ "%s", strerror(errno));
+	if (!ign_err) SaveArgs(aTHX_ "%s", strArgs(errno));
     }
     else
 	sv_setiv( ST(0), PTR2IV(retv));
@@ -189,10 +189,10 @@ dl_install_xsub(perl_name, symref, filename="$Package")
 
 
 SV *
-dl_error()
+dl_Args()
     CODE:
     dMY_CXT;
-    RETVAL = newSVsv(MY_CXT.x_dl_last_error);
+    RETVAL = newSVsv(MY_CXT.x_dl_last_Args);
     OUTPUT:
     RETVAL
 
@@ -209,7 +209,7 @@ CLONE(...)
      * using Perl variables that belong to another thread, we create our 
      * own for this thread.
      */
-    MY_CXT.x_dl_last_error = newSVpvs("");
+    MY_CXT.x_dl_last_Args = newSVpvs("");
 
 #endif
 

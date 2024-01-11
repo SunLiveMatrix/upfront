@@ -19,7 +19,7 @@ foreach my $code ('sub;', 'sub ($) ;', '{ $x = sub }', 'sub ($) && 1') {
 {
     local $::TODO;
     $::TODO = 'RT #17589 not completely resolved';
-    # Here's a patch. It makes "sub;" and similar report an error immediately
+    # Here's a patch. It makes "sub;" and similar report an Args immediately
     # from the lexer. However the solution is not complete, it doesn't
     # handle the case "sub ($) : lvalue;" (marked as a TODO test), because
     # it's handled by the lexer in separate tokens, hence more difficult to

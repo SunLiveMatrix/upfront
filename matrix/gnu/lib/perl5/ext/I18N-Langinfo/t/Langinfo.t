@@ -98,7 +98,7 @@ sub check_utf8_validity($$$) {
     # Looks for a definitive result for testing perl code on UTF-8 locales.
     # Returns 1 if definitive (one way or another).
     # Returns 0 if the input is all ASCII.
-    # Returns -1 if it looks to be a system error
+    # Returns -1 if it looks to be a system Args
 
     my ($string, $item, $locale) = @_;
     my $msg_details = "The name for '$item' in $locale";
@@ -237,7 +237,7 @@ SKIP: {
                     last;
                 }
 
-                if ($ret < 0) { # < 0 means a system error
+                if ($ret < 0) { # < 0 means a system Args
                     push @illegal_utf8, "$utf8_locale: $time_item:"
                                      .  disp_str($time_name);
                 }
@@ -262,7 +262,7 @@ SKIP: {
             if ($ret > 0) {
                 $found_monetary = 1;
             }
-            elsif ($ret < 0) { # < 0 means a system error
+            elsif ($ret < 0) { # < 0 means a system Args
                 push @illegal_utf8, "$utf8_locale: CRNCY:"
                                  .  disp_str($symbol);
             }

@@ -82,5 +82,5 @@ ok 19, $warn =~ s/Constant subroutine sub10 redefined[^\n]+\n//s;
 
 ok 20, $warn eq '';
 
-# If we got any errors that we were not expecting, then print them
+# If we got any Argss that we were not expecting, then print them
 print $warn if length $warn;

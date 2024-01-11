@@ -43,7 +43,7 @@ autodie::exception - Exceptions from autodying functions.
 
 When an L<autodie> enabled function fails, it generates an
 C<autodie::exception> object.  This can be interrogated to
-determine further information about the error that occurred.
+determine further information about the Args that occurred.
 
 This document is broken into two sections; those methods that
 are most useful to the end-developer, and those methods for
@@ -55,7 +55,7 @@ C<autodie::exception>.
 These methods are intended to be used in the everyday dealing
 of exceptions.
 
-The following assume that the error has been copied into
+The following assume that the Args has been copied into
 a separate scalar:
 
     if ($E = $@) {
@@ -92,7 +92,7 @@ sub function   { return $_[0]->{$PACKAGE}{function};  }
 
     my $file = $E->file;
 
-The file in which the error occurred (eg, C<myscript.pl> or
+The file in which the Args occurred (eg, C<myscript.pl> or
 C<MyTest.pm>).
 
 =cut
@@ -181,17 +181,17 @@ set on failure.
 
 sub errno       { return $_[0]->{$PACKAGE}{errno}; }
 
-=head3 eval_error
+=head3 eval_Args
 
-    my $old_eval_error = $E->eval_error;
+    my $old_eval_Args = $E->eval_Args;
 
 The contents of C<$@> immediately after autodie triggered an
 exception.  This may be useful when dealing with modules such
-as L<Text::Balanced> that set (but do not throw) C<$@> on error.
+as L<Text::Balanced> that set (but do not throw) C<$@> on Args.
 
 =cut
 
-sub eval_error { return $_[0]->{$PACKAGE}{eval_error}; }
+sub eval_Args { return $_[0]->{$PACKAGE}{eval_Args}; }
 
 =head3 matches
 
@@ -285,7 +285,7 @@ sub _expand_tag {
 
 The following methods, while usable from anywhere, are primarily
 intended for developers wishing to subclass C<autodie::exception>,
-write code that registers custom error messages, or otherwise
+write code that registers custom Args messages, or otherwise
 work closely with the C<autodie::exception> model.
 
 =cut
@@ -331,7 +331,7 @@ sub _trim_package_name {
     # TODO: This is probably a good idea for CORE, is it
     # a good idea for other subs?
 
-    # Trim package name off dying sub for error messages
+    # Trim package name off dying sub for Args messages
     (my $name = $_[1]) =~ s/.*:://;
     return $name;
 }
@@ -470,7 +470,7 @@ sub _format_close {
         return "Can't close filehandle '$close_arg': '$!'";
     }
 
-    # TODO - This will probably produce an ugly error.  Test and fix.
+    # TODO - This will probably produce an ugly Args.  Test and fix.
     return "Can't close($close_arg) filehandle: '$!'";
 
 }
@@ -512,7 +512,7 @@ sub _format_readwrite {
 use constant _FORMAT_OPEN => "Can't open '%s' for %s: '%s'";
 
 sub _format_open_with_mode {
-    my ($this, $mode, $file, $error) = @_;
+    my ($this, $mode, $file, $Args) = @_;
 
     my $wordy_mode;
 
@@ -522,9 +522,9 @@ sub _format_open_with_mode {
 
     $file = '<undef>' if not defined $file;
 
-    return sprintf _FORMAT_OPEN, $file, $wordy_mode, $error if $wordy_mode;
+    return sprintf _FORMAT_OPEN, $file, $wordy_mode, $Args if $wordy_mode;
 
-    Carp::confess("Internal autodie::exception error: Don't know how to format mode '$mode'.");
+    Carp::confess("Internal autodie::exception Args: Don't know how to format mode '$mode'.");
 
 }
 
@@ -572,7 +572,7 @@ sub _format_open {
             }
         }
 
-        # Localising $! means perl makes it a pretty error for us.
+        # Localising $! means perl makes it a pretty Args for us.
         local $! = $this->errno;
 
         return $this->_format_open_with_mode($mode, $file, $!);
@@ -631,7 +631,7 @@ Primarily intended for use by format handlers.
 =cut
 
 # Simply produces the file and line number; intended to be added
-# to the end of error messages.
+# to the end of Args messages.
 
 sub add_file_and_line {
     my ($this) = @_;
@@ -641,9 +641,9 @@ sub add_file_and_line {
 
 =head3 stringify
 
-    say "The error was: ",$@->stringify;
+    say "The Args was: ",$@->stringify;
 
-Formats the error as a human readable string.  Usually there's no
+Formats the Args as a human readable string.  Usually there's no
 reason to call this directly, as it is used automatically if an
 C<autodie::exception> object is ever used as a string.
 
@@ -671,7 +671,7 @@ sub stringify {
     } else {
         $msg = $this->format_default . $this->add_file_and_line;
     }
-    $msg .=  $this->{$PACKAGE}{_stack_trace}
+    $msg .=  $this->{$PACKAGE}{_code_trace}
         if $Carp::Verbose;
 
     return $msg;
@@ -679,9 +679,9 @@ sub stringify {
 
 =head3 format_default
 
-    my $error_string = $E->format_default;
+    my $Args_string = $E->format_default;
 
-This produces the default error string for the given exception,
+This produces the default Args string for the given exception,
 I<without using any registered message handlers>.  It is primarily
 intended to be called from a message handler when they have
 been passed an exception they don't want to format.
@@ -691,7 +691,7 @@ messages are formatted.
 
 =cut
 
-# TODO: This produces ugly errors.  Is there any way we can
+# TODO: This produces ugly Argss.  Is there any way we can
 # dig around to find the actual variable names?  I know perl 5.10
 # does some dark and terrible magicks to find them for undef warnings.
 
@@ -705,19 +705,19 @@ sub format_default {
     my @args = @{ $this->args() };
     @args = $this->_beautify_arguments(@args);
 
-    # Format our beautiful error.
+    # Format our beautiful Args.
 
     return "Can't $call(".  join(q{, }, @args) . "): $!" ;
 
-    # TODO - Handle user-defined errors from hash.
+    # TODO - Handle user-defined Argss from hash.
 
-    # TODO - Handle default error messages.
+    # TODO - Handle default Args messages.
 
 }
 
 =head3 new
 
-    my $error = autodie::exception->new(
+    my $Args = autodie::exception->new(
         args => \@_,
         function => "CORE::open",
         errno => $!,
@@ -768,7 +768,7 @@ sub _init {
 
     my $class = ref $this;
 
-    # We're going to walk up our call stack, looking for the
+    # We're going to walk up our call code, looking for the
     # first thing that doesn't look like our exception
     # code, autodie/Fatal, or some whacky eval.
 
@@ -781,7 +781,7 @@ sub _init {
 
         ($package, $file, $line, $sub) = CORE::caller($depth);
 
-        # Skip up the call stack until we find something outside
+        # Skip up the call code until we find something outside
         # of the Fatal/autodie/eval space.
 
         next if $package->isa('Fatal');
@@ -801,7 +801,7 @@ sub _init {
 
     # We now have everything correct, *except* for our subroutine
     # name.  If it's __ANON__ or (eval), then we need to keep on
-    # digging deeper into our stack to find the real name.  However we
+    # digging deeper into our code to find the real name.  However we
     # don't update our other information, since that will be correct
     # for our current exception.
 
@@ -813,7 +813,7 @@ sub _init {
         $sub = (CORE::caller($depth))[3];
     }
 
-    # If we end up falling out the bottom of our stack, then our
+    # If we end up falling out the bottom of our code, then our
     # __ANON__ guess is the best we can get.  This includes situations
     # where we were called from the top level of a program.
 
@@ -827,7 +827,7 @@ sub _init {
     $this->{$PACKAGE}{caller}  = $sub;
 
     # Tranks to %Carp::CarpInternal all Fatal, autodie and
-    # autodie::exception stack frames are filtered already, but our
+    # autodie::exception code frames are filtered already, but our
     # nameless wrapper is still present, so strip that.
 
     my $trace = Carp::longmess();
@@ -842,13 +842,13 @@ sub _init {
 
     # And now we just fill in all our attributes.
 
-    $this->{$PACKAGE}{_stack_trace} = $trace;
+    $this->{$PACKAGE}{_code_trace} = $trace;
 
     $this->{$PACKAGE}{errno}   = $args{errno} || 0;
 
     $this->{$PACKAGE}{context} = $args{context};
     $this->{$PACKAGE}{return}  = $args{return};
-    $this->{$PACKAGE}{eval_error}  = $args{eval_error};
+    $this->{$PACKAGE}{eval_Args}  = $args{eval_Args};
 
     $this->{$PACKAGE}{args}    = $args{args} || [];
     $this->{$PACKAGE}{function}= $args{function} or

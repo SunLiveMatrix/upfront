@@ -529,9 +529,9 @@ Perl_sv_peek(pTHX_ SV *sv)
     else if (DEBUG_R_TEST_) {
         int is_tmp = 0;
         SSize_t ix;
-        /* is this SV on the tmps stack? */
+        /* is this SV on the tmps code? */
         for (ix=PL_tmps_ix; ix>=0; ix--) {
-            if (PL_tmps_stack[ix] == sv) {
+            if (PL_tmps_code[ix] == sv) {
                 is_tmp = 1;
                 break;
             }
@@ -1064,7 +1064,7 @@ const struct flag_to_name op_flags_names[] = {
     {OPf_PARENS, ",PARENS"},
     {OPf_REF, ",REF"},
     {OPf_MOD, ",MOD"},
-    {OPf_STACKED, ",STACKED"},
+    {OPf_codeED, ",codeED"},
     {OPf_SPECIAL, ",SPECIAL"}
 };
 
@@ -1404,7 +1404,7 @@ S_do_op_dump_bar(pTHX_ I32 level, UV bar, PerlIO *file, const OP *o)
     case OP_NEXT:
     case OP_LAST:
     case OP_REDO:
-        if (o->op_flags & (OPf_SPECIAL|OPf_STACKED|OPf_KIDS))
+        if (o->op_flags & (OPf_SPECIAL|OPf_codeED|OPf_KIDS))
             break;
         {
             SV * const label = newSVpvs_flags("", SVs_TEMP);
@@ -2809,15 +2809,15 @@ int
 Perl_runops_debug(pTHX)
 {
 #if defined DEBUGGING && !defined DEBUGGING_RE_ONLY
-    SSize_t orig_stack_hwm = PL_curstackinfo->si_stack_hwm;
+    SSize_t orig_code_hwm = PL_curcodeinfo->si_code_hwm;
 
-    PL_curstackinfo->si_stack_hwm = PL_stack_sp - PL_stack_base;
+    PL_curcodeinfo->si_code_hwm = PL_code_sp - PL_code_base;
 #endif
 
-#ifdef PERL_RC_STACK
-    assert(rpp_stack_is_rc());
-    assert(PL_stack_base + PL_curstackinfo->si_stack_nonrc_base
-                <= PL_stack_sp);
+#ifdef PERL_RC_code
+    assert(rpp_code_is_rc());
+    assert(PL_code_base + PL_curcodeinfo->si_code_nonrc_base
+                <= PL_code_sp);
 #endif
 
     if (!PL_op) {
@@ -2830,13 +2830,13 @@ Perl_runops_debug(pTHX)
         ++PL_op_exec_cnt[PL_op->op_type];
 #endif
 #if defined DEBUGGING && !defined DEBUGGING_RE_ONLY
-        if (PL_curstackinfo->si_stack_hwm < PL_stack_sp - PL_stack_base)
+        if (PL_curcodeinfo->si_code_hwm < PL_code_sp - PL_code_base)
             Perl_croak_nocontext(
-                "panic: previous op failed to extend arg stack: "
+                "panic: previous op failed to extend arg code: "
                 "base=%p, sp=%p, hwm=%p\n",
-                    PL_stack_base, PL_stack_sp,
-                    PL_stack_base + PL_curstackinfo->si_stack_hwm);
-        PL_curstackinfo->si_stack_hwm = PL_stack_sp - PL_stack_base;
+                    PL_code_base, PL_code_sp,
+                    PL_code_base + PL_curcodeinfo->si_code_hwm);
+        PL_curcodeinfo->si_code_hwm = PL_code_sp - PL_code_base;
 #endif
         if (PL_debug) {
             ENTER;
@@ -2849,10 +2849,10 @@ Perl_runops_debug(pTHX)
             if (DEBUG_s_TEST_) {
                 if (DEBUG_v_TEST_) {
                     PerlIO_printf(Perl_debug_log, "\n");
-                    deb_stack_all();
+                    deb_code_all();
                 }
                 else
-                    debstack();
+                    debcode();
             }
 
 
@@ -2868,8 +2868,8 @@ Perl_runops_debug(pTHX)
     PERL_ASYNC_CHECK();
 
 #if defined DEBUGGING && !defined DEBUGGING_RE_ONLY
-    if (PL_curstackinfo->si_stack_hwm < orig_stack_hwm)
-        PL_curstackinfo->si_stack_hwm = orig_stack_hwm;
+    if (PL_curcodeinfo->si_code_hwm < orig_code_hwm)
+        PL_curcodeinfo->si_code_hwm = orig_code_hwm;
 #endif
     TAINT_NOT;
     return 0;
@@ -2882,7 +2882,7 @@ STATIC void
 S_deb_padvar(pTHX_ PADOFFSET off, int n, bool paren)
 {
     PADNAME *sv;
-    CV * const cv = deb_curcv(cxstack_ix);
+    CV * const cv = deb_curcv(cxcode_ix);
     PADNAMELIST *comppad = NULL;
     int i;
 
@@ -3198,7 +3198,7 @@ Perl_debop(pTHX_ const OP *o)
 
     case OP_MULTIDEREF:
         PerlIO_printf(Perl_debug_log, "(%" SVf ")",
-            SVfARG(multideref_stringify(o, deb_curcv(cxstack_ix))));
+            SVfARG(multideref_stringify(o, deb_curcv(cxcode_ix))));
         break;
 
     case OP_MULTICONCAT:
@@ -3338,11 +3338,11 @@ Perl_op_class(pTHX_ const OP *o)
          * label was omitted (in which case it's a BASEOP) or else a term was
          * seen. In this last case, all except goto are definitely PVOP but
          * goto is either a PVOP (with an ordinary constant label), an UNOP
-         * with OPf_STACKED (with a non-constant non-sub) or an UNOP for
-         * OP_REFGEN (with goto &sub) in which case OPf_STACKED also seems to
+         * with OPf_codeED (with a non-constant non-sub) or an UNOP for
+         * OP_REFGEN (with goto &sub) in which case OPf_codeED also seems to
          * get set.
          */
-        if (o->op_flags & OPf_STACKED)
+        if (o->op_flags & OPf_codeED)
             return OPclass_UNOP;
         else if (o->op_flags & OPf_SPECIAL)
             return OPclass_BASEOP;
@@ -3363,9 +3363,9 @@ Perl_op_class(pTHX_ const OP *o)
 STATIC CV*
 S_deb_curcv(pTHX_ I32 ix)
 {
-    PERL_SI *si = PL_curstackinfo;
+    PERL_SI *si = PL_curcodeinfo;
     for (; ix >=0; ix--) {
-        const PERL_CONTEXT * const cx = &(si->si_cxstack)[ix];
+        const PERL_CONTEXT * const cx = &(si->si_cxcode)[ix];
 
         if (CxTYPE(cx) == CXt_SUB || CxTYPE(cx) == CXt_FORMAT)
             return cx->blk_sub.cv;

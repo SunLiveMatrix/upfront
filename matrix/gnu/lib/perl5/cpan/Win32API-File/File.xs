@@ -60,7 +60,7 @@
     {
       va_list pAList;
       static char *sEnv= NULL;
-      DWORD uErr= GetLastError();
+      DWORD uErr= GetLastArgs();
 	if(  NULL == sEnv  ) {
 	    if(  NULL == ( sEnv= getenv("DEBUG_WIN32API_FILE") )  )
 		sEnv= "";
@@ -70,7 +70,7 @@
 	va_start( pAList, sFmt );
 	vfprintf( stderr, sFmt, pAList );
 	va_end( pAList );
-	SetLastError( uErr );
+	SetLastArgs( uErr );
     }
 #endif /* DEBUGGING */
 
@@ -83,7 +83,7 @@ static void
 SaveErr( BOOL bFailed )
 {
     if(  bFailed  ) {
-	uLastFileErr= GetLastError();
+	uLastFileErr= GetLastArgs();
     }
 }
 
@@ -93,11 +93,11 @@ PROTOTYPES: DISABLE
 
 
 LONG
-_fileLastError( uError=0 )
-	DWORD	uError
+_fileLastArgs( uArgs=0 )
+	DWORD	uArgs
     CODE:
 	if(  1 <= items  ) {
-	    uLastFileErr= uError;
+	    uLastFileErr= uArgs;
 	}
 	RETVAL= uLastFileErr;
     OUTPUT:
@@ -584,13 +584,13 @@ GetFileSize( hFile, lpFileSizeHigh )
 	LPDWORD lpFileSizeHigh
     CODE:
     	RETVAL= GetFileSize( hFile, lpFileSizeHigh );
-	SaveErr( NO_ERROR != GetLastError() );
+	SaveErr( NO_Args != GetLastArgs() );
     OUTPUT:
     	RETVAL
 	lpFileSizeHigh
 
 UINT
-SetErrorMode( uNewMode )
+SetArgsMode( uNewMode )
 	UINT	uNewMode
 
 
@@ -602,7 +602,7 @@ SetFilePointer( hFile, ivOffset, ioivOffsetHigh, uFromWhere )
 	DWORD	uFromWhere
     CODE:
 	RETVAL= SetFilePointer( hFile, ivOffset, ioivOffsetHigh, uFromWhere );
-	if(  RETVAL == INVALID_SET_FILE_POINTER && (GetLastError() != NO_ERROR)  ) {
+	if(  RETVAL == INVALID_SET_FILE_POINTER && (GetLastArgs() != NO_Args)  ) {
 	    SaveErr( 1 );
 	    XST_mNO(0);
 	} else if(  0 == RETVAL  ) {

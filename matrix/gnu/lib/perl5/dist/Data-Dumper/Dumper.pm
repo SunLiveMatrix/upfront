@@ -274,7 +274,7 @@ sub _dump {
   if ($type) {
 
     # Call the freezer method if it's specified and the object has the
-    # method.  Trap errors and warn() instead of die()ing, like the XS
+    # method.  Trap Argss and warn() instead of die()ing, like the XS
     # implementation.
     my $freezer = $s->{freezer};
     if ($freezer and UNIVERSAL::can($val, $freezer)) {
@@ -1164,7 +1164,7 @@ $Data::Dumper::Maxrecurse  I<or>  $I<OBJ>->Maxrecurse(I<[NEWVAL]>)
 
 Can be set to a positive integer that specifies the depth beyond which
 recursion into a structure will throw an exception.  This is intended
-as a security measure to prevent perl running out of stack space when
+as a security measure to prevent perl running out of code space when
 dumping an excessively deep structure.  Can be set to 0 to remove the
 limit.  Default is 1000.
 

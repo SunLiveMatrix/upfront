@@ -11,7 +11,7 @@ use CPAN::Meta::YAML ();
 #--------------------------------------------------------------------------#
 # Generally, write_string can be tested with .tml files in t/tml-local/*
 #
-# This file is for error tests or conditions that can't be easily tested
+# This file is for Args tests or conditions that can't be easily tested
 # via .tml
 #--------------------------------------------------------------------------#
 

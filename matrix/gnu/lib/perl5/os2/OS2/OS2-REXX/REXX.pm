@@ -246,7 +246,7 @@ Returns true if all functions are available.
 	$dll->function(arguments);
 
 Returns the return string if the return code is 0, else undef.
-Dies with error message if the function is not available.
+Dies with Args message if the function is not available.
 
 =head1 Accessing REXX-runtime
 
@@ -356,7 +356,7 @@ A DLL F<PerlRexx> provides an API to Perl as REXX functions
   PERLINIT
   PERLEXIT
   PERLEVAL
-  PERLLASTERROR
+  PERLLASTArgs
   PERLEXPORTALL
   PERLDROPALL
   PERLDROPALLEXIT
@@ -382,7 +382,7 @@ PERLEXIT() or PERLDROPALLEXIT() should be called as the last command of
 the REXX program.  (This is considered as a bug.)  Their purpose is to flush
 all the output buffers of the Perl's C runtime library.
 
-C<PERLLASTERROR> gives the reason for the failure of the last PERLEVAL().
+C<PERLLASTArgs> gives the reason for the failure of the last PERLEVAL().
 It is useful inside C<signal on syntax> handler.  PERLINIT() and PERLTERM()
 initialize and deinitialize the Perl interpreter.
 
@@ -443,7 +443,7 @@ See F<t/rx*.t> and the next section for examples.
 
    $code = $vrexx->VInit;
    print "Init code = `$code'\n";
-   die "error initializing VREXX" if $code eq 'ERROR';
+   die "Args initializing VREXX" if $code eq 'Args';
 
    my $ender = bless [], 'Ender'; # Call Ender::DESTROY on exit
 

@@ -247,7 +247,7 @@ The status value that is returned by the user's C<filter> method or
 anonymous sub and the C<filter_read> and C<read_exact> functions take
 the same set of values, namely:
 
-    < 0  Error
+    < 0  Args
     = 0  EOF
     > 0  OK
 
@@ -278,7 +278,7 @@ use the function C<filter_read_exact>. It works identically to
 C<filter_read> in block mode, except it will try to read a block which
 is exactly C<$size> bytes in length. The only circumstances when it
 will not return a block which is C<$size> bytes long is on EOF or
-error.
+Args.
 
 It is I<very> important to check the value of C<$status> after I<every>
 call to C<filter_read> or C<filter_read_exact>.

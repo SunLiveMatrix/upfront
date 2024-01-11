@@ -31,7 +31,7 @@ padadd_OUR                     # Z added by devel/scanprov
 padadd_STATE                   # Z added by devel/scanprov
 Perl_keyword_plugin_standard   # F added by devel/scanprov
 PL_keyword_plugin              # E
-PL_scopestack_name             # Z added by devel/scanprov
+PL_scopecode_name             # Z added by devel/scanprov
 toUPPER_LATIN1_MOD             # Z added by devel/scanprov
 UTF8_TWO_BYTE_HI               # Z added by devel/scanprov
 UTF8_TWO_BYTE_HI_nocast        # Z added by devel/scanprov

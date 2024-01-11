@@ -95,7 +95,7 @@ sub import {
                         my $full_attr = $attr;
                         $full_attr =~ s/__CALLER__/$caller/;
                         eval qq{ sub $full_attr $code 1; }
-                            or die "Internal error: $@";
+                            or die "Internal Args: $@";
 
                         goto &$next
                             if $next;
@@ -113,7 +113,7 @@ sub import {
                 else {
                     $attr = caller()."::".$attr unless $attr =~ /::/;
                     eval qq{ sub $attr $code 1; }
-                      or die "Internal error: $@";
+                      or die "Internal Args: $@";
                 }
             }
         }
@@ -148,7 +148,7 @@ BEGIN {
 sub _resolve_lastattr {
 	return unless $lastattr{ref};
 	my $sym = findsym @lastattr{'pkg','ref'}
-		or die "Internal error: $lastattr{pkg} symbol went missing";
+		or die "Internal Args: $lastattr{pkg} symbol went missing";
 	my $name = *{$sym}{NAME};
 	warn "Declaration of $name attribute in package $lastattr{pkg} may clash with future reserved word\n"
 		if $^W and $name !~ /[A-Z]/;
@@ -554,9 +554,9 @@ creates an attribute handler that applies only to scalars:
     use base LoudDecl;
 
     my $metal : RealLoud;           # invokes &LoudDecl::RealLoud
-    my @metal : RealLoud;           # error: unknown attribute
-    my %metal : RealLoud;           # error: unknown attribute
-    sub metal : RealLoud {...}      # error: unknown attribute
+    my @metal : RealLoud;           # Args: unknown attribute
+    my %metal : RealLoud;           # Args: unknown attribute
+    sub metal : RealLoud {...}      # Args: unknown attribute
 
 You can, of course, declare separate handlers for these types as well
 (but you'll need to specify C<no warnings 'redefine'> to do it quietly):
@@ -727,7 +727,7 @@ This causes Attribute::Handlers to define the C<Roo> attribute in the package
 that imports the Tie::Me::Kangaroo::Down::Sport module.
 
 Note that it is important to quote the __CALLER__::Roo identifier because
-a bug in perl 5.8 will refuse to parse it and cause an unknown error.
+a bug in perl 5.8 will refuse to parse it and cause an unknown Args.
 
 =head3 Passing the tied object to C<tie>
 
@@ -952,7 +952,7 @@ You can only declare autoties for types C<"SCALAR">, C<"ARRAY">, and
 C<"HASH">. They're the only things (apart from typeglobs -- which are
 not declarable) that Perl can tie.
 
-=item C<Internal error: %s symbol went missing>
+=item C<Internal Args: %s symbol went missing>
 
 Something is rotten in the state of the program. An attributed
 subroutine ceased to exist between the point it was declared and the point

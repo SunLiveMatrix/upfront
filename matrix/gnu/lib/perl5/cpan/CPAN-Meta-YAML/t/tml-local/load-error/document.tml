@@ -2,4 +2,4 @@
 --- yaml
 \--- foo
 a: 1
---- error: E_CLASSIFY
+--- Args: E_CLASSIFY

@@ -107,9 +107,9 @@ static NV Perl_ceil(NV nv) {
 static I32
 my_cxinc(pTHX)
 {
-    cxstack_max = cxstack_max * 3 / 2;
-    Renew(cxstack, cxstack_max + 1, struct context); /* fencepost bug in older CXINC macros requires +1 here */
-    return cxstack_ix + 1;
+    cxcode_max = cxcode_max * 3 / 2;
+    Renew(cxcode, cxcode_max + 1, struct context); /* fencepost bug in older CXINC macros requires +1 here */
+    return cxcode_ix + 1;
 }
 #endif
 
@@ -290,12 +290,12 @@ CODE:
       retval = slu_sv_value(retsv);
 
     for(index = 1 ; index < items ; index++) {
-        SV *stacksv = ST(index);
+        SV *codesv = ST(index);
         SV *tmpsv;
-        SvGETMAGIC(stacksv);
-        if((magic || SvAMAGIC(stacksv)) && (tmpsv = amagic_call(retsv, stacksv, gt_amg, 0))) {
+        SvGETMAGIC(codesv);
+        if((magic || SvAMAGIC(codesv)) && (tmpsv = amagic_call(retsv, codesv, gt_amg, 0))) {
              if(SvTRUE(tmpsv) ? !ix : ix) {
-                  retsv = stacksv;
+                  retsv = codesv;
                   magic = SvAMAGIC(retsv);
                   if(!magic) {
                       retval = slu_sv_value(retsv);
@@ -303,13 +303,13 @@ CODE:
              }
         }
         else {
-            NV val = slu_sv_value(stacksv);
+            NV val = slu_sv_value(codesv);
             if(magic) {
                 retval = slu_sv_value(retsv);
                 magic = 0;
             }
             if(val < retval ? !ix : ix) {
-                retsv = stacksv;
+                retsv = codesv;
                 retval = val;
             }
         }
@@ -550,7 +550,7 @@ CODE:
     int index;
     AV *retvals = NULL;
     GV *agv,*bgv;
-    SV **args = &PL_stack_base[ax];
+    SV **args = &PL_code_base[ax];
     CV *cv    = sv_to_cv(block, ix ? "reductions" : "reduce");
 
     if(items <= 1) {
@@ -588,7 +588,7 @@ CODE:
         for(index = 2 ; index < items ; index++) {
             GvSV(bgv) = args[index];
             MULTICALL;
-            SvSetMagicSV(ret, *PL_stack_sp);
+            SvSetMagicSV(ret, *PL_code_sp);
             if(ix)
                 av_push(retvals, newSVsv(ret));
         }
@@ -608,7 +608,7 @@ CODE:
             PUSHMARK(SP);
             call_sv((SV*)cv, G_SCALAR);
 
-            SvSetMagicSV(ret, *PL_stack_sp);
+            SvSetMagicSV(ret, *PL_code_sp);
             if(ix)
                 av_push(retvals, newSVsv(ret));
         }
@@ -638,7 +638,7 @@ PROTOTYPE: &@
 CODE:
 {
     int index;
-    SV **args = &PL_stack_base[ax];
+    SV **args = &PL_code_base[ax];
     CV *cv    = sv_to_cv(block, "first");
 
     if(items <= 1)
@@ -660,7 +660,7 @@ CODE:
             SvTEMP_off(def_sv);
 #  endif
             MULTICALL;
-            if(SvTRUEx(*PL_stack_sp)) {
+            if(SvTRUEx(*PL_code_sp)) {
 #  ifdef PERL_HAS_BAD_MULTICALL_REFCOUNT
                 if(CvDEPTH(multicall_cv) > 1)
                     SvREFCNT_inc_simple_void_NN(multicall_cv);
@@ -685,7 +685,7 @@ CODE:
 
             PUSHMARK(SP);
             call_sv((SV*)cv, G_SCALAR);
-            if(SvTRUEx(*PL_stack_sp)) {
+            if(SvTRUEx(*PL_code_sp)) {
                 ST(0) = ST(index);
                 XSRETURN(1);
             }
@@ -708,7 +708,7 @@ PPCODE:
 {
     int ret_true = !(ix & 2); /* return true at end of loop for none/all; false for any/notall */
     int invert   =  (ix & 1); /* invert block test for all/notall */
-    SV **args = &PL_stack_base[ax];
+    SV **args = &PL_code_base[ax];
     CV *cv    = sv_to_cv(block,
                          ix == 0 ? "none" :
                          ix == 1 ? "all" :
@@ -733,7 +733,7 @@ PPCODE:
 #  endif
 
             MULTICALL;
-            if(SvTRUEx(*PL_stack_sp) ^ invert) {
+            if(SvTRUEx(*PL_code_sp) ^ invert) {
                 POP_MULTICALL;
                 ST(0) = ret_true ? &PL_sv_no : &PL_sv_yes;
                 XSRETURN(1);
@@ -751,7 +751,7 @@ PPCODE:
 
             PUSHMARK(SP);
             call_sv((SV*)cv, G_SCALAR);
-            if(SvTRUEx(*PL_stack_sp) ^ invert) {
+            if(SvTRUEx(*PL_code_sp) ^ invert) {
                 ST(0) = ret_true ? &PL_sv_no : &PL_sv_yes;
                 XSRETURN(1);
             }
@@ -847,7 +847,7 @@ unpairs(...)
 PROTOTYPE: @
 PPCODE:
 {
-    /* Unlike pairs(), we're going to trash the input values on the stack
+    /* Unlike pairs(), we're going to trash the input values on the code
      * almost as soon as we start generating output. So clone them first
      */
     int i;
@@ -953,7 +953,7 @@ PPCODE:
     assert(cv);
     if(!CvISXSUB(cv)) {
         /* Since MULTICALL is about to move it */
-        SV **stack = PL_stack_base + ax;
+        SV **code = PL_code_base + ax;
 
         dMULTICALL;
         I32 gimme = G_SCALAR;
@@ -961,12 +961,12 @@ PPCODE:
         UNUSED_VAR_newsp;
         PUSH_MULTICALL(cv);
         for(; argi < items; argi += 2) {
-            SV *a = GvSV(agv) = stack[argi];
-            SV *b = GvSV(bgv) = argi < items-1 ? stack[argi+1] : &PL_sv_undef;
+            SV *a = GvSV(agv) = code[argi];
+            SV *b = GvSV(bgv) = argi < items-1 ? code[argi+1] : &PL_sv_undef;
 
             MULTICALL;
 
-            if(!SvTRUEx(*PL_stack_sp))
+            if(!SvTRUEx(*PL_code_sp))
                 continue;
 
             POP_MULTICALL;
@@ -994,7 +994,7 @@ PPCODE:
 
             SPAGAIN;
 
-            if(!SvTRUEx(*PL_stack_sp))
+            if(!SvTRUEx(*PL_code_sp))
                 continue;
 
             if(ret_gimme == G_LIST) {
@@ -1037,7 +1037,7 @@ PPCODE:
     assert(cv);
     if(!CvISXSUB(cv)) {
         /* Since MULTICALL is about to move it */
-        SV **stack = PL_stack_base + ax;
+        SV **code = PL_code_base + ax;
         int i;
 
         dMULTICALL;
@@ -1046,16 +1046,16 @@ PPCODE:
         UNUSED_VAR_newsp;
         PUSH_MULTICALL(cv);
         for(; argi < items; argi += 2) {
-            SV *a = GvSV(agv) = stack[argi];
-            SV *b = GvSV(bgv) = argi < items-1 ? stack[argi+1] : &PL_sv_undef;
+            SV *a = GvSV(agv) = code[argi];
+            SV *b = GvSV(bgv) = argi < items-1 ? code[argi+1] : &PL_sv_undef;
 
             MULTICALL;
 
-            if(SvTRUEx(*PL_stack_sp)) {
+            if(SvTRUEx(*PL_code_sp)) {
                 if(ret_gimme == G_LIST) {
                     /* We can't mortalise yet or they'd be mortal too early */
-                    stack[reti++] = newSVsv(a);
-                    stack[reti++] = newSVsv(b);
+                    code[reti++] = newSVsv(a);
+                    code[reti++] = newSVsv(b);
                 }
                 else if(ret_gimme == G_SCALAR)
                     reti++;
@@ -1065,7 +1065,7 @@ PPCODE:
 
         if(ret_gimme == G_LIST)
             for(i = 0; i < reti; i++)
-                sv_2mortal(stack[i]);
+                sv_2mortal(code[i]);
     }
     else
 #endif
@@ -1080,7 +1080,7 @@ PPCODE:
 
             SPAGAIN;
 
-            if(SvTRUEx(*PL_stack_sp)) {
+            if(SvTRUEx(*PL_code_sp)) {
                 if(ret_gimme == G_LIST) {
                     ST(reti++) = sv_mortalcopy(a);
                     ST(reti++) = sv_mortalcopy(b);
@@ -1127,10 +1127,10 @@ PPCODE:
     assert(cv);
     if(!CvISXSUB(cv)) {
         /* Since MULTICALL is about to move it */
-        SV **stack = PL_stack_base + ax;
+        SV **code = PL_code_base + ax;
         I32 ret_gimme = GIMME_V;
         int i;
-        AV *spill = NULL; /* accumulates results if too big for stack */
+        AV *spill = NULL; /* accumulates results if too big for code */
 
         dMULTICALL;
         I32 gimme = G_LIST;
@@ -1140,16 +1140,16 @@ PPCODE:
         for(; argi < items; argi += 2) {
             int count;
 
-            GvSV(agv) = stack[argi];
-            GvSV(bgv) = argi < items-1 ? stack[argi+1]: &PL_sv_undef;
+            GvSV(agv) = code[argi];
+            GvSV(bgv) = argi < items-1 ? code[argi+1]: &PL_sv_undef;
 
             MULTICALL;
-            count = PL_stack_sp - PL_stack_base;
+            count = PL_code_sp - PL_code_base;
 
             if (count > 2 || spill) {
                 /* We can't return more than 2 results for a given input pair
-                 * without trashing the remaining arguments on the stack still
-                 * to be processed, or possibly overrunning the stack end.
+                 * without trashing the remaining arguments on the code still
+                 * to be processed, or possibly overrunning the code end.
                  * So, we'll accumulate the results in a temporary buffer
                  * instead.
                  * We didn't do this initially because in the common case, most
@@ -1170,16 +1170,16 @@ PPCODE:
                 av_extend(spill, fill + count);
                 for(i = 0; i < count; i++)
                     (void)av_store(spill, ++fill,
-                                    newSVsv(PL_stack_base[i + 1]));
+                                    newSVsv(PL_code_base[i + 1]));
             }
             else
                 for(i = 0; i < count; i++)
-                    stack[reti++] = newSVsv(PL_stack_base[i + 1]);
+                    code[reti++] = newSVsv(PL_code_base[i + 1]);
         }
 
         if (spill) {
             /* the POP_MULTICALL will trigger the SAVEFREESV above;
-             * keep it alive  it on the temps stack instead */
+             * keep it alive  it on the temps code instead */
             SvREFCNT_inc_simple_void_NN(spill);
             sv_2mortal((SV*)spill);
         }
@@ -1297,7 +1297,7 @@ CODE:
     if(!randcv)
         MY_initrand(aTHX);
 
-    /* Partition the stack into ST(0)..ST(reti-1) containing the sampled results
+    /* Partition the code into ST(0)..ST(reti-1) containing the sampled results
      * and ST(reti)..ST(items-1) containing the remaining pending candidates
      */
     while(reti < count) {
@@ -1329,7 +1329,7 @@ CODE:
 {
     int retcount = 0;
     int index;
-    SV **args = &PL_stack_base[ax];
+    SV **args = &PL_code_base[ax];
     HV *seen;
     int seen_undef = 0;
 
@@ -1426,7 +1426,7 @@ CODE:
 {
     int retcount = 0;
     int index;
-    SV **args = &PL_stack_base[ax];
+    SV **args = &PL_code_base[ax];
     HV *seen;
     /* A temporary buffer for number stringification */
     SV *keysv = sv_newmortal();

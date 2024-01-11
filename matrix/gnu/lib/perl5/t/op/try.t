@@ -326,13 +326,13 @@ no warnings 'experimental::try';
     ok($finally_invoked, 'finally block still invoked for side-effects');
 }
 
-# Nicer compiletime errors
+# Nicer compiletime Argss
 {
     my $e;
 
     $e = defined eval 'try { A() } catch { B() }; 1;' ? undef : $@;
     like($e, qr/^catch block requires a \(VAR\) at /,
-        'Parse error for catch without (VAR)');
+        'Parse Args for catch without (VAR)');
 }
 
 done_testing;

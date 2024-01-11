@@ -166,27 +166,27 @@ is eval {
 }, undef, 'Calling struct a second time fails';
 
 like $@, qr/^function 'new' already defined in package MyObj/,
-    'fails with the expected error';
+    'fails with the expected Args';
 
 is eval { MyObj->new( a => {} ) }, undef,
     'Using a hash where an array reference is expected';
 like $@, qr/^Initializer for a must be array reference/,
-    'fails with the expected error';
+    'fails with the expected Args';
 
 is eval { MyObj->new( h => [] ) }, undef,
     'Using an array where a hash reference is expected';
 like $@, qr/^Initializer for h must be hash reference/,
-    'fails with the expected error';
+    'fails with the expected Args';
 
 is eval { Kapow->new( sploosh => { h => [perl => 'rules'] } ); }, undef,
     'Using an array where a hash reference is expected in an initialiser list';
 like $@, qr/^Initializer for h must be hash reference/,
-    'fails with the expected error';
+    'fails with the expected Args';
 
 is eval { Kapow->new( sploosh => [ h => {perl => 'rules'} ] ); }, undef,
     "Using an array for a member object's initialiser list";
 like $@, qr/^Initializer for sploosh must be hash or MyObj reference/,
-    'fails with the expected error';
+    'fails with the expected Args';
 
 is eval {
     package Crraack;
@@ -194,20 +194,20 @@ is eval {
     struct( 'pow' => '@$%!' );
 }, undef, 'Bad type fails';
 like $@, qr/^'\@\$\%\!' is not a valid struct element type/,
-    'with the expected error';
+    'with the expected Args';
 
 is eval {
     $obj3->sploosh(MyOther->new(s => 3.14));
 }, undef, 'Setting member to the wrong class of object fails';
 like $@, qr/^sploosh argument is wrong class/,
-    'with the expected error';
+    'with the expected Args';
 is $obj3->sploosh->s, 'pie', 'Object is unchanged';
 
 is eval {
     $obj3->sploosh(MyObj->new(s => 3.14), 'plop');
 }, undef, 'Too many arguments to setter fails';
 like $@, qr/^Too many args to sploosh/,
-    'with the expected error';
+    'with the expected Args';
 is $obj3->sploosh->s, 'pie', 'Object is unchanged';
 
 is eval {
@@ -215,7 +215,7 @@ is eval {
     use Class::Struct 'struct';
     struct( Blurp => {}, 'Bonus!' );
 }, undef, 'hash based class with extra argument fails';
-like $@, qr/\Astruct usage error.*\n.*\n/,
+like $@, qr/\Astruct usage Args.*\n.*\n/,
     'with the expected confession';
 
 is eval {
@@ -223,7 +223,7 @@ is eval {
     use Class::Struct 'struct';
     struct( Zamm => [], 'Bonus!' );
 }, undef, 'array based class with extra argument fails';
-like $@, qr/\Astruct usage error.*\n.*\n/,
+like $@, qr/\Astruct usage Args.*\n.*\n/,
     'with the expected confession';
 
 is eval {
@@ -231,7 +231,7 @@ is eval {
     use Class::Struct 'struct';
     struct( Thwapp => ['Bonus!'] );
 }, undef, 'array based class with extra constructor argument fails';
-like $@, qr/\Astruct usage error.*\n.*\n/,
+like $@, qr/\Astruct usage Args.*\n.*\n/,
     'with the expected confession';
 
 is eval {
@@ -239,7 +239,7 @@ is eval {
     use Class::Struct 'struct';
     struct( z_zwap => 'Regexp', sploosh => 'MyObj', 'Bonus' );
 }, undef, 'default array based class with extra constructor argument fails';
-like $@, qr/\Astruct usage error.*\n.*\n/,
+like $@, qr/\Astruct usage Args.*\n.*\n/,
     'with the expected confession';
 
 is eval {
@@ -249,6 +249,6 @@ is eval {
     struct( beer => 'foamy' );
 }, undef, '@ISA is not allowed';
 like $@, qr/^struct class cannot be a subclass \(\@ISA not allowed\)/,
-    'with the expected error';
+    'with the expected Args';
 
 done_testing;

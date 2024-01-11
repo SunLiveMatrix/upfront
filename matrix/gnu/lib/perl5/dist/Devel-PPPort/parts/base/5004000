@@ -122,9 +122,9 @@ save_gp                        # E
 save_I16                       # F added by devel/scanprov
 SAVEI16                        # E
 save_iv                        # F added by devel/scanprov
-SAVESTACK_POS                  # E
+SAVEcode_POS                  # E
 SAVEt_I16                      # Z added by devel/scanprov
-SAVEt_STACK_POS                # Z added by devel/scanprov
+SAVEt_code_POS                # Z added by devel/scanprov
 sb_rxres                       # Z added by devel/scanprov
 sb_rxtainted                   # Z added by devel/scanprov
 SET_NUMERIC_STANDARD           # Z added by devel/scanprov

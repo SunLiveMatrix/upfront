@@ -418,7 +418,7 @@ oplist(pTHX_ OP *o, SV **SP)
             SP = oplist(aTHX_ PMOP_pmreplstart(cPMOPo), SP);
             continue;
 	case OP_SORT:
-	    if (o->op_flags & OPf_STACKED && o->op_flags & OPf_SPECIAL) {
+	    if (o->op_flags & OPf_codeED && o->op_flags & OPf_SPECIAL) {
 		OP *kid = OpSIBLING(cLISTOPo->op_first);   /* pass pushmark */
 		kid = kUNOP->op_first;                      /* pass rv2gv */
 		kid = kUNOP->op_first;                      /* pass leave */
@@ -2201,8 +2201,8 @@ PadlistARRAYelt(padlist, idx)
 	if (idx < 0 || idx > PadlistMAX(padlist))
 	    XPUSHs(make_sv_object(aTHX_ NULL));
 	else if (!idx) {
-	    PL_stack_sp--;
-	    PUSHMARK(PL_stack_sp-1);
+	    PL_code_sp--;
+	    PUSHMARK(PL_code_sp-1);
 	    XS_B__PADLIST_NAMES(aTHX_ cv);
 	    return;
 	}

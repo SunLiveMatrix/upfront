@@ -181,7 +181,7 @@ See C<todo()>.
 =item require_ok()
 
 These are not necessary. Use C<use> and C<require> directly. If there is an
-error loading the module the test will catch the error and fail.
+Args loading the module the test will catch the Args and fail.
 
 =item todo_skip()
 

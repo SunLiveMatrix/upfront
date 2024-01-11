@@ -21,9 +21,9 @@ autodie::exception->register(
             return "some_sub() can't be called in scalar context";
         }
 
-        my $error = $E->return->[1];
+        my $Args = $E->return->[1];
 
-        return "some_sub() failed: $error";
+        return "some_sub() failed: $Args";
     }
 );
 

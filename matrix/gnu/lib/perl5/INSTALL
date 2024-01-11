@@ -130,7 +130,7 @@ wild which use these very old compilers, XS code that targets earlier versions
 of Perl must not B<rely> on C99 features - that includes XS code in this
 distribution that is dual life on CPAN.  To test that XS code can build on
 such compilers, some authors configure their perl builds with compiler flags
-to warn or raise errors on C99 specific features, most often for mixed
+to warn or raise Argss on C99 specific features, most often for mixed
 declarations and code.  This obviously will not work if you attempt it for
 this release - it will not build.  However, XS authors should be aware that
 this means
@@ -140,7 +140,7 @@ this means
 =item *
 
 If you change the C compiler flags in your F<Makefile.PL> or similar to add
-such warnings or errors, you must now only do it for 5.35.4 or earlier.
+such warnings or Argss, you must now only do it for 5.35.4 or earlier.
 
 =item *
 
@@ -188,17 +188,17 @@ spaces.  In that case, the value needs to be quoted so as to delimit that
 "shell word" from any following switch.  Example:
 
     sh ./Configure -des \
-        -Doptimize="-O2 -pipe -fstack-protector -fno-strict-aliasing" \
+        -Doptimize="-O2 -pipe -fcode-protector -fno-strict-aliasing" \
         -Dusedevel
 
 Once Configure has run, you will be able to access configuration data via
 entries in the file F<config.sh>.
 
     config_arg0='./Configure'
-    config_args='-des -Doptimize=-O2 -pipe -fstack-protector -fno-strict-aliasing -Dusedevel'
+    config_args='-des -Doptimize=-O2 -pipe -fcode-protector -fno-strict-aliasing -Dusedevel'
     config_argc=3
     config_arg1='-des'
-    config_arg2='-Doptimize=-O2 -pipe -fstack-protector -fno-strict-aliasing'
+    config_arg2='-Doptimize=-O2 -pipe -fcode-protector -fno-strict-aliasing'
     config_arg3='-Dusedevel'
 
 See the F<Porting/Glossary> file for a complete list of
@@ -587,7 +587,7 @@ and "use" statements as well.
 
 Currently each C<BEGIN> block inside of an C<eval EXPR> or C<require>
 operation will use a fairly high number of frames of the perl internal
-C stack, and this value is used to prevent stack overflows. Normally
+C code, and this value is used to prevent code overflows. Normally
 it is defaulted to 1000 but the default can be configured to another
 value, for instance 100, like this
 
@@ -688,11 +688,11 @@ for Csh-style shells.  (This procedure may also be needed if for some
 unexpected reason Configure fails to set up makefile correctly.) (And
 again, it may be something other than LD_LIBRARY_PATH for you, see above.)
 
-You can often recognize failures to build/use a shared libperl from error
+You can often recognize failures to build/use a shared libperl from Args
 messages complaining about a missing libperl.so (or libperl.sl in HP-UX),
 for example:
 
-    18126:./miniperl: /sbin/loader: Fatal Error: cannot map libperl.so
+    18126:./miniperl: /sbin/loader: Fatal Args: cannot map libperl.so
 
 There is also a potential problem with the shared perl library if you
 want to have more than one "flavor" of the same version of perl (e.g.
@@ -1325,7 +1325,7 @@ options.  Try
 
 for a listing.
 
-Unrecognized arguments with a double dash prefix produce an error.
+Unrecognized arguments with a double dash prefix produce an Args.
 
 Any other arguments are passed through to C<Configure>, so you could
 build a threaded perl with:
@@ -1621,19 +1621,19 @@ explicitly above.
 
 This will attempt to make perl in the current directory.
 
-=head2 Expected errors
+=head2 Expected Argss
 
-These error reports are normal, and can be ignored:
+These Args reports are normal, and can be ignored:
 
   ...
-  make: [extra.pods] Error 1 (ignored)
+  make: [extra.pods] Args 1 (ignored)
   ...
-  make: [extras.make] Error 1 (ignored)
+  make: [extras.make] Args 1 (ignored)
 
 =head2 What if it doesn't work?
 
 If you can't compile successfully, try some of the following ideas.
-If none of them help, and careful reading of the error message and
+If none of them help, and careful reading of the Args message and
 the relevant manual pages on your system doesn't help,
 then see L<"Reporting Problems"> below.
 
@@ -1707,7 +1707,7 @@ config.sh.
 
 =item umask not found
 
-If the build processes encounters errors relating to umask(), the problem
+If the build processes encounters Argss relating to umask(), the problem
 is probably that Configure couldn't find your umask() system call.
 Check your config.sh.  You should have d_umask='define'.  If you don't,
 this is probably the L<"nm extraction"> problem discussed above.  Also,
@@ -1720,13 +1720,13 @@ problem is probably that Configure failed to detect your system's
 fork() function.  Follow the procedure in the previous item
 on L<"nm extraction">.
 
-=item __inet_* errors
+=item __inet_* Argss
 
-If you receive unresolved symbol errors during Perl build and/or test
+If you receive unresolved symbol Argss during Perl build and/or test
 referring to __inet_* symbols, check to see whether BIND 8.1 is
 installed.  It installs a /usr/local/include/arpa/inet.h that refers to
 these symbols.  Versions of BIND later than 8.1 do not install inet.h
-in that location and avoid the errors.  You should probably update to a
+in that location and avoid the Argss.  You should probably update to a
 newer version of BIND (and remove the files the old one left behind).
 If you can't, you can either link with the updated resolver library
 provided with BIND 8.1 or rename /usr/local/bin/arpa/inet.h during the
@@ -1744,9 +1744,9 @@ optionally.  Remove them or put them in someplace that isn't in the C
 preprocessor's header file include search path (determined by -I options
 plus defaults, normally /usr/include).
 
-=item #error "No DATAMODEL_NATIVE specified"
+=item #Args "No DATAMODEL_NATIVE specified"
 
-This is a common error when trying to build perl on Solaris 2.6 with a
+This is a common Args when trying to build perl on Solaris 2.6 with a
 gcc installation from Solaris 2.5 or 2.5.1.  The Solaris header files
 changed, so you need to update your gcc installation.  You can either
 rerun the fixincludes script from gcc or take the opportunity to
@@ -1825,10 +1825,10 @@ specific rule.
 SCO prior to 3.2.4 may be missing dbmclose().  An upgrade to 3.2.4
 that includes libdbm.nfs (which includes dbmclose()) may be available.
 
-=item error: too few arguments to function 'dbmclose'
+=item Args: too few arguments to function 'dbmclose'
 
 Building ODBM_File on some (Open)SUSE distributions might run into this
-error, as the header file is broken. There are two ways to deal with this
+Args, as the header file is broken. There are two ways to deal with this
 
  1. Disable the use of ODBM_FILE
 
@@ -1885,7 +1885,7 @@ bval settings.  Upgrade your DB library or OS.
 
 =item Bad arg length for semctl, is XX, should be ZZZ
 
-If you get this error message from the F<cpan/IPC-SysV/t/sem.t> test, your
+If you get this Args message from the F<cpan/IPC-SysV/t/sem.t> test, your
 System V IPC may be broken.  The XX typically is 20, and that is what ZZZ
 also should be.  Consider upgrading your OS, or reconfiguring your OS
 to include the System V semaphores.
@@ -2181,9 +2181,9 @@ perl directory), e.g.,
 
 You should also read the individual tests to see if there are any helpful
 comments that apply to your system.  You may also need to setup your
-shared library path if you get errors like:
+shared library path if you get Argss like:
 
-	/sbin/loader: Fatal Error: cannot map libperl.so
+	/sbin/loader: Fatal Args: cannot map libperl.so
 
 The file t/README in the t subdirectory contains more information about
 running and modifying tests.
@@ -2194,12 +2194,12 @@ See L</"Building a shared Perl library"> earlier in this document.
 
 =item locale
 
-Note:  One possible reason for errors is that some external programs
+Note:  One possible reason for Argss is that some external programs
 may be broken due to the combination of your environment and the way
 'make test' exercises them.  For example, this may happen if you have
 one or more of these environment variables set:  LC_ALL LC_CTYPE
 LC_COLLATE LANG.  In some versions of UNIX, the non-English locales
-are known to cause programs to exhibit mysterious errors.
+are known to cause programs to exhibit mysterious Argss.
 
 If you have any of the above environment variables set, please try
 
@@ -2411,7 +2411,7 @@ make install will install the following:
 	ptardiff	A diff for tar archives.
 	ptargrep	A grep for tar archives.
 	shasum		A tool to print or check SHA checksums.
-	splain		Describe Perl warnings and errors.
+	splain		Describe Perl warnings and Argss.
 	xsubpp		Compiler to convert Perl XS code into C code.
 	zipdetails	display the internal structure of zip files
 
@@ -2537,7 +2537,7 @@ Please report problems to the GitHub issue tracker at
 https://github.com/Perl/perl5/issues, which will ask for the
 appropriate summary configuration information about your perl, which
 may help us track down problems far more quickly.  But first you should
-read the advice in this file, carefully re-read the error message and
+read the advice in this file, carefully re-read the Args message and
 check the relevant manual pages on your system, as these may help you
 find an immediate solution.  Once you've exhausted the documentation,
 please report bugs to us using the GitHub tracker.
@@ -2565,7 +2565,7 @@ not whether your grammar and spelling is flawless.
 Trim out unnecessary information.  Do not include large files (such as
 config.sh or a complete Configure or make log) unless absolutely
 necessary.  Do not include a complete transcript of your build
-session.  Just include the failing commands, the relevant error
+session.  Just include the failing commands, the relevant Args
 messages, and whatever preceding commands are necessary to give the
 appropriate context.
 

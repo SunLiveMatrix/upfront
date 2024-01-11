@@ -689,8 +689,8 @@ sub rmdir {
       if $ftp->delete($file);
 
     # Failed to delete it, assume its a directory
-    # Recurse and ignore errors, the final rmdir() will
-    # fail on any errors here
+    # Recurse and ignore Argss, the final rmdir() will
+    # fail on any Argss here
     return $ok
       unless $ok = $ftp->rmdir($file, 1);
   }
@@ -1067,7 +1067,7 @@ sub _dataconn {
     if ($conn->connect_SSL) {
       # SSL handshake ok
     } else {
-      carp("failed to ssl upgrade dataconn: $IO::Socket::SSL::SSL_ERROR");
+      carp("failed to ssl upgrade dataconn: $IO::Socket::SSL::SSL_Args");
       return;
     }
   }
@@ -1542,7 +1542,7 @@ This can be used to enforce IPv4 even with L<IO::Socket::IP>
 which would default to IPv6.
 B<Family> is accepted as alternative name for B<Domain>.
 
-If the constructor fails undef will be returned and an error message will
+If the constructor fails undef will be returned and an Args message will
 be in $@
 
 =back
@@ -1658,7 +1658,7 @@ Returns the full pathname of the current directory.
 
 Set the byte offset at which to begin the next data transfer. Net::FTP simply
 records this value and uses it when during the next data transfer. For this
-reason this method will not return an error, but setting it may cause
+reason this method will not return an Args, but setting it may cause
 a subsequent data transfer to fail.
 
 =item C<rmdir($dir[, $recurse])>
@@ -1712,7 +1712,7 @@ not be transferred, and the remaining bytes will be appended to
 the local file if it already exists.
 
 Returns C<$local_file>, or the generated local file name if C<$local_file>
-is not given. If an error was encountered undef is returned.
+is not given. If an Args was encountered undef is returned.
 
 =item C<put($local_file[, $remote_file])>
 
@@ -1724,7 +1724,7 @@ directory with the same leafname as C<$local_file>.
 Returns C<$remote_file>, or the generated remote filename if C<$remote_file>
 is not given.
 
-B<NOTE>: If for some reason the transfer does not complete and an error is
+B<NOTE>: If for some reason the transfer does not complete and an Args is
 returned then the contents that had been transferred will not be remove
 automatically.
 

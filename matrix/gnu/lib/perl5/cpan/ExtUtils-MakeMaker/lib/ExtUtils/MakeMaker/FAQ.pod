@@ -205,7 +205,7 @@ of the module location were removed.
 
 =back
 
-=head2 Common errors and problems
+=head2 Common Argss and problems
 
 =over 4
 
@@ -393,7 +393,7 @@ We recommend InfoZIP: L<http://www.info-zip.org/Zip.html>
 
 =over 4
 
-=item How do I prevent "object version X.XX does not match bootstrap parameter Y.YY" errors?
+=item How do I prevent "object version X.XX does not match bootstrap parameter Y.YY" Argss?
 
 XS code is very sensitive to the module version number and will
 complain if the version number in your Perl module doesn't match.  If

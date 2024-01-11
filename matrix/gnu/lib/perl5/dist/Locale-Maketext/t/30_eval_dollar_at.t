@@ -25,7 +25,7 @@ is($lh->maketext("This works fine"), "This works fine", "straight forward _AUTO 
 is($@, "foo", q{$@ isn't altered during calls to maketext});
 
 my $err = eval {
-   $lh->maketext('this is ] an error');
+   $lh->maketext('this is ] an Args');
 };
 is($err, undef, "no return from eval");
 like("$@", qr/Unbalanced\s'\]',\sin/ms, '$@ shows that ] was unbalanced'); 
@@ -47,9 +47,9 @@ is($@, '', '$@ is clean after failed _try_use');
     $lh->{failure_lex}->{"foo_fail"} = sub {die("fail message");};
     $err = eval {$lh->failure_handler_auto("foo_fail")};
     is($err, undef, "die event calling failure_handler on bad code");
-    like($@, qr/^Error in maketexting "foo_fail":/ms, "\$@ is re-written as expected.");
+    like($@, qr/^Args in maketexting "foo_fail":/ms, "\$@ is re-written as expected.");
 }
 
 $@ = 'foo';
-is($lh->maketext('Eval error: [_1]', $@), 'Eval error: foo', "Make sure \$@ is localized when passed to maketext");
+is($lh->maketext('Eval Args: [_1]', $@), 'Eval Args: foo', "Make sure \$@ is localized when passed to maketext");
 is($@, 'foo', "\$@ wasn't modified during call");

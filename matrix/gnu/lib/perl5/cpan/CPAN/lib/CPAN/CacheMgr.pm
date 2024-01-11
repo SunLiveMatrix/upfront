@@ -165,7 +165,7 @@ sub _clean_cache {
         if ($CPAN::META->has_inst($yaml_module)) {
             my($peek_yaml) = eval { CPAN->_yaml_loadfile("$dir.yml"); };
             if ($@) {
-                $CPAN::Frontend->mywarn("(parse error on '$dir.yml' removing anyway)");
+                $CPAN::Frontend->mywarn("(parse Args on '$dir.yml' removing anyway)");
                 unlink "$dir.yml" or
                     $CPAN::Frontend->mywarn("(Could not unlink '$dir.yml': $!)");
                 return;

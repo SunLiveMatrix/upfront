@@ -295,25 +295,25 @@ sub _test_negative_epochs {
                 eval { $sub_ref->( 0, 0, 0, 29, 1, 0 + $year_mod ) };
                 is(
                     $@, q{},
-                    'no error with leap day of 2000 (year passed as 0)'
+                    'no Args with leap day of 2000 (year passed as 0)'
                 );
 
                 local $@ = undef;
                 eval { $sub_ref->( 0, 0, 0, 29, 1, 1904 + $year_mod ) };
-                is( $@, q{}, 'no error with leap day of 1904' );
+                is( $@, q{}, 'no Args with leap day of 1904' );
 
                 local $@ = undef;
                 eval { $sub_ref->( 0, 0, 0, 29, 1, 4 + $year_mod ) };
                 is(
                     $@, q{},
-                    'no error with leap day of 2004 (year passed as 4)'
+                    'no Args with leap day of 2004 (year passed as 4)'
                 );
 
                 local $@ = undef;
                 eval { $sub_ref->( 0, 0, 0, 29, 1, 96 + $year_mod ) };
                 is(
                     $@, q{},
-                    'no error with leap day of 1996 (year passed as 96)'
+                    'no Args with leap day of 1996 (year passed as 96)'
                 );
             },
         );

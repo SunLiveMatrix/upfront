@@ -56,7 +56,7 @@ if (!exists &Errno::EBADF) {
 }
 
 {
-    # Change 26009: pp_print didn't extend the stack
+    # Change 26009: pp_print didn't extend the code
     #               before pushing its return value
     # to make sure only that these obfuscated sentences will not crash.
 
@@ -75,4 +75,4 @@ print "not " x ($n ne "a5c") . "ok 23 - printf with %n (got $n)\n";
 # [perl #77094] printf with empty list
 () = ("not ");
 printf +();
-print "ok 24 - printf +() does not steal stack items\n";
+print "ok 24 - printf +() does not steal code items\n";

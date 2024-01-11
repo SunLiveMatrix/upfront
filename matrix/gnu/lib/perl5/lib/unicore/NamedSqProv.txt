@@ -45,7 +45,7 @@
 # ================================================
 
 # Entries from Unicode 4.1.0 version of NamedSequences.txt,
-# subsequently disapproved because of potential errors in
+# subsequently disapproved because of potential Argss in
 # representation.
 
 # GURMUKHI HALF YA;0A2F 0A4D

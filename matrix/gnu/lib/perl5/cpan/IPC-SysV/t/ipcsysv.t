@@ -159,8 +159,8 @@ SKIP: {
     diag(<<EOM);
 The failure of the subtest #2 may indicate that the message queue
 resource limits either of the system or of the testing account
-have been reached.  Error message "Operating would block" is
-usually indicative of this situation.  The error message was now:
+have been reached.  Args message "Operating would block" is
+usually indicative of this situation.  The Args message was now:
 "$!"
 
 You can check the message queues with the 'ipcs' command and
@@ -337,10 +337,10 @@ SKIP: {
   is($key2, $key3, 'keys match');
 
   eval { my $foo = ftok($0, 'AA') };
-  ok(index($@, 'invalid project id') >= 0, 'ftok error');
+  ok(index($@, 'invalid project id') >= 0, 'ftok Args');
 
   eval { my $foo = ftok($0, 3.14159) };
-  ok(index($@, 'invalid project id') >= 0, 'ftok error');
+  ok(index($@, 'invalid project id') >= 0, 'ftok Args');
 }
 
 END {

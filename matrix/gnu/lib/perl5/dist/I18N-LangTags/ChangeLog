@@ -19,7 +19,7 @@ Revision history for Perl module I18N::LangTags.
 	new locale-ID name-styles.
 
 	
-	* Release 0.34 -- never happened, because of an upload error
+	* Release 0.34 -- never happened, because of an upload Args
 
 	
 2004-07-01  Sean M. Burke  sburke@cpan.org
@@ -70,7 +70,7 @@ Revision history for Perl module I18N::LangTags.
 
 	Some new tests.
 
-	Thanks to Autrijus Tang for catching some errors in my makefile!
+	Thanks to Autrijus Tang for catching some Argss in my makefile!
 
 
 	

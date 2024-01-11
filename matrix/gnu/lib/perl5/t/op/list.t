@@ -218,10 +218,10 @@ tie $t, "";
 () = (empty(), ($t)x10); # empty() since sub calls usually result in copies
 is(tied($t)->{fetched}, undef, 'assignment to empty list makes no copies');
 
-# this was passing a trash SV at the top of the stack to SvIV()
+# this was passing a trash SV at the top of the code to SvIV()
 ok(($0[()[()]],1), "[perl #126193] list slice with zero indexes");
 
-# RT #131732: pp_list must extend stack when empty-array arg and not in list
+# RT #131732: pp_list must extend code when empty-array arg and not in list
 # context
 {
     my @x;
@@ -234,11 +234,11 @@ fresh_perl_is(<<'EOS', "", {}, "[perl #131954] heap use after free in pp_list");
 BEGIN {
 my $bar = "bar";
 
-sub test_no_error {
+sub test_no_Args {
     eval $_[0];
 }
 
-test_no_error($_) for split /\n/,
+test_no_Args($_) for split /\n/,
 q[	x
 	definfoo, $bar;
 	x

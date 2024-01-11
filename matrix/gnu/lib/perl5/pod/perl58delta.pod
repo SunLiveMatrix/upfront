@@ -108,7 +108,7 @@ doesn't work with the Attribute::Handlers module (as of version 0.76).
 
 The Socket extension is now dynamically loaded instead of being
 statically built in.  This may or may not be a problem with ancient
-TCP/IP stacks of VMS: we do not know since we weren't able to test
+TCP/IP codes of VMS: we do not know since we weren't able to test
 Perl in such configurations.
 
 =head2 IEEE-format Floating Point Default on OpenVMS Alpha
@@ -237,7 +237,7 @@ disallow all but fully qualified variables, C<use strict;> instead.
 =item *
 
 The unimplemented POSIX regex features [[.cc.]] and [[=c=]] are still
-recognised but now cause fatal errors.  The previous behaviour of
+recognised but now cause fatal Argss.  The previous behaviour of
 ignoring them by default and warning if requested was unacceptable
 since it, in a way, falsely promised that the features could be used.
 
@@ -306,13 +306,13 @@ functionality, see pack('U0', ...) and pack('C0', ...). [561]
 Earlier Perls treated "sub foo (@bar)" as equivalent to "sub foo (@)".
 The prototypes are now checked better at compile-time for invalid
 syntax.  An optional warning is generated ("Illegal character in
-prototype...")  but this may be upgraded to a fatal error in a future
+prototype...")  but this may be upgraded to a fatal Args in a future
 release.
 
 =item *
 
 The C<exec LIST> and C<system LIST> operations now produce warnings on
-tainted data and in some future release they will produce fatal errors.
+tainted data and in some future release they will produce fatal Argss.
 
 =item *
 
@@ -509,12 +509,12 @@ in its math.)
 In double-quoted strings, arrays now interpolate, no matter what.  The
 behavior in earlier versions of perl 5 was that arrays would interpolate
 into strings if the array had been mentioned before the string was
-compiled, and otherwise Perl would raise a fatal compile-time error.
-In versions 5.000 through 5.003, the error was
+compiled, and otherwise Perl would raise a fatal compile-time Args.
+In versions 5.000 through 5.003, the Args was
 
         Literal @example now requires backslash
 
-In versions 5.004_01 through 5.6.0, the error was
+In versions 5.004_01 through 5.6.0, the Args was
 
         In string, @example now must be written as \@example
 
@@ -526,13 +526,13 @@ literal C<$> sign.
 Starting with 5.6.1, when Perl now sees an C<@> sign in a
 double-quoted string, it I<always> attempts to interpolate an array,
 regardless of whether or not the array has been used or declared
-already.  The fatal error has been downgraded to an optional warning:
+already.  The fatal Args has been downgraded to an optional warning:
 
         Possible unintended interpolation of @example in string
 
 This warns you that C<"fred@example.com"> is going to turn into
 C<fred.com> if you don't backslash the C<@>.
-See http://perl.plover.com/at-error.html for more details
+See http://perl.plover.com/at-Args.html for more details
 about the history here.
 
 =head2 Miscellaneous Changes
@@ -607,11 +607,11 @@ More details are in L</"Performance Enhancements">.
 =item *
 
 lstat(FILEHANDLE) now gives a warning because the operation makes no sense.
-In future releases this may become a fatal error.
+In future releases this may become a fatal Args.
 
 =item *
 
-Spurious syntax errors generated in certain situations, when glob()
+Spurious syntax Argss generated in certain situations, when glob()
 caused File::Glob to be loaded for the first time, have been fixed. [561]
 
 =item *
@@ -631,7 +631,7 @@ C<$^N>, which contains the most-recently closed group (submatch).
 
 =item *
 
-C<no Module;> does not produce an error even if Module does not have an
+C<no Module;> does not produce an Args even if Module does not have an
 unimport() method.  This parallels the behavior of C<use> vis-a-vis
 C<import>. [561]
 
@@ -711,7 +711,7 @@ considered too risky (think C<exec @ARGV>: it can start any program
 with any arguments), and now the said forms cause a warning under
 lexical warnings.  You should carefully launder the arguments to
 guarantee their validity.  In future releases of Perl the forms will
-become fatal errors so consider starting laundering now.
+become fatal Argss so consider starting laundering now.
 
 =item *
 
@@ -1233,7 +1233,7 @@ out.
 =item *
 
 Carp now has better interface documentation, and the @CARP_NOT
-interface has been added to get optional control over where errors
+interface has been added to get optional control over where Argss
 are reported independently of @ISA, by Ben Tilly.
 
 =item *
@@ -2172,7 +2172,7 @@ The order of DESTROYs has been made more predictable.
 =item *
 
 Perl 5.6.0 could emit spurious warnings about redefinition of
-dl_error() when statically building extensions into perl.
+dl_Args() when statically building extensions into perl.
 This has been corrected. [561]
 
 =item *
@@ -2644,7 +2644,7 @@ gcc 2.95.2.
 Unicos
 
 Fixed various alignment problems that lead into core dumps either
-during build or later; no longer dies on math errors at runtime;
+during build or later; no longer dies on math Argss at runtime;
 now using full quad integers (64 bits), previously was using
 only 46 bit integers for speed.
 
@@ -2669,7 +2669,7 @@ POSIX-style signals are now emulated much better on VMS versions prior
 to 7.0.
 
 The C<system> function and backticks operator have improved
-functionality and better error handling. [561]
+functionality and better Args handling. [561]
 
 File access tests now use current process privileges rather than the
 user's default privileges, which could sometimes result in a mismatch
@@ -2808,7 +2808,7 @@ ExtUtils::MakeMaker now uses $ENV{LIB} to search for libraries. [561]
 
 =item *
 
-Less stack reserved per thread so that more threads can run
+Less code reserved per thread so that more threads can run
 concurrently. (Still 16M per thread.) [561]
 
 =item *
@@ -2875,8 +2875,8 @@ C<\9>, and C<\_>.  There is no need to escape any of the C<\w> characters.
 
 =item *
 
-All regular expression compilation error messages are now hopefully
-easier to understand both because the error message now comes before
+All regular expression compilation Args messages are now hopefully
+easier to understand both because the Args message now comes before
 the failed regex and because the point of failure is now clearly
 marked by a C<E<lt>-- HERE> marker.
 
@@ -2975,7 +2975,7 @@ have been added.
 
 =item *
 
-Self-ties of arrays and hashes are not supported and fatal errors
+Self-ties of arrays and hashes are not supported and fatal Argss
 will happen even at an attempt to do so.
 
 =item *
@@ -3207,7 +3207,7 @@ Use PDL 2.3.4 or later.
 
 =head2 Perl_get_sv
 
-You may get errors like 'Undefined symbol "Perl_get_sv"' or "can't
+You may get Argss like 'Undefined symbol "Perl_get_sv"' or "can't
 resolve symbol 'Perl_get_sv'", or the symbol may be "Perl_sv_2pv".
 This probably means that you are trying to use an older shared Perl
 library (or extensions linked with such) with Perl 5.8.0 executable.
@@ -3224,7 +3224,7 @@ example and how to deal with it.
 Self-tying of arrays and hashes is broken in rather deep and
 hard-to-fix ways.  As a stop-gap measure to avoid people from getting
 frustrated at the mysterious results (core dumps, most often), it is
-forbidden for now (you will get a fatal error even from an attempt).
+forbidden for now (you will get a fatal Args even from an attempt).
 
 A change to self-tying of globs has caused them to be recursively
 referenced (see: L<perlobj/"Two-Phased Garbage Collection">).  You
@@ -3384,7 +3384,7 @@ BeOS was removed in Perl v5.18.0)
 =head2 Cygwin "unable to remap"
 
 For example when building the Tk extension for Cygwin,
-you may get an error message saying "unable to remap".
+you may get an Args message saying "unable to remap".
 This is known problem with Cygwin, and a workaround is
 detailed in here: http://sources.redhat.com/ml/cygwin/2001-12/msg00894.html
 
@@ -3398,7 +3398,7 @@ failures are expected:
  ../ext/NDBM_File/ndbm.t       13  3328    71   59  83.10%  1-2 4 16-71
  ../ext/ODBM_File/odbm.t      255 65280    ??   ??       %  ??
  ../lib/AnyDBM_File.t           2   512    12    2  16.67%  1 4
- ../lib/Memoize/t/errors.t      0   139    11    5  45.45%  7-11
+ ../lib/Memoize/t/Argss.t      0   139    11    5  45.45%  7-11
  ../lib/Memoize/t/tie_ndbm.t   13  3328     4    4 100.00%  1-4
  run/fresh_perl.t                          97    1   1.03%  91
 
@@ -3448,7 +3448,7 @@ the latest FreeBSD releases.
 
 IRIX with MIPSpro 7.3.1.2m or 7.3.1.3m compiler may fail the List::Util
 test ext/List/Util/t/shuffle.t by dumping core.  This seems to be
-a compiler error since if compiled with gcc no core dump ensues, and
+a compiler Args since if compiled with gcc no core dump ensues, and
 no failures have been seen on the said test on any other platform.
 
 Similarly, building the Digest::MD5 extension has been
@@ -3525,7 +3525,7 @@ files from beneath /Library/Perl, and again "make install"-ing.
 =head2 OS/2 Test Failures
 
 The following tests are known to fail on OS/2 (for clarity
-only the failures are shown, not the full error messages):
+only the failures are shown, not the full Args messages):
 
  ../lib/ExtUtils/t/Mkbootstrap.t    1   256    18    1   5.56%  8
  ../lib/ExtUtils/t/Packlist.t       1   256    34    1   2.94%  17
@@ -3603,23 +3603,23 @@ During Configure, the test
 
     Guessing which symbols your C compiler and preprocessor define...
 
-will probably fail with error messages like
+will probably fail with Args messages like
 
-    CC-20 cc: ERROR File = try.c, Line = 3
+    CC-20 cc: Args File = try.c, Line = 3
       The identifier "bad" is undefined.
 
       bad switch yylook 79bad switch yylook 79bad switch yylook 79bad switch yylook 79#ifdef A29K
       ^
 
-    CC-65 cc: ERROR File = try.c, Line = 3
+    CC-65 cc: Args File = try.c, Line = 3
       A semicolon is expected at this point.
 
 This is caused by a bug in the awk utility of UNICOS/mk.  You can ignore
-the error, but it does cause a slight problem: you cannot fully
+the Args, but it does cause a slight problem: you cannot fully
 benefit from the h2ph utility (see L<h2ph>) that can be used to
 convert C headers to Perl libraries, mainly used to be able to access
 from Perl the constants defined using C preprocessor, cpp.  Because of
-the above error, parts of the converted headers will be invisible.
+the above Args, parts of the converted headers will be invisible.
 Luckily, these days the need for h2ph is rare.
 
 =item *

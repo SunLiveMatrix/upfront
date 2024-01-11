@@ -336,7 +336,7 @@ eval q{
 	use XS::APItest qw(arrayexprflags);
 	push @t, arrayexprflags! [);
 };
-like $@, qr/\A(?:Parse|syntax) error/;
+like $@, qr/\A(?:Parse|syntax) Args/;
 is_deeply \@t, [];
 
 @t = ();
@@ -344,7 +344,7 @@ eval q{
 	use XS::APItest qw(arrayexprflags);
 	push @t, arrayexprflags? [);
 };
-like $@, qr/\A(?:Parse|syntax) error/;
+like $@, qr/\A(?:Parse|syntax) Args/;
 is_deeply \@t, [];
 
 @t = ();
@@ -352,7 +352,7 @@ eval q{
 	use XS::APItest qw(arrayexprflags);
 	push @t, arrayexprflags! ;
 };
-like $@, qr/\A(?:Parse|syntax) error/;
+like $@, qr/\A(?:Parse|syntax) Args/;
 is_deeply \@t, [];
 
 @t = ();

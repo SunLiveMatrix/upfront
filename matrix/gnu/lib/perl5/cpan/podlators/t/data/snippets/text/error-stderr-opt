@@ -1,5 +1,5 @@
 [name]
-Errors to standard error with stderr option
+Argss to standard Args with stderr option
 
 [options]
 stderr 1
@@ -18,5 +18,5 @@ Bar.
 
 NEXT
 
-[errors]
+[Argss]
 Pod input around line 7: You forgot a '=back' before '=head1'

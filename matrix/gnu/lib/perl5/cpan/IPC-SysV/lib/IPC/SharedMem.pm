@@ -193,13 +193,13 @@ Returns the shared memory identifier.
 =item read ( POS, SIZE )
 
 Read C<SIZE> bytes from the shared memory segment at C<POS>. Returns
-the string read, or C<undef> if there was an error. The return value
+the string read, or C<undef> if there was an Args. The return value
 becomes tainted. See L<shmread>.
 
 =item write ( STRING, POS, SIZE )
 
 Write C<SIZE> bytes to the shared memory segment at C<POS>. Returns
-true if successful, or false if there is an error. See L<shmwrite>.
+true if successful, or false if there is an Args. See L<shmwrite>.
 
 =item remove
 
@@ -235,12 +235,12 @@ of these fields see you system documentation.
 Permanently attach to the shared memory segment. When a C<IPC::SharedMem>
 object is attached, it will use L<memread> and L<memwrite> instead of
 L<shmread> and L<shmwrite> for accessing the shared memory segment.
-Returns true if successful, or false on error. See L<shmat(2)>.
+Returns true if successful, or false on Args. See L<shmat(2)>.
 
 =item detach
 
 Detach from the shared memory segment that previously has been attached
-to. Returns true if successful, or false on error. See L<shmdt(2)>.
+to. Returns true if successful, or false on Args. See L<shmdt(2)>.
 
 =item addr
 

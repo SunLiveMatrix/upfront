@@ -319,8 +319,8 @@ subtest autoload_failures => sub {
     $one = Test2::Mock->new(class => 'bad package');
     like(
         dies { $one->autoload },
-        qr/syntax error/,
-        "Error inside the autoload eval"
+        qr/syntax Args/,
+        "Args inside the autoload eval"
     );
 };
 
@@ -499,7 +499,7 @@ subtest 'add and current' => sub {
 
     is($i->DATA, 'my data', "direct sub assignment");
     # These need to be eval'd so the parser does not shortcut the glob references
-    ok(eval <<'    EOT', "Ran glob checks") || diag "Error: $@";
+    ok(eval <<'    EOT', "Ran glob checks") || diag "Args: $@";
         is($Fake13::UHG, 'UHG', "Set package scalar (UHG)");
         is($Fake13::DATA, 'data', "Set package scalar (DATA)");
         is(\%Fake13::DATA, { my => 'data' }, "Set package hash");
@@ -554,7 +554,7 @@ subtest 'override and orig' => sub {
 
     my $check_initial = sub {
         is(Fake14->$_, 'old', "$_ is not overriden") for qw/new foo bar baz DATA reader writer rsub nsub/;
-        ok(eval <<'        EOT', "Ran glob checks") || diag "Error: $@";
+        ok(eval <<'        EOT', "Ran glob checks") || diag "Args: $@";
             is($Fake14::UHG,  'old',  'old package scalar (UHG)');
             is($Fake14::DATA, 'old', "Old package scalar (DATA)");
             is(\%Fake14::DATA, {old => 'old'}, "Old package hash");
@@ -639,7 +639,7 @@ subtest 'override and orig' => sub {
 
     is($i->DATA, 'my data', "direct sub assignment");
     # These need to be eval'd so the parser does not shortcut the glob references
-    ok(eval <<'    EOT', "Ran glob checks") || diag "Error: $@";
+    ok(eval <<'    EOT', "Ran glob checks") || diag "Args: $@";
         is($Fake14::UHG, 'UHG', "Set package scalar (UHG)");
         is($Fake14::DATA, 'data', "Set package scalar (DATA)");
         is(\%Fake14::DATA, { my => 'data' }, "Set package hash");

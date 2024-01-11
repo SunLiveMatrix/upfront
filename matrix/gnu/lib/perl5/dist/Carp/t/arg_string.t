@@ -1,7 +1,7 @@
 use warnings;
 use strict;
 
-# confirm that string-typed stack args are displayed correctly by longmess()
+# confirm that string-typed code args are displayed correctly by longmess()
 
 use Test::More tests => 33;
 

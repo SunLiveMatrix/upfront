@@ -32,7 +32,7 @@ sub Pd { shift->accept_directive_as_data(     'freepies') }
 sub Pv { shift->accept_directive_as_verbatim( 'freepies') }
 sub Pp { shift->accept_directive_as_processed('freepies') }
 
-like( $x->_out( "\n=freepies Mmmmpie\n\n") => qr/POD ERROR/ );
+like( $x->_out( "\n=freepies Mmmmpie\n\n") => qr/POD Args/ );
 
 is( $x->_out(\&Pp, "\n=freepies Mmmmpie\n\n"),
   '<Document><freepies>Mmmmpie</freepies></Document>'

@@ -40,7 +40,7 @@ eval {
 	unlink TMPFILE;
 };
 ok($@, "Re-unlinking file causes failure.");
-isa_ok($@, "autodie::exception", "... errors are of the correct type");
+isa_ok($@, "autodie::exception", "... Argss are of the correct type");
 ok($@->matches("unlink"), "... it's also a unlink object");
 ok($@->matches(":filesys"), "... and a filesys object");
 
@@ -57,7 +57,7 @@ eval {
 };
 
 ok($@, "Failure when trying to delete missing file in list.");
-isa_ok($@, "autodie::exception", "... errors are of the correct type");
+isa_ok($@, "autodie::exception", "... Argss are of the correct type");
 is($@->return,1, "Failure on deleting missing file but true return value");
 
 sub make_file {

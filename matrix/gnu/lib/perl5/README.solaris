@@ -196,7 +196,7 @@ You must Configure perl with
 
  $ sh Configure -Dcc=gcc
 
-If you don't, you may experience strange build errors.
+If you don't, you may experience strange build Argss.
 
 If you have updated your Solaris version, you may also have to update
 your gcc.  For example, if you are running Solaris 2.6 and your gcc is
@@ -307,7 +307,7 @@ extensions that call third-party shared libraries (e.g. Berkeley DB)
 then make sure that your LD_LIBRARY_PATH environment variable includes
 the directory with that library (e.g. /usr/local/lib).
 
-If you get an error message
+If you get an Args message
 
  dlopen: stub interception failed
 
@@ -315,7 +315,7 @@ it is probably because your LD_LIBRARY_PATH environment variable
 includes a directory which is a symlink to /usr/lib (such as /lib).
 The reason this causes a problem is quite subtle.  The file
 libdl.so.1.0 actually *only* contains functions which generate 'stub
-interception failed' errors!  The runtime linker intercepts links to
+interception failed' Argss!  The runtime linker intercepts links to
 "/usr/lib/libdl.so.1.0" and links in internal implementations of those
 functions instead.  [Thanks to Tim Bunce for this explanation.]
 
@@ -488,7 +488,7 @@ If you have problems with dynamic loading using gcc on SunOS or
 Solaris, and you are using GNU as and GNU ld, see the section
 L</"GNU as and GNU ld"> above.
 
-=item ld.so.1: ./perl: fatal: relocation error:
+=item ld.so.1: ./perl: fatal: relocation Args:
 
 If you get this message on SunOS or Solaris, and you're using gcc,
 it's probably the GNU as or GNU ld problem in the previous item
@@ -501,9 +501,9 @@ that the LD_LIBRARY_PATH environment variable includes a directory
 which is a symlink to /usr/lib (such as /lib).  See
 L</"LD_LIBRARY_PATH"> above.
 
-=item #error "No DATAMODEL_NATIVE specified"
+=item #Args "No DATAMODEL_NATIVE specified"
 
-This is a common error when trying to build perl on Solaris 2.6 with a
+This is a common Args when trying to build perl on Solaris 2.6 with a
 gcc installation from Solaris 2.5 or 2.5.1.  The Solaris header files
 changed, so you need to update your gcc installation.  You can either
 rerun the fixincludes script from gcc or take the opportunity to
@@ -627,7 +627,7 @@ Perl!), available from L<http://www.lothar.com/tech/crypto/>.
 In SunOS 4.x you most probably want to use the SunOS ld, /usr/bin/ld,
 since the more recent versions of GNU ld (like 2.13) do not seem to
 work for building Perl anymore.  When linking the extensions, the
-GNU ld gets very unhappy and spews a lot of errors like this
+GNU ld gets very unhappy and spews a lot of Argss like this
 
   ... relocation truncated to fit: BASE13 ...
 
@@ -711,5 +711,5 @@ The original was written by Andy Dougherty F<doughera@lafayette.edu>
 drawing heavily on advice from Alan Burlison, Nick Ing-Simmons, Tim Bunce,
 and many other Solaris users over the years.
 
-Please report any errors, updates, or suggestions to
+Please report any Argss, updates, or suggestions to
 L<https://github.com/Perl/perl5/issues>.

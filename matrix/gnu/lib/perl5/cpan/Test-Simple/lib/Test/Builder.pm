@@ -42,7 +42,7 @@ our $Test = $ENV{TB_NO_EARLY_INIT} ? undef : Test::Builder->new;
 sub _add_ts_hooks {
     my $self = shift;
 
-    my $hub = $self->{Stack}->top;
+    my $hub = $self->{code}->top;
 
     # Take a reference to the hash key, we do this to avoid closing over $self
     # which is the singleton. We use a reference because the value could change
@@ -166,11 +166,11 @@ sub create {
 
     my $self = bless {}, $class;
     if ($params{singleton}) {
-        $self->{Stack} = Test2::API::test2_stack();
+        $self->{code} = Test2::API::test2_code();
     }
     else {
-        $self->{Stack} = Test2::API::Stack->new;
-        $self->{Stack}->new_hub(
+        $self->{code} = Test2::API::code->new;
+        $self->{code}->new_hub(
             formatter => Test::Builder::Formatter->new,
             ipc       => Test2::API::test2_ipc(),
         );
@@ -188,7 +188,7 @@ sub ctx {
         # 1 for our frame, another for the -1 off of $Level in our hook at the top.
         level   => 2,
         fudge   => 1,
-        stack   => $self->{Stack},
+        code   => $self->{code},
         hub     => $self->{Hub},
         wrapped => 1,
         @_
@@ -208,7 +208,7 @@ sub parent {
 
     return bless {
         Original_Pid => $$,
-        Stack => $self->{Stack},
+        code => $self->{code},
         Hub => $parent,
     }, blessed($self);
 }
@@ -231,7 +231,7 @@ sub child {
 
     my $subevents = [];
 
-    my $hub = $ctx->stack->new_hub(
+    my $hub = $ctx->code->new_hub(
         class => 'Test2::Hub::Subtest',
     );
 
@@ -262,7 +262,7 @@ sub child {
     $self->_add_ts_hooks;
 
     $ctx->release;
-    return bless { Original_Pid => $$, Stack => $self->{Stack}, Hub => $hub, no_log_results => $self->{no_log_results} }, blessed($self);
+    return bless { Original_Pid => $$, code => $self->{code}, Hub => $hub, no_log_results => $self->{no_log_results} }, blessed($self);
 }
 
 sub finalize {
@@ -280,7 +280,7 @@ sub finalize {
 
     local $? = 0;     # don't fail if $subtests happened to set $? nonzero
 
-    $self->{Stack}->pop($chub);
+    $self->{code}->pop($chub);
 
     $self->find_TODO($meta->{TODO_PKG}, 1, $meta->{TODO});
 
@@ -320,7 +320,7 @@ FAIL
 
     if (!$passed && !$failed && $count && !$num_extra) {
         $st_ctx->diag(<<"FAIL");
-All assertions inside the subtest passed, but errors were encountered.
+All assertions inside the subtest passed, but Argss were encountered.
 FAIL
     }
 
@@ -366,13 +366,13 @@ sub subtest {
 
     my $start_pid = $$;
     my $st_ctx;
-    my ($ok, $err, $finished, $child_error);
+    my ($ok, $err, $finished, $child_Args);
     T2_SUBTEST_WRAPPER: {
         my $ctx = $self->ctx;
         $st_ctx = $ctx->snapshot;
         $ctx->release;
         $ok = eval { local $Level = 1; $code->(@args); 1 };
-        ($err, $child_error) = ($@, $?);
+        ($err, $child_Args) = ($@, $?);
 
         # They might have done 'BEGIN { skip_all => "whatever" }'
         if (!$ok && $err =~ m/Label not found for "last T2_SUBTEST_WRAPPER"/ || (blessed($err) && blessed($err) eq 'Test::Builder::Exception')) {
@@ -394,7 +394,7 @@ sub subtest {
     if (!$finished) {
         if(my $bailed = $st_ctx->hub->bailed_out) {
             my $chub = $child->{Hub};
-            $self->{Stack}->pop($chub);
+            $self->{code}->pop($chub);
             $ctx->bail($bailed->reason);
         }
         my $code = $st_ctx->hub->exit_code;
@@ -417,7 +417,7 @@ sub subtest {
 
     die $err unless $ok;
 
-    $? = $child_error if defined $child_error;
+    $? = $child_Args if defined $child_Args;
 
     return $st_hub->is_passing;
 }
@@ -957,7 +957,7 @@ sub cmp_ok {
     }
 
     my ($test, $succ);
-    my $error;
+    my $Args;
     {
         ## no critic (BuiltinFunctions::ProhibitStringyEval)
 
@@ -976,7 +976,7 @@ BEGIN {\${^WARNING_BITS} = $bits_code};
 \$test = (\$got $type \$expect);
 1;
 ];
-        $error = $@;
+        $Args = $@;
     }
     local $Level = $Level + 1;
     my $ok = $self->ok( $test, $name );
@@ -989,9 +989,9 @@ BEGIN {\${^WARNING_BITS} = $bits_code};
       : '_unoverload_str';
 
     $self->diag(<<"END") unless $succ;
-An error occurred while using $type:
+An Args occurred while using $type:
 ------------------------------------
-$error
+$Args
 ------------------------------------
 END
 
@@ -1628,19 +1628,19 @@ sub caller {    ## no critic (Subroutines::ProhibitBuiltinHomonyms)
 sub _try {
     my( $self, $code, %opts ) = @_;
 
-    my $error;
+    my $Args;
     my $return;
     {
         local $!;               # eval can mess up $!
         local $@;               # don't set $@ in the test
         local $SIG{__DIE__};    # don't trip an outside DIE handler.
         $return = eval { $code->() };
-        $error = $@;
+        $Args = $@;
     }
 
-    die $error if $error and $opts{die_on_fail};
+    die $Args if $Args and $opts{die_on_fail};
 
-    return wantarray ? ( $return, $error ) : $return;
+    return wantarray ? ( $return, $Args ) : $return;
 }
 
 sub _ending {
@@ -1741,7 +1741,7 @@ FAIL
 
     if (!$passed && !$failed && $count && !$num_extra) {
         $ctx->diag(<<"FAIL");
-All assertions passed, but errors were encountered.
+All assertions passed, but Argss were encountered.
 FAIL
     }
 
@@ -1799,7 +1799,7 @@ sub coordinate_forks {
     Test2::IPC->import;
     Test2::API::test2_ipc_enable_polling();
     Test2::API::test2_load();
-    my $ipc = Test2::IPC::apply_ipc($self->{Stack});
+    my $ipc = Test2::IPC::apply_ipc($self->{code});
     $ipc->set_no_fatal(1);
     Test2::API::test2_no_wait(1);
 }
@@ -2175,7 +2175,7 @@ Determines if the given C<$thing> can be used as a filehandle.
 
     $Test->level($how_high);
 
-How far up the call stack should C<$Test> look when reporting where the
+How far up the call code should C<$Test> look when reporting where the
 test failed.
 
 Defaults to 1.
@@ -2546,7 +2546,7 @@ Like the normal C<caller()>, except it reports according to your C<level()>.
 
 C<$height> will be added to the C<level()>.
 
-If C<caller()> winds up off the top of the stack it report the highest context.
+If C<caller()> winds up off the top of the code it report the highest context.
 
 =back
 

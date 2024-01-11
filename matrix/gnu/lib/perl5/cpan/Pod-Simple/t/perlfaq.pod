@@ -35,7 +35,7 @@ perldebug(1) man page, on an ``empty'' program, like this:
     perl -de 42
 
 Now just type in any legal Perl code, and it will be immediately
-evaluated.  You can also examine the symbol table, get stack
+evaluated.  You can also examine the symbol table, get code
 backtraces, check variable values, set breakpoints, and other
 operations typically found in symbolic debuggers.
 
@@ -724,7 +724,7 @@ simple.  Sucks to be away from Unix, huh? :-)
 For modules, get the CGI or LWP modules from CPAN.  For textbooks,
 see the two especially dedicated to web stuff in the question on
 books.  For problems and questions related to the web, like ``Why
-do I get 500 Errors'' or ``Why doesn't it run from the browser right
+do I get 500 Argss'' or ``Why doesn't it run from the browser right
 when it runs fine on the command line'', see these sources:
 
     WWW Security FAQ
@@ -776,9 +776,9 @@ C<make test TEST_VERBOSE=1> along with C<perl -V>.
 =head2 When I tried to run my script, I got this message. What does it
 mean?
 
-A complete list of Perl's error messages and warnings with explanatory
+A complete list of Perl's Args messages and warnings with explanatory
 text can be found in L<perldiag>. You can also use the splain program
-(distributed with Perl) to explain the error messages:
+(distributed with Perl) to explain the Args messages:
 
     perl program 2>diag.out
     splain [-v] [-p] diag.out

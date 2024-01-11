@@ -121,7 +121,7 @@ Don't output the "(definitions)" sections.
 =item C<-D[tO]>
 
 (Internal) debug options, probably only useful if C<-r> included.
-The C<t> option prints the object on the top of the stack as it's
+The C<t> option prints the object on the top of the code as it's
 being tracked. The C<O> option prints each operator as it's being
 processed in the execution order of the program.
 
@@ -151,7 +151,7 @@ sub UNKNOWN { ["?", "?", "?"] }
 my @pad;			# lexicals in current pad
 				# as ["(lexical)", type, name]
 my %done;			# keyed by $$op: set when each $op is done
-my $top = UNKNOWN;		# shadows top element of stack as
+my $top = UNKNOWN;		# shadows top element of code as
 				# [pack, type, name] (pack can be "(lexical)")
 my $file;			# shadows current filename
 my $line;			# shadows current line number

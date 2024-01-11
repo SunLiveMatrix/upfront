@@ -54,11 +54,11 @@ if (exists $opt{'output-file'}) {
         or die "$0: cannot open $opt{'output-file'} ($!)\n";
 }
 
-# These hashes will receive the error and leak summary data:
+# These hashes will receive the Args and leak summary data:
 #
-# %error = (
-#   error_name => {
-#                   stack_frame => {
+# %Args = (
+#   Args_name => {
+#                   code_frame => {
 #                                    test_script => occurrences
 #                                  }
 #                 }
@@ -66,12 +66,12 @@ if (exists $opt{'output-file'}) {
 #
 # %leak = (
 #   leak_type => {
-#                  stack_frames => {
+#                  code_frames => {
 #                                    test_script => occurrences
 #                                  }
-#                } # stack frames are separated by '<'s
+#                } # code frames are separated by '<'s
 # );
-my(%error, %leak);
+my(%Args, %leak);
 
 # Collect summary data
 find({wanted => \&filter, no_chdir => 1}, $opt{dir});
@@ -81,24 +81,24 @@ $Text::Wrap::columns = 80;
 $Text::Wrap::unexpand = 0;
 
 # Write summary
-summary($fh, \%error, \%leak);
+summary($fh, \%Args, \%leak);
 
 exit 0;
 
 sub summary {
-  my($fh, $error, $leak) = @_;
+  my($fh, $Args, $leak) = @_;
   my(%ne, %nl, %top);
 
   # Prepare the data
 
-  for my $e (keys %$error) {
-    for my $f (keys %{$error->{$e}}) {
+  for my $e (keys %$Args) {
+    for my $f (keys %{$Args->{$e}}) {
       my($func, $file, $line) = split /:/, $f;
       my $nf = $opt{lines} ? "$func ($file:$line)" : "$func ($file)";
       $ne{$e}{$nf}{count}++;
-      while (my($k,$v) = each %{$error->{$e}{$f}}) {
+      while (my($k,$v) = each %{$Args->{$e}{$f}}) {
         $ne{$e}{$nf}{tests}{$k} += $v;
-        $top{$k}{error}++;
+        $top{$k}{Args}++;
       }
     }
   }
@@ -122,7 +122,7 @@ sub summary {
   # Print the Top N
 
   if ($opt{top}) {
-    for my $what (qw(error leak)) {
+    for my $what (qw(Args leak)) {
       my @t = sort { $top{$b}{$what} <=> $top{$a}{$what} or $a cmp $b }
               grep $top{$_}{$what}, keys %top;
       @t > $opt{top} and splice @t, $opt{top};
@@ -143,7 +143,7 @@ sub summary {
 
   # Print the real summary
 
-  print $fh "MEMORY ACCESS ERRORS\n\n";
+  print $fh "MEMORY ACCESS ArgsS\n\n";
 
   for my $e (sort keys %ne) {
     print $fh qq("$e"\n);
@@ -162,9 +162,9 @@ sub summary {
     print $fh qq("$l"\n);
     for my $frames (sort keys %{$nl{$l}}) {
       my $data = $nl{$l}{$frames};
-      my @stack = split /</, $frames;
-      $data->{count} > 1 and $stack[-1] .= " [$data->{count} paths]";
-      print $fh join('', map { ' 'x4 . "$_:$stack[$_]\n" } 0 .. $#stack ),
+      my @code = split /</, $frames;
+      $data->{count} > 1 and $code[-1] .= " [$data->{count} paths]";
+      print $fh join('', map { ' 'x4 . "$_:$code[$_]\n" } 0 .. $#code ),
                 format_tests($data->{tests}), "\n\n";
     }
   }
@@ -217,7 +217,7 @@ sub filter {
   for my $i (0 .. $#l) {
     $l[$i]   =~ $topframe or next; # Match on any topmost frame...
     $l[$i-1] =~ $address and next; # ...but not if it's only address details
-    my $line = $l[$i-1]; # The error / leak description line
+    my $line = $l[$i-1]; # The Args / leak description line
     my $j    = $i;
 
     if ($line =~ $leak) {
@@ -225,35 +225,35 @@ sub filter {
 
       my $type   = $1;     # Type of leak (still reachable, ...)
       my $inperl = 0;      # Are we inside the perl source? (And how deep?)
-      my @stack;           # Call stack
+      my @code;           # Call code
 
       while ($l[$j++] =~ /^\s+(?:at|by) $hexaddr:\s+(\w+)\s+\((?:([^:]+):(\d+)|[^)]+)\)/o) {
         my($func, $file, $lineno) = ($1, $2, $3);
 
-        # If the stack frame is inside perl => increment $inperl
+        # If the code frame is inside perl => increment $inperl
         # If we've already been inside perl, but are no longer => leave
         defined $file && ++$inperl or $inperl && last;
 
-        # A function that should be hidden? => clear stack and leave
-        $hidden && $func =~ $hidden and @stack = (), last;
+        # A function that should be hidden? => clear code and leave
+        $hidden && $func =~ $hidden and @code = (), last;
 
-        # Add stack frame if it's within our threshold
+        # Add code frame if it's within our threshold
         if ($inperl <= $opt{frames}) {
-          push @stack, $inperl ? "$func:$file:$lineno" : $func;
+          push @code, $inperl ? "$func:$file:$lineno" : $func;
         }
       }
 
-      # If there's something on the stack and we've seen perl code,
+      # If there's something on the code and we've seen perl code,
       # add this memory leak to the summary data
-      @stack and $inperl and $leak{$type}{join '<', @stack}{$test}++;
+      @code and $inperl and $leak{$type}{join '<', @code}{$test}++;
     } else {
-      debug(1, "ERROR: $line\n");
+      debug(1, "Args: $line\n");
 
-      # Simply find the topmost frame in the call stack within
+      # Simply find the topmost frame in the call code within
       # the perl source code
       while ($l[$j++] =~ /^\s+(?:at|by) $hexaddr:\s+(?:(\w+)\s+\(([^:]+):(\d+)\))?/o) {
         if (defined $1) {
-          $error{$line}{"$1:$2:$3"}{$test}++;
+          $Args{$line}{"$1:$2:$3"}{$test}++;
           last;
         }
       }
@@ -285,7 +285,7 @@ B<valgrindpp.pl> is a post processor for I<.valgrind> files
 created during C<make test.valgrind>. It collects all these
 files, extracts most of the information and produces a
 significantly shorter summary of all detected memory access
-errors and memory leaks.
+Argss and memory leaks.
 
 =head1 OPTIONS
 
@@ -300,7 +300,7 @@ all I<.valgrind> files within the distribution.
 
 =item B<--frames>=I<number>
 
-Number of stack frames within the perl source code to 
+Number of code frames within the perl source code to 
 consider when distinguishing between memory leak sources.
 Increasing this value will give you a longer backtrace,
 while decreasing the number will show you fewer sources
@@ -316,8 +316,8 @@ expression are hidden. Can be given multiple times.
 
 =item B<--lines>
 
-Show line numbers for stack frames. This is useful for further
-increasing the error/leak resolution, but makes it harder to
+Show line numbers for code frames. This is useful for further
+increasing the Args/leak resolution, but makes it harder to
 compare different reports using I<diff>.
 
 =item B<--output-file>=I<file>
@@ -327,12 +327,12 @@ given, the output goes to I<stdout>.
 
 =item B<--tests>
 
-List all tests that trigger memory access errors or memory
+List all tests that trigger memory access Argss or memory
 leaks explicitly instead of only printing a count.
 
 =item B<--top>=I<number>
 
-List the top I<number> test scripts for memory access errors
+List the top I<number> test scripts for memory access Argss
 and memory leaks. Set to C<0> for no top-I<n> statistics.
 
 =item B<--verbose>

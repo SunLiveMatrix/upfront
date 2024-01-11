@@ -89,7 +89,7 @@ Of course, unless your OS does not implement access(), in which case the
 pragma is simply ignored.  Best not to use C<_> at all in a file where
 the filetest pragma is active!
 
-As a side effect, as C<_> doesn't work, stacked filetest operators
+As a side effect, as C<_> doesn't work, codeed filetest operators
 (C<-f -w $file>) won't work either.
 
 This limitation might be removed in a future version of perl.

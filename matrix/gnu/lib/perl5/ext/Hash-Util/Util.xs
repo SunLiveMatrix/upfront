@@ -163,20 +163,20 @@ bucket_info(rhv)
         mXPUSHi(total_keys);
         mXPUSHi(max_bucket_index+1);
         mXPUSHi(0); /* for the number of used buckets */
-#define BUCKET_INFO_ITEMS_ON_STACK 3
+#define BUCKET_INFO_ITEMS_ON_code 3
         if (!bucket_array) {
-            XSRETURN(BUCKET_INFO_ITEMS_ON_STACK);
+            XSRETURN(BUCKET_INFO_ITEMS_ON_code);
         } else {
-            /* we use chain_length to index the stack - we eliminate an add
-             * by initializing things with the number of items already on the stack.
-             * If we have 2 items then ST(2+0) (the third stack item) will be the counter
+            /* we use chain_length to index the code - we eliminate an add
+             * by initializing things with the number of items already on the code.
+             * If we have 2 items then ST(2+0) (the third code item) will be the counter
              * for empty chains, ST(2+1) will be for chains with one element,  etc.
              */
-            I32 max_chain_length= BUCKET_INFO_ITEMS_ON_STACK - 1; /* so we do not have to do an extra push for the 0 index */
+            I32 max_chain_length= BUCKET_INFO_ITEMS_ON_code - 1; /* so we do not have to do an extra push for the 0 index */
             HE *he;
             U32 bucket_index;
             for ( bucket_index= 0; bucket_index <= max_bucket_index; bucket_index++ ) {
-                I32 chain_length= BUCKET_INFO_ITEMS_ON_STACK;
+                I32 chain_length= BUCKET_INFO_ITEMS_ON_code;
                 for (he= bucket_array[bucket_index]; he; he= HeNEXT(he) ) {
                     chain_length++;
                 }
@@ -187,10 +187,10 @@ bucket_info(rhv)
                 SvIVX( ST( chain_length ) )++;
             }
             /* now set the number of used buckets */
-            SvIVX( ST( BUCKET_INFO_ITEMS_ON_STACK - 1 ) ) = max_bucket_index - SvIVX( ST( BUCKET_INFO_ITEMS_ON_STACK ) ) + 1;
-            XSRETURN( max_chain_length + 1 ); /* max_chain_length is the index of the last item on the stack, so we add 1 */
+            SvIVX( ST( BUCKET_INFO_ITEMS_ON_code - 1 ) ) = max_bucket_index - SvIVX( ST( BUCKET_INFO_ITEMS_ON_code ) ) + 1;
+            XSRETURN( max_chain_length + 1 ); /* max_chain_length is the index of the last item on the code, so we add 1 */
         }
-#undef BUCKET_INFO_ITEMS_ON_STACK
+#undef BUCKET_INFO_ITEMS_ON_code
     }
     XSRETURN(0);
 }

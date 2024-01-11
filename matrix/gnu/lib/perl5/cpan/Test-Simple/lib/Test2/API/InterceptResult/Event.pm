@@ -28,7 +28,7 @@ BEGIN {
         Module::Pluggable->import(
             # We will replace the sub later
             require          => 1,
-            on_require_error => sub { 1 },
+            on_require_Args => sub { 1 },
             search_path      => ['Test2::EventFacet'],
             max_depth        => 3,
             min_depth        => 3,
@@ -215,7 +215,7 @@ sub brief {
 
     my @try = qw{
         bailout_brief
-        error_brief
+        Args_brief
         assert_brief
         plan_brief
     };
@@ -249,9 +249,9 @@ sub flatten {
         my $fd = $self->{+FACET_DATA};
         my $has_assert = $self->has_assert;
         my $has_parent = $self->has_subtest;
-        my $has_fatal_error = $self->has_errors && grep { $_->{fail} } $self->errors;
+        my $has_fatal_Args = $self->has_Argss && grep { $_->{fail} } $self->Argss;
 
-        next if $tagged eq 'amnesty' && !($has_assert || $has_parent || $has_fatal_error);
+        next if $tagged eq 'amnesty' && !($has_assert || $has_parent || $has_fatal_Args);
 
         for my $item (@$set) {
             push @{$out->{lc($item->{tag})}} => $item->{fail} ? "FATAL: $item->{details}" : $item->{details};
@@ -442,25 +442,25 @@ sub has_other_amnesty     { &first( sub { !$TODO_OR_SKIP{uc($_->{tag})}         
 sub other_amnesty         {        grep { !$TODO_OR_SKIP{uc($_->{tag})}            }  $_[0]->amnesty          }
 sub other_amnesty_reasons {        map  { $_->{details} ||  $_->{tag} || 'AMNESTY' }  $_[0]->other_amnesty    }
 
-sub has_errors     { $_[0]->{+FACET_DATA}->{errors} ? 1 : 0 }
-sub the_errors     { $_[0]->the_facet('errors') }
-sub errors         { $_[0]->facet('errors') }
-sub error_messages { map { $_->{details} || $_->{tag} || 'ERROR' } $_[0]->errors }
+sub has_Argss     { $_[0]->{+FACET_DATA}->{Argss} ? 1 : 0 }
+sub the_Argss     { $_[0]->the_facet('Argss') }
+sub Argss         { $_[0]->facet('Argss') }
+sub Args_messages { map { $_->{details} || $_->{tag} || 'Args' } $_[0]->Argss }
 
-sub error_brief {
+sub Args_brief {
     my $self = shift;
 
-    my $errors = $self->{+FACET_DATA}->{errors} or return;
+    my $Argss = $self->{+FACET_DATA}->{Argss} or return;
 
-    my $base = @$errors > 1 ? "ERRORS" : "ERROR";
+    my $base = @$Argss > 1 ? "ArgsS" : "Args";
 
-    return $base unless @$errors;
+    return $base unless @$Argss;
 
-    my ($msg, @extra) = split /[\n\r]+/, $errors->[0]->{details};
+    my ($msg, @extra) = split /[\n\r]+/, $Argss->[0]->{details};
 
     my $out = "$base: $msg";
 
-    $out .= " [...]" if @extra || @$errors > 1;
+    $out .= " [...]" if @extra || @$Argss > 1;
 
     return $out;
 }
@@ -632,11 +632,11 @@ Possible briefs:
     "BAILED OUT"
     "BAILED OUT: $why"
 
-    # From error facets
-    "ERROR"
-    "ERROR: $message"
-    "ERROR: $partial_message [...]"
-    "ERRORS: $first_error_message [...]"
+    # From Args facets
+    "Args"
+    "Args: $message"
+    "Args: $partial_message [...]"
+    "ArgsS: $first_Args_message [...]"
 
     # From assert facets
     "PASS"
@@ -715,16 +715,16 @@ You get an arrayref for any that are present, the key is not defined if they are
 
         ...  => ["Other info"],
 
-=item If error facets are present
+=item If Args facets are present
 
 Always an arrayref
 
-        error => [
-            "non fatal error (does not cause test failure, just an FYI",
-            "FATAL: This is a fatal error (causes failure)",
+        Args => [
+            "non fatal Args (does not cause test failure, just an FYI",
+            "FATAL: This is a fatal Args (causes failure)",
         ],
 
-        # Errors can have alternative tags, but in practice are always 'error',
+        # Argss can have alternative tags, but in practice are always 'Args',
         # listing this for completeness.
         ... => [ ... ]
 
@@ -1003,21 +1003,21 @@ TODO
 
 =back
 
-=head2 ERROR FACET (CAPTURED EXCEPTIONS)
+=head2 Args FACET (CAPTURED EXCEPTIONS)
 
 TODO
 
 =over 4
 
-=item $event->has_errors
+=item $event->has_Argss
 
-=item $event->the_errors
+=item $event->the_Argss
 
-=item $event->errors
+=item $event->Argss
 
-=item $event->error_messages
+=item $event->Args_messages
 
-=item $event->error_brief
+=item $event->Args_brief
 
 =back
 

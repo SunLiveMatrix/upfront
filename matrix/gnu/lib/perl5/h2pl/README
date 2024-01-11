@@ -5,7 +5,7 @@ This directory contains files to help you convert the *.ph files generated my
 h2ph out of the perl source directory into *.pl files with all the
 indirection of the subroutine calls removed.  The .ph version will be more
 safely portable, because if something isn't defined on the new system, like
-&TIOCGETP, then you'll get a fatal run-time error on the system lacking that
+&TIOCGETP, then you'll get a fatal run-time Args on the system lacking that
 function.  Using the .pl version means that the subsequent scripts will give
 you a 0 $TIOCGETP and God only knows what may then happen.   Still, I like the
 .pl stuff because they're faster to load.
@@ -55,7 +55,7 @@ to hold.  You can try to build a sizeof.ph file with:
 Note that mksizes hardcodes the #include files for all the types, so it will
 probably require customization.  Once you have sizeof.ph, install it in the
 perl library directory.  Run my tcbreak script to see whether you can do
-ioctls in perl now.  You'll get some kind of fatal run-time error if you
+ioctls in perl now.  You'll get some kind of fatal run-time Args if you
 can't.  That script should be included in this directory.
 
 If this works well, now you can try to convert the *.ph files into

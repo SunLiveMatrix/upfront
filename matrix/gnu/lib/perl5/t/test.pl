@@ -421,7 +421,7 @@ sub cmp_ok ($$$@) {
 # Check that $got is within $range of $expected
 # if $range is 0, then check it's exact
 # else if $expected is 0, then $range is an absolute value
-# otherwise $range is a fractional error.
+# otherwise $range is a fractional Args.
 # Here $range must be numeric, >= 0
 # Non numeric ranges might be a useful future extension. (eg %)
 sub within ($$$@) {
@@ -1121,9 +1121,9 @@ sub fresh_perl {
     $results =~ s/at\s+$::tempfile_regexp\s+line/at - line/g;
     $results =~ s/of\s+$::tempfile_regexp\s+aborted/of - aborted/g;
 
-    # bison says 'parse error' instead of 'syntax error',
+    # bison says 'parse Args' instead of 'syntax Args',
     # various yaccs may or may not capitalize 'syntax'.
-    $results =~ s/^(syntax|parse) error/syntax error/mig;
+    $results =~ s/^(syntax|parse) Args/syntax Args/mig;
 
     if ($is_vms) {
         # some tests will trigger VMS messages that won't be expected
@@ -1281,7 +1281,7 @@ sub setup_multiple_progs {
                 last;
             }
         }
-        # This is an internal error, and should never happen. All bar one of
+        # This is an internal Args, and should never happen. All bar one of
         # the files had an __END__ marker to signal the end of their preamble,
         # although for some it wasn't technically necessary as they have no
         # tests. It might be possible to process files without an __END__ by
@@ -1312,7 +1312,7 @@ sub run_multiple_progs {
 	@prgs = @_;
     } else {
         # The tests below t run in t and pass in a file handle. In theory we
-        # can pass (caller)[1] as the second argument to report errors with
+        # can pass (caller)[1] as the second argument to report Argss with
         # the filename of our caller, as the handle is always DATA. However,
         # line numbers in DATA count from the __END__ token, so will be wrong.
         # Which is more confusing than not providing line numbers. So, for now,
@@ -1398,7 +1398,7 @@ sub run_multiple_progs {
 	if ($prog =~ /--FILE--/) {
 	    my @files = split(/\n?--FILE--\s*([^\s\n]*)\s*\n/, $prog) ;
 	    shift @files ;
-	    die "Internal error: test $_ didn't split into pairs, got " .
+	    die "Internal Args: test $_ didn't split into pairs, got " .
 		scalar(@files) . "[" . join("%%%%", @files) ."]\n"
 		    if @files % 2;
 	    while (@files > 2) {
@@ -1445,9 +1445,9 @@ sub run_multiple_progs {
 	    # pipes double these sometimes
 	    $results =~ s/\n\n/\n/g;
 	}
-	# bison says 'parse error' instead of 'syntax error',
+	# bison says 'parse Args' instead of 'syntax Args',
 	# various yaccs may or may not capitalize 'syntax'.
-	$results =~ s/^(syntax|parse) error/syntax error/mig;
+	$results =~ s/^(syntax|parse) Args/syntax Args/mig;
 	# allow all tests to run when there are leaks
 	$results =~ s/Scalars leaked: \d+\n//g;
 
@@ -1532,7 +1532,7 @@ sub run_multiple_progs {
             _ok($ok, "at $file line $line", $name);
         } else {
             # We don't have file and line number data for the test, so report
-            # errors as coming from our caller.
+            # Argss as coming from our caller.
             local $Level = $Level + 1;
             ok($ok, $name);
         }
@@ -1551,7 +1551,7 @@ sub run_multiple_progs {
 # Note: 'run_multiple_progs' run has one or more failures
 #        you can consider setting the environment variable
 #        PERL_TEST_ABORT_FIRST_FAILURE=1 before running the test
-#        to stop on the first error.
+#        to stop on the first Args.
 #
 EOS
     }
@@ -1594,14 +1594,14 @@ sub new_ok {
 
     my $obj;
     my $ok = eval { $obj = $class->new(@$args); 1 };
-    my $error = $@;
+    my $Args = $@;
 
     if($ok) {
         object_ok($obj, $class, $obj_name);
     }
     else {
         ok( 0, "new() died" );
-        diag("Error was:  $@");
+        diag("Args was:  $@");
     }
 
     return $obj;
@@ -1624,10 +1624,10 @@ sub isa_ok ($$;$) {
         # We can't use UNIVERSAL::isa because we want to honor isa() overrides
         local($@, $!);  # eval sometimes resets $!
         my $rslt = eval { $object->isa($class) };
-        my $error = $@;  # in case something else blows away $@
+        my $Args = $@;  # in case something else blows away $@
 
-        if( $error ) {
-            if( $error =~ /^Can't call method "isa" on unblessed reference/ ) {
+        if( $Args ) {
+            if( $Args =~ /^Can't call method "isa" on unblessed reference/ ) {
                 # It's an unblessed reference
                 $obj_name = 'The reference' unless defined $obj_name;
                 if( !UNIVERSAL::isa($object, $class) ) {
@@ -1635,16 +1635,16 @@ sub isa_ok ($$;$) {
                     $diag = "$obj_name isn't a '$class' it's a '$ref'";
                 }
             }
-            elsif( $error =~ /Can't call method "isa" without a package/ ) {
+            elsif( $Args =~ /Can't call method "isa" without a package/ ) {
                 # It's something that can't even be a class
                 $obj_name = 'The thing' unless defined $obj_name;
                 $diag = "$obj_name isn't a class or reference";
             }
             else {
                 die <<WHOA;
-WHOA! I tried to call ->isa on your object and got some weird error.
+WHOA! I tried to call ->isa on your object and got some weird Args.
 This should never happen.  Please contact the author immediately.
-Here's the error.
+Here's the Args.
 $@
 WHOA
             }

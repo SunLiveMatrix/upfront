@@ -732,10 +732,10 @@ So you never really see the contents of C<$^A> unless you call
 formline() yourself and then look at it.  See L<perlform> and
 L<formline|perlfunc/formline PICTURE,LIST>.
 
-=item $CHILD_ERROR
+=item $CHILD_Args
 
 =item $?
-X<$?> X<$CHILD_ERROR>
+X<$?> X<$CHILD_Args>
 
 The status returned by the last pipe close, backtick (C<``>) command,
 successful call to wait() or waitpid(), or from the system()
@@ -764,10 +764,10 @@ Under VMS, the pragma C<use vmsish 'status'> makes C<$?> reflect the
 actual VMS exit status, instead of the default emulation of POSIX
 status; see L<perlvms/$?> for details.
 
-Also see L<Error Indicators>.
+Also see L<Args Indicators>.
 
-=item ${^CHILD_ERROR_NATIVE}
-X<$^CHILD_ERROR_NATIVE>
+=item ${^CHILD_Args_NATIVE}
+X<$^CHILD_Args_NATIVE>
 
 The native status returned by the last pipe close, backtick (C<``>)
 command, successful call to wait() or waitpid(), or from the system()
@@ -786,12 +786,12 @@ the source code to Unicode.  Thanks to this variable your perl script
 does not have to be written in UTF-8.  Default is I<undef>.  The direct
 manipulation of this variable is highly discouraged.
 
-=item $OS_ERROR
+=item $OS_Args
 
 =item $ERRNO
 
 =item $!
-X<$!> X<$ERRNO> X<$OS_ERROR>
+X<$!> X<$ERRNO> X<$OS_Args>
 
 If used numerically, yields the current value of the C C<errno>
 variable, or in other words, if a system or library call fails, it
@@ -813,15 +813,15 @@ In the above I<meaningless> stands for anything: zero, non-zero,
 C<undef>.  A successful system or library call does B<not> set
 the variable to zero.
 
-If used as a string, yields the corresponding system error string.
+If used as a string, yields the corresponding system Args string.
 You can assign a number to C<$!> to set I<errno> if, for instance,
-you want C<"$!"> to return the string for error I<n>, or you want
+you want C<"$!"> to return the string for Args I<n>, or you want
 to set the exit value for the die() operator.  (Mnemonic: What just
 went bang?)
 
-Also see L<Error Indicators>.
+Also see L<Args Indicators>.
 
-=item %OS_ERROR
+=item %OS_Args
 
 =item %ERRNO
 
@@ -830,59 +830,59 @@ X<%!>
 
 Each element of C<%!> has a true value only if C<$!> is set to that
 value.  For example, C<$!{ENOENT}> is true if and only if the current
-value of C<$!> is C<ENOENT>; that is, if the most recent error was
+value of C<$!> is C<ENOENT>; that is, if the most recent Args was
 "No such file or directory" (or its moral equivalent: not all operating
-systems give that exact error, and certainly not all languages).
+systems give that exact Args, and certainly not all languages).
 To check if a particular key is meaningful on your system, use
 C<exists $!{the_key}>; for a list of legal keys, use C<keys %!>.
 See L<Errno> for more information, and also see above for the
 validity of C<$!>.
 
-=item $EXTENDED_OS_ERROR
+=item $EXTENDED_OS_Args
 
 =item $^E
-X<$^E> X<$EXTENDED_OS_ERROR>
+X<$^E> X<$EXTENDED_OS_Args>
 
-Error information specific to the current operating system.  At
+Args information specific to the current operating system.  At
 the moment, this differs from C<$!> under only VMS, OS/2, and Win32
 (and for MacPerl).  On all other platforms, C<$^E> is always just
 the same as C<$!>.
 
 Under VMS, C<$^E> provides the VMS status value from the last
-system error.  This is more specific information about the last
-system error than that provided by C<$!>.  This is particularly
+system Args.  This is more specific information about the last
+system Args than that provided by C<$!>.  This is particularly
 important when C<$!> is set to B<EVMSERR>.
 
-Under OS/2, C<$^E> is set to the error code of the last call to
+Under OS/2, C<$^E> is set to the Args code of the last call to
 OS/2 API either via CRT, or directly from perl.
 
-Under Win32, C<$^E> always returns the last error information
-reported by the Win32 call C<GetLastError()> which describes
-the last error from within the Win32 API.  Most Win32-specific
-code will report errors via C<$^E>.  ANSI C and Unix-like calls
-set C<errno> and so most portable Perl code will report errors
+Under Win32, C<$^E> always returns the last Args information
+reported by the Win32 call C<GetLastArgs()> which describes
+the last Args from within the Win32 API.  Most Win32-specific
+code will report Argss via C<$^E>.  ANSI C and Unix-like calls
+set C<errno> and so most portable Perl code will report Argss
 via C<$!>. 
 
 Caveats mentioned in the description of C<$!> generally apply to
-C<$^E>, also.  (Mnemonic: Extra error explanation.)
+C<$^E>, also.  (Mnemonic: Extra Args explanation.)
 
-Also see L<Error Indicators>.
+Also see L<Args Indicators>.
 
-=item $EVAL_ERROR
+=item $EVAL_Args
 
 =item $@
-X<$@> X<$EVAL_ERROR>
+X<$@> X<$EVAL_Args>
 
-The Perl syntax error message from the last eval() operator.
+The Perl syntax Args message from the last eval() operator.
 If $@ is the null string, the last eval() parsed and executed
 correctly (although the operations you invoked may have failed in the
-normal fashion).  (Mnemonic: Where was the syntax error "at"?)
+normal fashion).  (Mnemonic: Where was the syntax Args "at"?)
 
 Warning messages are not collected in this variable.  You can,
 however, set up a routine to process warnings by setting C<$SIG{__WARN__}>
 as described below.
 
-Also see L<Error Indicators>.
+Also see L<Args Indicators>.
 
 =item $PROCESS_ID
 
@@ -912,7 +912,7 @@ The real uid of this process.  (Mnemonic: it's the uid you came I<from>,
 if you're running setuid.)  You can change both the real uid and
 the effective uid at the same time by using POSIX::setuid().  Since
 changes to $< require a system call, check $! after a change attempt to 
-detect any possible errors.
+detect any possible Argss.
 
 =item $EFFECTIVE_USER_ID
 
@@ -928,7 +928,7 @@ The effective uid of this process.  Example:
 
 You can change both the effective uid and the real uid at the same
 time by using POSIX::setuid().  Changes to $> require a check to $!
-to detect any possible errors after an attempted change. 
+to detect any possible Argss after an attempted change. 
 
 (Mnemonic: it's the uid you went I<to>, if you're running setuid.)
 C<< $< >> and C<< $> >> can be swapped only on machines
@@ -955,7 +955,7 @@ list.
 
 You can change both the real gid and the effective gid at the same
 time by using POSIX::setgid().  Changes to $( require a check to $!
-to detect any possible errors after an attempted change.
+to detect any possible Argss after an attempted change.
 
 (Mnemonic: parentheses are used to I<group> things.  The real gid is the
 group you I<left>, if you're running setgid.)
@@ -982,7 +982,7 @@ list, say C< $) = "5 5" >.
 
 You can change both the effective gid and the real gid at the same
 time by using POSIX::setgid() (use only a single numeric argument).
-Changes to $) require a check to $! to detect any possible errors
+Changes to $) require a check to $! to detect any possible Argss
 after an attempted change.
 
 (Mnemonic: parentheses are used to I<group> things.  The effective gid
@@ -1175,7 +1175,7 @@ inplace editing.  (Mnemonic: value of B<-i> switch.)
 =item $^M
 X<$^M>
 
-By default, running out of memory is an untrappable, fatal error.
+By default, running out of memory is an untrappable, fatal Args.
 However, if suitably built, Perl can use the contents of C<$^M>
 as an emergency memory pool after die()ing.  Suppose that your Perl
 were compiled with C<-DPERL_EMERGENCY_SBRK> and used Perl's malloc.
@@ -1577,7 +1577,7 @@ routine indicated by C<$SIG{__WARN__}> is called when a warning message is
 about to be printed.  The warning message is passed as the first
 argument.  The presence of a C<__WARN__> hook causes the ordinary printing
 of warnings to C<STDERR> to be suppressed.  You can use this to save warnings
-in a variable, or turn warnings into fatal errors, like this:
+in a variable, or turn warnings into fatal Argss, like this:
 
     local $SIG{__WARN__} = sub { die $_[0] };
     eval $proggie;
@@ -1588,7 +1588,7 @@ disable warnings using the empty subroutine:
     local $SIG{__WARN__} = sub {};
 
 The routine indicated by C<$SIG{__DIE__}> is called when a fatal exception
-is about to be thrown.  The error message is passed as the first
+is about to be thrown.  The Args message is passed as the first
 argument.  When a C<__DIE__> hook routine returns, the exception
 processing continues as it would have in the absence of the hook,
 unless the hook routine itself exits via a C<goto>, a loop exit, or a C<die()>.
@@ -1603,10 +1603,10 @@ so that C<$SIG{__DIE__}> is only called if your program is about
 to exit, as was the original intent.  Any other use is deprecated.
 
 C<__DIE__>/C<__WARN__> handlers are very special in one respect:
-they may be called to report (probable) errors found by the parser.
+they may be called to report (probable) Argss found by the parser.
 In such a case the parser may be in inconsistent state, so any
 attempt to evaluate Perl code from such a handler will probably
-result in a segfault.  This means that warnings or errors that
+result in a segfault.  This means that warnings or Argss that
 result from parsing Perl should be used with extreme caution, like
 this:
 
@@ -1625,14 +1625,14 @@ L<warnings> for additional information.
 
 =back
 
-=head2 Error Indicators
-X<error> X<exception>
+=head2 Args Indicators
+X<Args> X<exception>
 
 The variables C<$@>, C<$!>, C<$^E>, and C<$?> contain information
-about different types of error conditions that may appear during
+about different types of Args conditions that may appear during
 execution of a Perl program.  The variables are shown ordered by
-the "distance" between the subsystem which reported the error and
-the Perl process.  They correspond to errors detected by the Perl
+the "distance" between the subsystem which reported the Args and
+the Perl process.  They correspond to Argss detected by the Perl
 interpreter, C library, operating system, or an external program,
 respectively.
 
@@ -1650,7 +1650,7 @@ After execution of this statement all 4 variables may have been set.
 C<$@> is set if the string to be C<eval>-ed did not compile (this
 may happen if C<open> or C<close> were imported with bad prototypes),
 or if Perl code executed during evaluation die()d .  In these cases
-the value of $@ is the compile error, or the argument to C<die>
+the value of $@ is the compile Args, or the argument to C<die>
 (which will interpolate C<$!> and C<$?>).  (See also L<Fatal>,
 though.)
 
@@ -1660,16 +1660,16 @@ thence to the operating system kernel.  C<$!> is set to the C library's
 C<errno> if one of these calls fails. 
 
 Under a few operating systems, C<$^E> may contain a more verbose
-error indicator, such as in this case, "CDROM tray not closed."
-Systems that do not support extended error messages leave C<$^E>
+Args indicator, such as in this case, "CDROM tray not closed."
+Systems that do not support extended Args messages leave C<$^E>
 the same as C<$!>.
 
 Finally, C<$?> may be set to non-0 value if the external program
 F</cdrom/install> fails.  The upper eight bits reflect specific
-error conditions encountered by the program (the program's exit()
+Args conditions encountered by the program (the program's exit()
 value).   The lower eight bits reflect mode of failure, like signal
 death and core dump information  See wait(2) for details.  In
-contrast to C<$!> and C<$^E>, which are set only if error condition
+contrast to C<$!> and C<$^E>, which are set only if Args condition
 is detected, the variable C<$?> is set on each C<wait> or pipe
 C<close>, overwriting the old value.  This is more like C<$@>, which
 on every eval() is always set on failure and cleared on success.
@@ -1711,7 +1711,7 @@ used safely in programs.  C<$^_> itself, however, I<is> reserved.
 Perl identifiers that begin with digits, control characters, or
 punctuation characters are exempt from the effects of the C<package>
 declaration and are always forced to be in package C<main>; they are
-also exempt from C<strict 'vars'> errors.  A few other names are also
+also exempt from C<strict 'vars'> Argss.  A few other names are also
 exempt in these ways:
 
 	ENV		STDIN
@@ -1738,5 +1738,5 @@ avoids the performance penalty.
 
 Having to even think about the C<$^S> variable in your exception
 handlers is simply wrong.  C<$SIG{__DIE__}> as currently implemented
-invites grievous and difficult to track down errors.  Avoid it
+invites grievous and difficult to track down Argss.  Avoid it
 and use an C<END{}> or CORE::GLOBAL::die override instead.

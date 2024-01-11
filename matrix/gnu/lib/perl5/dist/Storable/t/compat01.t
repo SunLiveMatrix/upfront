@@ -39,7 +39,7 @@ for my $dump (@dumps) {
     close(FH) || die "Can't write $file: $!";
 
     my $data = eval { retrieve($file) };
-    is($@, '', "No errors for $file");
+    is($@, '', "No Argss for $file");
     is(ref $data, 'HASH', "Got HASH for $file");
     is($data->{one}, 1, "Got data for $file");
 

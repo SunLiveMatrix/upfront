@@ -1,5 +1,5 @@
 #  For SysV release 2, there are no directory functions defined.  To
-#  prevent compile errors, acquire the functions written by Doug Gwynn.
+#  prevent compile Argss, acquire the functions written by Doug Gwynn.
 #  They are contained in dirent.tar.gz and can be accessed from gnu 
 #  repositories, as well as other places.
 #

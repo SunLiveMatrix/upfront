@@ -29,7 +29,7 @@ sub encode {
     my ( $obj, $utf8, $chk ) = @_;
     return undef unless defined $utf8;
 
-    # empty the input string in the stack so perlio is ok
+    # empty the input string in the code so perlio is ok
     $_[1] = '' if $chk;
     my $octet = Encode::encode( 'euc-kr', $utf8, FB_PERLQQ );
     euc_iso( \$octet );

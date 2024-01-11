@@ -149,7 +149,7 @@ sub get_warn() {
 
     undef $a;
     eval '$a = eval "0x.3"';
-    is($a, undef); # throws an error
+    is($a, undef); # throws an Args
 
     undef $a;
     eval '$a = eval "0xc.3"';

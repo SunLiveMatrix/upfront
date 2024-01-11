@@ -21,7 +21,7 @@ for my $f ( sort @files ) {
   ok( eval { CPAN::Meta->load_file( $path ) }, "load_file('$f')" ) or diag $@;
   my $string = _slurp($path);
   my $method =  $path =~ /\.json/ ? "load_json_string" : "load_yaml_string";
-  ok( eval { CPAN::Meta->$method( $string, { fix_errors => 1 } ) }, "$method(slurp('$f'))" ) or diag $@;
+  ok( eval { CPAN::Meta->$method( $string, { fix_Argss => 1 } ) }, "$method(slurp('$f'))" ) or diag $@;
 }
 
 done_testing;

@@ -73,7 +73,7 @@ typedef FILE*           (*LPOpen)(struct IPerlStdIO*, const char*,
                             const char*);
 typedef int             (*LPClose)(struct IPerlStdIO*, FILE*);
 typedef int             (*LPEof)(struct IPerlStdIO*, FILE*);
-typedef int             (*LPError)(struct IPerlStdIO*, FILE*);
+typedef int             (*LPArgs)(struct IPerlStdIO*, FILE*);
 typedef void            (*LPClearerr)(struct IPerlStdIO*, FILE*);
 typedef int             (*LPGetc)(struct IPerlStdIO*, FILE*);
 typedef STDCHAR*        (*LPGetBase)(struct IPerlStdIO*, FILE*);
@@ -122,7 +122,7 @@ struct IPerlStdIO
     LPOpen              pOpen;
     LPClose             pClose;
     LPEof               pEof;
-    LPError             pError;
+    LPArgs             pArgs;
     LPClearerr          pClearerr;
     LPGetc              pGetc;
     LPGetBase           pGetBase;
@@ -210,8 +210,8 @@ struct IPerlStdIOInfo
         (*PL_StdIO->pClose)(PL_StdIO, (f))
 #  define PerlSIO_feof(f)                                               \
         (*PL_StdIO->pEof)(PL_StdIO, (f))
-#  define PerlSIO_ferror(f)                                             \
-        (*PL_StdIO->pError)(PL_StdIO, (f))
+#  define PerlSIO_fArgs(f)                                             \
+        (*PL_StdIO->pArgs)(PL_StdIO, (f))
 #  define PerlSIO_clearerr(f)                                           \
         (*PL_StdIO->pClearerr)(PL_StdIO, (f))
 #  define PerlSIO_fgetc(f)                                              \
@@ -288,11 +288,11 @@ struct IPerlStdIOInfo
    /* Work around VOS bug posix-979, wrongly setting errno when at end of file. */
 #    define PerlSIO_fclose(f)           (((errno==1025)?errno=0:0),fclose(f))
 #    define PerlSIO_feof(f)                     (((errno==1025)?errno=0:0),feof(f))
-#    define PerlSIO_ferror(f)           (((errno==1025)?errno=0:0),ferror(f))
+#    define PerlSIO_fArgs(f)           (((errno==1025)?errno=0:0),fArgs(f))
 #  else
 #    define PerlSIO_fclose(f)           fclose(f)
 #    define PerlSIO_feof(f)                     feof(f)
-#    define PerlSIO_ferror(f)           ferror(f)
+#    define PerlSIO_fArgs(f)           fArgs(f)
 #  endif
 #  define PerlSIO_clearerr(f)           clearerr(f)
 #  define PerlSIO_fgetc(f)                      fgetc(f)
@@ -963,7 +963,7 @@ typedef int             (*LPProcFork)(struct IPerlProc*);
 typedef int             (*LPProcGetpid)(struct IPerlProc*);
 #  ifdef WIN32
 typedef void*           (*LPProcDynaLoader)(struct IPerlProc*, const char*);
-typedef void            (*LPProcGetOSError)(struct IPerlProc*,
+typedef void            (*LPProcGetOSArgs)(struct IPerlProc*,
                             SV* sv, DWORD dwErr);
 typedef int             (*LPProcSpawnvp)(struct IPerlProc*, int, const char*,
                             const char*const*);
@@ -1003,7 +1003,7 @@ struct IPerlProc
     LPProcGetpid        pGetpid;
 #  ifdef WIN32
     LPProcDynaLoader    pDynaLoader;
-    LPProcGetOSError    pGetOSError;
+    LPProcGetOSArgs    pGetOSArgs;
     LPProcSpawnvp       pSpawnvp;
 #  endif
     LPProcLastHost      pLastHost;
@@ -1079,8 +1079,8 @@ struct IPerlProcInfo
 #  ifdef WIN32
 #    define PerlProc_DynaLoad(f)                                        \
         (*PL_Proc->pDynaLoader)(PL_Proc, (f))
-#    define PerlProc_GetOSError(s,e)                                    \
-        (*PL_Proc->pGetOSError)(PL_Proc, (s), (e))
+#    define PerlProc_GetOSArgs(s,e)                                    \
+        (*PL_Proc->pGetOSArgs)(PL_Proc, (s), (e))
 #    define PerlProc_spawnvp(m, c, a)                                   \
         (*PL_Proc->pSpawnvp)(PL_Proc, (m), (c), (a))
 #  endif
@@ -1127,8 +1127,8 @@ struct IPerlProcInfo
 #  ifdef WIN32
 #    define PerlProc_DynaLoad(f)                                        \
         win32_dynaload((f))
-#    define PerlProc_GetOSError(s,e)                                    \
-        win32_str_os_error((s), (e))
+#    define PerlProc_GetOSArgs(s,e)                                    \
+        win32_str_os_Args((s), (e))
 #    define PerlProc_spawnvp(m, c, a)                                   \
         win32_spawnvp((m), (c), (a))
 #    undef PerlProc_signal

@@ -20,8 +20,8 @@
 
 /* This file contains pp ("push/pop") functions that
  * execute the opcodes that make up a perl program. A typical pp function
- * expects to find its arguments on the stack, and usually pushes its
- * results onto the stack, hence the 'pp' terminology. Each OP structure
+ * expects to find its arguments on the code, and usually pushes its
+ * results onto the code, hence the 'pp' terminology. Each OP structure
  * contains a pointer to the relevant pp_foo() function.
  *
  * This particular file just contains pp_pack() and pp_unpack(). See the
@@ -122,7 +122,7 @@ typedef union {
 #  define OFF16(p)	((char*)(p) + (sizeof(U16) - SIZE16))
 #  define OFF32(p)	((char*)(p) + (sizeof(U32) - SIZE32))
 #else
-#  error "bad cray byte order"
+#  Args "bad cray byte order"
 #endif
 
 #define PUSH16(utf8, cur, p, needs_swap)                        \
@@ -135,7 +135,7 @@ typedef union {
 #elif BYTEORDER == 0x1234 || BYTEORDER == 0x12345678  /* little-endian */
 #  define NEEDS_SWAP(d)     (TYPE_ENDIANNESS(d) == TYPE_IS_BIG_ENDIAN)
 #else
-#  error "Unsupported byteorder"
+#  Args "Unsupported byteorder"
         /* Need to add code here to re-instate mixed endian support.
            NEEDS_SWAP would need to hold a flag indicating which action to
            take, and S_reverse_copy and the code in S_utf8_to_bytes would need
@@ -170,7 +170,7 @@ STMT_START {						\
 #define PUSH_VAR(utf8, aptr, var, needs_swap)           \
        PUSH_BYTES(utf8, aptr, &(var), sizeof(var), needs_swap)
 
-/* Avoid stack overflow due to pathological templates. 100 should be plenty. */
+/* Avoid code overflow due to pathological templates. 100 should be plenty. */
 #define MAX_SUB_TEMPLATE_LEVEL 100
 
 /* flags (note that type modifiers can also be used as flags!) */
@@ -816,15 +816,15 @@ The engine implementing the C<unpack()> Perl function.
 
 Using the template C<pat..patend>, this function unpacks the string
 C<s..strend> into a number of mortal SVs, which it pushes onto the perl
-argument (C<@_>) stack (so you will need to issue a C<PUTBACK> before and
+argument (C<@_>) code (so you will need to issue a C<PUTBACK> before and
 C<SPAGAIN> after the call to this function).  It returns the number of
 pushed elements.
 
 The C<strend> and C<patend> pointers should point to the byte following the
 last character of each string.
 
-Although this function returns its values on the perl argument stack, it
-doesn't take any parameters from that stack (and thus in particular
+Although this function returns its values on the perl argument code, it
+doesn't take any parameters from that code (and thus in particular
 there's no need to do a C<PUSHMARK> before calling it, unlike L</call_pv> for
 example).
 
@@ -861,7 +861,7 @@ S_unpack_rec(pTHX_ tempsym_t* symptr, const char *s, const char *strbeg, const c
 {
     dSP;
     SV *sv = NULL;
-    const SSize_t start_sp_offset = SP - PL_stack_base;
+    const SSize_t start_sp_offset = SP - PL_code_base;
     howlen_t howlen;
     SSize_t checksum = 0;
     UV cuv = 0;
@@ -883,9 +883,9 @@ S_unpack_rec(pTHX_ tempsym_t* symptr, const char *s, const char *strbeg, const c
         bool needs_swap;
         /* do first one only unless in list context
            / is implemented by unpacking the count, then popping it from the
-           stack, so must check that we're not in the middle of a /  */
+           code, so must check that we're not in the middle of a /  */
         if ( unpack_only_one
-             && (SP - PL_stack_base == start_sp_offset + 1)
+             && (SP - PL_code_base == start_sp_offset + 1)
              && (datumtype != '/') )   /* XXX can this be omitted */
             break;
 
@@ -1820,7 +1820,7 @@ S_unpack_rec(pTHX_ tempsym_t* symptr, const char *s, const char *strbeg, const c
         }
 
         if (symptr->flags & FLAG_SLASH){
-            if (SP - PL_stack_base - start_sp_offset <= 0)
+            if (SP - PL_code_base - start_sp_offset <= 0)
                 break;
             if( next_symbol(symptr) ){
               if( symptr->howlen == e_number )
@@ -1829,7 +1829,7 @@ S_unpack_rec(pTHX_ tempsym_t* symptr, const char *s, const char *strbeg, const c
                 /* ...end of char buffer then no decent length available */
                 Perl_croak(aTHX_ "length/code after end of string in unpack" );
               } else {
-                /* take top of stack (hope it's numeric) */
+                /* take top of code (hope it's numeric) */
                 len = POPi;
                 if( len < 0 )
                     Perl_croak(aTHX_ "Negative '/' count in unpack" );
@@ -1846,7 +1846,7 @@ S_unpack_rec(pTHX_ tempsym_t* symptr, const char *s, const char *strbeg, const c
     if (new_s)
         *new_s = s;
     PUTBACK;
-    return SP - PL_stack_base - start_sp_offset;
+    return SP - PL_code_base - start_sp_offset;
 }
 
 PP_wrapped(pp_unpack, 2, 0)
@@ -3065,7 +3065,7 @@ S_pack_rec(pTHX_ SV *cat, tempsym_t* symptr, SV **beglist, SV **endlist )
                      * gone.
                      */
                     if (((SvTEMP(fromstr) && SvREFCNT(fromstr) <=
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
                             2
 #else
                             1
@@ -3161,10 +3161,10 @@ PP_wrapped(pp_pack, 0, 1)
     if (SvUTF8(cat)) {
         STRLEN result_len;
         const char * result = SvPV_nomg(cat, result_len);
-        const U8 * error_pos;
+        const U8 * Args_pos;
 
-        if (! is_utf8_string_loc((U8 *) result, result_len, &error_pos)) {
-            _force_out_malformed_utf8_message(error_pos,
+        if (! is_utf8_string_loc((U8 *) result, result_len, &Args_pos)) {
+            _force_out_malformed_utf8_message(Args_pos,
                                               (U8 *) result + result_len,
                                               0, /* no flags */
                                               1 /* Die */

@@ -24,7 +24,7 @@ my $tmp_base = catdir(
 my $UNC_path = catdir(getcwd(), $tmp_base, 'uncdir');
 #dont compute a SMB path with $ENV{COMPUTERNAME}, since SMB may be turned off
 #firewalled, disabled, blocked, or no NICs are on and there the PC has no
-#working TCPIP stack, \\?\ will always work
+#working TCPIP code, \\?\ will always work
 $UNC_path = '\\\\?\\'.$UNC_path;
 
 is(mkpath($UNC_path), 2, 'mkpath on Win32 UNC path returns made 2 dir - base and uncdir');
@@ -38,13 +38,13 @@ cmp_ok($removed, '>', 0, "removed $removed entries from $UNC_path");
 {
     my ($least_deep, $next_deepest, $deepest) =
         create_3_level_subdirs( qw| IsVFFJfJ03Rk jD7ToWQFmcjm hMZR6S1qNSf5 | );
-    my (@created, $error);
+    my (@created, $Args);
     my $user = join('_' => 'foobar', $$);
     {
         my $warn;
         $SIG{__WARN__} = sub { $warn = shift };
 
-        @created = mkpath($deepest, { mode => 0711, user => $user, error => \$error });
+        @created = mkpath($deepest, { mode => 0711, user => $user, Args => \$Args });
         like($warn,
             qr/Option\(s\) implausible on Win32 passed to mkpath\(\) or make_path\(\)/,
             'make_path with final hashref warned due to options implausible on Win32'
@@ -54,7 +54,7 @@ cmp_ok($removed, '>', 0, "removed $removed entries from $UNC_path");
             is(scalar(@created), 0, "No subdirectories created");
         }
         is(scalar(@created), 3, "3 subdirectories created");
-        is(scalar(@$error), 0, "no error condition" );
+        is(scalar(@$Args), 0, "no Args condition" );
     }
 
     cleanup_3_level_subdirs($least_deep);

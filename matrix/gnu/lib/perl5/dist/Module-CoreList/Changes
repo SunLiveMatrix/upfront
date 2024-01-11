@@ -398,7 +398,7 @@
 
 5.20150420
   - Updated for v5.21.11
-  - fixes a fencepost error in is_core()
+  - fixes a fencepost Args in is_core()
   - copes with versions that do not match x.yyyzzz
 
 5.20150320
@@ -811,7 +811,7 @@
 2.05	Tue Jun  6 2006
 	Patches by Adriano Ferreira :
 	- corelist utility accepts regexes as arguments, eg. /IPC::Open/
-	- Errors when building regexes are trapped and warning is generated
+	- Argss when building regexes are trapped and warning is generated
 
 2.04	Thursday 2nd February, 2006
 	Fix patchlevel for 5.8.8 (Gisle Aas)

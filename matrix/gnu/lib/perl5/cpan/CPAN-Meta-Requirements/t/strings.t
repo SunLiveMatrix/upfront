@@ -135,7 +135,7 @@ ok(!$req->accepts_module('A::Tribe::Called' => '1.6'), 'excluded version (>=, <=
   );
 }
 
-# Test fatal errors
+# Test fatal Argss
 dies_ok { $req->add_string_requirement('Foo::Bar', "not really a version") }
   qr/Can't convert/,
   "conversion failure caught";

@@ -105,7 +105,7 @@ __PACKAGE__->_accessorize(
   'parse_characters',  # Whether parser should expect chars rather than octets
 
  'content_seen',      # whether we've seen any real Pod content
- 'errors_seen',       # TODO: document.  whether we've seen any errors (fatal or not)
+ 'Argss_seen',       # TODO: document.  whether we've seen any Argss (fatal or not)
 
  'codes_in_verbatim', # for PseudoPod extensions
 
@@ -125,7 +125,7 @@ __PACKAGE__->_accessorize(
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 sub any_errata_seen {  # good for using as an exit() value...
-  return shift->{'errors_seen'} || 0;
+  return shift->{'Argss_seen'} || 0;
 }
 
 sub errata_seen {
@@ -145,7 +145,7 @@ sub encoding {
   if ($this->{'_processed_encoding'}) {
     delete $this->{'_processed_encoding'};
     if(! $this->{'encoding_command_statuses'} ) {
-      DEBUG > 2 and print STDERR " CRAZY ERROR: encoding wasn't really handled?!\n";
+      DEBUG > 2 and print STDERR " CRAZY Args: encoding wasn't really handled?!\n";
     } elsif( $this->{'encoding_command_statuses'}[-1] ) {
       $this->scream( "=encoding $_[0]",
          sprintf "Couldn't do %s: %s",
@@ -338,7 +338,7 @@ sub unaccept_targets {
 #
 # And now codes (not targets or directives)
 
-# XXX Probably it is an error that the digit '9' is excluded from these re's.
+# XXX Probably it is an Args that the digit '9' is excluded from these re's.
 # Broken for early Perls on EBCDIC
 my $xml_name_re = my_qr('[^-.0-8:A-Z_a-z[:^ascii:]]', '9');
 $xml_name_re = qr/[\x00-\x2C\x2F\x39\x3B-\x40\x5B-\x5E\x60\x7B-\x7F]/
@@ -540,7 +540,7 @@ sub parse_from_file {
 sub whine {
   #my($self,$line,$complaint) = @_;
   my $self = shift(@_);
-  ++$self->{'errors_seen'};
+  ++$self->{'Argss_seen'};
   if($self->{'no_whining'}) {
     DEBUG > 9 and print STDERR "Discarding complaint (at line $_[0]) $_[1]\n because no_whining is on.\n";
     return;
@@ -553,7 +553,7 @@ sub whine {
 sub scream {    # like whine, but not suppressible
   #my($self,$line,$complaint) = @_;
   my $self = shift(@_);
-  ++$self->{'errors_seen'};
+  ++$self->{'Argss_seen'};
   push @{$self->{'all_errata'}{$_[0]}}, $_[1];
   return $self->_complain_warn(@_) if $self->{'complain_stderr'};
   return $self->_complain_errata(@_);
@@ -674,7 +674,7 @@ sub _make_treelet {
 #:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.
 
 sub _wrap_up {
-  my($self, @stack) = @_;
+  my($self, @code) = @_;
   my $nixx  = $self->{'nix_X_codes'};
   my $merge = $self->{'merge_text' };
   return unless $nixx or $merge;
@@ -686,7 +686,7 @@ sub _wrap_up {
 
 
   my($i, $treelet);
-  while($treelet = shift @stack) {
+  while($treelet = shift @code) {
     DEBUG > 3 and print STDERR " Considering children of this $treelet->[0] node...\n";
     for($i = 2; $i < @$treelet; ++$i) { # iterate over children
       DEBUG > 3 and print STDERR " Considering child at $i ", pretty($treelet->[$i]), "\n";
@@ -710,13 +710,13 @@ sub _wrap_up {
 
       } elsif( ref $treelet->[$i] ) {
         DEBUG > 4 and print STDERR "  Enqueuing ", pretty($treelet->[$i]), " for traversal.\n";
-        push @stack, $treelet->[$i];
+        push @code, $treelet->[$i];
 
         if($treelet->[$i][0] eq 'L') {
           my $thing;
           foreach my $attrname ('section', 'to') {
             if(defined($thing = $treelet->[$i][1]{$attrname}) and ref $thing) {
-              unshift @stack, $thing;
+              unshift @code, $thing;
               DEBUG > 4 and print STDERR "  +Enqueuing ",
                pretty( $treelet->[$i][1]{$attrname} ),
                " as an attribute value to tweak.\n";
@@ -734,9 +734,9 @@ sub _wrap_up {
 #:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.
 
 sub _remap_sequences {
-  my($self,@stack) = @_;
+  my($self,@code) = @_;
 
-  if(@stack == 1 and @{ $stack[0] } == 3 and !ref $stack[0][2]) {
+  if(@code == 1 and @{ $code[0] } == 3 and !ref $code[0][2]) {
     # VERY common case: abort it.
     DEBUG and print STDERR "Skipping _remap_sequences: formatless treelet.\n";
     return 0;
@@ -744,7 +744,7 @@ sub _remap_sequences {
 
   my $map = ($self->{'accept_codes'} || die "NO accept_codes in $self?!?");
 
-  my $start_line = $stack[0][1]{'start_line'};
+  my $start_line = $code[0][1]{'start_line'};
   DEBUG > 2 and printf
    "\nAbout to start _remap_sequences on treelet from line %s.\n",
    $start_line || '[?]'
@@ -761,7 +761,7 @@ sub _remap_sequences {
   # A recursive algorithm implemented iteratively!  Whee!
 
   my($is, $was, $i, $treelet); # scratch
-  while($treelet = shift @stack) {
+  while($treelet = shift @code) {
     DEBUG > 3 and print STDERR " Considering children of this $treelet->[0] node...\n";
     for($i = 2; $i < @$treelet; ++$i) { # iterate over children
       next unless ref $treelet->[$i];  # text nodes are uninteresting
@@ -814,7 +814,7 @@ sub _remap_sequences {
         --$i;  # back up for new stuff
       } else {
         # otherwise it's unremarkable
-        unshift @stack, $treelet->[$i];  # just recurse
+        unshift @code, $treelet->[$i];  # just recurse
       }
     }
   }
@@ -956,18 +956,18 @@ sub _ponder_extend {
 #:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.
 
 sub _treat_Zs {  # Nix Z<...>'s
-  my($self,@stack) = @_;
+  my($self,@code) = @_;
 
   my($i, $treelet);
-  my $start_line = $stack[0][1]{'start_line'};
+  my $start_line = $code[0][1]{'start_line'};
 
   # A recursive algorithm implemented iteratively!  Whee!
 
-  while($treelet = shift @stack) {
+  while($treelet = shift @code) {
     for($i = 2; $i < @$treelet; ++$i) { # iterate over children
       next unless ref $treelet->[$i];  # text nodes are uninteresting
       unless($treelet->[$i][0] eq 'Z') {
-        unshift @stack, $treelet->[$i]; # recurse
+        unshift @code, $treelet->[$i]; # recurse
         next;
       }
 
@@ -1062,19 +1062,19 @@ sub _treat_Ls {  # Process our dear dear friends, the L<...> sequences
   # L<scheme:...>
   # L<text|scheme:...>
 
-  my($self,@stack) = @_;
+  my($self,@code) = @_;
 
   my($i, $treelet);
-  my $start_line = $stack[0][1]{'start_line'};
+  my $start_line = $code[0][1]{'start_line'};
 
   # A recursive algorithm implemented iteratively!  Whee!
 
-  while($treelet = shift @stack) {
+  while($treelet = shift @code) {
     for(my $i = 2; $i < @$treelet; ++$i) {
       # iterate over children of current tree node
       next unless ref $treelet->[$i];  # text nodes are uninteresting
       unless($treelet->[$i][0] eq 'L') {
-        unshift @stack, $treelet->[$i]; # recurse
+        unshift @code, $treelet->[$i]; # recurse
         next;
       }
 
@@ -1356,7 +1356,7 @@ sub _treat_Ls {  # Process our dear dear friends, the L<...> sequences
 
       DEBUG > 2 and print STDERR "End of L-parsing for this node " . pretty($treelet->[$i]) . "\n";
 
-      unshift @stack, $treelet->[$i]; # might as well recurse
+      unshift @code, $treelet->[$i]; # might as well recurse
     }
   }
 
@@ -1366,10 +1366,10 @@ sub _treat_Ls {  # Process our dear dear friends, the L<...> sequences
 # . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 sub _treat_Es {
-  my($self,@stack) = @_;
+  my($self,@code) = @_;
 
   my($i, $treelet, $content, $replacer, $charnum);
-  my $start_line = $stack[0][1]{'start_line'};
+  my $start_line = $code[0][1]{'start_line'};
 
   # A recursive algorithm implemented iteratively!  Whee!
 
@@ -1378,7 +1378,7 @@ sub _treat_Es {
 
   #my @ells_to_tweak;
 
-  while($treelet = shift @stack) {
+  while($treelet = shift @code) {
     for(my $i = 2; $i < @$treelet; ++$i) { # iterate over children
       next unless ref $treelet->[$i];  # text nodes are uninteresting
       if($treelet->[$i][0] eq 'L') {
@@ -1387,17 +1387,17 @@ sub _treat_Es {
         my $thing;
         foreach my $attrname ('section', 'to') {
           if(defined($thing = $treelet->[$i][1]{$attrname}) and ref $thing) {
-            unshift @stack, $thing;
+            unshift @code, $thing;
             DEBUG > 2 and print STDERR "  Enqueuing ",
              pretty( $treelet->[$i][1]{$attrname} ),
              " as an attribute value to tweak.\n";
           }
         }
 
-        unshift @stack, $treelet->[$i]; # recurse
+        unshift @code, $treelet->[$i]; # recurse
         next;
       } elsif($treelet->[$i][0] ne 'E') {
-        unshift @stack, $treelet->[$i]; # recurse
+        unshift @code, $treelet->[$i]; # recurse
         next;
       }
 
@@ -1619,7 +1619,7 @@ A start_formatting_code and end_formatting_code methods, which in the
 base class call start_L, end_L, start_C, end_C, etc., if they are
 defined.
 
-have the POD FORMATTING ERRORS section note the localtime, and the
+have the POD FORMATTING ArgsS section note the localtime, and the
 version of Pod::Simple.
 
 option to delete all E<shy>s?

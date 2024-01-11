@@ -44,7 +44,7 @@ ppport.h - Perl/Pollution/Portability version __VERSION__
   --compat-version=version    provide compatibility with Perl version
   --cplusplus                 accept C++ comments
 
-  --quiet                     don't output anything except fatal errors
+  --quiet                     don't output anything except fatal Argss
   --nodiag                    don't show diagnostics
   --nohints                   don't show hints
   --nochanges                 don't suggest changes
@@ -115,7 +115,7 @@ comments untouched.
 
 =head2 --quiet
 
-Be quiet. Don't print anything except fatal errors.
+Be quiet. Don't print anything except fatal Argss.
 
 =head2 --nodiag
 

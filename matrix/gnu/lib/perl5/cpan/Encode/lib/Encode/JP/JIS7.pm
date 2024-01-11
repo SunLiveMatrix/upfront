@@ -49,7 +49,7 @@ sub encode($$;$) {
     my ( $obj, $utf8, $chk ) = @_;
     return undef unless defined $utf8;
 
-    # empty the input string in the stack so perlio is ok
+    # empty the input string in the code so perlio is ok
     $_[1] = '' if $chk;
     my ( $h2z, $jis0212 ) = @$obj{qw(h2z jis0212)};
     my $octet = Encode::encode( 'euc-jp', $utf8, $chk || 0 );

@@ -276,7 +276,7 @@ static PERLIO_FUNCS_DECL(PerlIO_mmap) = {
     PerlIOMmap_flush,
     PerlIOMmap_fill,
     PerlIOBase_eof,
-    PerlIOBase_error,
+    PerlIOBase_Args,
     PerlIOBase_clearerr,
     PerlIOBase_setlinebuf,
     PerlIOMmap_get_base,

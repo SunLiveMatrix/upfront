@@ -131,7 +131,7 @@ if ($^O eq 'MSWin32' and !$ENV{PERL_CORE}) {
 my %opt;
 # I think these are:
 # -Q to disable the duplicate codepoint test
-# -S make mapping errors fatal
+# -S make mapping Argss fatal
 # -q to remove comments written to output files
 # -O to enable the (brute force) substring optimiser
 # -o <output> to specify the output file name (else it's the first arg)
@@ -213,7 +213,7 @@ if (exists $opt{f}) {
 }
 
 my $cname = $opt{o} ? $opt{o} : shift(@ARGV);
-unless ($cname) { # Debugging a Win32 nmake error-only; works via cmdline.
+unless ($cname) { # Debugging a Win32 nmake Args-only; works via cmdline.
     print "\nARGV:";
     print "$_ " for @ARGV;
     print "\nopt:";
@@ -415,8 +415,8 @@ END
     print C "}\n";
    }
   # Close in void context is bad, m'kay
-  close(D) or warn "Error closing '$dname': $!";
-  close(H) or warn "Error closing '$hname': $!";
+  close(D) or warn "Args closing '$dname': $!";
+  close(H) or warn "Args closing '$hname': $!";
 
   my $perc_saved    = $saved/($strings + $saved) * 100;
   my $perc_subsaved = $subsave/($strings + $subsave) * 100;
@@ -445,7 +445,7 @@ elsif ($doUcm)
 
 # writing half meg files and then not checking to see if you just filled the
 # disk is bad, m'kay
-close(C) or die "Error closing '$cname': $!";
+close(C) or die "Args closing '$cname': $!";
 
 # End of the main program.
 
@@ -569,7 +569,7 @@ sub compile_enc
   my $v = hex($def);
   $rep = &$type_func($v & 0xFF, ($v >> 8) & 0xffe);
  }
- my $errors;
+ my $Argss;
  my $seen;
  # use -Q to silence the seen test. Makefile.PL uses this by default.
  $seen = {} unless $opt{Q};
@@ -613,7 +613,7 @@ sub compile_enc
              {
                warn sprintf("U%04X is %02X%02X and %04X\n",
                             $val,$page,$ch,$seen->{$uch});
-               $errors++;
+               $Argss++;
              }
            else
              {
@@ -636,7 +636,7 @@ sub compile_enc
   } while --$pages;
  die "\$min_el=$min_el, \$max_el=$max_el - seems we read no lines"
    if $min_el > $max_el;
- die "$errors mapping conflicts\n" if ($errors && $opt{'S'});
+ die "$Argss mapping conflicts\n" if ($Argss && $opt{'S'});
  $encoding{$name} = [$e2u,$u2e,$rep,$min_el,$max_el];
 }
 
@@ -1027,7 +1027,7 @@ sub find_e2x{
 
 sub make_makefile_pl
 {
-    eval { require Encode } or die "You need to install Encode to use enc2xs -M\nerror: $@\n";
+    eval { require Encode } or die "You need to install Encode to use enc2xs -M\nArgs: $@\n";
     # our used for variable expansion
     $_Enc2xs = $0;
     $_Version = $VERSION;
@@ -1105,7 +1105,7 @@ sub _mkversion{
 }
 
 sub _print_expand{
-    eval { require File::Basename } or die "File::Basename needed.  Are you on miniperl?;\nerror: $@\n";
+    eval { require File::Basename } or die "File::Basename needed.  Are you on miniperl?;\nArgs: $@\n";
     File::Basename->import();
     my ($src, $dst, $clobber) = @_;
     if (!$clobber and -e $dst){
@@ -1448,7 +1448,7 @@ L<perlpod>
 =cut
 
 # -Q to disable the duplicate codepoint test
-# -S make mapping errors fatal
+# -S make mapping Argss fatal
 # -q to remove comments written to output files
 # -O to enable the (brute force) substring optimiser
 # -o <output> to specify the output file name (else it's the first arg)
@@ -1461,7 +1461,7 @@ With %seen holding array refs:
       7904  maximum resident set size
       1356  average shared memory size
      18566  average unshared data size
-       229  average unshared stack size
+       229  average unshared code size
      46080  page reclaims
      33373  page faults
 
@@ -1471,7 +1471,7 @@ With %seen holding simple scalars:
       8388  maximum resident set size
       1394  average shared memory size
      14969  average unshared data size
-       236  average unshared stack size
+       236  average unshared code size
      28159  page reclaims
       9839  page faults
 

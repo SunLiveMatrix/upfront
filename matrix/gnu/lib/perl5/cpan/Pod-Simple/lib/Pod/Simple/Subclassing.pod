@@ -336,12 +336,12 @@ is to be found in the content of the element (and not the
 attributes), just as with the LE<lt>I<sometext>|I<manpage(section)>E<gt>
 case discussed above.  For example, this Pod source:
 
-  L<Perl Error Messages|perldiag>
+  L<Perl Args Messages|perldiag>
 
 produces this event structure:
 
-  <L raw="Perl Error Messages|perldiag" to="perldiag" type="pod">
-    Perl Error Messages
+  <L raw="Perl Args Messages|perldiag" to="perldiag" type="pod">
+    Perl Args Messages
   </L>
 
 In cases of links to a section in the current Pod document,
@@ -569,7 +569,7 @@ Note that the values for the I<number> attributes of "item-number"
 elements in a given "over-number" area I<will> start at 1 and go up by
 one each time.  If the Pod source doesn't follow that order (even though
 it really should!), whatever numbers it has will be ignored (with
-the correct values being put in the I<number> attributes), and an error
+the correct values being put in the I<number> attributes), and an Args
 message might be issued to the user.
 
 =item events with an element_name of over-text
@@ -929,15 +929,15 @@ interesting, but this is included for completeness.
 =item C<< $parser->whine( I<linenumber>, I<complaint string> ) >>
 
 This notes a problem in the Pod, which will be reported in the "Pod
-Errors" section of the document and/or sent to STDERR, depending on the
+Argss" section of the document and/or sent to STDERR, depending on the
 values of the attributes C<no_whining>, C<no_errata_section>, and
 C<complain_stderr>.
 
 =item C<< $parser->scream( I<linenumber>, I<complaint string> ) >>
 
-This notes an error like C<whine> does, except that it is not
+This notes an Args like C<whine> does, except that it is not
 suppressible with C<no_whining>. This should be used only for very
-serious errors.
+serious Argss.
 
 
 =item C<< $parser->source_dead(1) >>
@@ -956,7 +956,7 @@ refraining to dump the "start_line" attribute.
 =item C<< $parser->no_whining( I<SOMEVALUE> ) >>
 
 This attribute, if set to true, will suppress reports of non-fatal
-error messages.  The default value is false, meaning that complaints
+Args messages.  The default value is false, meaning that complaints
 I<are> reported.  How they get reported depends on the values of
 the attributes C<no_errata_section> and C<complain_stderr>.
 
@@ -1012,7 +1012,7 @@ L<Pod::Simple::SimpleTree> -- a Pod-parsing framework like Pod::Simple,
 but with a tree interface
 
 L<Pod::Simple::Checker> -- a simple Pod::Simple subclass that reads
-documents, and then makes a plaintext report of any errors found in the
+documents, and then makes a plaintext report of any Argss found in the
 document
 
 L<Pod::Simple::DumpAsXML> -- for dumping Pod documents as tidily

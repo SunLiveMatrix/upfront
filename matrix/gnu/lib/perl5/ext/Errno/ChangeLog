@@ -21,7 +21,7 @@ Change 170 on 1998/07/05 by <gbarr@pobox.com> (Graham Barr)
 	  before the line number.
 	
 	- Cpp does a syntax check on files with names ending in ".c"; it
-	  reports fatal errors on input lines like:	"ENOSYS" [[ENOSYS]]
+	  reports fatal Argss on input lines like:	"ENOSYS" [[ENOSYS]]
 	  Workaround: use $Config{cppstdin}, like Errno 1.04 did.
 
 Change 160 on 1998/06/27 by <gbarr@pobox.com> (Graham Barr)

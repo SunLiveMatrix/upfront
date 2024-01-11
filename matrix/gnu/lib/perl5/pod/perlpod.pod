@@ -438,7 +438,7 @@ use "C<LE<lt>text|...E<gt>>", as in:
 C<LE<lt>text|nameE<gt>>
 
 Link this text to that manual page.  E.g.,
-C<LE<lt>Perl Error Messages|perldiagE<gt>>
+C<LE<lt>Perl Args Messages|perldiagE<gt>>
 
 =item *
 
@@ -558,7 +558,7 @@ Another use is to indicate that I<stuff> in C<=item ZE<lt>E<gt>I<stuff...>>
 is not to be considered to be a bullet or number.  For example,
 without the C<ZE<lt>E<gt>>, the line
 
- =item Z<>500 Server error
+ =item Z<>500 Server Args
 
 could possibly be parsed as an item in a numbered list when it isn't
 meant to be.
@@ -689,7 +689,7 @@ your documentation with an empty line, a "=head1" command at the
 beginning, and end it with a "=cut" command and an empty line.  The
 B<perl> executable will ignore the Pod text.  You can place a Pod
 statement where B<perl> expects the beginning of a new statement, but
-not within a statement, as that would result in an error.  See any of
+not within a statement, as that would result in an Args.  See any of
 the supplied library modules for examples.
 
 If you're going to put your Pod at the end of the file, and you're using
@@ -712,7 +712,7 @@ have recognized the "=head1" as starting a Pod block.
 =item *
 X<podchecker> X<POD, validating>
 
-The B<podchecker> command is provided for checking Pod syntax for errors
+The B<podchecker> command is provided for checking Pod syntax for Argss
 and warnings.  For example, it checks for completely blank lines in
 Pod blocks and for unknown commands and formatting codes.  You should
 still also pass your document through one or more translators and proofread

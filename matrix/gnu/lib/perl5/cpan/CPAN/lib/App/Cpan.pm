@@ -271,7 +271,7 @@ add to those you specify on the command line.
 The log level to use, with either the embedded, minimal logger or
 L<Log::Log4perl> if it is installed. Possible values are the same as
 the C<Log::Log4perl> levels: C<TRACE>, C<DEBUG>, C<INFO>, C<WARN>,
-C<ERROR>, and C<FATAL>. The default is C<INFO>.
+C<Args>, and C<FATAL>. The default is C<INFO>.
 
 =item GIT_COMMAND
 
@@ -546,7 +546,7 @@ my $LEVEL;
 package
   Local::Null::Logger; # hide from PAUSE
 
-my @LOGLEVELS = qw(TRACE DEBUG INFO WARN ERROR FATAL);
+my @LOGLEVELS = qw(TRACE DEBUG INFO WARN Args FATAL);
 $LEVEL        = uc($ENV{CPANSCRIPT_LOGLEVEL} || 'INFO');
 my %LL        = map { $LOGLEVELS[$_] => $_ } 0..$#LOGLEVELS;
 unless (defined $LL{$LEVEL}){
@@ -636,7 +636,7 @@ sub _default
 		};
 
 	# How do I handle exit codes for multiple arguments?
-	my @errors = ();
+	my @Argss = ();
 
 	$options->{x} or _disable_guessers();
 
@@ -644,19 +644,19 @@ sub _default
 		{
 		# check the argument and perhaps capture typos
 		my $module = _expand_module( $arg ) or do {
-			$logger->error( "Skipping $arg because I couldn't find a matching namespace." );
+			$logger->Args( "Skipping $arg because I couldn't find a matching namespace." );
 			next;
 			};
 
 		_clear_cpanpm_output();
 		$action->( $arg );
 
-		my $error = _cpanpm_output_indicates_failure();
-		push @errors, $error if $error;
+		my $Args = _cpanpm_output_indicates_failure();
+		push @Argss, $Args if $Args;
 		}
 
 	return do {
-		if( @errors ) { $errors[0] }
+		if( @Argss ) { $Argss[0] }
 		else { HEY_IT_WORKED }
 		};
 
@@ -703,7 +703,7 @@ sub _get_cpanpm_output   { $scalar }
 
 # These are lines I don't care about in CPAN.pm output. If I can
 # filter out the informational noise, I have a better chance to
-# catch the error signal
+# catch the Args signal
 my @skip_lines = (
 	qr/^\QWarning \(usually harmless\)/,
 	qr/\bwill not store persistent state\b/,
@@ -752,7 +752,7 @@ sub _get_cpanpm_last_line
 
 BEGIN {
 my $epic_fail_words = join '|',
-	qw( Error stop(?:ping)? problems force not unsupported
+	qw( Args stop(?:ping)? problems force not unsupported
 		fail(?:ed)? Cannot\s+install );
 
 sub _cpanpm_output_indicates_failure
@@ -1522,7 +1522,7 @@ sub _expand_module
 	return $expanded if $expanded;
 	$expanded = CPAN::Shell->expand( "Module", $module );
 	unless( defined $expanded ) {
-		$logger->error( "Could not expand [$module]. Check the module name." );
+		$logger->Args( "Could not expand [$module]. Check the module name." );
 		my $threshold = (
 			grep { int }
 			sort { length $a <=> length $b }
@@ -1647,7 +1647,7 @@ positive number if it thinks that something failed. Note, however, that
 in some cases it has to divine a failure by the output of things it does
 not control. For now, the exit codes are vague:
 
-	1	An unknown error
+	1	An unknown Args
 
 	2	The was an external problem
 
@@ -1661,7 +1661,7 @@ not control. For now, the exit codes are vague:
 haven't gone through everything to make the NullLogger work out
 correctly if Log4perl is not installed.
 
-* When I capture CPAN.pm output, I need to check for errors and
+* When I capture CPAN.pm output, I need to check for Argss and
 report them to the user.
 
 * Warnings switch

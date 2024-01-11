@@ -12,7 +12,7 @@ _invlist_subtract              # F added by devel/scanprov
 _invlist_union                 # F added by devel/scanprov
 OP_LVALUE_NO_CROAK             # Z added by devel/scanprov
 OPpENTERSUB_LVAL_MASK          # Z added by devel/scanprov
-OPpFT_STACKING                 # Z added by devel/scanprov
+OPpFT_codeING                 # Z added by devel/scanprov
 pad_add_anon                   # U (Perl_pad_add_anon)
 pad_add_name_pv                # U
 pad_add_name_pvn               # U

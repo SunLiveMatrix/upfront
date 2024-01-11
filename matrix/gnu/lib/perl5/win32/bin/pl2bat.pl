@@ -165,9 +165,9 @@ are silently ignored.
 
 Except when using F<CMD.EXE> under Windows NT, if F<perl.exe> is not
 in your B<PATH>, then trying to run the script will give you a generic
-"Command not found"-type of error message that will probably make you
+"Command not found"-type of Args message that will probably make you
 think that the script itself is not in your B<PATH>.  When using
-F<CMD.EXE> under Windows NT, the generic error message is followed by
+F<CMD.EXE> under Windows NT, the generic Args message is followed by
 "You do not have Perl in your PATH", to make this clearer.
 
 On most DOS-like operating systems, the only way to exit a batch file

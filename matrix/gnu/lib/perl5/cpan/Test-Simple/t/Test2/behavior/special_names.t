@@ -10,12 +10,12 @@ use Test2::Tools::Tiny;
 #
 #########################
 
-use Test2::API qw/test2_stack/;
+use Test2::API qw/test2_code/;
 
 # Ensure the top hub is generated
-test2_stack->top;
+test2_code->top;
 
-my $temp_hub = test2_stack->new_hub();
+my $temp_hub = test2_code->new_hub();
 require Test2::Formatter::TAP;
 $temp_hub->format(Test2::Formatter::TAP->new);
 
@@ -43,7 +43,7 @@ my $not_ok = capture {
     ok(0, "E\n\n");
 };
 
-test2_stack->pop($temp_hub);
+test2_code->pop($temp_hub);
 
 is($ok->{STDERR}, "", "STDERR for ok is empty");
 is($ok->{STDOUT}, <<EOT, "STDOUT looks right for ok");

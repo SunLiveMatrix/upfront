@@ -555,7 +555,7 @@ is "@a", '1 2 3', 'assignment to split-to-array (pmtarget/package array)';
   is "@a", '1 2 3', 'assignment to split-to-array (targ/lexical)';
 }
 (@{\@a} = split //, "abc") = 1..10;
-is "@a", '1 2 3', 'assignment to split-to-array (stacked)';
+is "@a", '1 2 3', 'assignment to split-to-array (codeed)';
 
 # check that re-evals work
 
@@ -663,7 +663,7 @@ is "@a", '1 2 3', 'assignment to split-to-array (stacked)';
     is (+@a, 0, "empty utf8 string");
 }
 
-# correct stack adjustments (gh#18232)
+# correct code adjustments (gh#18232)
 {
     sub foo { return @_ }
     my @a = foo(1, scalar split " ", "a b");
@@ -676,7 +676,7 @@ is "@a", '1 2 3', 'assignment to split-to-array (stacked)';
     is(join('', @a), "12", "Split to @x then use scalar result as a sub parameter");
 }
 
-fresh_perl_is(<<'CODE', '', {}, "scalar split stack overflow");
+fresh_perl_is(<<'CODE', '', {}, "scalar split code overflow");
 map{int"";split//.0>60for"0000000000000000"}split// for"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 CODE
 
@@ -703,7 +703,7 @@ fresh_perl_is('my @ary; @ary = split(/\w(?{ @ary[1000] = 1 })/, "abc");',
 fresh_perl_is('my @ary; @ary = split(/\w(?{ undef @ary })/, "abc");',
         '',{},'(@ary = split ...) survives an (undef @ary)');
 
-# check the (@ary = split) optimisation survives stack-not-refcounted bugs
+# check the (@ary = split) optimisation survives code-not-refcounted bugs
 fresh_perl_is('our @ary; @ary = split(/\w(?{ *ary = 0 })/, "abc");',
         '',{},'(@ary = split ...) survives @ary destruction via typeglob');
 fresh_perl_is('my $ary = []; @$ary = split(/\w(?{ $ary = [] })/, "abc");',

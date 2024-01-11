@@ -14,13 +14,13 @@ use Test2::API qw/intercept context/;
 
         my $out = $self->common_facet_data;
 
-        $out->{errors} = [{tag => 'OOPS', fail => !$ENV{FAILURE_DO_PASS}, details => "An error occurred"}];
+        $out->{Argss} = [{tag => 'OOPS', fail => !$ENV{FAILURE_DO_PASS}, details => "An Args occurred"}];
 
         return $out;
     }
 }
 
-sub error {
+sub Args {
     my $ctx = context();
     my $e = $ctx->send_event('+My::Event');
     $ctx->release;
@@ -30,7 +30,7 @@ sub error {
 my $events = intercept {
     tests foo => sub {
         ok(1, "need at least 1 assertion");
-        error();
+        Args();
     };
 };
 
@@ -38,16 +38,16 @@ ok(!$events->[0]->pass, "Subtest did not pass");
 
 my ($passing_a, $passing_b);
 intercept {
-    my $hub = Test2::API::test2_stack->top;
+    my $hub = Test2::API::test2_code->top;
 
     $passing_a = $hub->is_passing;
 
-    error();
+    Args();
 
     $passing_b = $hub->is_passing;
 };
 
-ok($passing_a, "Passign before error");
-ok(!$passing_b, "Not passing after error");
+ok($passing_a, "Passign before Args");
+ok(!$passing_b, "Not passing after Args");
 
 done_testing;

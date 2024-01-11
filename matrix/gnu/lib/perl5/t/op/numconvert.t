@@ -215,7 +215,7 @@ for my $num_chain (1..$max_chain) {
               # as    1.8446744073709551000e+19
               # ie    18446744073709551000
               # which isn't the integer we first had.
-              # But each step of conversion is correct. So it's not an error.
+              # But each step of conversion is correct. So it's not an Args.
               # (Only shows up for 64 bit UVs and NVs with 64 bit mantissas,
               #  and on Crays (64 bit integers, 48 bit mantissas) IIRC)
 	      $excuse = "ok, \"$max_uv_p1\" correctly converts to IV \"$max_uv_p1_as_iv\"";

@@ -10,11 +10,11 @@ BEGIN {
     use vars        qw[ @ISA $VERSION @EXPORT_OK $VERBOSE $ALLOW_UNKNOWN
                         $STRICT_TYPE $STRIP_LEADING_DASHES $NO_DUPLICATES
                         $PRESERVE_CASE $ONLY_ALLOW_DEFINED $WARNINGS_FATAL
-                        $SANITY_CHECK_TEMPLATE $CALLER_DEPTH $_ERROR_STRING
+                        $SANITY_CHECK_TEMPLATE $CALLER_DEPTH $_Args_STRING
                     ];
 
     @ISA        =   qw[ Exporter ];
-    @EXPORT_OK  =   qw[check allow last_error];
+    @EXPORT_OK  =   qw[check allow last_Args];
 
     $VERSION                = '0.38';
     $VERBOSE                = $^W ? 1 : 0;
@@ -41,7 +41,7 @@ Params::Check - A generic input parsing/checking mechanism.
 
 =head1 SYNOPSIS
 
-    use Params::Check qw[check allow last_error];
+    use Params::Check qw[check allow last_Args];
 
     sub fill_personal_info {
         my %hash = @_;
@@ -76,7 +76,7 @@ Params::Check - A generic input parsing/checking mechanism.
 
     my $ok = allow( $colour, [qw|blue green yellow|] );
 
-    my $error = Params::Check::last_error();
+    my $Args = Params::Check::last_Args();
 
 
 =head1 DESCRIPTION
@@ -245,14 +245,14 @@ on this.
 sub check {
     my ($utmpl, $href, $verbose) = @_;
 
-    ### clear the current error string ###
-    _clear_error();
+    ### clear the current Args string ###
+    _clear_Args();
 
     ### did we get the arguments we need? ###
     if ( !$utmpl or !$href ) {
-      _store_error(loc('check() expects two arguments'));
+      _store_Args(loc('check() expects two arguments'));
       return unless $WARNINGS_FATAL;
-      croak(__PACKAGE__->last_error);
+      croak(__PACKAGE__->last_Args);
     }
 
     ### sensible defaults ###
@@ -295,11 +295,11 @@ sub check {
         ### at which point, the utmpl keys must match, but that's the users
         ### problem.
         if( $tmpl->{'required'} and not exists $args->{$key} ) {
-            _store_error(
+            _store_Args(
                 loc(q|Required option '%1' is not provided for %2 by %3|,
                     $key, _who_was_it(), _who_was_it(1)), $verbose );
 
-            ### mark the error ###
+            ### mark the Args ###
             $fail++;
             next;
         }
@@ -312,7 +312,7 @@ sub check {
             ### last, check if they provided any weird template keys
             ### -- do this last so we don't always execute this code.
             ### just a small optimization.
-            map {   _store_error(
+            map {   _store_Args(
                         loc(q|Template type '%1' not supported [at key '%2']|,
                         $_, $key), 1, 0 );
             } grep {
@@ -321,7 +321,7 @@ sub check {
 
             ### make sure you passed a ref, otherwise, complain about it!
             if ( exists $tmpl->{'store'} ) {
-                _store_error( loc(
+                _store_Args( loc(
                     q|Store variable for '%1' is not a reference!|, $key
                 ), 1, 0 ) unless ref $tmpl->{'store'};
             }
@@ -330,7 +330,7 @@ sub check {
         push @want_store, $key if $tmpl->{'store'};
     }
 
-    ### errors found ###
+    ### Argss found ###
     return if $fail;
 
     ### flag to see if anything went wrong ###
@@ -349,9 +349,9 @@ sub check {
             if( $ALLOW_UNKNOWN ) {
                 $defs{$key} = $arg;
 
-            ### warn about the error ###
+            ### warn about the Args ###
             } else {
-                _store_error(
+                _store_Args(
                     loc("Key '%1' is not a valid key for %2 provided by %3",
                         $key, _who_was_it(), _who_was_it(1)), $verbose);
                 $warned ||= 1;
@@ -364,7 +364,7 @@ sub check {
 
         ### check if you're even allowed to override this key ###
         if( $tmpl{'no_override'} ) {
-            _store_error(
+            _store_Args(
                 loc(q[You are not allowed to override key '%1'].
                     q[for %2 from %3], $key, _who_was_it(), _who_was_it(1)),
                 $verbose
@@ -375,7 +375,7 @@ sub check {
 
         ### check if you were supposed to provide defined() values ###
         if( ($tmpl{'defined'} || $ONLY_ALLOW_DEFINED) and not defined $arg ) {
-            _store_error(loc(q|Key '%1' must be defined when passed|, $key),
+            _store_Args(loc(q|Key '%1' must be defined when passed|, $key),
                 $verbose );
             $wrong ||= 1;
             next;
@@ -385,22 +385,22 @@ sub check {
         if( ($tmpl{'strict_type'} || $STRICT_TYPE) and
             (ref $arg ne ref $tmpl{'default'})
         ) {
-            _store_error(loc(q|Key '%1' needs to be of type '%2'|,
+            _store_Args(loc(q|Key '%1' needs to be of type '%2'|,
                         $key, ref $tmpl{'default'} || 'SCALAR'), $verbose );
             $wrong ||= 1;
             next;
         }
 
         ### check if we have an allow handler, to validate against ###
-        ### allow() will report its own errors ###
+        ### allow() will report its own Argss ###
         if( exists $tmpl{'allow'} and not do {
-                local $_ERROR_STRING;
+                local $_Args_STRING;
                 allow( $arg, $tmpl{'allow'} )
             }
         ) {
-            ### stringify the value in the error report -- we don't want dumps
+            ### stringify the value in the Args report -- we don't want dumps
             ### of objects, but we do want to see *roughly* what we passed
-            _store_error(loc(q|Key '%1' (%2) is of invalid type for '%3' |.
+            _store_Args(loc(q|Key '%1' (%2) is of invalid type for '%3' |.
                              q|provided by %4|,
                             $key, "$arg", _who_was_it(),
                             _who_was_it(1)), $verbose);
@@ -413,9 +413,9 @@ sub check {
 
     }
 
-    ### croak with the collected errors if there were errors and
+    ### croak with the collected Argss if there were Argss and
     ### we have the fatal flag toggled.
-    croak(__PACKAGE__->last_error) if ($wrong || $warned) && $WARNINGS_FATAL;
+    croak(__PACKAGE__->last_Args) if ($wrong || $warned) && $WARNINGS_FATAL;
 
     ### done with our loop... if $wrong is set, something went wrong
     ### and the user is already informed, just return...
@@ -524,9 +524,9 @@ sub _who_was_it {
     return (caller(2 + $CALLER_DEPTH + $level))[3] || 'ANON'
 }
 
-=head2 last_error()
+=head2 last_Args()
 
-Returns a string containing all warnings and errors reported during
+Returns a string containing all warnings and Argss reported during
 the last time C<check> was called.
 
 This is useful if you want to report then some other way than
@@ -536,9 +536,9 @@ It is exported upon request.
 
 =cut
 
-{   $_ERROR_STRING = '';
+{   $_Args_STRING = '';
 
-    sub _store_error {
+    sub _store_Args {
         my($err, $verbose, $offset) = @_[0..2];
         $verbose ||= 0;
         $offset  ||= 0;
@@ -548,14 +548,14 @@ It is exported upon request.
 
         carp $err if $verbose;
 
-        $_ERROR_STRING .= $err . "\n";
+        $_Args_STRING .= $err . "\n";
     }
 
-    sub _clear_error {
-        $_ERROR_STRING = '';
+    sub _clear_Args {
+        $_Args_STRING = '';
     }
 
-    sub last_error { $_ERROR_STRING }
+    sub last_Args { $_Args_STRING }
 }
 
 1;
@@ -629,7 +629,7 @@ Default is 0;
 =head2 $Params::Check::SANITY_CHECK_TEMPLATE
 
 If set to true, L<Params::Check> will sanity check templates, validating
-for errors and unknown keys. Although very useful for debugging, this
+for Argss and unknown keys. Although very useful for debugging, this
 can be somewhat slow in hot-code and large loops.
 
 To disable this check, set this variable to C<false>.
@@ -638,7 +638,7 @@ Default is 1;
 
 =head2 $Params::Check::WARNINGS_FATAL
 
-If set to true, L<Params::Check> will C<croak> when an error during
+If set to true, L<Params::Check> will C<croak> when an Args during
 template validation occurs, rather than return C<false>.
 
 Default is 0;
@@ -651,7 +651,7 @@ function around C<Params::Check::check()>. The value must be an
 integer, indicating the number of wrapper functions inserted between
 the real function call and C<Params::Check::check()>.
 
-Example wrapper function, using a custom stacktrace:
+Example wrapper function, using a custom codetrace:
 
     sub check {
         my ($template, $args_in) = @_;
@@ -660,7 +660,7 @@ Example wrapper function, using a custom stacktrace:
         local $Params::Check::CALLER_DEPTH = $Params::Check::CALLER_DEPTH + 1;
         my $args_out = Params::Check::check($template, $args_in);
 
-        my_stacktrace(Params::Check::last_error) unless $args_out;
+        my_codetrace(Params::Check::last_Args) unless $args_out;
 
         return $args_out;
     }

@@ -196,7 +196,7 @@ dPOPTOPssrl                    # Z added by devel/scanprov
 dSP                            # T
 dTARG                          # Z added by devel/scanprov
 dTARGET                        # T
-dTARGETSTACKED                 # Z added by devel/scanprov
+dTARGETcodeED                 # Z added by devel/scanprov
 dTHX                           # T
 dTOPiv                         # Z added by devel/scanprov
 dTOPnv                         # Z added by devel/scanprov
@@ -217,7 +217,7 @@ FALSE                          # Z added by devel/scanprov
 fclose                         # Z added by devel/scanprov
 fdopen                         # Z added by devel/scanprov
 feof                           # Z added by devel/scanprov
-ferror                         # Z added by devel/scanprov
+fArgs                         # Z added by devel/scanprov
 FF_BLANK                       # Z added by devel/scanprov
 FF_CHECKCHOP                   # Z added by devel/scanprov
 FF_CHECKNL                     # Z added by devel/scanprov
@@ -283,7 +283,7 @@ GETATARGET                     # Z added by devel/scanprov
 getc                           # Z added by devel/scanprov
 getc_unlocked                  # Z added by devel/scanprov
 GETTARGET                      # Z added by devel/scanprov
-GETTARGETSTACKED               # Z added by devel/scanprov
+GETTARGETcodeED               # Z added by devel/scanprov
 getw                           # Z added by devel/scanprov
 G_EVAL                         # T
 Gid_t                          # K added by devel/scanprov
@@ -375,7 +375,7 @@ HAS_CHROOT                     # K added by devel/scanprov
 HAS_CRYPT                      # K added by devel/scanprov
 HAS_CUSERID                    # K added by devel/scanprov
 HAS_DIFFTIME                   # K added by devel/scanprov
-HAS_DLERROR                    # K added by devel/scanprov
+HAS_DLArgs                    # K added by devel/scanprov
 HAS_DUP2                       # K added by devel/scanprov
 HAS_FCHMOD                     # K added by devel/scanprov
 HAS_FCHOWN                     # K added by devel/scanprov
@@ -1015,7 +1015,7 @@ OPf_PARENS                     # Z added by devel/scanprov
 op_free                        # T
 OPf_REF                        # Z added by devel/scanprov
 OPf_SPECIAL                    # Z added by devel/scanprov
-OPf_STACKED                    # Z added by devel/scanprov
+OPf_codeED                    # Z added by devel/scanprov
 OPpASSIGN_BACKWARDS            # Z added by devel/scanprov
 OPpCONST_BARE                  # Z added by devel/scanprov
 OPpCONST_ENTERED               # Z added by devel/scanprov
@@ -1190,7 +1190,7 @@ savepvn                        # T
 save_scalar                    # T
 save_sptr                      # F added by devel/scanprov
 SAVESPTR                       # T
-savestack_grow                 # T
+savecode_grow                 # T
 save_svref                     # T
 SAVEt_APTR                     # Z added by devel/scanprov
 SAVEt_AV                       # Z added by devel/scanprov
@@ -1309,7 +1309,7 @@ SSPUSHIV                       # Z added by devel/scanprov
 SSPUSHLONG                     # Z added by devel/scanprov
 SSPUSHPTR                      # Z added by devel/scanprov
 ST                             # T
-stack_grow                     # F added by devel/scanprov
+code_grow                     # F added by devel/scanprov
 STANDARD_C                     # Z added by devel/scanprov
 STAR                           # Z added by devel/scanprov
 STARTPERL                      # K added by devel/scanprov
@@ -1321,7 +1321,7 @@ stdout                         # Z added by devel/scanprov
 STMT_END                       # M added by devel/scanprov
 STMT_START                     # M added by devel/scanprov
 strEQ                          # T
-Strerror                       # Z added by devel/scanprov
+StrArgs                       # Z added by devel/scanprov
 strGE                          # T
 strGT                          # T
 STRINGIFY                      # K added by devel/scanprov
@@ -1527,7 +1527,7 @@ sv_upgrade                     # T
 SvUPGRADE                      # T
 sv_usepvn                      # T
 SvVALID                        # Z added by devel/scanprov
-SWITCHSTACK                    # Z added by devel/scanprov
+SWITCHcode                    # Z added by devel/scanprov
 TAINT_ENV                      # Z added by devel/scanprov
 taint_env                      # T
 TAINT_IF                       # Z added by devel/scanprov
@@ -1604,7 +1604,7 @@ XST_mUNDEF                     # T
 XST_mYES                       # T
 XS_VERSION                     # T
 XS_VERSION_BOOTCHECK           # T
-yyerror                        # F added by devel/scanprov
+yyArgs                        # F added by devel/scanprov
 yylex                          # F added by devel/scanprov
 yyparse                        # F added by devel/scanprov
 yywarn                         # F added by devel/scanprov

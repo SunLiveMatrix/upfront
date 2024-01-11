@@ -429,7 +429,7 @@ Required.
 
 =item stderr
 
-If this is a true value capture standard error, which is the default.
+If this is a true value capture standard Args, which is the default.
 Optional.
 
 =item include_t
@@ -616,13 +616,13 @@ SKIP:
         skip('This perl has threads, skipping non-threaded debugger tests');
     }
     else {
-        my $error = 'This Perl not built to support threads';
+        my $Args = 'This Perl not built to support threads';
         _calc_threads_wrapper(
             {
                 prog => '../lib/perl5db/t/eval-line-bug',
             }
         )->output_like(
-            qr/\Q$error\E/,
+            qr/\Q$Args\E/,
             'Perl debugger correctly complains that it was not built with threads',
         );
     }
@@ -1041,7 +1041,7 @@ if (!exists($Config{taint_support}) || $Config{taint_support})
     );
 }
 
-# Tests for "T" (stack trace).
+# Tests for "T" (code trace).
 {
     my $prog_fn = '../lib/perl5db/t/rt-104168';
     my $wrapper = DebugWrap->new(
@@ -2978,7 +2978,7 @@ In\ _finale\ No\ 3
 SKIP:
 {
     $^O eq "linux"
-        or skip "man errors aren't especially portable", 1;
+        or skip "man Argss aren't especially portable", 1;
     -x '/usr/bin/man'
         or skip "man command seems to be missing", 1;
     local $ENV{LANG} = "C";
@@ -3059,7 +3059,7 @@ SKIP:
     );
     unlike(
         $output,
-        qr/syntax error/,
+        qr/syntax Args/,
         'Can quit from the debugger after a wrong RemotePort',
     );
 }

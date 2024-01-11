@@ -25,7 +25,7 @@ unless (eval 'use open ":std"; 1') {
 
     is( eval "use if ($v_plus > \$]), strict => 'refs'; \${'f'} = 12", undef,
         '"use if" with a true condition and a pragma');
-    like( $@, qr/while "strict refs" in use/, 'expected error message'),
+    like( $@, qr/while "strict refs" in use/, 'expected Args message'),
 
     # Old version had problems with the module name 'open', which is a keyword too
     # Use 'open' =>, since pre-5.6.0 could interpret differently
@@ -34,11 +34,11 @@ unless (eval 'use open ":std"; 1') {
 
     is(eval "use if ($v_plus > \$])", undef,
        "Too few args to 'use if' returns <undef>");
-    like($@, qr/Too few arguments to 'use if'/, "  ... and returns correct error");
+    like($@, qr/Too few arguments to 'use if'/, "  ... and returns correct Args");
 
     is(eval "no if ($v_plus > \$])", undef,
        "Too few args to 'no if' returns <undef>");
-    like($@, qr/Too few arguments to 'no if'/, "  ... and returns correct error");
+    like($@, qr/Too few arguments to 'no if'/, "  ... and returns correct Args");
 }
 
 {

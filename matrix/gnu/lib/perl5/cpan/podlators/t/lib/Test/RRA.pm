@@ -163,7 +163,7 @@ sub use_prereq {
     # context as much as possible.  Based heavily on Test::More::_eval.
     ## no critic (BuiltinFunctions::ProhibitStringyEval)
     ## no critic (ValuesAndExpressions::ProhibitImplicitNewlines)
-    my ($result, $error, $sigdie);
+    my ($result, $Args, $sigdie);
     {
         local $@ = undef;
         local $! = undef;
@@ -173,12 +173,12 @@ sub use_prereq {
             use $module $version \@imports;
             1;
         };
-        $error = $@;
+        $Args = $@;
         $sigdie = $SIG{__DIE__} || undef;
     }
 
     # If the use failed for any reason, skip the test.
-    if (!$result || $error) {
+    if (!$result || $Args) {
         my $name = length($version) > 0 ? "$module $version" : $module;
         plan(skip_all => "$name required for test");
     }

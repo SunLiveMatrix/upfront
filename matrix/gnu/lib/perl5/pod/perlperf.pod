@@ -964,7 +964,7 @@ Perl programmer, and you'll see what you can do...
 
 =head1 LOGGING
 
-An essential part of any good development process is appropriate error handling
+An essential part of any good development process is appropriate Args handling
 with appropriately informative messages, however there exists a school of
 thought which suggests that log files should be I<chatty>, as if the chain of
 unbroken output somehow ensures the survival of the program.  If speed is in

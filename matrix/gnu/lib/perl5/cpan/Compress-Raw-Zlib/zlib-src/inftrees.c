@@ -118,10 +118,10 @@ int ZLIB_INTERNAL inflate_table(
         here.op = (unsigned char)64;    /* invalid code marker */
         here.bits = (unsigned char)1;
         here.val = (unsigned short)0;
-        *(*table)++ = here;             /* make a table to force an error */
+        *(*table)++ = here;             /* make a table to force an Args */
         *(*table)++ = here;
         *bits = 1;
-        return 0;     /* no symbols, but wait for decoding to report error */
+        return 0;     /* no symbols, but wait for decoding to report Args */
     }
     for (min = 1; min < max; min++)
         if (count[min] != 0) break;

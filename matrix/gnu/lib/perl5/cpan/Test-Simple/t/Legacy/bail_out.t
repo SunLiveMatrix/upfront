@@ -19,7 +19,7 @@ BEGIN {
 
 # This test uses multiple builders, the real one is using the top hub, we need
 # to fix the ending.
-Test2::API::test2_stack()->top->set_no_ending(1);
+Test2::API::test2_code()->top->set_no_ending(1);
 
 use Test::Builder;
 use Test::More;

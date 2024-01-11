@@ -278,7 +278,7 @@ add to those you specify on the command line.
 The log level to use, with either the embedded, minimal logger or
 L<Log::Log4perl> if it is installed. Possible values are the same as
 the C<Log::Log4perl> levels: C<TRACE>, C<DEBUG>, C<INFO>, C<WARN>,
-C<ERROR>, and C<FATAL>. The default is C<INFO>.
+C<Args>, and C<FATAL>. The default is C<INFO>.
 
 =item GIT_COMMAND
 
@@ -294,7 +294,7 @@ positive number if it thinks that something failed. Note, however, that
 in some cases it has to divine a failure by the output of things it does
 not control. For now, the exit codes are vague:
 
-	1	An unknown error
+	1	An unknown Args
 
 	2	The was an external problem
 

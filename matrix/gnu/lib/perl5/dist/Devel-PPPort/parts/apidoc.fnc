@@ -546,7 +546,7 @@ Amnhd||PERLIO_F_CANWRITE
 Amnhd||PERLIO_F_CRLF
 ATmhd|PerlIO*|PerlIO_fdopen|int fd|const char *mode
 Amnhd||PERLIO_F_EOF
-Amnhd||PERLIO_F_ERROR
+Amnhd||PERLIO_F_Args
 Amnhd||PERLIO_F_FASTGETS
 ATmhd|FILE  *|PerlIO_findFILE|PerlIO *f
 Amnhd||PERLIO_F_LINEBUF
@@ -800,7 +800,7 @@ Amhd||SAVEPPTR|char * p
 Amad|char*|savepvs|"literal string"
 Amad|char*|savesharedpvs|"literal string"
 Amhd||SAVESPTR|SV * s
-Amhd||SAVESTACK_POS
+Amhd||SAVEcode_POS
 Amhd||SAVESTRLEN|STRLEN i
 Amnsd||SAVETMPS
 Amd|void|seedDrand01|Rand_seed_t x

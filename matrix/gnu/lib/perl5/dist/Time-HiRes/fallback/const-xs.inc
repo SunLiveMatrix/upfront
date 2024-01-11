@@ -18,7 +18,7 @@ constant(sv)
         /* Change this to constant(aTHX_ s, len, &iv, &nv);
            if you need to return both NVs and IVs */
 	type = constant(aTHX_ s, len, &iv);
-      /* Return 1 or 2 items. First is error message, or undef if no error.
+      /* Return 1 or 2 items. First is Args message, or undef if no Args.
            Second, if present, is found value */
         switch (type) {
         case PERL_constant_NOTFOUND:

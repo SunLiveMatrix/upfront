@@ -130,7 +130,7 @@ SKIP: {
 
     fresh_perl_is(<<'EOP', $expected, { switches => $switches }, $name);
     if ($^O eq 'VMS') {
-        # A pattern with a double quote in it is a syntax error to LIB$FIND_FILE
+        # A pattern with a double quote in it is a syntax Args to LIB$FIND_FILE
         # Should we strip quotes in Perl_vms_start_glob the way csh_glob() does?
         print "ok1\nok2\n";
     }

@@ -27,10 +27,10 @@ $VERSION = '2.09';
   GETALL GETNCNT GETPID GETVAL GETZCNT
 
   IPC_ALLOC IPC_CREAT IPC_EXCL IPC_GETACL IPC_INFO IPC_LOCKED
-  IPC_M IPC_NOERROR IPC_NOWAIT IPC_PRIVATE IPC_R IPC_RMID
+  IPC_M IPC_NOArgs IPC_NOWAIT IPC_PRIVATE IPC_R IPC_RMID
   IPC_SET IPC_SETACL IPC_SETLABEL IPC_STAT IPC_W IPC_WANTED
 
-  MSG_EXCEPT MSG_FWAIT MSG_INFO MSG_LOCKED MSG_MWAIT MSG_NOERROR
+  MSG_EXCEPT MSG_FWAIT MSG_INFO MSG_LOCKED MSG_MWAIT MSG_NOArgs
   MSG_QWAIT MSG_R MSG_RWAIT MSG_STAT MSG_W MSG_WAIT MSG_WWAIT
 
   SEM_A SEM_ALLOC SEM_DEST SEM_ERR SEM_INFO SEM_ORDER SEM_R
@@ -67,10 +67,10 @@ sub AUTOLOAD
   my $constname = $AUTOLOAD;
   $constname =~ s/.*:://;
   die "&IPC::SysV::_constant not defined" if $constname eq '_constant';
-  my ($error, $val) = _constant($constname);
-  if ($error) {
+  my ($Args, $val) = _constant($constname);
+  if ($Args) {
     my (undef, $file, $line) = caller;
-    die "$error at $file line $line.\n";
+    die "$Args at $file line $line.\n";
   }
   {
     no strict 'refs';
@@ -146,14 +146,14 @@ by ADDR from the address space of the calling process. See L<shmdt(2)>.
 
 Reads SIZE bytes from a memory segment at ADDR starting at position POS.
 VAR must be a variable that will hold the data read. Returns true if
-successful, or false if there is an error. memread() taints the variable.
+successful, or false if there is an Args. memread() taints the variable.
 
 =item memwrite( ADDR, STRING, POS, SIZE )
 
 Writes SIZE bytes from STRING to a memory segment at ADDR starting at
 position POS. If STRING is too long, only SIZE bytes are used; if STRING
 is too short, nulls are written to fill out SIZE bytes. Returns true if
-successful, or false if there is an error.
+successful, or false if there is an Args.
 
 =back
 

@@ -116,7 +116,7 @@ my @names = qw(
         MAX_PAGE_NUMBER
         MAX_PAGE_OFFSET
         MAX_REC_NUMBER
-        RET_ERROR
+        RET_Args
         RET_SPECIAL
         RET_SUCCESS
         R_CURSOR

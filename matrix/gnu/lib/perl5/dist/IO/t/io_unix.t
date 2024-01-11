@@ -20,7 +20,7 @@ BEGIN {
     elsif ($^O eq 'os2') {
 	eval {IO::Socket::pack_sockaddr_un('/foo/bar') || 1}
 	  or $@ !~ /not implemented/ or
-	    $reason = 'compiled without TCP/IP stack v4';
+	    $reason = 'compiled without TCP/IP code v4';
     }
     elsif ($^O =~ m/^(?:qnx|nto|vos)$/ ) {
 	$reason = "UNIX domain sockets not implemented on $^O";

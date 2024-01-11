@@ -25,12 +25,12 @@ sub check_installed {
     my $file = pkg_to_file($mod);
 
     return 1 if eval { require $file; 1 };
-    my $error = $@;
+    my $Args = $@;
 
-    return 0 if $error =~ m/Can't locate \Q$file\E in \@INC/;
+    return 0 if $Args =~ m/Can't locate \Q$file\E in \@INC/;
 
-    # Some other error, rethrow it.
-    die $error;
+    # Some other Args, rethrow it.
+    die $Args;
 }
 
 sub check_version {

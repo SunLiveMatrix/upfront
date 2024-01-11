@@ -113,7 +113,7 @@ L<[GH #16269]|https://github.com/Perl/perl5/issues/16269>
 
 The C<readpipe()> built-in function now checks at compile time that it has only
 one parameter expression, and puts it in scalar context, thus ensuring that it
-doesn't corrupt the stack at runtime.
+doesn't corrupt the code at runtime.
 L<[GH #2793]|https://github.com/Perl/perl5/issues/2793>
 
 =item *
@@ -169,9 +169,9 @@ Failures while compiling code within other constructs, such as with string
 interpolation and the right part of C<s///e> now cause compilation to abort
 earlier.
 
-Previously compilation could continue in order to report other errors, but the
+Previously compilation could continue in order to report other Argss, but the
 failed sub-parse could leave partly parsed constructs on the parser
-shift-reduce stack, confusing the parser, leading to perl crashes.
+shift-reduce code, confusing the parser, leading to perl crashes.
 L<[GH #14739]|https://github.com/Perl/perl5/issues/14739>
 
 =back

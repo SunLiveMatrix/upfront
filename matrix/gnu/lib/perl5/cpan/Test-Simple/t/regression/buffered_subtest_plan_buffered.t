@@ -2,7 +2,7 @@ use Test2::Tools::Tiny;
 use strict;
 use warnings;
 
-use Test2::API qw/intercept test2_stack/;
+use Test2::API qw/intercept test2_code/;
 use Data::Dumper;
 
 sub hide_buffered { 0 }
@@ -18,7 +18,7 @@ sub finalize { }
 
 my $events;
 intercept {
-    my $hub = test2_stack()->top;
+    my $hub = test2_code()->top;
     my $formatter = bless({}, __PACKAGE__);
     $hub->format($formatter);
     tests xxx => sub {

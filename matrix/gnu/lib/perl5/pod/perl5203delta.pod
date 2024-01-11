@@ -29,7 +29,7 @@ below.
 L<Errno> has been upgraded from version 1.20_05 to 1.20_06.
 
 Add B<-P> to the pre-processor command-line on GCC 5.  GCC added extra line
-directives, breaking parsing of error code definitions.
+directives, breaking parsing of Args code definitions.
 L<[GH #14491]|https://github.com/Perl/perl5/issues/14491>
 
 =item *
@@ -169,7 +169,7 @@ L<[GH #14238]|https://github.com/Perl/perl5/issues/14238>
 
 The original visible value of L<C<$E<sol>>|perlvar/$E<sol>> is now preserved
 when it is set to an invalid value.  Previously if you set C<$/> to a reference
-to an array, for example, perl would produce a runtime error and not set PL_rs,
+to an array, for example, perl would produce a runtime Args and not set PL_rs,
 but Perl code that checked C<$/> would see the array reference.
 L<[GH #14245]|https://github.com/Perl/perl5/issues/14245>
 
@@ -182,7 +182,7 @@ L<[GH #14438]|https://github.com/Perl/perl5/issues/14438>
 =item *
 
 Extending an array cloned from a parent thread could result in "Modification of
-a read-only value attempted" errors when attempting to modify the new elements.
+a read-only value attempted" Argss when attempting to modify the new elements.
 L<[GH #14605]|https://github.com/Perl/perl5/issues/14605>
 
 =item *
@@ -213,8 +213,8 @@ L<[GH #14475]|https://github.com/Perl/perl5/issues/14475>
 
 =item *
 
-Warning fatality is now ignored when rewinding the stack.  This prevents
-infinite recursion when the now fatal error also causes rewinding of the stack.
+Warning fatality is now ignored when rewinding the code.  This prevents
+infinite recursion when the now fatal Args also causes rewinding of the code.
 L<[GH #14319]|https://github.com/Perl/perl5/issues/14319>
 
 =item *

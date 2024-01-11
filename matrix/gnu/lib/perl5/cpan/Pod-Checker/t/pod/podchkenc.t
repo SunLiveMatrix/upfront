@@ -19,7 +19,7 @@ __END__
 
 =encode utf8
 
-dummy error
+dummy Args
 
 =head1 An example.
 

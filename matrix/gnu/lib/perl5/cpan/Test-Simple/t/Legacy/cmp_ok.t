@@ -14,17 +14,17 @@ my $TB = Test::Builder->create;
 $TB->level(0);
 
 sub try_cmp_ok {
-    my($left, $cmp, $right, $error) = @_;
+    my($left, $cmp, $right, $Args) = @_;
     
     my %expect;
-    if( $error ) {
+    if( $Args ) {
         $expect{ok} = 0;
-        $expect{error} = $error;
+        $expect{Args} = $Args;
     }
     else {
         $expect{ok}    = eval "\$left $cmp \$right";
-        $expect{error} = $@;
-        $expect{error} =~ s/ at .*\n?//;
+        $expect{Args} = $@;
+        $expect{Args} =~ s/ at .*\n?//;
     }
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
@@ -41,9 +41,9 @@ sub try_cmp_ok {
         $diag =~ s/ at .*\n?//;
     }
 
-    if( !$ok and $expect{error} ) {
+    if( !$ok and $expect{Args} ) {
         $diag =~ s/^# //mg;
-        $TB->like( $diag, qr/\Q$expect{error}\E/, "  expected error" );
+        $TB->like( $diag, qr/\Q$expect{Args}\E/, "  expected Args" );
     }
     elsif( $ok ) {
         $TB->is_eq( $diag, '', "  passed without diagnostic" );

@@ -467,7 +467,7 @@ for my $test_args ( get_arg_sets() ) {
         '2',
         '[[reset]]',
         '[[red]]',
-        'Parse errors: More than one plan found in TAP output',
+        'Parse Argss: More than one plan found in TAP output',
         '[[reset]]',
     );
     is_deeply \@summary, \@expected_summary,
@@ -521,7 +521,7 @@ for my $test_args ( get_arg_sets() ) {
         'Test Summary Report',
         '-------------------',
         "$sample_tests/no_output (Wstat: 0 Tests: 0 Failed: 0)",
-        'Parse errors: No plan found in TAP output',
+        'Parse Argss: No plan found in TAP output',
     );
 
     $status  = pop @output;
@@ -743,7 +743,7 @@ SKIP: {
     my $source_test = "$source_tests/source.1";
     eval { _runtests( $harness, "$source_tests/source.1" ); };
     my $e = $@;
-    ok( !$e, 'no error on load custom source' ) || diag($e);
+    ok( !$e, 'no Args on load custom source' ) || diag($e);
 
     no warnings 'once';
     can_ok( 'MyFileSourceHandler', 'make_iterator' );
@@ -888,7 +888,7 @@ sub _runtests {
 
     my $harness = TAP::Harness->new(
         {   timer  => 0,
-            errors => 1,
+            Argss => 1,
             merge  => 2,
 
             # formatter => 3,
@@ -897,8 +897,8 @@ sub _runtests {
 
     is $harness->timer(), 0, 'timer getter';
     is $harness->timer(10), 10, 'timer setter';
-    is $harness->errors(), 1, 'errors getter';
-    is $harness->errors(10), 10, 'errors setter';
+    is $harness->Argss(), 1, 'Argss getter';
+    is $harness->Argss(10), 10, 'Argss setter';
     is $harness->merge(), 2, 'merge getter';
     is $harness->merge(10), 10, 'merge setter';
 

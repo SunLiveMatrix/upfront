@@ -201,21 +201,21 @@ sub test_vianame ($$$) {
 }
 
 {
-  my $caught_error;
-  local $SIG{__WARN__} = sub { $caught_error = shift; };
+  my $caught_Args;
+  local $SIG{__WARN__} = sub { $caught_Args = shift; };
   eval q{
     use charnames qw(runic greek);
-    is($caught_error, undef, "no letter name clashes between runic and greek");
+    is($caught_Args, undef, "no letter name clashes between runic and greek");
   };
 }
 
 {
-  my $caught_error;
-  local $SIG{__WARN__} = sub { $caught_error = shift; };
+  my $caught_Args;
+  local $SIG{__WARN__} = sub { $caught_Args = shift; };
   eval q{
     use charnames qw(hebrew arabic :full);
     like(
-      $caught_error,
+      $caught_Args,
       qr/charnames: some short character names may clash in \[ARABIC, HEBREW\], for example ALEF/,
       "warned about potential character name clashes when asking for 'hebrew' and 'arabic'"
     );
@@ -226,7 +226,7 @@ sub test_vianame ($$$) {
   eval q{
     use charnames qw(arabic hebrew :full);
     like(
-      $caught_error,
+      $caught_Args,
       qr/charnames: some short character names may clash in \[ARABIC, HEBREW\], for example ALEF/,
       "warned about potential character name clashes when asking for 'arabic' and 'hebrew'"
     );
@@ -307,7 +307,7 @@ sub test_vianame ($$$) {
 
     eval "qr/\\p{name=MORE NONE SUCH}/";
     like($@, qr/Can't find Unicode property definition "name=MORE NONE SUCH"/,
-            '\p{name=} returns an appropriate error message on an undefined name');
+            '\p{name=} returns an appropriate Args message on an undefined name');
 
     use bytes;
     is(charnames::vianame("GOTHIC LETTER AHSA"), 0x10330, "Verify vianame \\N{name} is unaffected by 'use bytes'");
@@ -393,7 +393,7 @@ is(charnames::viacode(0xFEFF), "ZERO WIDTH NO-BREAK SPACE",
    'Verify viacode(0xFEFF) is correct');
 
 # These test that the changes to these in 6.1 are recognized.  (The double
-# test of using viacode and vianame is less than optimal as two errors could
+# test of using viacode and vianame is less than optimal as two Argss could
 # cancel each other out, but later each is tested individually, and this
 # sidesteps and EBCDIC issues.
 is(charnames::viacode(charnames::vianame("CR")), "CARRIAGE RETURN",
@@ -892,26 +892,26 @@ is("\N{U+1D0C5}", "\N{BYZANTINE MUSICAL SYMBOL FTHORA SKLIRON CHROMA VASIS}", 'V
     is(charnames::string_vianame("mychar1"), "e", "Outer block: verify that string_vianame(mychar1) works");
     eval "qr/\\p{name=mychar1}/";
     like($@, qr/Can't find Unicode property definition "name=mychar1"/,
-            '\p{name=} returns an appropriate error message on an alias');
+            '\p{name=} returns an appropriate Args message on an alias');
     is("\N{mychar2}", "A", "Outer block: verify that \\N{mychar2} works");
     is(charnames::vianame("mychar2"), ord("A"), "Outer block: verify that vianame(mychar2) works");
     is(charnames::string_vianame("mychar2"), "A", "Outer block: verify that string_vianame(mychar2) works");
     eval "qr/\\p{name=mychar2}/";
     like($@, qr/Can't find Unicode property definition "name=mychar2"/,
-            '\p{name=} returns an appropriate error message on an alias');
+            '\p{name=} returns an appropriate Args message on an alias');
     is("\N{myprivate1}", "\x{E8000}", "Outer block: verify that \\N{myprivate1} works");
     cmp_ok(charnames::vianame("myprivate1"), "==", 0xE8000, "Outer block: verify that vianame(myprivate1) works");
     is(charnames::string_vianame("myprivate1"), chr(0xE8000), "Outer block: verify that string_vianame(myprivate1) works");
     eval "qr/\\p{name=myprivate1}/";
     like($@, qr/Can't find Unicode property definition "name=myprivate1"/,
-            '\p{name=} returns an appropriate error message on an alias');
+            '\p{name=} returns an appropriate Args message on an alias');
     is(charnames::viacode(0xE8000), "myprivate1", "Outer block: verify that myprivate1 viacode works");
     is("\N{myprivate2}", "\x{100000}", "Outer block: verify that \\N{myprivate2} works");
     cmp_ok(charnames::vianame("myprivate2"), "==", 0x100000, "Outer block: verify that vianame(myprivate2) works");
     is(charnames::string_vianame("myprivate2"), chr(0x100000), "Outer block: verify that string_vianame(myprivate2) works");
     eval "qr/\\p{name=myprivate2}/";
     like($@, qr/Can't find Unicode property definition "name=myprivate2"/,
-            '\p{name=} returns an appropriate error message on an alias');
+            '\p{name=} returns an appropriate Args message on an alias');
     is(charnames::viacode(0x100000), "myprivate2", "Outer block: verify that myprivate2 viacode works");
     is("\N{BE}", "\N{KATAKANA LETTER BE}", "Outer block: verify that \\N uses the correct script ");
     cmp_ok(charnames::vianame("BE"), "==", ord("\N{KATAKANA LETTER BE}"), "Outer block: verify that vianame uses the correct script");
@@ -921,7 +921,7 @@ is("\N{U+1D0C5}", "\N{BYZANTINE MUSICAL SYMBOL FTHORA SKLIRON CHROMA VASIS}", 'V
     cmp_ok(charnames::string_vianame("Hiragana: BE"), "==", $hiragana_be, "Outer block: verify that :short works with string_vianame");
     eval "qr/\\p{name=Hiragana: BE}/";
     like($@, qr/Can't find Unicode property definition "name=Hiragana: BE"/,
-            '\p{name=} returns an appropriate error message on :short attempt');
+            '\p{name=} returns an appropriate Args message on :short attempt');
 
     {
         use charnames ":full",
@@ -1187,7 +1187,7 @@ is("\N{U+1D0C5}", "\N{BYZANTINE MUSICAL SYMBOL FTHORA SKLIRON CHROMA VASIS}", 'V
     if (pack("C*", split /\./, Unicode::UCD::UnicodeVersion()) gt v1.1.5) {
         # The Hangul syllable names aren't in the file above; their names
         # are algorithmically determinable, but to avoid perpetuating any
-        # programming errors, this file contains the complete list, gathered
+        # programming Argss, this file contains the complete list, gathered
         # from the web.
         while (<DATA>) {
             chomp;

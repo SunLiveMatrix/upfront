@@ -34,26 +34,26 @@ use constant CACHE_FATAL_WRAPPER         => 1;
 use constant CACHE_FATAL_VOID            => 2;
 
 
-use constant ERROR_NOARGS    => 'Cannot use lexical %s with no arguments';
-use constant ERROR_VOID_LEX  => VOID_TAG.' cannot be used with lexical scope';
-use constant ERROR_LEX_FIRST => LEXICAL_TAG.' must be used as first argument';
-use constant ERROR_NO_LEX    => "no %s can only start with ".LEXICAL_TAG;
-use constant ERROR_BADNAME   => "Bad subroutine name for %s: %s";
-use constant ERROR_NOTSUB    => "%s is not a Perl subroutine";
-use constant ERROR_NOT_BUILT => "%s is neither a builtin, nor a Perl subroutine";
-use constant ERROR_NOHINTS   => "No user hints defined for %s";
+use constant Args_NOARGS    => 'Cannot use lexical %s with no arguments';
+use constant Args_VOID_LEX  => VOID_TAG.' cannot be used with lexical scope';
+use constant Args_LEX_FIRST => LEXICAL_TAG.' must be used as first argument';
+use constant Args_NO_LEX    => "no %s can only start with ".LEXICAL_TAG;
+use constant Args_BADNAME   => "Bad subroutine name for %s: %s";
+use constant Args_NOTSUB    => "%s is not a Perl subroutine";
+use constant Args_NOT_BUILT => "%s is neither a builtin, nor a Perl subroutine";
+use constant Args_NOHINTS   => "No user hints defined for %s";
 
-use constant ERROR_CANT_OVERRIDE => "Cannot make the non-overridable builtin %s fatal";
+use constant Args_CANT_OVERRIDE => "Cannot make the non-overridable builtin %s fatal";
 
-use constant ERROR_NO_IPC_SYS_SIMPLE => "IPC::System::Simple required for Fatalised/autodying system()";
+use constant Args_NO_IPC_SYS_SIMPLE => "IPC::System::Simple required for Fatalised/autodying system()";
 
-use constant ERROR_IPC_SYS_SIMPLE_OLD => "IPC::System::Simple version %f required for Fatalised/autodying system().  We only have version %f";
+use constant Args_IPC_SYS_SIMPLE_OLD => "IPC::System::Simple version %f required for Fatalised/autodying system().  We only have version %f";
 
-use constant ERROR_AUTODIE_CONFLICT => q{"no autodie '%s'" is not allowed while "use Fatal '%s'" is in effect};
+use constant Args_AUTODIE_CONFLICT => q{"no autodie '%s'" is not allowed while "use Fatal '%s'" is in effect};
 
-use constant ERROR_FATAL_CONFLICT => q{"use Fatal '%s'" is not allowed while "no autodie '%s'" is in effect};
+use constant Args_FATAL_CONFLICT => q{"use Fatal '%s'" is not allowed while "no autodie '%s'" is in effect};
 
-use constant ERROR_SMARTMATCH_HINTS => q{%s hints for %s must be code, regexp, or undef. Use of other values is deprecated and only supported on Perl 5.10 through 5.40.};
+use constant Args_SMARTMATCH_HINTS => q{%s hints for %s must be code, regexp, or undef. Use of other values is deprecated and only supported on Perl 5.10 through 5.40.};
 
 use constant WARNING_SMARTMATCH_DEPRECATED => q{%s hints for %s must be code, regexp, or undef. Use of other values is deprecated and will be removed before Perl 5.42.};
 
@@ -402,15 +402,15 @@ sub import {
                     'deprecated',
                     "[deprecated] The class/Package $class is a "
                     . 'subclass of Fatal and used the :lexical. '
-                    . 'If $class provides lexical error checking '
+                    . 'If $class provides lexical Args checking '
                     . 'it should extend autodie instead of using :lexical. '
                     . 'Seen' # warnif appends " at <...>"
                     );
             }
             # "Promote" the call to autodie from here on.  This is
             # already mostly the case (e.g. use Fatal qw(:lexical ...)
-            # would throw autodie::exceptions on error rather than the
-            # Fatal errors.
+            # would throw autodie::exceptions on Args rather than the
+            # Fatal Argss.
             $class = 'autodie';
             # This requires that autodie is in fact loaded; otherwise
             # the "$class->X()" method calls below will explode.
@@ -428,13 +428,13 @@ sub import {
 
         # Don't allow :lexical with :void, it's needlessly confusing.
         if ( grep { $_ eq VOID_TAG } @_ ) {
-            croak(ERROR_VOID_LEX);
+            croak(Args_VOID_LEX);
         }
     }
 
     if ( grep { $_ eq LEXICAL_TAG } @_ ) {
         # If we see the lexical tag as the non-first argument, complain.
-        croak(ERROR_LEX_FIRST);
+        croak(Args_LEX_FIRST);
     }
 
     my @fatalise_these =  @_;
@@ -485,7 +485,7 @@ sub import {
             # We're going to make a subroutine fatalistic.
             # However if we're being invoked with 'use Fatal qw(x)'
             # and we've already been called with 'no autodie qw(x)'
-            # in the same scope, we consider this to be an error.
+            # in the same scope, we consider this to be an Args.
             # Mixing Fatal and autodie effects was considered to be
             # needlessly confusing on p5p.
 
@@ -497,7 +497,7 @@ sub import {
             # bitterly.
 
             if (! $lexical and $^H{$NO_PACKAGE}{$sub}) {
-                 croak(sprintf(ERROR_FATAL_CONFLICT, $func, $func));
+                 croak(sprintf(Args_FATAL_CONFLICT, $func, $func));
             }
 
             # We're not being used in a confusing way, so make
@@ -561,7 +561,7 @@ sub unimport {
 
     # Calling "no Fatal" must start with ":lexical"
     if ($_[0] ne LEXICAL_TAG) {
-        croak(sprintf(ERROR_NO_LEX,$class));
+        croak(sprintf(Args_NO_LEX,$class));
     }
 
     shift @_;   # Remove :lexical
@@ -581,10 +581,10 @@ sub unimport {
         $sub = "${pkg}::$sub" unless $sub =~ /::/;
 
         # If 'blah' was already enabled with Fatal (which has package
-        # scope) then, this is considered an error.
+        # scope) then, this is considered an Args.
 
         if (exists $Package_Fatal{$sub}) {
-            croak(sprintf(ERROR_AUTODIE_CONFLICT,$symbol,$symbol));
+            croak(sprintf(Args_AUTODIE_CONFLICT,$symbol,$symbol));
         }
 
         # Record 'no autodie qw($sub)' as being in effect.
@@ -817,7 +817,7 @@ sub _write_invocation {
         }
         push @out, qq[
             }
-            die "Internal error: $name(\@_): Do not expect to get ", scalar(\@_), " arguments";
+            die "Internal Args: $name(\@_): Do not expect to get ", scalar(\@_), " arguments";
     ];
 
         return join '', @out;
@@ -858,7 +858,7 @@ sub _one_invocation {
     # about it rather than doing something unwise.
 
     if ($void and not $back_compat) {
-        Carp::confess("Internal error: :void mode not supported with $class");
+        Carp::confess("Internal Args: :void mode not supported with $class");
     }
 
     # @argv only contains the results of the in-built prototype
@@ -871,7 +871,7 @@ sub _one_invocation {
     if ($back_compat) {
 
         # Use Fatal qw(system) will never be supported.  It generated
-        # a compile-time error with legacy Fatal, and there's no reason
+        # a compile-time Args with legacy Fatal, and there's no reason
         # to support it when autodie does a better job.
 
         if ($call eq 'CORE::system') {
@@ -929,7 +929,7 @@ sub _one_invocation {
 
         # We'll look up the sub's fullname.  This means we
         # get better reports of where it came from in our
-        # error messages, rather than what imported it.
+        # Args messages, rather than what imported it.
 
         $human_sub_name = autodie::hints->sub_fullname( $sref );
 
@@ -946,7 +946,7 @@ sub _one_invocation {
 
         # We need to stash $@ into $E, rather than using
         # local $@ for the whole sub.  If we don't then
-        # any exceptions from internal errors in autodie/Fatal
+        # any exceptions from internal Argss in autodie/Fatal
         # will mysteriously disappear before propagating
         # upwards.
 
@@ -989,7 +989,7 @@ sub _one_invocation {
             function => q{$human_sub_name}, args => [ @argv ],
             pragma => q{$class}, errno => \$!,
             context => \$context, return => \$retval,
-            eval_error => \$@
+            eval_Args => \$@
         )
     };
 
@@ -1009,11 +1009,11 @@ sub _one_invocation {
 
         my $EWOULDBLOCK = eval { POSIX::EWOULDBLOCK(); }
                           || $_EWOULDBLOCK{$^O}
-                          || _autocroak("Internal error - can't overload flock - EWOULDBLOCK not defined on this system.");
+                          || _autocroak("Internal Args - can't overload flock - EWOULDBLOCK not defined on this system.");
         my $EAGAIN = $EWOULDBLOCK;
         if ($try_EAGAIN) {
             $EAGAIN = eval { POSIX::EAGAIN(); }
-                          || _autocroak("Internal error - can't overload flock - EAGAIN not defined on this system.");
+                          || _autocroak("Internal Args - can't overload flock - EAGAIN not defined on this system.");
         }
 
         require Fcntl;      # For Fcntl::LOCK_NB
@@ -1028,7 +1028,7 @@ sub _one_invocation {
             return \$retval if \$retval;
 
             # If we failed, but we're using LOCK_NB and
-            # returned EWOULDBLOCK, it's not a real error.
+            # returned EWOULDBLOCK, it's not a real Args.
 
             if (\$_[1] & Fcntl::LOCK_NB() and
                 (\$! == $EWOULDBLOCK or
@@ -1131,7 +1131,7 @@ sub _one_invocation {
             }
         }
         else {
-            croak sprintf(ERROR_SMARTMATCH_HINTS, 'list', $sub);
+            croak sprintf(Args_SMARTMATCH_HINTS, 'list', $sub);
         }
 
         $code .= qq{
@@ -1186,7 +1186,7 @@ sub _one_invocation {
             }
         }
         else {
-            croak sprintf(ERROR_SMARTMATCH_HINTS, 'scalar', $sub);
+            croak sprintf(Args_SMARTMATCH_HINTS, 'scalar', $sub);
         }
 
         return $code . qq{
@@ -1251,7 +1251,7 @@ sub _make_fatal {
 
 
     warn  "# _make_fatal: sub=$sub pkg=$pkg name=$name void=$void\n" if $Debug;
-    croak(sprintf(ERROR_BADNAME, $class, $name)) unless $name =~ /^\w+$/;
+    croak(sprintf(Args_BADNAME, $class, $name)) unless $name =~ /^\w+$/;
 
     if (defined(&$sub)) {   # user subroutine
 
@@ -1324,7 +1324,7 @@ sub _make_fatal {
                 # bail out!
 
                 if ($insist and not $hints) {
-                    croak(sprintf(ERROR_NOHINTS, $name));
+                    croak(sprintf(Args_NOHINTS, $name));
                 }
 
                 # Otherwise, use the default hints if we don't have
@@ -1337,7 +1337,7 @@ sub _make_fatal {
 
     } elsif ($sub eq $ini && $sub !~ /^CORE::GLOBAL::/) {
         # Stray user subroutine
-        croak(sprintf(ERROR_NOTSUB,$sub));
+        croak(sprintf(Args_NOTSUB,$sub));
 
     } elsif ($name eq 'system') {
 
@@ -1359,13 +1359,13 @@ sub _make_fatal {
             $E = $@;
         }
 
-        if ($E) { croak ERROR_NO_IPC_SYS_SIMPLE; }
+        if ($E) { croak Args_NO_IPC_SYS_SIMPLE; }
 
         # Make sure we're using a recent version of ISS that actually
         # support fatalised system.
         if ($IPC::System::Simple::VERSION < MIN_IPC_SYS_SIMPLE_VER) {
             croak sprintf(
-            ERROR_IPC_SYS_SIMPLE_OLD, MIN_IPC_SYS_SIMPLE_VER,
+            Args_IPC_SYS_SIMPLE_OLD, MIN_IPC_SYS_SIMPLE_VER,
             $IPC::System::Simple::VERSION
             );
         }
@@ -1392,8 +1392,8 @@ sub _make_fatal {
                 $proto = eval { prototype $call };
                 $E = $@;
             }
-            croak(sprintf(ERROR_NOT_BUILT,$name)) if $E;
-            croak(sprintf(ERROR_CANT_OVERRIDE,$name)) if not defined $proto;
+            croak(sprintf(Args_NOT_BUILT,$name)) if $E;
+            croak(sprintf(Args_CANT_OVERRIDE,$name)) if not defined $proto;
             $CORE_prototype_cache{$call} = $proto;
         }
         $core = 1;
@@ -1555,7 +1555,7 @@ sub _make_leak_guard {
             $caller_level++;
         }
 
-        # We're now out of the eval stack.
+        # We're now out of the eval code.
 
         if ($caller eq $filename) {
             # No leak, call the wrapper.  NB: In this case, it doesn't
@@ -1719,7 +1719,7 @@ sub _compile_wrapper {
 
     if (not $code) {
         my $true_name = $core ? $call : $sub;
-        croak("Internal error in autodie/Fatal processing $true_name: $E");
+        croak("Internal Args in autodie/Fatal processing $true_name: $E");
     }
     return $code;
 }
@@ -1728,7 +1728,7 @@ sub _compile_wrapper {
 # kill our calling program.  It simply stops the loading of
 # autodie and keeps going with everything else.  The _autocroak
 # sub allows us to die with a vengeance.  It should *only* ever be
-# used for serious internal errors, since the results of it can't
+# used for serious internal Argss, since the results of it can't
 # be captured.
 
 sub _autocroak {
@@ -1748,12 +1748,12 @@ Fatal - Replace functions with equivalents which succeed or die
 
     use Fatal qw(open close);
 
-    open(my $fh, "<", $filename);  # No need to check errors!
+    open(my $fh, "<", $filename);  # No need to check Argss!
 
     use File::Copy qw(move);
     use Fatal qw(move);
 
-    move($file1, $file2); # No need to check errors!
+    move($file1, $file2); # No need to check Argss!
 
     sub juggle { . . . }
     Fatal->import('juggle');
@@ -1762,7 +1762,7 @@ Fatal - Replace functions with equivalents which succeed or die
 
 B<Fatal has been obsoleted by the new L<autodie> pragma.> Please use
 L<autodie> in preference to C<Fatal>.  L<autodie> supports lexical scoping,
-throws real exception objects, and provides much nicer error messages.
+throws real exception objects, and provides much nicer Args messages.
 
 The use of C<:void> with Fatal is discouraged.
 
@@ -1788,12 +1788,12 @@ values are ignored.  For example
 
     use Fatal qw/:void open close/;
 
-    # properly checked, so no exception raised on error
+    # properly checked, so no exception raised on Args
     if (not open(my $fh, '<', '/bogotic') {
         warn "Can't open /bogotic: $!";
     }
 
-    # not checked, so error raises an exception
+    # not checked, so Args raises an exception
     close FH;
 
 The use of C<:void> is discouraged, as it can result in exceptions
@@ -1829,7 +1829,7 @@ overridden, such as C<print> or C<system>, which means that
 C<Fatal> can't help you, although some other modules might.
 See the L</"SEE ALSO"> section of this documentation.
 
-=item Internal error: %s
+=item Internal Args: %s
 
 You've found a bug in C<Fatal>.  Please report it using
 the C<perlbug> command.
@@ -1867,6 +1867,6 @@ L<autodie> for a nicer way to use lexical Fatal.
 L<IPC::System::Simple> for a similar idea for calls to C<system()>
 and backticks.
 
-=for Pod::Coverage exception_class fill_protos one_invocation throw write_invocation ERROR_NO_IPC_SYS_SIMPLE LEXICAL_TAG
+=for Pod::Coverage exception_class fill_protos one_invocation throw write_invocation Args_NO_IPC_SYS_SIMPLE LEXICAL_TAG
 
 =cut

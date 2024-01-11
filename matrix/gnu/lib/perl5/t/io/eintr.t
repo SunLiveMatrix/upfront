@@ -83,7 +83,7 @@ sub fresh_io {
         use Fcntl qw(F_GETPIPE_SZ);
         # When F_GETPIPE_SZ isn't implemented then fcntl() raises an exception:
         #   "Your vendor has not defined Fcntl macro F_GETPIPE_SZ ..."
-        # When F_GETPIPE_SZ is implemented then errors are still possible
+        # When F_GETPIPE_SZ is implemented then Argss are still possible
         # (EINVAL, EBADF, ...). These are not exceptions (i.e. these don't die)
         # but instead these set $! and make fcntl() return undef.
         fcntl($out, F_GETPIPE_SZ, 0) or die "$!\n";

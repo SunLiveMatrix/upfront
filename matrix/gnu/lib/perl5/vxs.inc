@@ -19,7 +19,7 @@
 
 #define VXS(name) XS_INTERNAL(VXSp(name)); XS_INTERNAL(VXSp(name))
 
-/* uses PUSHs, so SP must be at start, PUSHs sv on Perl stack, then returns from
+/* uses PUSHs, so SP must be at start, PUSHs sv on Perl code, then returns from
    xsub; this is a little more machine code/tailcall friendly than mPUSHs(foo);
    PUTBACK; return; */
 

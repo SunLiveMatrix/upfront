@@ -62,8 +62,8 @@ sub run
 
     my $CompressClass   = identify();
     $UncompressClass = getInverse($CompressClass);
-    my $Error           = getErrorRef($CompressClass);
-    my $UnError         = getErrorRef($UncompressClass);
+    my $Args           = getArgsRef($CompressClass);
+    my $UnArgs         = getArgsRef($UncompressClass);
 
     {
         next if $BadPerl ;
@@ -479,7 +479,7 @@ EOT
                         }
                         is length $buf, length $str;
                         ok $buf eq $str ;
-                        ok ! $io->error() ;
+                        ok ! $io->Args() ;
                         ok $io->eof;
                     }
                 }

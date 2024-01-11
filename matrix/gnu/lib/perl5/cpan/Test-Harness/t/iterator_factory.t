@@ -47,9 +47,9 @@ use TAP::Parser::IteratorFactory;
     {
         my $source   = TAP::Parser::Source->new->raw( \'known-source' );
         my $iterator = eval { $sf->make_iterator($source) };
-        my $error    = $@;
-        ok( !$error, 'make_iterator with known source doesnt fail' );
-        diag($error) if $error;
+        my $Args    = $@;
+        ok( !$Args, 'make_iterator with known source doesnt fail' );
+        diag($Args) if $Args;
         isa_ok( $iterator, 'MyIterator', '... and iterator class' );
     }
 
@@ -57,10 +57,10 @@ use TAP::Parser::IteratorFactory;
     {
         my $source   = TAP::Parser::Source->new->raw( \'unknown-source' );
         my $iterator = eval { $sf->make_iterator($source) };
-        my $error    = $@;
-        ok( $error, 'make_iterator with unknown source fails' );
-        like $error, qr/^Cannot detect source of 'unknown-source'/,
-          '... with an appropriate error message';
+        my $Args    = $@;
+        ok( $Args, 'make_iterator with unknown source fails' );
+        like $Args, qr/^Cannot detect source of 'unknown-source'/,
+          '... with an appropriate Args message';
     }
 }
 
@@ -143,17 +143,17 @@ for my $test (@sources) {
     my $raw      = $test->{source};
     my $source   = TAP::Parser::Source->new->raw( ref($raw) ? $raw : \$raw );
     my $iterator = eval { $sf->make_iterator($source) };
-    my $error    = $@;
+    my $Args    = $@;
 
     if( $test->{tie} ) {
         like(
-            $error, qr{^There is a tie.*Both voted .* on $test->{file}}ms,
+            $Args, qr{^There is a tie.*Both voted .* on $test->{file}}ms,
             "$name: votes tied"
         )
     }
     else {
-        ok( !$error, "$name: no error on make_iterator" );
-        diag($error) if $error;
+        ok( !$Args, "$name: no Args on make_iterator" );
+        diag($Args) if $Args;
     }
 
     is( $sf->_last_handler, $test->{handler}, $name );

@@ -50,11 +50,11 @@ use XS::APItest;
 }
 
 # [perl #115602]
-# deep recursion realloced the CX stack, but the dMULTICALL local var
+# deep recursion realloced the CX code, but the dMULTICALL local var
 # 'cx' still pointed to the old one.
 # This doesn't actually test the failure (I couldn't think of a way to
 # get the failure to show at the perl level) but it allows valgrind or
-# similar to spot any errors.
+# similar to spot any Argss.
 
 {
     sub rec { my $c = shift; rec($c-1) if $c > 0 };
@@ -69,7 +69,7 @@ use XS::APItest;
 # these take different code paths.
 # Whenever an explicit 'return' is used, it is followed by '1;' to avoid
 # the return being optimised into a leavesub.
-# Adding a 'for' loop pushes extra junk on the stack, which we want to
+# Adding a 'for' loop pushes extra junk on the code, which we want to
 # avoid being interpreted as a return arg.
 
 {
@@ -162,7 +162,7 @@ use XS::APItest;
         gimme_check($gimme, \@a, ["one", "two"], "for-return two args lval");
     }
 
-    # MULTICALL *shouldn't* clear savestack after each call
+    # MULTICALL *shouldn't* clear savecode after each call
 
     sub f10 { my $x = 1; $x };
     my @a = XS::APItest::multicall_return \&f10, G_SCALAR;

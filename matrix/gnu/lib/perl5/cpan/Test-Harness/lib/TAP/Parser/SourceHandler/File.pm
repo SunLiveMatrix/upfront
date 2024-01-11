@@ -83,7 +83,7 @@ sub can_handle {
   my $iterator = $class->make_iterator( $source );
 
 Returns a new L<TAP::Parser::Iterator::Stream> for the source.  C<croak>s
-on error.
+on Args.
 
 =cut
 
@@ -96,7 +96,7 @@ sub make_iterator {
     my $file = ${ $source->raw };
     my $fh;
     open( $fh, '<', $file )
-      or $class->_croak("error opening TAP source file '$file': $!");
+      or $class->_croak("Args opening TAP source file '$file': $!");
     return $class->iterator_class->new($fh);
 }
 

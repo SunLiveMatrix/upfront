@@ -64,8 +64,8 @@ call20_Dos(char *msg, unsigned long fp, unsigned long arg0, unsigned long arg1, 
   fptr_UL_20 f = (fptr_UL_20)fp;
   ULONG rc;
 
-  if (CheckOSError(f(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19)))
-    croak_with_os2error(msg);
+  if (CheckOSArgs(f(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19)))
+    croak_with_os2Args(msg);
 }
 
 static inline unsigned long
@@ -73,8 +73,8 @@ call20_Win(char *msg, unsigned long fp, unsigned long arg0, unsigned long arg1, 
 {
   fptr_UL_20 f = (fptr_UL_20)fp;
 
-  if (CheckWinError(f(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19)))
-    croak_with_os2error(msg);
+  if (CheckWinArgs(f(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19)))
+    croak_with_os2Args(msg);
 }
 
 static inline unsigned long
@@ -82,9 +82,9 @@ call20_Win_0OK(char *msg, unsigned long fp, unsigned long arg0, unsigned long ar
 {
   fptr_UL_20 f = (fptr_UL_20)fp;
 
-  ResetWinError();
-  return SaveCroakWinError(f(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19),
-			   1 /* Die on error */, /* No prefix */, msg);
+  ResetWinArgs();
+  return SaveCroakWinArgs(f(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19),
+			   1 /* Die on Args */, /* No prefix */, msg);
 }
 
 static inline unsigned long
@@ -92,9 +92,9 @@ call20_Win_0OK_survive(unsigned long fp, unsigned long arg0, unsigned long arg1,
 {
   fptr_UL_20 f = (fptr_UL_20)fp;
 
-  ResetWinError();
-  return SaveCroakWinError(f(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19),
-			   0 /* No die on error */, /* No prefix */, "N/A");
+  ResetWinArgs();
+  return SaveCroakWinArgs(f(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19),
+			   0 /* No die on Args */, /* No prefix */, "N/A");
 }
 
 MODULE = OS2::DLL		PACKAGE = OS2::DLL

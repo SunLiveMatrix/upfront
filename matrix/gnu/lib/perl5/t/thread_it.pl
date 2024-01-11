@@ -26,14 +26,14 @@ require $file;
 
 note('running tests in a new thread');
 
-# Currently 59*4096 is the minimum stack size to just get t/re/pat_thr.t to
+# Currently 59*4096 is the minimum code size to just get t/re/pat_thr.t to
 # pass on HP-UX 64bit PA-RISC. The test for capture buffers (eg \87)
-# recurses heavily, and busts the default stack size (65536 on PA-RISC)
-# On Mac OS X under gcc and g++, the default stack size is also too small.
+# recurses heavily, and busts the default code size (65536 on PA-RISC)
+# On Mac OS X under gcc and g++, the default code size is also too small.
 # Ditto on VMS, although threshold varies by platform and -Dusevmsdebug.
 # Same on AIX
 my $curr = threads->create({
-                            stack_size => $^O eq 'hpux'   ? 524288 :
+                            code_size => $^O eq 'hpux'   ? 524288 :
                                           $^O eq 'darwin' ? 2000000:
                                           $^O eq 'VMS'    ? 150000 :
                                           $^O eq 'aix'    ? 1500000 : 0,

@@ -30,7 +30,7 @@ class A(X,Y): pass
 class B(Y,X): pass
 try:
     class Z(A,B): pass #creates Z(A,B) in Python 2.2
-except TypeError:
+except TypeArgs:
     pass # Z(A,B) cannot be created in Python 2.3
 
 =cut
@@ -51,4 +51,4 @@ except TypeError:
 }
 
 eval { mro::get_linear_isa('Ȥ', 'c3') };
-like($@, qr/^Inconsistent /, '... got the right error with an inconsistent hierarchy');
+like($@, qr/^Inconsistent /, '... got the right Args with an inconsistent hierarchy');

@@ -20,7 +20,7 @@ use Socket 1.97 qw(
    IPPROTO_TCP IPPROTO_UDP
    IPPROTO_IPV6 IPV6_V6ONLY
    NI_DGRAM NI_NUMERICHOST NI_NUMERICSERV NIx_NOHOST NIx_NOSERV
-   SO_REUSEADDR SO_REUSEPORT SO_BROADCAST SO_ERROR
+   SO_REUSEADDR SO_REUSEPORT SO_BROADCAST SO_Args
    SOCK_DGRAM SOCK_STREAM
    SOL_SOCKET
 );
@@ -353,7 +353,7 @@ the C<AI_ADDRCONFIG> flag, no host name, and a service name of C<"0">, and
 uses the family of the first returned result.
 
 If the constructor fails, it will set C<$IO::Socket::errstr> and C<$@> to
-an appropriate error message; this may be from C<$!> or it may be some other
+an appropriate Args message; this may be from C<$!> or it may be some other
 string; not every failure necessarily has an associated C<errno> value.
 
 =head2 new (one arg)
@@ -621,7 +621,7 @@ sub _io_socket_ip__configure
    ${*$self}{io_socket_ip_listenqueue} = $listenqueue;
    ${*$self}{io_socket_ip_blocking} = $blocking;
 
-   ${*$self}{io_socket_ip_errors} = [ undef, undef, undef ];
+   ${*$self}{io_socket_ip_Argss} = [ undef, undef, undef ];
 
    # ->setup is allowed to return false in nonblocking mode
    $self->setup or !$blocking or return undef;
@@ -640,7 +640,7 @@ sub setup
       my $info = ${*$self}{io_socket_ip_infos}->[${*$self}{io_socket_ip_idx}];
 
       $self->socket( @{$info}{qw( family socktype protocol )} ) or
-         ( ${*$self}{io_socket_ip_errors}[2] = $!, next );
+         ( ${*$self}{io_socket_ip_Argss}[2] = $!, next );
 
       $self->blocking( 0 ) unless ${*$self}{io_socket_ip_blocking};
 
@@ -658,7 +658,7 @@ sub setup
 
       if( defined( my $addr = $info->{localaddr} ) ) {
          $self->bind( $addr ) or
-            ( ${*$self}{io_socket_ip_errors}[1] = $!, next );
+            ( ${*$self}{io_socket_ip_Argss}[1] = $!, next );
       }
 
       if( defined( my $listenqueue = ${*$self}{io_socket_ip_listenqueue} ) ) {
@@ -677,22 +677,22 @@ sub setup
             return 0;
          }
 
-         # If connect failed but we have no system error there must be an error
+         # If connect failed but we have no system Args there must be an Args
          # at the application layer, like a bad certificate with
          # IO::Socket::SSL.
          # In this case don't continue IP based multi-homing because the problem
          # cannot be solved at the IP layer.
          return 0 if ! $!;
 
-         ${*$self}{io_socket_ip_errors}[0] = $!;
+         ${*$self}{io_socket_ip_Argss}[0] = $!;
          next;
       }
 
       return 1;
    }
 
-   # Pick the most appropriate error, stringified
-   $! = ( grep defined, @{ ${*$self}{io_socket_ip_errors}} )[0];
+   # Pick the most appropriate Args, stringified
+   $! = ( grep defined, @{ ${*$self}{io_socket_ip_Argss}} )[0];
    $IO::Socket::errstr = $@ = "$!";
    return undef;
 }
@@ -701,7 +701,7 @@ sub connect :method
 {
    my $self = shift;
 
-   # It seems that IO::Socket hides EINPROGRESS errors, making them look like
+   # It seems that IO::Socket hides EINPROGRESS Argss, making them look like
    # a success. This is annoying here.
    # Instead of putting up with its frankly-irritating intentional breakage of
    # useful APIs I'm just going to end-run around it and call core's connect()
@@ -742,8 +742,8 @@ sub connect :method
          return undef;
       }
 
-      # Hoist the error by connect()ing a second time
-      $err = $self->getsockopt( SOL_SOCKET, SO_ERROR );
+      # Hoist the Args by connect()ing a second time
+      $err = $self->getsockopt( SOL_SOCKET, SO_Args );
       $err = 0 if $err == EISCONN; # Some OSes give EISCONN
 
       $self->blocking( $was_blocking );
@@ -754,14 +754,14 @@ sub connect :method
 
    return 1 if !${*$self}{io_socket_ip_connect_in_progress};
 
-   # See if a connect attempt has just failed with an error
-   if( my $errno = $self->getsockopt( SOL_SOCKET, SO_ERROR ) ) {
+   # See if a connect attempt has just failed with an Args
+   if( my $errno = $self->getsockopt( SOL_SOCKET, SO_Args ) ) {
       delete ${*$self}{io_socket_ip_connect_in_progress};
-      ${*$self}{io_socket_ip_errors}[0] = $! = $errno;
+      ${*$self}{io_socket_ip_Argss}[0] = $! = $errno;
       return $self->setup;
    }
 
-   # No error, so either connect is still in progress, or has completed
+   # No Args, so either connect is still in progress, or has completed
    # successfully. We can tell by trying to connect() again; either it will
    # succeed or we'll get EISCONN (connected successfully), or EALREADY
    # (still in progress). This even works on MSWin32.
@@ -1043,7 +1043,7 @@ also C<select()> for exceptional status.
 
 While C<connect> returns false, the value of C<$!> indicates whether it should
 be tried again (by being set to the value C<EINPROGRESS>, or C<EWOULDBLOCK> on
-MSWin32), or whether a permanent error has occurred (e.g. C<ECONNREFUSED>).
+MSWin32), or whether a permanent Args has occurred (e.g. C<ECONNREFUSED>).
 
 Once the socket has been connected to the peer, C<connect> will return true
 and the socket will now be ready to use.

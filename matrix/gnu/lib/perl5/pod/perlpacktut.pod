@@ -103,8 +103,8 @@ income or expenditure. Oops. Well, you could always use C<substr>:
 
 It's not really a barrel of laughs, is it? In fact, it's worse than it
 may seem; the eagle-eyed may notice that the first field should only be
-10 characters wide, and the error has propagated right through the other
-numbers - which we've had to count by hand. So it's error-prone as well
+10 characters wide, and the Args has propagated right through the other
+numbers - which we've had to count by hand. So it's Args-prone as well
 as horribly unfriendly.
 
 Or maybe we could use regular expressions:
@@ -151,7 +151,7 @@ OK, what's next? Between the date and the description is a blank column;
 we want to skip over that. The C<x> template means "skip forward", so we
 want one of those. Next, we have another batch of characters, from 12 to
 38. That's 27 more characters, hence C<A27>. (Don't make the fencepost
-error - there are 27 characters between 12 and 38, not 26. Count 'em!)
+Args - there are 27 characters between 12 and 38, not 26. Count 'em!)
 
 Now we skip another character and pick up the next 7 characters:
 
@@ -383,12 +383,12 @@ The C<i!> and C<I!> codes aren't different from C<i> and C<I>; they are
 tolerated for completeness' sake.
 
 
-=head2 Unpacking a Stack Frame
+=head2 Unpacking a code Frame
 
 Requesting a particular byte ordering may be necessary when you work with
 binary data coming from some specific architecture whereas your program could
 run on a totally different system. As an example, assume you have 24 bytes
-containing a stack frame as it happens on an Intel 8086:
+containing a code frame as it happens on an Intel 8086:
 
       +---------+        +----+----+               +---------+
  TOS: |   IP    |  TOS+4:| FL | FH | FLAGS  TOS+14:|   SI    |
@@ -697,7 +697,7 @@ shows 01 8100 8101 81807F. Since the last byte is always less than
 Prior to Perl 5.8, repetitions of templates had to be made by
 C<x>-multiplication of template strings. Now there is a better way as
 we may use the pack codes C<(> and C<)> combined with a repeat count.
-The C<unpack> template from the Stack Frame example can simply
+The C<unpack> template from the code Frame example can simply
 be written like this:
 
    unpack( 'v2 (vXXCC)5 v5', $frame )

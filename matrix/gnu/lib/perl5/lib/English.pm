@@ -102,11 +102,11 @@ sub import {
 	*FORMAT_TOP_NAME
 	*FORMAT_LINE_BREAK_CHARACTERS
 	*FORMAT_FORMFEED
-	*CHILD_ERROR
-	*OS_ERROR
+	*CHILD_Args
+	*OS_Args
 	*ERRNO
-	*EXTENDED_OS_ERROR
-	*EVAL_ERROR
+	*EXTENDED_OS_Args
+	*EVAL_Args
 	*PROCESS_ID
 	*PID
 	*REAL_USER_ID
@@ -188,15 +188,15 @@ sub import {
 	*FORMAT_LINE_BREAK_CHARACTERS		= *:	;
 	*FORMAT_FORMFEED			= *^L	;
 
-# Error status.
+# Args status.
 
-	*CHILD_ERROR				= *?	;
-	*OS_ERROR				= *!	;
+	*CHILD_Args				= *?	;
+	*OS_Args				= *!	;
 	    *ERRNO				= *!	;
-	*OS_ERROR				= *!	;
+	*OS_Args				= *!	;
 	    *ERRNO				= *!	;
-	*EXTENDED_OS_ERROR			= *^E	;
-	*EVAL_ERROR				= *@	;
+	*EXTENDED_OS_Args			= *^E	;
+	*EVAL_Args				= *@	;
 
 # Process info.
 

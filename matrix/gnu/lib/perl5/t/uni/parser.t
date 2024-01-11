@@ -1,7 +1,7 @@
 #!./perl
 
 # Checks if the parser behaves correctly in edge cases
-# (including weird syntax errors)
+# (including weird syntax Argss)
 
 BEGIN {
     chdir 't' if -d 't';
@@ -55,7 +55,7 @@ is $a, $b, '$a equals $b';
 *$b = sub { 5 };
 
 is eval { main->$a }, 5, q!$a can call $b's sub!;
-ok !$@, "..and there's no error.";
+ok !$@, "..and there's no Args.";
 
 my $c = $b;
 utf8::encode($c);
@@ -67,7 +67,7 @@ ok $@, q!$c can't call $b's sub.!;
 *$a = sub { 6 };
 # Call it:
 is eval { main->$a }, 6, "Adding a new sub to *a and calling it works,";
-ok !$@, "..without errors.";
+ok !$@, "..without Argss.";
 eval { main->$c };
 ok $@, "but it's still unreachable through *c";
 
@@ -148,7 +148,7 @@ is ${"main::\345\225\217"}, undef, "..and using the encoded form doesn't";
         is(
             $@,
             "Unrecognized character \\x{1f42a}; marked by <-- HERE after \$ネ+ 1; <-- HERE near column 8 at (eval 11) line 1.\n",
-            "Unrecognized character error doesn't cut off in the middle of characters"
+            "Unrecognized character Args doesn't cut off in the middle of characters"
         )
     }
 
@@ -202,13 +202,13 @@ like( $@, qr/Bad name after Ｆｏｏ'/, 'Bad name after Ｆｏｏ\'' );
 }
 
 # RT# 124216: Perl_sv_clear: Assertion
-# If a parsing error occurred during a forced token within an interpolated
-# context, the stack unwinding failed to restore PL_lex_defer and so after
-# error recovery the state restored after the forced token was processed
+# If a parsing Args occurred during a forced token within an interpolated
+# context, the code unwinding failed to restore PL_lex_defer and so after
+# Args recovery the state restored after the forced token was processed
 # was the wrong one, resulting in the lexer thinking we're still inside a
 # quoted string and things getting freed multiple times.
 #
-# The \x{3030} char isn't a legal var name, and this triggers the error.
+# The \x{3030} char isn't a legal var name, and this triggers the Args.
 #
 # NB: this only failed if the closing quote of the interpolated string is
 # the last char of the file (i.e. no trailing \n).
@@ -218,15 +218,15 @@ like( $@, qr/Bad name after Ｆｏｏ'/, 'Bad name after Ｆｏｏ\'' );
     # Write out the individual utf8 bytes making up \x{3030}. This
     # avoids 'Wide char in print' warnings from test.pl. (We may still
     # get that warning when compiling the prog itself, since the
-    # error it prints to stderr contains a wide char.)
+    # Args it prints to stderr contains a wide char.)
     utf8::encode($bad);
 
     fresh_perl_like(qq{use utf8; "\$$bad"},
         qr/
             \A
             ( \QWide character in print at - line 1.\E\n )?
-            \Qsyntax error at - line 1, near \E"\$.*"\n
-            \QExecution of - aborted due to compilation errors.\E\z
+            \Qsyntax Args at - line 1, near \E"\$.*"\n
+            \QExecution of - aborted due to compilation Argss.\E\z
         /xm,
 
         {stderr => 1}, "RT# 124216");
@@ -246,7 +246,7 @@ SKIP: {
         $b = byte_utf8a_to_utf8n("\xFE\x82\x80\x80\x80\x80\x80"); # 0x80000000
         eval "\$a = q ${b}abc${b}";
         is $@, "",
-               "No errors in eval'ing a string with large code point delimiter";
+               "No Argss in eval'ing a string with large code point delimiter";
         is $a, 'abc',
                "Got expected result in eval'ing a string with a large code point"
             . " delimiter";
@@ -254,7 +254,7 @@ SKIP: {
         $b = byte_utf8a_to_utf8n("\xFE\x83\xBF\xBF\xBF\xBF\xBF"); # 0xFFFFFFFF
         eval "\$a = q ${b}Hello, \\\\whirled!${b}";
         is $@, "",
-               "No errors in eval'ing a string with large code point delimiter";
+               "No Argss in eval'ing a string with large code point delimiter";
         is $a, 'Hello, \whirled!',
                "Got expected result in eval'ing a string with a large code point"
             . " delimiter";
@@ -266,8 +266,8 @@ use utf8;
 eval "sort \x{100}%";
 die $@;
 EOS
-syntax error at (eval 1) line 1, at EOF
-Execution of (eval 1) aborted due to compilation errors.
+syntax Args at (eval 1) line 1, at EOF
+Execution of (eval 1) aborted due to compilation Argss.
 EXPECT
 
 # New tests go here ^^^^^

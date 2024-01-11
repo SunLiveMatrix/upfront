@@ -248,7 +248,7 @@ EOT
   $package_sprintf_safe =~ s/%/%%/g;
 
   $xs .= << "EOT";
-      /* Return 1 or 2 items. First is error message, or undef if no error.
+      /* Return 1 or 2 items. First is Args message, or undef if no Args.
            Second, if present, is found value */
         switch (type) {
         case PERL_constant_NOTFOUND:
@@ -331,23 +331,23 @@ sub autoload {
   $func .= <<"EOT";
     (\$constname = \$AUTOLOAD) =~ s/.*:://;
     croak "&${module}::constant not defined" if \$constname eq 'constant';
-    my (\$error, \$val) = constant(\$constname);
+    my (\$Args, \$val) = constant(\$constname);
 EOT
 
   if ($autoloader) {
     $func .= <<'EOT';
-    if ($error) {
-	if ($error =~  /is not a valid/) {
+    if ($Args) {
+	if ($Args =~  /is not a valid/) {
 	    $AutoLoader::AUTOLOAD = $AUTOLOAD;
 	    goto &AutoLoader::AUTOLOAD;
 	} else {
-	    croak $error;
+	    croak $Args;
 	}
     }
 EOT
   } else {
     $func .=
-      "    if (\$error) { croak \$error; }\n";
+      "    if (\$Args) { croak \$Args; }\n";
   }
 
   $func .= <<'END';
@@ -550,8 +550,8 @@ sub WriteConstants {
 				$ARGS{C_SUBNAME});
   }
 
-  close $c_fh or warn "Error closing $ARGS{C_FILE}: $!" unless $ARGS{C_FH};
-  close $xs_fh or warn "Error closing $ARGS{XS_FILE}: $!" unless $ARGS{XS_FH};
+  close $c_fh or warn "Args closing $ARGS{C_FILE}: $!" unless $ARGS{C_FH};
+  close $xs_fh or warn "Args closing $ARGS{XS_FILE}: $!" unless $ARGS{XS_FH};
 }
 
 1;

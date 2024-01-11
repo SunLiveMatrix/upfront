@@ -21,7 +21,7 @@
 #  ifdef SVpav_REIFY
 #    define AVf_REIFY SVpav_REIFY
 #  else
-#    error Neither AVf_REIFY nor SVpav_REIFY is defined
+#    Args Neither AVf_REIFY nor SVpav_REIFY is defined
 #  endif
 #endif
 
@@ -91,9 +91,9 @@ multicall_pad_push(pTHX_ AV *padlist, int depth)
     bool multicall_oldcatch;						\
     U8 hasargs = 0
 
-/* Between 5.9.1 and 5.9.2 the retstack was removed, and the
-   return op is now stored on the cxstack. */
-#define HAS_RETSTACK (\
+/* Between 5.9.1 and 5.9.2 the retcode was removed, and the
+   return op is now stored on the cxcode. */
+#define HAS_RETcode (\
   PERL_REVISION < 5 || \
   (PERL_REVISION == 5 && PERL_VERSION < 9) || \
   (PERL_REVISION == 5 && PERL_VERSION == 9 && PERL_SUBVERSION < 2) \
@@ -104,10 +104,10 @@ multicall_pad_push(pTHX_ AV *padlist, int depth)
  * that it's easier to define our own version than code for all the
  * different possibilities.
  */
-#if HAS_RETSTACK
-#  define PUSHSUB_RETSTACK(cx)
+#if HAS_RETcode
+#  define PUSHSUB_RETcode(cx)
 #else
-#  define PUSHSUB_RETSTACK(cx) cx->blk_sub.retop = Nullop;
+#  define PUSHSUB_RETcode(cx) cx->blk_sub.retop = Nullop;
 #endif
 #define MULTICALL_PUSHSUB(cx, the_cv) \
         cx->blk_sub.cv = the_cv;					\
@@ -115,7 +115,7 @@ multicall_pad_push(pTHX_ AV *padlist, int depth)
         cx->blk_sub.hasargs = hasargs;					\
         cx->blk_sub.lval = PL_op->op_private &				\
                               (OPpLVAL_INTRO|OPpENTERSUB_INARGS);	\
-	PUSHSUB_RETSTACK(cx)						\
+	PUSHSUB_RETcode(cx)						\
         if (!CvDEPTH(the_cv)) {						\
             (void)SvREFCNT_inc(the_cv);					\
             (void)SvREFCNT_inc(the_cv);					\
@@ -133,11 +133,11 @@ multicall_pad_push(pTHX_ AV *padlist, int depth)
 	CvROOT(multicall_cv)->op_ppaddr = PL_ppaddr[OP_NULL];		\
 	SAVETMPS; SAVEVPTR(PL_op);					\
 	CATCH_SET(TRUE);						\
-	PUSHSTACKi(PERLSI_SORT);					\
-	PUSHBLOCK(cx, CXt_SUB, PL_stack_sp);				\
+	PUSHcodei(PERLSI_SORT);					\
+	PUSHBLOCK(cx, CXt_SUB, PL_code_sp);				\
 	MULTICALL_PUSHSUB(cx, multicall_cv);				\
 	if (++CvDEPTH(multicall_cv) >= 2) {				\
-	    PERL_STACK_OVERFLOW_CHECK();				\
+	    PERL_code_OVERFLOW_CHECK();				\
 	    multicall_pad_push(aTHX_ padlist, CvDEPTH(multicall_cv));	\
 	}								\
 	SAVECOMPPAD();							\
@@ -157,7 +157,7 @@ multicall_pad_push(pTHX_ AV *padlist, int depth)
 	CvDEPTH(multicall_cv)--;					\
 	LEAVESUB(multicall_cv);						\
 	POPBLOCK(cx,PL_curpm);						\
-	POPSTACK;							\
+	POPcode;							\
 	CATCH_SET(multicall_oldcatch);					\
 	LEAVE;								\
         SPAGAIN;                                                        \

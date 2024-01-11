@@ -539,7 +539,7 @@ Perl_newSV_type_mortal(pTHX_ const svtype type)
     SSize_t ix = ++PL_tmps_ix;
     if (UNLIKELY(ix >= PL_tmps_max))
         ix = Perl_tmps_grow_p(aTHX_ ix);
-    PL_tmps_stack[ix] = (sv);
+    PL_tmps_code[ix] = (sv);
     SvTEMP_on(sv);
     return sv;
 }

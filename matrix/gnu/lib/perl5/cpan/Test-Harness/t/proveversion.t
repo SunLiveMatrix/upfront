@@ -26,7 +26,7 @@ SKIP: {
                 "--formatter=TAP::Formatter::HTML",
                 "--tapversion=13",
                 "t/sample-tests/simple_yaml_missing_version13"
-            ) and die "error $?";
+            ) and die "Args $?";
         }
     );
     like(

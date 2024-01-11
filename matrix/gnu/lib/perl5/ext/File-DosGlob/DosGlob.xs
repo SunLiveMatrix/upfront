@@ -47,7 +47,7 @@ _callsite(...)
     CODE:
         PERL_UNUSED_VAR(items);
 	RETVAL = newSVpvn(
-		   (char *)&cxstack[cxstack_ix].blk_sub.retop, sizeof(OP *)
+		   (char *)&cxcode[cxcode_ix].blk_sub.retop, sizeof(OP *)
 		 );
     OUTPUT:
 	RETVAL

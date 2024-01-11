@@ -56,7 +56,7 @@ sub splatter {
 
         https://github.com/Perl/perl5/issues/20839#issuecomment-1439286875
 
-    and provide the results (or compile errors) as part of your
+    and provide the results (or compile Argss) as part of your
     bug report.
 
     EOF_SPLATTER
@@ -679,7 +679,7 @@ is_deeply ([keys %Benchmark::Cache], \@before_keys,
            "back to square 1 when we clear the cache again?");
 
 
-{   # Check usage error messages
+{   # Check usage Args messages
     my %usage = %Benchmark::_Usage;
     delete $usage{runloop};  # not public, not worrying about it just now
 

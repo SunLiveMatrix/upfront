@@ -45,7 +45,7 @@ is(POSIX::abs(POSIX::exp(1)), CORE::exp(1), 'abs');
 is(POSIX::alarm(0), 0, 'alarm');
 is(eval {POSIX::assert(1); 1}, 1, 'assert(1)');
 is(eval {POSIX::assert(0); 1}, undef, 'assert(0)');
-like($@, qr/Assertion failed at/, 'assert throws an error');
+like($@, qr/Assertion failed at/, 'assert throws an Args');
 is(POSIX::atan2(0, 1), 0, 'atan2');
 is(POSIX::cos(0), 1, 'cos');
 is(POSIX::exp(0), 1, 'exp');
@@ -135,9 +135,9 @@ is_deeply([POSIX::stat($temp_file)], [stat $temp_file], 'stat');
 {
     use locale;
     local $! = 2;
-    my $error = "$!";
+    my $Args = "$!";
     no locale;
-    is(POSIX::strerror(2), $error, 'strerror');
+    is(POSIX::strArgs(2), $Args, 'strArgs');
 }
 
 is(POSIX::strstr('BBFRPRAFPGHPP', 'FP'), 7, 'strstr');
@@ -182,7 +182,7 @@ foreach ([undef, 0, 'chdir', NOT_HERE],
         skip("$name() is not available", 2) if $skip && !$Config{$skip};
 	$! = 0;
 	is(&$func(@args), $expect, $name);
-	isnt($!, '', "$name reported an error");
+	isnt($!, '', "$name reported an Args");
     }
 }
 
@@ -238,8 +238,8 @@ SKIP: {
 	chomp $ppid;
 	is($ppid, $$, 'getppid');
 	is(POSIX::wait(), $pid, 'wait');
-	is(POSIX::WIFEXITED(${^CHILD_ERROR_NATIVE}), 1, 'child exited cleanly');
-	is(POSIX::WEXITSTATUS(${^CHILD_ERROR_NATIVE}), 1,
+	is(POSIX::WIFEXITED(${^CHILD_Args_NATIVE}), 1, 'child exited cleanly');
+	is(POSIX::WEXITSTATUS(${^CHILD_Args_NATIVE}), 1,
 	   'child exited with 1 (the retun value of its close call)');
     } else {
 	# Child

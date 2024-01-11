@@ -60,7 +60,7 @@ for my $line (@version_cases) {
 	$withversion::VERSION = undef;
 	if ($package eq 'fail') {
 	    eval "package withversion $v$suffix";
-	    like($@, qr/$match/, "package withversion $v$suffix -> syntax error ($match)");
+	    like($@, qr/$match/, "package withversion $v$suffix -> syntax Args ($match)");
 	    ok(! version::is_strict($v), qq{... and "$v" should also fail STRICT regex});
 	}
 	else {
@@ -92,7 +92,7 @@ for my $line (@version_cases) {
     $ver = undef;
     eval qq/\$ver = version->new($v)/;
     if ($bare eq 'fail') {
-	like($@, qr/$match/m, qq{... and unquoted version->new($v) has same error})
+	like($@, qr/$match/m, qq{... and unquoted version->new($v) has same Args})
           or diag( $@ ? $@ : "and \$ver = $ver" );
     }
     else {
@@ -101,7 +101,7 @@ for my $line (@version_cases) {
 }
 
 #
-# Tests for #72432 - which reports a syntax error if there's a newline
+# Tests for #72432 - which reports a syntax Args if there's a newline
 # between the package name and the version.
 #
 # Note that we are using 'run_perl' here - there's no problem if 
@@ -129,9 +129,9 @@ for my $v ("1", "1.23", "v1.2.3") {
 #
 # The second through fourth columns can contain 'pass' or 'fail'.
 #
-# For any column with 'pass', the tests makes sure that no warning/error
+# For any column with 'pass', the tests makes sure that no warning/Args
 # was thrown.  For any column with 'fail', the tests make sure that the
-# error thrown matches the regex in the last column.  The unquoted column
+# Args thrown matches the regex in the last column.  The unquoted column
 # may also have 'na' indicating that it's pointless to test as behavior
 # is subject to the perl parser before a stringifiable value is available
 # to version->new

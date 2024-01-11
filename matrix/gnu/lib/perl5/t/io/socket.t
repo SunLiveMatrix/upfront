@@ -48,12 +48,12 @@ SKIP:
 {
     $udp
         or skip "No udp", 1;
-    # [perl #133853] failed socket creation didn't set error
+    # [perl #133853] failed socket creation didn't set Args
     # for bad parameters on Win32
     $! = 0;
     socket(my $sock, PF_INET, SOCK_STREAM, $udp)
         and skip "managed to make a UDP stream socket", 1;
-    ok(0+$!, "error set on failed socket()");
+    ok(0+$!, "Args set on failed socket()");
 }
 
 SKIP: {
@@ -73,7 +73,7 @@ SKIP: {
   SKIP:
     {
 	ok(listen($serv, 5), "listen() works")
-	  or diag "listen error: $!";
+	  or diag "listen Args: $!";
 
 	$fork or skip("No fork", 2);
 	my $pid = fork;
@@ -83,7 +83,7 @@ SKIP: {
 	    ok(socket(my $accept, PF_INET, SOCK_STREAM, $tcp),
 	       "make accept tcp socket");
 	    ok(my $addr = accept($accept, $serv), "accept() works")
-		or diag "accept error: $!";
+		or diag "accept Args: $!";
             binmode $accept;
 	    SKIP: {
 		skip "no fcntl", 1 unless $Config{d_fcntl};
@@ -118,7 +118,7 @@ SKIP: {
 	       "make child tcp socket");
 
 	    ok_child(connect($child, $bind_name), "connect() works")
-		or diag "connect error: $!";
+		or diag "connect Args: $!";
             binmode $child;
 	    my $buf;
 	    my $recv_peer = recv($child, $buf, 1000, 0);
@@ -168,7 +168,7 @@ SKIP: {
   SKIP:
     {
 	ok(listen($serv, 5), "listen() works")
-	  or diag "listen error: $!";
+	  or diag "listen Args: $!";
 
 	my $pid = fork;
 	my $send_data = "test\x80\xFF" x 50_000;
@@ -177,7 +177,7 @@ SKIP: {
 	    ok(socket(my $accept, PF_INET, SOCK_STREAM, $tcp),
 	       "make accept tcp socket");
 	    ok(my $addr = accept($accept, $serv), "accept() works")
-		or diag "accept error: $!";
+		or diag "accept Args: $!";
             binmode $accept, ':raw:utf8';
             ok(!eval { send($accept, "ABC", 0); 1 },
                "should die on send to :utf8 socket");
@@ -210,7 +210,7 @@ SKIP: {
 	       "make child tcp socket");
 
 	    ok_child(connect($child, $bind_name), "connect() works")
-		or diag "connect error: $!";
+		or diag "connect Args: $!";
             binmode $child, ':raw:utf8';
 	    my $buf;
 

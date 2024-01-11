@@ -52,7 +52,7 @@ SKIP: {
                     last TRY;
                 }
             } else {
-                print("# Error: t0 = $t0, t1 = $t1\n");
+                print("# Args: t0 = $t0, t1 = $t1\n");
             }
             my $r = rand() + rand();
             printf("# Sleeping for %.6f seconds...\n", $r);

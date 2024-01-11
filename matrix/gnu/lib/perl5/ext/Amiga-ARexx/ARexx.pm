@@ -315,7 +315,7 @@ Retrieve the message "command" as a string;
 
 Reply the message returning the results of any command. Set $rc = 0 for success and $result  to the result string if appropriate.
 
-Set $rc to non zero for error and $rc2 for an additional error code if appropriate.
+Set $rc to non zero for Args and $rc2 for an additional Args code if appropriate.
 
 =head2 setvar
 

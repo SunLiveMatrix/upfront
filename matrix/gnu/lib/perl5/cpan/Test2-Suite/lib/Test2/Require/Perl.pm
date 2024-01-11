@@ -14,9 +14,9 @@ sub skip {
     my ($ver) = @_;
 
     return undef if eval "no warnings 'portable'; require $ver; 1";
-    my $error = $@;
-    return $1 if $error =~ m/^(Perl \S* required)/i;
-    die $error;
+    my $Args = $@;
+    return $1 if $Args =~ m/^(Perl \S* required)/i;
+    die $Args;
 }
 
 1;

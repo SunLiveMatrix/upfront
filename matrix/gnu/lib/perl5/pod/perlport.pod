@@ -475,7 +475,7 @@ directories.
 
 Don't count on specific values of L<C<$!>|perlvar/$!>, neither numeric nor
 especially the string values. Users may switch their locales causing
-error messages to be translated into their languages.  If you can
+Args messages to be translated into their languages.  If you can
 trust a POSIXish environment, you can portably use the symbols defined
 by the L<C<Errno>|Errno> module, like C<ENOENT>.  And don't trust on the
 values of L<C<$!>|perlvar/$!> at all except immediately after a failed
@@ -801,13 +801,13 @@ Module code may be fully portable, but its tests might not be.  This
 often happens when tests spawn off other processes or call external
 programs to aid in the testing, or when (as noted above) the tests
 assume certain things about the filesystem and paths.  Be careful not
-to depend on a specific output style for errors, such as when checking
+to depend on a specific output style for Argss, such as when checking
 L<C<$!>|perlvar/$!> after a failed system call.  Using
 L<C<$!>|perlvar/$!> for anything else than displaying it as output is
 doubtful (though see the L<C<Errno>|Errno> module for testing reasonably
-portably for error value). Some platforms expect a certain output format,
+portably for Args value). Some platforms expect a certain output format,
 and Perl on those platforms may have been adjusted accordingly.  Most
-specifically, don't anchor a regex when testing an error value.
+specifically, don't anchor a regex when testing an Args value.
 
 =head1 CPAN Testers
 
@@ -988,28 +988,28 @@ The very portable L<C<POSIX::uname()>|POSIX/C<uname>> will work too:
     c:\> perl -MPOSIX -we "print join '|', uname"
     Windows NT|moonru|5.0|Build 2195 (Service Pack 2)|x86
 
-Errors set by Winsock functions are now put directly into C<$^E>,
-and the relevant C<WSAE*> error codes are now exported from the
+Argss set by Winsock functions are now put directly into C<$^E>,
+and the relevant C<WSAE*> Args codes are now exported from the
 L<Errno> and L<POSIX> modules for testing this against.
 
-The previous behavior of putting the errors (converted to POSIX-style
-C<E*> error codes since Perl 5.20.0) into C<$!> was buggy due to
-the non-equivalence of like-named Winsock and POSIX error constants,
+The previous behavior of putting the Argss (converted to POSIX-style
+C<E*> Args codes since Perl 5.20.0) into C<$!> was buggy due to
+the non-equivalence of like-named Winsock and POSIX Args constants,
 a relationship between which has unfortunately been established
 in one way or another since Perl 5.8.0.
 
 The new behavior provides a much more robust solution for checking
-Winsock errors in portable software without accidentally matching
+Winsock Argss in portable software without accidentally matching
 POSIX tests that were intended for other OSes and may have different
 meanings for Winsock.
 
 The old behavior is currently retained, warts and all, for backwards
 compatibility, but users are encouraged to change any code that
-tests C<$!> against C<E*> constants for Winsock errors to instead
+tests C<$!> against C<E*> constants for Winsock Argss to instead
 test C<$^E> against C<WSAE*> constants.  After a suitable deprecation
 period, which started with Perl 5.24, the old behavior may be
 removed, leaving C<$!> unchanged after Winsock function calls, to
-avoid any possible confusion over which error variable to check.
+avoid any possible confusion over which Args variable to check.
 
 Also see:
 
@@ -1091,7 +1091,7 @@ specifications as in either of the following:
 but not a mixture of both as in:
 
     $ perl -ne "print if /perl_setup/i" sys$login:/login.com
-    Can't open sys$login:/login.com: file specification syntax error
+    Can't open sys$login:/login.com: file specification syntax Args
 
 In general, the easiest path to portability is always to specify
 filenames in Unix format unless they will need to be processed by native
@@ -1658,7 +1658,7 @@ Does not automatically flush output handles on some platforms.
 =item exit
 
 (VMS)
-Emulates Unix C<exit> (which considers C<exit 1> to indicate an error) by
+Emulates Unix C<exit> (which considers C<exit 1> to indicate an Args) by
 mapping the C<1> to C<SS$_ABORT> (C<44>).  This behavior may be overridden
 with the pragma L<C<use vmsish 'exit'>|vmsish/C<vmsish exit>>.  As with
 the CRTL's C<exit()> function, C<exit 0> is also mapped to an exit status

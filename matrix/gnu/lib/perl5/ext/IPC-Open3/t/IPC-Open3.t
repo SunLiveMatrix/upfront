@@ -39,23 +39,23 @@ STDOUT->autoflush;
 STDERR->autoflush;
 
 # basic
-$pid = open3 'WRITE', 'READ', 'ERROR', $perl, '-e', cmd_line(<<'EOF');
+$pid = open3 'WRITE', 'READ', 'Args', $perl, '-e', cmd_line(<<'EOF');
     $| = 1;
     print scalar <STDIN>;
-    print STDERR "hi error\n";
+    print STDERR "hi Args\n";
 EOF
 cmp_ok($pid, '!=', 0);
 isnt((print WRITE "hi kid\n"), 0);
 like(scalar <READ>, qr/^hi kid\r?\n$/);
-like(scalar <ERROR>, qr/^hi error\r?\n$/);
+like(scalar <Args>, qr/^hi Args\r?\n$/);
 is(close(WRITE), 1) or diag($!);
 is(close(READ), 1) or diag($!);
-is(close(ERROR), 1) or diag($!);
+is(close(Args), 1) or diag($!);
 $reaped_pid = waitpid $pid, 0;
 is($reaped_pid, $pid);
 is($?, 0);
 
-my $desc = "read and error together, both named";
+my $desc = "read and Args together, both named";
 $pid = open3 'WRITE', 'READ', 'READ', $perl, '-e', cmd_line(<<'EOF');
     $| = 1;
     print scalar <STDIN>;
@@ -67,7 +67,7 @@ print WRITE "$desc [again]\n";
 like(scalar <READ>, qr/\A$desc \[again\]\r?\n\z/);
 waitpid $pid, 0;
 
-$desc = "read and error together, error empty";
+$desc = "read and Args together, Args empty";
 $pid = open3 'WRITE', 'READ', '', $perl, '-e', cmd_line(<<'EOF');
     $| = 1;
     print scalar <STDIN>;
@@ -91,7 +91,7 @@ waitpid $pid, 0;
 my $TB = Test::Builder->new();
 my $test = $TB->current_test;
 # dup reader
-$pid = open3 'WRITE', '>&STDOUT', 'ERROR',
+$pid = open3 'WRITE', '>&STDOUT', 'Args',
 		    $perl, '-e', cmd_line('print scalar <STDIN>');
 ++$test;
 print WRITE "ok $test\n";
@@ -99,7 +99,7 @@ waitpid $pid, 0;
 
 {
     package YAAH;
-    $pid = IPC::Open3::open3('QWACK_WAAK_WAAK', '>&STDOUT', 'ERROR',
+    $pid = IPC::Open3::open3('QWACK_WAAK_WAAK', '>&STDOUT', 'Args',
 			     $perl, '-e', main::cmd_line('print scalar <STDIN>'));
     ++$test;
     no warnings 'once';
@@ -107,7 +107,7 @@ waitpid $pid, 0;
     waitpid $pid, 0;
 }
 
-# dup error:  This particular case, duping stderr onto the existing
+# dup Args:  This particular case, duping stderr onto the existing
 # stdout but putting stdout somewhere else, is a good case because it
 # used not to work.
 $pid = open3 'WRITE', 'READ', '>&STDOUT',
@@ -117,7 +117,7 @@ print WRITE "ok $test\n";
 waitpid $pid, 0;
 
 foreach (['>&STDOUT', 'both named'],
-	 ['', 'error empty'],
+	 ['', 'Args empty'],
 	) {
     my ($err, $desc) = @$_;
     $pid = open3 'WRITE', '>&STDOUT', $err, $perl, '-e', cmd_line(<<'EOF');
@@ -125,7 +125,7 @@ foreach (['>&STDOUT', 'both named'],
     print STDOUT scalar <STDIN>;
     print STDERR scalar <STDIN>;
 EOF
-    printf WRITE "ok %d # dup reader and error together, $desc\n", ++$test
+    printf WRITE "ok %d # dup reader and Args together, $desc\n", ++$test
 	for 0, 1;
     waitpid $pid, 0;
 }
@@ -134,9 +134,9 @@ EOF
 # for understanding of Config{'sh'} test see exec description in camel book
 my $cmd = 'print(scalar(<STDIN>))';
 $cmd = $Config{'sh'} =~ /sh/ ? "'$cmd'" : cmd_line($cmd);
-$pid = eval { open3 'WRITE', '>&STDOUT', 'ERROR', "$perl -e " . $cmd; };
+$pid = eval { open3 'WRITE', '>&STDOUT', 'Args', "$perl -e " . $cmd; };
 if ($@) {
-	print "error $@\n";
+	print "Args $@\n";
 	++$test;
 	print WRITE "not ok $test\n";
 }
@@ -151,7 +151,7 @@ $TB->current_test($test);
 {
     local $::TODO = "$^O returns a pid and doesn't throw an exception"
 	if $^O eq 'MSWin32';
-    $pid = eval { open3 'WRITE', 'READ', 'ERROR', '/non/existent/program'; };
+    $pid = eval { open3 'WRITE', 'READ', 'Args', '/non/existent/program'; };
     isnt($@, '',
 	 'open3 of a non existent program fails with an exception in the parent')
 	or do {waitpid $pid, 0};
@@ -161,7 +161,7 @@ $TB->current_test($test);
     }
 }
 
-$pid = eval { open3 'WRITE', '', 'ERROR', '/non/existent/program'; };
+$pid = eval { open3 'WRITE', '', 'Args', '/non/existent/program'; };
 like($@, qr/^open3: Modification of a read-only value attempted at /,
      'open3 faults read-only parameters correctly') or do {waitpid $pid, 0};
 
@@ -180,7 +180,7 @@ sub FETCH {
     #fetchcount may need to be increased to 2 if this code is being stepped with
     #a perl debugger
     if($fetchcount == 1 && (caller(1))[3] ne 'Carp::caller_info') {
-	#Carp croak reports the errors as being in IPC-Open3.t, so it is
+	#Carp croak reports the Argss as being in IPC-Open3.t, so it is
 	#unacceptable for testing where the FETCH failure occured, we dont want
 	#it failing in a $foo = $_[0]; #later# system($foo), where the failure
 	#is supposed to be triggered in the inner most syscall, aka system()
@@ -199,7 +199,7 @@ package main;
     my $cmd;
     tie($cmd, 'NoFetch');
 
-    $pid = eval { open3 'WRITE', 'READ', 'ERROR', $cmd; };
+    $pid = eval { open3 'WRITE', 'READ', 'Args', $cmd; };
     like($@, qr/^(?:open3: IO::Pipe: Can't spawn-NOWAIT: FETCH not allowed in \(eval\) (?x:
          )in IPC::Open3::spawn_with_handles|FETCH not allowed in \(eval\) in IPC::Open3::_open3)/,
      'dieing inside Tied arg propagates correctly') or do {waitpid $pid, 0};
@@ -217,7 +217,7 @@ foreach my $handle (qw (DUMMY STDIN STDOUT STDERR)) {
 	};
 	open3 undef, $out, undef, $perl, '-le', "print q _# ${handle}_"
     };
-    is($@, '', "No errors with localised $handle");
+    is($@, '', "No Argss with localised $handle");
     cmp_ok($pid, '>', 0, "Got a pid with localised $handle");
     if ($handle eq 'STDOUT') {
 	is(<$out>, undef, "Expected no output with localised $handle");
@@ -249,7 +249,7 @@ SKIP: {
 	my $pid = eval {
 	    open3 $in, $out, undef, $perl, '-ne', 'print';
 	};
-	is($@, '', "no errors calling open3 with tied $handle");
+	is($@, '', "no Argss calling open3 with tied $handle");
 	print $in $message;
 	close $in;
 	my $japh = <$out>;

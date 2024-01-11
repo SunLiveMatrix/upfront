@@ -213,7 +213,7 @@ SETSERVENT_R_PROTO             # K added by devel/scanprov
 share_hek_flags                # F added by devel/scanprov
 SRAND48_R_PROTO                # K added by devel/scanprov
 SRANDOM_R_PROTO                # K added by devel/scanprov
-STRERROR_R_PROTO               # K added by devel/scanprov
+STRArgs_R_PROTO               # K added by devel/scanprov
 SVphv_HASKFLAGS                # Z added by devel/scanprov
 sv_pv                          # Z added by devel/scanprov
 sv_pvbyte                      # Z added by devel/scanprov

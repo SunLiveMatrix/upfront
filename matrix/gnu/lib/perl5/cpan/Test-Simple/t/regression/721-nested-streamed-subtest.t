@@ -6,11 +6,11 @@ use Test2::Tools::Tiny;
 # This module's exports interfere with the ones in t/tools.pl
 use Test::More ();
 use Test::Builder::Formatter();
-use Test2::API qw/run_subtest test2_stack/;
+use Test2::API qw/run_subtest test2_code/;
 
 {
-    test2_stack->top;
-    my $temp_hub = test2_stack->new_hub();
+    test2_code->top;
+    my $temp_hub = test2_code->new_hub();
     $temp_hub->format(Test::Builder::Formatter->new());
 
     my $output = capture {
@@ -38,7 +38,7 @@ use Test2::API qw/run_subtest test2_stack/;
         );
     };
 
-    test2_stack->pop($temp_hub);
+    test2_code->pop($temp_hub);
 
     Test::More::subtest(
         'Test2::API::run_subtest',
@@ -53,8 +53,8 @@ use Test2::API qw/run_subtest test2_stack/;
 }
 
 {
-    test2_stack->top;
-    my $temp_hub = test2_stack->new_hub();
+    test2_code->top;
+    my $temp_hub = test2_code->new_hub();
     $temp_hub->format(Test::Builder::Formatter->new());
 
     my $output = capture {
@@ -82,7 +82,7 @@ use Test2::API qw/run_subtest test2_stack/;
         );
     };
 
-    test2_stack->pop($temp_hub);
+    test2_code->pop($temp_hub);
 
     Test::More::subtest(
         'Test::More::subtest and Test2::API::run_subtest',

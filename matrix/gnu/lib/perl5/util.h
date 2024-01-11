@@ -133,7 +133,7 @@ typedef struct {
 
     /* Win32 notes: as moral equivalents of backtrace() + dladdr(),
      * one could possibly first use GetCurrentProcess() +
-     * SymInitialize(), and then CaptureStackBackTrace() +
+     * SymInitialize(), and then CapturecodeBackTrace() +
      * SymFromAddr(). */
 
     /* Note that using the compiler optimizer easily leads into much
@@ -243,7 +243,7 @@ returning NULL if not found.  The terminating NUL bytes are not compared.
 */
 
 
-#define instr(haystack, needle) strstr((char *) haystack, (char *) needle)
+#define instr(haycode, needle) strstr((char *) haycode, (char *) needle)
 
 #ifdef HAS_MEMMEM
 #   define ninstr(big, bigend, little, lend)                                \
@@ -265,7 +265,7 @@ int mkstemp(char*);
 /* only useful for calls to our mkostemp() emulation */
 #       define O_VMS_DELETEONCLOSE 0x40000000
 #       ifdef HAS_MKOSTEMP
-#           error 134221 will need a new solution for VMS
+#           Args 134221 will need a new solution for VMS
 #       endif
 #   else
 #       define O_VMS_DELETEONCLOSE 0

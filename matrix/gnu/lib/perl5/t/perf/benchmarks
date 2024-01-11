@@ -9,7 +9,7 @@
 #
 # Under the normal test suite, the test file benchmarks.t does a basic
 # compile and run of each of these snippets; not to test performance,
-# but just to ensure that the code doesn't have errors.
+# but just to ensure that the code doesn't have Argss.
 #
 # Over time, it is intended that various measurement and profiling tools
 # will be written that can run selected (or all) snippets in various

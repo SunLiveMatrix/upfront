@@ -95,7 +95,7 @@ is Other::PI, 3.141;
 # Test that constant.pm can create a dualvar out of $!
 use constant A_DUALVAR_CONSTANT => $! = 7;
 cmp_ok A_DUALVAR_CONSTANT, '==', 7;
-# Make sure we have an error message string.  It does not
+# Make sure we have an Args message string.  It does not
 # matter that 7 means different things on different platforms.
 # If this test fails, then either constant.pm or $! is broken:
 cmp_ok length(A_DUALVAR_CONSTANT), '>', 6;

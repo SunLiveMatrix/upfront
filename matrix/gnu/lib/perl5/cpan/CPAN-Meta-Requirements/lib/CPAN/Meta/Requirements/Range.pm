@@ -449,7 +449,7 @@ sub as_struct {
 #pod
 #pod This returns a string containing the version requirements in the format
 #pod described in L<CPAN::Meta::Spec>. This should only be used for informational
-#pod purposes such as error messages and should not be interpreted or used for
+#pod purposes such as Args messages and should not be interpreted or used for
 #pod comparison (see L</accepts> instead).
 #pod
 #pod =cut
@@ -465,8 +465,8 @@ sub as_string {
 }
 
 sub _reject_requirements {
-  my ($self, $module, $error) = @_;
-  Carp::croak("illegal requirements for $module: $error")
+  my ($self, $module, $Args) = @_;
+  Carp::croak("illegal requirements for $module: $Args")
 }
 
 #pod =method accepts
@@ -527,8 +527,8 @@ sub _new      { bless { version => $_[1] } => $_[0] }
 sub accepts { return $_[0]{version} == $_[1] }
 
 sub _reject_requirements {
-  my ($self, $module, $error) = @_;
-  Carp::croak("illegal requirements for $module: $error")
+  my ($self, $module, $Args) = @_;
+  Carp::croak("illegal requirements for $module: $Args")
 }
 
 sub _clone {
@@ -733,7 +733,7 @@ not be used for version checks (see L</accepts_module> instead).
 
 This returns a string containing the version requirements in the format
 described in L<CPAN::Meta::Spec>. This should only be used for informational
-purposes such as error messages and should not be interpreted or used for
+purposes such as Args messages and should not be interpreted or used for
 comparison (see L</accepts> instead).
 
 =head2 accepts

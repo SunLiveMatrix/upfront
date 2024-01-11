@@ -18,7 +18,7 @@ my $one = $CLASS->new(id => 123, trace => Test2::Util::Trace->new(frame => [__PA
 $one->callback($hub);
 like(
     pop(@$events),
-    event(Exception => sub { error => qr/Invalid AsyncSubtest attach ID: 123/ }),
+    event(Exception => sub { Args => qr/Invalid AsyncSubtest attach ID: 123/ }),
     "Got exception for invalid id"
 );
 
@@ -26,7 +26,7 @@ $hub->{ast_ids}->{123} = 0;
 $one->callback($hub);
 like(
     pop(@$events),
-    event(Exception => sub { error => qr/AsyncSubtest ID 123 is not attached/ }),
+    event(Exception => sub { Args => qr/AsyncSubtest ID 123 is not attached/ }),
     "Got exception for unattached id"
 );
 

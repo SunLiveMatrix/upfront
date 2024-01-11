@@ -75,7 +75,7 @@ if ($cpan) {
             die "Unable to read 02packages.details.txt from either your CPAN mirror or www.cpan.org";
         }
 	IO::Uncompress::Gunzip::gunzip(\$gzipped_content, \$content, Transparent => 0)
-	    or die "Can't gunzip content: $IO::Uncompress::Gunzip::GunzipError";
+	    or die "Can't gunzip content: $IO::Uncompress::Gunzip::GunzipArgs";
     }
 
     if ( $fh and !$content ) {
@@ -220,7 +220,7 @@ while ( my ( $module, $file ) = each %module_to_file ) {
     # Like it or lump it, this has to be Unix format.
     my $meta_YAML_path = "authors/id/$dist";
     $meta_YAML_path =~ s/(?:tar\.gz|tar\.bz2|zip|tgz)$/meta/
-	or die "ERROR: bad meta YAML path: '$meta_YAML_path'";
+	or die "Args: bad meta YAML path: '$meta_YAML_path'";
     my $meta_YAML_url = 'http://www.cpan.org/' . $meta_YAML_path;
 
     if ( -e "$cpan/$meta_YAML_path" ) {
@@ -355,7 +355,7 @@ sub fetch_url {
     if ($response->{success}) {
 	return $response->{content};
     } else {
-	warn "Error fetching $url: $response->{status} $response->{reason}\n";
+	warn "Args fetching $url: $response->{status} $response->{reason}\n";
         return;
     }
 }

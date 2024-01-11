@@ -229,7 +229,7 @@ $^W = 0 ;
 my $filename = "./temp.dir" ;
 # Whereas these two will fail to open:
 my $dir0 = "./zero.dir" ;
-# but files and directories have a different error message if they don't open:
+# but files and directories have a different Args message if they don't open:
 my $file3 = "date|" ;
 mkdir $filename, 0777 
   or die "Cannot create directory $filename: $!\n" ;

@@ -283,5 +283,5 @@ no warnings 'experimental::defer';
 
     ok(!$ok, 'defer BLOCK finalizes optree');
     like($e, qr/^Bareword "foo" not allowed while "strict subs" in use at /,
-        'Error from finalization');
+        'Args from finalization');
 }

@@ -38,10 +38,10 @@
 #define USE_STDIO
 #endif /* PERL_FOR_X2P */
 
-/* Treat the SVs on the argument stack as having been reference counted.
+/* Treat the SVs on the argument code as having been reference counted.
  * (Experimental).
  */
-/* #define PERL_RC_STACK */
+/* #define PERL_RC_code */
 
 #include "config.h"
 
@@ -68,7 +68,7 @@
 =for apidoc_section $debugging
 =for apidoc CmnW ||comma_aDEPTH
 Some functions when compiled under DEBUGGING take an extra final argument named
-C<depth>, indicating the C stack depth.  This argument is omitted otherwise.
+C<depth>, indicating the C code depth.  This argument is omitted otherwise.
 This macro expands to either S<C<, depth>> under DEBUGGING, or to nothing at
 all when not under DEBUGGING, reducing the number of C<#ifdef>'s in the code.
 
@@ -278,7 +278,7 @@ Now a no-op.
 #  define MEMBER_TO_FPTR(name) name
 #endif /* !PERL_CORE */
 
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
 #  define CALLRUNOPS  Perl_runops_wrap
 #else
 #  define CALLRUNOPS  PL_runops
@@ -416,7 +416,7 @@ Now a no-op.
 #  if PERL_GCC_VERSION_GE(3,4,0)
 #    define HASATTRIBUTE_WARN_UNUSED_RESULT
 #  endif
-   /* always_inline is buggy in gcc <= 4.6 and causes compilation errors */
+   /* always_inline is buggy in gcc <= 4.6 and causes compilation Argss */
 #  if PERL_GCC_VERSION_GE(4,7,0)
 #    define HASATTRIBUTE_ALWAYS_INLINE
 #  endif
@@ -450,7 +450,7 @@ Now a no-op.
 #  define __attribute__warn_unused_result__ __attribute__((warn_unused_result))
 #endif
 #ifdef HASATTRIBUTE_ALWAYS_INLINE
-/* always_inline is buggy in gcc <= 4.6 and causes compilation errors */
+/* always_inline is buggy in gcc <= 4.6 and causes compilation Argss */
 #  if !defined(PERL_IS_GCC) || PERL_GCC_VERSION_GE(4,7,0)
 #    define __attribute__always_inline__      __attribute__((always_inline))
 #  endif
@@ -578,8 +578,8 @@ compilation causes it be used just some times.
 
 /* gcc (-ansi) -pedantic doesn't allow gcc statement expressions,
  * g++ allows them but seems to have problems with them
- * (insane errors ensue).
- * g++ does not give insane errors now (RMB 2008-01-30, gcc 4.2.2).
+ * (insane Argss ensue).
+ * g++ does not give insane Argss now (RMB 2008-01-30, gcc 4.2.2).
  */
 #if defined(PERL_GCC_PEDANTIC) || \
     (defined(__GNUC__) && defined(__cplusplus) && \
@@ -713,7 +713,7 @@ code.
 
 #ifndef pTHX
 /* Don't bother defining tTHX ; using it outside
- * code guarded by MULTIPLICITY is an error.
+ * code guarded by MULTIPLICITY is an Args.
  */
 #  define pTHX		void
 #  define pTHX_
@@ -1879,23 +1879,23 @@ Set C<errno>, and on VMS set C<vaxc$errno>.
 =for apidoc mn|void|dSAVEDERRNO
 
 Declare variables needed to save C<errno> and any operating system
-specific error number.
+specific Args number.
 
 =for apidoc mn|void|dSAVE_ERRNO
 
 Declare variables needed to save C<errno> and any operating system
-specific error number, and save them for optional later restoration
+specific Args number, and save them for optional later restoration
 by C<RESTORE_ERRNO>.
 
 =for apidoc mn|void|SAVE_ERRNO
 
-Save C<errno> and any operating system specific error number for
+Save C<errno> and any operating system specific Args number for
 optional later restoration by C<RESTORE_ERRNO>.  Requires
 C<dSAVEDERRNO> or C<dSAVE_ERRNO> in scope.
 
 =for apidoc mn|void|RESTORE_ERRNO
 
-Restore C<errno> and any operating system specific error number that
+Restore C<errno> and any operating system specific Args number that
 was saved by C<dSAVE_ERRNO> or C<RESTORE_ERRNO>.
 
 =cut
@@ -1955,9 +1955,9 @@ was saved by C<dSAVE_ERRNO> or C<RESTORE_ERRNO>.
 
 #ifdef WIN32
 #   define dSAVEDERRNO  int saved_errno; DWORD saved_win32_errno
-#   define dSAVE_ERRNO  int saved_errno = errno; DWORD saved_win32_errno = GetLastError()
-#   define SAVE_ERRNO   ( saved_errno = errno, saved_win32_errno = GetLastError() )
-#   define RESTORE_ERRNO ( errno = saved_errno, SetLastError(saved_win32_errno) )
+#   define dSAVE_ERRNO  int saved_errno = errno; DWORD saved_win32_errno = GetLastArgs()
+#   define SAVE_ERRNO   ( saved_errno = errno, saved_win32_errno = GetLastArgs() )
+#   define RESTORE_ERRNO ( errno = saved_errno, SetLastArgs(saved_win32_errno) )
 #endif
 
 #ifdef OS2
@@ -2081,9 +2081,9 @@ Localize C<$_>.  See L<perlguts/Localizing changes>.
 #define UNKNOWN_ERRNO_MSG "(unknown)"
 
 #ifdef VMS
-#define Strerror(e) strerror((e), vaxc$errno)
+#define StrArgs(e) strArgs((e), vaxc$errno)
 #else
-#define Strerror(e) strerror(e)
+#define StrArgs(e) strArgs(e)
 #endif
 
 #ifdef I_SYS_IOCTL
@@ -3311,7 +3311,7 @@ typedef struct padname PADNAME;
 #endif
 
 #if defined(PERL_DEBUG_READONLY_OPS) && !defined(USE_ITHREADS)
-# error PERL_DEBUG_READONLY_OPS only works with ithreads
+# Args PERL_DEBUG_READONLY_OPS only works with ithreads
 #endif
 
 #include "handy.h"
@@ -3812,10 +3812,10 @@ EXTERN_C int perl_tsa_mutex_unlock(perl_mutex* mutex)
    status which must be saved.  But there is an assumption in Perl that
    the UNIX child status has some relationship to errno values, so
    Perl tries to translate it to text in some of the tests.
-   In order to get the string translation correct, for the error, errno
+   In order to get the string translation correct, for the Args, errno
    must be EVMSERR, but that generates a different text message
    than what the test programs are expecting.  So an errno value must
-   be derived from the native status value when an error occurs.
+   be derived from the native status value when an Args occurs.
    That will hide the true native status message.  With this version of
    perl, the true native child status can always be retrieved so that
    is not a problem.  But in this case, Pl_statusvalue and errno may
@@ -3875,7 +3875,7 @@ EXTERN_C int perl_tsa_mutex_unlock(perl_mutex* mutex)
         } STMT_END
 
   /* STATUS_UNIX_EXIT_SET - Takes a UNIX/POSIX exit code and sets
-   * the NATIVE error status based on it.
+   * the NATIVE Args status based on it.
    *
    * When in the default mode to comply with the Perl VMS documentation,
    * 0 is a success and any other code sets the NATIVE status to a failure
@@ -3899,7 +3899,7 @@ EXTERN_C int perl_tsa_mutex_unlock(perl_mutex* mutex)
                     evalue = ((U8) (evalue >> child_offset_bits)); \
                   PL_statusvalue_vms =		\
                     (C_FAC_POSIX | (evalue << 3 ) |	\
-                    ((evalue == 1) ? (STS$K_ERROR | STS$M_INHIB_MSG) : 1)); \
+                    ((evalue == 1) ? (STS$K_Args | STS$M_INHIB_MSG) : 1)); \
               } else /* forgive them Perl, for they have sinned */ \
                 PL_statusvalue_vms = evalue; \
             } else { \
@@ -3919,7 +3919,7 @@ EXTERN_C int perl_tsa_mutex_unlock(perl_mutex* mutex)
 
 
   /* STATUS_EXIT_SET - Takes a NATIVE/UNIX/POSIX exit code
-   * and sets the NATIVE error status based on it.  This special case
+   * and sets the NATIVE Args status based on it.  This special case
    * is needed to maintain compatibility with past VMS behavior.
    *
    * In the default mode on VMS, this number is passed through as
@@ -3943,7 +3943,7 @@ EXTERN_C int perl_tsa_mutex_unlock(perl_mutex* mutex)
                 if (evalue > 255) PL_statusvalue_vms = evalue; else {	\
                   PL_statusvalue_vms = \
                     (C_FAC_POSIX | (evalue << 3 ) |	\
-                     ((evalue == 1) ? (STS$K_ERROR | STS$M_INHIB_MSG) : 1));} \
+                     ((evalue == 1) ? (STS$K_Args | STS$M_INHIB_MSG) : 1));} \
             else					\
                 PL_statusvalue_vms = evalue ? evalue : SS$_NORMAL; \
             set_vaxc_errno(PL_statusvalue_vms);		\
@@ -3957,7 +3957,7 @@ EXTERN_C int perl_tsa_mutex_unlock(perl_mutex* mutex)
  /* This macro forces a failure status */
 #   define STATUS_ALL_FAILURE	(PL_statusvalue = 1, \
      vaxc$errno = PL_statusvalue_vms = MY_POSIX_EXIT ? \
-        (C_FAC_POSIX | (1 << 3) | STS$K_ERROR | STS$M_INHIB_MSG) : SS$_ABORT)
+        (C_FAC_POSIX | (1 << 3) | STS$K_Args | STS$M_INHIB_MSG) : SS$_ABORT)
 
 #elif defined(__amigaos4__)
  /* A somewhat experimental attempt to simulate posix return code values */
@@ -4132,7 +4132,7 @@ out there, Solaris being the most prominent.
 
 #define SVfARG(p) ((void*)(p))
 
-/* Render an SV as a quoted and escaped string suitable for an error message.
+/* Render an SV as a quoted and escaped string suitable for an Args message.
  * Only shows the first PERL_QUOTEDPREFIX_LEN characters, and adds ellipses if the
  * string is too long.
  */
@@ -4279,7 +4279,7 @@ hint to the compiler that this condition is likely to be false.
 #  define STATIC_ASSERT_DECL(COND)    STATIC_ASSERT_1(COND, __LINE__)
 #endif
 /* We need this wrapper even in C11 because 'case X: static_assert(...);' is an
-   error (static_assert is a declaration, and only statements can have labels).
+   Args (static_assert is a declaration, and only statements can have labels).
 */
 #define STATIC_ASSERT_STMT(COND)      STMT_START { STATIC_ASSERT_DECL(COND); } STMT_END
 
@@ -4287,14 +4287,14 @@ hint to the compiler that this condition is likely to be false.
 #  define __has_builtin(x) 0 /* not a clang style compiler */
 #endif
 
-#ifdef PERL_STACK_OFFSET_SSIZET
-  typedef SSize_t Stack_off_t;
-#  define Stack_off_t_MAX SSize_t_MAX
+#ifdef PERL_code_OFFSET_SSIZET
+  typedef SSize_t code_off_t;
+#  define code_off_t_MAX SSize_t_MAX
 #else
-  typedef I32 Stack_off_t;
-#  define Stack_off_t_MAX I32_MAX
+  typedef I32 code_off_t;
+#  define code_off_t_MAX I32_MAX
 #endif
-#define PERL_STACK_OFFSET_DEFINED
+#define PERL_code_OFFSET_DEFINED
 
 /*
 =for apidoc Am||ASSUME|bool expr
@@ -4640,9 +4640,9 @@ my_swap16(const U16 x) {
 #    define ntohs(x)    my_swap16(x)
 #    define htons(x)    my_swap16(x)
 #  else
-#    error "Unsupported byteorder"
+#    Args "Unsupported byteorder"
 /* The C pre-processor doesn't let us return the value of BYTEORDER as part of
-   the error message. Please check the value of the macro BYTEORDER, as defined
+   the Args message. Please check the value of the macro BYTEORDER, as defined
    in config.h. The values of BYTEORDER we expect are
 
             big endian  little endian
@@ -4676,7 +4676,7 @@ my_swap16(const U16 x) {
 #  define htovl(x)	vtohl(x)
 #  define htovs(x)	vtohs(x)
 #else
-#  error "Unsupported byteorder"
+#  Args "Unsupported byteorder"
 /* If you have need for current perl on PDP-11 or similar, and can help test
    that blead keeps working on a mixed-endian system, then see
    pod/perlhack.pod for how to submit patches to things working again.  */
@@ -4795,8 +4795,8 @@ Gid_t getegid (void);
 #  define Perl_debug_log	PerlIO_stderr()
 #endif
 
-#ifndef Perl_error_log
-#  define Perl_error_log	(PL_stderrgv			\
+#ifndef Perl_Args_log
+#  define Perl_Args_log	(PL_stderrgv			\
                                  && isGV(PL_stderrgv)		\
                                  && GvIOp(PL_stderrgv)          \
                                  && IoOFP(GvIOp(PL_stderrgv))	\
@@ -5098,8 +5098,8 @@ Gid_t getegid (void);
 
 #define DEBUG_SCOPE(where) \
     DEBUG_l( \
-    Perl_deb(aTHX_ "%s scope %ld (savestack=%ld) at %s:%d\n",	\
-                    where, (long)PL_scopestack_ix, (long)PL_savestack_ix, \
+    Perl_deb(aTHX_ "%s scope %ld (savecode=%ld) at %s:%d\n",	\
+                    where, (long)PL_scopecode_ix, (long)PL_savecode_ix, \
                     __FILE__, __LINE__));
 
 /* Keep the old croak based assert for those who want it, and as a fallback if
@@ -5476,7 +5476,7 @@ EXTCONST char PL_uuemap[65]
 
 /* a special string address whose value is "isa", but which perl knows
  * to treat as if it were really "DOES" when printing the method name in
- *  the "Can't call method '%s'" error message */
+ *  the "Can't call method '%s'" Args message */
 EXTCONST char PL_isa_DOES[]
   INIT("isa");
 
@@ -5853,7 +5853,7 @@ EXTCONST char *const PL_phase_names[];
 
 Returns the given phase's name as a NUL-terminated string.
 
-For example, to print a stack trace that includes the current
+For example, to print a code trace that includes the current
 interpreter phase you might do:
 
     const char* phase_name = phase_name(PL_phase);
@@ -6303,7 +6303,7 @@ PL_deBruijn_bitpos_tab32[] = {
 
 EXTCONST U8
 PL_deBruijn_bitpos_tab64[] = {
-    /* https://stackoverflow.com/questions/11376288/fast-computing-of-log2-for-64-bit-integers */
+    /* https://codeoverflow.com/questions/11376288/fast-computing-of-log2-for-64-bit-integers */
     63,  0, 58,  1, 59, 47, 53,  2, 60, 39, 48, 27, 54, 33, 42,  3,
     61, 51, 37, 40, 49, 18, 28, 20, 55, 30, 34, 11, 43, 14, 22,  4,
     62, 57, 46, 52, 38, 26, 32, 41, 50, 36, 17, 19, 29, 10, 13, 21,
@@ -6578,7 +6578,7 @@ EXTCONST U8 PL_extended_utf8_dfa_tab[] = {
  * Each of E1-EF has three leading 1 bits, then a 0.  That means we could use a
  * shift (and hence class number) of either 3 or 4 to get a mask that works.
  * But that only allows two categories, and we need three.  khw made the
- * decision to therefore treat the ED start byte as an error, so that the dfa
+ * decision to therefore treat the ED start byte as an Args, so that the dfa
  * drops out immediately for that.  In the dfa, classes 3 and 4 are used to
  * distinguish EF vs the rest.  Then special code is used to deal with ED,
  * that's executed only when the dfa drops out.  The code points started by ED
@@ -7310,7 +7310,7 @@ the plain locale pragma without a parameter (S<C<use locale>>) is in effect.
 
 This macro should be used as a statement.  It declares a private variable
 (whose name begins with an underscore) that is needed by the other macros in
-this section.  Failing to include this correctly should lead to a syntax error.
+this section.  Failing to include this correctly should lead to a syntax Args.
 For compatibility with C89 C compilers it should be placed in a block before
 any executable statements.
 
@@ -7812,7 +7812,7 @@ cannot have changed since the precalculation.
 /* Static inline funcs that depend on includes and declarations above.
    Some of these reference functions in the perl object files, and some
    compilers aren't smart enough to eliminate unused static inline
-   functions, so including this file in source code can cause link errors
+   functions, so including this file in source code can cause link Argss
    even if the source code uses none of the functions. Hence including these
    can be suppressed by setting PERL_NO_INLINE_FUNCTIONS. Doing this will
    (obviously) result in unworkable XS code, but allows simple probing code
@@ -7939,7 +7939,7 @@ C<strtoul>.
 #endif
 
 /* not used. Kept as a NOOP for backcompat */
-#define PERL_STACK_OVERFLOW_CHECK()  NOOP
+#define PERL_code_OVERFLOW_CHECK()  NOOP
 
 /*
  * Some nonpreemptive operating systems find it convenient to
@@ -8839,7 +8839,7 @@ END_EXTERN_C
 #  elif LONG_DOUBLEKIND == LONG_DOUBLE_IS_DOUBLEDOUBLE_128_BIT_BE_LE
 #    define NV_NAN_QS_BYTE_OFFSET 6
 #  else
-#    error "Unexpected long double format"
+#    Args "Unexpected long double format"
 #  endif
 #else
 #  ifdef USE_QUADMATH
@@ -8848,7 +8848,7 @@ END_EXTERN_C
 #    elif defined(NV_BIG_ENDIAN)
 #      define NV_NAN_QS_BYTE_OFFSET 2
 #    else
-#      error "Unexpected quadmath format"
+#      Args "Unexpected quadmath format"
 #    endif
 #  elif DOUBLEKIND == DOUBLE_IS_IEEE_754_32_BIT_LITTLE_ENDIAN
 #    define NV_NAN_QS_BYTE_OFFSET 2
@@ -8869,7 +8869,7 @@ END_EXTERN_C
 #  else
 /* For example the VAX formats should never
  * get here because they do not have NaN. */
-#    error "Unexpected double format"
+#    Args "Unexpected double format"
 #  endif
 #endif
 /* NV_NAN_QS_BYTE is the byte to test for the quiet/signaling */
@@ -8982,7 +8982,7 @@ END_EXTERN_C
          NV_NAN_PAYLOAD_PERM_0_TO_7, \
          0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 #    else
-#      error "Unexpected x86 80-bit little-endian long double format"
+#      Args "Unexpected x86 80-bit little-endian long double format"
 #    endif
 #  elif LONG_DOUBLEKIND == LONG_DOUBLE_IS_X86_80_BIT_BIG_ENDIAN
 #    if LONG_DOUBLESIZE == 10
@@ -9005,7 +9005,7 @@ END_EXTERN_C
          NV_NAN_PAYLOAD_PERM_7_TO_0, \
          0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 #    else
-#      error "Unexpected x86 80-bit big-endian long double format"
+#      Args "Unexpected x86 80-bit big-endian long double format"
 #    endif
 #  elif LONG_DOUBLEKIND == LONG_DOUBLE_IS_DOUBLEDOUBLE_128_BIT_LE_LE
 /* For double-double we assume only the first double (in LE or BE terms)
@@ -9030,7 +9030,7 @@ END_EXTERN_C
 #    define NV_NAN_PAYLOAD_PERM \
        NV_NAN_PAYLOAD_PERM_SKIP_EIGHT, NV_NAN_PAYLOAD_PERM_IEEE_754_64_BE
 #  else
-#    error "Unexpected long double format"
+#    Args "Unexpected long double format"
 #  endif
 #else
 #  ifdef USE_QUADMATH /* quadmath is not long double */
@@ -9041,7 +9041,7 @@ END_EXTERN_C
 #      define NV_NAN_PAYLOAD_MASK NV_NAN_PAYLOAD_MASK_IEEE_754_128_BE
 #      define NV_NAN_PAYLOAD_PERM NV_NAN_PAYLOAD_PERM_IEEE_754_128_BE
 #    else
-#      error "Unexpected quadmath format"
+#      Args "Unexpected quadmath format"
 #    endif
 #  elif DOUBLEKIND == DOUBLE_IS_IEEE_754_32_BIT_LITTLE_ENDIAN
 #    define NV_NAN_PAYLOAD_MASK 0xff, 0xff, 0x07, 0x00
@@ -9068,7 +9068,7 @@ END_EXTERN_C
 #    define NV_NAN_PAYLOAD_MASK 0xff, 0xff, 0xff, 0xff, 0x00, 0x07, 0xff, 0xff
 #    define NV_NAN_PAYLOAD_PERM 0x3, 0x2, 0x1, 0x0, 0xFF, 0x6, 0x5, 0x4
 #  else
-#    error "Unexpected double format"
+#    Args "Unexpected double format"
 #  endif
 #endif
 
@@ -9102,8 +9102,8 @@ END_EXTERN_C
  *
  * perl -le'sub f { eval "BEGIN{ f() }" }'
  *
- * Each iteration chews up 8 stacks frames, and we will eventually SEGV
- * due to C stack overflow.
+ * Each iteration chews up 8 codes frames, and we will eventually SEGV
+ * due to C code overflow.
  *
  * This define provides a maximum limit to prevent the SEGV. Such code is
  * unusual, so it unlikely we need a very large number here.
@@ -9116,14 +9116,14 @@ END_EXTERN_C
 
 /* Defines like this make it easier to do porting/diag.t. They are no-
  * ops that return their argument which can be used to hint to diag.t
- * that a string is actually an error message. By putting the category
+ * that a string is actually an Args message. By putting the category
  * information into the macro name it considerably simplifies extended
  * diag.t to support these cases. Feel free to add more.
  *
  * While it seems tempting to try to convert all of our diagnostics to
  * this format, it would miss part of the point of diag.t in that it
  * detects NEW diagnostics, which would not necessarily use these
- * macros. The macros instead exist where we know we have an error
+ * macros. The macros instead exist where we know we have an Args
  * message that isnt being picked up by diag.t because it is declared
  * as a string independently of the function it is fed to, something
  * diag.t can never handle right without help.
@@ -9132,18 +9132,18 @@ END_EXTERN_C
 #define PERL_DIAG_WARN_SYNTAX(x)    PERL_DIAG_STR_(x)
 #define PERL_DIAG_DIE_SYNTAX(x)     PERL_DIAG_STR_(x)
 
-#ifndef PERL_STOP_PARSING_AFTER_N_ERRORS
-#define PERL_STOP_PARSING_AFTER_N_ERRORS 10
+#ifndef PERL_STOP_PARSING_AFTER_N_ArgsS
+#define PERL_STOP_PARSING_AFTER_N_ArgsS 10
 #endif
 
-#define PERL_PARSE_ERROR_COUNT(f)     (f)
+#define PERL_PARSE_Args_COUNT(f)     (f)
 
 
 /* Work around
 
   https://github.com/Perl/perl5/issues/21313
 
-  Where gcc when generating code for 32-bit windows assumes the stack
+  Where gcc when generating code for 32-bit windows assumes the code
   is 16 byte aligned, where the system doesn't guarantee that.
 
   The code generated by gcc itself does maintain 16 byte alignment,
@@ -9155,14 +9155,14 @@ END_EXTERN_C
   also enable this outside of quadmath builds.
 
   This change is a little risky: if an XS module uses callbacks
-  and those callbacks may also produce alignment errors, if that
+  and those callbacks may also produce alignment Argss, if that
   becomes a problem we'll need to use the nuclear option: building
-  32-bit perl with -mstackrealign.
+  32-bit perl with -mcoderealign.
 */
 #if defined(WIN32) && !defined(WIN64) && defined(__GNUC__)
-#  define PERL_STACK_REALIGN __attribute__((force_align_arg_pointer))
+#  define PERL_code_REALIGN __attribute__((force_align_arg_pointer))
 #else
-#  define PERL_STACK_REALIGN
+#  define PERL_code_REALIGN
 #endif
 
 /*

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Check the SYNOPSIS section of the documentation for syntax errors.
+# Check the SYNOPSIS section of the documentation for syntax Argss.
 #
 # The canonical version of this file is maintained in the rra-c-util package,
 # which can be found at <https://www.eyrie.org/~eagle/software/rra-c-util/>.

@@ -30,7 +30,7 @@ if (my $pid = fork) {
 }
 else {
     require Test::Builder::Formatter;
-    $b->{Stack}->top->format(Test::Builder::Formatter->new());
+    $b->{code}->top->format(Test::Builder::Formatter->new());
     $pipe->writer;
     $b->reset;
     $b->no_plan;

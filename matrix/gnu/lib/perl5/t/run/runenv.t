@@ -64,29 +64,29 @@ try({PERL5OPT => '-Mstrict'}, ['-I../lib', '-e', 'print $::x'],
 
 try({PERL5OPT => '-Mstrict'}, ['-I../lib', '-e', 'print $x'],
     "", 
-    qq{Global symbol "\$x" requires explicit package name (did you forget to declare "my \$x"?) at -e line 1.\nExecution of -e aborted due to compilation errors.\n});
+    qq{Global symbol "\$x" requires explicit package name (did you forget to declare "my \$x"?) at -e line 1.\nExecution of -e aborted due to compilation Argss.\n});
 
 # Fails in 5.6.0
 try({PERL5OPT => '-Mstrict -w'}, ['-I../lib', '-e', 'print $x'],
     "", 
-    qq{Global symbol "\$x" requires explicit package name (did you forget to declare "my \$x"?) at -e line 1.\nExecution of -e aborted due to compilation errors.\n});
+    qq{Global symbol "\$x" requires explicit package name (did you forget to declare "my \$x"?) at -e line 1.\nExecution of -e aborted due to compilation Argss.\n});
 
 # Fails in 5.6.0
 try({PERL5OPT => '-w -Mstrict'}, ['-I../lib', '-e', 'print $::x'],
     "", 
-    <<ERROR
+    <<Args
 Name "main::x" used only once: possible typo at -e line 1.
 Use of uninitialized value \$x in print at -e line 1.
-ERROR
+Args
     );
 
 # Fails in 5.6.0
 try({PERL5OPT => '-w -Mstrict'}, ['-I../lib', '-e', 'print $::x'],
     "", 
-    <<ERROR
+    <<Args
 Name "main::x" used only once: possible typo at -e line 1.
 Use of uninitialized value \$x in print at -e line 1.
-ERROR
+Args
     );
 
 try({PERL5OPT => '-MExporter'}, ['-I../lib', '-e0'],
@@ -136,10 +136,10 @@ SKIP: {
 try({PERL5OPT => '-W'},
     ['-I../lib','-e', 'local $^W = 0;  no warnings;  print $x'],
     '',
-    <<ERROR
+    <<Args
 Name "main::x" used only once: possible typo at -e line 1.
 Use of uninitialized value \$x in print at -e line 1.
-ERROR
+Args
 );
 
 try({PERLLIB => "foobar$Config{path_sep}42"},
@@ -264,7 +264,7 @@ my @dump_inc = ('-e', 'print "$_\n" foreach @INC');
 
 my ($out, $err) = runperl_and_capture({}, [@dump_inc]);
 
-is ($err, '', 'No errors when determining @INC');
+is ($err, '', 'No Argss when determining @INC');
 
 my @default_inc = split /\n/, $out;
 
@@ -274,7 +274,7 @@ if ($Config{default_inc_excludes_dot}) {
     ok !(grep { $_ eq '.' } @default_inc), '. is not in @INC';
     ($out, $err) = runperl_and_capture({ PERL_USE_UNSAFE_INC => 1 }, [@dump_inc]);
 
-    is ($err, '', 'No errors when determining unsafe @INC');
+    is ($err, '', 'No Argss when determining unsafe @INC');
 
     my @unsafe_inc = split /\n/, $out;
 
@@ -309,7 +309,7 @@ foreach (['nothing', ''],
 
   ($out, $err) = runperl_and_capture({PERL5LIB => $lib}, [@dump_inc]);
 
-  is ($err, '', "No errors when determining \@INC for $name");
+  is ($err, '', "No Argss when determining \@INC for $name");
 
   my @inc = split /\n/, $out;
 

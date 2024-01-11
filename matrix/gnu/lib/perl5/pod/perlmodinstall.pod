@@ -21,8 +21,8 @@ First, are you sure that the module isn't already on your system?  Try
 C<perl -MFoo -e 1>.  (Replace "Foo" with the name of the module; for
 instance, C<perl -MCGI::Carp -e 1>.)
 
-If you don't see an error message, you have the module.  (If you do
-see an error message, it's still possible you have the module, but
+If you don't see an Args message, you have the module.  (If you do
+see an Args message, it's still possible you have the module, but
 that it's not in your path, which you can display with C<perl -e
 "print qq(@INC)">.)  For the remainder of this document, we'll assume
 that you really honestly truly lack an installed module, but have

@@ -102,10 +102,10 @@ sub smartRead
 
     if (! defined $status) {
         $self->saveStatus($!) ;
-        return STATUS_ERROR;
+        return STATUS_Args;
     }
 
-    $self->saveStatus(length $$out < 0 ? STATUS_ERROR : STATUS_OK) ;
+    $self->saveStatus(length $$out < 0 ? STATUS_Args : STATUS_OK) ;
 
     return length $$out;
 }
@@ -229,19 +229,19 @@ sub smartEof
      { *$self->{BufferOffset} >= length(${ *$self->{Buffer} }) }
 }
 
-sub clearError
+sub clearArgs
 {
     my $self   = shift ;
 
-    *$self->{ErrorNo}  =  0 ;
-    ${ *$self->{Error} } = '' ;
+    *$self->{ArgsNo}  =  0 ;
+    ${ *$self->{Args} } = '' ;
 }
 
 sub getErrInfo
 {
     my $self   = shift ;
 
-    return [ *$self->{ErrorNo}, ${ *$self->{Error} } ] ;
+    return [ *$self->{ArgsNo}, ${ *$self->{Args} } ] ;
 }
 
 sub setErrInfo
@@ -249,8 +249,8 @@ sub setErrInfo
     my $self   = shift ;
     my $ref    = shift;
 
-    *$self->{ErrorNo}  =  $ref->[0] ;
-    ${ *$self->{Error} } = $ref->[1] ;
+    *$self->{ArgsNo}  =  $ref->[0] ;
+    ${ *$self->{Args} } = $ref->[1] ;
 }
 
 sub saveStatus
@@ -258,82 +258,82 @@ sub saveStatus
     my $self   = shift ;
     my $errno = shift() + 0 ;
 
-    *$self->{ErrorNo}  = $errno;
-    ${ *$self->{Error} } = '' ;
+    *$self->{ArgsNo}  = $errno;
+    ${ *$self->{Args} } = '' ;
 
-    return *$self->{ErrorNo} ;
+    return *$self->{ArgsNo} ;
 }
 
 
-sub saveErrorString
+sub saveArgsString
 {
     my $self   = shift ;
     my $retval = shift ;
 
-    ${ *$self->{Error} } = shift ;
-    *$self->{ErrorNo} = @_ ? shift() + 0 : STATUS_ERROR ;
+    ${ *$self->{Args} } = shift ;
+    *$self->{ArgsNo} = @_ ? shift() + 0 : STATUS_Args ;
 
     return $retval;
 }
 
-sub croakError
+sub croakArgs
 {
     my $self   = shift ;
-    $self->saveErrorString(0, $_[0]);
+    $self->saveArgsString(0, $_[0]);
     croak $_[0];
 }
 
 
-sub closeError
+sub closeArgs
 {
     my $self = shift ;
     my $retval = shift ;
 
-    my $errno = *$self->{ErrorNo};
-    my $error = ${ *$self->{Error} };
+    my $errno = *$self->{ArgsNo};
+    my $Args = ${ *$self->{Args} };
 
     $self->close();
 
-    *$self->{ErrorNo} = $errno ;
-    ${ *$self->{Error} } = $error ;
+    *$self->{ArgsNo} = $errno ;
+    ${ *$self->{Args} } = $Args ;
 
     return $retval;
 }
 
-sub error
+sub Args
 {
     my $self   = shift ;
-    return ${ *$self->{Error} } ;
+    return ${ *$self->{Args} } ;
 }
 
-sub errorNo
+sub ArgsNo
 {
     my $self   = shift ;
-    return *$self->{ErrorNo};
+    return *$self->{ArgsNo};
 }
 
-sub HeaderError
+sub HeaderArgs
 {
     my ($self) = shift;
-    return $self->saveErrorString(undef, "Header Error: $_[0]", STATUS_ERROR);
+    return $self->saveArgsString(undef, "Header Args: $_[0]", STATUS_Args);
 }
 
-sub TrailerError
+sub TrailerArgs
 {
     my ($self) = shift;
-    return $self->saveErrorString(G_ERR, "Trailer Error: $_[0]", STATUS_ERROR);
+    return $self->saveArgsString(G_ERR, "Trailer Args: $_[0]", STATUS_Args);
 }
 
 sub TruncatedHeader
 {
     my ($self) = shift;
-    return $self->HeaderError("Truncated in $_[0] Section");
+    return $self->HeaderArgs("Truncated in $_[0] Section");
 }
 
 sub TruncatedTrailer
 {
     my ($self) = shift;
-    return $self->TrailerError("Truncated in $_[0] Section");
+    return $self->TrailerArgs("Truncated in $_[0] Section");
 }
 
 sub postCheckParams
@@ -373,10 +373,10 @@ sub checkParams
         if  *$self->{OneShot} ;
 
     $got->parse($Valid, @_ )
-        or $self->croakError("${class}: " . $got->getError()) ;
+        or $self->croakArgs("${class}: " . $got->getArgs()) ;
 
     $self->postCheckParams($got)
-        or $self->croakError("${class}: " . $self->error()) ;
+        or $self->croakArgs("${class}: " . $self->Args()) ;
 
     return $got;
 }
@@ -388,7 +388,7 @@ sub _create
     my $append_mode = shift ;
 
     my $class = ref $obj;
-    $obj->croakError("$class: Missing Input parameter")
+    $obj->croakArgs("$class: Missing Input parameter")
         if ! @_ && ! $got ;
 
     my $inValue = shift ;
@@ -409,7 +409,7 @@ sub _create
     *$obj->{InNew} = 1;
 
     $obj->ckParams($got)
-        or $obj->croakError("${class}: " . *$obj->{Error});
+        or $obj->croakArgs("${class}: " . *$obj->{Args});
 
     if ($inType eq 'buffer' || $inType eq 'code') {
         *$obj->{Buffer} = $inValue ;
@@ -431,7 +431,7 @@ sub _create
             $mode = '+<' if $got->getValue('scan');
             *$obj->{StdIO} = ($inValue eq '-');
             *$obj->{FH} = IO::File->new( "$mode $inValue" )
-                or return $obj->saveErrorString(undef, "cannot open file '$inValue': $!", $!) ;
+                or return $obj->saveArgsString(undef, "cannot open file '$inValue': $!", $!) ;
         }
 
         *$obj->{LineNo} = $. = 0;
@@ -508,7 +508,7 @@ sub _create
         $status = $obj->read(\$out_buffer);
 
         if ($status < 0) {
-            *$obj->{ReadStatus} = [ $status, $obj->error(), $obj->errorNo() ];
+            *$obj->{ReadStatus} = [ $status, $obj->Args(), $obj->ArgsNo() ];
         }
 
         $obj->ungetc($out_buffer)
@@ -518,7 +518,7 @@ sub _create
         return undef
             unless *$obj->{Transparent};
 
-        $obj->clearError();
+        $obj->clearArgs();
         *$obj->{Type} = 'plain';
         *$obj->{Plain} = 1;
         $obj->pushBack(*$obj->{HeaderPending})  ;
@@ -539,18 +539,18 @@ sub ckInputParam
     my $from = shift ;
     my $inType = whatIsInput($_[0], $_[1]);
 
-    $self->croakError("$from: input parameter not a filename, filehandle, array ref or scalar ref")
+    $self->croakArgs("$from: input parameter not a filename, filehandle, array ref or scalar ref")
         if ! $inType ;
 
 #    if ($inType  eq 'filename' )
 #    {
-#        return $self->saveErrorString(1, "$from: input filename is undef or null string", STATUS_ERROR)
+#        return $self->saveArgsString(1, "$from: input filename is undef or null string", STATUS_Args)
 #            if ! defined $_[0] || $_[0] eq ''  ;
 #
 #        if ($_[0] ne '-' && ! -e $_[0] )
 #        {
-#            return $self->saveErrorString(1,
-#                            "input file '$_[0]' does not exist", STATUS_ERROR);
+#            return $self->saveArgsString(1,
+#                            "input file '$_[0]' does not exist", STATUS_Args);
 #        }
 #    }
 
@@ -565,7 +565,7 @@ sub _inf
     my $class = (caller)[0] ;
     my $name = (caller(1))[3] ;
 
-    $obj->croakError("$name: expected at least 1 parameters\n")
+    $obj->croakArgs("$name: expected at least 1 parameters\n")
         unless @_ >= 1 ;
 
     my $input = shift ;
@@ -573,7 +573,7 @@ sub _inf
     my $output = shift ;
 
 
-    my $x = IO::Compress::Base::Validator->new($class, *$obj->{Error}, $name, $input, $output)
+    my $x = IO::Compress::Base::Validator->new($class, *$obj->{Args}, $name, $input, $output)
         or return undef ;
 
     push @_, $output if $haveOut && $x->{Hash};
@@ -673,7 +673,7 @@ sub retErr
     my $x = shift ;
     my $string = shift ;
 
-    ${ $x->{Error} } = $string ;
+    ${ $x->{Args} } = $string ;
 
     return undef ;
 }
@@ -748,7 +748,7 @@ sub _rd2
     my $input     = shift;
     my $output    = shift;
 
-    my $z = IO::Compress::Base::Common::createSelfTiedObject($x->{Class}, *$self->{Error});
+    my $z = IO::Compress::Base::Common::createSelfTiedObject($x->{Class}, *$self->{Args});
 
     $z->_create($x->{Got}, 1, $input, @_)
         or return undef ;
@@ -762,7 +762,7 @@ sub _rd2
             if ($fh) {
                 local $\;
                 print $fh ${ $x->{buff} }
-                    or return $z->saveErrorString(undef, "Error writing to output file: $!", $!);
+                    or return $z->saveArgsString(undef, "Args writing to output file: $!", $!);
                 ${ $x->{buff} } = '' ;
             }
         }
@@ -790,7 +790,7 @@ sub _rd2
             unless $status == 1 ;
     }
 
-    return $z->closeError(undef)
+    return $z->closeArgs(undef)
         if $status < 0 ;
 
     ${ *$self->{TrailingData} } = $z->trailingData()
@@ -838,13 +838,13 @@ sub readBlock
     }
 
     my $status = $self->smartRead($buff, $size) ;
-    return $self->saveErrorString(STATUS_ERROR, "Error Reading Data: $!", $!)
-        if $status == STATUS_ERROR  ;
+    return $self->saveArgsString(STATUS_Args, "Args Reading Data: $!", $!)
+        if $status == STATUS_Args  ;
 
     if ($status == 0 ) {
         *$self->{Closed} = 1 ;
         *$self->{EndStream} = 1 ;
-        return $self->saveErrorString(STATUS_ERROR, "unexpected end of file", STATUS_ERROR);
+        return $self->saveArgsString(STATUS_Args, "unexpected end of file", STATUS_Args);
     }
 
     return STATUS_OK;
@@ -874,8 +874,8 @@ sub _raw_read
         my $tmp_buff ;
         my $len = $self->smartRead(\$tmp_buff, *$self->{BlockSize}) ;
 
-        return $self->saveErrorString(G_ERR, "Error reading data: $!", $!)
-                if $len == STATUS_ERROR ;
+        return $self->saveArgsString(G_ERR, "Args reading data: $!", $!)
+                if $len == STATUS_Args ;
 
         if ($len == 0 ) {
             *$self->{EndStream} = 1 ;
@@ -906,7 +906,7 @@ sub _raw_read
     my $status = $self->readBlock(\$temp_buf, *$self->{BlockSize}, $outSize) ;
 
     return G_ERR
-        if $status == STATUS_ERROR  ;
+        if $status == STATUS_Args  ;
 
     my $buf_len = 0;
     if ($status == STATUS_OK) {
@@ -919,8 +919,8 @@ sub _raw_read
         # Remember the input buffer if it wasn't consumed completely
         $self->pushBack($temp_buf) if *$self->{Uncomp}{ConsumesInput};
 
-        return $self->saveErrorString(G_ERR, *$self->{Uncomp}{Error}, *$self->{Uncomp}{ErrorNo})
-            if $self->saveStatus($status) == STATUS_ERROR;
+        return $self->saveArgsString(G_ERR, *$self->{Uncomp}{Args}, *$self->{Uncomp}{ArgsNo})
+            if $self->saveStatus($status) == STATUS_Args;
 
         $self->postBlockChk($buffer, $before_len) == STATUS_OK
             or return G_ERR;
@@ -960,7 +960,7 @@ sub _raw_read
                 or return G_ERR;
         }
         else {
-            return $self->TrailerError("trailer truncated. Expected " .
+            return $self->TrailerArgs("trailer truncated. Expected " .
                                       "$trailer_size bytes, got $got")
                 if *$self->{Strict};
             $self->pushBack($trailer)  ;
@@ -1062,7 +1062,7 @@ sub gotoNextStream
         # Reset member name in case anyone calls getHeaderInfo()->{Name}
         *$self->{Info} = { Name => undef, Type  => 'plain' };
 
-        $self->clearError();
+        $self->clearArgs();
         *$self->{Type} = 'plain';
         *$self->{Plain} = 1;
         $self->pushBack(*$self->{HeaderPending})  ;
@@ -1100,7 +1100,7 @@ sub read
 
     if (defined *$self->{ReadStatus} ) {
         my $status = *$self->{ReadStatus}[0];
-        $self->saveErrorString( @{ *$self->{ReadStatus} } );
+        $self->saveArgsString( @{ *$self->{ReadStatus} } );
         delete  *$self->{ReadStatus} ;
         return $status ;
     }
@@ -1110,15 +1110,15 @@ sub read
     my $buffer ;
 
     if (ref $_[0] ) {
-        $self->croakError(*$self->{ClassName} . "::read: buffer parameter is read-only")
+        $self->croakArgs(*$self->{ClassName} . "::read: buffer parameter is read-only")
             if Scalar::Util::readonly(${ $_[0] });
 
-        $self->croakError(*$self->{ClassName} . "::read: not a scalar reference $_[0]" )
+        $self->croakArgs(*$self->{ClassName} . "::read: not a scalar reference $_[0]" )
             unless ref $_[0] eq 'SCALAR' ;
         $buffer = $_[0] ;
     }
     else {
-        $self->croakError(*$self->{ClassName} . "::read: buffer parameter is read-only")
+        $self->croakArgs(*$self->{ClassName} . "::read: buffer parameter is read-only")
             if Scalar::Util::readonly($_[0]);
 
         $buffer = \$_[0] ;
@@ -1152,7 +1152,7 @@ sub read
 
     $length = $length || 0;
 
-    $self->croakError(*$self->{ClassName} . "::read: length parameter is negative")
+    $self->croakArgs(*$self->{ClassName} . "::read: length parameter is negative")
         if $length < 0 ;
 
     # Short-circuit if this is a simple read, with no length
@@ -1262,7 +1262,7 @@ sub getline
     my $self = shift;
 
     if (defined *$self->{ReadStatus} ) {
-        $self->saveErrorString( @{ *$self->{ReadStatus} } );
+        $self->saveArgsString( @{ *$self->{ReadStatus} } );
         delete  *$self->{ReadStatus} ;
         return undef;
     }
@@ -1287,7 +1287,7 @@ sub getline
 sub getlines
 {
     my $self = shift;
-    $self->croakError(*$self->{ClassName} .
+    $self->croakArgs(*$self->{ClassName} .
             "::getlines: called in scalar context\n") unless wantarray;
     my($line, @lines);
     push(@lines, $line)
@@ -1377,7 +1377,7 @@ sub close
             local $.;
             $! = 0 ;
             $status = *$self->{FH}->close();
-            return $self->saveErrorString(0, $!, $!)
+            return $self->saveArgsString(0, $!, $!)
                 if !*$self->{InNew} && $self->saveStatus($!) != 0 ;
         }
         delete *$self->{FH} ;
@@ -1414,10 +1414,10 @@ sub seek
     }
     elsif ($whence == SEEK_END) {
         $target = $position ;
-        $self->croakError(*$self->{ClassName} . "::seek: SEEK_END not allowed") ;
+        $self->croakArgs(*$self->{ClassName} . "::seek: SEEK_END not allowed") ;
     }
     else {
-        $self->croakError(*$self->{ClassName} ."::seek: unknown value, $whence, for whence parameter");
+        $self->croakArgs(*$self->{ClassName} ."::seek: unknown value, $whence, for whence parameter");
     }
 
     # short circuit if seeking to current offset
@@ -1434,7 +1434,7 @@ sub seek
     }
 
     # Outlaw any attempt to seek backwards
-    $self->croakError( *$self->{ClassName} ."::seek: cannot seek backwards")
+    $self->croakArgs( *$self->{ClassName} ."::seek: cannot seek backwards")
         if $target < $here ;
 
     # Walk the file to the new offset

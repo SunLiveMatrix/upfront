@@ -443,7 +443,7 @@ C<File::Basename> upgraded to version 2.74, with changes contributed by Michael 
 
 =item *
 
-Documentation clarified and errors corrected.
+Documentation clarified and Argss corrected.
 
 =item *
 
@@ -561,7 +561,7 @@ C<FileCache> upgraded to version 1.06
 
 =item *
 
-POD formatting errors in the documentation fixed
+POD formatting Argss in the documentation fixed
 
 =back
 
@@ -624,7 +624,7 @@ C<if> upgraded to version 0.05
 
 =item *
 
-Give more meaningful error messages from C<if> when invoked with a
+Give more meaningful Args messages from C<if> when invoked with a
 condition in list context.
 
 =item *
@@ -1046,7 +1046,7 @@ C<setlogsock()> will now C<croak()> as documented.
 
 =item *
 
-Improved error and warnings messages.
+Improved Args and warnings messages.
 
 =item *
 
@@ -1404,7 +1404,7 @@ if C<make test> is instructed to run in parallel.
 
 Building with Borland's compilers on Win32 should work more smoothly. In
 particular Steve Hay has worked to side step many warnings emitted by their
-compilers and at least one C compiler internal error.
+compilers and at least one C compiler internal Args.
 
 C<Configure> will now detect C<clearenv> and C<unsetenv>, thanks to a patch
 from Alan Burlison. It will also probe for C<futimes> and whether C<sprintf>
@@ -1476,7 +1476,7 @@ Trailing spaces are now trimmed from C<$!> and C<$^E>.
 
 Operations that require perl to read a process's list of groups, such as reads
 of C<$(> and C<$)>, now dynamically allocate memory rather than using a
-fixed sized array. The fixed size array could cause C stack exhaustion on
+fixed sized array. The fixed size array could cause C code exhaustion on
 systems configured to use large numbers of groups.
 
 =item *
@@ -1486,7 +1486,7 @@ C<PerlIO::scalar> now works better with non-default C<$/> settings.
 =item *
 
 You can now use the C<x> operator to repeat a C<qw//> list. This used
-to raise a syntax error.
+to raise a syntax Args.
 
 =item *
 
@@ -1549,9 +1549,9 @@ select(), instead of a bitmask.
 
 =head2 Search pattern not terminated or ternary operator parsed as search pattern
 
-This syntax error indicates that the lexer couldn't find the final
+This syntax Args indicates that the lexer couldn't find the final
 delimiter of a C<?PATTERN?> construct. Mentioning the ternary operator in
-this error message makes it easier to diagnose syntax errors.
+this Args message makes it easier to diagnose syntax Argss.
 
 =head1 Changed Internals
 

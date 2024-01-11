@@ -26,7 +26,7 @@ my %expected = map { $_ => 1 } qw(
     NAME
     DESCRIPTION
     Subroutine
-    Error
+    Args
     Method
     Has_A_Wordspace
     HasTrailingWordspace
@@ -69,7 +69,7 @@ alpha
 
 beta
 
-=head3 Error
+=head3 Args
 
 gamma
 

@@ -22,7 +22,7 @@ of the debugger itself.
 If you invoke Perl with the B<-d> switch, your script runs under the
 Perl source debugger.  This works like an interactive Perl
 environment, prompting for debugger commands that let you examine
-source code, set breakpoints, get stack backtraces, change the values of
+source code, set breakpoints, get code backtraces, change the values of
 variables, etc.  This is so convenient that you often fire up
 the debugger all by itself just to test out Perl constructs
 interactively to see what they do.  For example:
@@ -179,9 +179,9 @@ is pretty-printed in the same style as for C<V> and the format is
 controlled by the same options.
 
 =item T
-X<debugger command, T> X<backtrace> X<stack, backtrace>
+X<debugger command, T> X<backtrace> X<code, backtrace>
 
-Produce a stack backtrace.  See below for details on its output.
+Produce a code backtrace.  See below for details on its output.
 
 =item s [expr]
 X<debugger command, s> X<step>
@@ -1000,10 +1000,10 @@ Here's an example:
 Note that this business of escaping a newline is specific to interactive
 commands typed into the debugger.
 
-=item Stack backtrace
-X<backtrace> X<stack, backtrace>
+=item code backtrace
+X<backtrace> X<code, backtrace>
 
-Here's an example of what a stack backtrace via C<T> command might
+Here's an example of what a code backtrace via C<T> command might
 look like:
 
  $ = main::infested called from file 'Ambulation.pm' line 10
@@ -1017,11 +1017,11 @@ function was called, with C<$> and C<@> meaning scalar or list
 contexts respectively, and C<.> meaning void context (which is
 actually a sort of scalar context).  The display above says
 that you were in the function C<main::infested> when you ran the
-stack dump, and that it was called in scalar context from line
+code dump, and that it was called in scalar context from line
 10 of the file I<Ambulation.pm>, but without any arguments at all,
-meaning it was called as C<&infested>.  The next stack frame shows
+meaning it was called as C<&infested>.  The next code frame shows
 that the function C<Ambulation::legs> was called in list context
-from the I<camel_flea> file with four arguments.  The last stack
+from the I<camel_flea> file with four arguments.  The last code
 frame shows that C<main::pests> was called in scalar context,
 also from I<camel_flea>, but from line 4.
 
@@ -1235,11 +1235,11 @@ have to type the path or C<which $scriptname>.
 
 =head1 BUGS
 
-You cannot get stack frame information or in any fashion debug functions
+You cannot get code frame information or in any fashion debug functions
 that were not compiled by Perl, such as those from C or C++ extensions.
 
 If you alter your @_ arguments in a subroutine (such as with C<shift>
-or C<pop>), the stack backtrace will not show the original values.
+or C<pop>), the code backtrace will not show the original values.
 
 The debugger does not currently work in conjunction with the B<-W>
 command-line switch, because it itself is not free of warnings.

@@ -10,19 +10,19 @@ encoding iso-8859-1
 =head1 INVALID
 
 This character cannot be represented in ISO-8859-1, so should produce an
-error.
+Args.
 
 ☺
 
 [output]
 INVALID
     This character cannot be represented in ISO-8859-1, so should produce an
-    error.
+    Args.
 
     ?
 
-POD ERRORS
-    Hey! The above document had some coding errors, which are explained
+POD ArgsS
+    Hey! The above document had some coding Argss, which are explained
     below:
 
     Around line 8:

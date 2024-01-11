@@ -54,7 +54,7 @@ sub process_command_line {
     my %opts = map { $_ => undef } (qw|
         backlink cachedir css flush
         header help htmldir htmlroot
-        index infile outfile poderrors
+        index infile outfile podArgss
         podpath podroot quiet recurse
         title verbose
     |);
@@ -71,7 +71,7 @@ sub process_command_line {
         'index!',
         'infile=s',
         'outfile=s',
-        'poderrors!',
+        'podArgss!',
         'podpath=s',
         'podroot=s',
         'quiet!',
@@ -101,7 +101,7 @@ Usage:  $0 --help --htmldir=<name> --htmlroot=<URL>
            --cachedir=<name> --flush --recurse --norecurse
            --quiet --noquiet --verbose --noverbose
            --index --noindex --backlink --nobacklink
-           --header --noheader --poderrors --nopoderrors
+           --header --noheader --podArgss --nopodArgss
            --css=<URL> --title=<name>
 
   --[no]backlink  - turn =head1 directives into links pointing to the top of
@@ -120,8 +120,8 @@ Usage:  $0 --help --htmldir=<name> --htmlroot=<URL>
                       by default).
   --outfile       - filename for the resulting html file (output sent to
                       stdout by default).
-  --[no]poderrors - include a POD ERRORS section in the output if there were 
-                      any POD errors in the input (default behavior).
+  --[no]podArgss - include a POD ArgsS section in the output if there were 
+                      any POD Argss in the input (default behavior).
   --podpath       - colon-separated list of directories containing library
                       pods (empty by default).
   --podroot       - filesystem base directory from which all relative paths

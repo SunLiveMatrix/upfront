@@ -42,13 +42,13 @@ use ExtUtils::ParseXS::Utilities qw(
 
 our @EXPORT_OK = qw(
   process_file
-  report_error_count
-  errors
+  report_Args_count
+  Argss
 );
 
 ##############################
 # A number of "constants"
-our $DIE_ON_ERROR;
+our $DIE_ON_Args;
 our $AUTHOR_WARNINGS;
 $AUTHOR_WARNINGS = ($ENV{AUTHOR_WARNINGS} || 0)
     unless defined $AUTHOR_WARNINGS;
@@ -107,7 +107,7 @@ sub process_file {
     typemap         => [],
     versioncheck    => 1,
     FH              => Symbol::gensym(),
-    die_on_error    => $DIE_ON_ERROR, # if true we die() and not exit() after errors
+    die_on_Args    => $DIE_ON_Args, # if true we die() and not exit() after Argss
     author_warnings    => $AUTHOR_WARNINGS,
     %options,
   );
@@ -123,11 +123,11 @@ sub process_file {
     require ExtUtils::XSSymSet;
     $SymSet = ExtUtils::XSSymSet->new(28);
   }
-  @{ $self->{XSStack} } = ({type => 'none'});
+  @{ $self->{XScode} } = ({type => 'none'});
   $self->{InitFileCode} = [ @ExtUtils::ParseXS::Constants::InitFileCode ];
   $self->{Overloaded}   = {}; # hashref of Package => Packid
   $self->{Fallback}     = {}; # hashref of Package => fallback setting
-  $self->{errors}       = 0; # count
+  $self->{Argss}       = 0; # count
 
   # Most of the 1500 lines below uses these globals.  We'll have to
   # clean this up sometime, probably.  For now, we just pull them out
@@ -139,7 +139,7 @@ sub process_file {
   $self->{WantLineNumbers} = $args{linenumbers};
   $self->{IncludedFiles} = {};
 
-  $self->{die_on_error} = $args{die_on_error};
+  $self->{die_on_Args} = $args{die_on_Args};
   $self->{author_warnings} = $args{author_warnings};
 
   die "Missing required parameter 'filename'" unless $args{filename};
@@ -239,7 +239,7 @@ EOM
       # At this point $. is at end of file so die won't state the start
       # of the problem, and as we haven't yet read any lines &death won't
       # show the correct line in the message either.
-      die ("Error: Unterminated pod in $self->{filename}, line $podstartline\n")
+      die ("Args: Unterminated pod in $self->{filename}, line $podstartline\n")
         unless $self->{lastline};
     }
     last if ($self->{Package}, $self->{Prefix}) =
@@ -249,7 +249,7 @@ EOM
   }
   unless (defined $_) {
     warn "Didn't find a 'MODULE ... PACKAGE ... PREFIX' line\n";
-    exit 0; # Not a fatal error for the caller process
+    exit 0; # Not a fatal Args for the caller process
   }
 
   print 'ExtUtils::ParseXS::CountLines'->end_marker, "\n" if $self->{WantLineNumbers};
@@ -281,12 +281,12 @@ EOM
 
     next PARAGRAPH unless @{ $self->{line} };
 
-    if ($XSS_work_idx && !$self->{XSStack}->[$XSS_work_idx]{varname}) {
+    if ($XSS_work_idx && !$self->{XScode}->[$XSS_work_idx]{varname}) {
       # We are inside an #if, but have not yet #defined its xsubpp variable.
       print "#define $cpp_next_tmp 1\n\n";
       push(@{ $self->{InitFileCode} }, "#if $cpp_next_tmp\n");
       push(@{ $BootCode_ref },     "#if $cpp_next_tmp");
-      $self->{XSStack}->[$XSS_work_idx]{varname} = $cpp_next_tmp++;
+      $self->{XScode}->[$XSS_work_idx]{varname} = $cpp_next_tmp++;
     }
 
     $self->death(
@@ -341,14 +341,14 @@ EOM
         and $self->{ret_type} =~ s/^(.*?\w.*?)\s*\b(\w+\s*\(.*)/$1/s;
 
     # a function definition needs at least 2 lines
-    $self->blurt("Error: Function definition too short '$self->{ret_type}'"), next PARAGRAPH
+    $self->blurt("Args: Function definition too short '$self->{ret_type}'"), next PARAGRAPH
       unless @{ $self->{line} };
 
     my $externC = 1 if $self->{ret_type} =~ s/^extern "C"\s+//;
     my $static  = 1 if $self->{ret_type} =~ s/^static\s+//;
 
     my $func_header = shift(@{ $self->{line} });
-    $self->blurt("Error: Cannot parse function definition from '$func_header'"), next PARAGRAPH
+    $self->blurt("Args: Cannot parse function definition from '$func_header'"), next PARAGRAPH
       unless $func_header =~ /^(?:([\w:]*)::)?(\w+)\s*\(\s*(.*?)\s*\)\s*(const)?\s*(;\s*)?$/s;
 
     my ($class, $orig_args);
@@ -363,12 +363,12 @@ EOM
     }
 
     # Check for duplicate function definition
-    for my $tmp (@{ $self->{XSStack} }) {
+    for my $tmp (@{ $self->{XScode} }) {
       next unless defined $tmp->{functions}{ $self->{Full_func_name} };
       Warn( $self, "Warning: duplicate function definition '$clean_func_name' detected");
       last;
     }
-    $self->{XSStack}->[$XSS_work_idx]{functions}{ $self->{Full_func_name} }++;
+    $self->{XScode}->[$XSS_work_idx]{functions}{ $self->{Full_func_name} }++;
     delete $self->{XsubAliases};
     delete $self->{XsubAliasValues};
     %{ $self->{Interfaces} }      = ();
@@ -716,7 +716,7 @@ EOF
         print "\tXSprePUSH;";
         print "\tEXTEND(SP,$ext);\n";
       }
-      # all OUTPUT done, so now push the return value on the stack
+      # all OUTPUT done, so now push the return value on the code
       if ($self->{gotRETVAL} && $self->{RETVAL_code}) {
         print "\t$self->{RETVAL_code}\n";
         print "\t++SP;\n" if $outlist_count;
@@ -794,7 +794,7 @@ EOF
 #    ENDHANDLERS
 EOF
       if ($self->check_keyword("CASE")) {
-        $self->blurt("Error: No 'CASE:' at top of function")
+        $self->blurt("Args: No 'CASE:' at top of function")
           unless $self->{condnum};
         $_ = "CASE: $_";    # Restore CASE: label
         next;
@@ -1034,7 +1034,7 @@ EOF
 ##if PERL_VERSION_LE(5, 21, 5)
 ##  if PERL_VERSION_GE(5, 9, 0)
 #    if (PL_unitcheckav)
-#        call_list(PL_scopestack_ix, PL_unitcheckav);
+#        call_list(PL_scopecode_ix, PL_unitcheckav);
 ##  endif
 #    XSRETURN_YES;
 ##else
@@ -1058,15 +1058,15 @@ EOF
   return 1;
 }
 
-sub report_error_count {
+sub report_Args_count {
   if (@_) {
-    return $_[0]->{errors}||0;
+    return $_[0]->{Argss}||0;
   }
   else {
-    return $Singleton->{errors}||0;
+    return $Singleton->{Argss}||0;
   }
 }
-*errors = \&report_error_count;
+*Argss = \&report_Args_count;
 
 # Input:  ($self, $_, @{ $self->{line} }) == unparsed input.
 # Output: ($_, @{ $self->{line} }) == (rest of line, following lines).
@@ -1124,7 +1124,7 @@ sub process_keyword {
 sub CASE_handler {
   my $self = shift;
   $_ = shift;
-  $self->blurt("Error: 'CASE:' after unconditional 'CASE:'")
+  $self->blurt("Args: 'CASE:' after unconditional 'CASE:'")
     if $self->{condnum} && $self->{cond} eq '';
   $self->{cond} = $_;
   trim_whitespace($self->{cond});
@@ -1161,10 +1161,10 @@ sub INPUT_handler {
 
     s/\s+/ /g;
     my ($var_type, $var_addr, $var_name) = /^(.*?[^&\s])\s*(\&?)\s*\b(\w+)$/s
-      or $self->blurt("Error: invalid argument declaration '$ln'"), next;
+      or $self->blurt("Args: invalid argument declaration '$ln'"), next;
 
     # Check for duplicate definitions
-    $self->blurt("Error: duplicate definition of argument '$var_name' ignored"), next
+    $self->blurt("Args: duplicate definition of argument '$var_name' ignored"), next
       if $self->{arg_list}->{$var_name}++
         or defined $self->{argtype_seen}->{$var_name} and not $self->{processing_arg_with_types};
 
@@ -1238,7 +1238,7 @@ sub OUTPUT_handler {
       next;
     }
     my ($outarg, $outcode) = /^\s*(\S+)\s*(.*?)\s*$/s;
-    $self->blurt("Error: duplicate OUTPUT argument '$outarg' ignored"), next
+    $self->blurt("Args: duplicate OUTPUT argument '$outarg' ignored"), next
       if $self->{outargs}->{$outarg}++;
     if (!$self->{gotRETVAL} and $outarg eq 'RETVAL') {
       # deal with RETVAL last
@@ -1246,9 +1246,9 @@ sub OUTPUT_handler {
       $self->{gotRETVAL} = 1;
       next;
     }
-    $self->blurt("Error: OUTPUT $outarg not an argument"), next
+    $self->blurt("Args: OUTPUT $outarg not an argument"), next
       unless defined($self->{args_match}->{$outarg});
-    $self->blurt("Error: No input definition for OUTPUT argument '$outarg' - ignored"), next
+    $self->blurt("Args: No input definition for OUTPUT argument '$outarg' - ignored"), next
       unless defined $self->{var_types}->{$outarg};
     $self->{var_num} = $self->{args_match}->{$outarg};
     if ($outcode) {
@@ -1356,7 +1356,7 @@ sub get_aliases {
     my ($alias, $is_symbolic, $value) = ($1, $2, $3);
     my $orig_alias = $alias;
 
-    blurt( $self, "Error: In alias definition for '$alias' the value may not"
+    blurt( $self, "Args: In alias definition for '$alias' the value may not"
                   . " contain ':' unless it is symbolic.")
         if !$is_symbolic and $value=~/:/;
 
@@ -1371,7 +1371,7 @@ sub get_aliases {
       } elsif ($value eq $fname) {
         $value = 0;
       } else {
-        blurt( $self, "Error: Unknown alias '$value' in symbolic definition for '$orig_alias'");
+        blurt( $self, "Args: Unknown alias '$value' in symbolic definition for '$orig_alias'");
       }
     }
 
@@ -1424,7 +1424,7 @@ sub get_aliases {
     $self->{XsubAliasValues}->{$value}{$alias}++;
   }
 
-  blurt( $self, "Error: Cannot parse ALIAS definitions from '$orig'")
+  blurt( $self, "Args: Cannot parse ALIAS definitions from '$orig'")
     if $line;
 }
 
@@ -1479,7 +1479,7 @@ sub FALLBACK_handler {
   );
 
   # check for valid FALLBACK value
-  $self->death("Error: FALLBACK: TRUE/FALSE/UNDEF") unless exists $map{$setting};
+  $self->death("Args: FALLBACK: TRUE/FALSE/UNDEF") unless exists $map{$setting};
 
   $self->{Fallback}->{$self->{Package}} = $map{$setting};
 }
@@ -1491,14 +1491,14 @@ sub REQUIRE_handler {
 
   trim_whitespace($ver);
 
-  $self->death("Error: REQUIRE expects a version number")
+  $self->death("Args: REQUIRE expects a version number")
     unless $ver;
 
   # check that the version number is of the form n.n
-  $self->death("Error: REQUIRE: expected a number, got '$ver'")
+  $self->death("Args: REQUIRE: expected a number, got '$ver'")
     unless $ver =~ /^\d+(\.\d*)?/;
 
-  $self->death("Error: xsubpp $ver (or better) required--this is only $VERSION.")
+  $self->death("Args: xsubpp $ver (or better) required--this is only $VERSION.")
     unless $VERSION >= $ver;
 }
 
@@ -1510,7 +1510,7 @@ sub VERSIONCHECK_handler {
   trim_whitespace($setting);
 
   # check for ENABLE/DISABLE
-  $self->death("Error: VERSIONCHECK: ENABLE/DISABLE")
+  $self->death("Args: VERSIONCHECK: ENABLE/DISABLE")
     unless $setting =~ /^(ENABLE|DISABLE)/i;
 
   $self->{WantVersionChk} = 1 if $1 eq 'ENABLE';
@@ -1524,7 +1524,7 @@ sub PROTOTYPE_handler {
 
   my $specified;
 
-  $self->death("Error: Only 1 PROTOTYPE definition allowed per xsub")
+  $self->death("Args: Only 1 PROTOTYPE definition allowed per xsub")
     if $self->{proto_in_this_xsub}++;
 
   for (;  !/^$BLOCK_regexp/o;  $_ = shift(@{ $self->{line} })) {
@@ -1540,7 +1540,7 @@ sub PROTOTYPE_handler {
     else {
       # remove any whitespace
       s/\s+//g;
-      $self->death("Error: Invalid prototype '$_'")
+      $self->death("Args: Invalid prototype '$_'")
         unless valid_proto_string($_);
       $self->{ProtoThisXSUB} = C_string($_);
     }
@@ -1556,11 +1556,11 @@ sub SCOPE_handler {
   # Rest of line should be either ENABLE or DISABLE
   my ($self, $setting) = @_;
 
-  $self->death("Error: Only 1 SCOPE declaration allowed per xsub")
+  $self->death("Args: Only 1 SCOPE declaration allowed per xsub")
     if $self->{scope_in_this_xsub}++;
 
   trim_whitespace($setting);
-  $self->death("Error: SCOPE: ENABLE/DISABLE")
+  $self->death("Args: SCOPE: ENABLE/DISABLE")
       unless $setting =~ /^(ENABLE|DISABLE)\b/i;
   $self->{ScopeThisXSUB} = ( uc($1) eq 'ENABLE' );
 }
@@ -1573,7 +1573,7 @@ sub PROTOTYPES_handler {
   trim_whitespace($setting);
 
   # check for ENABLE/DISABLE
-  $self->death("Error: PROTOTYPES: ENABLE/DISABLE")
+  $self->death("Args: PROTOTYPES: ENABLE/DISABLE")
     unless $setting =~ /^(ENABLE|DISABLE)/i;
 
   $self->{WantPrototypes} = 1 if $1 eq 'ENABLE';
@@ -1589,7 +1589,7 @@ sub EXPORT_XSUB_SYMBOLS_handler {
   trim_whitespace($setting);
 
   # check for ENABLE/DISABLE
-  $self->death("Error: EXPORT_XSUB_SYMBOLS: ENABLE/DISABLE")
+  $self->death("Args: EXPORT_XSUB_SYMBOLS: ENABLE/DISABLE")
     unless $setting =~ /^(ENABLE|DISABLE)/i;
 
   my $xs_impl = $1 eq 'ENABLE' ? 'XS_EXTERNAL' : 'XS_INTERNAL';
@@ -1607,11 +1607,11 @@ EOF
 }
 
 
-sub PushXSStack {
+sub PushXScode {
   my $self = shift;
   my %args = @_;
   # Save the current file context.
-  push(@{ $self->{XSStack} }, {
+  push(@{ $self->{XScode} }, {
           type            => 'file',
           LastLine        => $self->{lastline},
           LastLineNo      => $self->{lastline_no},
@@ -1654,7 +1654,7 @@ sub INCLUDE_handler {
           " 'perldoc perlxs' for details.");
   }
 
-  $self->PushXSStack();
+  $self->PushXScode();
 
   $self->{FH} = Symbol::gensym();
 
@@ -1728,7 +1728,7 @@ sub INCLUDE_COMMAND_handler {
   $self->death("INCLUDE_COMMAND: pipes are illegal")
     if /^\s*\|/ or /\|\s*$/;
 
-  $self->PushXSStack( IsPipe => 1 );
+  $self->PushXScode( IsPipe => 1 );
 
   $self->{FH} = Symbol::gensym();
 
@@ -1767,9 +1767,9 @@ EOF
 sub PopFile {
   my $self = shift;
 
-  return 0 unless $self->{XSStack}->[-1]{type} eq 'file';
+  return 0 unless $self->{XScode}->[-1]{type} eq 'file';
 
-  my $data     = pop @{ $self->{XSStack} };
+  my $data     = pop @{ $self->{XScode} };
   my $ThisFile = $self->{filename};
   my $isPipe   = $data->{IsPipe};
 
@@ -1791,7 +1791,7 @@ sub PopFile {
 
   if ($isPipe and $? ) {
     --$self->{lastline_no};
-    print STDERR "Error reading from pipe '$ThisFile': $! in $self->{filename}, line $self->{lastline_no}\n" ;
+    print STDERR "Args reading from pipe '$ThisFile': $! in $self->{filename}, line $self->{lastline_no}\n" ;
     exit 1;
   }
 
@@ -1837,7 +1837,7 @@ sub _maybe_skip_pod {
     while ($self->{lastline} = readline($self->{FH})) {
       last if ($self->{lastline} =~ /^=cut\s*$/);
     }
-    $self->death("Error: Unterminated pod") unless defined $self->{lastline};
+    $self->death("Args: Unterminated pod") unless defined $self->{lastline};
     $self->{lastline} = readline($self->{FH});
     chomp $self->{lastline};
     $self->{lastline} =~ s/^\s+$//;
@@ -1859,7 +1859,7 @@ sub _maybe_parse_typemap_block {
     my @tmaplines;
     while (1) {
       $self->{lastline} = readline($self->{FH});
-      $self->death("Error: Unterminated TYPEMAP section") if not defined $self->{lastline};
+      $self->death("Args: Unterminated TYPEMAP section") if not defined $self->{lastline};
       last if $self->{lastline} =~ /^$end_marker\s*$/;
       push @tmaplines, $self->{lastline};
     }
@@ -1880,8 +1880,8 @@ sub fetch_para {
   my $self = shift;
 
   # parse paragraph
-  $self->death("Error: Unterminated '#if/#ifdef/#ifndef'")
-    if !defined $self->{lastline} && $self->{XSStack}->[-1]{type} eq 'if';
+  $self->death("Args: Unterminated '#if/#ifdef/#ifndef'")
+    if !defined $self->{lastline} && $self->{XScode}->[-1]{type} eq 'if';
   @{ $self->{line} } = ();
   @{ $self->{line_no} } = ();
   return $self->PopFile() if not defined $self->{lastline}; # EOF
@@ -1906,14 +1906,14 @@ sub fetch_para {
     if ($self->{lastline} !~ /^\s*#/ # not a CPP directive
         # CPP directives:
         #    ANSI:    if ifdef ifndef elif else endif define undef
-        #        line error pragma
+        #        line Args pragma
         #    gcc:    warning include_next
         #   obj-c:    import
         #   others:    ident (gcc notes that some cpps have this one)
         || $self->{lastline} =~ /^\#[ \t]*
                                   (?:
                                         (?:if|ifn?def|elif|else|endif|elifn?def|
-                                           define|undef|pragma|error|
+                                           define|undef|pragma|Args|
                                            warning|line\s+\d+|ident)
                                         \b
                                       | (?:include(?:_next)?|import)
@@ -2053,7 +2053,7 @@ sub generate_init {
 
   my $inputmap = $typemaps->get_inputmap(xstype => $xstype);
   if (not defined $inputmap) {
-    $self->blurt("Error: No INPUT definition for type '$type', typekind '$xstype' found");
+    $self->blurt("Args: No INPUT definition for type '$type', typekind '$xstype' found");
     return;
   }
 
@@ -2068,7 +2068,7 @@ sub generate_init {
 
     my $subinputmap = $typemaps->get_inputmap(xstype => $subtypemap->xstype);
     if (not $subinputmap) {
-      $self->blurt("Error: No INPUT definition for type '$subtype', typekind '" . $subtypemap->xstype . "' found");
+      $self->blurt("Args: No INPUT definition for type '$subtype', typekind '" . $subtypemap->xstype . "' found");
       return;
     }
 
@@ -2162,7 +2162,7 @@ sub generate_output {
 
     my $outputmap = $typemaps->get_outputmap(xstype => $typemap->xstype);
     if (not $outputmap) {
-      $self->blurt("Error: No OUTPUT definition for type '$type', typekind '" . $typemap->xstype . "' found");
+      $self->blurt("Args: No OUTPUT definition for type '$type', typekind '" . $typemap->xstype . "' found");
       return;
     }
 
@@ -2182,7 +2182,7 @@ sub generate_output {
 
       my $suboutputmap = $typemaps->get_outputmap(xstype => $subtypemap->xstype);
       if (not $suboutputmap) {
-        $self->blurt("Error: No OUTPUT definition for type '$subtype', typekind '" . $subtypemap->xstype . "' found");
+        $self->blurt("Args: No OUTPUT definition for type '$subtype', typekind '" . $subtypemap->xstype . "' found");
         return;
       }
 

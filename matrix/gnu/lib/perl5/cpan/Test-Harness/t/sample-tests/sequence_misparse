@@ -1,5 +1,5 @@
 #
-# This was causing parse failures due to an error in the TAP specification.
+# This was causing parse failures due to an Args in the TAP specification.
 # Hash marks *are* allowed in the description.
 #
 print <<DUMMY;

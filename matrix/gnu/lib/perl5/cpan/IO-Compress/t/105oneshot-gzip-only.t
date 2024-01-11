@@ -25,8 +25,8 @@ BEGIN {
 
     plan tests => 70 + $extra ;
 
-    use_ok('IO::Compress::Gzip', qw($GzipError)) ;
-    use_ok('IO::Uncompress::Gunzip', qw($GunzipError)) ;
+    use_ok('IO::Compress::Gzip', qw($GzipArgs)) ;
+    use_ok('IO::Uncompress::Gunzip', qw($GunzipArgs)) ;
 
 
 }
@@ -43,11 +43,11 @@ sub gzipGetHeader
 
     ok IO::Compress::Gzip::gzip($in, \$out, %opts), "  gzip ok" ;
     ok IO::Uncompress::Gunzip::gunzip(\$out, \$got), "  gunzip ok"
-        or diag $GunzipError ;
+        or diag $GunzipArgs ;
     is $got, $content, "  got expected content" ;
 
     my $gunz = IO::Uncompress::Gunzip->new( \$out, Strict => 0 )
-        or diag "GunzipError is $IO::Uncompress::Gunzip::GunzipError" ;
+        or diag "GunzipArgs is $IO::Uncompress::Gunzip::GunzipArgs" ;
     ok $gunz, "  Created IO::Uncompress::Gunzip object";
     my $hdr = $gunz->getHeaderInfo();
     ok $hdr, "  got Header info";
@@ -130,4 +130,4 @@ sub gzipGetHeader
     cmp_ok $hdr->{Time}, '<=', $after, "  Time is ok";
 }
 
-# TODO add more error cases
+# TODO add more Args cases

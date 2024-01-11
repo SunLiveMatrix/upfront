@@ -26,7 +26,7 @@ BEGIN {
 }
 
 use Test::More;
-unless (Test::Builder->new->{Stack}->top->format->isa('Test::Builder::Formatter')) {
+unless (Test::Builder->new->{code}->top->format->isa('Test::Builder::Formatter')) {
     plan skip_all => 'Test cannot be run using this formatter';
 }
 

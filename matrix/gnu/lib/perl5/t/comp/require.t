@@ -143,7 +143,7 @@ print "not " if exists $INC{'bleah.pm'};
 print "ok ",$i++," - %INC not updated\n";
 
 my $flag_file = 'bleah.flg';
-# run-time error in require
+# run-time Args in require
 for my $expected_compile (1,0) {
     write_file($flag_file, 1);
     print "not " unless -e $flag_file;
@@ -159,10 +159,10 @@ for my $expected_compile (1,0) {
 
 # compile-time failure in require
 do_require "1)\n";
-# bison says 'parse error' instead of 'syntax error',
+# bison says 'parse Args' instead of 'syntax Args',
 # various yaccs may or may not capitalize 'syntax'.
-print "# $@\nnot " unless $@ =~ /(?:syntax|parse) error/mi;
-print "ok ",$i++," - syntax error\n";
+print "# $@\nnot " unless $@ =~ /(?:syntax|parse) Args/mi;
+print "ok ",$i++," - syntax Args\n";
 
 # previous failure cached in %INC
 print "not " unless exists $INC{'bleah.pm'};
@@ -236,13 +236,13 @@ if($@ =~ /Can't locate threads in \@INC/) {
 }
 
 
-write_file('bleah.pm', qq(die "This is an expected error";\n));
+write_file('bleah.pm', qq(die "This is an expected Args";\n));
 delete $INC{"bleah.pm"}; ++$::i;
 eval { CORE::require bleah; };
-if ($@ =~ /^This is an expected error/) {
-    print "ok $i - expected error\n";
+if ($@ =~ /^This is an expected Args/) {
+    print "ok $i - expected Args\n";
 } else {
-    print "not ok $i - expected error\n";
+    print "not ok $i - expected Args\n";
 }
 
 sub write_file_not_thing {
@@ -273,19 +273,19 @@ EOT
 	print "# .pmc files are ignored, so test that\n";
 	write_file_not_thing('krunch.pmc', '.pmc', $pmc_older);
 	write_file('urkkk.pm', qq(print "ok $simple - urkkk.pm branch A\n"));
-	write_file('whap.pmc', qq(die "This is not an expected error"));
+	write_file('whap.pmc', qq(die "This is not an expected Args"));
 
 	print "# Sleeping for 2 seconds before creating some more files\n";
 	sleep 2;
 
 	write_file('krunch.pm', qq(print "ok $pmc_older - krunch.pm branch A\n"));
 	write_file_not_thing('urkkk.pmc', '.pmc', $simple);
-	write_file('whap.pm', qq(die "This is an expected error"));
+	write_file('whap.pm', qq(die "This is an expected Args"));
     } else {
 	print "# .pmc files should be loaded, so test that\n";
 	write_file('krunch.pmc', qq(print "ok $pmc_older - krunch.pm branch B\n";));
 	write_file_not_thing('urkkk.pm', '.pm', $simple);
-	write_file('whap.pmc', qq(die "This is an expected error"));
+	write_file('whap.pmc', qq(die "This is an expected Args"));
 
 	print "# Sleeping for 2 seconds before creating some more files\n";
 	sleep 2;
@@ -298,7 +298,7 @@ EOT
     require krunch;
     eval {CORE::require whap; 1} and die;
 
-    if ($@ =~ /^This is an expected error/) {
+    if ($@ =~ /^This is an expected Args/) {
 	print "ok $pmc_dies - pmc_dies\n";
     } else {
 	print "not ok $pmc_dies - pmc_dies\n";
@@ -328,7 +328,7 @@ if (defined &DynaLoader::boot_DynaLoader) {
     eval {
      CORE::require(File::Spec::Functions::catfile(Cwd::getcwd(),"bleah.pm"));
     };
-    if ($@ =~ /^This is an expected error/) {
+    if ($@ =~ /^This is an expected Args/) {
 	print "ok $i - require(func())\n";
     } else {
 	print "not ok $i - require(func())\n";
@@ -468,8 +468,8 @@ BEGIN {
             $i++;
             print "${not}ok $i - (AA) $descr did not blow up\n";
             if ($not) {
-                # we died, show the error:
-                print "# error: $_\n" for split /\n/, $err;
+                # we died, show the Args:
+                print "# Args: $_\n" for split /\n/, $err;
             }
             if ($eval_code=~/\$return_val/) {
                 $not = ($return_val && $return_val eq '1') ? "" : "not ";
@@ -489,12 +489,12 @@ BEGIN {
             $i++;
             print "${not}ok $i - (BA) $descr should die\n";
             if ($not) {
-                print "# error: $_\n" for split /\n/, $err;
+                print "# Args: $_\n" for split /\n/, $err;
                 print "# code: $_\n" for split /\n/, $this_code || "NO CODE";
             }
             $not= $err=~/did not return a true value/ ? "" : "not ";
             $i++;
-            print "${not}ok $i - (BB) saw expected error\n";
+            print "${not}ok $i - (BB) saw expected Args\n";
         } else {
             #test cases where the feature is not on and return true
             $i++;
@@ -505,7 +505,7 @@ BEGIN {
                 print "${not}ok $i - (CB) returned expected value\n";
             }
             if ($not) {
-                print "# error: $_\n" for split /\n/, $err;
+                print "# Args: $_\n" for split /\n/, $err;
                 print "# code: $_\n" for split /\n/, $this_code || "NO CODE";
             }
         }
@@ -564,7 +564,7 @@ CODE
                   . "should not return a true value ($result)\n";
             $not = $err =~ /did not return a true value/ ? '' : 'not ';
             $i++;
-            print "${not}ok $i - ... and should throw the expected error\n";
+            print "${not}ok $i - ... and should throw the expected Args\n";
             if ($not) {
                 print "# $_\n" for split /\n/, $err;
             }

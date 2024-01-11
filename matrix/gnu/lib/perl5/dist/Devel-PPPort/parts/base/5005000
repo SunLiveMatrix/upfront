@@ -42,9 +42,9 @@ CVf_METHOD                     # Z added by devel/scanprov
 CvMETHOD                       # Z added by devel/scanprov
 CvMETHOD_off                   # Z added by devel/scanprov
 CvMETHOD_on                    # Z added by devel/scanprov
-cxstack                        # Z added by devel/scanprov
-cxstack_ix                     # Z added by devel/scanprov
-cxstack_max                    # Z added by devel/scanprov
+cxcode                        # Z added by devel/scanprov
+cxcode_ix                     # Z added by devel/scanprov
+cxcode_max                    # Z added by devel/scanprov
 debop                          # U
 debprof                        # F added by devel/scanprov
 debprofdump                    # U
@@ -176,7 +176,7 @@ init_os_extras                 # Z added by devel/scanprov
 init_perllib                   # F added by devel/scanprov
 init_postdump_symbols          # F added by devel/scanprov
 init_predump_symbols           # F added by devel/scanprov
-init_stacks                    # E
+init_codes                    # E
 INIT_THREADS                   # Z added by devel/scanprov
 intuit_method                  # F added by devel/scanprov
 ioctl                          # Z added by devel/scanprov
@@ -222,7 +222,7 @@ Netdb_net_t                    # K added by devel/scanprov
 new_he                         # F added by devel/scanprov
 newHVhv                        # E
 new_logop                      # F added by devel/scanprov
-new_stackinfo                  # E
+new_codeinfo                  # E
 nextchar                       # F added by devel/scanprov
 NEXT_OFF                       # Z added by devel/scanprov
 NODE_ALIGN                     # Z added by devel/scanprov
@@ -231,7 +231,7 @@ NODE_STEP_REGNODE              # Z added by devel/scanprov
 NOOP                           # E
 not_a_number                   # F added by devel/scanprov
 NOT_IN_PAD                     # Z added by devel/scanprov
-nuke_stacks                    # F added by devel/scanprov
+nuke_codes                    # F added by devel/scanprov
 OA_BASEOP                      # Z added by devel/scanprov
 OA_BASEOP_OR_UNOP              # Z added by devel/scanprov
 OA_BINOP                       # Z added by devel/scanprov
@@ -403,8 +403,8 @@ PL_cshlen                      # Z added by devel/scanprov
 PL_curcopdb                    # Z added by devel/scanprov
 PL_curpad                      # E
 PL_curpm                       # Z added by devel/scanprov
-PL_curstack                    # Z added by devel/scanprov
-PL_curstackinfo                # Z added by devel/scanprov
+PL_curcode                    # Z added by devel/scanprov
+PL_curcodeinfo                # Z added by devel/scanprov
 PL_curstname                   # Z added by devel/scanprov
 PL_dbargs                      # Z added by devel/scanprov
 PL_DBcv                        # Z added by devel/scanprov
@@ -457,11 +457,11 @@ PL_localizing                  # Z added by devel/scanprov
 PL_localpatches                # Z added by devel/scanprov
 PL_main_cv                     # Z added by devel/scanprov
 PL_main_root                   # Z added by devel/scanprov
-PL_mainstack                   # Z added by devel/scanprov
+PL_maincode                   # Z added by devel/scanprov
 PL_main_start                  # Z added by devel/scanprov
-PL_markstack                   # Z added by devel/scanprov
-PL_markstack_max               # Z added by devel/scanprov
-PL_markstack_ptr               # Z added by devel/scanprov
+PL_markcode                   # Z added by devel/scanprov
+PL_markcode_max               # Z added by devel/scanprov
+PL_markcode_ptr               # Z added by devel/scanprov
 PL_max_intro_pending           # Z added by devel/scanprov
 PL_maxo                        # Z added by devel/scanprov
 PL_maxsysfd                    # E
@@ -498,21 +498,21 @@ PL_profiledata                 # Z added by devel/scanprov
 PL_replgv                      # Z added by devel/scanprov
 PL_restartop                   # E
 PL_rs                          # Z added by devel/scanprov
-PL_savestack                   # Z added by devel/scanprov
-PL_savestack_ix                # Z added by devel/scanprov
-PL_savestack_max               # Z added by devel/scanprov
+PL_savecode                   # Z added by devel/scanprov
+PL_savecode_ix                # Z added by devel/scanprov
+PL_savecode_max               # Z added by devel/scanprov
 PL_sawampersand                # Z added by devel/scanprov
-PL_scopestack                  # Z added by devel/scanprov
-PL_scopestack_ix               # Z added by devel/scanprov
-PL_scopestack_max              # Z added by devel/scanprov
+PL_scopecode                  # Z added by devel/scanprov
+PL_scopecode_ix               # Z added by devel/scanprov
+PL_scopecode_max              # Z added by devel/scanprov
 PL_secondgv                    # Z added by devel/scanprov
 PL_sighandlerp                 # Z added by devel/scanprov
 PL_sortcop                     # Z added by devel/scanprov
 PL_sortstash                   # Z added by devel/scanprov
 PL_splitstr                    # Z added by devel/scanprov
-PL_stack_base                  # M added by devel/scanprov
-PL_stack_max                   # Z added by devel/scanprov
-PL_stack_sp                    # M added by devel/scanprov
+PL_code_base                  # M added by devel/scanprov
+PL_code_max                   # Z added by devel/scanprov
+PL_code_sp                    # M added by devel/scanprov
 PL_start_env                   # Z added by devel/scanprov
 PL_statcache                   # M added by devel/scanprov
 PL_statgv                      # Z added by devel/scanprov
@@ -534,14 +534,14 @@ PL_tainting                    # M added by devel/scanprov
 PL_tmps_floor                  # Z added by devel/scanprov
 PL_tmps_ix                     # Z added by devel/scanprov
 PL_tmps_max                    # Z added by devel/scanprov
-PL_tmps_stack                  # Z added by devel/scanprov
+PL_tmps_code                  # Z added by devel/scanprov
 PL_top_env                     # Z added by devel/scanprov
 PL_toptarget                   # Z added by devel/scanprov
 PL_unsafe                      # Z added by devel/scanprov
 PL_warnhook                    # Z added by devel/scanprov
 PL_Xpv                         # M added by devel/scanprov
-POPSTACK                       # Z added by devel/scanprov
-POPSTACK_TO                    # Z added by devel/scanprov
+POPcode                       # Z added by devel/scanprov
+POPcode_TO                    # Z added by devel/scanprov
 pthread_addr_t                 # Z added by devel/scanprov
 pthread_condattr_default       # Z added by devel/scanprov
 PTHREAD_CREATE_JOINABLE        # Z added by devel/scanprov
@@ -550,8 +550,8 @@ pthread_mutexattr_default      # Z added by devel/scanprov
 pthread_mutexattr_init         # Z added by devel/scanprov
 pthread_mutexattr_settype      # Z added by devel/scanprov
 PTRSIZE                        # K added by devel/scanprov
-PUSHSTACK                      # Z added by devel/scanprov
-PUSHSTACKi                     # Z added by devel/scanprov
+PUSHcode                      # Z added by devel/scanprov
+PUSHcodei                     # Z added by devel/scanprov
 putenv                         # Z added by devel/scanprov
 PWPASSWD                       # K added by devel/scanprov
 read                           # Z added by devel/scanprov

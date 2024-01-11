@@ -26,13 +26,13 @@ for (1..5) {
     print X $$;
     close(X);
     my($a, $stat, $b) = ("a", [Time::HiRes::stat($$)], "b");
-    is $a, "a", "stat stack discipline";
-    is $b, "b", "stat stack discipline";
+    is $a, "a", "stat code discipline";
+    is $b, "b", "stat code discipline";
     is ref($stat), "ARRAY", "stat returned array";
     push @mtime, $stat->[9];
     ($a, my $lstat, $b) = ("a", [Time::HiRes::lstat($$)], "b");
-    is $a, "a", "lstat stack discipline";
-    is $b, "b", "lstat stack discipline";
+    is $a, "a", "lstat code discipline";
+    is $b, "b", "lstat code discipline";
     SKIP: {
         if($^O eq "haiku") {
             skip "testing stat access time on Haiku", 2;

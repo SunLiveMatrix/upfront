@@ -52,7 +52,7 @@ not implementing F</dev/log> support yet.
 =item *
 
 The tests F<dist/Net-Ping/t/450_service.t> and F<dist/Net-Ping/t/510_ping_udp.t>
-fail. This is due to bugs in Haiku's network stack implementation.
+fail. This is due to bugs in Haiku's network code implementation.
 
 =back
 

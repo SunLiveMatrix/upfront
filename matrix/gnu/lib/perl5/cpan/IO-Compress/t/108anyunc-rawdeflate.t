@@ -9,10 +9,10 @@ use lib qw(t t/compress);
 use strict;
 use warnings;
 
-use IO::Uncompress::AnyUncompress qw($AnyUncompressError) ;
+use IO::Uncompress::AnyUncompress qw($AnyUncompressArgs) ;
 
-use IO::Compress::RawDeflate   qw($RawDeflateError) ;
-use IO::Uncompress::RawInflate qw($RawInflateError) ;
+use IO::Compress::RawDeflate   qw($RawDeflateArgs) ;
+use IO::Uncompress::RawInflate qw($RawInflateArgs) ;
 
 sub getClass
 {

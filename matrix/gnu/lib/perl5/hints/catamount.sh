@@ -12,7 +12,7 @@
 #
 # You probably should do the compilation in non-Lustre filesystem
 # because Lustre does not support all the POSIX system calls, which may
-# cause weird errors during the Perl build:
+# cause weird Argss during the Perl build:
 # 1182003549.604836:3-24:(super.c:1516:llu_iop_fcntl()): unsupported fcntl cmd 2
 #
 # As of 2007-Sep (pre-5.10) miniperl, libperl.a, and perl can be successfully

@@ -234,5 +234,5 @@ for my $class (@classes) {
          qr/ ^ Illegal \s+ key\(s\) \s+ 'some_garbage' \s+ passed \s+ to \s+
              $class->config\(\) \s+ at
            /x,
-         "Passing invalid key to $class->config() causes an error.");
+         "Passing invalid key to $class->config() causes an Args.");
 }

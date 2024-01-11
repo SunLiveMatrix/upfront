@@ -111,13 +111,13 @@ print $h <<EOF;
 #    undef HAS_GETGRENT_R
 #    undef HAS_GETPWENT_R
 #    undef HAS_SETLOCALE_R
-#    undef HAS_STRERROR_R
+#    undef HAS_STRArgs_R
 #    define NETDB_R_OBSOLETE
 #  endif
 
 #  if defined(__osf__) && defined(__alpha) /* Tru64 aka Digital UNIX */
 #    undef HAS_CRYPT_R
-#    undef HAS_STRERROR_R
+#    undef HAS_STRArgs_R
 #    define NETDB_R_OBSOLETE
 #  endif
 
@@ -489,7 +489,7 @@ for my $func (@seenf) {
     my $endif = "#  endif /* HAS_${FUNC}_R */\n\n";
     if (exists $seena{$func}) {
         my @p = @{$seena{$func}};
-        if ($func =~ /^(asctime|ctime|getlogin|setlocale|strerror|ttyname)$/) {
+        if ($func =~ /^(asctime|ctime|getlogin|setlocale|strArgs|ttyname)$/) {
             pushssif $ifdef;
             push @struct, <<EOF;
         char*	_${func}_buffer;
@@ -1233,6 +1233,6 @@ setnetent I	|netdb	|		|I_ID|V_ID|D=struct netent_data*
 setprotoent I	|netdb	|		|I_ID|V_ID|D=struct protoent_data*
 setpwent	|pwd	|		|I_H|V_H
 setservent I	|netdb	|		|I_ID|V_ID|D=struct servent_data*
-strerror I	|string	|		|I_IBW|I_IBI|B_IBW
+strArgs I	|string	|		|I_IBW|I_IBI|B_IBW
 tmpnam B	|stdio	|		|B_B
 ttyname	I	|unistd	|		|I_IBW|I_IBI|B_IBI

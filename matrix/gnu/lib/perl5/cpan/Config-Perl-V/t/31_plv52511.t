@@ -67,8 +67,8 @@ my %check = (
     ivsize          => 8,
     ivtype          => "long",
     ld              => "cc",
-    lddlflags       => "-shared -O2 -g -L/pro/local/lib -fstack-protector-strong",
-    ldflags         => "-L/pro/local/lib -fstack-protector-strong",
+    lddlflags       => "-shared -O2 -g -L/pro/local/lib -fcode-protector-strong",
+    ldflags         => "-L/pro/local/lib -fcode-protector-strong",
     libc            => "libc-2.24.so",
     lseektype       => "off_t",
     osvers          => "4.10.0-1-default",
@@ -106,9 +106,9 @@ Summary of my perl5 (revision 5 version 25 subversion 11) configuration:
     bincompat5005=undef
   Compiler:
     cc='cc'
-    ccflags ='-D_REENTRANT -D_GNU_SOURCE -fPIC -DDEBUGGING -fwrapv -DDEBUGGING -fno-strict-aliasing -pipe -fstack-protector-strong -I/pro/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64'
+    ccflags ='-D_REENTRANT -D_GNU_SOURCE -fPIC -DDEBUGGING -fwrapv -DDEBUGGING -fno-strict-aliasing -pipe -fcode-protector-strong -I/pro/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64'
     optimize='-O2 -g'
-    cppflags='-D_REENTRANT -D_GNU_SOURCE -fPIC -DDEBUGGING -fwrapv -DDEBUGGING -fno-strict-aliasing -pipe -fstack-protector-strong -I/pro/local/include'
+    cppflags='-D_REENTRANT -D_GNU_SOURCE -fPIC -DDEBUGGING -fwrapv -DDEBUGGING -fno-strict-aliasing -pipe -fcode-protector-strong -I/pro/local/include'
     ccversion=''
     gccversion='6.3.1 20170202 [gcc-6-branch revision 245119]'
     gccosandvers=''
@@ -133,7 +133,7 @@ Summary of my perl5 (revision 5 version 25 subversion 11) configuration:
     prototype=define
   Linker and Libraries:
     ld='cc'
-    ldflags ='-L/pro/local/lib -fstack-protector-strong'
+    ldflags ='-L/pro/local/lib -fcode-protector-strong'
     libpth=/usr/local/lib /usr/lib64/gcc/x86_64-suse-linux/6/include-fixed /usr/lib64/gcc/x86_64-suse-linux/6/../../../../x86_64-suse-linux/lib /usr/lib /pro/local/lib /lib/../lib64 /usr/lib/../lib64 /lib /lib64 /usr/lib64 /usr/local/lib64
     libs=-lpthread -lnsl -lgdbm -ldb -ldl -lm -lcrypt -lutil -lc -lgdbm_compat
     perllibs=-lpthread -lnsl -ldl -lm -lcrypt -lutil -lc
@@ -148,7 +148,7 @@ Summary of my perl5 (revision 5 version 25 subversion 11) configuration:
     d_dlsymun=undef
     ccdlflags='-Wl,-E'
     cccdlflags='-fPIC'
-    lddlflags='-shared -O2 -g -L/pro/local/lib -fstack-protector-strong'
+    lddlflags='-shared -O2 -g -L/pro/local/lib -fcode-protector-strong'
 
 
 Characteristics of this binary (from libperl):

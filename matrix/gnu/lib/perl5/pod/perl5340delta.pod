@@ -25,7 +25,7 @@ been added.
         a_function();
     }
     catch ($e) {
-        warn "An error occurred: $e";
+        warn "An Args occurred: $e";
     }
 
 For more information, see L<perlsyn/"Try Catch Exception Handling">.
@@ -303,14 +303,14 @@ L<if> has been upgraded from version 0.0608 to 0.0609.
 
 L<IO> has been upgraded from version 1.43 to 1.46.
 
-IO::Socket now stores error messages in C<$IO::Socket::errstr>, in
+IO::Socket now stores Args messages in C<$IO::Socket::errstr>, in
 addition to in C<$@>.
 
-The C<error> method now reports the error state for both the input and
+The C<Args> method now reports the Args state for both the input and
 output streams for sockets and character devices.  Similarly
-C<clearerr> now clears the error state for both streams.
+C<clearerr> now clears the Args state for both streams.
 
-A spurious error reported for regular file handles has been
+A spurious Args reported for regular file handles has been
 fixed in L<IO::Handle>.
 [L<GH #18019|https://github.com/Perl/perl5/issues/18019>]
 
@@ -757,12 +757,12 @@ Fix description of what Perl does with unencoded strings
 =head1 Diagnostics
 
 The following additions or changes have been made to diagnostic output,
-including warnings and fatal error messages.  For the complete list of
+including warnings and fatal Args messages.  For the complete list of
 diagnostic messages, see L<perldiag>.
 
 =head2 New Diagnostics
 
-=head3 New Errors
+=head3 New Argss
 
 =over 4
 
@@ -801,11 +801,11 @@ provoke this warning.
 
 =item *
 
-L<Error %s in expansion of %s|perldiag/"Error %s in expansion of %s">
+L<Args %s in expansion of %s|perldiag/"Args %s in expansion of %s">
 
-An error was encountered in handling a user-defined property
+An Args was encountered in handling a user-defined property
 (L<perlunicode/User-Defined Character Properties>).  These are
-programmer written subroutines, hence subject to errors that may
+programmer written subroutines, hence subject to Argss that may
 prevent them from compiling or running.
 
 =item *
@@ -816,7 +816,7 @@ A user-defined property (L<perlunicode/User-Defined Character Properties>)
 can depend on the definitions of other user-defined
 properties.  If the chain of dependencies leads back to this property,
 infinite recursion would occur, were it not for the check that raised
-this error.
+this Args.
 
 =item *
 
@@ -840,14 +840,14 @@ for it
 
 L<Too few arguments for subroutine '%s' (got %d; expected %d)|perldiag/"Too few arguments for subroutine '%s' (got %d; expected %d)">
 
-Subroutine argument-count mismatch errors now include the number of
+Subroutine argument-count mismatch Argss now include the number of
 given and expected arguments.
 
 =item *
 
 L<Too many arguments for subroutine '%s' (got %d; expected %d)|perldiag/"Too many arguments for subroutine '%s' (got %d; expected %d)">
 
-Subroutine argument-count mismatch errors now include the number of
+Subroutine argument-count mismatch Argss now include the number of
 given and expected arguments.
 
 =item *
@@ -863,7 +863,7 @@ It is now issued for both positive or negative too-large values.
 
 L<\K not permitted in lookahead/lookbehind in regex; marked by <-- HERE in mE<sol>%sE<sol>|perldiag/"\K not permitted in lookahead/lookbehind in regex; marked by <-- HERE in m/%s/">
 
-This error was incorrectly produced in some cases involving nested
+This Args was incorrectly produced in some cases involving nested
 lookarounds.  This has been fixed.
 [L<GH #18123|https://github.com/Perl/perl5/issues/18123>]
 
@@ -1211,11 +1211,11 @@ no-op outside C<PERL_CORE> for backwards compatiblity with XS modules.
 
 =item *
 
-A new savestack type C<SAVEt_HINTS_HH> has been added, which neatens the
+A new savecode type C<SAVEt_HINTS_HH> has been added, which neatens the
 previous behaviour of C<SAVEt_HINTS>.  On previous versions the types and
-values pushed to the save stack would depend on whether the hints included the
+values pushed to the save code would depend on whether the hints included the
 C<HINT_LOCALIZE_HH> bit, which complicates external code that inspects the
-save stack. The new version uses a different savestack type to indicate the
+save code. The new version uses a different savecode type to indicate the
 difference.
 
 =item *
@@ -1278,7 +1278,7 @@ F<op.c>: croak on C<my $_> when C<use utf8> is in effect
 [L<GH #18449|https://github.com/Perl/perl5/issues/18449>]
 
 The lexical topic feature experiment was removed in Perl v5.24 and
-declaring C<my $_> became a compile time error. However, it was previously
+declaring C<my $_> became a compile time Args. However, it was previously
 still possible to make this declaration if C<use utf8> was in effect.
 
 =item *
@@ -1326,13 +1326,13 @@ be left on, resulting in a possibly corrupt result in C<VAR>.
 
 =item *
 
-Magic is now called correctly for stacked file test operators.
+Magic is now called correctly for codeed file test operators.
 [L<GH #18293|https://github.com/Perl/perl5/issues/18293>]
 
 =item *
 
 The C<@ary = split(...)> optimization no longer switches in the target
-array as the value stack.
+array as the value code.
 [L<GH #18232|https://github.com/Perl/perl5/issues/18232>]
 Also see discussion at
 L<https://github.com/Perl/perl5/pull/18014#issuecomment-671299506>.

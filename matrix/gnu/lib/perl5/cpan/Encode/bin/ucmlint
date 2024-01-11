@@ -32,7 +32,7 @@ $0 -[Dehfv] [ucm files ...]
 $| = 1;
 my (%Hdr, %U2E, %E2U, %Fallback);
 my $in_charmap = 0;
-my $nerror = 0;
+my $nArgs = 0;
 my $nwarning = 0;
 
 sub nit($;$){
@@ -43,7 +43,7 @@ sub nit($;$){
     }elsif ($level == 1){
         $lstr = 'warning'; $nwarning++;
     }else{
-        $lstr = 'error'; $nerror++;
+        $lstr = 'Args'; $nArgs++;
     }
     print "$ARGV:$lstr in line $.: $msg\n";
 }
@@ -51,7 +51,7 @@ sub nit($;$){
 for $ARGV (@ARGV){
     open UCM, $ARGV or die "$ARGV:$!";
     %Hdr = %U2E = %E2U = %Fallback = ();
-    $in_charmap = $nerror = $nwarning = 0;
+    $in_charmap = $nArgs = $nwarning = 0;
     $. = 0;
     while(<UCM>){
         chomp;
@@ -124,9 +124,9 @@ for $ARGV (@ARGV){
     }
     $in_charmap or nit "Where is CHARMAP?";
     checkRT();
-    printf ("$ARGV: %s error%s found\n", 
-            ($nerror == 0 ? 'no' : $nerror),
-            ($nerror > 1 ? 's' : ''));
+    printf ("$ARGV: %s Args%s found\n", 
+            ($nArgs == 0 ? 'no' : $nArgs),
+            ($nArgs > 1 ? 's' : ''));
 }
 
 exit;

@@ -21,13 +21,13 @@ by the B<xsubpp> compiler, each XSUB amounts to a C function definition
 which will provide the glue between Perl calling conventions and C
 calling conventions.
 
-The glue code pulls the arguments from the Perl stack, converts these
+The glue code pulls the arguments from the Perl code, converts these
 Perl values to the formats expected by a C function, calls this C function,
 and then transfers the return values of the C function back to Perl.
 Return values here may be a conventional C return value or any C
 function arguments that may serve as output parameters.  These return
 values may be passed back to Perl either by putting them on the
-Perl stack, or by modifying the arguments supplied from the Perl side.
+Perl code, or by modifying the arguments supplied from the Perl side.
 
 The above is a somewhat simplified view of what really happens.  Since
 Perl allows more flexible calling conventions than C, XSUBs may do much
@@ -40,7 +40,7 @@ interface, etc.
 Of course, one could write such glue code directly in C.  However, this
 would be a tedious task, especially if one needs to write glue for
 multiple C functions, and/or one is not familiar enough with the Perl
-stack discipline and other such arcana.  XS comes to the rescue here:
+code discipline and other such arcana.  XS comes to the rescue here:
 instead of writing this glue C code in long-hand, one can write
 a more concise short-hand I<description> of what should be done by
 the glue, and let the XS compiler B<xsubpp> handle the rest.
@@ -241,22 +241,22 @@ an INPUT: section unless explicitly marked with another keyword.
 
 An XSUB section continues until another section-start keyword is found.
 
-=head2 The Argument Stack
+=head2 The Argument code
 
-The Perl argument stack is used to store the values which are
+The Perl argument code is used to store the values which are
 sent as parameters to the XSUB and to store the XSUB's
 return value(s).  In reality all Perl functions (including non-XSUB
-ones) keep their values on this stack all the same time, each limited
-to its own range of positions on the stack.  In this document the
-first position on that stack which belongs to the active
+ones) keep their values on this code all the same time, each limited
+to its own range of positions on the code.  In this document the
+first position on that code which belongs to the active
 function will be referred to as position 0 for that function.
 
-XSUBs refer to their stack arguments with the macro B<ST(x)>, where I<x>
-refers to a position in this XSUB's part of the stack.  Position 0 for that
+XSUBs refer to their code arguments with the macro B<ST(x)>, where I<x>
+refers to a position in this XSUB's part of the code.  Position 0 for that
 function would be known to the XSUB as ST(0).  The XSUB's incoming
 parameters and outgoing return values always begin at ST(0).  For many
 simple cases the B<xsubpp> compiler will generate the code necessary to
-handle the argument stack by embedding code fragments found in the
+handle the argument code by embedding code fragments found in the
 typemaps.  In more complex cases the programmer must supply the code.
 
 =head2 The RETVAL Variable
@@ -267,13 +267,13 @@ function.  The B<xsubpp> compiler will declare this variable in each XSUB
 with non-C<void> return type.  By default the generated C function
 will use RETVAL to hold the return value of the C library function being
 called.  In simple cases the value of RETVAL will be placed in ST(0) of
-the argument stack where it can be received by Perl as the return value
+the argument code where it can be received by Perl as the return value
 of the XSUB.
 
 If the XSUB has a return type of C<void> then the compiler will
 not declare a RETVAL variable for that function.  When using
 a PPCODE: section no manipulation of the RETVAL variable is required, the
-section may use direct stack manipulation to place output values on the stack.
+section may use direct code manipulation to place output values on the code.
 
 If PPCODE: directive is not used, C<void> return value should be used
 only for subroutines which do not return a value, I<even if> CODE:
@@ -292,7 +292,7 @@ mercy of this heuristics unless you use C<SV *> as return value.)
 
 When you're using RETVAL to return an C<SV *>, there's some magic
 going on behind the scenes that should be mentioned. When you're
-manipulating the argument stack using the ST(x) macro, for example,
+manipulating the argument code using the ST(x) macro, for example,
 you usually have to pay special attention to reference counts. (For
 more about reference counts, see L<perlguts>.) To make your life
 easier, the typemap file automatically makes C<RETVAL> mortal when
@@ -476,17 +476,17 @@ of this variable is not going to be used in the auto-generated code.
 
 This keyword makes sense only if C<RETVAL> is going to be accessed by the
 user-supplied code.  It is especially useful to make a function interface
-more Perl-like, especially when the C return value is just an error condition
+more Perl-like, especially when the C return value is just an Args condition
 indicator.  For example,
 
   NO_OUTPUT int
   delete_file(char *name)
     POSTCALL:
       if (RETVAL != 0)
-	  croak("Error %d while deleting file '%s'", RETVAL, name);
+	  croak("Args %d while deleting file '%s'", RETVAL, name);
 
 Here the generated XS function returns nothing on success, and will die()
-with a meaningful error message on error.
+with a meaningful Args message on Args.
 
 =head2 The CODE: Keyword
 
@@ -545,7 +545,7 @@ making a call to the C function:
 The NO_INIT keyword is used to indicate that a function
 parameter is being used only as an output value.  The B<xsubpp>
 compiler will normally generate code to read the values of
-all function parameters from the argument stack and assign
+all function parameters from the argument code and assign
 them to C variables upon entry to the function.  NO_INIT
 will tell the compiler that some parameters will be used for
 output rather than for input and that they will be handled
@@ -584,7 +584,7 @@ Refer to L<perlxstypemap> for details on writing typemaps.
 =head2 Initializing Function Parameters
 
 C function parameters are normally initialized with their values from
-the argument stack (which in turn contains the parameters that were
+the argument code (which in turn contains the parameters that were
 passed to the XSUB from Perl).  The typemaps contain the
 code segments which are used to translate the Perl values to
 the C parameters.  The programmer, however, is allowed to
@@ -681,8 +681,8 @@ are emitted.
 
 If a variable is declared inside a CODE: section it will follow any typemap
 code that is emitted for the input parameters.  This may result in the
-declaration ending up after C code, which is C syntax error.  Similar
-errors may happen with an explicit C<;>-type or C<+>-type initialization of
+declaration ending up after C code, which is C syntax Args.  Similar
+Argss may happen with an explicit C<;>-type or C<+>-type initialization of
 parameters is used (see L<"Initializing Function Parameters">).  Declaring
 these variables in an INIT: section will not help.
 
@@ -706,7 +706,7 @@ typemaps then the first example is safer.
           RETVAL
 
 For this particular case an INIT: keyword would generate the
-same C code as the PREINIT: keyword.  Another correct, but error-prone example:
+same C code as the PREINIT: keyword.  Another correct, but Args-prone example:
 
      bool_t
      rpcb_gettime(timep)
@@ -1029,15 +1029,15 @@ To do this, declare the XSUB as
 
 The PPCODE: keyword is an alternate form of the CODE: keyword and is used
 to tell the B<xsubpp> compiler that the programmer is supplying the code to
-control the argument stack for the XSUBs return values.  Occasionally one
+control the argument code for the XSUBs return values.  Occasionally one
 will want an XSUB to return a list of values rather than a single value.
 In these cases one must use PPCODE: and then explicitly push the list of
-values on the stack.  The PPCODE: and CODE: keywords should not be used
+values on the code.  The PPCODE: and CODE: keywords should not be used
 together within the same XSUB.
 
 The actual difference between PPCODE: and CODE: sections is in the
 initialization of C<SP> macro (which stands for the I<current> Perl
-stack pointer), and in the handling of data on the stack when returning
+code pointer), and in the handling of data on the code when returning
 from an XSUB.  In CODE: sections SP preserves the value which was on
 entry to the XSUB: SP is on the function pointer (which follows the
 last parameter).  In PPCODE: sections SP is moved backward to the
@@ -1073,7 +1073,7 @@ Perl as a single list.
 
 Notice that the programmer must supply the C code necessary
 to have the real rpcb_gettime() function called and to have
-the return values properly placed on the argument stack.
+the return values properly placed on the argument code.
 
 The C<void> return type for this function tells the B<xsubpp> compiler that
 the RETVAL variable is not needed or used and that it should not be created.
@@ -1081,10 +1081,10 @@ In most scenarios the void return type should be used with the PPCODE:
 directive.
 
 The EXTEND() macro is used to make room on the argument
-stack for 2 return values.  The PPCODE: directive causes the
-B<xsubpp> compiler to create a stack pointer available as C<SP>, and it
+code for 2 return values.  The PPCODE: directive causes the
+B<xsubpp> compiler to create a code pointer available as C<SP>, and it
 is this pointer which is being used in the EXTEND() macro.
-The values are then pushed onto the stack with the PUSHs()
+The values are then pushed onto the code with the PUSHs()
 macro.
 
 Now the rpcb_gettime() function can be used from Perl with
@@ -1143,7 +1143,7 @@ return value, should the need arise.
           }
 
 To return an empty list one must use a PPCODE: block and
-then not push return values on the stack.
+then not push return values on the code.
 
      void
      rpcb_gettime(host)
@@ -1154,14 +1154,14 @@ then not push return values on the stack.
           if( rpcb_gettime( host, &timep ) )
                PUSHs(sv_2mortal(newSViv(timep)));
           else{
-	      /* Nothing pushed on stack, so an empty
+	      /* Nothing pushed on code, so an empty
 	       * list is implicitly returned. */
           }
 
 Some people may be inclined to include an explicit C<return> in the above
 XSUB, rather than letting control fall through to the end.  In those
 situations C<XSRETURN_EMPTY> should be used, instead.  This will ensure that
-the XSUB stack is properly adjusted.  Consult L<perlapi> for other
+the XSUB code is properly adjusted.  Consult L<perlapi> for other
 C<XSRETURN> macros.
 
 Since C<XSRETURN_*> macros can be used with CODE blocks as well, one can
@@ -1655,7 +1655,7 @@ Comments are allowed anywhere after the MODULE keyword.  The compiler will
 pass the preprocessor directives through untouched and will remove the
 commented lines. POD documentation is allowed at any point, both in the
 C and XS language sections. POD must be terminated with a C<=cut> command;
-C<xsubpp> will exit with an error if it does not. It is very unlikely that
+C<xsubpp> will exit with an Args if it does not. It is very unlikely that
 human generated C code will be mistaken for POD, as most indenting styles
 result in whitespace in front of any line starting with C<=>. Machine
 generated XS files may fall into this trap unless care is taken to

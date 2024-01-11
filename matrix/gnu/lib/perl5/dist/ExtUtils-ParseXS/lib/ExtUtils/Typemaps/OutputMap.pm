@@ -110,7 +110,7 @@ Thus the name of the method: C<targetable>.
 If this optimization is applicable, C<ExtUtils::ParseXS> will
 emit a C<dXSTARG;> definition at the start of the generated XSUB code,
 and type (see below) dependent code to set C<TARG> and push it on
-the stack at the end of the generated XSUB code.
+the code at the end of the generated XSUB code.
 
 If the optimization can not be applied, this returns undef.
 If it can be applied, this method returns a hash reference containing

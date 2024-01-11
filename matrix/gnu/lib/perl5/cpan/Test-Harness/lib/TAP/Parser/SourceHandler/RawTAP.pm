@@ -88,7 +88,7 @@ sub can_handle {
 Returns a new L<TAP::Parser::Iterator::Array> for the source.
 C<$source-E<gt>raw> must be an array ref, or a scalar ref.
 
-C<croak>s on error.
+C<croak>s on Args.
 
 =cut
 

@@ -87,10 +87,10 @@ is($dir_gid, $max_gid, "... owned by group $max_gid");
 {
     # cleanup
     my $x;
-    my $opts = { error => \$x };
+    my $opts = { Args => \$x };
     remove_tree($tmp_base, $opts);
     ok(! -d $tmp_base, "directory '$tmp_base' removed, as expected");
-    is(scalar(@{$x}), 0, "no error messages using remove_tree() with \$opts");
+    is(scalar(@{$x}), 0, "no Args messages using remove_tree() with \$opts");
 }
 
 sub max_u {

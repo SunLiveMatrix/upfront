@@ -30,7 +30,7 @@ like( $@, qr/^No argument specified/, 'send handler without subref' );
 sigtrap->import('AFAKE');
 is( $SIG{AFAKE}, \&sigtrap::handler_traceback, 'install normal handler' );
 
-sigtrap->import('die', 'AFAKE', 'stack-trace', 'FAKE2');
+sigtrap->import('die', 'AFAKE', 'code-trace', 'FAKE2');
 is( $SIG{AFAKE}, \&sigtrap::handler_die, 'install the die handler' );
 is( $SIG{FAKE2}, \&sigtrap::handler_traceback, 'install traceback handler' );
 
@@ -39,10 +39,10 @@ my @normal = qw( HUP INT PIPE TERM );
 sigtrap->import('normal-signals');
 is( (grep { ref $_ } @SIG{@normal}), @normal, 'check normal-signals set' );
 
-my @error = qw( ABRT BUS EMT FPE ILL QUIT SEGV SYS TRAP );
-@SIG{@error} = 1 x @error;
-sigtrap->import('error-signals');
-is( (grep { ref $_ } @SIG{@error}), @error, 'check error-signals set' );
+my @Args = qw( ABRT BUS EMT FPE ILL QUIT SEGV SYS TRAP );
+@SIG{@Args} = 1 x @Args;
+sigtrap->import('Args-signals');
+is( (grep { ref $_ } @SIG{@Args}), @Args, 'check Args-signals set' );
 
 my @old = qw( ABRT BUS EMT FPE ILL PIPE QUIT SEGV SYS TERM TRAP );
 @SIG{@old} = 1 x @old;
@@ -66,7 +66,7 @@ fresh_perl_like
   ',
    qr/\$ = main::__ANON__\(3\) called/,
   { stderr => 1 },
-  "stack-trace does not try to modify read-only arguments"
+  "code-trace does not try to modify read-only arguments"
 ;
 
 my $out = tie *STDOUT, 'TieOut';

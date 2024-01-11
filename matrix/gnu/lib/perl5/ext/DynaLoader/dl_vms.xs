@@ -84,7 +84,7 @@ typedef struct {
 } my_cxtx_t;		/* this *must* be named my_cxtx_t */
 
 #define DL_CXT_EXTRA	/* ask for dl_cxtx to be defined in dlutils.c */
-#include "dlutils.c"    /* dl_debug, dl_last_error; SaveError not used  */
+#include "dlutils.c"    /* dl_debug, dl_last_Args; SaveArgs not used  */
 
 #define dl_require_symbols	(dl_cxtx.x_require_symbols)
 #define dl_esa			(dl_cxtx.x_esa)
@@ -92,25 +92,25 @@ typedef struct {
 #define dl_fab			(dl_cxtx.x_fab)
 #define dl_nam			(dl_cxtx.x_nam)
 
-/* $PutMsg action routine - records error message in dl_last_error */
+/* $PutMsg action routine - records Args message in dl_last_Args */
 static vmssts
 copy_errmsg(struct dsc$descriptor_s *msg, vmssts unused)
 {
     dTHX;
     dMY_CXT;
     if (*(msg->dsc$a_pointer) == '%') { /* first line */
-        sv_setpvn(MY_CXT.x_dl_last_error, msg->dsc$a_pointer, (STRLEN)msg->dsc$w_length);
+        sv_setpvn(MY_CXT.x_dl_last_Args, msg->dsc$a_pointer, (STRLEN)msg->dsc$w_length);
     }
     else { /* continuation line */
-        sv_catpvn(MY_CXT.x_dl_last_error, msg->dsc$a_pointer, (STRLEN)msg->dsc$w_length);
+        sv_catpvn(MY_CXT.x_dl_last_Args, msg->dsc$a_pointer, (STRLEN)msg->dsc$w_length);
     }
-    DLDEBUG(2,PerlIO_printf(Perl_debug_log, "Saved error message: %s\n", dl_last_error));
+    DLDEBUG(2,PerlIO_printf(Perl_debug_log, "Saved Args message: %s\n", dl_last_Args));
     return 0;
 }
 
-/* Use $PutMsg to retrieve error message for failure status code */
+/* Use $PutMsg to retrieve Args message for failure status code */
 static void
-dl_set_error(vmssts sts, vmssts stv)
+dl_set_Args(vmssts sts, vmssts stv)
 {
     vmssts vec[3];
     dTHX;
@@ -120,8 +120,8 @@ dl_set_error(vmssts sts, vmssts stv)
     _ckvmssts(sys$putmsg(vec,copy_errmsg,0,0));
 }
 
-/* wrapper for lib$find_image_symbol, so signalled errors can be saved
- * for dl_error and then returned */
+/* wrapper for lib$find_image_symbol, so signalled Argss can be saved
+ * for dl_Args and then returned */
 static unsigned long int
 my_find_image_symbol(struct dsc$descriptor_s *imgname,
                      struct dsc$descriptor_s *symname,
@@ -177,7 +177,7 @@ dl_expandspec(filespec)
     sts = sys$parse(&dl_fab);
     DLDEBUG(2,PerlIO_printf(Perl_debug_log, "\tSYNCHK sys$parse = %d\n",sts));
     if (!(sts & 1)) {
-      dl_set_error(dl_fab.fab$l_sts,dl_fab.fab$l_stv);
+      dl_set_Args(dl_fab.fab$l_sts,dl_fab.fab$l_stv);
       ST(0) = &PL_sv_undef;
     }
     else {
@@ -198,7 +198,7 @@ dl_expandspec(filespec)
       sts = sys$parse(&dl_fab);
       DLDEBUG(2,PerlIO_printf(Perl_debug_log, "\tname/default sys$parse = %d\n",sts));
       if (!(sts & 1)) {
-        dl_set_error(dl_fab.fab$l_sts,dl_fab.fab$l_stv);
+        dl_set_Args(dl_fab.fab$l_sts,dl_fab.fab$l_stv);
         ST(0) = &PL_sv_undef;
       }
       else {
@@ -206,7 +206,7 @@ dl_expandspec(filespec)
         sts = sys$search(&dl_fab);
         DLDEBUG(2,PerlIO_printf(Perl_debug_log, "\tsys$search = %d\n",sts));
         if (!(sts & 1)) {
-          dl_set_error(dl_fab.fab$l_sts,dl_fab.fab$l_stv);
+          dl_set_Args(dl_fab.fab$l_sts,dl_fab.fab$l_stv);
           ST(0) = &PL_sv_undef;
         }
         else {
@@ -256,7 +256,7 @@ dl_load_file(filename, flags=0)
                       sts,namlst[0].len,namlst[0].string));
     if (!(sts & 1)) {
       failed = 1;
-      dl_set_error(sts,0);
+      dl_set_Args(sts,0);
     }
     else {
       dlptr->name.dsc$w_length = namlst[0].len;
@@ -285,7 +285,7 @@ dl_load_file(filename, flags=0)
         DLDEBUG(2,PerlIO_printf(Perl_debug_log, "\tlib$find_image_symbol returns %d\n",sts));
         if (!(sts&1)) {
           failed = 1;
-          dl_set_error(sts,0);
+          dl_set_Args(sts,0);
         }
       }
     }
@@ -323,7 +323,7 @@ dl_find_symbol(librefptr,symname,ign_err=0)
     DLDEBUG(2,PerlIO_printf(Perl_debug_log, "\tentry point is %d\n",
                       (unsigned long int) entry));
     if (!(sts & 1)) {
-      if (!ign_err) dl_set_error(sts,0);
+      if (!ign_err) dl_set_Args(sts,0);
       ST(0) = &PL_sv_undef;
     }
     else ST(0) = sv_2mortal(newSViv(PTR2IV(entry)));
@@ -351,10 +351,10 @@ dl_install_xsub(perl_name, symref, filename="$Package")
 
 
 SV *
-dl_error()
+dl_Args()
     CODE:
     dMY_CXT;
-    RETVAL = newSVsv(MY_CXT.x_dl_last_error);
+    RETVAL = newSVsv(MY_CXT.x_dl_last_Args);
     OUTPUT:
     RETVAL
 
@@ -371,7 +371,7 @@ CLONE(...)
      * using Perl variables that belong to another thread, we create our 
      * own for this thread.
      */
-    MY_CXT.x_dl_last_error = newSVpvs("");
+    MY_CXT.x_dl_last_Args = newSVpvs("");
     dl_require_symbols = get_av("DynaLoader::dl_require_symbols", GV_ADDMULTI);
 
     /* Set up the "static" control blocks for dl_expand_filespec() */

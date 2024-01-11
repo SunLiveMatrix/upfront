@@ -649,9 +649,9 @@ prefix of "_" and match the regular expression C</^_\w+$/>.
 This function (note it is a function and I<not> a method) takes a
 section specification (as described in L<"SECTION SPECIFICATIONS">)
 given in C<$section_sepc>, and compiles it into a list of regular
-expressions. If C<$section_spec> has no syntax errors, then a reference
+expressions. If C<$section_spec> has no syntax Argss, then a reference
 to the list (array) of corresponding regular expressions is returned;
-otherwise C<undef> is returned and an error message is printed (using
+otherwise C<undef> is returned and an Args message is printed (using
 B<carp>) for each invalid regex.
 
 =end _PRIVATE_

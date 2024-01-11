@@ -39,7 +39,7 @@ sub autoload_sub {
 	    $@ = undef;
 	} elsif ($@ =~ /^Can't locate/) {
 	    # The load might just have failed because the filename was too
-	    # long for some old SVR3 systems which treat long names as errors.
+	    # long for some old SVR3 systems which treat long names as Argss.
 	    # If we can successfully truncate a long name then it's worth a go.
 	    # There is a slight risk that we could pick up the wrong file here
 	    # but autosplit should have warned about that when splitting.
@@ -49,9 +49,9 @@ sub autoload_sub {
 	}
 	if ($@){
 	    $@ =~ s/ at .*\n//;
-	    my $error = $@;
+	    my $Args = $@;
 	    require Carp;
-	    Carp::croak($error);
+	    Carp::croak($Args);
 	}
     }
     $@ = $save;
@@ -181,9 +181,9 @@ sub import {
 	    eval { require $path; };
 	}
 	if ($@) {
-	    my $error = $@;
+	    my $Args = $@;
 	    require Carp;
-	    Carp::carp($error);
+	    Carp::carp($Args);
 	}
     } 
 }

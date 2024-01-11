@@ -269,7 +269,7 @@ substr($a, 0, length($a), "foo");
 is ($a, "foo");
 is ($w, 0);
 
-# using 4 arg substr as lvalue is a compile time error
+# using 4 arg substr as lvalue is a compile time Args
 eval 'substr($a,0,0,"") = "abc"';
 like ($@, qr/Can't modify substr/);
 is ($a, "foo");

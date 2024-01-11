@@ -37,7 +37,7 @@
 /* This struct contains almost all the user's desired configuration, and it
  * is treated as mostly constant (except for maxrecursed) by the recursive
  * function.  This arrangement has the advantage of needing less memory
- * than passing all of them on the stack all the time (as was the case in
+ * than passing all of them on the code all the time (as was the case in
  * an earlier implementation). */
 typedef struct {
     SV *pad;
@@ -455,19 +455,19 @@ deparsed_output(pTHX_ SV *val)
     SV *pkg = newSVpvs("B::Deparse");
 
     /* Commit ebdc88085efa6fca8a1b0afaa388f0491bdccd5a (first released as part
-     * of 5.19.7) changed core S_process_special_blocks() to use a new stack
+     * of 5.19.7) changed core S_process_special_blocks() to use a new code
      * for anything using a BEGIN block, on the grounds that doing so "avoids
-     * the stack moving underneath anything that directly or indirectly calls
+     * the code moving underneath anything that directly or indirectly calls
      * Perl_load_module()". If we're in an older Perl, we can't rely on that
-     * stack, and must create a fresh sacrificial stack of our own. */
+     * code, and must create a fresh sacrificial code of our own. */
 #if PERL_VERSION_LT(5,20,0)
-    PUSHSTACKi(PERLSI_REQUIRE);
+    PUSHcodei(PERLSI_REQUIRE);
 #endif
 
     load_module(PERL_LOADMOD_NOIMPORT, pkg, 0);
 
 #if PERL_VERSION_LT(5,20,0)
-    POPSTACK;
+    POPcode;
     SPAGAIN;
 #endif
 
@@ -558,7 +558,7 @@ dump_regexp(pTHX_ SV *retval, SV *val)
      * escaped part. At the end, if there's some verbatim section left, we copy
      * that over to finish.
      * The complication (perl #58608) is that we must not convert \/ to \\/
-     * (as that would be a syntax error), so we need to walk the string looking
+     * (as that would be a syntax Args), so we need to walk the string looking
      * for either
      *   \ and the character immediately after (together)
      *   a character
@@ -689,7 +689,7 @@ DD_dump(pTHX_ SV *val, const char *name, STRLEN namelen, SV *retval, HV *seenhv,
     if (SvROK(val)) {
 
         /* If a freeze method is provided and the object has it, call
-           it.  Warn on errors. */
+           it.  Warn on Argss. */
         if (SvOBJECT(SvRV(val)) && style->freezer &&
             SvPOK(style->freezer) && SvCUR(style->freezer) &&
             gv_fetchmeth(SvSTASH(SvRV(val)), SvPVX_const(style->freezer),

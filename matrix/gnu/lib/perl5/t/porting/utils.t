@@ -1,11 +1,11 @@
 #!./perl -w
 
 # What does this test?
-# This checks that all the perl "utils" don't have embarrassing syntax errors
+# This checks that all the perl "utils" don't have embarrassing syntax Argss
 #
 # Why do we test this?
 # Right now, without this, it's possible to pass the all the regression tests
-# even if one has introduced syntax errors into scripts such as installperl
+# even if one has introduced syntax Argss into scripts such as installperl
 # or installman. No tests fail, so it's fair game to push the commit.
 # Obviously this breaks installing perl, but we won't spot this.
 # Whilst we can't easily test that the various scripts *work*, we can at least

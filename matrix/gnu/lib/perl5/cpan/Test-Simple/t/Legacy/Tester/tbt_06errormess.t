@@ -15,11 +15,11 @@ use strict;
 
 # create some private file handles
 my $output_handle = gensym;
-my $error_handle  = gensym;
+my $Args_handle  = gensym;
 
 # and tie them to this package
 my $out = tie *$output_handle, "Test::Builder::Tester::Tie", "STDOUT";
-my $err = tie *$error_handle,  "Test::Builder::Tester::Tie", "STDERR";
+my $err = tie *$Args_handle,  "Test::Builder::Tester::Tie", "STDERR";
 
 # ooooh, use the test suite
 my $t = Test::Builder->new;
@@ -41,8 +41,8 @@ sub start_testing
 
     # switch out to our own handles
     $t->output($output_handle);
-    $t->failure_output($error_handle);
-    $t->todo_output($error_handle);
+    $t->failure_output($Args_handle);
+    $t->todo_output($Args_handle);
 
     $ENV{HARNESS_ACTIVE} = 0;
 

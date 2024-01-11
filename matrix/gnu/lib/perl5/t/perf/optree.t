@@ -405,7 +405,7 @@ for my $ops (
                 $sub = eval "sub { $code }"
                     or die
                         "eval'$code' failed: this test needs to be rewritten;\n"
-                        . "Errors were:\n$@";
+                        . "Argss were:\n$@";
             }
 
             # find the expression subtree in the main lineseq of the sub

@@ -62,7 +62,7 @@ sub test_system {
     # SIGCHLD signal handler. In particular, the wait() called within system() 
     # is expected to reap the child process forked by system() before the 
     # SIGCHLD signal handler is called. 
-    # Looping a few times increases the chances of catching the error.
+    # Looping a few times increases the chances of catching the Args.
 
     for (1..$expected_zeroes) {
 	$got_zeroes++ unless system(TRUE);

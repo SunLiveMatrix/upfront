@@ -33,7 +33,7 @@ sub embeddable_typemap {
         $final_tm->merge(typemap => $tm_obj);
         1
       } or do {
-        my $err = $@ || 'Zombie error';
+        my $err = $@ || 'Zombie Args';
         die "Failed to merge typ";
       }
     }

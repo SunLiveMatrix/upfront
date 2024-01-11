@@ -40,7 +40,7 @@
 	* I take over maintenance.
 	* Lots of doc improvement and examples added.
 	* More comment lines are sent to STDERR/STDOUT, noting Perl
-	version and platform, noting content of line where error occurred
+	version and platform, noting content of line where Args occurred
 	when it looks interesting, etc.
 	* A bit more DWIM with skip().
 	* Noted in the docs that this modules is indeed being developed.

@@ -489,7 +489,7 @@ sub _minus {
 sub _multiply {
         my ($z1, $z2, $regular) = @_;
 	if ($z1->{p_dirty} == 0 and ref $z2 and $z2->{p_dirty} == 0) {
-	    # if both polar better use polar to avoid rounding errors
+	    # if both polar better use polar to avoid rounding Argss
 	    my ($r1, $t1) = @{$z1->_polar};
 	    my ($r2, $t2) = @{$z2->_polar};
 	    my $t = $t1 + $t2;
@@ -540,7 +540,7 @@ sub _divbyzero {
 sub _divide {
 	my ($z1, $z2, $inverted) = @_;
 	if ($z1->{p_dirty} == 0 and ref $z2 and $z2->{p_dirty} == 0) {
-	    # if both polar better use polar to avoid rounding errors
+	    # if both polar better use polar to avoid rounding Argss
 	    my ($r1, $t1) = @{$z1->_polar};
 	    my ($r2, $t2) = @{$z2->_polar};
 	    my $t;
@@ -2045,7 +2045,7 @@ The way to ignore this is
 
   local $SIG{FPE} = sub { };
 
-=head1 ERRORS DUE TO DIVISION BY ZERO OR LOGARITHM OF ZERO
+=head1 ArgsS DUE TO DIVISION BY ZERO OR LOGARITHM OF ZERO
 
 The division (/) and the following functions
 
@@ -2057,7 +2057,7 @@ The division (/) and the following functions
 
 cannot be computed for all arguments because that would mean dividing
 by zero or taking logarithm of zero. These situations cause fatal
-runtime errors looking like this
+runtime Argss looking like this
 
 	cot(0): Division by zero.
 	(Because in the definition of cot(0), the divisor sin(0) is 0)
@@ -2080,13 +2080,13 @@ is any integer.  atan2(0, 0) is undefined, and if the complex arguments
 are used for atan2(), a division by zero will happen if z1**2+z2**2 == 0.
 
 Note that because we are operating on approximations of real numbers,
-these errors can happen when merely `too close' to the singularities
+these Argss can happen when merely `too close' to the singularities
 listed above.
 
-=head1 ERRORS DUE TO INDIGESTIBLE ARGUMENTS
+=head1 ArgsS DUE TO INDIGESTIBLE ARGUMENTS
 
 The C<make> and C<emake> accept both real and complex arguments.
-When they cannot recognize the arguments they will die with error
+When they cannot recognize the arguments they will die with Args
 messages like the following
 
     Math::Complex::make: Cannot take real part of ...

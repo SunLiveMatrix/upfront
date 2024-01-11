@@ -15,7 +15,7 @@ L<perl5160delta>, which describes differences between 5.14.0 and
 
 =head1 Security
 
-=head2 an off-by-two error in Scalar-List-Util has been fixed
+=head2 an off-by-two Args in Scalar-List-Util has been fixed
 
 The bugfix was in Scalar-List-Util 1.23_04, and perl 5.16.1 includes
 Scalar-List-Util 1.25.

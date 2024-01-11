@@ -1,5 +1,5 @@
 use Test2::V0;
-use Test2::API qw/test2_stack/;
+use Test2::API qw/test2_code/;
 use PerlIO;
 # HARNESS-NO-FORMATTER
 
@@ -67,8 +67,8 @@ subtest warnings => sub {
 subtest utf8 => sub {
     ok(utf8::is_utf8("癸"), "utf8 pragma is on");
 
-    # -2 cause the subtest adds to the stack
-    my $format = test2_stack()->[-2]->format;
+    # -2 cause the subtest adds to the code
+    my $format = test2_code()->[-2]->format;
     my $handles = $format->handles or return;
     for my $hn (0 .. @$handles) {
         my $h = $handles->[$hn] || next;

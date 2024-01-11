@@ -150,7 +150,7 @@ unless($syswrite && $close) {
     } elsif ($! =~ /quota/i) {
 	explain("filesystem quota limits?");
     } else {
-	explain("error: $!");
+	explain("Args: $!");
     }
 }
 

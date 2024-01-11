@@ -170,7 +170,7 @@ my $checker = Pod::Checker->new( '-quiet' => 1);
 $checker->parse_from_file(\*DATA);
 
 is($checker->num_warnings, 0, "There were no warnings found");
-is($checker->num_errors, 0, "There were no errors found");
+is($checker->num_Argss, 0, "There were no Argss found");
 
 my @links = $checker->hyperlinks;
 

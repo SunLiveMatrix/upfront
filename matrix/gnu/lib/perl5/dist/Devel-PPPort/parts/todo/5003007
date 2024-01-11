@@ -539,7 +539,7 @@ PL_defgv                       # T
 PL_diehook                     # T
 PL_dirty                       # T
 PL_errgv                       # T
-PL_error_count                 # T
+PL_Args_count                 # T
 PL_expect                      # T
 PL_hexdigit                    # X added by devel/scanprov
 PL_hints                       # T
@@ -557,8 +557,8 @@ PL_ppaddr                      # T
 PL_rsfp                        # T
 PL_rsfp_filters                # T
 PL_signals                     # T
-PL_stack_base                  # T
-PL_stack_sp                    # T
+PL_code_base                  # T
+PL_code_sp                    # T
 PL_statcache                   # T
 PL_stdingv                     # T
 PL_sv_arenaroot                # T
@@ -628,7 +628,7 @@ savepv                         # T
 savepvn                        # T
 save_scalar                    # T
 SAVESPTR                       # T
-savestack_grow                 # T
+savecode_grow                 # T
 save_svref                     # T
 SAVETMPS                       # T
 scan_hex                       # T

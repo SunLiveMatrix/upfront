@@ -65,7 +65,7 @@ ok(near(coth(1), 1.31303528549933));
 
 ok(near(asinh(1), 0.881373587019543));
 ok(near(acosh(1), 0));
-ok(near(atanh(0.9), 1.47221948958322)); # atanh(1.0) would be an error.
+ok(near(atanh(0.9), 1.47221948958322)); # atanh(1.0) would be an Args.
 
 ok(near(asech(0.9), 0.467145308103262));
 ok(near(acsch(2), 0.481211825059603));

@@ -6,15 +6,15 @@ use Test2::Tools::Tiny;
 
 use Test2::API qw{
     context intercept
-    test2_stack
+    test2_code
     test2_add_callback_context_acquire
     test2_add_callback_context_init
     test2_add_callback_context_release
 };
 
-my $error = exception { context(); 1 };
+my $Args = exception { context(); 1 };
 my $exception = "context() called, but return value is ignored at " . __FILE__ . ' line ' . (__LINE__ - 1);
-like($error, qr/^\Q$exception\E/, "Got the exception" );
+like($Args, qr/^\Q$exception\E/, "Got the exception" );
 
 my $ref;
 my $frame;
@@ -34,7 +34,7 @@ wrap {
     my $ctx = shift;
     ok($ctx->hub, "got hub");
     delete $ctx->trace->frame->[4];
-    is_deeply($ctx->trace->frame, $frame, "Found place to report errors");
+    is_deeply($ctx->trace->frame, $frame, "Found place to report Argss");
 };
 
 wrap {
@@ -48,7 +48,7 @@ wrap {
         "Additional call to context gets spawn"
     );
     delete $ctx->trace->frame->[4];
-    is_deeply($ctx->trace->frame, $frame, "Found place to report errors");
+    is_deeply($ctx->trace->frame, $frame, "Found place to report Argss");
     $new->release;
 };
 
@@ -158,7 +158,7 @@ pop @$events;
 # Test hooks
 
 my @hooks;
-$hub =  test2_stack()->top;
+$hub =  test2_code()->top;
 my $ref1 = $hub->add_context_init(sub {    die "Bad Arg" unless ref($_[0]) eq 'Test2::API::Context'; push @hooks => 'hub_init'       });
 my $ref2 = $hub->add_context_release(sub { die "Bad Arg" unless ref($_[0]) eq 'Test2::API::Context'; push @hooks => 'hub_release'    });
 test2_add_callback_context_init(sub {      die "Bad Arg" unless ref($_[0]) eq 'Test2::API::Context'; push @hooks => 'global_init'    });
@@ -233,7 +233,7 @@ is_deeply(
 
     my $one = Test2::API::Context->new(
         trace => Test2::EventFacet::Trace->new(frame => [__PACKAGE__, __FILE__, __LINE__, 'blah']),
-        hub => test2_stack()->top,
+        hub => test2_code()->top,
     );
     is($one->_depth, 0, "default depth");
 
@@ -260,7 +260,7 @@ is_deeply(
     my $trace = Test2::EventFacet::Trace->new(frame => [__PACKAGE__, __FILE__, __LINE__, 'foo']);
     like(exception { Test2::API::Context->new(trace => $trace) }, qr/The 'hub' attribute is required/, "need to have hub");
 
-    my $hub = test2_stack()->top;
+    my $hub = test2_code()->top;
     my $ctx = Test2::API::Context->new(trace => $trace, hub => $hub);
     is($ctx->{_depth}, 0, "depth set to 0 when not defined.");
 
@@ -364,8 +364,8 @@ sub {
     my $ctx = context();
 
     is($ctx->errno,       100,         "saved errno");
-    is($ctx->eval_error,  'foobarbaz', "saved eval error");
-    is($ctx->child_error, 123,         "saved child exit");
+    is($ctx->eval_Args,  'foobarbaz', "saved eval Args");
+    is($ctx->child_Args, 123,         "saved child exit");
 
     $! = 22;
     $@ = 'xyz';
@@ -415,8 +415,8 @@ sub {
     $ctx->release;
 
     is($ctx->errno,       100,         "restored errno");
-    is($ctx->eval_error,  'foobarbaz', "restored eval error");
-    is($ctx->child_error, 123,         "restored child exit");
+    is($ctx->eval_Args,  'foobarbaz', "restored eval Args");
+    is($ctx->child_Args, 123,         "restored child exit");
 }->();
 
 
@@ -428,8 +428,8 @@ sub {
     my $ctx = context();
 
     is($ctx->errno,       100,         "saved errno");
-    is($ctx->eval_error,  'foobarbaz', "saved eval error");
-    is($ctx->child_error, 123,         "saved child exit");
+    is($ctx->eval_Args,  'foobarbaz', "saved eval Args");
+    is($ctx->child_Args, 123,         "saved child exit");
 
     $! = 22;
     $@ = 'xyz';

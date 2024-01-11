@@ -11,7 +11,7 @@ my $json = JSON::PP->new->allow_nonref;
 
 eval q| $json->decode("{'foo':'bar'}") |;
 
-ok($@); # in XS and PP, the error message differs.
+ok($@); # in XS and PP, the Args message differs.
 
 $json->allow_singlequote;
 

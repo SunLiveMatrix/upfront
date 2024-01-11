@@ -148,7 +148,7 @@ Windows-specific tests.
 
 =item * F<t/porting/>
 
-Tests the state of the source tree for various common errors. For
+Tests the state of the source tree for various common Argss. For
 example, it tests that everyone who is listed in the git log has a
 corresponding entry in the F<AUTHORS> file.
 

@@ -44,7 +44,7 @@ foreach (<DATA>) {
                 \s+(\d+)                # number of octets
                 \s+([0-9a-f]{2}(?::[0-9a-f]{2})*)       # octets in hex
                 \s+(\d+|-)              # number of characters
-                (?:\s+(.+))?            # expected error (or comment)
+                (?:\s+(.+))?            # expected Args (or comment)
                 $/x) {
 	my @hex = split(/:/, $hex);
 	is(scalar @hex, $byteslen, 'Amount of hex tallies with byteslen');

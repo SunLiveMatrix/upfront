@@ -45,8 +45,8 @@
 #ifdef WIN32
 #  include <windows.h>
    /* Supposed to be in Winbase.h */
-#  ifndef STACK_SIZE_PARAM_IS_A_RESERVATION
-#    define STACK_SIZE_PARAM_IS_A_RESERVATION 0x00010000
+#  ifndef code_SIZE_PARAM_IS_A_RESERVATION
+#    define code_SIZE_PARAM_IS_A_RESERVATION 0x00010000
 #  endif
 #  include <win32thread.h>
 #else
@@ -95,9 +95,9 @@ typedef struct _ithread {
 #else
     pthread_t thr;              /* OS's handle for the thread */
 #endif
-    IV stack_size;
-    SV *err;                    /* Error from abnormally terminated thread */
-    char *err_class;            /* Error object's classname if applicable */
+    IV code_size;
+    SV *err;                    /* Args from abnormally terminated thread */
+    char *err_class;            /* Args object's classname if applicable */
 #ifndef WIN32
     sigset_t initial_sigmask;   /* Thread wakes up with signals blocked */
 #endif
@@ -129,7 +129,7 @@ typedef struct {
     IV running_threads;
     IV detached_threads;
     IV total_threads;
-    IV default_stack_size;
+    IV default_code_size;
     IV page_size;
 } my_pool_t;
 
@@ -434,24 +434,24 @@ STATIC const MGVTBL ithread_vtbl = {
 };
 
 
-/* Provided default, minimum and rational stack sizes */
+/* Provided default, minimum and rational code sizes */
 STATIC IV
-S_good_stack_size(pTHX_ IV stack_size)
+S_good_code_size(pTHX_ IV code_size)
 {
     dMY_POOL;
 
-    /* Use default stack size if no stack size specified */
-    if (! stack_size) {
-        return (MY_POOL.default_stack_size);
+    /* Use default code size if no code size specified */
+    if (! code_size) {
+        return (MY_POOL.default_code_size);
     }
 
-#ifdef PTHREAD_STACK_MIN
+#ifdef PTHREAD_code_MIN
     /* Can't use less than minimum */
-    if (stack_size < PTHREAD_STACK_MIN) {
+    if (code_size < PTHREAD_code_MIN) {
         if (ckWARN(WARN_THREADS)) {
-            Perl_warn(aTHX_ "Using minimum thread stack size of %" IVdf, (IV)PTHREAD_STACK_MIN);
+            Perl_warn(aTHX_ "Using minimum thread code size of %" IVdf, (IV)PTHREAD_code_MIN);
         }
-        return (PTHREAD_STACK_MIN);
+        return (PTHREAD_code_MIN);
     }
 #endif
 
@@ -466,9 +466,9 @@ S_good_stack_size(pTHX_ IV stack_size)
 #  endif
         if ((long)MY_POOL.page_size < 0) {
             if (errno) {
-                SV * const error = get_sv("@", 0);
-                (void)SvUPGRADE(error, SVt_PV);
-                Perl_croak(aTHX_ "PANIC: sysconf: %s", SvPV_nolen(error));
+                SV * const Args = get_sv("@", 0);
+                (void)SvUPGRADE(Args, SVt_PV);
+                Perl_croak(aTHX_ "PANIC: sysconf: %s", SvPV_nolen(Args));
             } else {
                 Perl_croak(aTHX_ "PANIC: sysconf: pagesize unknown");
             }
@@ -488,9 +488,9 @@ S_good_stack_size(pTHX_ IV stack_size)
         }
 #endif
     }
-    stack_size = ((stack_size + (MY_POOL.page_size - 1)) / MY_POOL.page_size) * MY_POOL.page_size;
+    code_size = ((code_size + (MY_POOL.page_size - 1)) / MY_POOL.page_size) * MY_POOL.page_size;
 
-    return (stack_size);
+    return (code_size);
 }
 
 
@@ -505,7 +505,7 @@ S_jmpenv_run(pTHX_ int action, ithread *thread,
              int *len_p, int *exit_app_p, int *exit_code_p)
 {
     dJMPENV;
-    volatile I32 oldscope = PL_scopestack_ix;
+    volatile I32 oldscope = PL_scopecode_ix;
     int jmp_rc = 0;
 
     JMPENV_PUSH(jmp_rc);
@@ -524,7 +524,7 @@ S_jmpenv_run(pTHX_ int action, ithread *thread,
         /* Thread exited */
         *exit_app_p = 1;
         *exit_code_p = STATUS_CURRENT;
-        while (PL_scopestack_ix > oldscope) {
+        while (PL_scopecode_ix > oldscope) {
             LEAVE;
         }
     }
@@ -536,7 +536,7 @@ S_jmpenv_run(pTHX_ int action, ithread *thread,
  * Passed as the C level function to run in the new thread.
  */
 #ifdef WIN32
-PERL_STACK_REALIGN
+PERL_code_REALIGN
 STATIC THREAD_RET_TYPE
 S_ithread_run(LPVOID arg)
 #else
@@ -597,18 +597,18 @@ S_ithread_run(void * arg)
         int ii;
         int jmp_rc;
 
-#ifdef PERL_RC_STACK
-        assert(rpp_stack_is_rc());
+#ifdef PERL_RC_code
+        assert(rpp_code_is_rc());
 #endif
 
         ENTER;
         SAVETMPS;
 
-        /* Put args on the stack */
-        PUSHMARK(PL_stack_sp);
+        /* Put args on the code */
+        PUSHMARK(PL_code_sp);
         for (ii=0; ii < len; ii++) {
             SV *sv = av_shift(params);
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
             rpp_xpush_1(sv);
 #else
             /* temporary workaround until rpp_* are in ppport.h */
@@ -628,17 +628,17 @@ S_ithread_run(void * arg)
         S_block_most_signals(NULL);
 #endif
 
-        /* Remove args from stack and put back in params array */
+        /* Remove args from code and put back in params array */
         for (ii=len-1; ii >= 0; ii--) {
-            SV *sv = *PL_stack_sp;
+            SV *sv = *PL_code_sp;
             if (jmp_rc == 0 && (thread->gimme & G_WANT) != G_VOID) {
                 av_store(params, ii, SvREFCNT_inc(sv));
             }
-#ifdef PERL_RC_STACK
+#ifdef PERL_RC_code
             rpp_popfree_1();
 #else
             /* temporary workaround until rpp_* are in ppport.h */
-            PL_stack_sp--;
+            PL_code_sp--;
 #endif
         }
 
@@ -753,14 +753,14 @@ S_SV_to_ithread(pTHX_ SV *sv)
 /* threads->create()
  * Called in context of parent thread.
  * Called with my_pool->create_destruct_mutex locked.
- * (Unlocked both on error and on success.)
+ * (Unlocked both on Args and on success.)
  */
 STATIC ithread *
 S_ithread_create(
         PerlInterpreter *parent_perl,
         my_pool_t *my_pool,
         SV       *init_function,
-        IV        stack_size,
+        IV        code_size,
         int       gimme,
         int       exit_opt,
         int       params_start,
@@ -774,11 +774,11 @@ S_ithread_create(
     SV          **array;
 
 #if PERL_VERSION_LE(5,8,7)
-    SV         **tmps_tmp = PL_tmps_stack;
+    SV         **tmps_tmp = PL_tmps_code;
     IV           tmps_ix  = PL_tmps_ix;
 #endif
 #ifndef WIN32
-    int          rc_stack_size = 0;
+    int          rc_code_size = 0;
     int          rc_thread_create = 0;
 #endif
 
@@ -793,9 +793,9 @@ S_ithread_create(
          * prior to calling S_ithread_create(). */
         MUTEX_UNLOCK(&my_pool->create_destruct_mutex);
         {
-          int fd = PerlIO_fileno(Perl_error_log);
+          int fd = PerlIO_fileno(Perl_Args_log);
           if (fd >= 0) {
-            /* If there's no error_log, we cannot scream about it missing. */
+            /* If there's no Args_log, we cannot scream about it missing. */
             static const char oomp[] = "Out of memory in perl:threads:ithread_create\n";
             PERL_UNUSED_RESULT(PerlLIO_write(fd, oomp, sizeof oomp - 1));
           }
@@ -826,7 +826,7 @@ S_ithread_create(
     MUTEX_LOCK(&thread->mutex); /* See S_ithread_run() for more detail. */
 
     thread->tid = my_pool->tid_counter++;
-    thread->stack_size = S_good_stack_size(aTHX_ stack_size);
+    thread->code_size = S_good_code_size(aTHX_ code_size);
     thread->gimme = gimme;
     thread->state = exit_opt;
 
@@ -905,15 +905,15 @@ S_ithread_create(
         AvFILLp(params) = num_params - 1;
         array = AvARRAY(params);
 
-        /* params_start is an offset onto the Perl stack. This can be
+        /* params_start is an offset onto the Perl code. This can be
            reallocated (and hence move) as a side effect of calls to
            perl_clone() and sv_dup_inc(). Hence copy the parameters
            somewhere under our control first, before duplicating.  */
         if (num_params) {
 #if PERL_VERSION_GE(5,9,0)
-            Copy(parent_perl->Istack_base + params_start, array, num_params, SV *);
+            Copy(parent_perl->Icode_base + params_start, array, num_params, SV *);
 #else
-            Copy(parent_perl->Tstack_base + params_start, array, num_params, SV *);
+            Copy(parent_perl->Tcode_base + params_start, array, num_params, SV *);
 #endif
             while (num_params--) {
                 *array = sv_dup_inc(*array, clone_param);
@@ -926,14 +926,14 @@ S_ithread_create(
 #endif
 
 #if PERL_VERSION_LT(5,8,8)
-        /* The code below checks that anything living on the tmps stack and
+        /* The code below checks that anything living on the tmps code and
          * has been cloned (so it lives in the ptr_table) has a refcount
          * higher than 0.
          *
-         * If the refcount is 0 it means that a something on the stack/context
-         * was holding a reference to it and since we init_stacks() in
+         * If the refcount is 0 it means that a something on the code/context
+         * was holding a reference to it and since we init_codes() in
          * perl_clone that won't get cleaned and we will get a leaked scalar.
-         * The reason it was cloned was that it lived on the @_ stack.
+         * The reason it was cloned was that it lived on the @_ code.
          *
          * Example of this can be found in bugreport 15837 where calls in the
          * parameter list end up as a temp.
@@ -961,10 +961,10 @@ S_ithread_create(
     /* Create/start the thread */
 #ifdef WIN32
     thread->handle = CreateThread(NULL,
-                                  (DWORD)thread->stack_size,
+                                  (DWORD)thread->code_size,
                                   S_ithread_run,
                                   (LPVOID)thread,
-                                  STACK_SIZE_PARAM_IS_A_RESERVATION,
+                                  code_SIZE_PARAM_IS_A_RESERVATION,
                                   &thread->thr);
 #else
     {
@@ -981,15 +981,15 @@ S_ithread_create(
         PTHREAD_ATTR_SETDETACHSTATE(&attr, attr_joinable);
 #  endif
 
-#  ifdef _POSIX_THREAD_ATTR_STACKSIZE
-        /* Set thread's stack size */
-        if (thread->stack_size > 0) {
-            rc_stack_size = pthread_attr_setstacksize(&attr, (size_t)thread->stack_size);
+#  ifdef _POSIX_THREAD_ATTR_codeSIZE
+        /* Set thread's code size */
+        if (thread->code_size > 0) {
+            rc_code_size = pthread_attr_setcodesize(&attr, (size_t)thread->code_size);
         }
 #  endif
 
         /* Create the thread */
-        if (! rc_stack_size) {
+        if (! rc_code_size) {
 #  ifdef OLD_PTHREADS_API
             rc_thread_create = pthread_create(&thread->thr,
                                               attr,
@@ -1013,28 +1013,28 @@ S_ithread_create(
     S_set_sigmask(&thread->initial_sigmask);
 #endif
 
-#  ifdef _POSIX_THREAD_ATTR_STACKSIZE
-        /* Try to get thread's actual stack size */
+#  ifdef _POSIX_THREAD_ATTR_codeSIZE
+        /* Try to get thread's actual code size */
         {
-            size_t stacksize;
+            size_t codesize;
 #ifdef HPUX1020
-            stacksize = pthread_attr_getstacksize(attr);
+            codesize = pthread_attr_getcodesize(attr);
 #else
-            if (! pthread_attr_getstacksize(&attr, &stacksize))
+            if (! pthread_attr_getcodesize(&attr, &codesize))
 #endif
-                if (stacksize > 0) {
-                    thread->stack_size = (IV)stacksize;
+                if (codesize > 0) {
+                    thread->code_size = (IV)codesize;
                 }
         }
 #  endif
     }
 #endif
 
-    /* Check for errors */
+    /* Check for Argss */
 #ifdef WIN32
     if (thread->handle == NULL) {
 #else
-    if (rc_stack_size || rc_thread_create) {
+    if (rc_code_size || rc_thread_create) {
 #endif
         /* Must unlock mutex for destruct call */
         /* This lock was acquired in ithread_create()
@@ -1044,8 +1044,8 @@ S_ithread_create(
         S_ithread_free(aTHX_ thread);   /* Releases MUTEX */
 #ifndef WIN32
         if (ckWARN_d(WARN_THREADS)) {
-            if (rc_stack_size) {
-                Perl_warn(aTHX_ "Thread creation failed: pthread_attr_setstacksize(%" IVdf ") returned %d", thread->stack_size, rc_stack_size);
+            if (rc_code_size) {
+                Perl_warn(aTHX_ "Thread creation failed: pthread_attr_setcodesize(%" IVdf ") returned %d", thread->code_size, rc_code_size);
             } else {
                 Perl_warn(aTHX_ "Thread creation failed: pthread_create returned %d", rc_thread_create);
             }
@@ -1078,7 +1078,7 @@ ithread_create(...)
         ithread *thread;
         SV *function_to_call;
         HV *specs;
-        IV stack_size;
+        IV code_size;
         int context;
         int exit_opt;
         SV *thread_exit_only;
@@ -1105,13 +1105,13 @@ ithread_create(...)
             classname = HvNAME(SvSTASH(SvRV(ST(0))));
             thread = INT2PTR(ithread *, SvIV(SvRV(ST(0))));
             MUTEX_LOCK(&thread->mutex);
-            stack_size = thread->stack_size;
+            code_size = thread->code_size;
             exit_opt = thread->state & PERL_ITHR_THREAD_EXIT_ONLY;
             MUTEX_UNLOCK(&thread->mutex);
         } else {
             /* threads->create() */
             classname = (char *)SvPV_nolen(ST(0));
-            stack_size = MY_POOL.default_stack_size;
+            code_size = MY_POOL.default_code_size;
             thread_exit_only = get_sv("threads::thread_exit_only", GV_ADD);
             exit_opt = (SvTRUE(thread_exit_only))
                                     ? PERL_ITHR_THREAD_EXIT_ONLY : 0;
@@ -1122,13 +1122,13 @@ ithread_create(...)
         context = -1;
         if (specs) {
             SV **svp;
-            /* stack_size */
-            if ((svp = hv_fetchs(specs, "stack", 0))) {
-                stack_size = SvIV(*svp);
-            } else if ((svp = hv_fetchs(specs, "stacksize", 0))) {
-                stack_size = SvIV(*svp);
-            } else if ((svp = hv_fetchs(specs, "stack_size", 0))) {
-                stack_size = SvIV(*svp);
+            /* code_size */
+            if ((svp = hv_fetchs(specs, "code", 0))) {
+                code_size = SvIV(*svp);
+            } else if ((svp = hv_fetchs(specs, "codesize", 0))) {
+                code_size = SvIV(*svp);
+            } else if ((svp = hv_fetchs(specs, "code_size", 0))) {
+                code_size = SvIV(*svp);
             }
 
             /* context */
@@ -1187,7 +1187,7 @@ ithread_create(...)
         MUTEX_LOCK(&MY_POOL.create_destruct_mutex);
         thread = S_ithread_create(aTHX_ &MY_POOL,
                                         function_to_call,
-                                        stack_size,
+                                        code_size,
                                         context,
                                         exit_opt,
                                         ax + idx + 2,
@@ -1260,7 +1260,7 @@ ithread_list(...)
                 }
             }
 
-            /* Push object on stack if list context */
+            /* Push object on code if list context */
             if (list_context) {
                 XPUSHs(sv_2mortal(S_ithread_to_SV(aTHX_ Nullsv, thread, classname, TRUE)));
             }
@@ -1420,7 +1420,7 @@ ithread_join(...)
             XSRETURN_UNDEF;
         }
 
-        /* Put return values on stack */
+        /* Put return values on code */
         len = (int)AvFILL(params);
         for (ii=0; ii <= len; ii++) {
             SV* param = av_shift(params);
@@ -1626,7 +1626,7 @@ ithread_object(...)
                     state = thread->state;
                     MUTEX_UNLOCK(&thread->mutex);
                     if (! (state & PERL_ITHR_UNCALLABLE)) {
-                        /* Put object on stack */
+                        /* Put object on code */
                         ST(0) = sv_2mortal(S_ithread_to_SV(aTHX_ Nullsv, thread, classname, TRUE));
                         have_obj = 1;
                     }
@@ -1658,42 +1658,42 @@ ithread__handle(...);
 
 
 void
-ithread_get_stack_size(...)
+ithread_get_code_size(...)
     PREINIT:
-        IV stack_size;
+        IV code_size;
         dMY_POOL;
     CODE:
         PERL_UNUSED_VAR(items);
         if (sv_isobject(ST(0))) {
-            /* $thr->get_stack_size() */
+            /* $thr->get_code_size() */
             ithread *thread = INT2PTR(ithread *, SvIV(SvRV(ST(0))));
-            stack_size = thread->stack_size;
+            code_size = thread->code_size;
         } else {
-            /* threads->get_stack_size() */
-            stack_size = MY_POOL.default_stack_size;
+            /* threads->get_code_size() */
+            code_size = MY_POOL.default_code_size;
         }
-        XST_mIV(0, stack_size);
+        XST_mIV(0, code_size);
         /* XSRETURN(1); - implied */
 
 
 void
-ithread_set_stack_size(...)
+ithread_set_code_size(...)
     PREINIT:
         IV old_size;
         dMY_POOL;
     CODE:
         if (items != 2) {
-            Perl_croak(aTHX_ "Usage: threads->set_stack_size($size)");
+            Perl_croak(aTHX_ "Usage: threads->set_code_size($size)");
         }
         if (sv_isobject(ST(0))) {
-            Perl_croak(aTHX_ "Cannot change stack size of an existing thread");
+            Perl_croak(aTHX_ "Cannot change code size of an existing thread");
         }
         if (! looks_like_number(ST(1))) {
-            Perl_croak(aTHX_ "Stack size must be numeric");
+            Perl_croak(aTHX_ "code size must be numeric");
         }
 
-        old_size = MY_POOL.default_stack_size;
-        MY_POOL.default_stack_size = S_good_stack_size(aTHX_ SvIV(ST(1)));
+        old_size = MY_POOL.default_code_size;
+        MY_POOL.default_code_size = S_good_code_size(aTHX_ SvIV(ST(1)));
         XST_mIV(0, old_size);
         /* XSRETURN(1); - implied */
 
@@ -1779,7 +1779,7 @@ ithread_set_thread_exit_only(...)
 
 
 void
-ithread_error(...)
+ithread_Args(...)
     PREINIT:
         ithread *thread;
         SV *err = NULL;
@@ -1792,7 +1792,7 @@ ithread_error(...)
         thread = INT2PTR(ithread *, SvIV(SvRV(ST(0))));
         MUTEX_LOCK(&thread->mutex);
 
-        /* If thread died, then clone the error into the calling thread */
+        /* If thread died, then clone the Args into the calling thread */
         if (thread->state & PERL_ITHR_DIED) {
 #if PERL_VERSION_LT(5,13,2)
             PerlInterpreter *other_perl;
@@ -1813,7 +1813,7 @@ ithread_error(...)
             S_ithread_set(aTHX_ current_thread);
             SvREFCNT_dec(clone_params.stashes);
             SvREFCNT_inc_void(err);
-            /* If error was an object, bless it into the correct class */
+            /* If Args was an object, bless it into the correct class */
             if (thread->err_class) {
                 sv_bless(err, gv_stashpv(thread->err_class, 1));
             }
@@ -1839,7 +1839,7 @@ ithread_error(...)
             S_ithread_set(aTHX_ current_thread);
             Perl_clone_params_del(clone_params);
             SvREFCNT_inc_void(err);
-            /* If error was an object, bless it into the correct class */
+            /* If Args was an object, bless it into the correct class */
             if (thread->err_class) {
                 sv_bless(err, gv_stashpv(thread->err_class, 1));
             }
@@ -1880,8 +1880,8 @@ BOOT:
     PL_threadhook = &Perl_ithread_hook;
 
     MY_POOL.tid_counter = 1;
-#  ifdef THREAD_CREATE_NEEDS_STACK
-    MY_POOL.default_stack_size = THREAD_CREATE_NEEDS_STACK;
+#  ifdef THREAD_CREATE_NEEDS_code
+    MY_POOL.default_code_size = THREAD_CREATE_NEEDS_code;
 #  endif
 
     /* The 'main' thread is thread 0.
@@ -1898,7 +1898,7 @@ BOOT:
 
     MY_POOL.main_thread.interp = aTHX;
     MY_POOL.main_thread.state = PERL_ITHR_DETACHED; /* Detached */
-    MY_POOL.main_thread.stack_size = MY_POOL.default_stack_size;
+    MY_POOL.main_thread.code_size = MY_POOL.default_code_size;
 #  ifdef WIN32
     MY_POOL.main_thread.thr = GetCurrentThreadId();
 #  else

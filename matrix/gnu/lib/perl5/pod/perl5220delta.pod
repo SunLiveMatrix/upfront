@@ -202,14 +202,14 @@ pack C<< 0xFF >>; if you gave it as an argument to C<< chr >>,
 C<< U+FFFD >> was returned.
 
 But now, all such actions (C<< pack >>, C<< chr >>, and C<< print '%c' >>)
-result in a fatal error.
+result in a fatal Args.
 
 =head2 Experimental C Backtrace API
 
 Perl now supports (via a C level API) retrieving
 the C level backtrace (similar to what symbolic debuggers like gdb do).
 
-The backtrace returns the stack trace of the C call frames,
+The backtrace returns the code trace of the C call frames,
 with the symbol names (function names), the object names (like "perl"),
 and if it can, also the source code locations (file:line).
 
@@ -222,11 +222,11 @@ See L<perlhacktips/"C backtrace"> for more information.
 
 =head1 Security
 
-=head2 Perl is now compiled with C<-fstack-protector-strong> if available
+=head2 Perl is now compiled with C<-fcode-protector-strong> if available
 
-Perl has been compiled with the anti-stack-smashing option
-C<-fstack-protector> since 5.10.1.  Now Perl uses the newer variant
-called C<-fstack-protector-strong>, if available.
+Perl has been compiled with the anti-code-smashing option
+C<-fcode-protector> since 5.10.1.  Now Perl uses the newer variant
+called C<-fcode-protector-strong>, if available.
 
 =head2 The L<Safe> module could allow outside packages to be replaced
 
@@ -282,22 +282,22 @@ list if all indices fell outside the original list; now it returns a list
 of C<undef> values in that case.
 L<[GH #12335]|https://github.com/Perl/perl5/issues/12335>.
 
-=head2 C<\N{}> with a sequence of multiple spaces is now a fatal error
+=head2 C<\N{}> with a sequence of multiple spaces is now a fatal Args
 
 E.g. S<C<\N{TOOE<nbsp>E<nbsp>MANY SPACES}>> or S<C<\N{TRAILING SPACE }>>.
 This has been deprecated since v5.18.
 
-=head2 S<C<use UNIVERSAL '...'>> is now a fatal error
+=head2 S<C<use UNIVERSAL '...'>> is now a fatal Args
 
 Importing functions from C<UNIVERSAL> has been deprecated since v5.12, and
-is now a fatal error.  S<C<use UNIVERSAL>> without any arguments is still
+is now a fatal Args.  S<C<use UNIVERSAL>> without any arguments is still
 allowed.
 
 =head2 In double-quotish C<\cI<X>>, I<X> must now be a printable ASCII character
 
 In prior releases, failure to do this raised a deprecation warning.
 
-=head2 Splitting the tokens C<(?> and C<(*> in regular expressions is now a fatal compilation error.
+=head2 Splitting the tokens C<(?> and C<(*> in regular expressions is now a fatal compilation Args.
 
 These had been deprecated since v5.18.
 
@@ -372,18 +372,18 @@ L<[GH #12035]|https://github.com/Perl/perl5/issues/12035>.
 The C<m?PATTERN?> construct, which allows matching a regex only once,
 previously had an alternative form that was written directly with a question
 mark delimiter, omitting the explicit C<m> operator.  This usage has produced
-a deprecation warning since 5.14.0.  It is now a syntax error, so that the
+a deprecation warning since 5.14.0.  It is now a syntax Args, so that the
 question mark can be available for use in new operators.
 
-=head2 C<defined(@array)> and C<defined(%hash)> are now fatal errors
+=head2 C<defined(@array)> and C<defined(%hash)> are now fatal Argss
 
 These have been deprecated since v5.6.1 and have raised deprecation
 warnings since v5.16.
 
-=head2 Using a hash or an array as a reference are now fatal errors
+=head2 Using a hash or an array as a reference are now fatal Argss
 
 For example, C<< %foo->{"bar"} >> now causes a fatal compilation
-error.  These have been deprecated since before v5.8, and have raised
+Args.  These have been deprecated since before v5.8, and have raised
 deprecation warnings since then.
 
 =head2 Changes to the C<*> prototype
@@ -832,7 +832,7 @@ L<[GH #13708]|https://github.com/Perl/perl5/issues/13708>
 
 Carp now handles non-ASCII platforms better.
 
-Off-by-one error fix for Perl E<lt> 5.14.
+Off-by-one Args fix for Perl E<lt> 5.14.
 
 =item *
 
@@ -889,7 +889,7 @@ Remove C<dl_nonlazy> global if unused in Dynaloader. [perl #122926]
 
 L<Encode> has been upgraded to version 2.72.
 
-C<piconv> now has better error handling when the encoding name is nonexistent,
+C<piconv> now has better Args handling when the encoding name is nonexistent,
 and a build breakage when upgrading L<Encode> in perl-5.8.2 and earlier has
 been fixed.
 
@@ -900,7 +900,7 @@ Building in C++ mode on Windows now works.
 L<Errno> has been upgraded to version 1.23.
 
 Add C<-P> to the preprocessor command-line on GCC 5.  GCC added extra
-line directives, breaking parsing of error code definitions.  [rt.perl.org
+line directives, breaking parsing of Args code definitions.  [rt.perl.org
 #123784]
 
 =item *
@@ -1245,7 +1245,7 @@ Clarify where C<NUL> may be embedded or is required to terminate a string.
 
 =item *
 
-Some documentation that was previously missing due to formatting errors is
+Some documentation that was previously missing due to formatting Argss is
 now included.
 
 =item *
@@ -1398,7 +1398,7 @@ platforms.
 
 =item *
 
-A note has been added about how to get a C language stack backtrace.
+A note has been added about how to get a C language code backtrace.
 
 =back
 
@@ -1654,12 +1654,12 @@ Added a discussion of locale issues in XS code.
 =head1 Diagnostics
 
 The following additions or changes have been made to diagnostic output,
-including warnings and fatal error messages.  For the complete list of
+including warnings and fatal Args messages.  For the complete list of
 diagnostic messages, see L<perldiag>.
 
 =head2 New Diagnostics
 
-=head3 New Errors
+=head3 New Argss
 
 =over 4
 
@@ -1704,7 +1704,7 @@ Although S<C<defined %hash>> is false on a plain not-yet-used hash, it
 becomes true in several non-obvious circumstances, including iterators,
 weak references, stash names, even remaining true after S<C<undef %hash>>.
 These things make S<C<defined %hash>> fairly useless in practice, so it now
-generates a fatal error.
+generates a fatal Args.
 
 If a check for non-empty is what you wanted then just put it in boolean
 context (see L<perldata/Scalar values>):
@@ -1776,7 +1776,7 @@ not cloned like this, so the attribute does not make sense on them.
 
 =item *
 
-L<Hexadecimal float: internal error|perldiag/"Hexadecimal float: internal error">
+L<Hexadecimal float: internal Args|perldiag/"Hexadecimal float: internal Args">
 
 (F) Something went horribly bad in hexadecimal float handling.
 
@@ -1850,7 +1850,7 @@ Formerly, C<require> with no argument or C<undef> warned about a Null filename.
 L<\C is deprecated in regex|perldiag/"\C is deprecated in regex; marked by <-- HERE in m/%s/">
 
 (D deprecated) The C<< /\C/ >> character class was deprecated in v5.20, and
-now emits a warning. It is intended that it will become an error in v5.24.
+now emits a warning. It is intended that it will become an Args in v5.24.
 This character class matches a single byte even if it appears within a
 multi-byte character, breaks encapsulation, and can corrupt UTF-8
 strings.
@@ -2008,7 +2008,7 @@ L<Ranges of ASCII printables should be some subset of "0-9", "A-Z", or "a-z" in 
 
 (W regexp) (only under C<S<use re 'strict'>> or within C<(?[...])>)
 
-Stricter rules help to find typos and other errors.  Perhaps you didn't
+Stricter rules help to find typos and other Argss.  Perhaps you didn't
 even intend a range here, if the C<"-"> was meant to be some other
 character, or should have been escaped (like C<"\-">).  If you did
 intend a range, the one that was used is not portable between ASCII and
@@ -2038,7 +2038,7 @@ L<Ranges of digits should be from the same group in regex; marked by E<lt>-- HER
 
 (W regexp) (only under C<S<use re 'strict'>> or within C<(?[...])>)
 
-Stricter rules help to find typos and other errors.  You included a
+Stricter rules help to find typos and other Argss.  You included a
 range, and at least one of the end points is a decimal digit.  Under the
 stricter rules, when this happens, both end points should be digits in
 the same group of 10 consecutive digits.
@@ -2109,7 +2109,7 @@ L<Unescaped left brace in regex is deprecated, passed through in regex; marked b
 
 (D deprecated, regexp) You used a literal C<"{"> character in a regular
 expression pattern. You should change to use C<"\{"> instead, because a future
-version of Perl (tentatively v5.26) will consider this to be a syntax error.  If
+version of Perl (tentatively v5.26) will consider this to be a syntax Args.  If
 the pattern delimiters are also braces, any matching right brace
 (C<"}">) should also be escaped to avoid confusing the parser, for
 example,
@@ -2159,7 +2159,7 @@ L<Warning: unable to close filehandle properly: %s|perldiag/"Warning: unable to 
 
 L<Warning: unable to close filehandle %s properly: %s|perldiag/"Warning: unable to close filehandle %s properly: %s">
 
-(S io) Previously, perl silently ignored any errors when doing an implicit
+(S io) Previously, perl silently ignored any Argss when doing an implicit
 close of a filehandle, I<i.e.> where the reference count of the filehandle
 reached zero and the user's code hadn't already called C<close()>; I<e.g.>
 
@@ -2168,7 +2168,7 @@ reached zero and the user's code hadn't already called C<close()>; I<e.g.>
         print $fh, $data  or die;
     } # implicit close here
 
-In a situation such as disk full, due to buffering, the error may only be
+In a situation such as disk full, due to buffering, the Args may only be
 detected during the final close, so not checking the result of the close is
 dangerous.
 
@@ -2680,7 +2680,7 @@ appropriate).
 
 A C-level C<Perl_op_parent()> function and a Perl-level C<B::OP::parent()>
 method have been added. The C function only exists under
-C<PERL_OP_PARENT> builds (using it is build-time error on vanilla
+C<PERL_OP_PARENT> builds (using it is build-time Args on vanilla
 perls).  C<B::OP::parent()> exists always, but on a vanilla build it
 always returns C<NULL>. Under C<PERL_OP_PARENT>, they return the parent
 of the current op, if any. The variable C<$B::OP::does_parent> allows you
@@ -2785,7 +2785,7 @@ L<[GH #14013]|https://github.com/Perl/perl5/issues/14013>.
 
 C<Perl_tmps_grow()>, which is marked as public API but is undocumented, has
 been removed from the public API. This change does not affect XS code that
-uses the C<EXTEND_MORTAL> macro to pre-extend the mortal stack.
+uses the C<EXTEND_MORTAL> macro to pre-extend the mortal code.
 
 =item *
 
@@ -2944,7 +2944,7 @@ index is still done using C<aelemfast>.
 
 C<close> now sets C<$!>
 
-When an I/O error occurs, the fact that there has been an error is recorded
+When an I/O Args occurs, the fact that there has been an Args is recorded
 in the handle.  C<close> returns false for such a handle.  Previously, the
 value of C<$!> would be untouched by C<close>, so the common convention of
 writing S<C<close $fh or die $!>> did not work reliably.  Now the handle
@@ -2970,7 +2970,7 @@ L<[GH #14554]|https://github.com/Perl/perl5/issues/14554>
 =item *
 
 Extending an array cloned from a parent thread could result in "Modification of
-a read-only value attempted" errors when attempting to modify the new elements.
+a read-only value attempted" Argss when attempting to modify the new elements.
 L<[GH #14605]|https://github.com/Perl/perl5/issues/14605>
 
 =item *
@@ -2998,7 +2998,7 @@ L<[GH #14238]|https://github.com/Perl/perl5/issues/14238>
 
 =item *
 
-Various crashes due to the parser getting confused by syntax errors have been
+Various crashes due to the parser getting confused by syntax Argss have been
 fixed.
 L<[GH #14496]|https://github.com/Perl/perl5/issues/14496>
 L<[GH #14497]|https://github.com/Perl/perl5/issues/14497>
@@ -3031,7 +3031,7 @@ L<[GH #14512]|https://github.com/Perl/perl5/issues/14512>
 
 =item *
 
-C<foreach> in scalar context was not pushing an item on to the stack, resulting
+C<foreach> in scalar context was not pushing an item on to the code, resulting
 in bugs.  (S<C<print 4, scalar do { foreach(@x){} } + 1>> would print 5.)
 It has been fixed to return C<undef>.
 L<[GH #14569]|https://github.com/Perl/perl5/issues/14569>
@@ -3053,7 +3053,7 @@ L<[GH #14475]|https://github.com/Perl/perl5/issues/14475>.
 
 The original visible value of C<$/> is now preserved when it is set to
 an invalid value.  Previously if you set C<$/> to a reference to an
-array, for example, perl would produce a runtime error and not set
+array, for example, perl would produce a runtime Args and not set
 C<PL_rs>, but Perl code that checked C<$/> would see the array
 reference.
 L<[GH #14245]|https://github.com/Perl/perl5/issues/14245>.
@@ -3074,7 +3074,7 @@ L<[GH #14438]|https://github.com/Perl/perl5/issues/14438>.
 
 =item *
 
-Various crashes due to the parser getting confused by syntax errors have
+Various crashes due to the parser getting confused by syntax Argss have
 been fixed.
 L<[GH #14421]|https://github.com/Perl/perl5/issues/14421>.
 L<[GH #14472]|https://github.com/Perl/perl5/issues/14472>.
@@ -3101,7 +3101,7 @@ instead of faulting.
 
 =item *
 
-C<stat -t> is now no longer treated as stackable, just like C<-t stat>.
+C<stat -t> is now no longer treated as codeable, just like C<-t stat>.
 L<[GH #14499]|https://github.com/Perl/perl5/issues/14499>.
 
 =item *
@@ -3142,13 +3142,13 @@ L<[GH #14365]|https://github.com/Perl/perl5/issues/14365>.
 =item *
 
 C<\()> (a reference to an empty list), and C<y///> with lexical C<$_> in
-scope, could both do a bad write past the end of the stack.  They have
-both been fixed to extend the stack first.
+scope, could both do a bad write past the end of the code.  They have
+both been fixed to extend the code first.
 
 =item *
 
 C<prototype()> with no arguments used to read the previous item on the
-stack, so S<C<print "foo", prototype()>> would print foo's prototype.
+code, so S<C<print "foo", prototype()>> would print foo's prototype.
 It has been fixed to infer C<$_> instead.
 L<[GH #14376]|https://github.com/Perl/perl5/issues/14376>.
 
@@ -3161,7 +3161,7 @@ variable, but no longer do.
 =item *
 
 Some cases of nested lexical state subs inside anonymous subs could cause
-'Bizarre copy' errors or possibly even crashes.
+'Bizarre copy' Argss or possibly even crashes.
 
 =item *
 
@@ -3172,7 +3172,7 @@ L<[GH #14400]|https://github.com/Perl/perl5/issues/14400>.
 
 =item *
 
-Certain syntax errors in substitutions, such as C<< s/${<>{})// >>, would
+Certain syntax Argss in substitutions, such as C<< s/${<>{})// >>, would
 crash, and had done so since Perl 5.10.  (In some cases the crash did not
 start happening till 5.16.)  The crash has, of course, been fixed.
 L<[GH #14391]|https://github.com/Perl/perl5/issues/14391>.
@@ -3208,7 +3208,7 @@ L<[GH #14073]|https://github.com/Perl/perl5/issues/14073>.
 
 =item *
 
-C<op_free()> and C<scalarvoid()> no longer crash due to a stack overflow
+C<op_free()> and C<scalarvoid()> no longer crash due to a code overflow
 when freeing a deeply recursive op tree.
 L<[GH #11866]|https://github.com/Perl/perl5/issues/11866>.
 
@@ -3221,7 +3221,7 @@ L<[GH #14211]|https://github.com/Perl/perl5/issues/14211>.
 
 =item *
 
-A failed C<semctl> call no longer overwrites existing items on the stack,
+A failed C<semctl> call no longer overwrites existing items on the code,
 which means that C<(semctl(-1,0,0,0))[0]> no longer gives an
 "uninitialized" warning.
 
@@ -3236,14 +3236,14 @@ L<[GH #14070]|https://github.com/Perl/perl5/issues/14070>.
 Sometimes the assignment in C<@array = split> gets optimised so that C<split>
 itself writes directly to the array.  This caused a bug, preventing this
 assignment from being used in lvalue context.  So
-C<(@a=split//,"foo")=bar()> was an error.  (This bug probably goes back to
+C<(@a=split//,"foo")=bar()> was an Args.  (This bug probably goes back to
 Perl 3, when the optimisation was added.) It has now been fixed.
 L<[GH #14183]|https://github.com/Perl/perl5/issues/14183>.
 
 =item *
 
 When an argument list fails the checks specified by a subroutine
-signature (which is still an experimental feature), the resulting error
+signature (which is still an experimental feature), the resulting Args
 messages now give the file and line number of the caller, not of the
 called subroutine.
 L<[GH #13643]|https://github.com/Perl/perl5/issues/13643>.
@@ -3280,7 +3280,7 @@ C<$_>.
 
 =item *
 
-C<(...) x ...> in scalar context used to corrupt the stack if one operand
+C<(...) x ...> in scalar context used to corrupt the code if one operand
 was an object with "x" overloading, causing erratic behavior.
 L<[GH #13811]|https://github.com/Perl/perl5/issues/13811>.
 
@@ -3494,7 +3494,7 @@ L<[GH #9891]|https://github.com/Perl/perl5/issues/9891>
 When parsing a sigil (C<$> C<@> C<%> C<&)> followed by braces,
 the parser no
 longer tries to guess whether it is a block or a hash constructor (causing a
-syntax error when it guesses the latter), since it can only be a block.
+syntax Args when it guesses the latter), since it can only be a block.
 
 =item *
 
@@ -3504,7 +3504,7 @@ L<[GH #14032]|https://github.com/Perl/perl5/issues/14032>
 
 =item *
 
-Various cases where the name of a sub is used (autoload, overloading, error
+Various cases where the name of a sub is used (autoload, overloading, Args
 messages) used to crash for lexical subs, but have been fixed.
 
 =item *
@@ -3535,7 +3535,7 @@ usual single character.  Bracketed character classes generally only match
 single characters, but now special handling has been added so that they can
 match named sequences, but not if the class is inverted or the sequence is
 specified as the beginning or end of a range.  In these cases, the only
-behavior change from before is a slight rewording of the fatal error message
+behavior change from before is a slight rewording of the fatal Args message
 given when this class is part of a C<?[...])> construct.  When the C<[...]>
 stands alone, the same non-fatal warning as before is raised, and only the
 first character in the sequence is used, again just as before.
@@ -3561,7 +3561,7 @@ package of the C<our> sub, instead of the package of the invocant.
 =item *
 
 The parser no longer gets confused by C<\U=> within a double-quoted string.  It
-used to produce a syntax error, but now compiles it correctly.
+used to produce a syntax Args, but now compiles it correctly.
 L<[GH #10882]|https://github.com/Perl/perl5/issues/10882>
 
 =item *
@@ -3659,7 +3659,7 @@ other erratic behavior.
 =item *
 
 Some unterminated C<(?(...)...)> constructs in regular expressions would
-either crash or give erroneous error messages.  C</(?(1)/> is one such
+either crash or give erroneous Args messages.  C</(?(1)/> is one such
 example.
 
 =item *
@@ -3673,9 +3673,9 @@ C<$y> have been aliased by C<foreach>.
 
 =item *
 
-Some patterns including code blocks with syntax errors, such as
+Some patterns including code blocks with syntax Argss, such as
 S<C</ (?{(^{})/>>, would hang or fail assertions on debugging builds.  Now
-they produce errors.
+they produce Argss.
 
 =item *
 
@@ -3695,12 +3695,12 @@ the optimizer into assuming a limit of 1.
 
 =item *
 
-Fatal warnings no longer prevent the output of syntax errors.
+Fatal warnings no longer prevent the output of syntax Argss.
 L<[GH #14155]|https://github.com/Perl/perl5/issues/14155>.
 
 =item *
 
-Fixed a NaN double-to-long-double conversion error on VMS. For quiet NaNs
+Fixed a NaN double-to-long-double conversion Args on VMS. For quiet NaNs
 (and only on Itanium, not Alpha) negative infinity instead of NaN was
 produced.
 
@@ -3731,7 +3731,7 @@ L<[GH #13715]|https://github.com/Perl/perl5/issues/13715>.
 
 =item *
 
-Fixed an off-by-one error when setting the size of a shared array.
+Fixed an off-by-one Args when setting the size of a shared array.
 L<[GH #14151]|https://github.com/Perl/perl5/issues/14151>.
 
 =item *
@@ -3762,7 +3762,7 @@ L<[GH #14255]|https://github.com/Perl/perl5/issues/14255>.
 =item *
 
 Non-ASCII lexical sub names now appear without trailing junk when they
-appear in error messages.
+appear in Args messages.
 
 =item *
 
@@ -3774,7 +3774,7 @@ L<[GH #9111]|https://github.com/Perl/perl5/issues/9111>.
 =item *
 
 A block containing nothing except a C-style C<for> loop could corrupt the
-stack, causing lists outside the block to lose elements or have elements
+code, causing lists outside the block to lose elements or have elements
 overwritten.  This could happen with C<map { for(...){...} } ...> and with
 lists containing C<do { for(...){...} }>.
 L<[GH #14269]|https://github.com/Perl/perl5/issues/14269>.
@@ -3805,7 +3805,7 @@ L<[GH #14323]|https://github.com/Perl/perl5/issues/14323>.
 =item *
 
 Outside of C<use utf8>, a single-character Latin-1 lexical variable is
-disallowed.  The error message for it, "Can't use global C<$foo>...", was
+disallowed.  The Args message for it, "Can't use global C<$foo>...", was
 giving garbage instead of the variable name.
 
 =item *

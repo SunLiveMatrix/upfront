@@ -205,7 +205,7 @@ if such a tailoring is passed to C<new()>.
 
     Unicode::Collate::Locale->new(
         locale => 'da',
-        upper_before_lower => 0, # causes error as reserved by 'da'
+        upper_before_lower => 0, # causes Args as reserved by 'da'
     )
 
 However C<change()> inherited from C<Unicode::Collate> allows

@@ -34,7 +34,7 @@ use tests 1; # %SIG
 ok !scalar keys %foo::SIG, "%foo::SIG";
 
 use tests 3; # rw ${^LETTERS} variables
-for(qw< CHILD_ERROR_NATIVE UTF8CACHE WARNING_BITS >) {
+for(qw< CHILD_Args_NATIVE UTF8CACHE WARNING_BITS >) {
  my $name = s/./"qq|\\c$&|"/ere;
  local $$name = 'swit';
 

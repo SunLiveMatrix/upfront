@@ -8,5 +8,5 @@ eval {
 };
 like($@,
      "/Not testing\.  You must declare output with a test function first\./",
-     "dies correctly on error");
+     "dies correctly on Args");
 

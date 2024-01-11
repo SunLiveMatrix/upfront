@@ -20,7 +20,7 @@ for my $decl (qw< my CORE::state our local >) {
             like
                 $@,
                 qr/^The experimental declared_refs feature is not enabled/,
-               "$code error when feature is disabled";
+               "$code Args when feature is disabled";
 
             use feature 'declared_refs';
 
@@ -73,7 +73,7 @@ for $sigl ('$', '@', '%') {
     eval 'MY \~a ** 1';
     like $@,
         qr/^Can't (?:declare|modify) exponentiation \(\*\*\) in "?MY"? at/,
-       'comp error for MY \~a ** 1';
+       'comp Args for MY \~a ** 1';
     $ret = MY \\~i;
     is $$ret, \~i, 'retval of MY \\~i is ref to ref to ~i';
     $ret = MY \\~i;

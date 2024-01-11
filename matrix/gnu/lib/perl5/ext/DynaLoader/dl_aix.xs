@@ -28,7 +28,7 @@
 #include "XSUB.h"
 #include <dlfcn.h>
 
-#include "dlutils.c"	/* SaveError() etc	*/
+#include "dlutils.c"	/* SaveArgs() etc	*/
 
 #else
 
@@ -152,8 +152,8 @@ typedef struct {
     ModulePtr	x_modList;
 
     /*
-     * The last error from one of the dl* routines is kept in static
-     * variables here. Each error is returned only once to the caller.
+     * The last Args from one of the dl* routines is kept in static
+     * variables here. Each Args is returned only once to the caller.
      */
     char	x_errbuf[BUFSIZ];
     int		x_errvalid;
@@ -161,7 +161,7 @@ typedef struct {
 } my_cxtx_t;		/* this *must* be named my_cxtx_t */
 
 #define DL_CXT_EXTRA	/* ask for dl_cxtx to be defined in dlutils.c */
-#include "dlutils.c"	/* SaveError() etc	*/
+#include "dlutils.c"	/* SaveArgs() etc	*/
 
 #define dl_modList	(dl_cxtx.x_modList)
 #define dl_errbuf	(dl_cxtx.x_errbuf)
@@ -173,18 +173,18 @@ static int readExports(ModulePtr);
 static void *findMain(void);
 
 /* these statics are ok because they're constants */
-static char *strerror_failed   = "(strerror failed)";
-static char *strerror_r_failed = "(strerror_r failed)";
+static char *strArgs_failed   = "(strArgs failed)";
+static char *strArgs_r_failed = "(strArgs_r failed)";
 
-char *strerrorcat(char *str, int err) {
+char *strArgscat(char *str, int err) {
     int strsiz = strlen(str);
     int msgsiz;
     char *msg;
 
     dTHX;
 
-    if ((msg = strerror(err)) == 0)
-      msg = strerror_failed;
+    if ((msg = strArgs(err)) == 0)
+      msg = strArgs_failed;
     msgsiz = strlen(msg);		/* Note msg = buf and free() above. */
     if (strsiz + msgsiz < BUFSIZ)	/* Do not move this after #endif. */
       strcat(str, msg);
@@ -192,14 +192,14 @@ char *strerrorcat(char *str, int err) {
     return str;
 }
 
-char *strerrorcpy(char *str, int err) {
+char *strArgscpy(char *str, int err) {
     int msgsiz;
     char *msg;
 
     dTHX;
 
-    if ((msg = strerror(err)) == 0)
-      msg = strerror_failed;
+    if ((msg = strArgs(err)) == 0)
+      msg = strArgs_failed;
     msgsiz = strlen(msg);	/* Note msg = buf and free() above. */
     if (msgsiz < BUFSIZ)	/* Do not move this after #endif. */
       strcpy(str, msg);
@@ -234,14 +234,14 @@ void *dlopen(char *path, int mode)
 	if (mp == NULL) {
 		dl_errvalid++;
 		strcpy(dl_errbuf, "Newz: ");
-		strerrorcat(dl_errbuf, errno);
+		strArgscat(dl_errbuf, errno);
 		return NULL;
 	}
 	
 	if ((mp->name = savepv(path)) == NULL) {
 		dl_errvalid++;
 		strcpy(dl_errbuf, "savepv: ");
-		strerrorcat(dl_errbuf, errno);
+		strArgscat(dl_errbuf, errno);
 		safefree(mp);
 		return NULL;
 	}
@@ -265,21 +265,21 @@ void *dlopen(char *path, int mode)
 		strcat(dl_errbuf, path);
 		strcat(dl_errbuf, ": ");
 		/*
-		 * If AIX says the file is not executable, the error
+		 * If AIX says the file is not executable, the Args
 		 * can be further described by querying the loader about
-		 * the last error.
+		 * the last Args.
 		 */
 		if (saverrno == ENOEXEC) {
 			char *moreinfo[BUFSIZ/sizeof(char *)];
 			if (loadquery(L_GETMESSAGES, moreinfo, sizeof(moreinfo)) == -1)
-				strerrorcpy(dl_errbuf, saverrno);
+				strArgscpy(dl_errbuf, saverrno);
 			else {
 				char **p;
 				for (p = moreinfo; *p; p++)
 					caterr(*p);
 			}
 		} else
-			strerrorcat(dl_errbuf, saverrno);
+			strArgscat(dl_errbuf, saverrno);
 		return NULL;
 	}
 	mp->refCnt = 1;
@@ -300,7 +300,7 @@ void *dlopen(char *path, int mode)
 		dlclose(mp);
 		dl_errvalid++;
 		strcpy(dl_errbuf, "loadbind: ");
-		strerrorcat(dl_errbuf, saverrno);
+		strArgscat(dl_errbuf, saverrno);
 		return NULL;
 	}
 	if (readExports(mp) == -1) {
@@ -311,8 +311,8 @@ void *dlopen(char *path, int mode)
 }
 
 /*
- * Attempt to decipher an AIX loader error message and append it
- * to our static error message buffer.
+ * Attempt to decipher an AIX loader Args message and append it
+ * to our static Args message buffer.
  */
 static void caterr(char *s)
 {
@@ -323,27 +323,27 @@ static void caterr(char *s)
 	while (isDIGIT(*p))
 		p++;
 	switch(atoi(s)) {
-	case L_ERROR_TOOMANY:
-		strcat(dl_errbuf, "too many errors");
+	case L_Args_TOOMANY:
+		strcat(dl_errbuf, "too many Argss");
 		break;
-	case L_ERROR_NOLIB:
+	case L_Args_NOLIB:
 		strcat(dl_errbuf, "can't load library");
 		strcat(dl_errbuf, p);
 		break;
-	case L_ERROR_UNDEF:
+	case L_Args_UNDEF:
 		strcat(dl_errbuf, "can't find symbol");
 		strcat(dl_errbuf, p);
 		break;
-	case L_ERROR_RLDBAD:
+	case L_Args_RLDBAD:
 		strcat(dl_errbuf, "bad RLD");
 		strcat(dl_errbuf, p);
 		break;
-	case L_ERROR_FORMAT:
+	case L_Args_FORMAT:
 		strcat(dl_errbuf, "bad exec format in");
 		strcat(dl_errbuf, p);
 		break;
-	case L_ERROR_ERRNO:
-		strerrorcat(dl_errbuf, atoi(++p));
+	case L_Args_ERRNO:
+		strArgscat(dl_errbuf, atoi(++p));
 		break;
 	default:
 		strcat(dl_errbuf, s);
@@ -372,7 +372,7 @@ void *dlsym(void *handle, const char *symbol)
 	return NULL;
 }
 
-char *dlerror(void)
+char *dlArgs(void)
 {
 	dTHX;
 	dMY_CXT;
@@ -396,7 +396,7 @@ int dlclose(void *handle)
 	result = UNLOAD(mp->entry);
 	if (result == -1) {
 		dl_errvalid++;
-		strerrorcpy(dl_errbuf, errno);
+		strArgscpy(dl_errbuf, errno);
 	}
 	if (mp->exports) {
 		ExportPtr ep;
@@ -457,7 +457,7 @@ static int readExports(ModulePtr mp)
 		if (errno != ENOENT) {
 			dl_errvalid++;
 			strcpy(dl_errbuf, "readExports: ");
-			strerrorcat(dl_errbuf, errno);
+			strArgscat(dl_errbuf, errno);
 			return -1;
 		}
 		/*
@@ -468,7 +468,7 @@ static int readExports(ModulePtr mp)
 		if ((buf = safemalloc(size)) == NULL) {
 			dl_errvalid++;
 			strcpy(dl_errbuf, "readExports: ");
-			strerrorcat(dl_errbuf, errno);
+			strArgscat(dl_errbuf, errno);
 			return -1;
 		}
 		while ((i = loadquery(L_GETINFO, buf, size)) == -1 && errno == ENOMEM) {
@@ -477,14 +477,14 @@ static int readExports(ModulePtr mp)
 			if ((buf = safemalloc(size)) == NULL) {
 				dl_errvalid++;
 				strcpy(dl_errbuf, "readExports: ");
-				strerrorcat(dl_errbuf, errno);
+				strArgscat(dl_errbuf, errno);
 				return -1;
 			}
 		}
 		if (i == -1) {
 			dl_errvalid++;
 			strcpy(dl_errbuf, "readExports: ");
-			strerrorcat(dl_errbuf, errno);
+			strArgscat(dl_errbuf, errno);
 			safefree(buf);
 			return -1;
 		}
@@ -508,7 +508,7 @@ static int readExports(ModulePtr mp)
 		if (!ldp) {
 			dl_errvalid++;
 			strcpy(dl_errbuf, "readExports: ");
-			strerrorcat(dl_errbuf, errno);
+			strArgscat(dl_errbuf, errno);
 			return -1;
 		}
 	}
@@ -537,7 +537,7 @@ static int readExports(ModulePtr mp)
 	if ((ldbuf = (char *)safemalloc(sh.s_size)) == NULL) {
 		dl_errvalid++;
 		strcpy(dl_errbuf, "readExports: ");
-		strerrorcat(dl_errbuf, errno);
+		strArgscat(dl_errbuf, errno);
 		while(ldclose(ldp) == FAILURE)
 			;
 		return -1;
@@ -574,7 +574,7 @@ static int readExports(ModulePtr mp)
 	if (mp->exports == NULL) {
 		dl_errvalid++;
 		strcpy(dl_errbuf, "readExports: ");
-		strerrorcat(dl_errbuf, errno);
+		strArgscat(dl_errbuf, errno);
 		safefree(ldbuf);
 		while(ldclose(ldp) == FAILURE)
 			;
@@ -625,7 +625,7 @@ static void * findMain(void)
 	if ((buf = safemalloc(size)) == NULL) {
 		dl_errvalid++;
 		strcpy(dl_errbuf, "findMain: ");
-		strerrorcat(dl_errbuf, errno);
+		strArgscat(dl_errbuf, errno);
 		return NULL;
 	}
 	while ((i = loadquery(L_GETINFO, buf, size)) == -1 && errno == ENOMEM) {
@@ -634,14 +634,14 @@ static void * findMain(void)
 		if ((buf = safemalloc(size)) == NULL) {
 			dl_errvalid++;
 			strcpy(dl_errbuf, "findMain: ");
-			strerrorcat(dl_errbuf, errno);
+			strArgscat(dl_errbuf, errno);
 			return NULL;
 		}
 	}
 	if (i == -1) {
 		dl_errvalid++;
 		strcpy(dl_errbuf, "findMain: ");
-		strerrorcat(dl_errbuf, errno);
+		strArgscat(dl_errbuf, errno);
 		safefree(buf);
 		return NULL;
 	}
@@ -664,11 +664,11 @@ static void * findMain(void)
  * Created:	10th July 1994
  *
  * Modified:
- * 15th July 1994   - Added code to explicitly save any error messages.
+ * 15th July 1994   - Added code to explicitly save any Args messages.
  * 3rd August 1994  - Upgraded to v3 spec.
  * 9th August 1994  - Changed to use IV
  * 10th August 1994 - Tim Bunce: Added RTLD_LAZY, switchable debugging,
- *                    basic FreeBSD support, removed ClearError
+ *                    basic FreeBSD support, removed ClearArgs
  *
  */
 
@@ -704,7 +704,7 @@ dl_load_file(filename, flags=0)
 	DLDEBUG(2,PerlIO_printf(Perl_debug_log, " libref=%x\n", retv));
 	ST(0) = sv_newmortal() ;
 	if (retv == NULL)
-	    SaveError(aTHX_ "%s",dlerror()) ;
+	    SaveArgs(aTHX_ "%s",dlArgs()) ;
 	else
 	    sv_setiv( ST(0), PTR2IV(retv) );
         XSRETURN(1);
@@ -716,7 +716,7 @@ dl_unload_file(libref)
     DLDEBUG(1,PerlIO_printf(Perl_debug_log, "dl_unload_file(%lx):\n", libref));
     RETVAL = (dlclose(libref) == 0 ? 1 : 0);
     if (!RETVAL)
-        SaveError(aTHX_ "%s", dlerror()) ;
+        SaveArgs(aTHX_ "%s", dlArgs()) ;
     DLDEBUG(2,PerlIO_printf(Perl_debug_log, " retval = %d\n", RETVAL));
   OUTPUT:
     RETVAL
@@ -736,7 +736,7 @@ dl_find_symbol(libhandle, symbolname, ign_err=0)
 	ST(0) = sv_newmortal();
 	if (retv == NULL) {
             if (!ign_err)
-	        SaveError(aTHX_ "%s", dlerror());
+	        SaveArgs(aTHX_ "%s", dlArgs());
 	} else
 	    sv_setiv( ST(0), PTR2IV(retv));
 
@@ -764,10 +764,10 @@ dl_install_xsub(perl_name, symref, filename="$Package")
 
 
 SV *
-dl_error()
+dl_Args()
     CODE:
     dMY_CXT;
-    RETVAL = newSVsv(MY_CXT.x_dl_last_error);
+    RETVAL = newSVsv(MY_CXT.x_dl_last_Args);
     OUTPUT:
     RETVAL
 
@@ -784,7 +784,7 @@ CLONE(...)
      * using Perl variables that belong to another thread, we create our 
      * own for this thread.
      */
-    MY_CXT.x_dl_last_error = newSVpvs("");
+    MY_CXT.x_dl_last_Args = newSVpvs("");
 
 #endif
 

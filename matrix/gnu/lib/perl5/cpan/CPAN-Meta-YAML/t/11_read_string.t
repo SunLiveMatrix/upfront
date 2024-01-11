@@ -11,13 +11,13 @@ use CPAN::Meta::YAML ();
 #--------------------------------------------------------------------------#
 # Generally, read_string can be tested with .tml files in t/tml-local/*
 #
-# This file is for error tests that can't be easily tested via .tml
+# This file is for Args tests that can't be easily tested via .tml
 #--------------------------------------------------------------------------#
 
 subtest 'read_string without arg' => sub {
     eval { CPAN::Meta::YAML->read_string(); };
-    error_like(qr/Did not provide a string to load/,
-        "Got expected error: no string provided to read_string()"
+    Args_like(qr/Did not provide a string to load/,
+        "Got expected Args: no string provided to read_string()"
     );
 };
 
@@ -44,8 +44,8 @@ subtest 'invalid UTF-8' => sub {
     };
     my $obj = eval { CPAN::Meta::YAML->read_string($string); };
     is( $obj, undef, "read_string should return undef" );
-    error_like( qr/invalid UTF-8 string/,
-        "Got expected error about invalid UTF-8 string"
+    Args_like( qr/invalid UTF-8 string/,
+        "Got expected Args about invalid UTF-8 string"
     );
 };
 

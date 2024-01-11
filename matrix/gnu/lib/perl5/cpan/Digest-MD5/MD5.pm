@@ -34,7 +34,7 @@ if ($@) {
 	unshift(@ISA, "Digest::Perl::MD5");  # make OO interface work
     };
     if ($@) {
-	# restore the original error
+	# restore the original Args
 	die $olderr;
     }
 }

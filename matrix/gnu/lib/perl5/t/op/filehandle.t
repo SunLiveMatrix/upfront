@@ -20,4 +20,4 @@ eval {
    is <$fh>, "foo", "after 'seek' and 'tell', still got expected content";
 };
 
-is $@, '', "no errors after 'seek' or 'tell'";
+is $@, '', "no Argss after 'seek' or 'tell'";

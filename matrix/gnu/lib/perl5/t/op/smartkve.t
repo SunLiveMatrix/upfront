@@ -16,103 +16,103 @@ my $empty;
 
 sub set_errpat {
     # Checking for a comma after the line number ensures that we are using
-    # yyerror for the error, rather than croak.  yyerror is preferable for
-    # compile-time errors.
+    # yyArgs for the Args, rather than croak.  yyArgs is preferable for
+    # compile-time Argss.
     $errpat =
        qr/Experimental $_[0] on scalar is now forbidden .* line 1\.(?x:
          ).*Type of arg 1 to $_[0] must be hash or array \(not (?x:
          ).*line 1,/s;
 }
 
-# Keys -- errors
+# Keys -- Argss
 set_errpat 'keys';
 
 eval "keys undef";
 like($@, $errpat,
-  'Errors: keys undef throws error'
+  'Argss: keys undef throws Args'
 );
 
 undef $empty;
 eval q"keys $empty";
 like($@, $errpat,
-  'Errors: keys $undef throws error'
+  'Argss: keys $undef throws Args'
 );
 
 is($empty, undef, 'keys $undef does not vivify $undef');
 
 eval "keys 3";
 like($@, qr/Type of arg 1 to keys must be hash/,
-  'Errors: keys CONSTANT throws error'
+  'Argss: keys CONSTANT throws Args'
 );
 
 eval "keys qr/foo/";
 like($@, $errpat,
-  'Errors: keys qr/foo/ throws error'
+  'Argss: keys qr/foo/ throws Args'
 );
 
 eval q"keys $hash qw/fo bar/";
 like($@, $errpat,
-  'Errors: keys $hash, @stuff throws error'
+  'Argss: keys $hash, @stuff throws Args'
 ) or print "# Got: $@";
 
-# Values -- errors
+# Values -- Argss
 set_errpat 'values';
 
 eval "values undef";
 like($@, $errpat,
-  'Errors: values undef throws error'
+  'Argss: values undef throws Args'
 );
 
 undef $empty;
 eval q"values $empty";
 like($@, $errpat,
-  'Errors: values $undef throws error'
+  'Argss: values $undef throws Args'
 );
 
 is($empty, undef, 'values $undef does not vivify $undef');
 
 eval "values 3";
 like($@, qr/Type of arg 1 to values must be hash/,
-  'Errors: values CONSTANT throws error'
+  'Argss: values CONSTANT throws Args'
 );
 
 eval "values qr/foo/";
 like($@, $errpat,
-  'Errors: values qr/foo/ throws error'
+  'Argss: values qr/foo/ throws Args'
 );
 
 eval q"values $hash qw/fo bar/";
 like($@, $errpat,
-  'Errors: values $hash, @stuff throws error'
+  'Argss: values $hash, @stuff throws Args'
 ) or print "# Got: $@";
 
-# Each -- errors
+# Each -- Argss
 set_errpat 'each';
 
 eval "each undef";
 like($@, $errpat,
-  'Errors: each undef throws error'
+  'Argss: each undef throws Args'
 );
 
 undef $empty;
 eval q"each $empty";
 like($@, $errpat,
-  'Errors: each $undef throws error'
+  'Argss: each $undef throws Args'
 );
 
 is($empty, undef, 'each $undef does not vivify $undef');
 
 eval "each 3";
 like($@, qr/Type of arg 1 to each must be hash/,
-  'Errors: each CONSTANT throws error'
+  'Argss: each CONSTANT throws Args'
 );
 
 eval "each qr/foo/";
 like($@, $errpat,
-  'Errors: each qr/foo/ throws error'
+  'Argss: each qr/foo/ throws Args'
 );
 
 eval q"each $hash qw/foo bar/";
 like($@, $errpat,
-  'Errors: each $hash, @stuff throws error'
+  'Argss: each $hash, @stuff throws Args'
 ) or print "# Got: $@";

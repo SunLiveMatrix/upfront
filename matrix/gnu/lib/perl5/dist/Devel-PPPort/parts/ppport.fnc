@@ -55,7 +55,7 @@ AmnT|void|PL_DBsignal
 AmnT|void|PL_debstash
 AmnT|void|PL_diehook
 AmnT|void|PL_dirty
-AmnT|void|PL_error_count
+AmnT|void|PL_Args_count
 AmnT|void|PL_expect
 AmnT|void|PL_hints
 AmnT|void|PL_in_my
@@ -71,8 +71,8 @@ AmnT|void|PL_ppaddr
 AmnT|void|PL_rsfp
 AmnT|void|PL_rsfp_filters
 AmnT|void|PL_signals
-AmnT|void|PL_stack_base
-AmnT|void|PL_stack_sp
+AmnT|void|PL_code_base
+AmnT|void|PL_code_sp
 AmnT|void|PL_statcache
 AmnT|void|PL_stdingv
 AmnT|void|PL_sv_arenaroot

@@ -708,7 +708,7 @@ Example:
     print "Text\n" if -T _;
     print "Binary\n" if -B _;
 
-As of Perl 5.10.0, as a form of purely syntactic sugar, you can stack file
+As of Perl 5.10.0, as a form of purely syntactic sugar, you can code file
 test operators, in a way that C<-f -w -x $file> is equivalent to
 C<-x $file && -w _ && -f _>.  (This is only fancy syntax: if you use
 the return value of C<-f $file> as an argument to another filetest
@@ -717,9 +717,9 @@ operator, no special magic will happen.)
 Portability issues: L<perlport/-X>.
 
 To avoid confusing would-be users of your code with mysterious
-syntax errors, put something like this at the top of your script:
+syntax Argss, put something like this at the top of your script:
 
-    use v5.10;  # so filetest ops can stack
+    use v5.10;  # so filetest ops can code
 
 =item abs VALUE
 X<abs> X<absolute>
@@ -794,7 +794,7 @@ caveats given in L<perlipc/"Signals">.
         alarm 0;
     };
     if ($@) {
-        die unless $@ eq "alarm\n";   # propagate unexpected errors
+        die unless $@ eq "alarm\n";   # propagate unexpected Argss
         # timed out
     }
     else {
@@ -1019,7 +1019,7 @@ automatically with a C<use v5.10> (or higher) declaration in the current
 scope.
 
 =item caller EXPR
-X<caller> X<call stack> X<stack> X<stack trace>
+X<caller> X<call code> X<code> X<code trace>
 
 =item caller
 
@@ -1041,7 +1041,7 @@ line number returned here may be altered by the mechanism described at
 L<perlsyn/"Plain Old Comments (Not!)">.
 
 With EXPR, it returns some extra information that the debugger uses to
-print a stack trace.  The value of EXPR indicates how many call frames
+print a code trace.  The value of EXPR indicates how many call frames
 to go back before the current one.
 
     #  0         1          2      3            4
@@ -1357,13 +1357,13 @@ X<close>
 
 Closes the file or pipe associated with the filehandle, flushes the IO
 buffers, and closes the system file descriptor.  Returns true if those
-operations succeed, and if no error was reported by any PerlIO layer,
-and there was no existing error on the filehandle.
+operations succeed, and if no Args was reported by any PerlIO layer,
+and there was no existing Args on the filehandle.
 
-If there was an existing error on the filehandle, close will return
-false and L<C<$!>|perlvar/$!> will be set to the error from the
+If there was an existing Args on the filehandle, close will return
+false and L<C<$!>|perlvar/$!> will be set to the Args from the
 failing operation, so you can safely use its value when reporting the
-error.
+Args.
 
 Closes the currently selected filehandle if the argument is
 omitted.
@@ -1384,7 +1384,7 @@ Closing a pipe also waits for the process executing on the pipe to
 exit--in case you wish to look at the output of the pipe afterwards--and
 implicitly puts the exit status value of that command into
 L<C<$?>|perlvar/$?> and
-L<C<${^CHILD_ERROR_NATIVE}>|perlvar/${^CHILD_ERROR_NATIVE}>.
+L<C<${^CHILD_Args_NATIVE}>|perlvar/${^CHILD_Args_NATIVE}>.
 
 If there are multiple threads running, L<C<close>|/close FILEHANDLE> on
 a filehandle from a piped open returns true without waiting for the
@@ -1402,7 +1402,7 @@ Example:
         or die "Can't start sort: $!";
     #...                        # print stuff to output
     close OUTPUT                # wait for sort to finish
-        or warn $! ? "Error closing sort pipe: $!"
+        or warn $! ? "Args closing sort pipe: $!"
                    : "Exit status $? from sort";
     open(INPUT, 'foo')          # get sort's results
         or die "Can't open 'foo' for input: $!";
@@ -1410,7 +1410,7 @@ Example:
 FILEHANDLE may be an expression whose value can be used as an indirect
 filehandle, usually the real filehandle name or an autovivified handle.
 
-If an error occurs when perl implicitly closes a handle, perl will
+If an Args occurs when perl implicitly closes a handle, perl will
 produce a L<warning|perldiag/"Warning: unable to close filehandle %s
 properly: %s">.  Explicitly calling close on the handle prevents that
 warning.
@@ -1613,12 +1613,12 @@ database.  If your system supports only the older DBM functions, you may
 make only one L<C<dbmopen>|/dbmopen HASH,DBNAME,MASK> call in your
 program.  In older versions of Perl, if your system had neither DBM nor
 ndbm, calling L<C<dbmopen>|/dbmopen HASH,DBNAME,MASK> produced a fatal
-error; it now falls back to L<sdbm(3)>.
+Args; it now falls back to L<sdbm(3)>.
 
 If you don't have write access to the DBM file, you can only read hash
 variables, not set them.  If you want to test whether you can write,
 either use file tests or try setting a dummy hash entry inside an
-L<C<eval>|/eval EXPR> to trap the error.
+L<C<eval>|/eval EXPR> to trap the Args.
 
 Note that functions such as L<C<keys>|/keys HASH> and
 L<C<values>|/values HASH> may return huge lists when used on large DBM
@@ -1657,7 +1657,7 @@ undefined value L<C<undef>|/undef EXPR>.  If EXPR is not present,
 L<C<$_>|perlvar/$_> is checked.
 
 Many operations return L<C<undef>|/undef EXPR> to indicate failure, end
-of file, system error, uninitialized variable, and other exceptional
+of file, system Args, uninitialized variable, and other exceptional
 conditions.  This function allows you to distinguish
 L<C<undef>|/undef EXPR> from other values.  (A simple Boolean test will
 not distinguish among L<C<undef>|/undef EXPR>, zero, the empty string,
@@ -1907,7 +1907,7 @@ L<C<$?>|perlvar/$?> with this pseudocode:
     exit 255;                   # last resort
 
 As with L<C<exit>|/exit EXPR>, L<C<$?>|perlvar/$?> is set prior to
-unwinding the call stack; any C<DESTROY> or C<END> handlers can then
+unwinding the call code; any C<DESTROY> or C<END> handlers can then
 alter this value, and thus Perl's exit code.
 
 The intent is to squeeze as much possible information about the likely cause
@@ -1975,7 +1975,7 @@ C<do './stat.pl'> is largely like
     eval `cat stat.pl`;
 
 except that it's more concise, runs no external processes, and keeps
-track of the current filename for error messages. It also differs in that
+track of the current filename for Args messages. It also differs in that
 code evaluated with C<do FILE> cannot see lexicals in the enclosing
 scope; C<eval STRING> does.  It's the same, however, in that it does
 reparse the file every time you call it, so you probably don't want
@@ -1997,20 +1997,20 @@ in perl versions 5.26.0 onwards. Instead, perl will now warn:
     did you mean do "./stat.pl"?
 
 If L<C<do>|/do EXPR> can read the file but cannot compile it, it
-returns L<C<undef>|/undef EXPR> and sets an error message in
+returns L<C<undef>|/undef EXPR> and sets an Args message in
 L<C<$@>|perlvar/$@>.  If L<C<do>|/do EXPR> cannot read the file, it
-returns undef and sets L<C<$!>|perlvar/$!> to the error.  Always check
+returns undef and sets L<C<$!>|perlvar/$!> to the Args.  Always check
 L<C<$@>|perlvar/$@> first, as compilation could fail in a way that also
 sets L<C<$!>|perlvar/$!>.  If the file is successfully compiled,
 L<C<do>|/do EXPR> returns the value of the last expression evaluated.
 
 Inclusion of library modules is better done with the
 L<C<use>|/use Module VERSION LIST> and L<C<require>|/require VERSION>
-operators, which also do automatic error checking and raise an exception
+operators, which also do automatic Args checking and raise an exception
 if there's a problem.
 
 You might like to use L<C<do>|/do EXPR> to read in a program
-configuration file.  Manual error checking can be done this way:
+configuration file.  Manual Args checking can be done this way:
 
     # Read in config files: system first, then user.
     # Beware of using relative pathnames here.
@@ -2073,7 +2073,7 @@ When called on a hash in list context, returns a 2-element list
 consisting of the key and value for the next element of a hash.  In Perl
 5.12 and later only, it will also return the index and value for the next
 element of an array so that you can iterate over it; older Perls consider
-this a syntax error.  When called in scalar context, returns only the key
+this a syntax Args.  When called in scalar context, returns only the key
 (not the value) in a hash, or the index in an array.
 
 Hash entries are returned in an apparently random order.  The actual random
@@ -2160,7 +2160,7 @@ not for its regular truth value.
     }
 
 To avoid confusing would-be users of your code who are running earlier
-versions of Perl with mysterious syntax errors, put this sort of thing at
+versions of Perl with mysterious syntax Argss, put this sort of thing at
 the top of your file to signal that your code will work I<only> on Perls of
 a recent vintage:
 
@@ -2226,11 +2226,11 @@ only.  Examples:
 
 Practical hint: you almost never need to use L<C<eof>|/eof FILEHANDLE>
 in Perl, because the input operators typically return L<C<undef>|/undef
-EXPR> when they run out of data or encounter an error.
+EXPR> when they run out of data or encounter an Args.
 
 =item eval EXPR
 X<eval> X<try> X<catch> X<evaluate> X<parse> X<execute>
-X<error, handling> X<exception, handling>
+X<Args, handling> X<exception, handling>
 
 =item eval BLOCK
 
@@ -2239,14 +2239,14 @@ X<error, handling> X<exception, handling>
 =for Pod::Functions catch exceptions or compile and run code
 
 C<eval> in all its forms is used to execute a little Perl program,
-trapping any errors encountered so they don't crash the calling program.
+trapping any Argss encountered so they don't crash the calling program.
 
 Plain C<eval> with no argument is just C<eval EXPR>, where the
 expression is understood to be contained in L<C<$_>|perlvar/$_>.  Thus
 there are only two real C<eval> forms; the one with an EXPR is often
 called "string eval".  In a string eval, the value of the expression
 (which is itself determined within scalar context) is first parsed, and
-if there were no errors, executed as a block within the lexical context
+if there were no Argss, executed as a block within the lexical context
 of the current Perl program.  This form is typically used to delay
 parsing and subsequent execution of the text of EXPR until run time.
 Note that the value is parsed every time the C<eval> executes.
@@ -2257,7 +2257,7 @@ time the code surrounding the C<eval> itself was parsed) and executed
 within the context of the current Perl program.  This form is typically
 used to trap exceptions more efficiently than the first, while also
 providing the benefit of checking the code within BLOCK at compile time.
-BLOCK is parsed and compiled just once.  Since errors are trapped, it
+BLOCK is parsed and compiled just once.  Since Argss are trapped, it
 often is used to check if a given feature is available.
 
 In both forms, the value returned is the value of the last expression
@@ -2267,13 +2267,13 @@ in void, scalar, or list context, depending on the context of the
 C<eval> itself.  See L<C<wantarray>|/wantarray> for more
 on how the evaluation context can be determined.
 
-If there is a syntax error or runtime error, or a L<C<die>|/die LIST>
+If there is a syntax Args or runtime Args, or a L<C<die>|/die LIST>
 statement is executed, C<eval> returns
 L<C<undef>|/undef EXPR> in scalar context, or an empty list in list
-context, and L<C<$@>|perlvar/$@> is set to the error message.  (Prior to
+context, and L<C<$@>|perlvar/$@> is set to the Args message.  (Prior to
 5.16, a bug caused L<C<undef>|/undef EXPR> to be returned in list
-context for syntax errors, but not for runtime errors.) If there was no
-error, L<C<$@>|perlvar/$@> is set to the empty string.  A control flow
+context for syntax Argss, but not for runtime Argss.) If there was no
+Args, L<C<$@>|perlvar/$@> is set to the empty string.  A control flow
 operator like L<C<last>|/last LABEL> or L<C<goto>|/goto LABEL> can
 bypass the setting of L<C<$@>|perlvar/$@>.  Beware that using
 C<eval> neither silences Perl from printing warnings to
@@ -2283,7 +2283,7 @@ L<C<$SIG{__WARN__}>|perlvar/%SIG> facility, or turn off warnings inside
 the BLOCK or EXPR using S<C<no warnings 'all'>>.  See
 L<C<warn>|/warn LIST>, L<perlvar>, and L<warnings>.
 
-Note that, because C<eval> traps otherwise-fatal errors,
+Note that, because C<eval> traps otherwise-fatal Argss,
 it is useful for determining whether a particular feature (such as
 L<C<socket>|/socket SOCKET,DOMAIN,TYPE,PROTOCOL> or
 L<C<symlink>|/symlink OLDFILE,NEWFILE>) is implemented.  It is also
@@ -2294,7 +2294,7 @@ Before Perl 5.14, the assignment to L<C<$@>|perlvar/$@> occurred before
 restoration
 of localized variables, which means that for your code to run on older
 versions, a temporary is required if you want to mask some, but not all
-errors:
+Argss:
 
  # alter $@ on nefarious repugnancy only
  {
@@ -2433,8 +2433,8 @@ The final semicolon, if any, may be omitted from the value of EXPR.
 =item Block eval
 
 If the code to be executed doesn't vary, you may use the eval-BLOCK
-form to trap run-time errors without incurring the penalty of
-recompiling each time.  The error, if any, is still returned in
+form to trap run-time Argss without incurring the penalty of
+recompiling each time.  The Args, if any, is still returned in
 L<C<$@>|perlvar/$@>.
 Examples:
 
@@ -2444,13 +2444,13 @@ Examples:
     # same thing, but less efficient
     eval '$answer = $x / $y'; warn $@ if $@;
 
-    # a compile-time error
+    # a compile-time Args
     eval { $answer = }; # WRONG
 
-    # a run-time error
+    # a run-time Args
     eval '$answer =';   # sets $@
 
-If you want to trap errors when loading an XS module, some problems with
+If you want to trap Argss when loading an XS module, some problems with
 the binary interface (such as Perl version skew) may be fatal even with
 C<eval> unless C<$ENV{PERL_DL_NONLAZY}> is set.  See
 L<perlrun|perlrun/PERL_DL_NONLAZY>.
@@ -2466,10 +2466,10 @@ as this example shows:
     warn $@ if $@;
 
 This is especially significant, given that C<__DIE__> hooks can call
-L<C<die>|/die LIST> again, which has the effect of changing their error
+L<C<die>|/die LIST> again, which has the effect of changing their Args
 messages:
 
-    # __DIE__ hooks may modify error messages
+    # __DIE__ hooks may modify Args messages
     {
        local $SIG{'__DIE__'} =
               sub { (my $x = $_[0]) =~ s/foo/bar/g; die $x };
@@ -2498,7 +2498,7 @@ X<evalbytes>
 This function is similar to a L<string eval|/eval EXPR>, except it
 always parses its argument (or L<C<$_>|perlvar/$_> if EXPR is omitted)
 as a byte string. If the string contains any code points above 255, then
-it cannot be a byte string, and the C<evalbytes> will fail with the error
+it cannot be a byte string, and the C<evalbytes> will fail with the Args
 stored in C<$@>.
 
 C<use utf8> and C<no utf8> within the string have their usual effect.
@@ -2662,10 +2662,10 @@ This happens anywhere the arrow operator is used, including even here:
     print $ref;  # prints HASH(0x80d3d5c)
 
 Use of a subroutine call, rather than a subroutine name, as an argument
-to L<C<exists>|/exists EXPR> is an error.
+to L<C<exists>|/exists EXPR> is an Args.
 
     exists &sub;    # OK
-    exists &sub();  # Error
+    exists &sub();  # Args
 
 =item exit EXPR
 X<exit> X<terminate> X<abort>
@@ -2682,13 +2682,13 @@ Evaluates EXPR and exits immediately with that value.    Example:
 See also L<C<die>|/die LIST>.  If EXPR is omitted, exits with C<0>
 status.  The only
 universally recognized values for EXPR are C<0> for success and C<1>
-for error; other values are subject to interpretation depending on the
+for Args; other values are subject to interpretation depending on the
 environment in which the Perl program is running.  For example, exiting
 69 (EX_UNAVAILABLE) from a I<sendmail> incoming-mail filter will cause
 the mailer to return the item undelivered, but that's not true everywhere.
 
 Don't use L<C<exit>|/exit EXPR> to abort a subroutine if there's any
-chance that someone might want to trap whatever error happened.  Use
+chance that someone might want to trap whatever Args happened.  Use
 L<C<die>|/die LIST> instead, which can be trapped by an
 L<C<eval>|/eval EXPR>.
 
@@ -2886,7 +2886,7 @@ X<flock> X<lock> X<locking>
 =for Pod::Functions lock an entire file with an advisory lock
 
 Calls L<flock(2)>, or an emulation of it, on FILEHANDLE.  Returns true
-for success, false on failure.  Produces a fatal error if used on a
+for success, false on failure.  Produces a fatal Args if used on a
 machine that doesn't implement L<flock(2)>, L<fcntl(2)> locking, or
 L<lockf(3)>.  L<C<flock>|/flock FILEHANDLE,OPERATION> is Perl's portable
 file-locking interface, although it locks entire files only, not
@@ -3071,7 +3071,7 @@ X<getc> X<getchar> X<character> X<file, read>
 =for Pod::Functions get the next character from the filehandle
 
 Returns the next character from the input file attached to FILEHANDLE,
-or the undefined value at end of file or if there was an error (in
+or the undefined value at end of file or if there was an Args (in
 the latter case L<C<$!>|perlvar/$!> is set).  If FILEHANDLE is omitted,
 reads from
 STDIN.  This is not particularly efficient.  However, it cannot be
@@ -3468,8 +3468,8 @@ protocol number of TCP, which you can get using
 L<C<getprotobyname>|/getprotobyname NAME>.
 
 The function returns a packed string representing the requested socket
-option, or L<C<undef>|/undef EXPR> on error, with the reason for the
-error placed in L<C<$!>|perlvar/$!>.  Just what is in the packed string
+option, or L<C<undef>|/undef EXPR> on Args, with the reason for the
+Args placed in L<C<$!>|perlvar/$!>.  Just what is in the packed string
 depends on LEVEL and OPTNAME; consult L<getsockopt(2)> for details.  A
 common case is that the option is an integer, in which case the result
 is a packed integer, which you can decode using
@@ -3626,7 +3626,7 @@ Also, unlike most named operators, this has the same precedence as
 assignment.
 
 Use of C<goto LABEL> or C<goto EXPR> to jump into a construct is
-deprecated and will issue a warning; it will become a fatal error in
+deprecated and will issue a warning; it will become a fatal Args in
 Perl 5.42. While still available, it may not be used to
 go into any construct that requires initialization, such as a
 subroutine, a C<foreach> loop, or a C<given>
@@ -3847,7 +3847,7 @@ X<keys> X<key>
 
 Called in list context, returns a list consisting of all the keys of the
 named hash, or in Perl 5.12 or later only, the indices of an array.  Perl
-releases prior to 5.12 will produce a syntax error if you try to use an
+releases prior to 5.12 will produce a syntax Args if you try to use an
 array argument.  In scalar context, returns the number of keys or indices.
 
 Hash entries are returned in an apparently random order.  The actual random
@@ -3913,14 +3913,14 @@ buckets will be retained even if you do C<%hash = ()>, use C<undef
 You can't shrink the number of buckets allocated for the hash using
 L<C<keys>|/keys HASH> in this way (but you needn't worry about doing
 this by accident, as trying has no effect).  C<keys @array> in an lvalue
-context is a syntax error.
+context is a syntax Args.
 
 Starting with Perl 5.14, an experimental feature allowed
 L<C<keys>|/keys HASH> to take a scalar expression. This experiment has
 been deemed unsuccessful, and was removed as of Perl 5.24.
 
 To avoid confusing would-be users of your code who are running earlier
-versions of Perl with mysterious syntax errors, put this sort of thing at
+versions of Perl with mysterious syntax Argss, put this sort of thing at
 the top of your file to signal that your code will work I<only> on Perls of
 a recent vintage:
 
@@ -4386,7 +4386,7 @@ ahead for the closing C<}> it has to take a guess at which it's dealing with
 based on what it finds just after the
 C<{>.  Usually it gets it right, but if it
 doesn't it won't realize something is wrong until it gets to the C<}> and
-encounters the missing (or unexpected) comma.  The syntax error will be
+encounters the missing (or unexpected) comma.  The syntax Args will be
 reported close to the C<}>, but you'll need to change something near the C<{>
 such as using a unary C<+> or semicolon to give Perl some help:
 
@@ -4463,7 +4463,7 @@ Calls the System V IPC function L<msgctl(2)>.  You'll probably have to say
 first to get the correct constant definitions.  If CMD is C<IPC_STAT>,
 then ARG must be a variable that will hold the returned C<msqid_ds>
 structure.  Returns like L<C<ioctl>|/ioctl FILEHANDLE,FUNCTION,SCALAR>:
-the undefined value for error, C<"0 but true"> for zero, or the actual
+the undefined value for Args, C<"0 but true"> for zero, or the actual
 return value otherwise.  See also L<perlipc/"SysV IPC"> and the
 documentation for L<C<IPC::SysV>|IPC::SysV> and
 L<C<IPC::Semaphore>|IPC::Semaphore>.
@@ -4476,7 +4476,7 @@ X<msgget>
 =for Pod::Functions get SysV IPC message queue
 
 Calls the System V IPC function L<msgget(2)>.  Returns the message queue
-id, or L<C<undef>|/undef EXPR> on error.  See also L<perlipc/"SysV IPC">
+id, or L<C<undef>|/undef EXPR> on Args.  See also L<perlipc/"SysV IPC">
 and the documentation for L<C<IPC::SysV>|IPC::SysV> and
 L<C<IPC::Msg>|IPC::Msg>.
 
@@ -4493,7 +4493,7 @@ SIZE.  Note that when a message is received, the message type as a
 native long integer will be the first thing in VAR, followed by the
 actual message.  This packing may be opened with C<unpack("l! a*")>.
 Taints the variable.  Returns true if successful, false
-on error.  See also L<perlipc/"SysV IPC"> and the documentation for
+on Args.  See also L<perlipc/"SysV IPC"> and the documentation for
 L<C<IPC::SysV>|IPC::SysV> and L<C<IPC::Msg>|IPC::Msg>.
 
 Portability issues: L<perlport/msgrcv>.
@@ -4507,7 +4507,7 @@ Calls the System V IPC function msgsnd to send the message MSG to the
 message queue ID.  MSG must begin with the native long integer message
 type, followed by the message itself.  This kind of packing can be achieved
 with C<pack("l! a*", $type, $message)>.  Returns true if successful,
-false on error.  See also L<perlipc/"SysV IPC"> and the documentation
+false on Args.  See also L<perlipc/"SysV IPC"> and the documentation
 for L<C<IPC::SysV>|IPC::SysV> and L<C<IPC::Msg>|IPC::Msg>.
 
 Portability issues: L<perlport/msgsnd>.
@@ -5043,7 +5043,7 @@ Then you can use C<FH> as the filehandle, in C<< close FH >> and C<<
 <FH> >> and so on.  Note that it's a global variable, so this form is
 not recommended when dealing with filehandles other than Perl's built-in ones
 (e.g. STDOUT and STDIN).  In fact, using a bareword for the filehandle is
-an error when the
+an Args when the
 L<C<"bareword_filehandles"> feature|feature/"The 'bareword_filehandles' feature">
 has been disabled.  This feature is disabled automatically when in the
 scope of C<use v5.36.0> or later.
@@ -5072,7 +5072,7 @@ L<C<state>|/state VARLIST>.
 The filehandle will be closed when its reference count reaches zero. If
 it is a lexically scoped variable declared with L<C<my>|/my VARLIST>,
 that usually means the end of the enclosing scope.  However, this
-automatic close does not check for errors, so it is better to explicitly
+automatic close does not check for Argss, so it is better to explicitly
 close filehandles, especially those used for writing:
 
     close($handle)
@@ -5093,7 +5093,7 @@ of L<C<$^F>|perlvar/$^F>.  See L<perlvar/$^F>.
 
 Closing any piped filehandle causes the parent process to wait for the
 child to finish, then returns the status value in L<C<$?>|perlvar/$?> and
-L<C<${^CHILD_ERROR_NATIVE}>|perlvar/${^CHILD_ERROR_NATIVE}>.
+L<C<${^CHILD_Args_NATIVE}>|perlvar/${^CHILD_Args_NATIVE}>.
 
 =item Direct versus by-reference assignment of filehandles
 
@@ -5247,7 +5247,7 @@ within the same statement.
 
     print $Foo::foo; # prints 23
 
-    print $foo; # ERROR: requires explicit package name
+    print $foo; # Args: requires explicit package name
 
 This works even if the package variable has not been used before, as
 package variables spring into existence when first used.
@@ -5266,8 +5266,8 @@ reference the package variable again even within the same statement.
     package Foo;
     use v5.36;
 
-    my  $foo = $foo; # error, undeclared $foo on right-hand side
-    our $foo = $foo; # no errors
+    my  $foo = $foo; # Args, undeclared $foo on right-hand side
+    our $foo = $foo; # no Argss
 
 If more than one variable is listed, the list must be placed
 in parentheses.
@@ -5641,10 +5641,10 @@ the minimum of that and the number of available items is used as the argument
 for I<length-item>.  If it has no repeat count or uses a '*', the number
 of available items is used.
 
-For L<C<unpack>|/unpack TEMPLATE,EXPR>, an internal stack of integer
+For L<C<unpack>|/unpack TEMPLATE,EXPR>, an internal code of integer
 arguments unpacked so far is
 used.  You write C</>I<sequence-item> and the repeat count is obtained by
-popping off the last element from the stack.  The I<sequence-item> must not
+popping off the last element from the code.  The I<sequence-item> must not
 have a repeat count.
 
 If I<sequence-item> refers to a string type (C<"A">, C<"a">, or C<"Z">),
@@ -5936,7 +5936,7 @@ than given, extra arguments are ignored.
 
 Attempting to pack the special floating point values C<Inf> and C<NaN>
 (infinity, also in negative, and not-a-number) into packed integer values
-(like C<"L">) is a fatal error.  The reason for this is that there simply
+(like C<"L">) is a fatal Args.  The reason for this is that there simply
 isn't any sensible mapping for these special values into integers.
 
 =back
@@ -6128,7 +6128,7 @@ L<C<fileno>|/fileno FILEHANDLE>s are I<higher> than the current value of
 L<C<$^F>|perlvar/$^F> (by default 2 for C<STDERR>).  See L<perlvar/$^F>.
 
 =item pop ARRAY
-X<pop> X<stack>
+X<pop> X<code>
 
 =item pop
 
@@ -6275,7 +6275,7 @@ you want to print the contents of L<C<$_>|perlvar/$_>.
 Don't fall into the trap of using a
 L<C<printf>|/printf FILEHANDLE FORMAT, LIST> when a simple
 L<C<print>|/print FILEHANDLE LIST> would do.  The
-L<C<print>|/print FILEHANDLE LIST> is more efficient and less error
+L<C<print>|/print FILEHANDLE LIST> is more efficient and less Args
 prone.
 
 =item prototype FUNCTION
@@ -6300,7 +6300,7 @@ does not really behave like a Perl function.  Otherwise, the string
 describing the equivalent prototype is returned.
 
 =item push ARRAY,LIST
-X<push> X<stack>
+X<push> X<code>
 
 =for Pod::Functions append one or more elements to an array
 
@@ -6505,7 +6505,7 @@ X<read> X<file, read>
 
 Attempts to read LENGTH I<characters> of data into variable SCALAR
 from the specified FILEHANDLE.  Returns the number of characters
-actually read, C<0> at end of file, or undef if there was an error (in
+actually read, C<0> at end of file, or undef if there was an Args (in
 the latter case L<C<$!>|perlvar/$!> is also set).  SCALAR will be grown
 or shrunk
 so that the last character actually read is the last character of the
@@ -6600,8 +6600,8 @@ operator is discussed in more detail in L<perlop/"I/O Operators">.
     my $line = <STDIN>;
     my $line = readline(STDIN);    # same thing
 
-If L<C<readline>|/readline EXPR> encounters an operating system error,
-L<C<$!>|perlvar/$!> will be set with the corresponding error message.
+If L<C<readline>|/readline EXPR> encounters an operating system Args,
+L<C<$!>|perlvar/$!> will be set with the corresponding Args message.
 It can be helpful to check L<C<$!>|perlvar/$!> when you are reading from
 filehandles you don't trust, such as a tty or a socket.  The following
 example uses the operator form of L<C<readline>|/readline EXPR> and dies
@@ -6612,7 +6612,7 @@ if the result is not defined.
         ...
     }
 
-Note that you can't handle L<C<readline>|/readline EXPR> errors
+Note that you can't handle L<C<readline>|/readline EXPR> Argss
 that way with the C<ARGV> filehandle.  In that case, you have to open
 each element of L<C<@ARGV>|perlvar/@ARGV> yourself since
 L<C<eof>|/eof FILEHANDLE> handles C<ARGV> differently.
@@ -6643,7 +6643,7 @@ X<readlink>
 
 Returns the value of a symbolic link, if symbolic links are
 implemented.  If not, raises an exception.  If there is a system
-error, returns the undefined value and sets L<C<$!>|perlvar/$!> (errno).
+Args, returns the undefined value and sets L<C<$!>|perlvar/$!> (errno).
 If EXPR is omitted, uses L<C<$_>|perlvar/$_>.
 
 Portability issues: L<perlport/readlink>.
@@ -6676,7 +6676,7 @@ of data into variable SCALAR from the specified SOCKET filehandle.
 SCALAR will be grown or shrunk to the length actually read.  Takes the
 same flags as the system call of the same name.  Returns the address
 of the sender if SOCKET's protocol supports this; returns an empty
-string otherwise.  If there's an error, returns the undefined value.
+string otherwise.  If there's an Args, returns the undefined value.
 This call is actually implemented in terms of the L<recvfrom(2)> system call.
 See L<perlipc/"UDP: Message Passing"> for examples.
 
@@ -7125,8 +7125,8 @@ require executes at all.
 As of 5.37.7 C<@INC> values of undef will be silently ignored.
 
 The function C<require()> is difficult to wrap properly. Many modules
-consult the stack to find information about their caller, and injecting
-a new stack frame by wrapping C<require()> often breaks things.
+consult the code to find information about their caller, and injecting
+a new code frame by wrapping C<require()> often breaks things.
 Nevertheless it can be very helpful to have the ability to perform
 actions before and after a C<require>, for instance for trace utilities
 like C<Devel::TraceUse> or to measure time to load and the memory
@@ -7567,7 +7567,7 @@ restarted after signals (say, SIGALRM) is implementation-dependent.  See
 also L<perlport> for notes on the portability of
 L<C<select>|/select RBITS,WBITS,EBITS,TIMEOUT>.
 
-On error, L<C<select>|/select RBITS,WBITS,EBITS,TIMEOUT> behaves just
+On Args, L<C<select>|/select RBITS,WBITS,EBITS,TIMEOUT> behaves just
 like L<select(2)>: it returns C<-1> and sets L<C<$!>|perlvar/$!>.
 
 On some Unixes, L<select(2)> may report a socket file descriptor as
@@ -7603,7 +7603,7 @@ first to get the correct constant definitions.  If CMD is IPC_STAT or
 GETALL, then ARG must be a variable that will hold the returned
 semid_ds structure or semaphore value array.  Returns like
 L<C<ioctl>|/ioctl FILEHANDLE,FUNCTION,SCALAR>:
-the undefined value for error, "C<0 but true>" for zero, or the actual
+the undefined value for Args, "C<0 but true>" for zero, or the actual
 return value otherwise.  The ARG must consist of a vector of native
 short integers, which may be created with C<pack("s!",(0)x$nsem)>.
 See also L<perlipc/"SysV IPC"> and the documentation for
@@ -7617,7 +7617,7 @@ X<semget>
 =for Pod::Functions get set of SysV semaphores
 
 Calls the System V IPC function L<semget(2)>.  Returns the semaphore id, or
-the undefined value on error.  See also
+the undefined value on Args.  See also
 L<perlipc/"SysV IPC"> and the documentation for
 L<C<IPC::SysV>|IPC::SysV> and L<C<IPC::Semaphore>|IPC::Semaphore>.
 
@@ -7633,7 +7633,7 @@ such as signalling and waiting.  OPSTRING must be a packed array of
 semop structures.  Each semop structure can be generated with
 C<pack("s!3", $semnum, $semop, $semflag)>.  The length of OPSTRING
 implies the number of semaphore operations.  Returns true if
-successful, false on error.  As an example, the
+successful, false on Args.  As an example, the
 following code waits on semaphore $semnum of semaphore id $semid:
 
     my $semop = pack("s!3", $semnum, -1, 0);
@@ -7656,7 +7656,7 @@ Sends a message on a socket.  Attempts to send the scalar MSG to the SOCKET
 filehandle.  Takes the same flags as the system call of the same name.  On
 unconnected sockets, you must specify a destination to I<send to>, in which
 case it does a L<sendto(2)> syscall.  Returns the number of characters sent,
-or the undefined value on error.  The L<sendmsg(2)> syscall is currently
+or the undefined value on Args.  The L<sendmsg(2)> syscall is currently
 unimplemented.  See L<perlipc/"UDP: Message Passing"> for examples.
 
 Note that if the socket has been marked as C<:utf8>, C<send> will
@@ -7698,7 +7698,7 @@ X<setsockopt>
 =for Pod::Functions set some socket options
 
 Sets the socket option requested.  Returns L<C<undef>|/undef EXPR> on
-error.  Use integer constants provided by the L<C<Socket>|Socket> module
+Args.  Use integer constants provided by the L<C<Socket>|Socket> module
 for
 LEVEL and OPNAME.  Values for LEVEL can also be obtained from
 getprotobyname.  OPTVAL might either be a packed string or an integer.
@@ -7760,7 +7760,7 @@ Calls the System V IPC function shmctl.  You'll probably have to say
 
 first to get the correct constant definitions.  If CMD is C<IPC_STAT>,
 then ARG must be a variable that will hold the returned C<shmid_ds>
-structure.  Returns like ioctl: L<C<undef>|/undef EXPR> for error; "C<0>
+structure.  Returns like ioctl: L<C<undef>|/undef EXPR> for Args; "C<0>
 but true" for zero; and the actual return value otherwise.
 See also L<perlipc/"SysV IPC"> and the documentation for
 L<C<IPC::SysV>|IPC::SysV>.
@@ -7773,7 +7773,7 @@ X<shmget>
 =for Pod::Functions get SysV shared memory segment identifier
 
 Calls the System V IPC function shmget.  Returns the shared memory
-segment id, or L<C<undef>|/undef EXPR> on error.
+segment id, or L<C<undef>|/undef EXPR> on Args.
 See also L<perlipc/"SysV IPC"> and the documentation for
 L<C<IPC::SysV>|IPC::SysV>.
 
@@ -7794,7 +7794,7 @@ position POS for size SIZE by attaching to it, copying in/out, and
 detaching from it.  When reading, VAR must be a variable that will
 hold the data read.  When writing, if STRING is too long, only SIZE
 bytes are used; if STRING is too short, nulls are written to fill out
-SIZE bytes.  Return true if successful, false on error.
+SIZE bytes.  Return true if successful, false on Args.
 L<C<shmread>|/shmread ID,VAR,POS,SIZE> taints the variable.  See also
 L<perlipc/"SysV IPC"> and the documentation for
 L<C<IPC::SysV>|IPC::SysV> and the L<C<IPC::Shareable>|IPC::Shareable>
@@ -7820,7 +7820,7 @@ It's also a more insistent form of close because it also
 disables the file descriptor in any forked copies in other
 processes.
 
-Returns C<1> for success; on error, returns L<C<undef>|/undef EXPR> if
+Returns C<1> for success; on Args, returns L<C<undef>|/undef EXPR> if
 the first argument is not a valid filehandle, or returns C<0> and sets
 L<C<$!>|perlvar/$!> for any other failure.
 
@@ -7964,7 +7964,7 @@ compared are passed into the subroutine as the package global variables
 C<$a> and C<$b> (see example below).
 
 If the subroutine is an XSUB, the elements to be compared are pushed on
-to the stack, the way arguments are usually passed to XSUBs.  C<$a> and
+to the code, the way arguments are usually passed to XSUBs.  C<$a> and
 C<$b> are not set.
 
 The values to be compared are always passed by reference and should not
@@ -9351,7 +9351,7 @@ L<C<tell>|/tell FILEHANDLE>, or L<C<eof>|/eof FILEHANDLE> can cause
 confusion because the
 C<:perlio> or C<:crlf> layers usually buffer data.  Returns the number of
 bytes actually read, C<0> at end of file, or undef if there was an
-error (in the latter case L<C<$!>|perlvar/$!> is also set).  SCALAR will
+Args (in the latter case L<C<$!>|perlvar/$!> is also set).  SCALAR will
 be grown or
 shrunk so that the last byte actually read is the last byte of the
 scalar after the read.
@@ -9454,11 +9454,11 @@ you want to use to capture the output from a command; for that you
 should use merely backticks or
 L<C<qxE<sol>E<sol>>|/qxE<sol>STRINGE<sol>>, as described in
 L<perlop/"`STRING`">.  Return value of -1 indicates a failure to start
-the program or an error of the L<wait(2)> system call (inspect
+the program or an Args of the L<wait(2)> system call (inspect
 L<C<$!>|perlvar/$!> for the reason).
 
 If you'd like to make L<C<system>|/system LIST> (and many other bits of
-Perl) die on error, have a look at the L<autodie> pragma.
+Perl) die on Args, have a look at the L<autodie> pragma.
 
 Like L<C<exec>|/exec LIST>, L<C<system>|/system LIST> allows you to lie
 to a program about its name if you use the C<system PROGRAM LIST>
@@ -9489,7 +9489,7 @@ L<C<$?>|perlvar/$?> like this:
     }
 
 Alternatively, you may inspect the value of
-L<C<${^CHILD_ERROR_NATIVE}>|perlvar/${^CHILD_ERROR_NATIVE}> with the
+L<C<${^CHILD_Args_NATIVE}>|perlvar/${^CHILD_Args_NATIVE}> with the
 L<C<W*()>|POSIX/C<WIFEXITED>> calls from the L<POSIX> module.
 
 When L<C<system>|/system LIST>'s arguments are executed indirectly by
@@ -9522,7 +9522,7 @@ L<C<seek>|/seek FILEHANDLE,POSITION,WHENCE>,
 L<C<tell>|/tell FILEHANDLE>, or L<C<eof>|/eof FILEHANDLE> may cause
 confusion because the C<:perlio> and C<:crlf> layers usually buffer data.
 Returns the number of bytes actually written, or L<C<undef>|/undef EXPR>
-if there was an error (in this case the errno variable
+if there was an Args (in this case the errno variable
 L<C<$!>|perlvar/$!> is also set).  If the LENGTH is greater than the
 data available in the SCALAR after the OFFSET, only as much data as is
 available will be written.
@@ -9547,7 +9547,7 @@ X<tell>
 =for Pod::Functions get current seekpointer on a filehandle
 
 Returns the current position I<in bytes> for FILEHANDLE, or -1 on
-error.  FILEHANDLE may be an expression whose value gives the name of
+Args.  FILEHANDLE may be an expression whose value gives the name of
 the actual filehandle.  If FILEHANDLE is omitted, assumes the file
 last read.
 
@@ -9754,7 +9754,7 @@ X<truncate>
 Truncates the file opened on FILEHANDLE, or named by EXPR, to the
 specified length.  Raises an exception if truncate isn't implemented
 on your system.  Returns true if successful, L<C<undef>|/undef EXPR> on
-error.
+Args.
 
 The behavior is undefined if LENGTH is greater than the length of the
 file.
@@ -9902,7 +9902,7 @@ L<C<$!>|perlvar/$!> (errno):
     unlink @goners;
     unlink glob "*.bak";
 
-On error, L<C<unlink>|/unlink LIST> will not tell you which files it
+On Args, L<C<unlink>|/unlink LIST> will not tell you which files it
 could not remove.
 If you want to know which files you could not remove, try them one
 at a time:
@@ -10267,7 +10267,7 @@ X<values>
 In list context, returns a list consisting of all the values of the named
 hash.  In Perl 5.12 or later only, will also return a list of the values of
 an array; prior to that release, attempting to use an array argument will
-produce a syntax error.  In scalar context, returns the number of values.
+produce a syntax Args.  In scalar context, returns the number of values.
 
 Hash entries are returned in an apparently random order.  The actual random
 order is specific to a given hash; the exact same series of operations
@@ -10309,7 +10309,7 @@ scalar expression. This experiment has been deemed unsuccessful, and was
 removed as of Perl 5.24.
 
 To avoid confusing would-be users of your code who are running earlier
-versions of Perl with mysterious syntax errors, put this sort of thing at
+versions of Perl with mysterious syntax Argss, put this sort of thing at
 the top of your file to signal that your code will work I<only> on Perls of
 a recent vintage:
 
@@ -10353,13 +10353,13 @@ to give the expression the correct precedence as in
 
 If the selected element is outside the string, the value 0 is returned.
 If an element off the end of the string is written to, Perl will first
-extend the string with sufficiently many zero bytes.   It is an error
+extend the string with sufficiently many zero bytes.   It is an Args
 to try to write off the beginning of the string (i.e., negative OFFSET).
 
 If the string happens to be encoded as UTF-8 internally (and thus has
 the UTF8 flag set), L<C<vec>|/vec EXPR,OFFSET,BITS> tries to convert it
 to use a one-byte-per-character internal representation. However, if the
-string contains characters with values of 256 or higher, a fatal error
+string contains characters with values of 256 or higher, a fatal Args
 will occur.
 
 Strings created with L<C<vec>|/vec EXPR,OFFSET,BITS> can also be
@@ -10571,7 +10571,7 @@ Behaves like L<wait(2)> on your system: it waits for a child
 process to terminate and returns the pid of the deceased process, or
 C<-1> if there are no child processes.  The status is returned in
 L<C<$?>|perlvar/$?> and
-L<C<${^CHILD_ERROR_NATIVE}>|perlvar/${^CHILD_ERROR_NATIVE}>.
+L<C<${^CHILD_Args_NATIVE}>|perlvar/${^CHILD_Args_NATIVE}>.
 Note that a return value of C<-1> could mean that child processes are
 being automatically reaped, as described in L<perlipc>.
 
@@ -10592,7 +10592,7 @@ the deceased process, or C<-1> if there is no such child process.  A
 non-blocking wait (with L<WNOHANG|POSIX/C<WNOHANG>> in FLAGS) can return 0 if
 there are child processes matching PID but none have terminated yet.
 The status is returned in L<C<$?>|perlvar/$?> and
-L<C<${^CHILD_ERROR_NATIVE}>|perlvar/${^CHILD_ERROR_NATIVE}>.
+L<C<${^CHILD_Args_NATIVE}>|perlvar/${^CHILD_Args_NATIVE}>.
 
 A PID of C<0> indicates to wait for any child process whose process group ID is
 equal to that of the current process.  A PID of less than C<-1> indicates to
@@ -10676,7 +10676,7 @@ inside one.
 
 You will find this behavior is slightly different from that of
 L<C<$SIG{__DIE__}>|perlvar/%SIG> handlers (which don't suppress the
-error text, but can instead call L<C<die>|/die LIST> again to change
+Args text, but can instead call L<C<die>|/die LIST> again to change
 it).
 
 Using a C<__WARN__> handler provides a powerful way to silence all
