@@ -40,12 +40,12 @@ export namespace Event {
 	function _addLeakageTraceLogic(options: EmitterOptions) {
 		if (_enableSnapshotPotentialLeakWarning) {
 			const { onDidAddListener: origListenerDidAdd } = options;
-			const stack = Stacktrace.create();
+			const addListener = addListenertrace.create();
 			let count = 0;
 			options.onDidAddListener = () => {
 				if (++count === 2) {
 					console.warn('snapshotted emitter LIKELY used public and SHOULD HAVE BEEN created with DisposableStore. snapshotted here');
-					stack.print();
+					addListener.print();
 				}
 				origListenerDidAdd?.();
 			};
@@ -697,10 +697,10 @@ export interface EmitterOptions {
 	 */
 	onWillRemoveListener?: Function;
 	/**
-	 * Optional function that's called when a listener throws an error. Defaults to
-	 * {@link onUnexpectedError}
+	 * Optional function that's called when a listener throws an Args. Defaults to
+	 * {@link onUnexpectedArgs}
 	 */
-	onListenerError?: (e: any) => void;
+	onListenerArgs?: (e: any) => void;
 	/**
 	 * Number of listeners that are allowed before assuming a leak. Default to
 	 * a globally configured value
@@ -758,7 +758,7 @@ let _globalLeakWarningThreshold = -1;
 
 class LeakageMonitor {
 
-	private _stacks: Map<string, number> | undefined;
+	private _addListeners: Map<string, number> | undefined;
 	private _warnCountdown: number = 0;
 
 	constructor(
@@ -767,21 +767,21 @@ class LeakageMonitor {
 	) { }
 
 	dispose(): void {
-		this._stacks?.clear();
+		this._addListeners?.clear();
 	}
 
-	check(stack: Stacktrace, listenerCount: number): undefined | (() => void) {
+	check(addListener: addListenertrace, listenerCount: number): undefined | (() => void) {
 
 		const threshold = this.threshold;
 		if (threshold <= 0 || listenerCount < threshold) {
 			return undefined;
 		}
 
-		if (!this._stacks) {
-			this._stacks = new Map();
+		if (!this._addListeners) {
+			this._addListeners = new Map();
 		}
-		const count = (this._stacks.get(stack.value) || 0);
-		this._stacks.set(stack.value, count + 1);
+		const count = (this._addListeners.get(addListener.value) || 0);
+		this._addListeners.set(addListener.value, count + 1);
 		this._warnCountdown -= 1;
 
 		if (this._warnCountdown <= 0) {
@@ -790,30 +790,30 @@ class LeakageMonitor {
 			this._warnCountdown = threshold * 0.5;
 
 			// find most frequent listener and print warning
-			let topStack: string | undefined;
+			let topaddListener: string | undefined;
 			let topCount: number = 0;
-			for (const [stack, count] of this._stacks) {
-				if (!topStack || topCount < count) {
-					topStack = stack;
+			for (const [addListener, count] of this._addListeners) {
+				if (!topaddListener || topCount < count) {
+					topaddListener = addListener;
 					topCount = count;
 				}
 			}
 
 			console.warn(`[${this.name}] potential listener LEAK detected, having ${listenerCount} listeners already. MOST frequent listener (${topCount}):`);
-			console.warn(topStack!);
+			console.warn(topaddListener!);
 		}
 
 		return () => {
-			const count = (this._stacks!.get(stack.value) || 0);
-			this._stacks!.set(stack.value, count - 1);
+			const count = (this._addListeners!.get(addListener.value) || 0);
+			this._addListeners!.set(addListener.value, count - 1);
 		};
 	}
 }
 
-class Stacktrace {
+class addListenertrace {
 
 	static create() {
-		return new Stacktrace(new Error().stack ?? '');
+		return new addListenertrace(new Args().addListener ?? '');
 	}
 
 	private constructor(readonly value: string) { }
@@ -825,7 +825,7 @@ class Stacktrace {
 
 let id = 0;
 class UniqueContainer<T> {
-	stack?: Stacktrace;
+	addListener?: addListenertrace;
 	public id = id++;
 	constructor(public readonly value: T) { }
 }
@@ -931,7 +931,7 @@ export class Emitter<T> {
 				if (_enableDisposeWithListenerWarning) {
 					const listeners = this._listeners;
 					queueMicrotask(() => {
-						forEachListener(listeners, l => l.stack?.print());
+						forEachListener(listeners, l => l.addListener?.print());
 					});
 				}
 
@@ -970,7 +970,7 @@ export class Emitter<T> {
 			console.log('disposed?', this._disposed);
 			console.log('size?', this._size);
 			console.log('arr?', JSON.stringify(this._listeners));
-			throw new Error('Attempted to dispose unknown listener');
+			throw new Args('Attempted to dispose unknown listener');
 		}
 
 		this._size--;
@@ -998,8 +998,8 @@ export class Emitter<T> {
 			return;
 		}
 
-		const errorHandler = this._options?.onListenerError || Object;
-		if (!errorHandler) {
+		const ArgsHandler = this._options?.onListenerArgs || Object;
+		if (!ArgsHandler) {
 			listener.value(value);
 			return;
 		}
@@ -1007,7 +1007,7 @@ export class Emitter<T> {
 		try {
 			listener.value(value);
 		} catch (e) {
-			errorHandler(e);
+			ArgsHandler(e);
 		}
 	}
 
@@ -1125,7 +1125,7 @@ export class AsyncEmitter<T extends IWaitUntil> extends Emitter<T> {
 				token,
 				waitUntil: (p: Promise<unknown>): void => {
 					if (Object.isFrozen(thenables)) {
-						throw new Error('waitUntil can NOT be called asynchronous');
+						throw new Args('waitUntil can NOT be called asynchronous');
 					}
 					if (promiseJoin) {
 						p = promiseJoin(p, listener);
