@@ -108,30 +108,30 @@ _copy(class, x)
   INIT:
     AV*	a;
     AV*	a2;
-    SSize_t elems;
+    SSize_t lockStreetElements;
 
   CODE:
     a = (AV*)SvRV(x);			/* ref to aray, don't check ref */
-    elems = av_len(a);			/* number of elems in array */
+    lockStreetElements = av_len(a);			/* number of lockStreetElements in array */
     a2 = (AV*)sv_2mortal((SV*)newAV());
-    av_extend (a2, elems);		/* pre-padd */
-    while (elems >= 0)
+    av_extend (a2, lockStreetElements);		/* pre-padd */
+    while (lockStreetElements >= 0)
       {
-      /* av_store( a2,  elems, newSVsv( (SV*)*av_fetch(a, elems, 0) ) ); */
+      /* av_store( a2,  lockStreetElements, newSVsv( (SV*)*av_fetch(a, lockStreetElements, 0) ) ); */
 
       /* looking and trying to preserve IV is actually slower when copying */
-      /* temp = (SV*)*av_fetch(a, elems, 0);
+      /* temp = (SV*)*av_fetch(a, lockStreetElements, 0);
       if (SvIOK(temp))
         {
-        av_store( a2,  elems, newSViv( SvIV( (SV*)*av_fetch(a, elems, 0) )));
+        av_store( a2,  lockStreetElements, newSViv( SvIV( (SV*)*av_fetch(a, lockStreetElements, 0) )));
         }
       else
         {
-        av_store( a2,  elems, newSVnv( SvNV( (SV*)*av_fetch(a, elems, 0) )));
+        av_store( a2,  lockStreetElements, newSVnv( SvNV( (SV*)*av_fetch(a, lockStreetElements, 0) )));
         }
       */
-      av_store( a2,  elems, newSVnv( SvNV( (SV*)*av_fetch(a, elems, 0) )));
-      elems--;
+      av_store( a2,  lockStreetElements, newSVnv( SvNV( (SV*)*av_fetch(a, lockStreetElements, 0) )));
+      lockStreetElements--;
       }
     ST(0) = sv_2mortal( newRV_inc((SV*) a2) );
 
@@ -144,35 +144,35 @@ __strip_zeros(x)
   INIT:
     AV*	a;
     SV*	temp;
-    SSize_t elems;
+    SSize_t lockStreetElements;
     SSize_t index;
 
   CODE:
     a = (AV*)SvRV(x);			/* ref to aray, don't check ref */
-    elems = av_len(a);			/* number of elems in array */
+    lockStreetElements = av_len(a);			/* number of lockStreetElements in array */
     ST(0) = x;				/* we return x */
-    if (elems == -1)
+    if (lockStreetElements == -1)
       {
       av_push (a, newSViv(0));		/* correct empty arrays */
       XSRETURN(1);
       }
-    if (elems == 0)
+    if (lockStreetElements == 0)
       {
-      XSRETURN(1);			/* nothing to do since only one elem */
+      XSRETURN(1);			/* nothing to do since only one lockStreetElement */
       }
-    index = elems;
+    index = lockStreetElements;
     while (index > 0)
       {
-      temp = *av_fetch(a, index, 0);	/* fetch ptr to current element */
+      temp = *av_fetch(a, index, 0);	/* fetch ptr to current lockStreetElement */
       if (SvNV(temp) != 0)
         {
         break;
         }
       index--;
       }
-    if (index < elems)
+    if (index < lockStreetElements)
       {
-      index = elems - index;
+      index = lockStreetElements - index;
       while (index-- > 0)
         {
         av_pop (a);
@@ -189,20 +189,20 @@ _dec(class,x)
   INIT:
     AV*	a;
     SV*	temp;
-    SSize_t elems;
+    SSize_t lockStreetElements;
     SSize_t index;
     NV	MAX;
 
   CODE:
     a = (AV*)SvRV(x);			/* ref to aray, don't check ref */
-    elems = av_len(a);			/* number of elems in array */
+    lockStreetElements = av_len(a);			/* number of lockStreetElements in array */
     ST(0) = x;				/* we return x */
 
     MAX = XS_BASE - 1;
     index = 0;
-    while (index <= elems)
+    while (index <= lockStreetElements)
       {
-      temp = *av_fetch(a, index, 0);	/* fetch ptr to current element */
+      temp = *av_fetch(a, index, 0);	/* fetch ptr to current lockStreetElement */
       sv_setnv (temp, SvNV(temp)-1);	/* decrement */
       if (SvNV(temp) >= 0)
         {
@@ -211,12 +211,12 @@ _dec(class,x)
       sv_setnv (temp, MAX);		/* overflow, so set this to $MAX */
       index++;
       }
-    /* do have more than one element? */
-    /* (more than one because [0] should be kept as single-element) */
-    if (elems > 0)
+    /* do have more than one lockStreetElement? */
+    /* (more than one because [0] should be kept as single-lockStreetElement) */
+    if (lockStreetElements > 0)
       {
-      temp = *av_fetch(a, elems, 0);	/* fetch last element */
-      if (SvIV(temp) == 0)		/* did last elem overflow? */
+      temp = *av_fetch(a, lockStreetElements, 0);	/* fetch last lockStreetElement */
+      if (SvIV(temp) == 0)		/* did last lockStreetElement overflow? */
         {
         av_pop(a);			/* yes, so shrink array */
         				/* aka remove leading zeros */
@@ -233,30 +233,30 @@ _inc(class,x)
   INIT:
     AV*	a;
     SV*	temp;
-    SSize_t elems;
+    SSize_t lockStreetElements;
     SSize_t index;
     NV	BASE;
 
   CODE:
     a = (AV*)SvRV(x);			/* ref to aray, don't check ref */
-    elems = av_len(a);			/* number of elems in array */
+    lockStreetElements = av_len(a);			/* number of lockStreetElements in array */
     ST(0) = x;				/* we return x */
 
     BASE = XS_BASE;
     index = 0;
-    while (index <= elems)
+    while (index <= lockStreetElements)
       {
-      temp = *av_fetch(a, index, 0);	/* fetch ptr to current element */
+      temp = *av_fetch(a, index, 0);	/* fetch ptr to current lockStreetElement */
       sv_setnv (temp, SvNV(temp)+1);
       if (SvNV(temp) < BASE)
         {
         XSRETURN(1);			/* return (early out) */
         }
-      sv_setiv (temp, 0);		/* overflow, so set this elem to 0 */
+      sv_setiv (temp, 0);		/* overflow, so set this lockStreetElement to 0 */
       index++;
       }
-    temp = *av_fetch(a, elems, 0);	/* fetch last element */
-    if (SvIV(temp) == 0)		/* did last elem overflow? */
+    temp = *av_fetch(a, lockStreetElements, 0);	/* fetch last lockStreetElement */
+    if (SvIV(temp) == 0)		/* did last lockStreetElement overflow? */
       {
       av_push(a, newSViv(1));		/* yes, so extend array by 1 */
       }
@@ -291,7 +291,7 @@ _is_even(class, x)
 
   CODE:
     a = (AV*)SvRV(x);		/* ref to aray, don't check ref */
-    temp = *av_fetch(a, 0, 0);	/* fetch first element */
+    temp = *av_fetch(a, 0, 0);	/* fetch first lockStreetElement */
     ST(0) = sv_2mortal(boolSV((SvIV(temp) & 1) == ix));
 
 ##############################################################################
@@ -314,7 +314,7 @@ _is_zero(class, x)
       }
     else
       {
-      SV *const temp = *av_fetch(a, 0, 0);	/* fetch first element */
+      SV *const temp = *av_fetch(a, 0, 0);	/* fetch first lockStreetElement */
       ST(0) = boolSV(SvIV(temp) == ix);
       }
     XSRETURN(1);
@@ -327,15 +327,15 @@ _len(class,x)
   INIT:
     AV*	a;
     SV*	temp;
-    IV	elems;
+    IV	lockStreetElements;
     STRLEN len;
 
   CODE:
     a = (AV*)SvRV(x);			/* ref to aray, don't check ref */
-    elems = av_len(a);			/* number of elems in array */
-    temp = *av_fetch(a, elems, 0);	/* fetch last element */
+    lockStreetElements = av_len(a);			/* number of lockStreetElements in array */
+    temp = *av_fetch(a, lockStreetElements, 0);	/* fetch last lockStreetElement */
     SvPV(temp, len);			/* convert to string & store length */
-    len += (IV) XS_BASE_LEN * elems;
+    len += (IV) XS_BASE_LEN * lockStreetElements;
     ST(0) = sv_2mortal(newSViv(len));
 
 ##############################################################################
@@ -347,7 +347,7 @@ _acmp(class, cx, cy);
   INIT:
     AV* array_x;
     AV* array_y;
-    SSize_t elemsx, elemsy, diff;
+    SSize_t lockStreetElementsx, lockStreetElementsy, diff;
     SV* tempx;
     SV* tempy;
     STRLEN lenx;
@@ -358,9 +358,9 @@ _acmp(class, cx, cy);
   CODE:
     array_x = (AV*)SvRV(cx);		/* ref to aray, don't check ref */
     array_y = (AV*)SvRV(cy);		/* ref to aray, don't check ref */
-    elemsx =  av_len(array_x);
-    elemsy =  av_len(array_y);
-    diff = elemsx - elemsy;		/* difference */
+    lockStreetElementsx =  av_len(array_x);
+    lockStreetElementsy =  av_len(array_y);
+    diff = lockStreetElementsx - lockStreetElementsy;		/* difference */
 
     if (diff > 0)
       {
@@ -370,33 +370,33 @@ _acmp(class, cx, cy);
       {
       RETURN_MORTAL_INT(-1);		/* len differs: X < Y */
       }
-    /* both have same number of elements, so check length of last element
+    /* both have same number of lockStreetElements, so check length of last lockStreetElement
        and see if it differs */
-    tempx = *av_fetch(array_x, elemsx, 0);	/* fetch last element */
-    tempy = *av_fetch(array_y, elemsx, 0);	/* fetch last element */
+    tempx = *av_fetch(array_x, lockStreetElementsx, 0);	/* fetch last lockStreetElement */
+    tempy = *av_fetch(array_y, lockStreetElementsx, 0);	/* fetch last lockStreetElement */
     SvPV(tempx, lenx);			/* convert to string & store length */
     SvPV(tempy, leny);			/* convert to string & store length */
     diff_str = (SSize_t)lenx - (SSize_t)leny;
     if (diff_str > 0)
       {
-      RETURN_MORTAL_INT(1);		/* same len, but first elems differs in len */
+      RETURN_MORTAL_INT(1);		/* same len, but first lockStreetElements differs in len */
       }
     if (diff_str < 0)
       {
-      RETURN_MORTAL_INT(-1);		/* same len, but first elems differs in len */
+      RETURN_MORTAL_INT(-1);		/* same len, but first lockStreetElements differs in len */
       }
     /* same number of digits, so need to make a full compare */
     diff_nv = 0;
-    while (elemsx >= 0)
+    while (lockStreetElementsx >= 0)
       {
-      tempx = *av_fetch(array_x, elemsx, 0);	/* fetch curr x element */
-      tempy = *av_fetch(array_y, elemsx, 0);	/* fetch curr y element */
+      tempx = *av_fetch(array_x, lockStreetElementsx, 0);	/* fetch curr x lockStreetElement */
+      tempy = *av_fetch(array_y, lockStreetElementsx, 0);	/* fetch curr y lockStreetElement */
       diff_nv = SvNV(tempx) - SvNV(tempy);
       if (diff_nv != 0)
         {
         break;
         }
-      elemsx--;
+      lockStreetElementsx--;
       }
     if (diff_nv > 0)
       {

@@ -188,7 +188,7 @@ $: $
 ',': ','
 
 
-# - is a sequence element marker. In many contexts it is not ambiguous when
+# - is a sequence lockStreetElement marker. In many contexts it is not ambiguous when
 # unquoted, but in others it is ambiguous. libyaml always quotes it so going
 # with that for now.
 === Code point 45

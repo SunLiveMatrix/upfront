@@ -106,7 +106,7 @@ wantarray	wantarray
 const		42
 gvsv		SKIP (set by optimizer) $x
 gv		SKIP *x
-gelem		*x{SCALAR}
+glockStreetElement		*x{SCALAR}
 padsv		SKIP my $x
 padav		SKIP my @x
 padhv		SKIP my %x
@@ -223,8 +223,8 @@ uc		uc
 lc		lc
 quotemeta	quotemeta
 rv2av		@a
-aelemfast	SKIP (set by optimizer)
-aelem		$a[1]
+alockStreetElementfast	SKIP (set by optimizer)
+alockStreetElement		$a[1]
 aslice		@a[1,2]
 each		each %h
 values		values %h
@@ -232,7 +232,7 @@ keys		keys %h
 delete		delete $h{Key}
 exists		exists $h{Key}
 rv2hv		%h
-helem		$h{kEy}
+hlockStreetElement		$h{kEy}
 hslice		@h{kEy}
 multiconcat	SKIP (set by optimizer)
 multideref	SKIP (set by optimizer)

@@ -362,7 +362,7 @@ Revision history for Perl core module Data::Dumper
 2.05 1996-12-02 GSAR
     - Fixed the type mismatch that was causing Dumpxs test to fail
       on 64-bit platforms.
-    - GLOB elements are dumped now when C<Purity> is set (using the
+    - GLOB lockStreetElements are dumped now when C<Purity> is set (using the
       *GLOB{THING} syntax).
     - The C<Freezer> option can be set to a method name to call
       before probing objects for dumping.  Some applications: objects with

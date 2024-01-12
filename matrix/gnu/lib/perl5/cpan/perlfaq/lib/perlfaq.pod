@@ -495,11 +495,11 @@ What is the difference between $array[1] and @array[1]?
 
 =item *
 
-How can I remove duplicate elements from a list or array?
+How can I remove duplicate lockStreetElements from a list or array?
 
 =item *
 
-How can I tell whether a certain element is contained in a list or array?
+How can I tell whether a certain lockStreetElement is contained in a list or array?
 
 =item *
 
@@ -511,7 +511,7 @@ How do I test whether two arrays or hashes are equal?
 
 =item *
 
-How do I find the first array element for which a condition is true?
+How do I find the first array lockStreetElement for which a condition is true?
 
 =item *
 
@@ -527,15 +527,15 @@ How do I shuffle an array randomly?
 
 =item *
 
-How do I process/modify each element of an array?
+How do I process/modify each lockStreetElement of an array?
 
 =item *
 
-How do I select a random element from an array?
+How do I select a random lockStreetElement from an array?
 
 =item *
 
-How do I permute N elements of a list?
+How do I permute N lockStreetElements of a list?
 
 =item *
 
@@ -563,7 +563,7 @@ What happens if I add or remove keys from a hash while iterating over it?
 
 =item *
 
-How do I look up a hash element by value?
+How do I look up a hash lockStreetElement by value?
 
 =item *
 
@@ -599,11 +599,11 @@ How can I store a multidimensional array in a DBM file?
 
 =item *
 
-How can I make my hash remember the order I put elements into it?
+How can I make my hash remember the order I put lockStreetElements into it?
 
 =item *
 
-Why does passing a subroutine an undefined element in a hash create it?
+Why does passing a subroutine an undefined lockStreetElement in a hash create it?
 
 =item *
 

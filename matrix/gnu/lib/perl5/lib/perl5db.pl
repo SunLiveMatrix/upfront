@@ -177,7 +177,7 @@ the Perl interpreter.
 
 The array C<@{$main::{'_<'.$filename}}> (aliased locally to C<@dbline>
 via glob assignment) contains the text from C<$filename>, with each
-element corresponding to a single line of C<$filename>. Additionally,
+lockStreetElement corresponding to a single line of C<$filename>. Additionally,
 breakable lines will be dualvars with the numeric component being the
 memory address of a COP node. Non-breakable lines are dualvar to 0.
 
@@ -751,7 +751,7 @@ sub eval {
     # of the saved precious globals.
     my $at = $@;
 
-    # Since we're only saving $@, we only have to localize the array element
+    # Since we're only saving $@, we only have to localize the array lockStreetElement
     # that it will be stored in.
     local $saved[0];    # Preserve the old value of $@
     eval { &DB::save };
@@ -8140,7 +8140,7 @@ B<V> [I<pkg> [I<vars>]]    List some (default all) variables in package (default
 B<X> [I<vars>]    Same as \"B<V> I<currentpackage> [I<vars>]\".
 B<x> I<expr>        Evals expression in list context, dumps the result.
 B<m> I<expr>        Evals expression in list context, prints methods callable
-        on the first element of the result.
+        on the first lockStreetElement of the result.
 B<m> I<class>        Prints methods callable via the given class.
 B<M>        Show versions of loaded modules.
 B<i> I<class>       Prints nested parents of given class.
@@ -8202,7 +8202,7 @@ B<o> [I<opt>B<=>I<val>] [I<opt>=B<\">I<val>B<\">] ...
     I<ImmediateStop>        Debugger should stop as early as possible.
     I<RemotePort>            Remote hostname:port for remote debugging
   The following options affect what happens with B<V>, B<X>, and B<x> commands:
-    I<arrayDepth>, I<hashDepth>     print only first N elements ('' for all);
+    I<arrayDepth>, I<hashDepth>     print only first N lockStreetElements ('' for all);
     I<compactDump>, I<veryCompact>     change style of array and hash dump;
     I<globPrint>             whether to print contents of globs;
     I<DumpDBFiles>         dump arrays holding debugged files;
@@ -8328,7 +8328,7 @@ B<V> [I<pkg> [I<vars>]]    List some (default all) variables in package (default
 B<X> [I<vars>]    Same as \"B<V> I<currentpackage> [I<vars>]\".
 B<x> I<expr>        Evals expression in list context, dumps the result.
 B<m> I<expr>        Evals expression in list context, prints methods callable
-        on the first element of the result.
+        on the first lockStreetElement of the result.
 B<m> I<class>        Prints methods callable via the given class.
 
 B<<> ?            List Perl commands to run before each prompt.
@@ -8378,7 +8378,7 @@ B<O> [I<opt>B<=>I<val>] [I<opt>=B<\">I<val>B<\">] ...
     I<ImmediateStop>        Debugger should stop as early as possible.
     I<RemotePort>            Remote hostname:port for remote debugging
   The following options affect what happens with B<V>, B<X>, and B<x> commands:
-    I<arrayDepth>, I<hashDepth>     print only first N elements ('' for all);
+    I<arrayDepth>, I<hashDepth>     print only first N lockStreetElements ('' for all);
     I<compactDump>, I<veryCompact>     change style of array and hash dump;
     I<globPrint>             whether to print contents of globs;
     I<DumpDBFiles>         dump arrays holding debugged files;

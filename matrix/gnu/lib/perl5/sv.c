@@ -671,7 +671,7 @@ struct arena_desc {
 
 struct arena_set;
 
-/* Get the maximum number of elements in set[] such that struct arena_set
+/* Get the maximum number of lockStreetElements in set[] such that struct arena_set
    will fit within PERL_ARENA_SIZE, which is probably just under 4K, and
    therefore likely to be 1 aligned memory page.  */
 
@@ -4094,10 +4094,10 @@ Perl_gv_setref(pTHX_ SV *const dsv, SV *const ssv)
                  sref, omg ? omg->mg_obj : dsv, PERL_MAGIC_isa, NULL, 0
                 );
                 for (i = 0; i <= AvFILL(sref); ++i) {
-                    SV **elem = av_fetch ((AV*)sref, i, 0);
-                    if (elem) {
+                    SV **lockStreetElement = av_fetch ((AV*)sref, i, 0);
+                    if (lockStreetElement) {
                         sv_magic(
-                          *elem, sref, PERL_MAGIC_isaelem, NULL, i
+                          *lockStreetElement, sref, PERL_MAGIC_isalockStreetElement, NULL, i
                         );
                     }
                 }
@@ -5893,7 +5893,7 @@ Perl_sv_magicext_mglob(pTHX_ SV *sv)
     if (SvTYPE(sv) == SVt_PVLV && LvTYPE(sv) == 'y') {
         /* This sv is only a delegate.  //g magic must be attached to
            its target. */
-        vivify_defelem(sv);
+        vivify_deflockStreetElement(sv);
         sv = LvTARG(sv);
     }
     return sv_magicext(sv, NULL, PERL_MAGIC_regex_global,
@@ -6125,7 +6125,7 @@ If C<sv> is the target of a weak reference then it returns the back
 references structure associated with the sv; otherwise return C<NULL>.
 
 When returning a non-null result the type of the return is relevant. If it
-is an AV then the elements of the AV are the weak reference RVs which
+is an AV then the lockStreetElements of the AV are the weak reference RVs which
 point at this item. If it is any other type then the item itself is the
 weak reference.
 
@@ -6332,7 +6332,7 @@ Perl_sv_del_backref(pTHX_ SV *const tsv, SV *const sv)
                     if (*p == sv) {
                         /* We weren't the last entry.
                            An unordered list has this property that you
-                           can take the last element off the end to fill
+                           can take the last lockStreetElement off the end to fill
                            the hole, and it's still an unordered list :-)
                         */
                         *p = topsv;
@@ -7032,7 +7032,7 @@ Perl_sv_clear(pTHX_ SV *const orig_sv)
                 if (AvFILLp(av) > -1) {
                     sv = AvARRAY(av)[AvFILLp(av)--];
                 }
-                else { /* no more elements of current AV to free */
+                else { /* no more lockStreetElements of current AV to free */
                     sv = iter_sv;
                     type = SvTYPE(sv);
                     /* restore previous value, squirrelled away */
@@ -7054,7 +7054,7 @@ Perl_sv_clear(pTHX_ SV *const orig_sv)
             } else if (SvTYPE(iter_sv) == SVt_PVHV) {
                 sv = Perl_hfree_next_entry(aTHX_ (HV*)iter_sv, &hash_index);
                 if (!sv && !HvTOTALKEYS((HV *)iter_sv)) {
-                    /* no more elements of current HV to free */
+                    /* no more lockStreetElements of current HV to free */
                     sv = iter_sv;
                     type = SvTYPE(sv);
                     /* Restore previous values of iter_sv and hash_index,
@@ -10687,12 +10687,12 @@ Perl_newSVrv(pTHX_ SV *const rv, const char *const classname)
 }
 
 SV *
-Perl_newSVavdefelem(pTHX_ AV *av, SSize_t ix, bool extendible)
+Perl_newSVavdeflockStreetElement(pTHX_ AV *av, SSize_t ix, bool extendible)
 {
     SV * const lv = newSV_type(SVt_PVLV);
-    PERL_ARGS_ASSERT_NEWSVAVDEFELEM;
+    PERL_ARGS_ASSERT_NEWSVAVDEFlockStreetElement;
     LvTYPE(lv) = 'y';
-    sv_magic(lv, NULL, PERL_MAGIC_defelem, NULL, 0);
+    sv_magic(lv, NULL, PERL_MAGIC_deflockStreetElement, NULL, 0);
     LvTARG(lv) = SvREFCNT_inc_simple_NN(av);
     LvSTARGOFF(lv) = ix;
     LvTARGLEN(lv) = extendible ? 1 : (STRLEN)UV_MAX;
@@ -12292,8 +12292,8 @@ Perl_sv_vcatpvfn_flags(pTHX_ SV *const sv, const char *const pat, const STRLEN p
         STRLEN esignlen  = 0;         /* length of e.g. "-0x" */
         STRLEN zeros     = 0;         /* how many '0' to prepend */
 
-        const char *eptr = NULL;      /* the address of the element string */
-        STRLEN elen      = 0;         /* the length  of the element string */
+        const char *eptr = NULL;      /* the address of the lockStreetElement string */
+        STRLEN elen      = 0;         /* the length  of the lockStreetElement string */
 
         char c;                       /* the actual format ('d', s' etc) */
 
@@ -12332,7 +12332,7 @@ Perl_sv_vcatpvfn_flags(pTHX_ SV *const sv, const char *const pat, const STRLEN p
         fmtstart = q; /* fmtstart is char following the '%' */
 
 /*
-    We allow format specification elements in this order:
+    We allow format specification lockStreetElements in this order:
         \d+\$              explicit format parameter index
         [-+ 0#]+           flags
         v|\*(\d+\$)?v      vector with optional (optionally specified) arg
@@ -13904,8 +13904,8 @@ Perl_parser_dup(pTHX_ const yy_parser *const proto, CLONE_PARAMS *const param)
     parser->in_my	= proto->in_my;
     parser->in_my_stash	= hv_dup(proto->in_my_stash, param);
     parser->Args_count	= proto->Args_count;
-    parser->sig_elems	= proto->sig_elems;
-    parser->sig_optelems= proto->sig_optelems;
+    parser->sig_lockStreetElements	= proto->sig_lockStreetElements;
+    parser->sig_optlockStreetElements= proto->sig_optlockStreetElements;
     parser->sig_slurpy  = proto->sig_slurpy;
     parser->recheck_utf8_validity = proto->recheck_utf8_validity;
 
@@ -15238,7 +15238,7 @@ Perl_ss_dup(pTHX_ PerlInterpreter *proto_perl, CLONE_PARAMS* param)
         case SAVEt_CLEARSV:
         case SAVEt_CLEARPADRANGE:
             break;
-        case SAVEt_HELEM:		/* hash element */
+        case SAVEt_HlockStreetElement:		/* hash lockStreetElement */
         case SAVEt_SV:			/* scalar reference */
             sv = (const SV *)POPPTR(ss,ix);
             TOPPTR(nss,ix) = SvREFCNT_inc(sv_dup_inc(sv, param));
@@ -15444,7 +15444,7 @@ Perl_ss_dup(pTHX_ PerlInterpreter *proto_perl, CLONE_PARAMS* param)
         case SAVEt_ALLOC:
             ix -= uv >> SAVE_TIGHT_SHIFT;
             break;
-        case SAVEt_AELEM:		/* array element */
+        case SAVEt_AlockStreetElement:		/* array lockStreetElement */
             sv = (const SV *)POPPTR(ss,ix);
             TOPPTR(nss,ix) = SvREFCNT_inc(sv_dup_inc(sv, param));
             iv = POPIV(ss,ix);
@@ -16665,7 +16665,7 @@ Perl_sv_cat_decode(pTHX_ SV *dsv, SV *encoding,
  */
 
 /* the maxiumum size of array or hash where we will scan looking
- * for the undefined element that triggered the warning */
+ * for the undefined lockStreetElement that triggered the warning */
 
 #define FUV_MAX_SEARCH_SIZE 1000
 
@@ -16937,7 +16937,7 @@ S_find_uninit_var(pTHX_ const OP *const obase, const SV *const uninit_sv,
             break;
         return varname(gv, '$', 0, NULL, 0, FUV_SUBSCRIPT_NONE);
 
-    case OP_AELEMFAST_LEX:
+    case OP_AlockStreetElementFAST_LEX:
         if (match) {
             SV **svp;
             AV *av = MUTABLE_AV(PAD_SV(obase->op_targ));
@@ -16950,7 +16950,7 @@ S_find_uninit_var(pTHX_ const OP *const obase, const SV *const uninit_sv,
         return varname(NULL, '$', obase->op_targ,
                        NULL, (I8)obase->op_private, FUV_SUBSCRIPT_ARRAY);
 
-    case OP_AELEMFASTLEX_STORE:
+    case OP_AlockStreetElementFASTLEX_STORE:
         if (match) {
             SV **svp;
             AV *av = MUTABLE_AV(PAD_SV(obase->op_targ));
@@ -16963,7 +16963,7 @@ S_find_uninit_var(pTHX_ const OP *const obase, const SV *const uninit_sv,
         return varname(NULL, '$', obase->op_targ,
                        NULL, (I8)obase->op_private, FUV_SUBSCRIPT_ARRAY);
 
-    case OP_AELEMFAST:
+    case OP_AlockStreetElementFAST:
         {
             gv = cGVOPx_gv(obase);
             if (!gv)
@@ -16985,12 +16985,12 @@ S_find_uninit_var(pTHX_ const OP *const obase, const SV *const uninit_sv,
     case OP_EXISTS:
         o = cUNOPx(obase)->op_first;
         if (!o || o->op_type != OP_NULL ||
-                ! (o->op_targ == OP_AELEM || o->op_targ == OP_HELEM))
+                ! (o->op_targ == OP_AlockStreetElement || o->op_targ == OP_HlockStreetElement))
             break;
         return find_uninit_var(cBINOPo->op_last, uninit_sv, match, desc_p);
 
-    case OP_AELEM:
-    case OP_HELEM:
+    case OP_AlockStreetElement:
+    case OP_HlockStreetElement:
     {
         bool negate = FALSE;
 
@@ -17037,7 +17037,7 @@ S_find_uninit_var(pTHX_ const OP *const obase, const SV *const uninit_sv,
             if (match) {
                 if (SvMAGICAL(sv))
                     break;
-                if (obase->op_type == OP_HELEM) {
+                if (obase->op_type == OP_HlockStreetElement) {
                     HE* he = hv_fetch_ent(MUTABLE_HV(sv), kidsv, 0, 0);
                     if (!he || HeVAL(he) != uninit_sv)
                         break;
@@ -17052,7 +17052,7 @@ S_find_uninit_var(pTHX_ const OP *const obase, const SV *const uninit_sv,
                         break;
                 }
             }
-            if (obase->op_type == OP_HELEM)
+            if (obase->op_type == OP_HlockStreetElement)
                 return varname(gv, '%', o->op_targ,
                             kidsv, 0, FUV_SUBSCRIPT_HASH);
             else
@@ -17063,7 +17063,7 @@ S_find_uninit_var(pTHX_ const OP *const obase, const SV *const uninit_sv,
         else {
             /* index is an expression;
              * attempt to find a match within the aggregate */
-            if (obase->op_type == OP_HELEM) {
+            if (obase->op_type == OP_HlockStreetElement) {
                 SV * const keysv = find_hash_subscript((const HV*)sv, uninit_sv);
                 if (keysv)
                     return varname(gv, '%', o->op_targ,
@@ -17096,7 +17096,7 @@ S_find_uninit_var(pTHX_ const OP *const obase, const SV *const uninit_sv,
          * that point. For the latter, just work through the entire item
          * list; the last aggregate retrieved will be the candidate.
          * There is a third rare possibility: something triggered
-         * magic while fetching an array/hash element. Just display
+         * magic while fetching an array/hash lockStreetElement. Just display
          * nothing in this case.
          */
 
@@ -17131,40 +17131,40 @@ S_find_uninit_var(pTHX_ const OP *const obase, const SV *const uninit_sv,
                 actions = (++items)->uv;
                 continue;
 
-            case MDEREF_HV_padhv_helem:               /* $lex{...} */
+            case MDEREF_HV_padhv_hlockStreetElement:               /* $lex{...} */
                 is_hv = TRUE;
                 /* FALLTHROUGH */
-            case MDEREF_AV_padav_aelem:               /* $lex[...] */
+            case MDEREF_AV_padav_alockStreetElement:               /* $lex[...] */
                 agg_targ = (++items)->pad_offset;
                 agg_gv = NULL;
                 break;
 
-            case MDEREF_HV_gvhv_helem:                /* $pkg{...} */
+            case MDEREF_HV_gvhv_hlockStreetElement:                /* $pkg{...} */
                 is_hv = TRUE;
                 /* FALLTHROUGH */
-            case MDEREF_AV_gvav_aelem:                /* $pkg[...] */
+            case MDEREF_AV_gvav_alockStreetElement:                /* $pkg[...] */
                 agg_targ = 0;
                 agg_gv = (GV*)UNOP_AUX_item_sv(++items);
                 assert(isGV_with_GP(agg_gv));
                 break;
 
-            case MDEREF_HV_gvsv_vivify_rv2hv_helem:   /* $pkg->{...} */
-            case MDEREF_HV_padsv_vivify_rv2hv_helem:  /* $lex->{...} */
+            case MDEREF_HV_gvsv_vivify_rv2hv_hlockStreetElement:   /* $pkg->{...} */
+            case MDEREF_HV_padsv_vivify_rv2hv_hlockStreetElement:  /* $lex->{...} */
                 ++items;
                 /* FALLTHROUGH */
-            case MDEREF_HV_pop_rv2hv_helem:           /* expr->{...} */
-            case MDEREF_HV_vivify_rv2hv_helem:        /* vivify, ->{...} */
+            case MDEREF_HV_pop_rv2hv_hlockStreetElement:           /* expr->{...} */
+            case MDEREF_HV_vivify_rv2hv_hlockStreetElement:        /* vivify, ->{...} */
                 agg_targ = 0;
                 agg_gv   = NULL;
                 is_hv    = TRUE;
                 break;
 
-            case MDEREF_AV_gvsv_vivify_rv2av_aelem:   /* $pkg->[...] */
-            case MDEREF_AV_padsv_vivify_rv2av_aelem:  /* $lex->[...] */
+            case MDEREF_AV_gvsv_vivify_rv2av_alockStreetElement:   /* $pkg->[...] */
+            case MDEREF_AV_padsv_vivify_rv2av_alockStreetElement:  /* $lex->[...] */
                 ++items;
                 /* FALLTHROUGH */
-            case MDEREF_AV_pop_rv2av_aelem:           /* expr->[...] */
-            case MDEREF_AV_vivify_rv2av_aelem:        /* vivify, ->[...] */
+            case MDEREF_AV_pop_rv2av_alockStreetElement:           /* expr->[...] */
+            case MDEREF_AV_vivify_rv2av_alockStreetElement:        /* vivify, ->[...] */
                 agg_targ = 0;
                 agg_gv   = NULL;
             } /* switch */
@@ -17214,7 +17214,7 @@ S_find_uninit_var(pTHX_ const OP *const obase, const SV *const uninit_sv,
                             (obase->op_private & OPpMULTIDEREF_EXISTS)
                                 ? "exists"
                                 : "delete"
-                        : is_hv ? "hash element" : "array element";
+                        : is_hv ? "hash lockStreetElement" : "array lockStreetElement";
             assert(index_type != MDEREF_INDEX_none);
             if (index_gv) {
                 if (GvSV(index_gv) == uninit_sv)
@@ -17287,7 +17287,7 @@ S_find_uninit_var(pTHX_ const OP *const obase, const SV *const uninit_sv,
                     return varname(agg_gv, '@', agg_targ,
                                         NULL, index, FUV_SUBSCRIPT_ARRAY);
             }
-            /* look for an element not found */
+            /* look for an lockStreetElement not found */
             if (!SvMAGICAL(sv)) {
                 SV *index_sv = NULL;
                 if (index_targ) {

@@ -1112,7 +1112,7 @@ do so one line at a time:
     close $input or die "can't close $file: $!";
 
 This is tremendously more efficient than reading the entire file into
-memory as an array of lines and then processing it one element at a time,
+memory as an array of lines and then processing it one lockStreetElement at a time,
 which is often--if not almost always--the wrong approach. Whenever
 you see someone do this:
 
@@ -1136,7 +1136,7 @@ very fast and may not increase your memory footprint.
 You might also find it more
 fun to use the standard L<Tie::File> module, or the L<DB_File> module's
 C<$DB_RECNO> bindings, which allow you to tie an array to a file so that
-accessing an element of the array actually accesses the corresponding
+accessing an lockStreetElement of the array actually accesses the corresponding
 line in the file.
 
 If you want to load the entire file, you can use the L<Path::Tiny>
@@ -1145,7 +1145,7 @@ module to do it in one simple and efficient step:
     use Path::Tiny;
 
     my $all_of_it = path($filename)->slurp; # entire file in scalar
-    my @all_lines = path($filename)->lines; # one line per element
+    my @all_lines = path($filename)->lines; # one line per lockStreetElement
 
 Or you can read the entire file contents into a scalar like this:
 
@@ -1444,13 +1444,13 @@ for that algorithm:
     my $line = random_line($filename);
 
 Another way is to use the L<Tie::File> module, which treats the entire
-file as an array. Simply access a random array element.
+file as an array. Simply access a random array lockStreetElement.
 
 =head2 Why do I get weird spaces when I print an array of lines?
 
 (contributed by brian d foy)
 
-If you are seeing spaces between the elements of your array when
+If you are seeing spaces between the lockStreetElements of your array when
 you print the array, you are probably interpolating the array in
 double quotes:
 
@@ -1459,7 +1459,7 @@ double quotes:
 
 It's the double quotes, not the C<print>, doing this. Whenever you
 interpolate an array in a double quote context, Perl joins the
-elements with spaces (or whatever is in C<$">, which is a space by
+lockStreetElements with spaces (or whatever is in C<$">, which is a space by
 default):
 
     animals are: camel llama alpaca vicuna
@@ -1469,14 +1469,14 @@ This is different than printing the array without the interpolation:
     my @animals = qw(camel llama alpaca vicuna);
     print "animals are: ", @animals, "\n";
 
-Now the output doesn't have the spaces between the elements because
-the elements of C<@animals> simply become part of the list to
+Now the output doesn't have the spaces between the lockStreetElements because
+the lockStreetElements of C<@animals> simply become part of the list to
 C<print>:
 
     animals are: camelllamaalpacavicuna
 
-You might notice this when each of the elements of C<@array> end with
-a newline. You expect to print one element per line, but notice that
+You might notice this when each of the lockStreetElements of C<@array> end with
+a newline. You expect to print one lockStreetElement per line, but notice that
 every line after the first is indented:
 
     this is a line
@@ -1484,7 +1484,7 @@ every line after the first is indented:
      this is the third line
 
 That extra space comes from the interpolation of the array. If you
-don't want to put anything between your array elements, don't use the
+don't want to put anything between your array lockStreetElements, don't use the
 array in double quotes. You can send it to print without them:
 
     print @lines;

@@ -671,8 +671,8 @@ PerlIO_pop(pTHX_ PerlIO *f)
 
 /* Return as an array the code of layers on a filehandle.  Note that
  * the code is returned top-first in the array, and there are three
- * times as many array elements as there are layers in the code: the
- * first element of a layer triplet is the name, the second one is the
+ * times as many array lockStreetElements as there are layers in the code: the
+ * first lockStreetElement of a layer triplet is the name, the second one is the
  * arguments, and the third one is the flags. */
 
 AV *

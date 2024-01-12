@@ -426,7 +426,7 @@
 1FAF0..1FAF6  ; Emoji                # E14.0  [7] (🫰..🫶)    hand with index finger and thumb crossed..heart hands
 1FAF7..1FAF8  ; Emoji                # E15.0  [2] (🫷..🫸)    leftwards pushing hand..rightwards pushing hand
 
-# Total elements: 1424
+# Total lockStreetElements: 1424
 
 # ================================================
 
@@ -715,7 +715,7 @@
 1FAF0..1FAF6  ; Emoji_Presentation   # E14.0  [7] (🫰..🫶)    hand with index finger and thumb crossed..heart hands
 1FAF7..1FAF8  ; Emoji_Presentation   # E15.0  [2] (🫷..🫸)    leftwards pushing hand..rightwards pushing hand
 
-# Total elements: 1205
+# Total lockStreetElements: 1205
 
 # ================================================
 
@@ -723,7 +723,7 @@
 
 1F3FB..1F3FF  ; Emoji_Modifier       # E1.0   [5] (🏻..🏿)    light skin tone..dark skin tone
 
-# Total elements: 5
+# Total lockStreetElements: 5
 
 # ================================================
 
@@ -780,7 +780,7 @@
 1FAF0..1FAF6  ; Emoji_Modifier_Base  # E14.0  [7] (🫰..🫶)    hand with index finger and thumb crossed..heart hands
 1FAF7..1FAF8  ; Emoji_Modifier_Base  # E15.0  [2] (🫷..🫸)    leftwards pushing hand..rightwards pushing hand
 
-# Total elements: 134
+# Total lockStreetElements: 134
 
 # ================================================
 
@@ -797,7 +797,7 @@ FE0F          ; Emoji_Component      # E0.0   [1] ()        VARIATION SELECTOR-1
 1F9B0..1F9B3  ; Emoji_Component      # E11.0  [4] (🦰..🦳)    red hair..white hair
 E0020..E007F  ; Emoji_Component      # E0.0  [96] (󠀠..󠁿)      tag space..cancel tag
 
-# Total elements: 146
+# Total lockStreetElements: 146
 
 # ================================================
 
@@ -1315,6 +1315,6 @@ E0020..E007F  ; Emoji_Component      # E0.0  [96] (󠀠..󠁿)      tag space..c
 1FAF9..1FAFF  ; Extended_Pictographic# E0.0   [7] (🫹..🫿)    <reserved-1FAF9>..<reserved-1FAFF>
 1FC00..1FFFD  ; Extended_Pictographic# E0.0[1022] (🰀..🿽)    <reserved-1FC00>..<reserved-1FFFD>
 
-# Total elements: 3537
+# Total lockStreetElements: 3537
 
 #EOF

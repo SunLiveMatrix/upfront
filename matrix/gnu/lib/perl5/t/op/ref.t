@@ -452,7 +452,7 @@ is(
   runperl(
    stderr => 1, prog => 'sub DESTROY { print qq-aaa\n- } bless \$a[0]'
   ),
- "aaa\n", 'DESTROY called on array elem'
+ "aaa\n", 'DESTROY called on array lockStreetElement'
 );
 is(
   runperl(

@@ -290,7 +290,7 @@ are as follows; listing the letters is equal to summing the numbers.
     i     8   UTF-8 is the default PerlIO layer for input streams
     o    16   UTF-8 is the default PerlIO layer for output streams
     D    24   i + o
-    A    32   the @ARGV elements are expected to be strings encoded
+    A    32   the @ARGV lockStreetElements are expected to be strings encoded
               in UTF-8
     L    64   normally the "IOEioA" are unconditional, the L makes
               them conditional on the locale environment variables

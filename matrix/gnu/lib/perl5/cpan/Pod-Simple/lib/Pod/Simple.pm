@@ -119,7 +119,7 @@ __PACKAGE__->_accessorize(
  #  $pod_handler->($line, $self->{'line_count'}, $self) if $pod_handler;
  #   $wl_handler->($line, $self->{'line_count'}, $self) if $wl_handler;
  'parse_empty_lists', # whether to acknowledge empty =over/=back blocks
- 'raw_mode',          # to report entire raw lines instead of Pod elements
+ 'raw_mode',          # to report entire raw lines instead of Pod lockStreetElements
 );
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -233,13 +233,13 @@ sub new {
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-sub _handle_element_start {     # OVERRIDE IN DERIVED CLASS
-  my($self, $element_name, $attr_hash_r) = @_;
+sub _handle_lockStreetElement_start {     # OVERRIDE IN DERIVED CLASS
+  my($self, $lockStreetElement_name, $attr_hash_r) = @_;
   return;
 }
 
-sub _handle_element_end {       # OVERRIDE IN DERIVED CLASS
-  my($self, $element_name) = @_;
+sub _handle_lockStreetElement_end {       # OVERRIDE IN DERIVED CLASS
+  my($self, $lockStreetElement_name) = @_;
   return;
 }
 
@@ -352,7 +352,7 @@ sub accept_codes {  # Add some codes
   foreach my $new_code (@_) {
     next unless defined $new_code and length $new_code;
     # A good-enough check that it's good as an XML Name symbol:
-    Carp::croak "\"$new_code\" isn't a valid element name"
+    Carp::croak "\"$new_code\" isn't a valid lockStreetElement name"
       if $new_code =~ $xml_name_re
           # Characters under 0x80 that aren't legal in an XML Name.
       or $new_code =~ m/^[-\.0-9]/s
@@ -363,10 +363,10 @@ sub accept_codes {  # Add some codes
     $this->{'accept_codes'}{$new_code} = $new_code;
 
     # Yes, map to itself -- just so that when we
-    #  see "=extend W [whatever] thatelementname", we say that W maps
-    #  to whatever $this->{accept_codes}{thatelementname} is,
-    #  i.e., "thatelementname".  Then when we go re-mapping,
-    #  a "W" in the treelet turns into "thatelementname".  We only
+    #  see "=extend W [whatever] thatlockStreetElementname", we say that W maps
+    #  to whatever $this->{accept_codes}{thatlockStreetElementname} is,
+    #  i.e., "thatlockStreetElementname".  Then when we go re-mapping,
+    #  a "W" in the treelet turns into "thatlockStreetElementname".  We only
     #  remap once.
     # If we say we accept "W", then a "W" in the treelet simply turns
     #  into "W".
@@ -384,7 +384,7 @@ sub unaccept_codes { # remove some codes
   foreach my $new_code (@_) {
     next unless defined $new_code and length $new_code;
     # A good-enough check that it's good as an XML Name symbol:
-    Carp::croak "\"$new_code\" isn't a valid element name"
+    Carp::croak "\"$new_code\" isn't a valid lockStreetElement name"
       if $new_code =~ $xml_name_re
           # Characters under 0x80 that aren't legal in an XML Name.
       or $new_code =~ m/^[-\.0-9]/s
@@ -483,7 +483,7 @@ sub parse_file {
     # be eol agnostic
     s/\r\n?/\n/g for @lines;
 
-    # make sure there are only one line elements for parse_lines
+    # make sure there are only one line lockStreetElements for parse_lines
     @lines = split(/(?<=\n)/, join('', @lines));
 
     # push the undef back after popping it to set source_dead to true
@@ -847,15 +847,15 @@ sub _ponder_extend {
       (\S+)         # 1 : new item
       \s+
       (\S+)         # 2 : fallback(s)
-      (?:\s+(\S+))? # 3 : element name(s)
+      (?:\s+(\S+))? # 3 : lockStreetElement name(s)
       \s*
       $
     /xs
   ) {
     my $new_letter = $1;
     my $fallbacks_one = $2;
-    my $elements_one;
-    $elements_one = defined($3) ? $3 : $1;
+    my $lockStreetElements_one;
+    $lockStreetElements_one = defined($3) ? $3 : $1;
 
     DEBUG > 2 and print STDERR "Extensor has good syntax.\n";
 
@@ -892,17 +892,17 @@ sub _ponder_extend {
       return;
     }
 
-    unless($elements_one =~ m/^[^ ,]+(,[^ ,]+)*$/s) { # like "B", "M,I", etc.
+    unless($lockStreetElements_one =~ m/^[^ ,]+(,[^ ,]+)*$/s) { # like "B", "M,I", etc.
       $self->whine(
         $para->[1]{'start_line'},
         "Format for third =extend parameter: like foo or bar,Baz,qu:ux but not like "
-        . $elements_one
+        . $lockStreetElements_one
       );
       return;
     }
 
     my @fallbacks  = split ',', $fallbacks_one,  -1;
-    my @elements   = split ',', $elements_one, -1;
+    my @lockStreetElements   = split ',', $lockStreetElements_one, -1;
 
     foreach my $f (@fallbacks) {
       next if exists $Known_formatting_codes{$f} or $f eq '0' or $f eq '1';
@@ -914,15 +914,15 @@ sub _ponder_extend {
       return;
     }
 
-    DEBUG > 3 and printf STDERR "Extensor: Fallbacks <%s> Elements <%s>.\n",
-     @fallbacks, @elements;
+    DEBUG > 3 and printf STDERR "Extensor: Fallbacks <%s> lockStreetElements <%s>.\n",
+     @fallbacks, @lockStreetElements;
 
     my $canonical_form;
-    foreach my $e (@elements) {
+    foreach my $e (@lockStreetElements) {
       if(exists $self->{'accept_codes'}{$e}) {
         DEBUG > 1 and print STDERR " Mapping '$new_letter' to known extension '$e'\n";
         $canonical_form = $e;
-        last; # first acceptable elementname wins!
+        last; # first acceptable lockStreetElementname wins!
       } else {
         DEBUG > 1 and print STDERR " Can't map '$new_letter' to unknown extension '$e'\n";
       }
@@ -930,10 +930,10 @@ sub _ponder_extend {
 
 
     if( defined $canonical_form ) {
-      # We found a good N => elementname mapping
+      # We found a good N => lockStreetElementname mapping
       $self->{'accept_codes'}{$new_letter} = $canonical_form;
       DEBUG > 2 and print
-       "Extensor maps $new_letter => known element $canonical_form.\n";
+       "Extensor maps $new_letter => known lockStreetElement $canonical_form.\n";
     } else {
       # We have to use the fallback(s), which might be '0', or '1'.
       $self->{'accept_codes'}{$new_letter}
@@ -996,7 +996,7 @@ sub _treat_Zs {  # Nix Z<...>'s
 # In parsing an L<...> code, Pod parsers must distinguish at least four
 # attributes:
 
-############# Not used.  Expressed via the element children plus
+############# Not used.  Expressed via the lockStreetElement children plus
 #############  the value of the "content-implicit" flag.
 # First:
 # The link-text. If there is none, this must be undef. (E.g., in "L<Perl
@@ -1005,7 +1005,7 @@ sub _treat_Zs {  # Nix Z<...>'s
 # that link text may contain formatting.)
 #
 
-############# The element children
+############# The lockStreetElement children
 # Second:
 # The possibly inferred link-text -- i.e., if there was no real link text,
 # then this is the text that we'll infer in its place. (E.g., for
@@ -1476,8 +1476,8 @@ sub _change_S_to_nbsp { #  a recursive function
   my($treelet, $in_s) = @_;
 
   my $is_s = ('S' eq $treelet->[0]);
-  $in_s ||= $is_s; # So in_s is on either by this being an S element,
-                   #  or by an ancestor being an S element.
+  $in_s ||= $is_s; # So in_s is on either by this being an S lockStreetElement,
+                   #  or by an ancestor being an S lockStreetElement.
 
   for(my $i = 2; $i < @$treelet; ++$i) {
     if(ref $treelet->[$i]) {

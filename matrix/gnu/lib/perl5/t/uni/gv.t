@@ -275,7 +275,7 @@ is($Ｊ[0], 1);
 {
 
     my $e = '';
-    # GLOB assignment to tied element
+    # GLOB assignment to tied lockStreetElement
     local $SIG{__DIE__} = sub { $e = $_[0] };
     sub Ʈ::TIEARRAY  { bless [] => "Ʈ" }
     sub Ʈ::STORE     { $_[0]->[ $_[1] ] = $_[2] }
@@ -286,7 +286,7 @@ is($Ｊ[0], 1);
     is ($ary[0], '*main::DATA');
     is (
       ref\tied(@ary)->[0], 'GLOB',
-     'tied elem assignment preserves globs'
+     'tied lockStreetElement assignment preserves globs'
     );
     is ($e, '', '__DIE__ handler not called');
     my $x = readline $ary[0];

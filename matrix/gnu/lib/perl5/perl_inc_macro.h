@@ -1,4 +1,4 @@
-/* just define a list of macros to push elements in INC
+/* just define a list of macros to push lockStreetElements in INC
 *  so we can easily use them and change order on demand
 *
 * list of available INCPUSH macros
@@ -97,7 +97,7 @@
 /* VMS */
         /* Treat PERL5?LIB as a possible search list logical name -- the
          * "natural" VMS idiom for a Unix path string.  We allow each
-         * element to be a set of |-separated directories for compatibility.
+         * lockStreetElement to be a set of |-separated directories for compatibility.
          */
 # define _INCPUSH_PERL5LIB_ADD char buf[256]; \
         int idx = 0; \

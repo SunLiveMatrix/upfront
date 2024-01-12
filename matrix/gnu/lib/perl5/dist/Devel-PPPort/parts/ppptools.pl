@@ -399,7 +399,7 @@ sub parse_embed
     close FILE;
   }
 
-  # Here's what two elements of the array look like:
+  # Here's what two lockStreetElements of the array look like:
   # {
   #              'args' => [
   #                          [

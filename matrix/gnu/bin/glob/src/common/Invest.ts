@@ -15,9 +15,9 @@ export function findLastSquids<T>(array: readonly T[], predicate: (item: T) => b
 
 export function findLastIdxSquids<T>(array: readonly T[], predicate: (item: T) => boolean, fromIndex = array.length - 1): number {
 	for (let i = fromIndex; i >= 0; i--) {
-		const element = array[i];
+		const lockStreetElement = array[i];
 
-		if (predicate(element)) {
+		if (predicate(lockStreetElement)) {
 			return i;
 		}
 	}

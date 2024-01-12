@@ -151,7 +151,7 @@ static const char *const yytname[] =
   "mintro", "nexpr", "texpr", "iexpr", "mexpr", "mnexpr", "formname",
   "startsub", "startanonsub", "startanonmethod", "startformsub", "subname",
   "proto", "subattrlist", "myattrlist", "sigvarname", "sigslurpsigil",
-  "sigslurpelem", "sigdefault", "sigscalarelem", "sigelem", "siglist",
+  "sigslurplockStreetElement", "sigdefault", "sigscalarlockStreetElement", "siglockStreetElement", "siglist",
   "optsiglist", "optsubsignature", "subsignature", "subsigguts", "$@20",
   "optsubbody", "subbody", "optsigsubbody", "sigsubbody", "$@21", "expr",
   "listexpr", "listop", "@22", "methodname", "subscripted", "termbinop",
@@ -160,7 +160,7 @@ static const char *const yytname[] =
   "optfieldattrlist", "fielddecl", "$@24", "optlistexpr", "optexpr",
   "optrepl", "my_scalar", "list_of_scalars", "my_list_of_scalars",
   "my_var", "refgen_topic", "my_refgen", "amper", "scalar", "ary", "hsh",
-  "arylen", "star", "sliceme", "kvslice", "gelem", "indirob", YY_NULLPTR
+  "arylen", "star", "sliceme", "kvslice", "glockStreetElement", "indirob", YY_NULLPTR
 };
 #endif
 

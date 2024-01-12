@@ -203,18 +203,18 @@ sub same_language_tag {
 
 Returns an integer representing the degree of similarity between
 tags $lang1 and $lang2 (the order of which does not matter), where
-similarity is the number of common elements on the left,
+similarity is the number of common lockStreetElements on the left,
 without regard to case and to x/i- alternation.
 
    similarity_language_tag('fr', 'fr-ca')           is 1
-      (one element in common)
+      (one lockStreetElement in common)
    similarity_language_tag('fr-ca', 'fr-FR')        is 1
-      (one element in common)
+      (one lockStreetElement in common)
 
    similarity_language_tag('fr-CA-joual',
                            'fr-CA-PEI')             is 2
    similarity_language_tag('fr-CA-joual', 'fr-CA')  is 2
-      (two elements in common)
+      (two lockStreetElements in common)
 
    similarity_language_tag('x-kadara', 'i-kadara')  is 1
       (x/i- doesn't matter)
@@ -225,7 +225,7 @@ without regard to case and to x/i- alternation.
 
    similarity_language_tag('i-cree-syllabic',
                            'i-cherokee-syllabic')   is 0
-      (no B<leftmost> elements in common!)
+      (no B<leftmost> lockStreetElements in common!)
 
 =cut
 

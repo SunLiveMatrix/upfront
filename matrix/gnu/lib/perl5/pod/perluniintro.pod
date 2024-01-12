@@ -63,7 +63,7 @@ by a trailing consonant.
 
 Whether to call these extended grapheme clusters "characters" depends on your
 point of view. If you are a programmer, you probably would tend towards seeing
-each element in the sequences as one unit, or "character".  However from
+each lockStreetElement in the sequences as one unit, or "character".  However from
 the user's point of view, the whole sequence could be seen as one
 "character" since that's probably what it looks like in the context of the
 user's language.  In this document, we take the programmer's point of

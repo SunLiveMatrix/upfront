@@ -218,7 +218,7 @@ my %c_mod = (
 
 # Key is the .pm file from which we check the version.
 # Value is a reference to an array of files to check for differences
-# The trivial case is a pure perl module, where the array holds one element,
+# The trivial case is a pure perl module, where the array holds one lockStreetElement,
 # the perl module's file. The "fun" comes with XS modules, and the real fun
 # with XS modules with more than one XS file, and "interesting" layouts.
 

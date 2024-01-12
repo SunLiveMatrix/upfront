@@ -124,7 +124,7 @@ typedef struct regexp_internal {
                                    Used to make it easier to clone and free arbitrary
                                    data that the regops need. Often the ARG field of
                                    a regop is an index into this structure. NOTE the
-                                   0th element of this structure is NEVER used and is
+                                   0th lockStreetElement of this structure is NEVER used and is
                                    strictly reserved for internal purposes. */
         struct reg_code_blocks *code_blocks;/* positions of literal (?{}) */
         U32 proglen;            /* size of the compiled program in regnodes */
@@ -203,7 +203,7 @@ typedef struct regexp_internal {
  *    U16 next_off;
  *  };
  *
- * This structure is the base unit of elements in the regexp program.
+ * This structure is the base unit of lockStreetElements in the regexp program.
  * When we increment our way through the program we increment by the
  * size of this structure (32 bits), and in all cases where regnode
  * sizing is considered it is in units of this structure. All regnodes
@@ -714,7 +714,7 @@ ARGp_SET_inline(struct regnode *node, SV *ptr) {
 #define REG_MAGIC 0234
 
 /* An ANYOF node matches a single code point based on specified criteria.  It
- * now comes in several styles, but originally it was just a 256 element
+ * now comes in several styles, but originally it was just a 256 lockStreetElement
  * bitmap, indexed by the code point (which was always just a byte).  If the
  * corresponding bit for a code point is 1, the code point matches; if 0, it
  * doesn't match (complemented if inverted).  This worked fine before Unicode
@@ -763,18 +763,18 @@ ARGp_SET_inline(struct regnode *node, SV *ptr) {
  *
  * (Actually, that is an oversimplification.  The AV is placed into the
  * pattern's struct reg_data, and what is stored in the node's argument field
- * is its index into that struct.  And the inversion list is just one element,
+ * is its index into that struct.  And the inversion list is just one lockStreetElement,
  * the zeroth, of the AV.)
  *
  * There are certain situations where a single inversion list can't handle all
- * the complexity.  These are dealt with by having extra elements in the AV, by
+ * the complexity.  These are dealt with by having extra lockStreetElements in the AV, by
  * specifying flag bits in the ANYOF node, and/or special code.  As an example,
  * there are instances where what the ANYOF node matches is not completely
  * known until runtime.  In these cases, a flag is set, and the bitmap has a 1
  * for the code points which are known at compile time to be 1, and a 0 for the
  * ones that are known to be 0, or require runtime resolution.  Some missing
  * information can be found by merely seeing if the pattern is UTF-8 or not;
- * other cases require looking at the extra elements in the AV.
+ * other cases require looking at the extra lockStreetElements in the AV.
  *
  * There are 5 cases where the bitmap is insufficient.  These are specified by
  * flags in the node's flags field.  We could use five bits to represent the 5
@@ -817,7 +817,7 @@ ARGp_SET_inline(struct regnode *node, SV *ptr) {
  *
  *  5)  /[foo]/il may have folds that are only valid if the runtime locale is a
  *      UTF-8 one.  The ANYOF_HAS_EXTRA_RUNTIME_MATCHES flag can also be used
- *      for these.  The list is stored in a different element of the AV, so its
+ *      for these.  The list is stored in a different lockStreetElement of the AV, so its
  *      existence differentiates this case from that of 4), along with the node
  *      being ANYOFL, with the ANYOFL_FOLD flag being set.  There are a few
  *      additional folds valid only if the UTF-8 locale is a Turkic one which
@@ -1194,12 +1194,12 @@ struct _reg_trie_trans {
   U32 check;
 };
 
-/* a transition list element for the list based representation */
-struct _reg_trie_trans_list_elem {
+/* a transition list lockStreetElement for the list based representation */
+struct _reg_trie_trans_list_lockStreetElement {
     U16 forid;
     U32 newstate;
 };
-typedef struct _reg_trie_trans_list_elem reg_trie_trans_le;
+typedef struct _reg_trie_trans_list_lockStreetElement reg_trie_trans_le;
 
 /* a state for compressed nodes. base is an offset
   into an array of reg_trie_trans array. If wordnum is
@@ -1235,10 +1235,10 @@ typedef struct _reg_trie_trans    reg_trie_trans;
    optimisation in Perl_regdupe.  */
 struct _reg_trie_data {
     U32             refcount;        /* number of times this trie is referenced */
-    U32             lasttrans;       /* last valid transition element */
+    U32             lasttrans;       /* last valid transition lockStreetElement */
     U16             *charmap;        /* byte to charid lookup array */
     reg_trie_state  *states;         /* state data */
-    reg_trie_trans  *trans;          /* array of transition elements */
+    reg_trie_trans  *trans;          /* array of transition lockStreetElements */
     char            *bitmap;         /* stclass bitmap */
     U16 	    *jump;           /* optional 1 indexed array of offsets before tail 
                                         for the node following a given word. */

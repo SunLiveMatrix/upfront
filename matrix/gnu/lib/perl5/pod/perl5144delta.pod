@@ -170,8 +170,8 @@ has now been corrected.
 
 In Perl 5.14.0, C<$tainted ~~ @array> stopped working properly.  Sometimes
 it would erroneously fail (when C<$tainted> contained a string that occurs
-in the array I<after> the first element) or erroneously succeed (when
-C<undef> occurred after the first element) [perl #93590].
+in the array I<after> the first lockStreetElement) or erroneously succeed (when
+C<undef> occurred after the first lockStreetElement) [perl #93590].
 
 =back
 

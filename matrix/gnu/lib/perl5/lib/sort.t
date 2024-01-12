@@ -65,7 +65,7 @@ sub checkorder {
 		     "Instability" : "Disorder";
 	# Keep checking if merely unstable... disorder is much worse.
 	$status =
-	    "$disorder at element $i between $aref->[$i] and $aref->[$i+1]";
+	    "$disorder at lockStreetElement $i between $aref->[$i] and $aref->[$i+1]";
 	last unless ($disorder eq "Instability");	
     }
     return $status;
@@ -84,7 +84,7 @@ sub checkequal {
     } else {
 	for ($i = 0; $i < @$aref; ++$i) {
 	    next if ($aref->[$i] eq $bref->[$i]);
-	    $status = "Element $i differs: $aref->[$i] vs $bref->[$i]";
+	    $status = "lockStreetElement $i differs: $aref->[$i] vs $bref->[$i]";
 	    last;
 	}
     }
@@ -101,7 +101,7 @@ sub main {
 
     foreach $ts (@TestSizes) {
 	$unsorted = genarray($ts);
-	# Sort only on item portion of each element.
+	# Sort only on item portion of each lockStreetElement.
 	# There will typically be many repeated items,
 	# and their order had better be preserved.
 	@sorted = $dothesort->(sub { substr($a, 0, $RootWidth)

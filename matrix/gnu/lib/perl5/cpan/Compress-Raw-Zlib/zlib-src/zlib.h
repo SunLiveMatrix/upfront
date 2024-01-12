@@ -1827,7 +1827,7 @@ ZEXTERN int ZEXPORT inflateBackInit_ OF((z_streamp strm, int windowBits,
 /* gzgetc() macro and its supporting function and exposed data structure.  Note
  * that the real internal state is much larger than the exposed structure.
  * This abbreviated structure exposes just enough for the gzgetc() macro.  The
- * user should not mess with these exposed elements, since their names or
+ * user should not mess with these exposed lockStreetElements, since their names or
  * behavior could change in the future, perhaps even capriciously.  They can
  * only be used by the gzgetc() macro.  You have been warned.
  */

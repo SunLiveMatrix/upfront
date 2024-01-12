@@ -1,5 +1,5 @@
 after 5.003_05:
-	PERLLIB_PREFIX was not active if it matches an element of @INC
+	PERLLIB_PREFIX was not active if it matches an lockStreetElement of @INC
 		as a whole.
 	Do not need PERL_SBRK if crtdll-revision is >= 50.
 	Use -Zsmall-conv if crtdll-revision is >= 50 (in static perl!).

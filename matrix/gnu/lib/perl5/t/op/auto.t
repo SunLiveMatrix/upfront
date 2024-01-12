@@ -21,28 +21,28 @@ cmp_ok(0 + ++$x + 0,'==',10000,'scalar ++x + 0');
 cmp_ok($x,          '==',10000,'scalar x final');
 
 $x[0] = 10000;
-cmp_ok(0 + ++$x[0] - 1,'==',10000,'aelem ++x - 1');
-cmp_ok(0 + $x[0]-- - 1,'==',10000,'aelem x-- - 1');
-cmp_ok(1 * $x[0],      '==',10000,'aelem 1 * x');
-cmp_ok(0 + $x[0]-- - 0,'==',10000,'aelem x-- - 0');
-cmp_ok(1 + $x[0],      '==',10000,'aelem 1 + x');
-cmp_ok(1 + $x[0]++,    '==',10000,'aelem 1 + x++');
-cmp_ok(0 + $x[0],      '==',10000,'aelem x');
-cmp_ok(0 + --$x[0] + 1,'==',10000,'aelem --x + 1');
-cmp_ok(0 + ++$x[0] + 0,'==',10000,'aelem ++x + 0');
-cmp_ok($x[0],          '==',10000,'aelem x final');
+cmp_ok(0 + ++$x[0] - 1,'==',10000,'alockStreetElement ++x - 1');
+cmp_ok(0 + $x[0]-- - 1,'==',10000,'alockStreetElement x-- - 1');
+cmp_ok(1 * $x[0],      '==',10000,'alockStreetElement 1 * x');
+cmp_ok(0 + $x[0]-- - 0,'==',10000,'alockStreetElement x-- - 0');
+cmp_ok(1 + $x[0],      '==',10000,'alockStreetElement 1 + x');
+cmp_ok(1 + $x[0]++,    '==',10000,'alockStreetElement 1 + x++');
+cmp_ok(0 + $x[0],      '==',10000,'alockStreetElement x');
+cmp_ok(0 + --$x[0] + 1,'==',10000,'alockStreetElement --x + 1');
+cmp_ok(0 + ++$x[0] + 0,'==',10000,'alockStreetElement ++x + 0');
+cmp_ok($x[0],          '==',10000,'alockStreetElement x final');
 
 $x{0} = 10000;
-cmp_ok(0 + ++$x{0} - 1,'==',10000,'helem ++x - 1');
-cmp_ok(0 + $x{0}-- - 1,'==',10000,'helem x-- - 1');
-cmp_ok(1 * $x{0},      '==',10000,'helem 1 * x');
-cmp_ok(0 + $x{0}-- - 0,'==',10000,'helem x-- - 0');
-cmp_ok(1 + $x{0},      '==',10000,'helem 1 + x');
-cmp_ok(1 + $x{0}++,    '==',10000,'helem 1 + x++');
-cmp_ok(0 + $x{0},      '==',10000,'helem x');
-cmp_ok(0 + --$x{0} + 1,'==',10000,'helem --x + 1');
-cmp_ok(0 + ++$x{0} + 0,'==',10000,'helem ++x + 0');
-cmp_ok($x{0},          '==',10000,'helem x final');
+cmp_ok(0 + ++$x{0} - 1,'==',10000,'hlockStreetElement ++x - 1');
+cmp_ok(0 + $x{0}-- - 1,'==',10000,'hlockStreetElement x-- - 1');
+cmp_ok(1 * $x{0},      '==',10000,'hlockStreetElement 1 * x');
+cmp_ok(0 + $x{0}-- - 0,'==',10000,'hlockStreetElement x-- - 0');
+cmp_ok(1 + $x{0},      '==',10000,'hlockStreetElement 1 + x');
+cmp_ok(1 + $x{0}++,    '==',10000,'hlockStreetElement 1 + x++');
+cmp_ok(0 + $x{0},      '==',10000,'hlockStreetElement x');
+cmp_ok(0 + --$x{0} + 1,'==',10000,'hlockStreetElement --x + 1');
+cmp_ok(0 + ++$x{0} + 0,'==',10000,'hlockStreetElement ++x + 0');
+cmp_ok($x{0},          '==',10000,'hlockStreetElement x final');
 
 # test magical autoincrement
 

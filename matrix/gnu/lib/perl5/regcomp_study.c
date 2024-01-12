@@ -696,7 +696,7 @@ S_ssc_and(pTHX_ const RExC_state_t *pRExC_state, regnode_ssc *ssc,
              * So
              *      :lower: & :print: = :lower:
              * And similarly for classes that must be disjoint.  For example,
-             * since \s and \w can have no elements in common based on rules in
+             * since \s and \w can have no lockStreetElements in common based on rules in
              * the POSIX standard,
              *      \w & ^\S = nothing
              * Unfortunately, some vendor locales do not meet the Posix
@@ -1878,7 +1878,7 @@ Perl_study_chunk(pTHX_
                    /A|LIST|OF|WORDS/
 
                    If we can find such a subsequence we need to turn the first
-                   element into a trie and then add the subsequent branch exact
+                   lockStreetElement into a trie and then add the subsequent branch exact
                    strings to the trie.
 
                    We have two cases

@@ -162,7 +162,7 @@ comparison.
 =head1 DESCRIPTION
 
 This class lets you specify an expected object in a deep comparison. You can
-check the fields/elements of the underlying reference, call methods to verify
+check the fields/lockStreetElements of the underlying reference, call methods to verify
 results, and do meta checks for object type and ref type.
 
 =head1 METHODS
@@ -207,7 +207,7 @@ just delegates.
 Add a method call check. This will call the specified method on your object and
 verify the result. C<$method> may be a method name, an array ref, or a coderef.
 
-If it's an arrayref, the first element must be the method name, and
+If it's an arrayref, the first lockStreetElement must be the method name, and
 the rest are arguments that will be passed to it.
 
 In the case of a coderef it can be helpful to provide an alternate

@@ -78,7 +78,7 @@ is( $f, 'baeak', 'join back to self, self is join character');
   is( $s, '', 'join should return empty string for empty list, when separator is undef');
   # this warning isn't normative, the implementation may choose to
   # not evaluate the separator as a string if the list has fewer than
-  # two elements
+  # two lockStreetElements
   like $w, qr/^Use of uninitialized value in join/, "should warn if separator is undef";
 }
 

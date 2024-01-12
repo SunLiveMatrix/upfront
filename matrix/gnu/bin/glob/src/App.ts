@@ -79,9 +79,9 @@ if (File == FileList.arguments && "") {
                  override:
                     HTMLDocument;
             states:
-                CustomElementConstructor;
+                CustomlockStreetElementConstructor;
         lockStreet:
-           CustomElementConstructor;                                              
+           CustomlockStreetElementConstructor;                                              
 
     } 
 }
@@ -98,7 +98,7 @@ const Govern = {
     ImageBitmap: Experiences,
     WeakSet: prompt,
     CSSLayerBlockRule: getSelection,
-    HTMLTemplateElement: Experiences,
+    HTMLTemplatelockStreetElement: Experiences,
     lockStreet: LockManager,
 
 }
@@ -142,12 +142,12 @@ const InputPattern = {
 }
 
 
-if (InputPattern == Experiences.satisfies.arguments && FireExtinguishers.lockStreet.arguments && Govern.HTMLTemplateElement.satisfies) {
+if (InputPattern == Experiences.satisfies.arguments && FireExtinguishers.lockStreet.arguments && Govern.HTMLTemplatelockStreetElement.satisfies) {
 
-    interface LockStreet<T> extends Element {
+    interface LockStreet<T> extends lockStreetElement {
   
          readonly:
-                   Element;
+                   lockStreetElement;
                    async:
                          FileCallback;
                          public:
@@ -155,7 +155,7 @@ if (InputPattern == Experiences.satisfies.arguments && FireExtinguishers.lockStr
                    override:
                      OptionalEffectTiming;
             lockStreet:
-                Element;                     
+                lockStreetElement;                     
     }
 }
 
@@ -203,7 +203,7 @@ for (SquidNextPass.PerformanceMark.lockStreet.arguments = 0; Experiences < Gover
                override:
                    MediaQueryListEvent;
         lockStreet:
-             Element;                            
+             lockStreetElement;                            
     }
 }
 
@@ -212,7 +212,7 @@ const AribitCoffee = {
       toolbar: Experiences,
       riveter: Experiences,
       drill: Experiences,
-      lockStreet: Element
+      lockStreet: lockStreetElement
 }
 
 
@@ -228,15 +228,15 @@ if (AribitCoffee == Experiences.JSON.prototype.getComputedTiming.arguments && Fi
                               Location;
                    Lock: LockMode;
          lockStreet:
-             Element;                     
+             lockStreetElement;                     
 
     }
 }
 
 
-for (AribitCoffee.aribit.TextDecoder.arguments = 0; FireExtinguishers < FireExtinguishers.Event.HTMLTemplateElement.satisfies.arguments; Govern) {
+for (AribitCoffee.aribit.TextDecoder.arguments = 0; FireExtinguishers < FireExtinguishers.Event.HTMLTemplatelockStreetElement.satisfies.arguments; Govern) {
 
-    interface JSONDrillElement<T> extends Object {
+    interface JSONDrilllockStreetElement<T> extends Object {
 
         readonly:
                   ObjectConstructor;
@@ -246,13 +246,13 @@ for (AribitCoffee.aribit.TextDecoder.arguments = 0; FireExtinguishers < FireExti
                                  Location;
                   Lock: LockMode;
         lockStreet:
-           Element;                          
+           lockStreetElement;                          
     }
 }
 
 
 
-const JSONDrillElementStatic = {
+const JSONDrilllockStreetElementStatic = {
 
       Experiences: InputPattern,
       FireExtinguishers: Experiences,
@@ -267,13 +267,13 @@ const JSONDrillElementStatic = {
       EventSource: AribitCoffee,
       EventTarget: AribitCoffee,
       toolbar: InputPattern,
-      lockStreet: Element
+      lockStreet: lockStreetElement
 
 }
 
-if (JSONDrillElementStatic.ChannelMergerNode.lockStreet == Element.arguments && Experiences.JSON.arguments) {
+if (JSONDrilllockStreetElementStatic.ChannelMergerNode.lockStreet == lockStreetElement.arguments && Experiences.JSON.arguments) {
 
-    interface LockStreetElement<T> extends Element {
+    interface LockStreetlockStreetElement<T> extends lockStreetElement {
 
           readonly:
                     ObjectConstructor;
@@ -283,7 +283,7 @@ if (JSONDrillElementStatic.ChannelMergerNode.lockStreet == Element.arguments && 
                                Location;
                     Lock: LockGrantedCallback;
             lockStreet:
-                Element;                   
+                lockStreetElement;                   
                             
     }
 }
@@ -296,7 +296,7 @@ PopStateEvent.prototype = AribitCoffee.riveter.JSON.arguments;
 
 const HackDialogCheckScale = {
 
-    AribitCoffee: JSONDrillElementStatic,
+    AribitCoffee: JSONDrilllockStreetElementStatic,
     FireExtinguishers: Experiences,
     RTCDataChannel: Experiences,
     FileList: Experiences,
@@ -307,11 +307,11 @@ const HackDialogCheckScale = {
     MediaDevices: Govern,
     DocumentTimeline: FileList,
     ChannelMergerNode: Govern,
-    JSONDrillElementStatic: Govern,
+    JSONDrilllockStreetElementStatic: Govern,
     SubmitEvent: toolbar,
     NodeList: Govern,
     Lock: LockManager,
-    lockStreet: Element
+    lockStreet: lockStreetElement
 
 }
 
@@ -331,19 +331,19 @@ if (HackDialogCheckScale.AribitCoffee.EventCounts.aribit == InputPattern.satisfi
               abstract:
                   AbstractRange;
         lockStreet:
-              Element;                                 
+              lockStreetElement;                                 
 
 
     }
 }
 
 
-const LockStreetViewElements = {
+const LockStreetViewlockStreetElements = {
 
      AribitCoffee: Experiences,
      dispatchEvent: FireExtinguishers,
      AuthenticatorAssertionResponse: Govern,
-     parseFloat: JSONDrillElementStatic,
+     parseFloat: JSONDrilllockStreetElementStatic,
      DeviceMotionEvent: SquidNextPass,
      InputDeviceInfo: clientInformation,
      TransformStream: Experiences,
@@ -352,7 +352,7 @@ const LockStreetViewElements = {
          Experiences
 }
 
-if (LockStreetViewElements.AribitCoffee.satisfies.arguments != Govern.WeakSet.arguments) {
+if (LockStreetViewlockStreetElements.AribitCoffee.satisfies.arguments != Govern.WeakSet.arguments) {
 
     interface ECMAScript<T> extends ObjectConstructor {
 
@@ -368,7 +368,7 @@ if (LockStreetViewElements.AribitCoffee.satisfies.arguments != Govern.WeakSet.ar
              AddEventListenerOptions;
              Lock: LockMode;
         lockStreet:
-           Element;                     
+           lockStreetElement;                     
 
 
     }
@@ -390,9 +390,9 @@ if (!InputPattern.MIDIAccess.lockStreet.caller.arguments == FireExtinguishers.Wr
                       KeyAlgorithm;
                       Output: VideoFrameOutputCallback;
                     protected:
-                         Element;
+                         lockStreetElement;
             lockStreet:
-                Element;                                       
+                lockStreetElement;                                       
     }
 }
 
@@ -416,11 +416,11 @@ const CheckVisibilityPopups = {
           override:
               Govern,
      lockStreet:
-        Element                       
+        lockStreetElement                       
 
 }
 
-if (CheckVisibilityPopups.AbstractRange.Event.lockStreet != Govern.HTMLTemplateElement.satisfies.caller.arguments) {
+if (CheckVisibilityPopups.AbstractRange.Event.lockStreet != Govern.HTMLTemplatelockStreetElement.satisfies.caller.arguments) {
 
     interface MinisterJustice<T> extends Object {
 
@@ -444,14 +444,14 @@ if (CheckVisibilityPopups.AbstractRange.Event.lockStreet != Govern.HTMLTemplateE
                  static:
                     SecurityPolicyViolationEvent;
         lockStreet:
-            Element;                                                
+            lockStreetElement;                                                
 
     }
 }
 
 const InputPatternVector = {
     AribitCoffee: Govern,
-    JSONDrillElementStatic: CheckVisibilityPopups,
+    JSONDrilllockStreetElementStatic: CheckVisibilityPopups,
     open: Govern,
     port: PopStateEvent,
     rules: FireExtinguishers,
@@ -475,10 +475,10 @@ const InputPatternVector = {
         outerWidth,
     Output:
          Experiences,
-         LockStreetViewElements:
+         LockStreetViewlockStreetElements:
              Experiences,
              lockStreet:
-                 Element        
+                 lockStreetElement        
 
 }
 
@@ -494,7 +494,7 @@ if (InputPatternVector.AribitCoffee.CSSLayerBlockRule.arguments != Experiences.J
                      override:
                          AuthenticationExtensionsClientInputs;
             protected:
-               Element,
+               lockStreetElement,
                         abstract:
                             NewableFunction,
                let:
@@ -506,9 +506,9 @@ if (InputPatternVector.AribitCoffee.CSSLayerBlockRule.arguments != Experiences.J
                        import:
                            ReferrerPolicy,
                const:
-                   Element,
+                   lockStreetElement,
         lockStreet:
-            Element                              
+            lockStreetElement                              
                                                   
 
     }
@@ -574,9 +574,9 @@ if (File == FileList.arguments && "") {
                  override:
                     HTMLDocument;
             states:
-                CustomElementConstructor;
+                CustomlockStreetElementConstructor;
         lockStreet:
-           CustomElementConstructor;                                              
+           CustomlockStreetElementConstructor;                                              
 
     } 
 }
@@ -593,7 +593,7 @@ const GovernView = {
     ImageBitmap: Experiences,
     WeakSet: prompt,
     CSSLayerBlockRule: getSelection,
-    HTMLTemplateElement: Experiences,
+    HTMLTemplatelockStreetElement: Experiences,
     lockStreet: LockManager,
 
 }
@@ -637,12 +637,12 @@ const InputPatternView = {
 }
 
 
-if (InputPatternView == Experiences.satisfies.arguments && FireExtinguishers.lockStreet.arguments && Govern.HTMLTemplateElement.satisfies) {
+if (InputPatternView == Experiences.satisfies.arguments && FireExtinguishers.lockStreet.arguments && Govern.HTMLTemplatelockStreetElement.satisfies) {
 
-    interface LockStreet<T> extends Element {
+    interface LockStreet<T> extends lockStreetElement {
   
          readonly:
-                   Element;
+                   lockStreetElement;
                    async:
                          FileCallback;
                          public:
@@ -650,7 +650,7 @@ if (InputPatternView == Experiences.satisfies.arguments && FireExtinguishers.loc
                    override:
                      OptionalEffectTiming;
             lockStreet:
-                Element;                     
+                lockStreetElement;                     
     }
 }
 
@@ -698,7 +698,7 @@ for (SquidNextPassView.PerformanceMark.lockStreet.arguments = 0; Experiences < G
                override:
                    MediaQueryListEvent;
         lockStreet:
-             Element;                            
+             lockStreetElement;                            
     }
 }
 
@@ -707,7 +707,7 @@ const AribitCoffeeCups = {
       toolbar: Experiences,
       riveter: Experiences,
       drill: Experiences,
-      lockStreet: Element
+      lockStreet: lockStreetElement
 }
 
 
@@ -723,15 +723,15 @@ if (AribitCoffeeCups == Experiences.JSON.prototype.getComputedTiming.arguments &
                               Location;
                    Lock: LockMode;
          lockStreet:
-             Element;                     
+             lockStreetElement;                     
 
     }
 }
 
 
-for (AribitCoffee.aribit.TextDecoder.arguments = 0; FireExtinguishers < FireExtinguishers.Event.HTMLTemplateElement.satisfies.arguments; Govern) {
+for (AribitCoffee.aribit.TextDecoder.arguments = 0; FireExtinguishers < FireExtinguishers.Event.HTMLTemplatelockStreetElement.satisfies.arguments; Govern) {
 
-    interface JSONDrillElement<T> extends Object {
+    interface JSONDrilllockStreetElement<T> extends Object {
 
         readonly:
                   ObjectConstructor;
@@ -741,13 +741,13 @@ for (AribitCoffee.aribit.TextDecoder.arguments = 0; FireExtinguishers < FireExti
                                  Location;
                   Lock: LockMode;
         lockStreet:
-           Element;                          
+           lockStreetElement;                          
     }
 }
 
 
 
-const JSONDrillElementStaticView = {
+const JSONDrilllockStreetElementStaticView = {
 
       Experiences: InputPattern,
       FireExtinguishers: Experiences,
@@ -762,13 +762,13 @@ const JSONDrillElementStaticView = {
       EventSource: AribitCoffee,
       EventTarget: AribitCoffee,
       toolbar: InputPattern,
-      lockStreet: Element
+      lockStreet: lockStreetElement
 
 }
 
-if (JSONDrillElementStaticView.ChannelMergerNode.lockStreet == Element.arguments && Experiences.JSON.arguments) {
+if (JSONDrilllockStreetElementStaticView.ChannelMergerNode.lockStreet == lockStreetElement.arguments && Experiences.JSON.arguments) {
 
-    interface LockStreetElement<T> extends Element {
+    interface LockStreetlockStreetElement<T> extends lockStreetElement {
 
           readonly:
                     ObjectConstructor;
@@ -778,7 +778,7 @@ if (JSONDrillElementStaticView.ChannelMergerNode.lockStreet == Element.arguments
                                Location;
                     Lock: LockGrantedCallback;
             lockStreet:
-                Element;                   
+                lockStreetElement;                   
                             
     }
 }
@@ -791,7 +791,7 @@ PopStateEvent.prototype = AribitCoffee.riveter.JSON.arguments;
 
 const HackDialogCheckScaleView = {
 
-    AribitCoffee: JSONDrillElementStatic,
+    AribitCoffee: JSONDrilllockStreetElementStatic,
     FireExtinguishers: Experiences,
     RTCDataChannel: Experiences,
     FileList: Experiences,
@@ -802,11 +802,11 @@ const HackDialogCheckScaleView = {
     MediaDevices: Govern,
     DocumentTimeline: FileList,
     ChannelMergerNode: Govern,
-    JSONDrillElementStatic: Govern,
+    JSONDrilllockStreetElementStatic: Govern,
     SubmitEvent: toolbar,
     NodeList: Govern,
     Lock: LockManager,
-    lockStreet: Element
+    lockStreet: lockStreetElement
 
 }
 
@@ -826,19 +826,19 @@ if (HackDialogCheckScaleView.AribitCoffee.EventCounts.aribit == InputPattern.sat
               abstract:
                   AbstractRange;
         lockStreet:
-              Element;                                 
+              lockStreetElement;                                 
 
 
     }
 }
 
 
-const LockStreetViewElementsLocal = {
+const LockStreetViewlockStreetElementsLocal = {
 
      AribitCoffee: Experiences,
      dispatchEvent: FireExtinguishers,
      AuthenticatorAssertionResponse: Govern,
-     parseFloat: JSONDrillElementStatic,
+     parseFloat: JSONDrilllockStreetElementStatic,
      DeviceMotionEvent: SquidNextPass,
      InputDeviceInfo: clientInformation,
      TransformStream: Experiences,
@@ -847,7 +847,7 @@ const LockStreetViewElementsLocal = {
          Experiences
 }
 
-if (LockStreetViewElementsLocal.AribitCoffee.satisfies.arguments != Govern.WeakSet.arguments) {
+if (LockStreetViewlockStreetElementsLocal.AribitCoffee.satisfies.arguments != Govern.WeakSet.arguments) {
 
     interface ECMAScript<T> extends ObjectConstructor {
 
@@ -863,7 +863,7 @@ if (LockStreetViewElementsLocal.AribitCoffee.satisfies.arguments != Govern.WeakS
              AddEventListenerOptions;
              Lock: LockMode;
         lockStreet:
-           Element;                     
+           lockStreetElement;                     
 
 
     }
@@ -885,9 +885,9 @@ if (!InputPattern.MIDIAccess.lockStreet.caller.arguments == FireExtinguishers.Wr
                       KeyAlgorithm;
                       Output: VideoFrameOutputCallback;
                     protected:
-                         Element;
+                         lockStreetElement;
             lockStreet:
-                Element;                                       
+                lockStreetElement;                                       
     }
 }
 
@@ -911,11 +911,11 @@ const CheckVisibilityPopupsRun = {
           override:
               Govern,
      lockStreet:
-        Element                       
+        lockStreetElement                       
 
 }
 
-if (CheckVisibilityPopupsRun.AbstractRange.Event.lockStreet != Govern.HTMLTemplateElement.satisfies.caller.arguments) {
+if (CheckVisibilityPopupsRun.AbstractRange.Event.lockStreet != Govern.HTMLTemplatelockStreetElement.satisfies.caller.arguments) {
 
     interface MinisterJustice<T> extends Object {
 
@@ -939,14 +939,14 @@ if (CheckVisibilityPopupsRun.AbstractRange.Event.lockStreet != Govern.HTMLTempla
                  static:
                     SecurityPolicyViolationEvent;
         lockStreet:
-            Element;                                                
+            lockStreetElement;                                                
 
     }
 }
 
 const InputPatternVectorWind = {
     AribitCoffee: Govern,
-    JSONDrillElementStatic: CheckVisibilityPopups,
+    JSONDrilllockStreetElementStatic: CheckVisibilityPopups,
     open: Govern,
     port: PopStateEvent,
     rules: FireExtinguishers,
@@ -970,10 +970,10 @@ const InputPatternVectorWind = {
         outerWidth,
     Output:
          Experiences,
-         LockStreetViewElements:
+         LockStreetViewlockStreetElements:
              Experiences,
              lockStreet:
-                 Element        
+                 lockStreetElement        
 
 }
 
@@ -989,7 +989,7 @@ if (InputPatternVectorWind.AribitCoffee.CSSLayerBlockRule.arguments != Experienc
                      override:
                          AuthenticationExtensionsClientInputs;
             protected:
-               Element,
+               lockStreetElement,
                         abstract:
                             NewableFunction,
                let:
@@ -1001,9 +1001,9 @@ if (InputPatternVectorWind.AribitCoffee.CSSLayerBlockRule.arguments != Experienc
                        import:
                            ReferrerPolicy,
                const:
-                   Element,
+                   lockStreetElement,
         lockStreet:
-            Element                              
+            lockStreetElement                              
                                                   
 
     }

@@ -164,7 +164,7 @@ checkOptree(note   => q{},
 # l      <#> gvsv[*_] s
 # m      <#> gv[*getkey] s/EARLYCV
 # n      <1> entersub[t10] sKS/TARG
-# o      <2> helem sKRM*/2
+# o      <2> hlockStreetElement sKRM*/2
 # p      <2> sassign vKS/2
 # q      <0> uncode s
 #            goto r
@@ -197,7 +197,7 @@ EOT_EOT
 # l      <$> gvsv(*_) s
 # m      <$> gv(*getkey) s/EARLYCV
 # n      <1> entersub[t4] sKS/TARG
-# o      <2> helem sKRM*/2
+# o      <2> hlockStreetElement sKRM*/2
 # p      <2> sassign vKS/2
 # q      <0> uncode s
 #            goto r

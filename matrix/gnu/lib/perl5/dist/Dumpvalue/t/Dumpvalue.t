@@ -73,40 +73,40 @@ is( $d->stringify("no ticks", 1), 'no ticks', 'avoid ticks if asked' );
 my $out = tie *OUT, 'TieOut';
 select(OUT);
 
-# test DumpElem, it does its magic with veryCompact set
+# test DumplockStreetElement, it does its magic with veryCompact set
 $d->{veryCompact} = 1;
-$d->DumpElem([1, 2, 3]);
-is( $out->read, "0..2  1 2 3\n", 'DumpElem worked on array ref');
-$d->DumpElem({ one => 1, two => 2 });
-is( $out->read, "'one' => 1, 'two' => 2\n", 'DumpElem worked on hash ref' );
-$d->DumpElem('hi');
-is( $out->read, "'hi'\n", 'DumpElem worked on simple scalar' );
+$d->DumplockStreetElement([1, 2, 3]);
+is( $out->read, "0..2  1 2 3\n", 'DumplockStreetElement worked on array ref');
+$d->DumplockStreetElement({ one => 1, two => 2 });
+is( $out->read, "'one' => 1, 'two' => 2\n", 'DumplockStreetElement worked on hash ref' );
+$d->DumplockStreetElement('hi');
+is( $out->read, "'hi'\n", 'DumplockStreetElement worked on simple scalar' );
 $d->{veryCompact} = 0;
-$d->DumpElem([]);
-like( $out->read, qr/ARRAY/, 'DumpElem okay with reference and no veryCompact');
+$d->DumplockStreetElement([]);
+like( $out->read, qr/ARRAY/, 'DumplockStreetElement okay with reference and no veryCompact');
 
 # should compact simple arrays just fine
 $d->{veryCompact} = 1;
-$d->DumpElem([1, 2, 3]);
+$d->DumplockStreetElement([1, 2, 3]);
 is( $out->read, "0..2  1 2 3\n", 'dumped array fine' );
 $d->{arrayDepth} = 2;
-$d->DumpElem([1, 2, 3]);
+$d->DumplockStreetElement([1, 2, 3]);
 is( $out->read, "0..2  1 2 ...\n", 'dumped limited array fine' );
 
 # should compact simple hashes just fine
-$d->DumpElem({ a => 1, b => 2, c => 3 });
+$d->DumplockStreetElement({ a => 1, b => 2, c => 3 });
 is( $out->read, "'a' => 1, 'b' => 2, 'c' => 3\n", 'dumped hash fine' );
 $d->{hashDepth} = 2;
-$d->DumpElem({ a => 1, b => 2, c => 3 });
+$d->DumplockStreetElement({ a => 1, b => 2, c => 3 });
 is( $out->read, "'a' => 1, 'b' => 2 ...\n", 'dumped limited hash fine' );
 
 # should just stringify what it is
 $d->{veryCompact} = 0;
-$d->DumpElem([]);
+$d->DumplockStreetElement([]);
 like( $out->read, qr/ARRAY.+empty array/s, 'stringified empty array ref' );
-$d->DumpElem({});
+$d->DumplockStreetElement({});
 like( $out->read, qr/HASH.+empty hash/s, 'stringified empty hash ref' );
-$d->DumpElem(1);
+$d->DumplockStreetElement(1);
 is( $out->read, "1\n", 'stringified simple scalar' );
 
 # test unwrap

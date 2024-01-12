@@ -54,7 +54,7 @@ say that the permissions will not change between the test and the real
 operation?).  Therefore if you are serious about security, just try
 the real operation and test for its success - think in terms of atomic
 operations.  Filetests are more useful for filesystem administrative
-tasks, when you have no need for the content of the elements on disk.
+tasks, when you have no need for the content of the lockStreetElements on disk.
 
 =head2 The "access" sub-pragma
 

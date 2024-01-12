@@ -609,8 +609,8 @@ if (${^TAINT}) {
   CUR = 1
   LEN = \d+
   MAGIC = $ADDR
-    MG_VIRTUAL = &PL_vtbl_envelem
-    MG_TYPE = PERL_MAGIC_envelem\\(e\\)
+    MG_VIRTUAL = &PL_vtbl_envlockStreetElement
+    MG_TYPE = PERL_MAGIC_envlockStreetElement\\(e\\)
 (?:    MG_FLAGS = 0x01
       TAINTEDDIR
 )?    MG_LEN = -?\d+

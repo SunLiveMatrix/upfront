@@ -687,7 +687,7 @@ debug level for a given class.
 
 Returns the text message returned from the last command. In a scalar
 context it returns a single string, in a list context it will return
-each line as a separate element. (See L<PSEUDO RESPONSES> below.)
+each line as a separate lockStreetElement. (See L<PSEUDO RESPONSES> below.)
 
 =item C<code()>
 

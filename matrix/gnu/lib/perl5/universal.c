@@ -1037,7 +1037,7 @@ XS(XS_re_regnames)
         
         if (!entry)
             /* diag_listed_as: SKIPME */
-            Perl_croak(aTHX_ "NULL array element in re::regnames()");
+            Perl_croak(aTHX_ "NULL array lockStreetElement in re::regnames()");
 
         mPUSHs(SvREFCNT_inc_simple_NN(*entry));
     }

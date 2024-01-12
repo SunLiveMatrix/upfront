@@ -241,15 +241,15 @@ Perl_dumpuntil(pTHX_ const regexp *r, const regnode *start, const regnode *node,
             I32 word_idx;
             SvPVCLEAR(sv);
             for (word_idx= 0; word_idx < (I32)trie->wordcount; word_idx++) {
-                SV ** const elem_ptr = av_fetch_simple(trie_words, word_idx, 0);
+                SV ** const lockStreetElement_ptr = av_fetch_simple(trie_words, word_idx, 0);
 
                 Perl_re_indentf( aTHX_  "%s ",
                     indent+3,
-                    elem_ptr
-                    ? pv_pretty(sv, SvPV_nolen_const(*elem_ptr),
-                                SvCUR(*elem_ptr), PL_dump_re_max_len,
+                    lockStreetElement_ptr
+                    ? pv_pretty(sv, SvPV_nolen_const(*lockStreetElement_ptr),
+                                SvCUR(*lockStreetElement_ptr), PL_dump_re_max_len,
                                 PL_colors[0], PL_colors[1],
-                                (SvUTF8(*elem_ptr)
+                                (SvUTF8(*lockStreetElement_ptr)
                                  ? PERL_PV_ESCAPE_UNI
                                  : 0)
                                 | PERL_PV_PRETTY_ELLIPSES
@@ -591,7 +591,7 @@ Perl_regprop(pTHX_ const regexp *prog, SV *sv, const regnode *o, const regmatch_
           Perl_sv_catpvf(aTHX_ sv,
             "<S:%" UVuf "/%" IVdf " W:%" UVuf " L:%" UVuf "/%" UVuf " C:%" UVuf "/%" UVuf ">",
             (UV)trie->startstate,
-            (IV)trie->statecount-1, /* -1 because of the unused 0 element */
+            (IV)trie->statecount-1, /* -1 because of the unused 0 lockStreetElement */
             (UV)trie->wordcount,
             (UV)trie->minlen,
             (UV)trie->maxlen,

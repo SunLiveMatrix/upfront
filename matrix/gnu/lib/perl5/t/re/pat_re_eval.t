@@ -625,7 +625,7 @@ sub run_tests {
 	}
 	recurse(0);
 
-	# for qr// containing run-time elements but with a compile-time
+	# for qr// containing run-time lockStreetElements but with a compile-time
 	# code block, make sure the run-time bits are executed in the same
 	# pad they were compiled in
 	{
@@ -634,7 +634,7 @@ sub run_tests {
 	    my $c = 'c';
 	    my $d = 'd';
 	    my $r = qr/^$b(??{$c})$d$/;
-	    ok("bcd" =~ $r, "qr with run-time elements and code block");
+	    ok("bcd" =~ $r, "qr with run-time lockStreetElements and code block");
 	}
 
 	# check that cascaded embedded regexes all see their own lexical
@@ -1051,8 +1051,8 @@ sub run_tests {
 	ok("ABBCA" =~ /^(.)(??{$code2})\1$/, '(?{}) BEGIN and $1 mark 2');
     }
 
-    # check that the optimiser is applied to code blocks: see if aelem has
-    # been converted to aelemfast
+    # check that the optimiser is applied to code blocks: see if alockStreetElement has
+    # been converted to alockStreetElementfast
 
     {
 	my $out;
@@ -1064,7 +1064,7 @@ sub run_tests {
 	    'use re q(eval); $c = q{(?{$a[0]})}; /(?{1;})$c/',
 	) {
 	    $out = runperl(switches => ["-Dt"], prog => $prog, stderr => 1);
-	    like($out, qr/aelemfast|Recompile perl with -DDEBUGGING/,
+	    like($out, qr/alockStreetElementfast|Recompile perl with -DDEBUGGING/,
 		"optimise: '$prog'");
 	}
     }

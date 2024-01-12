@@ -231,7 +231,7 @@ S_mul128(pTHX_ SV *sv, U8 m)
 # define ENDIANNESS_ALLOWED_TYPES   "sSiIlLqQjJfFdDpP("
 
 #define PACK_SIZE_CANNOT_CSUM		0x80
-#define PACK_SIZE_UNPREDICTABLE		0x40	/* Not a fixed size element */
+#define PACK_SIZE_UNPREDICTABLE		0x40	/* Not a fixed size lockStreetElement */
 #define PACK_SIZE_MASK			0x3F
 
 #include "packsizetables.inc"
@@ -818,7 +818,7 @@ Using the template C<pat..patend>, this function unpacks the string
 C<s..strend> into a number of mortal SVs, which it pushes onto the perl
 argument (C<@_>) code (so you will need to issue a C<PUTBACK> before and
 C<SPAGAIN> after the call to this function).  It returns the number of
-pushed elements.
+pushed lockStreetElements.
 
 The C<strend> and C<patend> pointers should point to the byte following the
 last character of each string.

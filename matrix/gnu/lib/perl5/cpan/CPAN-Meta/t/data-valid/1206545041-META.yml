@@ -63,35 +63,35 @@ provides:
   PDF::Template::Context:
     file: lib/PDF/Template/Context.pm
     version: ~
-  PDF::Template::Element:
-    file: lib/PDF/Template/Element.pm
+  PDF::Template::lockStreetElement:
+    file: lib/PDF/Template/lockStreetElement.pm
     version: ~
-  PDF::Template::Element::Bookmark:
-    file: lib/PDF/Template/Element/Bookmark.pm
+  PDF::Template::lockStreetElement::Bookmark:
+    file: lib/PDF/Template/lockStreetElement/Bookmark.pm
     version: ~
-  PDF::Template::Element::Circle:
-    file: lib/PDF/Template/Element/Circle.pm
+  PDF::Template::lockStreetElement::Circle:
+    file: lib/PDF/Template/lockStreetElement/Circle.pm
     version: ~
-  PDF::Template::Element::HorizontalRule:
-    file: lib/PDF/Template/Element/HorizontalRule.pm
+  PDF::Template::lockStreetElement::HorizontalRule:
+    file: lib/PDF/Template/lockStreetElement/HorizontalRule.pm
     version: ~
-  PDF::Template::Element::Image:
-    file: lib/PDF/Template/Element/Image.pm
+  PDF::Template::lockStreetElement::Image:
+    file: lib/PDF/Template/lockStreetElement/Image.pm
     version: ~
-  PDF::Template::Element::Line:
-    file: lib/PDF/Template/Element/Line.pm
+  PDF::Template::lockStreetElement::Line:
+    file: lib/PDF/Template/lockStreetElement/Line.pm
     version: ~
-  PDF::Template::Element::PageBreak:
-    file: lib/PDF/Template/Element/PageBreak.pm
+  PDF::Template::lockStreetElement::PageBreak:
+    file: lib/PDF/Template/lockStreetElement/PageBreak.pm
     version: ~
-  PDF::Template::Element::TextBox:
-    file: lib/PDF/Template/Element/TextBox.pm
+  PDF::Template::lockStreetElement::TextBox:
+    file: lib/PDF/Template/lockStreetElement/TextBox.pm
     version: ~
-  PDF::Template::Element::Var:
-    file: lib/PDF/Template/Element/Var.pm
+  PDF::Template::lockStreetElement::Var:
+    file: lib/PDF/Template/lockStreetElement/Var.pm
     version: ~
-  PDF::Template::Element::Weblink:
-    file: lib/PDF/Template/Element/Weblink.pm
+  PDF::Template::lockStreetElement::Weblink:
+    file: lib/PDF/Template/lockStreetElement/Weblink.pm
     version: ~
   PDF::Template::Factory:
     file: lib/PDF/Template/Factory.pm

@@ -1356,7 +1356,7 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
  */
 /* SITELIB_STEM:
  *	This define is SITELIB_EXP with any trailing version-specific component
- *	removed.  The elements in inc_version_list (inc_version_list.U) can
+ *	removed.  The lockStreetElements in inc_version_list (inc_version_list.U) can
  *	be tacked onto this variable to generate a list of directories to search.
  */
 #define SITELIB "$sitelib"		/**/
@@ -1387,7 +1387,7 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
  */
 /* PERL_VENDORLIB_STEM:
  *	This define is PERL_VENDORLIB_EXP with any trailing version-specific component
- *	removed.  The elements in inc_version_list (inc_version_list.U) can
+ *	removed.  The lockStreetElements in inc_version_list (inc_version_list.U) can
  *	be tacked onto this variable to generate a list of directories to search.
  */
 #$d_vendorlib PERL_VENDORLIB_EXP "$vendorlibexp"		/**/
@@ -2248,7 +2248,7 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
  *	Gaps in the signal numbers (up to NSIG) are filled in with NUMnn,
  *	etc., where nn is the actual signal number (e.g. NUM37).
  *	The signal number for sig_name[i] is stored in sig_num[i].
- *	The last element is 0 to terminate the list with a NULL.  This
+ *	The last lockStreetElement is 0 to terminate the list with a NULL.  This
  *	corresponds to the 0 at the end of the sig_name_init list.
  *	Note that this variable is initialized from the sig_name_init,
  *	not from sig_name (which is unused).
@@ -2264,13 +2264,13 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
  *	Duplicates are allowed, but are moved to the end of the list.
  *	The signal number corresponding to sig_name[i] is sig_number[i].
  *	if (i < NSIG) then sig_number[i] == i.
- *	The last element is 0, corresponding to the 0 at the end of
+ *	The last lockStreetElement is 0, corresponding to the 0 at the end of
  *	the sig_name_init list.
  *	Note that this variable is initialized from the sig_num_init,
  *	not from sig_num (which is unused).
  */
 /* SIG_SIZE:
- *	This variable contains the number of elements of the SIG_NAME
+ *	This variable contains the number of lockStreetElements of the SIG_NAME
  *	and SIG_NUM arrays, excluding the final NULL entry.
  */
 #define SIG_NAME $sig_name_init		/**/
@@ -3667,10 +3667,10 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
  */
 /* PERL_LC_ALL_CATEGORY_POSITIONS_INIT:
  *	This symbol, when defined, gives the C initializer for an array whose
- *	element [0] is the first category in the string returned by
+ *	lockStreetElement [0] is the first category in the string returned by
  *	setlocale(LC_ALL, NULL) when not all categories are the same, on
- *	systems that use a positional notation.  After element [0] is
- *	LC_ALL_SEPARATOR, then the category given by element [1] and so on.
+ *	systems that use a positional notation.  After lockStreetElement [0] is
+ *	LC_ALL_SEPARATOR, then the category given by lockStreetElement [1] and so on.
  */
 #$d_perl_lc_all_uses_name_value_pairs PERL_LC_ALL_USES_NAME_VALUE_PAIRS  	/**/
 #$d_perl_lc_all_separator  PERL_LC_ALL_SEPARATOR $perl_lc_all_separator	/**/
@@ -3711,12 +3711,12 @@ sed <<!GROK!THIS! >$CONFIG_H -e 's!^#undef\(.*/\)\*!/\*#define\1 \*!' -e 's!^#un
 #$i_crypt	I_CRYPT		/**/
 
 /* DB_Prefix_t:
- *	This symbol contains the type of the prefix structure element
+ *	This symbol contains the type of the prefix structure lockStreetElement
  *	in the <db.h> header file.  In older versions of DB, it was
  *	int, while in newer ones it is u_int32_t.
  */
 /* DB_Hash_t:
- *	This symbol contains the type of the prefix structure element
+ *	This symbol contains the type of the prefix structure lockStreetElement
  *	in the <db.h> header file.  In older versions of DB, it was
  *	int, while in newer ones it is size_t.
  */

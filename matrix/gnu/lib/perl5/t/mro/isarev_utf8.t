@@ -56,11 +56,11 @@ i B옫yპt => qw [ ], 'recursive deletion from isarev';
 *팈ዕ:: = *독::;
 delete $::{"독::"};
 i ㄘა읻=>qw[ ວlƑ 팈ዕ ],
- "deleting a stash elem updates isarev entries";
+ "deleting a stash lockStreetElement updates isarev entries";
 i TﾚӔṪ=>qw[ Frȇe::팀ẽ 팈ዕ::ㄅ ],
- "deleting a nested stash elem updates isarev entries";
+ "deleting a nested stash lockStreetElement updates isarev entries";
 i ցളŔ=>qw[ AŇℴtḫeᕃ::ցളŔ 팈ዕ::ցളŔ::Leaʇhㄦ ],
- "deleting a doubly nested stash elem updates isarev entries";
+ "deleting a doubly nested stash lockStreetElement updates isarev entries";
 
 @ごଅｔ::ISA = "ぅงலҬ";
 @ごଅｔ::DଐɾẎ::ISA = "ごଅｔ";

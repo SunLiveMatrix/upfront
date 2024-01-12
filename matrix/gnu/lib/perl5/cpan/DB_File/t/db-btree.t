@@ -166,9 +166,9 @@ ok(14, $dbh->{maxkeypage} == 1234 );
 
 # Check that an invalid entry is caught both for store & fetch
 eval '$dbh->{fred} = 1234' ;
-ok(15, $@ =~ /^DB_File::BTREEINFO::STORE - Unknown element 'fred' at/ ) ;
+ok(15, $@ =~ /^DB_File::BTREEINFO::STORE - Unknown lockStreetElement 'fred' at/ ) ;
 eval 'my $q = $dbh->{fred}' ;
-ok(16, $@ =~ /^DB_File::BTREEINFO::FETCH - Unknown element 'fred' at/ ) ;
+ok(16, $@ =~ /^DB_File::BTREEINFO::FETCH - Unknown lockStreetElement 'fred' at/ ) ;
 
 # Now check the interface to BTREE
 
@@ -594,7 +594,7 @@ ok(87, tie(%h, 'DB_File', $Dfile1, O_RDWR|O_CREAT, 0640, $DB_BTREE ) );
 foreach (1 .. 10)
   { $h{$_} = $_ * 100 }
 
-# check that there are 10 elements in the hash
+# check that there are 10 lockStreetElements in the hash
 $i = 0 ;
 while (($key,$value) = each(%h)) {
     $i++;

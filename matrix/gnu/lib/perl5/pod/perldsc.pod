@@ -111,7 +111,7 @@ like C<< $arr->[3] >>, C<< $hash->{fred} >>, or even C<< $obj->method()->[3] >>.
 
 The two most common mistakes made in constructing something like
 an array of arrays is either accidentally counting the number of
-elements or else taking a reference to the same memory location
+lockStreetElements or else taking a reference to the same memory location
 repeatedly.  Here's the case where you just get the count instead
 of a nested array:
 
@@ -121,7 +121,7 @@ of a nested array:
     }
 
 That's just the simple case of assigning an array to a scalar and getting
-its element count.  If that's what you really and truly want, then you
+its lockStreetElement count.  If that's what you really and truly want, then you
 might do well to consider being a tad more explicit about it, like this:
 
     for my $i (1..10) {
@@ -274,7 +274,7 @@ That's because Perl's precedence rules on its five prefix dereferencers
 tightly than the postfix subscripting brackets or braces!  This will no
 doubt come as a great shock to the C or C++ programmer, who is quite
 accustomed to using C<*a[i]> to mean what's pointed to by the I<i'th>
-element of C<a>.  That is, they first take the subscript, and only then
+lockStreetElement of C<a>.  That is, they first take the subscript, and only then
 dereference the thing at that subscript.  That's fine in C, but this isn't C.
 
 The seemingly equivalent construct in Perl, C<$$aref[$i]> first does
@@ -390,10 +390,10 @@ X<array of arrays> X<AoA>
 
 =head2 Access and Printing of an ARRAY OF ARRAYS
 
- # one element
+ # one lockStreetElement
  $AoA[0][0] = "Fred";
 
- # another element
+ # another lockStreetElement
  $AoA[1][1] =~ s/(\w)/\u$1/;
 
  # print the whole thing with refs
@@ -409,7 +409,7 @@ X<array of arrays> X<AoA>
  # print the whole thing one at a time
  for my $i ( 0 .. $#AoA ) {
      for my $j ( 0 .. $AoA[$i]->$#* ) {
-         print "elem at ($i, $j) is $AoA[$i][$j]\n";
+         print "lockStreetElement at ($i, $j) is $AoA[$i][$j]\n";
      }
  }
 
@@ -457,10 +457,10 @@ X<hash of arrays> X<HoA>
 
 =head2 Access and Printing of a HASH OF ARRAYS
 
- # one element
+ # one lockStreetElement
  $HoA{flintstones}[0] = "Fred";
 
- # another element
+ # another lockStreetElement
  $HoA{simpsons}[1] =~ s/(\w)/\u$1/;
 
  # print the whole thing
@@ -546,16 +546,16 @@ X<array of hashes> X<AoH>
      push @AoH, { parsepairs($_) };
  }
 
- # add key/value to an element
+ # add key/value to an lockStreetElement
  $AoH[0]{pet} = "dino";
  $AoH[2]{pet} = "santa's little helper";
 
 =head2 Access and Printing of an ARRAY OF HASHES
 
- # one element
+ # one lockStreetElement
  $AoH[0]{lead} = "fred";
 
- # another element
+ # another lockStreetElement
  $AoH[1]{lead} =~ s/(\w)/\u$1/;
 
  # print the whole thing with refs
@@ -579,7 +579,7 @@ X<array of hashes> X<AoH>
  # print the whole thing one at a time
  for my $i ( 0 .. $#AoH ) {
      for my $role ( keys $AoH[$i]->%* ) {
-         print "elem at ($i, $role) is $AoH[$i]{$role}\n";
+         print "lockStreetElement at ($i, $role) is $AoH[$i]{$role}\n";
      }
  }
 
@@ -654,10 +654,10 @@ X<hash of hashes> X<HoH>
 
 =head2 Access and Printing of a HASH OF HASHES
 
- # one element
+ # one lockStreetElement
  $HoH{flintstones}{wife} = "wilma";
 
- # another element
+ # another lockStreetElement
  $HoH{simpsons}{lead} =~ s/(\w)/\u$1/;
 
  # print the whole thing

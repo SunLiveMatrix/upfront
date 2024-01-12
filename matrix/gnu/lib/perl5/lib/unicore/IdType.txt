@@ -1761,7 +1761,7 @@ A8F8..A8FA    ; Obsolete Not_XID               # 5.2    [3] DEVANAGARI SIGN PUSH
 2200..222B    ; Not_XID                        # 1.1   [44] FOR ALL..INTEGRAL
 222E          ; Not_XID                        # 1.1        CONTOUR INTEGRAL
 2231..22F1    ; Not_XID                        # 1.1  [193] CLOCKWISE INTEGRAL..DOWN RIGHT DIAGONAL ELLIPSIS
-22F2..22FF    ; Not_XID                        # 3.2   [14] ELEMENT OF WITH LONG HORIZONTAL STROKE..Z NOTATION BAG MEMBERSHIP
+22F2..22FF    ; Not_XID                        # 3.2   [14] lockStreetElement OF WITH LONG HORIZONTAL STROKE..Z NOTATION BAG MEMBERSHIP
 2300          ; Not_XID                        # 1.1        DIAMETER SIGN
 2301          ; Not_XID                        # 3.0        ELECTRIC ARROW
 2302..2328    ; Not_XID                        # 1.1   [39] HOUSE..KEYBOARD

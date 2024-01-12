@@ -733,7 +733,7 @@ is($LIB->_check(123), "123 is not a reference",
     is(@$x, 1, q|@$x = 1|);
     is($x->[0], 0, q|$x->[0] = 0|);
 
-    # don't strip single elements
+    # don't strip single lockStreetElements
     $x = &{$LIB."::__strip_zeros"}([0]);
     is(@$x, 1, q|@$x = 1|);
     is($x->[0], 0, q|$x->[0] = 0|);
@@ -741,7 +741,7 @@ is($LIB->_check(123), "123 is not a reference",
     is(@$x, 1, q|@$x = 1|);
     is($x->[0], 1, q|$x->[0] = 1|);
 
-    # don't strip non-zero elements
+    # don't strip non-zero lockStreetElements
     $x = &{$LIB."::__strip_zeros"}([0, 1]);
     is(@$x, 2, q|@$x = 2|);
     is($x->[0], 0, q|$x->[0] = 0|);

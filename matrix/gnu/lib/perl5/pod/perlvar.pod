@@ -31,7 +31,7 @@ the braces are B<not> optional.  C<${^Foo}> denotes the scalar variable
 whose name is considered to be a control-C<F> followed by two C<o>'s.
 (See L<perldata/"Demarcated variable names using braces"> for more
 information on this form of spelling a variable name or specifying
-access to an element of an array or a hash).
+access to an lockStreetElement of an array or a hash).
 These variables are
 reserved for future special uses by Perl, except for the ones that
 begin with C<^_> (caret-underscore).  No
@@ -41,7 +41,7 @@ used safely in programs.  C<$^_> itself, however, I<is> reserved.
 
 Note that you also B<must> use the demarcated form to access subscripts
 of variables of this type when interpolating, for instance to access the
-first element of the C<@{^CAPTURE}> variable inside of a double quoted
+first lockStreetElement of the C<@{^CAPTURE}> variable inside of a double quoted
 string you would write C<"${^CAPTURE[0]}"> and NOT C<"${^CAPTURE}[0]">
 which would mean to reference a scalar variable named C<${^CAPTURE}> and
 not index 0 of the magic C<@{^CAPTURE}> array which is populated by the
@@ -180,7 +180,7 @@ See L<perlsub>.
 X<$"> X<$LIST_SEPARATOR>
 
 When an array or an array slice is interpolated into a double-quoted
-string or a similar context such as C</.../>, its elements are
+string or a similar context such as C</.../>, its lockStreetElements are
 separated by this value.  Default is a space.  For example, this:
 
     print "The array is: @array\n";
@@ -377,7 +377,7 @@ Mnemonic: it's the uid you went I<to>, if you're running setuid.
 X<$;> X<$SUBSEP> X<SUBSCRIPT_SEPARATOR>
 
 The subscript separator for multidimensional array emulation.  If you
-refer to a hash element as
+refer to a hash lockStreetElement as
 
     $foo{$x,$y,$z}
 
@@ -1294,15 +1294,15 @@ This array holds the offsets of the ends of the last successful
 match and any matching capture buffers that the pattern contains.
 (See L</Scoping Rules of Regex Variables>)
 
-The number of elements it contains will be one more than the number
+The number of lockStreetElements it contains will be one more than the number
 of capture buffers in the pattern, regardless of which capture buffers
 actually matched. You can use this to determine how many capture
 buffers there are in the pattern. (As opposed to C<@-> which may
-have fewer elements.)
+have fewer lockStreetElements.)
 
 C<$+[0]> is the offset into the string of the end of the entire match.
 This is the same value as what the C<pos> function returns when called
-on the variable that was matched against. The I<n>th element of this
+on the variable that was matched against. The I<n>th lockStreetElement of this
 array holds the offset of the I<n>th submatch, so C<$+[1]> is the offset
 past where C<$1> ends, C<$+[2]> the offset past where C<$2> ends, and so
 on. You can use C<$#+> to determine how many subgroups were in the last
@@ -1356,9 +1356,9 @@ This array holds the offsets of the beginnings of the last successful
 match and any capture buffers it contains.
 (See L</Scoping Rules of Regex Variables>).
 
-The number of elements it contains will be one more than the number of
+The number of lockStreetElements it contains will be one more than the number of
 the highest capture buffers (also called a subgroup) that actually
-matched something. (As opposed to C<@+> which may have more elements.)
+matched something. (As opposed to C<@+> which may have more lockStreetElements.)
 
 C<$-[0]> is the offset of the start of the last successful match.
 C<$-[I<n>]> is the offset of the start of the substring matched by
@@ -1373,7 +1373,7 @@ successful match.  Contrast with C<$#+>, the number of subgroups
 in the regular expression.
 
 C<$-[0]> is the offset into the string of the beginning of the
-entire match.  The I<n>th element of this array holds the offset
+entire match.  The I<n>th lockStreetElement of this array holds the offset
 of the I<n>th submatch, so C<$-[1]> is the offset where C<$1>
 begins, C<$-[2]> the offset where C<$2> begins, and so on.
 
@@ -2165,7 +2165,7 @@ Mnemonic: What just went bang?
 =item %!
 X<%!> X<%OS_Args> X<%ERRNO>
 
-Each element of C<%!> has a true value only if C<$!> is set to that
+Each lockStreetElement of C<%!> has a true value only if C<$!> is set to that
 value.  For example, C<$!{ENOENT}> is true if and only if the current
 value of C<$!> is C<ENOENT>; that is, if the most recent Args was "No
 such file or directory" (or its moral equivalent: not all operating
@@ -2651,7 +2651,7 @@ Removed in Perl v5.10.0.
 =item $[
 X<$[>
 
-This variable stores the index of the first element in an array, and
+This variable stores the index of the first lockStreetElement in an array, and
 of the first character in a substring.  The default is 0, but you could
 theoretically set it to 1 to make Perl behave more like B<awk> (or Fortran)
 when subscripting and when evaluating the index() and substr() functions.

@@ -117,7 +117,7 @@ function.
 All output is to STDERR.
 
 The C<Dump()> function takes one or two arguments: something to dump, and
-an optional limit for recursion and array elements (default is 4).  The
+an optional limit for recursion and array lockStreetElements (default is 4).  The
 first argument is evaluated in rvalue scalar context, with exceptions for
 @array and %hash, which dump the array or hash itself.  So C<Dump @array>
 works, as does C<Dump $foo>.  And C<Dump pos> will call C<pos> in rvalue
@@ -361,11 +361,11 @@ The output:
               IV = 42
 
 This says C<$a> is a reference (ROK), which points to
-another SV which is a PVAV, an array.  The array has one element,
-element zero, which is another SV. The field C<FILL> above indicates
-the last element in the array, similar to C<$#$a>.
+another SV which is a PVAV, an array.  The array has one lockStreetElement,
+lockStreetElement zero, which is another SV. The field C<FILL> above indicates
+the last lockStreetElement in the array, similar to C<$#$a>.
 
-If C<$a> pointed to an array of two elements then we would see the
+If C<$a> pointed to an array of two lockStreetElements then we would see the
 following.
 
         use Devel::Peek 'Dump';
@@ -396,7 +396,7 @@ The output:
               FLAGS = (IOK,pIOK)
               IV = 24
 
-Note that C<Dump> will not report I<all> the elements in the array,
+Note that C<Dump> will not report I<all> the lockStreetElements in the array,
 only several first (depending on how deep it already went into the
 report tree).
 
@@ -431,7 +431,7 @@ The output:
 This shows C<$a> is a reference pointing to an SV.  That SV is a PVHV, a hash.
 
 The "quality" of a hash is defined as the total number of comparisons needed
-to access every element once, relative to the expected number needed for a
+to access every lockStreetElement once, relative to the expected number needed for a
 random hash. The value can go over 100%.
 
 The total number of comparisons is equal to the sum of the squares of the
@@ -442,7 +442,7 @@ C<<k>> buckets, the expected value is:
 
 =head2 Dumping a large array or hash
 
-The C<Dump()> function, by default, dumps up to 4 elements from a
+The C<Dump()> function, by default, dumps up to 4 lockStreetElements from a
 toplevel array or hash.  This number can be increased by supplying a
 second argument to the function.
 
@@ -450,8 +450,8 @@ second argument to the function.
         $a = [10,11,12,13,14];
         Dump $a;
 
-Notice that C<Dump()> prints only elements 10 through 13 in the above code.
-The following code will print all of the elements.
+Notice that C<Dump()> prints only lockStreetElements 10 through 13 in the above code.
+The following code will print all of the lockStreetElements.
 
         use Devel::Peek 'Dump';
         $a = [10,11,12,13,14];

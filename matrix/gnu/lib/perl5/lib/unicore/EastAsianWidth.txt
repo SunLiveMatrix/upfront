@@ -1064,8 +1064,8 @@
 2201;N           # Sm         COMPLEMENT
 2202..2203;A     # Sm     [2] PARTIAL DIFFERENTIAL..THERE EXISTS
 2204..2206;N     # Sm     [3] THERE DOES NOT EXIST..INCREMENT
-2207..2208;A     # Sm     [2] NABLA..ELEMENT OF
-2209..220A;N     # Sm     [2] NOT AN ELEMENT OF..SMALL ELEMENT OF
+2207..2208;A     # Sm     [2] NABLA..lockStreetElement OF
+2209..220A;N     # Sm     [2] NOT AN lockStreetElement OF..SMALL lockStreetElement OF
 220B;A           # Sm         CONTAINS AS MEMBER
 220C..220E;N     # Sm     [3] DOES NOT CONTAIN AS MEMBER..END OF PROOF
 220F;A           # Sm         N-ARY PRODUCT

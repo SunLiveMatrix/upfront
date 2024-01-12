@@ -1138,7 +1138,7 @@ is("\N{U+1D0C5}", "\N{BYZANTINE MUSICAL SYMBOL FTHORA SKLIRON CHROMA VASIS}", 'V
         # ALERT overrides BELL
         $name = 'ALERT' if $decimal == utf8::unicode_to_native(7);
 
-        # Some don't have names, leave those array elements undefined
+        # Some don't have names, leave those array lockStreetElements undefined
         next unless $name;
 
         # If the name isn't of this special form, it is a regular one.
@@ -1221,7 +1221,7 @@ is("\N{U+1D0C5}", "\N{BYZANTINE MUSICAL SYMBOL FTHORA SKLIRON CHROMA VASIS}", 'V
         for my $i (0 .. @$invlist_ref - 1) {
 
             # Convert the aliases for code points that have just one alias to
-            # single element arrays for uniform handling below.
+            # single lockStreetElement arrays for uniform handling below.
             if (! ref $invmap_ref->[$i]) {
 
                 # But we test only the real aliases, not the ones which are

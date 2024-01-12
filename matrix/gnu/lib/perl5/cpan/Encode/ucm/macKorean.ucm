@@ -640,9 +640,9 @@ CHARMAP
 <U2206> \xA7\x51 |0 # INCREMENT
 <U2206><UF87F> \xA7\x52 |3 # INCREMENT, oblique
 <U2207> \xA1\xD4 |0 # NABLA
-<U2208> \xA1\xF4 |0 # ELEMENT OF
-<U2208><UF877> \xA1\x88 |3 # ELEMENT OF, superscript
-<U2209> \xA7\x73 |0 # NOT AN ELEMENT OF
+<U2208> \xA1\xF4 |0 # lockStreetElement OF
+<U2208><UF877> \xA1\x88 |3 # lockStreetElement OF, superscript
+<U2209> \xA7\x73 |0 # NOT AN lockStreetElement OF
 <U220B> \xA1\xF5 |0 # CONTAINS AS MEMBER
 <U220C> \xA7\x74 |0 # DOES NOT CONTAIN AS MEMBER
 <U220F> \xA2\xB3 |0 # N-ARY PRODUCT

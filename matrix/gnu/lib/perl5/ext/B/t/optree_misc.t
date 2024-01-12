@@ -11,15 +11,15 @@ BEGIN {
 use OptreeCheck;
 plan tests => 18;
 
-# The regression this was testing is that the first aelemfast, derived
+# The regression this was testing is that the first alockStreetElementfast, derived
 # from a lexical array, is supposed to be a BASEOP "<0>", while the
 # second, from a global, is an SVOP "<$>" or a PADOP "<#>" depending
 # on threading. In buggy versions, both showed up as SVOPs/PADOPs. See
 # B.xs:cc_opclass() for the relevant code.
 
-# All this is much simpler, now that aelemfast_lex has been broken out from
-# aelemfast
-checkOptree ( name	=> 'OP_AELEMFAST opclass',
+# All this is much simpler, now that alockStreetElementfast_lex has been broken out from
+# alockStreetElementfast
+checkOptree ( name	=> 'OP_AlockStreetElementFAST opclass',
 	      code	=> sub { my @x; our @y; $x[127] + $y[-128]},
 	      strip_open_hints => 1,
 	      expect	=> <<'EOT_EOT', expect_nt => <<'EONT_EONT');
@@ -32,12 +32,12 @@ checkOptree ( name	=> 'OP_AELEMFAST opclass',
 # -           <#> gv[*y] s ->-
 # 3        <;> nextstate(main 636 optree_misc.t:25) v:>,<,%,{ ->4
 # 6        <2> add[t6] sK/2 ->7
-# -           <1> ex-aelem sK/2 ->5
-# 4              <0> aelemfast_lex[@x:634,636] sR/key=127 ->5
+# -           <1> ex-alockStreetElement sK/2 ->5
+# 4              <0> alockStreetElementfast_lex[@x:634,636] sR/key=127 ->5
 # -              <0> ex-const s ->-
-# -           <1> ex-aelem sK/2 ->6
+# -           <1> ex-alockStreetElement sK/2 ->6
 # -              <1> ex-rv2av sKR/1 ->-
-# 5                 <#> aelemfast[*y] s/key=128 ->6
+# 5                 <#> alockStreetElementfast[*y] s/key=128 ->6
 # -              <0> ex-const s/FOLD ->-
 EOT_EOT
 # 7  <1> leavesub[1 ref] K/REFC,1 ->(end)
@@ -49,12 +49,12 @@ EOT_EOT
 # -           <$> gv(*y) s ->-
 # 3        <;> nextstate(main 636 optree_misc.t:27) v:>,<,%,{ ->4
 # 6        <2> add[t4] sK/2 ->7
-# -           <1> ex-aelem sK/2 ->5
-# 4              <0> aelemfast_lex[@x:634,636] sR/key=127 ->5
+# -           <1> ex-alockStreetElement sK/2 ->5
+# 4              <0> alockStreetElementfast_lex[@x:634,636] sR/key=127 ->5
 # -              <0> ex-const s ->-
-# -           <1> ex-aelem sK/2 ->6
+# -           <1> ex-alockStreetElement sK/2 ->6
 # -              <1> ex-rv2av sKR/1 ->-
-# 5                 <$> aelemfast(*y) s/key=128 ->6
+# 5                 <$> alockStreetElementfast(*y) s/key=128 ->6
 # -              <0> ex-const s/FOLD ->-
 EONT_EONT
 

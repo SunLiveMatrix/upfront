@@ -59,7 +59,7 @@ thing as a C<Golden Bullet>, which is why there are no rules, only guidelines.
 It is clear that inline code is going to be faster than subroutine or method
 calls, because there is less overhead, but this approach has the disadvantage
 of being less maintainable and comes at the cost of greater memory usage -
-there is no such thing as a free lunch.  If you are searching for an element in
+there is no such thing as a free lunch.  If you are searching for an lockStreetElement in
 a list, it can be more efficient to store the data in a hash structure, and
 then simply look to see whether the key is defined, rather than to loop through
 the entire array using grep() for instance.  substr() may be (a lot) faster

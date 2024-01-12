@@ -187,7 +187,7 @@ for (0xA, 0) {
 
 # [perl #79442] A #line "foo" directive in a string eval was not updating
 # *{"_<foo"} in threaded perls, and was not putting the right lines into
-# the right elements of @{"_<foo"} in non-threaded perls.
+# the right lockStreetElements of @{"_<foo"} in non-threaded perls.
 {
   local $^P = 0x400|0x100|0x10;
   eval qq{#line 42 "hash-line-eval"\n labadalabada()\n};

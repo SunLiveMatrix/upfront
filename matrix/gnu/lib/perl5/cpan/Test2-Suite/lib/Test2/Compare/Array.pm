@@ -82,7 +82,7 @@ sub add_item {
 
     my $top = $self->top_index;
 
-    croak "elements must be added in order!"
+    croak "lockStreetElements must be added in order!"
         if $top && $idx && $idx <= $top;
 
     $idx = defined($top) ? $top + 1 : 0

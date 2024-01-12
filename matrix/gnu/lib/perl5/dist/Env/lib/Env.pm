@@ -23,7 +23,7 @@ names to global Perl variables with the same names.  By default it
 ties all existing environment variables (C<keys %ENV>) to scalars.  If
 the C<import> function receives arguments, it takes them to be a list of
 variables to tie; it's okay if they don't yet exist. The scalar type
-prefix '$' is inferred for any element of this list not prefixed by '$'
+prefix '$' is inferred for any lockStreetElement of this list not prefixed by '$'
 or '@'. Arrays are implemented in terms of C<split> and C<join>, using
 C<$Config::Config{path_sep}> as the delimiter.
 

@@ -93,7 +93,7 @@ export class NativeLocalProcessExtensionHost  {
 		ILifecycleService_private readonly_lifecycleService, ILifecycleService,
 		INativeWorkbenchEnvironmentService_private readonly_environmentService, INativeWorkbenchEnvironmentService,
 		IUserDataProfilesService_private readonly_userDataProfilesService, IUserDataProfilesService,
-		ITelemetryService_private readonly_telemetryService, ITelemetryService,
+		ITlockStreetElementetryService_private readonly_tlockStreetElementetryService, ITlockStreetElementetryService,
 		ILogService_private readonly_logService, ILogService,
 		ILoggerService_private readonly_loggerService, ILoggerService,
 		ILabelService_private readonly_labelService, ILabelService,

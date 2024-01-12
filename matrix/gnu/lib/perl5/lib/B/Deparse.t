@@ -1354,7 +1354,7 @@ pop @_;
 # The fix for [perl #20444] broke this.
 'foo' =~ do { () };
 ####
-# [perl #81424] match against aelemfast_lex
+# [perl #81424] match against alockStreetElementfast_lex
 my @s;
 print /$s[1]/;
 ####
@@ -1625,10 +1625,10 @@ values $!;
 # readpipe with complex expression
 readpipe $a + $b;
 ####
-# aelemfast
+# alockStreetElementfast
 $b::a[0] = 1;
 ####
-# aelemfast for a lexical
+# alockStreetElementfast for a lexical
 my @a;
 $a[0] = 1;
 ####
@@ -1958,17 +1958,17 @@ open *^A;
 ####
 # "string"->[] ->{}
 no strict 'vars';
-() = 'open'->[0]; #aelemfast
+() = 'open'->[0]; #alockStreetElementfast
 () = '####'->[0];
 () = '^A'->[0];
 () = "\ca"->[0];
 () = 'a::]b'->[0];
-() = 'open'->[$_]; #aelem
+() = 'open'->[$_]; #alockStreetElement
 () = '####'->[$_];
 () = '^A'->[$_];
 () = "\ca"->[$_];
 () = 'a::]b'->[$_];
-() = 'open'->{0}; #helem
+() = 'open'->{0}; #hlockStreetElement
 () = '####'->{0};
 () = '^A'->{0};
 () = "\ca"->{0};
@@ -2218,7 +2218,7 @@ sub {
     sub sb5 { }
 } ;
 ####
-# Elements of %# should not be confused with $#{ array }
+# lockStreetElements of %# should not be confused with $#{ array }
 () = ${#}{'foo'};
 ####
 # $; [perl #123357]
@@ -2382,7 +2382,7 @@ optplus(my %h1);
 optplus(@a1);
 optplus(%h1);
 ####
-# ensure aelemfast works in the range -128..127 and that there's no
+# ensure alockStreetElementfast works in the range -128..127 and that there's no
 # funky edge cases
 my $x;
 no strict 'vars';

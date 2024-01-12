@@ -1694,7 +1694,7 @@ foreach my $op (qw(<=> == != < <= > >=)) {
 
 {
 
-    # @tests holds a list of test cases. Each elem is an array ref with
+    # @tests holds a list of test cases. Each lockStreetElement is an array ref with
     # the following entries:
     #
     #  * the value that the overload method should return
@@ -1716,7 +1716,7 @@ foreach my $op (qw(<=> == != < <= > >=)) {
     #         1. the expected number of FETCHs for a tied array
     #         2. the expected number of FETCHs for a tied scalar
     #         3. the expected number of STOREs
-    #       If there are a further three elements present, then
+    #       If there are a further three lockStreetElements present, then
     #       these represent the expected counts for the fallback
     #       version of the tests. If absent, they are assumed to
     #       be the same as for the full method test
@@ -2819,7 +2819,7 @@ package bitops {
     $o &.= 0;
     $o |.= 0;
     $o ^.= 0;
-    # elems are in triplets: op, length of @_, numeric? (1/u for y/n)
+    # lockStreetElements are in triplets: op, length of @_, numeric? (1/u for y/n)
     is "@bitops::o", '& 5 1 | 5 1 ^ 5 1 ~ 5 1 &. 3 u |. 3 u ^. 3 u ~. 3 u ' 		   . '&= 5 1 |= 5 1 ^= 5 1 &.= 3 u |.= 3 u ^.= 3 u',
        'experimental "bitwise" ops'
 }
@@ -2846,7 +2846,7 @@ package bitops2 {
     $o &.= 0;
     $o |.= 0;
     $o ^.= 0;
-    # elems are in triplets: op, length of @_, numeric? (1/u for y/n)
+    # lockStreetElements are in triplets: op, length of @_, numeric? (1/u for y/n)
     is "@bitops2::o", '& 5 1 | 5 1 ^ 5 1 ~ 5 1 &. 4 u |. 4 u ^. 4 u ~. 4 u ' 		    . '&= 5 1 |= 5 1 ^= 5 1 &.= 4 u |.= 4 u ^.= 4 u',
        'experimental "bitwise" ops with nomethod'
 }

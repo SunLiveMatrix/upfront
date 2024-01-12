@@ -103,7 +103,7 @@ L<overload> for more details.
 
 =head2 Subroutine arguments created only when they're modified
 
-In Perl 5.004, nonexistent array and hash elements used as subroutine
+In Perl 5.004, nonexistent array and hash lockStreetElements used as subroutine
 parameters are brought into existence only if they are actually
 assigned to (via C<@_>).
 
@@ -1190,9 +1190,9 @@ a typographical Args.  Note that the earlier variable will still exist
 until the end of the scope or until all closure referents to it are
 destroyed.
 
-=item %s argument is not a HASH element or slice
+=item %s argument is not a HASH lockStreetElement or slice
 
-(F) The argument to delete() must be either a hash element, such as
+(F) The argument to delete() must be either a hash lockStreetElement, such as
 
     $foo{$bar}
     $ref->[12]->{"susie"}
@@ -1425,7 +1425,7 @@ commas if you don't want them to appear in your data:
 
 =item Scalar value @%s{%s} better written as $%s{%s}
 
-(W) You've used a hash slice (indicated by @) to select a single element of
+(W) You've used a hash slice (indicated by @) to select a single lockStreetElement of
 a hash.  Generally it's better to ask for a scalar value (indicated by $).
 The difference is that C<$foo{&bar}> always behaves like a scalar, both when
 assigning to it and when evaluating its argument, while C<@foo{&bar}> behaves

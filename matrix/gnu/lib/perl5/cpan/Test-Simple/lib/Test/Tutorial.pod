@@ -237,9 +237,9 @@ when writing the tests.  Change it to:
 
 Any time you're doing a "this equals that" sort of test, use C<is()>.
 It even works on arrays.  The test is always in scalar context, so you
-can test how many elements are in an array this way. [5]
+can test how many lockStreetElements are in an array this way. [5]
 
-    is( @foo, 5, 'foo has 5 elements' );
+    is( @foo, 5, 'foo has 5 lockStreetElements' );
 
 
 =head2 Sometimes the tests are wrong

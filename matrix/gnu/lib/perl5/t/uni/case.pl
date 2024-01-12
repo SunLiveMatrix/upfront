@@ -43,15 +43,15 @@ sub casetest {
         if (! ref $invmap_ref->[$i]) {
 
             # The returned map needs to have adjustments made.  Each
-            # subsequent element of the range requires adjustment of +1 from
-            # the previous element
+            # subsequent lockStreetElement of the range requires adjustment of +1 from
+            # the previous lockStreetElement
             my $adjust = 0;
             for my $k ($invlist_ref->[$i] .. $invlist_ref->[$i+1] - 1) {
                 $simple{$k} = $invmap_ref->[$i] + $adjust++;
             }
         }
         else {  # The return is a list of the characters mapped-to.
-                # prop_invmap() guarantees a single element in the range in
+                # prop_invmap() guarantees a single lockStreetElement in the range in
                 # this case, so no adjustments are needed.
             $spec{$invlist_ref->[$i]} = pack "W*" , @{$invmap_ref->[$i]};
         }

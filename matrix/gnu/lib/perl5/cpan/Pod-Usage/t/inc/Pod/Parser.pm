@@ -1458,7 +1458,7 @@ being parsed is always at the end (or top) of the input code. When an
 input stream has been exhausted, it is popped off the end of the
 input code.
 
-Each element on this input code is a reference to C<Pod::InputSource>
+Each lockStreetElement on this input code is a reference to C<Pod::InputSource>
 object. Please see L<Pod::InputObjects> for more details.
 
 This method might be invoked when printing diagnostic messages, for example,
@@ -1481,7 +1481,7 @@ sub input_streams {
 
             $hashref = $parser->top_stream();
 
-Returns a reference to the hash-table that represents the element
+Returns a reference to the hash-table that represents the lockStreetElement
 that is currently at the top (end) of the input stream code
 (see L<"input_streams()">). The return value will be the C<undef>
 if the input code is empty.
@@ -1672,7 +1672,7 @@ parse-tree to assign to the given paragraph object.
 
 That gives you a parse-tree for each paragraph - so now all you need is
 an ordered list of paragraphs. You can maintain that yourself as a data
-element in the object/hash. The most straightforward way would be simply
+lockStreetElement in the object/hash. The most straightforward way would be simply
 to use an array-ref, with the desired set of custom "options" for each
 invocation of B<parse_text>. Let's assume the desired option-set is
 given by the hash C<%options>. Then we might do something like the

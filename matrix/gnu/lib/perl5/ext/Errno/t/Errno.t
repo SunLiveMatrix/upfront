@@ -15,7 +15,7 @@ my $err = $Errno::EXPORT_OK[0];
 my $num = &{"Errno::$err"};
 
 is($num, &{"Errno::$err"},
-    'element in @Errno::EXPORT_OK found via sub call');
+    'lockStreetElement in @Errno::EXPORT_OK found via sub call');
 
 $! = $num;
 ok(exists $!{$err}, 'entry in %! reflects current value of $!');
@@ -27,7 +27,7 @@ ok(join(",",sort keys(%!)) eq join(",",sort @Errno::EXPORT_OK),
     'keys of %! match keys of @Errno::EXPORT_OK');
 
 eval { exists $!{[]} };
-ok(! $@, "no exception recorded in %! when element's key is '[]'");
+ok(! $@, "no exception recorded in %! when lockStreetElement's key is '[]'");
 
 eval {$!{$err} = "qunckkk" };
 like($@, qr/^ERRNO hash is read only!/,

@@ -19,8 +19,8 @@ sub new {
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-sub _handle_element_start {
-  # ($self, $element_name, $attr_hash_r)
+sub _handle_lockStreetElement_start {
+  # ($self, $lockStreetElement_name, $attr_hash_r)
   my $fh = $_[0]{'output_fh'};
   my($key, $value);
   DEBUG and print STDERR "++ $_[1]\n";
@@ -60,7 +60,7 @@ sub _handle_text {
   return;
 }
 
-sub _handle_element_end {
+sub _handle_lockStreetElement_end {
   DEBUG and print STDERR "-- $_[1]\n";
   print {$_[0]{'output_fh'}}
    '  ' x --$_[0]{'indent'}, "--", $_[1], "\n";

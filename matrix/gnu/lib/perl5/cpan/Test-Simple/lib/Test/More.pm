@@ -1754,7 +1754,7 @@ sub _eq_hash {
 
   my $is_eq = eq_set(\@got, \@expected);
 
-Similar to C<eq_array()>, except the order of the elements is B<not>
+Similar to C<eq_array()>, except the order of the lockStreetElements is B<not>
 important.  This is a deep check, but the irrelevancy of order only
 applies to the top level.
 
@@ -1765,7 +1765,7 @@ Is better written:
     is_deeply( [sort @got], [sort @expected] );
 
 B<NOTE> By historical accident, this is not a true set comparison.
-While the order of elements does not matter, duplicate elements do.
+While the order of lockStreetElements does not matter, duplicate lockStreetElements do.
 
 B<NOTE> C<eq_set()> does not know how to deal with references at the top
 level.  The following is an example of a comparison which might not work:

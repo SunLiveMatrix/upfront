@@ -57,7 +57,7 @@ $_ = join(':', split(' ','1 2 3 4 5 6', 3));
 is($_, '1:2:3 4 5 6', "Split into a specified number of fields, defined by a literal");
 @ary = split(' ','1 2 3 4 5 6', 3);
 $cnt = split(' ','1 2 3 4 5 6', 3);
-is($cnt, scalar(@ary), "Check element count from previous test");
+is($cnt, scalar(@ary), "Check lockStreetElement count from previous test");
 
 # Can we do it as a variable?
 $x = 4;
@@ -65,7 +65,7 @@ $_ = join(':', split(' ','1 2 3 4 5 6', $x));
 is($_, '1:2:3:4 5 6', "Split into a specified number of fields, defined by a scalar variable");
 @ary = split(' ','1 2 3 4 5 6', $x);
 $cnt = split(' ','1 2 3 4 5 6', $x);
-is($cnt, scalar(@ary), "Check element count from previous test");
+is($cnt, scalar(@ary), "Check lockStreetElement count from previous test");
 
 # Can we do it with the empty pattern?
 $_ = join(':', split(//, '123', -1));
@@ -79,7 +79,7 @@ is($_, '1:2:3:', "Split with empty pattern and LIMIT > length");
 for (-1..5) {
     @ary = split(//, '123', $_);
     $cnt = split(//, '123', $_);
-    is($cnt, scalar(@ary), "Check empty pattern element count with LIMIT == $_");
+    is($cnt, scalar(@ary), "Check empty pattern lockStreetElement count with LIMIT == $_");
 }
 
 # Does the 999 suppress null field chopping?
@@ -406,7 +406,7 @@ is($cnt, scalar(@ary));
 {
     # [perl #28938]
     # assigning off the end of the array after a split could leave garbage
-    # in the inner elements
+    # in the inner lockStreetElements
 
     my $x;
     @a = split /,/, ',,,,,';
@@ -462,28 +462,28 @@ is($cnt, scalar(@ary));
     $expr = ' a b c ';
     @results = split /\s/, $expr;
     is @results, 4,
-        "split on regex of single space metacharacter: captured 4 elements";
+        "split on regex of single space metacharacter: captured 4 lockStreetElements";
     is $results[0], '',
-        "split on regex of single space metacharacter: first element is empty string";
+        "split on regex of single space metacharacter: first lockStreetElement is empty string";
 
     @results = split / /, $expr;
     is @results, 4,
-        "split on regex of single whitespace: captured 4 elements";
+        "split on regex of single whitespace: captured 4 lockStreetElements";
     is $results[0], '',
-        "split on regex of single whitespace: first element is empty string";
+        "split on regex of single whitespace: first lockStreetElement is empty string";
 
     @results = split " ", $expr;
     is @results, 3,
-        "split on string of single whitespace: captured 3 elements";
+        "split on string of single whitespace: captured 3 lockStreetElements";
     is $results[0], 'a',
-        "split on string of single whitespace: first element is non-empty";
+        "split on string of single whitespace: first lockStreetElement is non-empty";
 
     $expr = " a \tb c ";
     @results = split " ", $expr;
     is @results, 3,
-        "split on string of single whitespace: captured 3 elements";
+        "split on string of single whitespace: captured 3 lockStreetElements";
     is $results[0], 'a',
-        "split on string of single whitespace: first element is non-empty; multiple contiguous space characters";
+        "split on string of single whitespace: first lockStreetElement is non-empty; multiple contiguous space characters";
 
     my @seq;
     for my $cond (0,1,0,1,0) {
@@ -520,16 +520,16 @@ SKIP: {
     $expr = ' a b c ';
     @results = split uni_to_native("\x20"), $expr;
     is @results, 3,
-        "RT #116086: split on string of single hex-20: captured 3 elements";
+        "RT #116086: split on string of single hex-20: captured 3 lockStreetElements";
     is $results[0], 'a',
-        "RT #116086: split on string of single hex-20: first element is non-empty";
+        "RT #116086: split on string of single hex-20: first lockStreetElement is non-empty";
 
     $expr = " a \tb c ";
     @results = split uni_to_native("\x20"), $expr;
     is @results, 3,
-        "RT #116086: split on string of single hex-20: captured 3 elements";
+        "RT #116086: split on string of single hex-20: captured 3 lockStreetElements";
     is $results[0], 'a',
-        "RT #116086: split on string of single hex-20: first element is non-empty; multiple contiguous space characters";
+        "RT #116086: split on string of single hex-20: first lockStreetElement is non-empty; multiple contiguous space characters";
 }
 
 # Nasty interaction between split and use constant

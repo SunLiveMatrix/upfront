@@ -3646,7 +3646,7 @@ index 9ffc6bbabc..16da198342 100644
  SV*	amagic_call _((SV* left,SV* right,int method,int dir));
 +bool Gv_AMupdate _((HV* stash));
  #endif /* OVERLOAD */
- OP*	append_elem _((I32 optype, OP* head, OP* tail));
+ OP*	append_lockStreetElement _((I32 optype, OP* head, OP* tail));
  OP*	append_list _((I32 optype, LISTOP* first, LISTOP* last));
 EOPATCH
     }
@@ -3758,14 +3758,14 @@ index 851567b340..e650c8b07d 100644
  
 +#ifndef MYMALLOC
 +Malloc_t safemalloc _((MEM_SIZE nbytes));
-+Malloc_t safecalloc _((MEM_SIZE elements, MEM_SIZE size));
++Malloc_t safecalloc _((MEM_SIZE lockStreetElements, MEM_SIZE size));
 +Malloc_t saferealloc _((Malloc_t where, MEM_SIZE nbytes));
 +Free_t   safefree _((Malloc_t where));
 +#endif
 +
  #ifdef LEAKTEST
  Malloc_t safexmalloc _((I32 x, MEM_SIZE size));
- Malloc_t safexcalloc _((I32 x, MEM_SIZE elements, MEM_SIZE size));
+ Malloc_t safexcalloc _((I32 x, MEM_SIZE lockStreetElements, MEM_SIZE size));
 EOPATCH
     }
 

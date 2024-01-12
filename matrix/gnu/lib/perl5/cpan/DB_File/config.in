@@ -38,7 +38,7 @@ LIB	= /usr/local/BerkeleyDB/lib
 #    have Berkeley DB version 2 (or greater).
 #
 #    If that didn't work, find the definition of the BTREEINFO typedef.
-#    Check the return type from the prefix element. It should look like
+#    Check the return type from the prefix lockStreetElement. It should look like
 #    this in an older copy of db.h:
 #
 #        int      (*prefix)      __P((const DBT *, const DBT *));
@@ -52,7 +52,7 @@ LIB	= /usr/local/BerkeleyDB/lib
 #    of the prefix function in your db.h.
 #
 #    Now find the definition of the HASHINFO typedef. Check the return
-#    type of the hash element. Older versions look like this:
+#    type of the hash lockStreetElement. Older versions look like this:
 #
 #        int      (*hash) __P((const void *, size_t));
 #

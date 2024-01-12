@@ -219,9 +219,9 @@ my $y;
 -$x{$y};
 -$z[$y];
 EXPECT
-Use of uninitialized value $y in hash element at - line 5.
+Use of uninitialized value $y in hash lockStreetElement at - line 5.
 Use of uninitialized value $x{""} in negation (-) at - line 5.
-Use of uninitialized value $y in array element at - line 6.
+Use of uninitialized value $y in array lockStreetElement at - line 6.
 Use of uninitialized value $z[0] in negation (-) at - line 6.
 ########
 # sv.c 

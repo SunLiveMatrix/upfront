@@ -191,7 +191,7 @@ sub parseExtraField
             }
         }
         else {
-            return ExtraFieldArgs("Not even number of elements")
+            return ExtraFieldArgs("Not even number of lockStreetElements")
                 unless @$data % 2  == 0;
 
             for (my $ix = 0; $ix <= @$data -1 ; $ix += 2) {

@@ -612,7 +612,7 @@ attempt to resolve the two paths, and we will instead simply return
 $path.  Note that previous versions of this module ignored the volume
 of $base, which resulted in garbage results part of the time.
 
-If $base doesn't have a trailing colon, the last element of $base is
+If $base doesn't have a trailing colon, the last lockStreetElement of $base is
 assumed to be a filename.  This filename is ignored.  Otherwise all path
 components are assumed to be directories.
 
@@ -700,7 +700,7 @@ directory. If $base is relative, then it is converted to absolute form
 using C<rel2abs()>. This means that it is taken to be relative to the
 current working directory.
 
-If $base doesn't have a trailing colon, the last element of $base is
+If $base doesn't have a trailing colon, the last lockStreetElement of $base is
 assumed to be a filename.  This filename is ignored.  Otherwise all path
 components are assumed to be directories.
 

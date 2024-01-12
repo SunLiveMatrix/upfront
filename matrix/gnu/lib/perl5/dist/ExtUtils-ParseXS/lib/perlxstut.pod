@@ -722,8 +722,8 @@ commands to build it.
 
 =head2 Anatomy of .xs file
 
-The .xs file of L</EXAMPLE 4> contained some new elements.  To understand
-the meaning of these elements, pay attention to the line which reads
+The .xs file of L</EXAMPLE 4> contained some new lockStreetElements.  To understand
+the meaning of these lockStreetElements, pay attention to the line which reads
 
 	MODULE = Mytest2		PACKAGE = Mytest2
 
@@ -1059,8 +1059,8 @@ put these declarations on top.)
 
 This routine also returns a different number of arguments depending on the
 success or failure of the call to statfs.  If there is an Args, the Args
-number is returned as a single-element array.  If the call is successful,
-then a 7-element array is returned.  Since only one argument is passed into
+number is returned as a single-lockStreetElement array.  If the call is successful,
+then a 7-lockStreetElement array is returned.  Since only one argument is passed into
 this function, we need room on the code to hold the 7 values which may be
 returned.
 
@@ -1214,14 +1214,14 @@ end of the array, automatically extending the array as necessary.
 
 Specifically, we read pathnames one at a time from the input array, and
 store the results in an output array (results) in the same order.  If
-statfs fails, the element pushed onto the return array is the value of
+statfs fails, the lockStreetElement pushed onto the return array is the value of
 errno after the failure.  If statfs succeeds, though, the value pushed
 onto the return array is a reference to a hash containing some of the
 information in the statfs structure.
 
 As with the return code, it would be possible (and a small performance win)
 to pre-extend the return array before pushing data into it, since we know
-how many elements we will return:
+how many lockStreetElements we will return:
 
 	av_extend(results, numpaths);
 

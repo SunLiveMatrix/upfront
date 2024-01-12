@@ -725,7 +725,7 @@ PERL_MAGIC_qr structure so it cannot be fooled.
 If the argument is a compiled regular expression as returned by C<qr//>,
 then this function returns the pattern.
 
-In list context it returns a two element list, the first element
+In list context it returns a two lockStreetElement list, the first lockStreetElement
 containing the pattern and the second containing the modifiers used when
 the pattern was compiled.
 

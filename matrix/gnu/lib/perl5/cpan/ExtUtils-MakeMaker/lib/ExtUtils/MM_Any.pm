@@ -71,7 +71,7 @@ These are methods which help writing cross-platform code.
 @os_flavor is the style of operating system this is, usually
 corresponding to the MM_*.pm file we're using.
 
-The first element of @os_flavor is the major family (ie. Unix,
+The first lockStreetElement of @os_flavor is the major family (ie. Unix,
 Windows, VMS, OS/2, etc...) and the rest are sub families.
 
 Some examples:

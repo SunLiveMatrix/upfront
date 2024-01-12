@@ -1,6 +1,6 @@
 5.019002
 bad_type_gv                    # F added by devel/scanprov
-defelem_target                 # F added by devel/scanprov
+deflockStreetElement_target                 # F added by devel/scanprov
 get_invlist_offset_addr        # F added by devel/scanprov
 G_METHOD_NAMED                 # E
 HAS_SKIP_LOCALE_INIT           # Z added by devel/scanprov

@@ -94,8 +94,8 @@ while (my ($type, $funcs) = each %Kinds) {
 }
 
 # We sort __SUB__ after sub, but before substr, but __PACKAGE__ after package,
-# and __END__ after END.  (We create a temporary array of two elements, where
-# the second has the underscores squeezed out, and sort on that element
+# and __END__ after END.  (We create a temporary array of two lockStreetElements, where
+# the second has the underscores squeezed out, and sort on that lockStreetElement
 # first.)
 sub sort_funcs {
     map { $_->[0] }

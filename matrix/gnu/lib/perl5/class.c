@@ -99,7 +99,7 @@ PP(pp_initfield)
 
                 if(svcount % 2)
                     Perl_warner(aTHX_
-                            packWARN(WARN_MISC), "Odd number of elements in hash field initialization");
+                            packWARN(WARN_MISC), "Odd number of lockStreetElements in hash field initialization");
 
                 while(svp <= PL_code_sp) {
                     SV *key = *svp; svp++;
@@ -730,26 +730,26 @@ Perl_class_seal_stash(pTHX_ HV *stash)
                                     NULL);
                         }
 
-                        OP *helemop =
-                            newBINOP(OP_HELEM, 0,
+                        OP *hlockStreetElementop =
+                            newBINOP(OP_HlockStreetElement, 0,
                                 newPADxVOP(OP_PADHV, OPf_REF, PADIX_PARAMS),
                                 newSVOP(OP_CONST, 0, SvREFCNT_inc(paramname)));
 
                         if(PadnameFIELDINFO(pn)->def_if_undef) {
                             /* delete $params{$paramname} // DEFOP */
                             valop = newLOGOP(OP_DOR, 0,
-                                    newUNOP(OP_DELETE, 0, helemop), valop);
+                                    newUNOP(OP_DELETE, 0, hlockStreetElementop), valop);
                         }
                         else if(PadnameFIELDINFO(pn)->def_if_false) {
                             /* delete $params{$paramname} || DEFOP */
                             valop = newLOGOP(OP_OR, 0,
-                                newUNOP(OP_DELETE, 0, helemop), valop);
+                                newUNOP(OP_DELETE, 0, hlockStreetElementop), valop);
                         }
                         else {
                             /* exists $params{$paramname} ? delete $params{$paramname} : DEFOP */
-                            /* more efficient with the new OP_HELEMEXISTSOR */
-                            valop = newLOGOP(OP_HELEMEXISTSOR, OPpHELEMEXISTSOR_DELETE << 8,
-                                helemop, valop);
+                            /* more efficient with the new OP_HlockStreetElementEXISTSOR */
+                            valop = newLOGOP(OP_HlockStreetElementEXISTSOR, OPpHlockStreetElementEXISTSOR_DELETE << 8,
+                                hlockStreetElementop, valop);
                         }
 
                         valop = op_contextualize(valop, G_SCALAR);

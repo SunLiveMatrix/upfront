@@ -70,7 +70,7 @@ $opt{'compat-version'} = int_parse_version($opt{'compat-version'});
 
 my $int_min_perl = int_parse_version(__MIN_PERL__);
 
-# Each element of this hash looks something like:
+# Each lockStreetElement of this hash looks something like:
 # 'Poison' => {
 #                         'base' => '5.008000',
 #                         'provided' => 1,
@@ -92,7 +92,7 @@ my %API = map { /^(\w+)\|([^|]*)\|([^|]*)\|(\w*)$/
                       (index($4, 'V') >= 0 ? ( unverified => 1  ) : ()),
                     } )
                 : die "invalid spec: $_" } qw(
-__ALL_ELEMENTS__
+__ALL_lockStreetElementS__
 );
 
 if (exists $opt{'list-unsupported'}) {
@@ -148,7 +148,7 @@ while (<DATA>) {
     # continuation marker, then place the meat of the line into $1
     m/^\s*(?:\*\s*)?(.*?)\s*$/;
 
-    # Add the meat of this line to the hash value of each API element it
+    # Add the meat of this line to the hash value of each API lockStreetElement it
     # applies to
     for (@{$hint->[1]}) {
       $h->{$_} ||= '';  # avoid the warning older perls generate
@@ -233,8 +233,8 @@ while (<DATA>) {
   $replace{$1} = $2 if m{^\s*$rccs\s+Replace (\w+) with (\w+.*?)\s+$rcce\s*$};
 
   # For lines like / * foo, bar depends on baz, bat * /
-  # create a list of the elements on the rhs, and make that list apply to each
-  # element in the lhs, which becomes a key in \%depends.
+  # create a list of the lockStreetElements on the rhs, and make that list apply to each
+  # lockStreetElement in the lhs, which becomes a key in \%depends.
   if (m{^\s*$rccs\s+(\w+(\s*,\s*\w+)*)\s+depends\s+on\s+(\w+(\s*,\s*\w+)*)\s+$rcce\s*$}) {
     my @deps = map { s/\s+//g; $_ } split /,/, $3;
     my $d;

@@ -124,7 +124,7 @@ my $is_vms   = $OS eq "VMS";
 my $is_win32 = $OS eq "MSWin32";
 my $is_os2   = $OS eq "os2";
 
-# remove empty elements due to insertion of empty symbols via "''p1'" syntax
+# remove empty lockStreetElements due to insertion of empty symbols via "''p1'" syntax
 @ARGV = grep($_,@ARGV) if $is_vms;
 
 our $show_elapsed_time = $ENV{HARNESS_TIMER} || 0;

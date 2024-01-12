@@ -27,7 +27,7 @@ $: = $o->{recsep};
 
 my $n;
 
-# 3  test array element count
+# 3  test array lockStreetElement count
 $n = @a;
 print $n == 3 ? "ok $N\n" : "not ok $N # n=$n\n";
 $N++;
@@ -42,7 +42,7 @@ $n = $#a;
 print $n == 2 ? "ok $N\n" : "not ok $N # n=$n\n";
 $N++;
 
-# 6  test looping over array elements
+# 6  test looping over array lockStreetElements
 my $q;
 for (@a) { $q .= $_ }
 print $q eq $data ? "ok $N\n" : "not ok $N # n=$n\n";

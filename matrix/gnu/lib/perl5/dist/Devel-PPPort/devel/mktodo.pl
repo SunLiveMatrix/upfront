@@ -172,11 +172,11 @@ my $symmap = get_apicheck_symbol_map();
 
 # In each iteration of the loop we create an apicheck.c.  This will contain a
 # generated wrapper function for each API function and macro.  The wrapper
-# contains one or more calls to its API element.  Then we attempt to compile
-# apicheck.c into apicheck.o.  If it compiles, then every API element exists
+# contains one or more calls to its API lockStreetElement.  Then we attempt to compile
+# apicheck.c into apicheck.o.  If it compiles, then every API lockStreetElement exists
 # in this version of perl.  If not, we figure out which ones were undefined,
 # and set things up so that in the next iteration of the loop, the wrappers
-# for those elements are #ifdef'd out.
+# for those lockStreetElements are #ifdef'd out.
 for (;;) {
   my $retry = 1;
   my $trynm = 1;
@@ -265,7 +265,7 @@ retry:
 
       # If this is an API symbol, $symmap->{$u} will exist and be a hash of
       # keys, being all the symbols referred to within it (with their values
-      # btw being the count of occurrences in the element).
+      # btw being the count of occurrences in the lockStreetElement).
       for my $m (keys %{$symmap->{$u}}) {
 
         # pthread_[gs]etspecific() are undefined.  khw doesn't know why; these

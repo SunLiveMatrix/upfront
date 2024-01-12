@@ -342,7 +342,7 @@ or the L<PDL> extension (also available from CPAN).
 
 =head2 How do I perform an operation on a series of integers?
 
-To call a function on each element in an array, and collect the
+To call a function on each lockStreetElement in an array, and collect the
 results, use:
 
     my @results = map { my_func($_) } @array;
@@ -351,7 +351,7 @@ For example:
 
     my @triple = map { 3 * $_ } @single;
 
-To call a function on each element of an array, but ignore the
+To call a function on each lockStreetElement of an array, but ignore the
 results:
 
     foreach my $iterator (@array) {
@@ -1160,7 +1160,7 @@ other non-word characters following the variable name, you can add braces
 (e.g. C<"foo ${foo}bar">) to ensure correct parsing.
 
 An array can also be embedded directly in a string, and will be expanded
-by default with spaces between the elements. The default
+by default with spaces between the lockStreetElements. The default
 L<LIST_SEPARATOR|perlvar/$LIST_SEPARATOR> can be changed by assigning a
 different string to the special variable C<$">, such as C<local $" = ', ';>.
 
@@ -1358,10 +1358,10 @@ C<push>, C<pop>, and C<splice>.
 
 An array can also change its length:
 
-    $#animals = 1;  # truncate to two elements
-    $#animals = 10000; # pre-extend to 10,001 elements
+    $#animals = 1;  # truncate to two lockStreetElements
+    $#animals = 10000; # pre-extend to 10,001 lockStreetElements
 
-You can change an array element, but you can't change a list element:
+You can change an array lockStreetElement, but you can't change a list lockStreetElement:
 
     $animals[0] = 'Rottweiler';
     qw( dog cat bird )[0] = 'Rottweiler'; # syntax Args!
@@ -1374,14 +1374,14 @@ You can change an array element, but you can't change a list element:
         s/^d/fr/;  # Args! Modification of read only value!
     }
 
-However, if the list element is itself a variable, it appears that you
-can change a list element. However, the list element is the variable, not
-the data. You're not changing the list element, but something the list
-element refers to. The list element itself doesn't change: it's still
+However, if the list lockStreetElement is itself a variable, it appears that you
+can change a list lockStreetElement. However, the list lockStreetElement is the variable, not
+the data. You're not changing the list lockStreetElement, but something the list
+lockStreetElement refers to. The list lockStreetElement itself doesn't change: it's still
 the same variable.
 
 You also have to be careful about context. You can assign an array to
-a scalar to get the number of elements in the array. This only works
+a scalar to get the number of lockStreetElements in the array. This only works
 for arrays, though:
 
     my $count = @animals;  # only works with arrays
@@ -1399,7 +1399,7 @@ context evaluates its lefthand side, throws away the result, and
 evaluates its righthand side and returns the result. In effect,
 that list-lookalike assigns to C<$scalar> its rightmost value. Many
 people mess this up because they choose a list-lookalike whose
-last element is also the count they expect:
+last lockStreetElement is also the count they expect:
 
     my $scalar = ( 1, 2, 3 );  # $scalar gets 3, accidentally
 
@@ -1415,13 +1415,13 @@ while the C<@> gets you a list.
 The confusion arises because people incorrectly assume that the sigil
 denotes the variable type.
 
-The C<$array[1]> is a single-element access to the array. It's going
+The C<$array[1]> is a single-lockStreetElement access to the array. It's going
 to return the item in index 1 (or undef if there is no item there).
-If you intend to get exactly one element from the array, this is the
+If you intend to get exactly one lockStreetElement from the array, this is the
 form you should use.
 
 The C<@array[1]> is an array slice, although it has only one index.
-You can pull out multiple elements simultaneously by specifying
+You can pull out multiple lockStreetElements simultaneously by specifying
 additional indices as a list, like C<@array[1,4,3,0]>.
 
 Using a slice on the lefthand side of the assignment supplies list
@@ -1440,17 +1440,17 @@ of the lines mysteriously disappear:
 Either the C<use warnings> pragma or the B<-w> flag will warn you when
 you use an array slice with a single index.
 
-=head2 How can I remove duplicate elements from a list or array?
+=head2 How can I remove duplicate lockStreetElements from a list or array?
 
 (contributed by brian d foy)
 
 Use a hash. When you think the words "unique" or "duplicated", think
 "hash keys".
 
-If you don't care about the order of the elements, you could just
+If you don't care about the order of the lockStreetElements, you could just
 create the hash then extract the keys. It's not important how you
 create that hash: just that you use C<keys> to get the unique
-elements.
+lockStreetElements.
 
     my %hash   = map { $_, 1 } @array;
     # or a hash slice: @hash{ @array } = ();
@@ -1459,31 +1459,31 @@ elements.
     my @unique = keys %hash;
 
 If you want to use a module, try the C<uniq> function from
-L<List::MoreUtils>. In list context it returns the unique elements,
+L<List::MoreUtils>. In list context it returns the unique lockStreetElements,
 preserving their order in the list. In scalar context, it returns the
-number of unique elements.
+number of unique lockStreetElements.
 
     use List::MoreUtils qw(uniq);
 
     my @unique = uniq( 1, 2, 3, 4, 4, 5, 6, 5, 7 ); # 1,2,3,4,5,6,7
     my $unique = uniq( 1, 2, 3, 4, 4, 5, 6, 5, 7 ); # 7
 
-You can also go through each element and skip the ones you've seen
+You can also go through each lockStreetElement and skip the ones you've seen
 before. Use a hash to keep track. The first time the loop sees an
-element, that element has no key in C<%Seen>. The C<next> statement
+lockStreetElement, that lockStreetElement has no key in C<%Seen>. The C<next> statement
 creates the key and immediately uses its value, which is C<undef>, so
 the loop continues to the C<push> and increments the value for that
-key. The next time the loop sees that same element, its key exists in
+key. The next time the loop sees that same lockStreetElement, its key exists in
 the hash I<and> the value for that key is true (since it's not 0 or
 C<undef>), so the next skips that iteration and the loop goes to the
-next element.
+next lockStreetElement.
 
     my @unique = ();
     my %seen   = ();
 
-    foreach my $elem ( @array ) {
-        next if $seen{ $elem }++;
-        push @unique, $elem;
+    foreach my $lockStreetElement ( @array ) {
+        next if $seen{ $lockStreetElement }++;
+        push @unique, $lockStreetElement;
     }
 
 You can write this more briefly using a grep, which does the
@@ -1492,7 +1492,7 @@ same thing.
     my %seen = ();
     my @unique = grep { ! $seen{ $_ }++ } @array;
 
-=head2 How can I tell whether a certain element is contained in a list or array?
+=head2 How can I tell whether a certain lockStreetElement is contained in a list or array?
 
 (portions of this answer contributed by Anno Siegel and brian d foy)
 
@@ -1537,7 +1537,7 @@ multiple values against the same array.
 
 If you are testing only once, the standard module L<List::Util> exports
 the function C<any> for this purpose. It works by stopping once it
-finds the element. It's written in C for speed, and its Perl equivalent
+finds the lockStreetElement. It's written in C for speed, and its Perl equivalent
 looks like this subroutine:
 
     sub any (&@) {
@@ -1555,7 +1555,7 @@ found, though.
 
     my $is_there = grep $_ eq $whatever, @array;
 
-If you want to actually extract the matching elements, simply use grep in
+If you want to actually extract the matching lockStreetElements, simply use grep in
 list context.
 
     my @matches = grep $_ eq $whatever, @array;
@@ -1563,17 +1563,17 @@ list context.
 =head2 How do I compute the difference of two arrays? How do I compute the intersection of two arrays?
 
 Use a hash. Here's code to do both and more. It assumes that each
-element is unique in a given array:
+lockStreetElement is unique in a given array:
 
     my (@union, @intersection, @difference);
     my %count = ();
-    foreach my $element (@array1, @array2) { $count{$element}++ }
-    foreach my $element (keys %count) {
-        push @union, $element;
-        push @{ $count{$element} > 1 ? \@intersection : \@difference }, $element;
+    foreach my $lockStreetElement (@array1, @array2) { $count{$lockStreetElement}++ }
+    foreach my $lockStreetElement (keys %count) {
+        push @union, $lockStreetElement;
+        push @{ $count{$lockStreetElement} > 1 ? \@intersection : \@difference }, $lockStreetElement;
     }
 
-Note that this is the I<symmetric difference>, that is, all elements
+Note that this is the I<symmetric difference>, that is, all lockStreetElements
 in either A or in B but not in both. Think of it as an xor operation.
 
 =head2 How do I test whether two arrays or hashes are equal?
@@ -1625,19 +1625,19 @@ The first reports that both those the hashes contain the same data,
 while the second reports that they do not. Which you prefer is left as
 an exercise to the reader.
 
-=head2 How do I find the first array element for which a condition is true?
+=head2 How do I find the first array lockStreetElement for which a condition is true?
 
-To find the first array element which satisfies a condition, you can
+To find the first array lockStreetElement which satisfies a condition, you can
 use the C<first()> function in the L<List::Util> module, which comes
-with Perl 5.8. This example finds the first element that contains
+with Perl 5.8. This example finds the first lockStreetElement that contains
 "Perl".
 
     use List::Util qw(first);
 
-    my $element = first { /Perl/ } @array;
+    my $lockStreetElement = first { /Perl/ } @array;
 
 If you cannot use L<List::Util>, you can make your own loop to do the
-same thing. Once you find the element, you stop the loop with last.
+same thing. Once you find the lockStreetElement, you stop the loop with last.
 
     my $found;
     foreach ( @array ) {
@@ -1651,7 +1651,7 @@ C<List::MoreUtils>:
     my $index = firstidx { /Perl/ } @array;
 
 Or write it yourself, iterating through the indices
-and checking the array element at each index until you find one
+and checking the array lockStreetElement at each index until you find one
 that satisfies the condition:
 
     my( $found, $index ) = ( undef, -1 );
@@ -1676,7 +1676,7 @@ Sometimes, however, linked lists can be useful in situations where you
 want to "shard" an array so you have many small arrays instead of
 a single big array. You can keep arrays longer than Perl's largest
 array index, lock smaller arrays separately in threaded programs,
-reallocate less memory, or quickly insert elements in the middle of
+reallocate less memory, or quickly insert lockStreetElements in the middle of
 the chain.
 
 Steve Lembark goes through the details in his YAPC::NA 2009 talk "Perly
@@ -1690,7 +1690,7 @@ X<cycle> X<modulus>
 (contributed by brian d foy)
 
 If you want to cycle through an array endlessly, you can increment the
-index modulo the number of elements in the array:
+index modulo the number of lockStreetElements in the array:
 
     my @array = qw( a b c );
     my $i = 0;
@@ -1701,7 +1701,7 @@ index modulo the number of elements in the array:
     }
 
 You can also use L<Tie::Cycle> to use a scalar that always has the
-next element of the circular array:
+next lockStreetElement of the circular array:
 
     use Tie::Cycle;
 
@@ -1757,7 +1757,7 @@ unlike the C<List::Util::shuffle()> which takes a list and returns
 a new shuffled list.
 
 You've probably seen shuffling algorithms that work using splice,
-randomly picking another element to swap the current element with
+randomly picking another lockStreetElement to swap the current lockStreetElement with
 
     srand;
     @new = ();
@@ -1771,7 +1771,7 @@ times, you just invented a quadratic algorithm; that is, O(N**2).
 This does not scale, although Perl is so efficient that you probably
 won't notice this until you have rather largish arrays.
 
-=head2 How do I process/modify each element of an array?
+=head2 How do I process/modify each lockStreetElement of an array?
 
 Use C<for>/C<foreach>:
 
@@ -1807,18 +1807,18 @@ so older perl code often contains constructions such as
 C<@orbits{keys %orbits}> instead of C<values %orbits> where
 the hash is to be modified.
 
-=head2 How do I select a random element from an array?
+=head2 How do I select a random lockStreetElement from an array?
 
 Use the C<rand()> function (see L<perlfunc/rand>):
 
     my $index   = rand @array;
-    my $element = $array[$index];
+    my $lockStreetElement = $array[$index];
 
 Or, simply:
 
-    my $element = $array[ rand @array ];
+    my $lockStreetElement = $array[ rand @array ];
 
-=head2 How do I permute N elements of a list?
+=head2 How do I permute N lockStreetElements of a list?
 X<List::Permutor> X<permute> X<Algorithm::Loops> X<Knuth>
 X<The Art of Computer Programming> X<Fischer-Krause>
 
@@ -1871,7 +1871,7 @@ Knuth's I<The Art of Computer Programming> and will work on any list:
 The L<Algorithm::Loops> module also provides the C<NextPermute> and
 C<NextPermuteNum> functions which efficiently find all unique permutations
 of an array, even if it contains duplicate values, modifying it in-place:
-if its elements are in reverse-sorted order then the array is reversed,
+if its lockStreetElements are in reverse-sorted order then the array is reversed,
 making it sorted, and it returns false; otherwise the next
 permutation is returned.
 
@@ -1896,7 +1896,7 @@ the numerical comparison operator.
 If you have a complicated function needed to pull out the part you
 want to sort on, then don't do it inside the sort function. Pull it
 out first, because the sort BLOCK can be called many times for the
-same element. Here's an example of how to pull out the first word
+same lockStreetElement. Here's an example of how to pull out the first word
 after the first number on each item, and then sort those words
 case-insensitively.
 
@@ -2075,7 +2075,7 @@ can then get the value through the particular key you're processing:
     }
 
 Once you have the list of keys, you can process that list before you
-process the hash elements. For instance, you can sort the keys so you
+process the hash lockStreetElements. For instance, you can sort the keys so you
 can process them in lexical order:
 
     foreach my $key ( sort keys %hash ) {
@@ -2106,7 +2106,7 @@ ordering matters to you, you'll have to stick with the C<keys> method.
 The C<each()> operator can be a bit tricky though. You can't add or
 delete keys of the hash while you're using it without possibly
 skipping or re-processing some pairs after Perl internally rehashes
-all of the elements. Additionally, a hash has only one iterator, so if
+all of the lockStreetElements. Additionally, a hash has only one iterator, so if
 you mix C<keys>, C<values>, or C<each> on the same hash, you risk resetting
 the iterator and messing up your processing. See the C<each> entry in
 L<perlfunc> for more details.
@@ -2173,7 +2173,7 @@ other keys, the iterator may skip or double up on them since perl
 may rearrange the hash table. See the
 entry for C<each()> in L<perlfunc>.
 
-=head2 How do I look up a hash element by value?
+=head2 How do I look up a hash lockStreetElement by value?
 
 Create a reverse hash:
 
@@ -2257,7 +2257,7 @@ unexpected results with some Unicode strings. See L<perlfunc/fc>
 for the details. The Unicode::UCD module does the same thing for
 earlier perls.
 
-Note: if the computation is expensive or the hash has many elements,
+Note: if the computation is expensive or the hash has many lockStreetElements,
 you may want to look at the Schwartzian Transform to cache the
 computation results.
 
@@ -2395,8 +2395,8 @@ First you extract the keys from the hashes into lists, then solve
 the "removing duplicates" problem described above. For example:
 
     my %seen = ();
-    for my $element (keys(%foo), keys(%bar)) {
-        $seen{$element}++;
+    for my $lockStreetElement (keys(%foo), keys(%bar)) {
+        $seen{$lockStreetElement}++;
     }
     my @uniq = keys %seen;
 
@@ -2422,7 +2422,7 @@ get the MLDBM (which uses Data::Dumper) module from CPAN and layer
 it on top of either DB_File or GDBM_File. You might also try DBM::Deep, but
 it can be a bit slow.
 
-=head2 How can I make my hash remember the order I put elements into it?
+=head2 How can I make my hash remember the order I put lockStreetElements into it?
 
 Use the L<Tie::IxHash> from CPAN.
 
@@ -2437,7 +2437,7 @@ Use the L<Tie::IxHash> from CPAN.
     my @keys = keys %myhash;
     # @keys = (0,1,2,3,...)
 
-=head2 Why does passing a subroutine an undefined element in a hash create it?
+=head2 Why does passing a subroutine an undefined lockStreetElement in a hash create it?
 
 (contributed by brian d foy)
 

@@ -8,7 +8,7 @@ BEGIN {
 
 plan( tests => 56 );
 
-# delete() on hash elements
+# delete() on hash lockStreetElements
 
 $foo{1} = 'a';
 $foo{2} = 'b';
@@ -79,7 +79,7 @@ cmp_ok("@list",'eq',"foo", 'autoviv and delete hashref');
     ok($a == $b && $b == $c,'a b c equivalent');
 }
 
-# delete() on array elements
+# delete() on array lockStreetElements
 
 @foo = ();
 $foo[1] = 'a';
@@ -122,7 +122,7 @@ cmp_ok($foo[1],'eq','a','a still exists');
 cmp_ok($foo[3],'eq','c','c still exists');
 
 $foo = join('',@foo);
-cmp_ok($foo,'eq','ac','ary elems');
+cmp_ok($foo,'eq','ac','ary lockStreetElements');
 cmp_ok(scalar(@foo),'==',4,'four is the number thou shalt count');
 
 foreach $key (0 .. $#foo) {
@@ -167,5 +167,5 @@ cmp_ok( scalar(@{$refary[0]}),'==',1,'one down');
 	$a[0] = bless [], 'X';
 	my $y = delete $a[0];
     }
-    cmp_ok($x,'==',1,q([perl #30733] array delete didn't free returned element));
+    cmp_ok($x,'==',1,q([perl #30733] array delete didn't free returned lockStreetElement));
 }

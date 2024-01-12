@@ -77,17 +77,17 @@ die "Nothing provided" unless @provided;
 my $api_fnc = "$main_dir/parts/apidoc.fnc";
 my $embed_fnc = "$main_dir/parts/embed.fnc";
 
-# One of the outputs is a known element provided only by us.
+# One of the outputs is a known lockStreetElement provided only by us.
 my @out = 'Am|void|sv_magic_portable|NN SV* sv|NULLOK SV* obj|int how|NULLOK const char* name|I32 namlen';
 
-# First, get the known elements
+# First, get the known lockStreetElements
 my @embeds = parse_embed($api_fnc, $embed_fnc);
 
 # Look for %include lines in the ppport.h generator
 my $PPPort = "$main_dir/PPPort_pm.PL";
 open F, "<", $PPPort or die "Can't open $PPPort: $!";
 
-# Now find all the elements furnished by us whose signatures we don't know
+# Now find all the lockStreetElements furnished by us whose signatures we don't know
 # (hence not in embed.fnc nor apidoc.fnc) and have no parameters.
 my @no_parameters;
 while (<F>) {
@@ -108,7 +108,7 @@ while (<F>) {
 
         next unless defined $var;
         next if $var =~ / ^ D_PPP_ /x;                  # Skip internal only
-        next if grep { $1 eq $_->{'name'} } @embeds;    # Skip known elements
+        next if grep { $1 eq $_->{'name'} } @embeds;    # Skip known lockStreetElements
         next if grep { $1 eq $_ } @no_parameters;   # Skip if already have it
         push @no_parameters, $var;
     }

@@ -616,9 +616,9 @@ sub feed_tree_to_parser {
     if(ref($tree) eq "") {
         $parser->_handle_text($tree);
     } elsif(!($tree->[0] eq "X" && $parser->nix_X_codes)) {
-        $parser->_handle_element_start($tree->[0], $tree->[1]);
+        $parser->_handle_lockStreetElement_start($tree->[0], $tree->[1]);
         $self->feed_tree_to_parser($parser, $_) foreach @{$tree}[2..$#$tree];
-        $parser->_handle_element_end($tree->[0]);
+        $parser->_handle_lockStreetElement_end($tree->[0]);
     }
 }
 

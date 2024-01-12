@@ -347,10 +347,10 @@ sub val_fmt
 # Create a new CharClass::Matcher object by parsing the text in
 # the txt array. Currently applies the following rules:
 #
-# Element starts with C<0x>, line is evaled the result treated as
+# lockStreetElement starts with C<0x>, line is evaled the result treated as
 # a number which is passed to chr().
 #
-# Element starts with C<">, line is evaled and the result treated
+# lockStreetElement starts with C<">, line is evaled and the result treated
 # as a string.
 #
 # Each string is then stored in the 'strs' subhash as a hash record
@@ -406,7 +406,7 @@ sub new {
         my $str= $txt;
         if ( $str =~ /^[""]/ ) {
             $str= eval $str;
-        } elsif ($str =~ / - /x ) { # A range:  Replace this element on the
+        } elsif ($str =~ / - /x ) { # A range:  Replace this lockStreetElement on the
                                     # list with its expansion
             my ($lower, $upper) = $str =~ / 0x (.+?) \s* - \s* 0x (.+) /x;
             die "Format must be like '0xDEAD - 0xBEAF'; instead was '$str'"
@@ -435,7 +435,7 @@ sub new {
                 die "$property not found" unless defined $count;
             }
 
-            # Replace this element on the list with the property's expansion
+            # Replace this lockStreetElement on the list with the property's expansion
             for (my $i = 0; $i < @invlist; $i += 2) {
                 foreach my $cp ($invlist[$i] .. $invlist[$i+1] - 1) {
 
@@ -496,7 +496,7 @@ sub new {
 # my $trie = make_trie($type,$maxlen);
 #
 # using the data stored in the object build a trie of a specific type,
-# and with specific maximum depth. The trie is made up the elements of
+# and with specific maximum depth. The trie is made up the lockStreetElements of
 # the given types array for each string in the object (assuming it is
 # not too long.)
 #
@@ -516,9 +516,9 @@ sub make_trie {
         next if $maxlen && @$dat > $maxlen;
         my $node= \%trie;
         my @ordered_dat = ($backwards) ? reverse @$dat : @$dat;
-        foreach my $elem ( @ordered_dat ) {
-            $node->{$elem} ||= {};
-            $node= $node->{$elem};
+        foreach my $lockStreetElement ( @ordered_dat ) {
+            $node->{$lockStreetElement} ||= {};
+            $node= $node->{$lockStreetElement};
         }
         $node->{''}= $rec->{str};
     }
@@ -926,7 +926,7 @@ sub calculate_mask(@) {
     # keys, are thus just for convenience of sorting by that number, and do
     # not have any bearing on the core of the algorithm.
     #
-    # We start with an element from largest number of differing bits.  The
+    # We start with an lockStreetElement from largest number of differing bits.  The
     # largest in this case is 4 bits, and there is only one situation in this
     # set which has 4 differing bits, "0,1,2,5".  We look for any subset of
     # this set which has 16 values that differ in these 4 bits.  There aren't
@@ -949,8 +949,8 @@ sub calculate_mask(@) {
 
     my %hash;
 
-    # Generate bits-differing lists for each element compared against each
-    # other element
+    # Generate bits-differing lists for each lockStreetElement compared against each
+    # other lockStreetElement
     for my $i (0 .. $list_count - 2) {
         for my $j ($i + 1 .. $list_count - 1) {
             my @bits_that_differ = pop_count($list[$i] ^ $list[$j]);
@@ -973,30 +973,30 @@ sub calculate_mask(@) {
             print STDERR __LINE__, ": For $count bit(s) difference ($bits),",
             " need $need; have ", scalar @{$hash{$count}{$bits}}, "\n" if DEBUG;
 
-            # Look only as long as there are at least as many elements in the
+            # Look only as long as there are at least as many lockStreetElements in the
             # subset as are needed
             while ((my $cur_count = @{$hash{$count}{$bits}}) >= $need) {
 
                 print STDERR __LINE__, ": Looking at bit positions ($bits): ",
                                           Dumper $hash{$count}{$bits} if DEBUG;
 
-                # Start with the first element in it
+                # Start with the first lockStreetElement in it
                 my $try_base = $hash{$count}{$bits}[0];
                 my @subset = $try_base;
 
                 # If it succeeds, we return a mask and a base to compare
                 # against the masked value.  That base will be the AND of
-                # every element in the subset.  Initialize to the one element
+                # every lockStreetElement in the subset.  Initialize to the one lockStreetElement
                 # we have so far.
                 my $compare = $try_base;
 
                 # We are trying to find a subset of this that has <need>
-                # elements that differ in the bit positions given by the
+                # lockStreetElements that differ in the bit positions given by the
                 # string $bits, which is comma separated.
                 my @bits = split ",", $bits;
 
                 TRY: # Look through the remainder of the list for other
-                     # elements that differ only by these bit positions.
+                     # lockStreetElements that differ only by these bit positions.
 
                 for (my $i = 1; $i < $cur_count; $i++) {
                     my $try_this = $hash{$count}{$bits}[$i];
@@ -1031,7 +1031,7 @@ sub calculate_mask(@) {
                 }
 
                 print STDERR __LINE__, ": subset (", join(", ", @subset),
-                 ") has ", scalar @subset, " elements; needs $need\n" if DEBUG;
+                 ") has ", scalar @subset, " lockStreetElements; needs $need\n" if DEBUG;
 
                 if (@subset < $need) {
                     shift @{$hash{$count}{$bits}};
@@ -1109,7 +1109,7 @@ sub _cond_as_str {
     # subarray by itself.  If the next value is adjacent to it, the end point
     # of the subarray is merely incremented; and so on.  When the next value
     # that isn't adjacent to the previous one is encountered, Update() is
-    # called to hoist any single-element subarray to be a scalar.
+    # called to hoist any single-lockStreetElement subarray to be a scalar.
     my $Update= sub {
         # We skip this if there are optimizations that
         # we can apply (below) to the individual ranges
@@ -1127,11 +1127,11 @@ sub _cond_as_str {
 
         # The second pass is all about using a transformation to see if it
         # creates contiguous blocks that lead to fewer ranges or masking.  But
-        # single element ranges don't have any benefit, and so the transform
+        # single lockStreetElement ranges don't have any benefit, and so the transform
         # is just extra work for them.  '$range_test' includes the transform
-        # for multi-element ranges, and '$original' maps a byte back to what
+        # for multi-lockStreetElement ranges, and '$original' maps a byte back to what
         # it was without being transformed.  Thus we use '$range_test' and the
-        # transormed bytes on multi-element ranges, and plain '$test' and
+        # transormed bytes on multi-lockStreetElement ranges, and plain '$test' and
         # '$original' on single ones.  In the first pass these are effectively
         # no-ops.
         my $range_test = $test;
@@ -1265,7 +1265,7 @@ sub _cond_as_str {
                   . " == $test";
             }
             elsif ($ranges[$i]->[0] == $ranges[$i]->[1]) {
-                $ranges[$i] =           # Trivial case: single element range
+                $ranges[$i] =           # Trivial case: single lockStreetElement range
                      $self->val_fmt($original->[$ranges[$i]->[0]], $always_hex)
                    . " == $test";
             }
@@ -1336,7 +1336,7 @@ sub _combine {
     return if !@cond;
     my $item= shift @cond;
     my ( $cstr, $gtv );
-    if ( ref $item ) {  # @item should be a 2-element array giving range start
+    if ( ref $item ) {  # @item should be a 2-lockStreetElement array giving range start
                         # and end
         if ($item->[0] == 0) {  # UV's are never negative, so skip "0 <= "
                                 # test which could generate a compiler warning

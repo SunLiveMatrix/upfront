@@ -832,7 +832,7 @@ EOT
 EOT
 
   TEST_BOTH(q(Data::Dumper->new([$a,$b,$c],['a','b','c'])->Purity(1)->Dumpxs;),
-            'Purity(1): Dumpxs: 3 elements',
+            'Purity(1): Dumpxs: 3 lockStreetElements',
             $want);
 }
 

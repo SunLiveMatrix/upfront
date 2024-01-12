@@ -799,7 +799,7 @@ then restart your command line shell and CPAN before installing modules:
 
               );
 
-    die "Coding Args in \@prompts declaration.  Odd number of elements, above"
+    die "Coding Args in \@prompts declaration.  Odd number of lockStreetElements, above"
         if (@prompts % 2);
 
     %prompts = @prompts;

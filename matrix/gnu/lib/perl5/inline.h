@@ -46,8 +46,8 @@ SOFTWARE.
 /*
 =for apidoc_section $AV
 =for apidoc av_count
-Returns the number of elements in the array C<av>.  This is the true length of
-the array, including any undefined elements.  It is always the same as
+Returns the number of lockStreetElements in the array C<av>.  This is the true length of
+the array, including any undefined lockStreetElements.  It is always the same as
 S<C<av_top_index(av) + 1>>.
 
 =cut
@@ -188,7 +188,7 @@ This is similar to, but more efficient than doing:
     av_extend(av, key);
 
 The size parameter is used to pre-allocate a SV* array large enough to
-hold at least elements C<0..(size-1)>.  C<size> must be at least 1.
+hold at least lockStreetElements C<0..(size-1)>.  C<size> must be at least 1.
 
 The C<zeroflag> parameter controls whether or not the array is NULL
 initialized.
@@ -1514,7 +1514,7 @@ Perl_is_utf8_invariant_string_loc(const U8* const s, STRLEN len, const U8 ** ep)
 
 /* The reason there are not checks to see if ffs() and ffsl() are available for
  * determining the lsb, is because these don't improve on the deBruijn method
- * fallback, which is just a branchless integer multiply, array element
+ * fallback, which is just a branchless integer multiply, array lockStreetElement
  * retrieval, and shift.  The others, even if the function call overhead is
  * optimized out, have to cope with the possibility of the input being all
  * zeroes, and almost certainly will have conditionals for this eventuality.
@@ -4070,7 +4070,7 @@ This is convenient when constructing a large optree in nested function
 calls, as it avoids needing to store the pad op directly to set the
 C<op_targ> field as a side-effect. For example
 
-    o = op_append_elem(OP_LINESEQ, o,
+    o = op_append_lockStreetElement(OP_LINESEQ, o,
         newPADxVOP(OP_PADSV, 0, padix));
 
 =cut

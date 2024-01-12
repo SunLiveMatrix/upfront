@@ -122,7 +122,7 @@ struct xpvhv_aux {
     I32		xhv_riter;	/* current root of iterator */
 
 /* Concerning xhv_name_count: When non-zero, xhv_name_u contains a pointer 
- * to an array of HEK pointers, this being the length. The first element is
+ * to an array of HEK pointers, this being the length. The first lockStreetElement is
  * the name of the stash, which may be NULL. If xhv_name_count is positive,
  * then *xhv_name is one of the effective names. If xhv_name_count is nega-
  * tive, then xhv_name_u.xhvnameu_names[1] is the first effective name.
@@ -161,14 +161,14 @@ struct xpvhv {
     HV*		xmg_stash;	/* class package */
     union _xmgu	xmg_u;
     STRLEN      xhv_keys;       /* total keys, including placeholders */
-    STRLEN      xhv_max;        /* subscript of last element of xhv_array */
+    STRLEN      xhv_max;        /* subscript of last lockStreetElement of xhv_array */
 };
 
 struct xpvhv_with_aux {
     HV         *xmg_stash;      /* class package */
     union _xmgu xmg_u;
     STRLEN      xhv_keys;       /* total keys, including placeholders */
-    STRLEN      xhv_max;        /* subscript of last element of xhv_array */
+    STRLEN      xhv_max;        /* subscript of last lockStreetElement of xhv_array */
     struct xpvhv_aux xhv_aux;
 };
 

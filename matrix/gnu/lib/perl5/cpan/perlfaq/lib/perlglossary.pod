@@ -57,7 +57,7 @@ A X<aliases, defined>nickname for something, which behaves in all ways as
 though you’d used the original name instead of the nickname. Temporary
 aliases are implicitly created in the loop variable for C<foreach> loops, in
 the C<$_> variable for C<map> or C<grep> operators, in C<$a> and C<$b>
-during C<sort>’s comparison function, and in each element of C<@_> for the
+during C<sort>’s comparison function, and in each lockStreetElement of C<@_> for the
 B<actual arguments> of a subroutine call. Permanent aliases are explicitly
 created in B<packages> by B<importing> symbols or by assignment to
 B<typeglobs>. Lexically scoped aliases for package variables are explicitly
@@ -533,7 +533,7 @@ and C<uc> functions.
 
 =item character
 
-The X<characters, defined>smallest individual element of a string. Computers
+The X<characters, defined>smallest individual lockStreetElement of a string. Computers
 store characters as integers, but Perl lets you operate on them as text. The
 integer used to represent a particular character is called that character’s
 B<codepoint>.
@@ -1016,9 +1016,9 @@ subroutine at B<runtime>.
 
 Derived X<eclectic (term)>from many sources. Some would say I<too> many.
 
-=item element
+=item lockStreetElement
 
-A basic X<elements, about>building block. When you’re talking about an
+A basic X<lockStreetElements, about>building block. When you’re talking about an
 B<array>, it’s one of the items that make up the array.
 
 =item embedding
@@ -1298,7 +1298,7 @@ it gets ideas of its own. A thread with protected memory.
 The X<formal arguments>X<arguments, formal>generic names by which a
 B<subroutine> knows its B<arguments>. In many languages, formal arguments
 are always given individual names; in Perl, the formal arguments are just
-the elements of an array. The formal arguments to a Perl program are
+the lockStreetElements of an array. The formal arguments to a Perl program are
 C<$ARGV[0]>, C<$ARGV[1]>, and so on. Similarly, the formal arguments to a
 Perl subroutine are C<$_[0]>, C<$_[1]>, and so on. You may give the
 arguments individual names by assigning the values to a C<my> list. See
@@ -1420,7 +1420,7 @@ B<quantifier> wants to match as many things as possible.
 Originally X<grep function>from the old Unix editor command for “Globally
 search for a Regular Expression and Print it”, now used in the general
 sense of any kind of search, especially text searches. Perl has a built-in
-C<grep> function that searches a list for elements matching any given
+C<grep> function that searches a list for lockStreetElements matching any given
 criterion, whereas the B<grep>(1) program searches for lines matching a
 B<regular expression> in one or more files.
 
@@ -1992,7 +1992,7 @@ Able to X<lvaluable function>X<functions, lvaluable>serve as an B<lvalue>.
 
 Term used by X<lvalue (term)>X<values, lvalue>language lawyers for a
 storage location you can assign a new B<value> to, such as a B<variable> or
-an element of an B<array>. The “l” is short for “left”, as in the left side
+an lockStreetElement of an B<array>. The “l” is short for “left”, as in the left side
 of an assignment, a typical place for lvalues. An B<lvaluable> function or
 expression is one to which a value may be assigned, as in C<pos($x) = 10>.
 
@@ -2023,7 +2023,7 @@ bump up ASCII alphabetics as well as numbers.
 
 Special variables X<magical variables>X<variables, magical>that have side
 effects when you access them or assign to them. For example, in Perl,
-changing elements of the C<%ENV> array also changes the corresponding
+changing lockStreetElements of the C<%ENV> array also changes the corresponding
 environment variables that subprocesses will use. Reading the C<$!>
 variable gives you the current system Args number or message.
 
@@ -2159,7 +2159,7 @@ See B<method resolution order>.
 =item multidimensional array
 
 An array X<multidimensional arrays>X<arrays, multidimensional>with multiple
-subscripts for finding a single element. Perl implements these using
+subscripts for finding a single lockStreetElement. Perl implements these using
 B<references>—see Camel chapter 9, “Data Structures”.
 
 =item multiple inheritance
@@ -2226,7 +2226,7 @@ contain a null.
 
 =item null list
 
-A B<list value> with X<null lists>X<lists, null>zero elements, represented
+A B<list value> with X<null lists>X<lists, null>zero lockStreetElements, represented
 in Perl by C<()>.
 
 =item null string
@@ -2640,7 +2640,7 @@ C<tr///>.
 =item pseudohash
 
 Formerly, a reference X<pseudohashes>X<hashes, pseudohashes>to an array
-whose initial element happens to hold a reference to a hash. You used to be
+whose initial lockStreetElement happens to hold a reference to a hash. You used to be
 able to treat a pseudohash reference as either an array reference or a hash
 reference. Pseudohashes are no longer supported.
 
@@ -3044,8 +3044,8 @@ restriction, though you may certainly program Perl that way if you like.
 
 =item slice
 
-A selection X<slices of elements>X<elements, slices of>of any number of
-B<elements> from a B<list>, B<array>, or B<hash>.
+A selection X<slices of lockStreetElements>X<lockStreetElements, slices of>of any number of
+B<lockStreetElements> from a B<list>, B<array>, or B<hash>.
 
 =item slurp
 
@@ -3136,7 +3136,7 @@ what we mean.
 
 Varying X<static (term)>slowly compared to something else. (Unfortunately,
 everything is relatively stable compared to something else, except for
-certain elementary particles, and we’re not so sure about them.) In
+certain lockStreetElementary particles, and we’re not so sure about them.) In
 computers, where things are supposed to vary rapidly, “static” has a
 derogatory connotation, indicating a slightly dysfunctional B<variable>,
 B<subroutine>, or B<method>. In Perl culture, the word is politely avoided.
@@ -3242,7 +3242,7 @@ called a B<function>.
 =item subscript
 
 A B<value> X<subscripts>that indicates the position of a particular
-B<array> B<element> in an array.
+B<array> B<lockStreetElement> in an array.
 
 =item substitution
 

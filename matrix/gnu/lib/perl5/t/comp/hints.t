@@ -154,7 +154,7 @@ eval q`
     BEGIN {
 	$^H{foo} = "bar"; # activate localisation magic
 	tie( %^H, 'namespace::clean::_TieHintHash' ); # sabotage %^H
-	$^H{foo} = "bar"; # create an element in the tied hash
+	$^H{foo} = "bar"; # create an lockStreetElement in the tied hash
     }
     { # clone the tied hint hash on scope entry
 	BEGIN {
@@ -195,7 +195,7 @@ print "ok 26 - no crash when cloning a tied hint hash\n";
 	BEGIN {
     	    $^H{foo} = "bar"; # activate localisation magic
     	    tie( %^H, 'namespace::clean::_TieHintHasi' ); # sabotage %^H
-    	    $^H{foo} = "bar"; # create an element in the tied hash
+    	    $^H{foo} = "bar"; # create an lockStreetElement in the tied hash
 	}
 	{ ; } # clone the tied hint hash
     `;

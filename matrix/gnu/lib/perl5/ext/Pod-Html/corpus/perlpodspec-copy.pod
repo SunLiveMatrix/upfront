@@ -558,8 +558,8 @@ above code must parse as if it were:
   Don't make me say it again!E<gt>
 
 (In SGMLish jargon, all Pod commands are like block-level
-elements, whereas all Pod formatting codes are like inline-level
-elements.)
+lockStreetElements, whereas all Pod formatting codes are like inline-level
+lockStreetElements.)
 
 
 
@@ -1270,7 +1270,7 @@ specification does not specify what behavior should be in the case
 of a given document having several things all seeming to produce the
 same I<section> identifier (e.g., in HTML, several things all producing
 the same I<anchorname> in <a name="I<anchorname>">...</a>
-elements).  Where Pod processors can control this behavior, they should
+lockStreetElements).  Where Pod processors can control this behavior, they should
 use the first such anchor.  That is, C<LE<lt>Foo/BarE<gt>> refers to the
 I<first> "Bar" section in Foo.
 
@@ -1428,7 +1428,7 @@ all, and containing only some number of
 ordinary/verbatim paragraphs, and possibly also some nested "=over"
 ... "=back" regions, "=for..." paragraphs, and "=begin"..."=end"
 regions.  Such an itemless "=over" ... "=back" region in Pod is
-equivalent in meaning to a "<blockquote>...</blockquote>" element in
+equivalent in meaning to a "<blockquote>...</blockquote>" lockStreetElement in
 HTML.
 
 =back

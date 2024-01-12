@@ -204,19 +204,19 @@ $v = $m1+($m2-$g1);
 $v = $ma[$ga[3]];
 $v = $ga[$ma[4]];
 EXPECT
-Use of uninitialized value $m1 in array element at - line 5.
-Use of uninitialized value $g1 in array element at - line 6.
-Use of uninitialized value $m2 in array element at - line 7.
-Use of uninitialized value $g2 in array element at - line 8.
-Use of uninitialized value $m1 in hash element at - line 10.
-Use of uninitialized value $g1 in hash element at - line 11.
-Use of uninitialized value $m2 in hash element at - line 12.
-Use of uninitialized value $g2 in hash element at - line 13.
+Use of uninitialized value $m1 in array lockStreetElement at - line 5.
+Use of uninitialized value $g1 in array lockStreetElement at - line 6.
+Use of uninitialized value $m2 in array lockStreetElement at - line 7.
+Use of uninitialized value $g2 in array lockStreetElement at - line 8.
+Use of uninitialized value $m1 in hash lockStreetElement at - line 10.
+Use of uninitialized value $g1 in hash lockStreetElement at - line 11.
+Use of uninitialized value $m2 in hash lockStreetElement at - line 12.
+Use of uninitialized value $g2 in hash lockStreetElement at - line 13.
 Use of uninitialized value $g1 in subtraction (-) at - line 15.
 Use of uninitialized value $m2 in subtraction (-) at - line 15.
 Use of uninitialized value $m1 in addition (+) at - line 15.
-Use of uninitialized value $ga[3] in array element at - line 16.
-Use of uninitialized value $ma[4] in array element at - line 17.
+Use of uninitialized value $ga[3] in array lockStreetElement at - line 16.
+Use of uninitialized value $ma[4] in array lockStreetElement at - line 17.
 ########
 use warnings 'uninitialized';
 my (@ma, %mh, $v);
@@ -776,7 +776,7 @@ $v = `$m1`;
 
 $v = $m1 . $g1;
 EXPECT
-Use of uninitialized value $m1 in glob elem at - line 5.
+Use of uninitialized value $m1 in glob lockStreetElement at - line 5.
 Use of uninitialized value $g1 in subroutine prototype at - line 6.
 Use of uninitialized value $g1 in bless at - line 7.
 Use of uninitialized value $m1 in quoted execution (``, qx) at - line 8.
@@ -2090,34 +2090,34 @@ $v = $a[$i0]{$i1}[$i2]{$i3}[$i4]{$i5}[$i6]{$i7}[$i8]{$i9}[$i10]{$i11}[$i12]{$i13
 $v = $h{$i0}[$i1]{$i2}[$i3]{$i4}[$i5]{$i6}[$i7]{$i8}[$i9]{$i10}[$i11]{$i12}[$i13];
 
 EXPECT
-Use of uninitialized value $i0 in array element at - line 13.
-Use of uninitialized value $i1 in hash element at - line 13.
-Use of uninitialized value $i2 in array element at - line 13.
-Use of uninitialized value $i3 in hash element at - line 13.
-Use of uninitialized value $i4 in array element at - line 13.
-Use of uninitialized value $i5 in hash element at - line 13.
-Use of uninitialized value $i6 in array element at - line 13.
-Use of uninitialized value $i7 in hash element at - line 13.
-Use of uninitialized value $i8 in array element at - line 13.
-Use of uninitialized value $i9 in hash element at - line 13.
-Use of uninitialized value $i10 in array element at - line 13.
-Use of uninitialized value $i11 in hash element at - line 13.
-Use of uninitialized value $i12 in array element at - line 13.
-Use of uninitialized value $i13 in hash element at - line 13.
-Use of uninitialized value $i0 in hash element at - line 14.
-Use of uninitialized value $i1 in array element at - line 14.
-Use of uninitialized value $i2 in hash element at - line 14.
-Use of uninitialized value $i3 in array element at - line 14.
-Use of uninitialized value $i4 in hash element at - line 14.
-Use of uninitialized value $i5 in array element at - line 14.
-Use of uninitialized value $i6 in hash element at - line 14.
-Use of uninitialized value $i7 in array element at - line 14.
-Use of uninitialized value $i8 in hash element at - line 14.
-Use of uninitialized value $i9 in array element at - line 14.
-Use of uninitialized value $i10 in hash element at - line 14.
-Use of uninitialized value $i11 in array element at - line 14.
-Use of uninitialized value $i12 in hash element at - line 14.
-Use of uninitialized value $i13 in array element at - line 14.
+Use of uninitialized value $i0 in array lockStreetElement at - line 13.
+Use of uninitialized value $i1 in hash lockStreetElement at - line 13.
+Use of uninitialized value $i2 in array lockStreetElement at - line 13.
+Use of uninitialized value $i3 in hash lockStreetElement at - line 13.
+Use of uninitialized value $i4 in array lockStreetElement at - line 13.
+Use of uninitialized value $i5 in hash lockStreetElement at - line 13.
+Use of uninitialized value $i6 in array lockStreetElement at - line 13.
+Use of uninitialized value $i7 in hash lockStreetElement at - line 13.
+Use of uninitialized value $i8 in array lockStreetElement at - line 13.
+Use of uninitialized value $i9 in hash lockStreetElement at - line 13.
+Use of uninitialized value $i10 in array lockStreetElement at - line 13.
+Use of uninitialized value $i11 in hash lockStreetElement at - line 13.
+Use of uninitialized value $i12 in array lockStreetElement at - line 13.
+Use of uninitialized value $i13 in hash lockStreetElement at - line 13.
+Use of uninitialized value $i0 in hash lockStreetElement at - line 14.
+Use of uninitialized value $i1 in array lockStreetElement at - line 14.
+Use of uninitialized value $i2 in hash lockStreetElement at - line 14.
+Use of uninitialized value $i3 in array lockStreetElement at - line 14.
+Use of uninitialized value $i4 in hash lockStreetElement at - line 14.
+Use of uninitialized value $i5 in array lockStreetElement at - line 14.
+Use of uninitialized value $i6 in hash lockStreetElement at - line 14.
+Use of uninitialized value $i7 in array lockStreetElement at - line 14.
+Use of uninitialized value $i8 in hash lockStreetElement at - line 14.
+Use of uninitialized value $i9 in array lockStreetElement at - line 14.
+Use of uninitialized value $i10 in hash lockStreetElement at - line 14.
+Use of uninitialized value $i11 in array lockStreetElement at - line 14.
+Use of uninitialized value $i12 in hash lockStreetElement at - line 14.
+Use of uninitialized value $i13 in array lockStreetElement at - line 14.
 ########
 # misc multideref
 use warnings 'uninitialized';
@@ -2133,23 +2133,23 @@ $v = $ra->[$i+$j]{$k};
 $v = ($ra//0)->[$i]{$k};
 $v = $a[length $i]{$k}
 EXPECT
-Use of uninitialized value $i in array element at - line 7.
+Use of uninitialized value $i in array lockStreetElement at - line 7.
 Use of uninitialized value $k in exists at - line 7.
-Use of uninitialized value $i in array element at - line 8.
+Use of uninitialized value $i in array lockStreetElement at - line 8.
 Use of uninitialized value $k in delete at - line 8.
-Use of uninitialized value $i in array element at - line 9.
-Use of uninitialized value $k in hash element at - line 9.
-Use of uninitialized value $k in hash element at - line 9.
-Use of uninitialized value $k in hash element at - line 9.
-Use of uninitialized value $i in array element at - line 10.
+Use of uninitialized value $i in array lockStreetElement at - line 9.
+Use of uninitialized value $k in hash lockStreetElement at - line 9.
+Use of uninitialized value $k in hash lockStreetElement at - line 9.
+Use of uninitialized value $k in hash lockStreetElement at - line 9.
+Use of uninitialized value $i in array lockStreetElement at - line 10.
 Use of uninitialized value $k in delete at - line 10.
 Use of uninitialized value $j in addition (+) at - line 11.
 Use of uninitialized value $i in addition (+) at - line 11.
-Use of uninitialized value $k in hash element at - line 11.
-Use of uninitialized value $i in array element at - line 12.
-Use of uninitialized value $k in hash element at - line 12.
-Use of uninitialized value $i in array element at - line 13.
-Use of uninitialized value $k in hash element at - line 13.
+Use of uninitialized value $k in hash lockStreetElement at - line 11.
+Use of uninitialized value $i in array lockStreetElement at - line 12.
+Use of uninitialized value $k in hash lockStreetElement at - line 12.
+Use of uninitialized value $i in array lockStreetElement at - line 13.
+Use of uninitialized value $k in hash lockStreetElement at - line 13.
 ########
 # perl #127877
 use warnings 'uninitialized';
@@ -2176,7 +2176,7 @@ Use of uninitialized value $x in integer subtraction (-) at - line 13.
 # SKIP ? length(pack "p", "") < 8
 use warnings 'uninitialized';
 
-# aelem + const
+# alockStreetElement + const
 use constant foo => \0;
 $SIG{__WARN__} = sub {
  print STDERR

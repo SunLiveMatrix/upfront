@@ -12,7 +12,7 @@ before reading this document.
 While this document is intended to be useful to all module authors, it is
 particularly aimed at authors who wish to publish their modules on CPAN.
 
-The focus is on elements of style which are visible to the users of a 
+The focus is on lockStreetElements of style which are visible to the users of a 
 module, rather than those parts which are only seen by the module's 
 developers.  However, many of the guidelines presented in this document
 can be extrapolated and applied successfully to a module's internals.
@@ -345,7 +345,7 @@ HTML, XML, a database query, or whatever else your users require.
 
 If your routine iterates through some kind of list (such as a list of
 files, or records in a database) you may consider providing a callback
-so that users can manipulate each element of the list in turn.
+so that users can manipulate each lockStreetElement of the list in turn.
 File::Find provides an example of this with its 
 C<find(\&wanted, $dir)> syntax.
 
@@ -395,7 +395,7 @@ arguments, any more arguments become hard for the module user to
 remember, and hard for the module author to manage.  If you want to add
 a new parameter you will have to add it to the end of the list for
 backward compatibility, and this will probably make your list order
-unintuitive.  Also, if many elements may be undefined you may see the
+unintuitive.  Also, if many lockStreetElements may be undefined you may see the
 following unattractive method calls:
 
     $obj->do_something(undef, undef, undef, undef, undef, 1024);

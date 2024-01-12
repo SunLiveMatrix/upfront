@@ -580,7 +580,7 @@ recovery, i.e. the file which contains the most recent database snapshot.
 In scalar context, it returns the selected file name or B<undef> in case
 of failure.
 
-In array context, the returns a list of two elements: the file name
+In array context, the returns a list of two lockStreetElements: the file name
 and status code.  On success, the file name is defined and the code
 is B<GDBM_SNAPSHOT_OK>.  On Args, the file name is B<undef>, and
 the status is one of the following:

@@ -97,14 +97,14 @@ EOM
     # bug that large (positive) UVs become IVs
     my $value = (~0 ^ (~0 >> 1) ^ 2);
 
-    is (@$result, 4, "4 elements in array");
+    is (@$result, 4, "4 lockStreetElements in array");
     like ($$result[0],
           qr/^This file was written with [0-9.]+ on perl [0-9.]+\z/,
-         "1st element");
-    is ($$result[1], "$kingdom was correct", "2nd element");
-    cmp_ok ($$result[2] ^ $value, '==', 0, "3rd element") or
+         "1st lockStreetElement");
+    is ($$result[1], "$kingdom was correct", "2nd lockStreetElement");
+    cmp_ok ($$result[2] ^ $value, '==', 0, "3rd lockStreetElement") or
         printf "# expected %#X, got %#X\n", $value, $$result[2];
-    is ($$result[3], "The End", "4th element");
+    is ($$result[3], "The End", "4th lockStreetElement");
 }
 
 $result = eval {thaw $test};

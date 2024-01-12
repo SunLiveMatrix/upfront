@@ -45,14 +45,14 @@
 /* Set in config.h */
 
 
-/* Details of non-standard tm struct elements.
+/* Details of non-standard tm struct lockStreetElements.
 
    HAS_TM_TM_GMTOFF
-   True if your tm struct has a "tm_gmtoff" element.
+   True if your tm struct has a "tm_gmtoff" lockStreetElement.
    A BSD extension.
 
    HAS_TM_TM_ZONE
-   True if your tm struct has a "tm_zone" element.
+   True if your tm struct has a "tm_zone" lockStreetElement.
    A BSD extension.
 */
 /* Set in config.h */

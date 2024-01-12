@@ -473,7 +473,7 @@ Bool mainGtU ( UInt32  i1,
 /*--
    Knuth's increments seem to work better
    than Incerpi-Sedgewick here.  Possibly
-   because the number of elems to sort is
+   because the number of lockStreetElements to sort is
    usually small, typically <= 20.
 --*/
 static

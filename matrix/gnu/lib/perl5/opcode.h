@@ -38,7 +38,7 @@
 #define Perl_pp_hex Perl_pp_oct
 #define Perl_pp_rindex Perl_pp_index
 #define Perl_pp_lcfirst Perl_pp_ucfirst
-#define Perl_pp_aelemfast_lex Perl_pp_aelemfast
+#define Perl_pp_alockStreetElementfast_lex Perl_pp_alockStreetElementfast
 #define Perl_pp_avalues Perl_pp_akeys
 #define Perl_pp_values Perl_do_kv
 #define Perl_pp_keys Perl_do_kv
@@ -154,7 +154,7 @@ EXTCONST char* const PL_op_name[] INIT({
 	"const",
 	"gvsv",
 	"gv",
-	"gelem",
+	"glockStreetElement",
 	"padsv",
 	"padsv_store",
 	"padav",
@@ -283,10 +283,10 @@ EXTCONST char* const PL_op_name[] INIT({
 	"lc",
 	"quotemeta",
 	"rv2av",
-	"aelemfast",
-	"aelemfast_lex",
-	"aelemfastlex_store",
-	"aelem",
+	"alockStreetElementfast",
+	"alockStreetElementfast_lex",
+	"alockStreetElementfastlex_store",
+	"alockStreetElement",
 	"aslice",
 	"kvaslice",
 	"aeach",
@@ -298,7 +298,7 @@ EXTCONST char* const PL_op_name[] INIT({
 	"delete",
 	"exists",
 	"rv2hv",
-	"helem",
+	"hlockStreetElement",
 	"hslice",
 	"kvhslice",
 	"multideref",
@@ -337,8 +337,8 @@ EXTCONST char* const PL_op_name[] INIT({
 	"leavesub",
 	"leavesublv",
 	"argcheck",
-	"argelem",
-	"argdefelem",
+	"arglockStreetElement",
+	"argdeflockStreetElement",
 	"caller",
 	"warn",
 	"die",
@@ -564,7 +564,7 @@ EXTCONST char* const PL_op_name[] INIT({
 	"ceil",
 	"floor",
 	"is_tainted",
-	"helemexistsor",
+	"hlockStreetElementexistsor",
 	"methstart",
 	"initfield",
 	"classname",
@@ -580,7 +580,7 @@ EXTCONST char* const PL_op_desc[] INIT({
 	"constant item",
 	"scalar variable",
 	"glob value",
-	"glob elem",
+	"glob lockStreetElement",
 	"private variable",
 	"padsv scalar assignment",
 	"private array",
@@ -709,10 +709,10 @@ EXTCONST char* const PL_op_desc[] INIT({
 	"lc",
 	"quotemeta",
 	"array dereference",
-	"constant array element",
-	"constant lexical array element",
-	"const lexical array element store",
-	"array element",
+	"constant array lockStreetElement",
+	"constant lexical array lockStreetElement",
+	"const lexical array lockStreetElement store",
+	"array lockStreetElement",
 	"array slice",
 	"index/value array slice",
 	"each on array",
@@ -724,7 +724,7 @@ EXTCONST char* const PL_op_desc[] INIT({
 	"delete",
 	"exists",
 	"hash dereference",
-	"hash element",
+	"hash lockStreetElement",
 	"hash slice",
 	"key/value hash slice",
 	"array or hash lookup",
@@ -990,7 +990,7 @@ EXTCONST char* const PL_op_desc[] INIT({
 	"ceil",
 	"floor",
 	"is_tainted",
-	"hash element exists or",
+	"hash lockStreetElement exists or",
 	"method start",
 	"initialise field",
 	"class name",
@@ -1011,7 +1011,7 @@ INIT({
 	Perl_pp_const,
 	Perl_pp_gvsv,
 	Perl_pp_gv,
-	Perl_pp_gelem,
+	Perl_pp_glockStreetElement,
 	Perl_pp_padsv,
 	Perl_pp_padsv_store,
 	Perl_pp_padav,
@@ -1140,10 +1140,10 @@ INIT({
 	Perl_pp_lc,
 	Perl_pp_quotemeta,
 	Perl_pp_rv2av,
-	Perl_pp_aelemfast,
-	Perl_pp_aelemfast_lex,	/* implemented by Perl_pp_aelemfast */
-	Perl_pp_aelemfastlex_store,
-	Perl_pp_aelem,
+	Perl_pp_alockStreetElementfast,
+	Perl_pp_alockStreetElementfast_lex,	/* implemented by Perl_pp_alockStreetElementfast */
+	Perl_pp_alockStreetElementfastlex_store,
+	Perl_pp_alockStreetElement,
 	Perl_pp_aslice,
 	Perl_pp_kvaslice,
 	Perl_pp_aeach,
@@ -1155,7 +1155,7 @@ INIT({
 	Perl_pp_delete,
 	Perl_pp_exists,
 	Perl_pp_rv2hv,	/* implemented by Perl_pp_rv2av */
-	Perl_pp_helem,
+	Perl_pp_hlockStreetElement,
 	Perl_pp_hslice,
 	Perl_pp_kvhslice,
 	Perl_pp_multideref,
@@ -1194,8 +1194,8 @@ INIT({
 	Perl_pp_leavesub,
 	Perl_pp_leavesublv,
 	Perl_pp_argcheck,
-	Perl_pp_argelem,
-	Perl_pp_argdefelem,
+	Perl_pp_arglockStreetElement,
+	Perl_pp_argdeflockStreetElement,
 	Perl_pp_caller,
 	Perl_pp_warn,
 	Perl_pp_die,
@@ -1421,7 +1421,7 @@ INIT({
 	Perl_pp_ceil,
 	Perl_pp_floor,
 	Perl_pp_is_tainted,
-	Perl_pp_helemexistsor,
+	Perl_pp_hlockStreetElementexistsor,
 	Perl_pp_methstart,
 	Perl_pp_initfield,
 	Perl_pp_classname,
@@ -1437,7 +1437,7 @@ INIT({
 	Perl_ck_svconst,	/* const */
 	Perl_ck_null,		/* gvsv */
 	Perl_ck_null,		/* gv */
-	Perl_ck_null,		/* gelem */
+	Perl_ck_null,		/* glockStreetElement */
 	Perl_ck_null,		/* padsv */
 	Perl_ck_sassign,	/* padsv_store */
 	Perl_ck_null,		/* padav */
@@ -1566,10 +1566,10 @@ INIT({
 	Perl_ck_fun,		/* lc */
 	Perl_ck_fun,		/* quotemeta */
 	Perl_ck_rvconst,	/* rv2av */
-	Perl_ck_null,		/* aelemfast */
-	Perl_ck_null,		/* aelemfast_lex */
-	Perl_ck_null,		/* aelemfastlex_store */
-	Perl_ck_null,		/* aelem */
+	Perl_ck_null,		/* alockStreetElementfast */
+	Perl_ck_null,		/* alockStreetElementfast_lex */
+	Perl_ck_null,		/* alockStreetElementfastlex_store */
+	Perl_ck_null,		/* alockStreetElement */
 	Perl_ck_null,		/* aslice */
 	Perl_ck_null,		/* kvaslice */
 	Perl_ck_each,		/* aeach */
@@ -1581,7 +1581,7 @@ INIT({
 	Perl_ck_delete,		/* delete */
 	Perl_ck_exists,		/* exists */
 	Perl_ck_rvconst,	/* rv2hv */
-	Perl_ck_null,		/* helem */
+	Perl_ck_null,		/* hlockStreetElement */
 	Perl_ck_null,		/* hslice */
 	Perl_ck_null,		/* kvhslice */
 	Perl_ck_null,		/* multideref */
@@ -1620,8 +1620,8 @@ INIT({
 	Perl_ck_null,		/* leavesub */
 	Perl_ck_null,		/* leavesublv */
 	Perl_ck_null,		/* argcheck */
-	Perl_ck_null,		/* argelem */
-	Perl_ck_null,		/* argdefelem */
+	Perl_ck_null,		/* arglockStreetElement */
+	Perl_ck_null,		/* argdeflockStreetElement */
 	Perl_ck_fun,		/* caller */
 	Perl_ck_fun,		/* warn */
 	Perl_ck_fun,		/* die */
@@ -1847,7 +1847,7 @@ INIT({
 	Perl_ck_null,		/* ceil */
 	Perl_ck_null,		/* floor */
 	Perl_ck_null,		/* is_tainted */
-	Perl_ck_helemexistsor,	/* helemexistsor */
+	Perl_ck_hlockStreetElementexistsor,	/* hlockStreetElementexistsor */
 	Perl_ck_null,		/* methstart */
 	Perl_ck_null,		/* initfield */
 	Perl_ck_classname,	/* classname */
@@ -1862,7 +1862,7 @@ EXTCONST U32 PL_opargs[] INIT({
 	0x00000604,	/* const */
 	0x00000644,	/* gvsv */
 	0x00000644,	/* gv */
-	0x00011244,	/* gelem */
+	0x00011244,	/* glockStreetElement */
 	0x00000044,	/* padsv */
 	0x00011104,	/* padsv_store */
 	0x00000040,	/* padav */
@@ -1991,10 +1991,10 @@ EXTCONST U32 PL_opargs[] INIT({
 	0x00009b8e,	/* lc */
 	0x00009b8e,	/* quotemeta */
 	0x00000148,	/* rv2av */
-	0x00013644,	/* aelemfast */
-	0x00013040,	/* aelemfast_lex */
-	0x00013140,	/* aelemfastlex_store */
-	0x00013204,	/* aelem */
+	0x00013644,	/* alockStreetElementfast */
+	0x00013040,	/* alockStreetElementfast_lex */
+	0x00013140,	/* alockStreetElementfastlex_store */
+	0x00013204,	/* alockStreetElement */
 	0x00023401,	/* aslice */
 	0x00023401,	/* kvaslice */
 	0x00003b40,	/* aeach */
@@ -2006,7 +2006,7 @@ EXTCONST U32 PL_opargs[] INIT({
 	0x00001b00,	/* delete */
 	0x00001b04,	/* exists */
 	0x00000148,	/* rv2hv */
-	0x00014204,	/* helem */
+	0x00014204,	/* hlockStreetElement */
 	0x00024401,	/* hslice */
 	0x00024401,	/* kvhslice */
 	0x00000f44,	/* multideref */
@@ -2045,8 +2045,8 @@ EXTCONST U32 PL_opargs[] INIT({
 	0x00000100,	/* leavesub */
 	0x00000100,	/* leavesublv */
 	0x00000f00,	/* argcheck */
-	0x00000f00,	/* argelem */
-	0x00000300,	/* argdefelem */
+	0x00000f00,	/* arglockStreetElement */
+	0x00000300,	/* argdeflockStreetElement */
 	0x00009b08,	/* caller */
 	0x0000240d,	/* warn */
 	0x0000240d,	/* die */
@@ -2272,7 +2272,7 @@ EXTCONST U32 PL_opargs[] INIT({
 	0x0000011e,	/* ceil */
 	0x0000011e,	/* floor */
 	0x00000106,	/* is_tainted */
-	0x00011300,	/* helemexistsor */
+	0x00011300,	/* hlockStreetElementexistsor */
 	0x00000f00,	/* methstart */
 	0x00000f00,	/* initfield */
 	0x00000008,	/* classname */
@@ -2281,7 +2281,7 @@ EXTCONST U32 PL_opargs[] INIT({
 END_EXTERN_C
 
 
-#define OPpARGELEM_SV           0x00
+#define OPpARGlockStreetElement_SV           0x00
 #define OPpLVREF_SV             0x00
 #define OPpARG1_MASK            0x01
 #define OPpCOREARGS_DEREF1      0x01
@@ -2290,7 +2290,7 @@ END_EXTERN_C
 #define OPpRV2HV_ISKEYS         0x01
 #define OPpSORT_NUMERIC         0x01
 #define OPpTRANS_CAN_FORCE_UTF8 0x01
-#define OPpARGELEM_AV           0x02
+#define OPpARGlockStreetElement_AV           0x02
 #define OPpCONST_NOVER          0x02
 #define OPpCOREARGS_DEREF2      0x02
 #define OPpEVAL_HAS_HH          0x02
@@ -2302,7 +2302,7 @@ END_EXTERN_C
 #define OPpTRANS_USE_SVOP       0x02
 #define OPpARG2_MASK            0x03
 #define OPpAVHVSWITCH_MASK      0x03
-#define OPpARGELEM_HV           0x04
+#define OPpARGlockStreetElement_HV           0x04
 #define OPpASSIGN_TRUEBOOL      0x04
 #define OPpCONST_SHORTCIRCUIT   0x04
 #define OPpDONT_INIT_GV         0x04
@@ -2310,13 +2310,13 @@ END_EXTERN_C
 #define OPpEVAL_UNICODE         0x04
 #define OPpFT_codeED           0x04
 #define OPpINITFIELD_HV         0x04
-#define OPpLVREF_ELEM           0x04
+#define OPpLVREF_lockStreetElement           0x04
 #define OPpSLICEWARNING         0x04
 #define OPpSORT_REVERSE         0x04
 #define OPpSPLIT_IMPLIM         0x04
 #define OPpTRANS_IDENTICAL      0x04
 #define OPpUSEINT               0x04
-#define OPpARGELEM_MASK         0x06
+#define OPpARGlockStreetElement_MASK         0x06
 #define OPpARG3_MASK            0x07
 #define OPpPADRANGE_COUNTSHIFT  0x07
 #define OPpCONST_STRICT         0x08
@@ -2392,7 +2392,7 @@ END_EXTERN_C
 #define OPpCOREARGS_PUSHMARK    0x80
 #define OPpDEFER_FINALLY        0x80
 #define OPpENTERSUB_NOPAREN     0x80
-#define OPpHELEMEXISTSOR_DELETE 0x80
+#define OPpHlockStreetElementEXISTSOR_DELETE 0x80
 #define OPpINITFIELDS           0x80
 #define OPpLVALUE               0x80
 #define OPpLVAL_INTRO           0x80
@@ -2567,7 +2567,7 @@ EXTCONST I16  PL_op_private_bitdef_ix[] = {
        4, /* const */
        9, /* gvsv */
       11, /* gv */
-      12, /* gelem */
+      12, /* glockStreetElement */
       13, /* padsv */
       16, /* padsv_store */
       19, /* padav */
@@ -2696,10 +2696,10 @@ EXTCONST I16  PL_op_private_bitdef_ix[] = {
        0, /* lc */
        0, /* quotemeta */
      118, /* rv2av */
-     125, /* aelemfast */
-     125, /* aelemfast_lex */
-     125, /* aelemfastlex_store */
-     126, /* aelem */
+     125, /* alockStreetElementfast */
+     125, /* alockStreetElementfast_lex */
+     125, /* alockStreetElementfastlex_store */
+     126, /* alockStreetElement */
      131, /* aslice */
      134, /* kvaslice */
        0, /* aeach */
@@ -2711,7 +2711,7 @@ EXTCONST I16  PL_op_private_bitdef_ix[] = {
      135, /* delete */
      139, /* exists */
      141, /* rv2hv */
-     126, /* helem */
+     126, /* hlockStreetElement */
      131, /* hslice */
      134, /* kvhslice */
      149, /* multideref */
@@ -2750,8 +2750,8 @@ EXTCONST I16  PL_op_private_bitdef_ix[] = {
      188, /* leavesub */
      188, /* leavesublv */
        0, /* argcheck */
-     190, /* argelem */
-     192, /* argdefelem */
+     190, /* arglockStreetElement */
+     192, /* argdeflockStreetElement */
      195, /* caller */
       55, /* warn */
       55, /* die */
@@ -2977,7 +2977,7 @@ EXTCONST I16  PL_op_private_bitdef_ix[] = {
       78, /* ceil */
       78, /* floor */
        0, /* is_tainted */
-     254, /* helemexistsor */
+     254, /* hlockStreetElementexistsor */
      256, /* methstart */
      258, /* initfield */
       -1, /* classname */
@@ -3005,7 +3005,7 @@ EXTCONST U16  PL_op_private_bitdefs[] = {
     0x0558, 0x1b70, 0x4c6c, 0x4808, 0x3fe5, /* const */
     0x3abc, 0x4139, /* gvsv */
     0x19d5, /* gv */
-    0x0067, /* gelem, lt, i_lt, gt, i_gt, le, i_le, ge, i_ge, eq, i_eq, ne, i_ne, ncmp, i_ncmp, slt, sgt, sle, sge, seq, sne, scmp, smartmatch, lslice, xor, isa */
+    0x0067, /* glockStreetElement, lt, i_lt, gt, i_gt, le, i_le, ge, i_ge, eq, i_eq, ne, i_ne, ncmp, i_ncmp, slt, sgt, sle, sge, seq, sne, scmp, smartmatch, lslice, xor, isa */
     0x3abc, 0x4bb8, 0x03d7, /* padsv */
     0x3abc, 0x4bb8, 0x0003, /* padsv_store, lvavref */
     0x3abc, 0x4bb8, 0x06d4, 0x3bac, 0x4989, /* padav */
@@ -3036,8 +3036,8 @@ EXTCONST U16  PL_op_private_bitdefs[] = {
     0x3bac, 0x0067, /* vec */
     0x3d18, 0x06d4, 0x5010, 0x018f, /* index, rindex */
     0x3abc, 0x4138, 0x06d4, 0x3bac, 0x4988, 0x4c64, 0x0003, /* rv2av */
-    0x025f, /* aelemfast, aelemfast_lex, aelemfastlex_store */
-    0x3abc, 0x39b8, 0x03d6, 0x3bac, 0x0067, /* aelem, helem */
+    0x025f, /* alockStreetElementfast, alockStreetElementfast_lex, alockStreetElementfastlex_store */
+    0x3abc, 0x39b8, 0x03d6, 0x3bac, 0x0067, /* alockStreetElement, hlockStreetElement */
     0x3abc, 0x3bac, 0x4989, /* aslice, hslice */
     0x3bad, /* kvaslice, kvhslice */
     0x3abc, 0x48d8, 0x36d4, 0x0003, /* delete */
@@ -3054,8 +3054,8 @@ EXTCONST U16  PL_op_private_bitdefs[] = {
     0x3abc, 0x0003, /* cond_expr */
     0x3abc, 0x1198, 0x03d6, 0x014c, 0x4f68, 0x4c64, 0x2c21, /* entersub */
     0x43d8, 0x0003, /* leavesub, leavesublv, leavewrite, leaveeval */
-    0x02aa, 0x0003, /* argelem */
-    0x2a3c, 0x2918, 0x0003, /* argdefelem */
+    0x02aa, 0x0003, /* arglockStreetElement */
+    0x2a3c, 0x2918, 0x0003, /* argdeflockStreetElement */
     0x00bc, 0x018f, /* caller */
     0x2755, /* nextstate, dbstate */
     0x395c, 0x43d9, /* leave */
@@ -3075,7 +3075,7 @@ EXTCONST U16  PL_op_private_bitdefs[] = {
     0x3abc, 0x4bb8, 0x04f6, 0x348c, 0x1ac8, 0x0003, /* lvref */
     0x3abd, /* lvrefslice */
     0x1edc, 0x0003, /* pushdefer */
-    0x131c, 0x0003, /* helemexistsor */
+    0x131c, 0x0003, /* hlockStreetElementexistsor */
     0x2e7c, 0x0003, /* methstart */
     0x3168, 0x2fc4, 0x0003, /* initfield */
 
@@ -3094,7 +3094,7 @@ EXTCONST U8 PL_op_private_valid[] = {
     /* CONST      */ (OPpCONST_NOVER|OPpCONST_SHORTCIRCUIT|OPpCONST_STRICT|OPpCONST_ENTERED|OPpCONST_BARE),
     /* GVSV       */ (OPpOUR_INTRO|OPpLVAL_INTRO),
     /* GV         */ (OPpEARLY_CV),
-    /* GELEM      */ (OPpARG2_MASK),
+    /* GlockStreetElement      */ (OPpARG2_MASK),
     /* PADSV      */ (OPpDEREF|OPpPAD_STATE|OPpLVAL_INTRO),
     /* PADSV_STORE */ (OPpARG1_MASK|OPpPAD_STATE|OPpLVAL_INTRO),
     /* PADAV      */ (OPpSLICEWARNING|OPpMAYBE_LVSUB|OPpTRUEBOOL|OPpPAD_STATE|OPpLVAL_INTRO),
@@ -3223,10 +3223,10 @@ EXTCONST U8 PL_op_private_valid[] = {
     /* LC         */ (OPpARG1_MASK),
     /* QUOTEMETA  */ (OPpARG1_MASK),
     /* RV2AV      */ (OPpARG1_MASK|OPpHINT_STRICT_REFS|OPpSLICEWARNING|OPpMAYBE_LVSUB|OPpTRUEBOOL|OPpOUR_INTRO|OPpLVAL_INTRO),
-    /* AELEMFAST  */ (255),
-    /* AELEMFAST_LEX */ (255),
-    /* AELEMFASTLEX_STORE */ (255),
-    /* AELEM      */ (OPpARG2_MASK|OPpMAYBE_LVSUB|OPpDEREF|OPpLVAL_DEFER|OPpLVAL_INTRO),
+    /* AlockStreetElementFAST  */ (255),
+    /* AlockStreetElementFAST_LEX */ (255),
+    /* AlockStreetElementFASTLEX_STORE */ (255),
+    /* AlockStreetElement      */ (OPpARG2_MASK|OPpMAYBE_LVSUB|OPpDEREF|OPpLVAL_DEFER|OPpLVAL_INTRO),
     /* ASLICE     */ (OPpSLICEWARNING|OPpMAYBE_LVSUB|OPpLVAL_INTRO),
     /* KVASLICE   */ (OPpMAYBE_LVSUB),
     /* AEACH      */ (OPpARG1_MASK),
@@ -3238,7 +3238,7 @@ EXTCONST U8 PL_op_private_valid[] = {
     /* DELETE     */ (OPpARG1_MASK|OPpKVSLICE|OPpSLICE|OPpLVAL_INTRO),
     /* EXISTS     */ (OPpARG1_MASK|OPpEXISTS_SUB),
     /* RV2HV      */ (OPpRV2HV_ISKEYS|OPpHINT_STRICT_REFS|OPpSLICEWARNING|OPpMAYBE_LVSUB|OPpMAYBE_TRUEBOOL|OPpTRUEBOOL|OPpOUR_INTRO|OPpLVAL_INTRO),
-    /* HELEM      */ (OPpARG2_MASK|OPpMAYBE_LVSUB|OPpDEREF|OPpLVAL_DEFER|OPpLVAL_INTRO),
+    /* HlockStreetElement      */ (OPpARG2_MASK|OPpMAYBE_LVSUB|OPpDEREF|OPpLVAL_DEFER|OPpLVAL_INTRO),
     /* HSLICE     */ (OPpSLICEWARNING|OPpMAYBE_LVSUB|OPpLVAL_INTRO),
     /* KVHSLICE   */ (OPpMAYBE_LVSUB),
     /* MULTIDEREF */ (OPpARG1_MASK|OPpHINT_STRICT_REFS|OPpMAYBE_LVSUB|OPpMULTIDEREF_EXISTS|OPpMULTIDEREF_DELETE|OPpLVAL_DEFER|OPpLVAL_INTRO),
@@ -3277,8 +3277,8 @@ EXTCONST U8 PL_op_private_valid[] = {
     /* LEAVESUB   */ (OPpARG1_MASK|OPpREFCOUNTED),
     /* LEAVESUBLV */ (OPpARG1_MASK|OPpREFCOUNTED),
     /* ARGCHECK   */ (OPpARG1_MASK),
-    /* ARGELEM    */ (OPpARG1_MASK|OPpARGELEM_MASK),
-    /* ARGDEFELEM */ (OPpARG1_MASK|OPpARG_IF_FALSE|OPpARG_IF_UNDEF),
+    /* ARGlockStreetElement    */ (OPpARG1_MASK|OPpARGlockStreetElement_MASK),
+    /* ARGDEFlockStreetElement */ (OPpARG1_MASK|OPpARG_IF_FALSE|OPpARG_IF_UNDEF),
     /* CALLER     */ (OPpARG4_MASK|OPpOFFBYONE),
     /* WARN       */ (OPpARG4_MASK),
     /* DIE        */ (OPpARG4_MASK),
@@ -3481,8 +3481,8 @@ EXTCONST U8 PL_op_private_valid[] = {
     /* INTROCV    */ (0),
     /* CLONECV    */ (0),
     /* PADRANGE   */ (OPpPADRANGE_COUNTMASK|OPpLVAL_INTRO),
-    /* REFASSIGN  */ (OPpARG2_MASK|OPpLVREF_ELEM|OPpLVREF_ITER|OPpLVREF_TYPE|OPpPAD_STATE|OPpLVAL_INTRO),
-    /* LVREF      */ (OPpARG1_MASK|OPpLVREF_ELEM|OPpLVREF_ITER|OPpLVREF_TYPE|OPpPAD_STATE|OPpLVAL_INTRO),
+    /* REFASSIGN  */ (OPpARG2_MASK|OPpLVREF_lockStreetElement|OPpLVREF_ITER|OPpLVREF_TYPE|OPpPAD_STATE|OPpLVAL_INTRO),
+    /* LVREF      */ (OPpARG1_MASK|OPpLVREF_lockStreetElement|OPpLVREF_ITER|OPpLVREF_TYPE|OPpPAD_STATE|OPpLVAL_INTRO),
     /* LVREFSLICE */ (OPpLVAL_INTRO),
     /* LVAVREF    */ (OPpARG1_MASK|OPpPAD_STATE|OPpLVAL_INTRO),
     /* ANONCONST  */ (OPpARG1_MASK),
@@ -3504,7 +3504,7 @@ EXTCONST U8 PL_op_private_valid[] = {
     /* CEIL       */ (OPpARG1_MASK|OPpTARGET_MY),
     /* FLOOR      */ (OPpARG1_MASK|OPpTARGET_MY),
     /* IS_TAINTED */ (OPpARG1_MASK),
-    /* HELEMEXISTSOR */ (OPpARG1_MASK|OPpHELEMEXISTSOR_DELETE),
+    /* HlockStreetElementEXISTSOR */ (OPpARG1_MASK|OPpHlockStreetElementEXISTSOR_DELETE),
     /* METHSTART  */ (OPpARG1_MASK|OPpINITFIELDS),
     /* INITFIELD  */ (OPpARG1_MASK|OPpINITFIELD_AV|OPpINITFIELD_HV),
     /* CLASSNAME  */ (0),

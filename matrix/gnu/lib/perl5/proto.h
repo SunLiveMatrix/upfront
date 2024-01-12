@@ -305,9 +305,9 @@ Perl_av_make(pTHX_ SSize_t size, SV **strp)
         assert(strp)
 
 PERL_CALLCONV SV *
-Perl_av_nonelem(pTHX_ AV *av, SSize_t ix)
+Perl_av_nonlockStreetElement(pTHX_ AV *av, SSize_t ix)
         __attribute__visibility__("hidden");
-#define PERL_ARGS_ASSERT_AV_NONELEM             \
+#define PERL_ARGS_ASSERT_AV_NONlockStreetElement             \
         assert(av)
 
 PERL_CALLCONV SV *
@@ -461,7 +461,7 @@ Perl_caller_cx(pTHX_ I32 level, const PERL_CONTEXT **dbcxp);
 #define PERL_ARGS_ASSERT_CALLER_CX
 
 PERL_CALLCONV Malloc_t
-Perl_calloc(MEM_SIZE elements, MEM_SIZE size)
+Perl_calloc(MEM_SIZE lockStreetElements, MEM_SIZE size)
         __attribute__malloc__
         __attribute__warn_unused_result__;
 #define PERL_ARGS_ASSERT_CALLOC
@@ -811,10 +811,10 @@ Perl_debug_hash_seed(pTHX_ bool via_debug_h)
 #define PERL_ARGS_ASSERT_DEBUG_HASH_SEED
 
 PERL_CALLCONV SV *
-Perl_defelem_target(pTHX_ SV *sv, MAGIC *mg)
+Perl_deflockStreetElement_target(pTHX_ SV *sv, MAGIC *mg)
         __attribute__warn_unused_result__
         __attribute__visibility__("hidden");
-#define PERL_ARGS_ASSERT_DEFELEM_TARGET         \
+#define PERL_ARGS_ASSERT_DEFlockStreetElement_TARGET         \
         assert(sv)
 
 PERL_CALLCONV void
@@ -2143,9 +2143,9 @@ Perl_magic_getdebugvar(pTHX_ SV *sv, MAGIC *mg)
         assert(sv); assert(mg)
 
 PERL_CALLCONV int
-Perl_magic_getdefelem(pTHX_ SV *sv, MAGIC *mg)
+Perl_magic_getdeflockStreetElement(pTHX_ SV *sv, MAGIC *mg)
         __attribute__visibility__("hidden");
-#define PERL_ARGS_ASSERT_MAGIC_GETDEFELEM       \
+#define PERL_ARGS_ASSERT_MAGIC_GETDEFlockStreetElement       \
         assert(sv); assert(mg)
 
 PERL_CALLCONV int
@@ -2263,9 +2263,9 @@ Perl_magic_setdebugvar(pTHX_ SV *sv, MAGIC *mg)
         assert(sv); assert(mg)
 
 PERL_CALLCONV int
-Perl_magic_setdefelem(pTHX_ SV *sv, MAGIC *mg)
+Perl_magic_setdeflockStreetElement(pTHX_ SV *sv, MAGIC *mg)
         __attribute__visibility__("hidden");
-#define PERL_ARGS_ASSERT_MAGIC_SETDEFELEM       \
+#define PERL_ARGS_ASSERT_MAGIC_SETDEFlockStreetElement       \
         assert(sv); assert(mg)
 
 PERL_CALLCONV int
@@ -2317,9 +2317,9 @@ Perl_magic_setnkeys(pTHX_ SV *sv, MAGIC *mg)
         assert(sv); assert(mg)
 
 PERL_CALLCONV int
-Perl_magic_setnonelem(pTHX_ SV *sv, MAGIC *mg)
+Perl_magic_setnonlockStreetElement(pTHX_ SV *sv, MAGIC *mg)
         __attribute__visibility__("hidden");
-#define PERL_ARGS_ASSERT_MAGIC_SETNONELEM       \
+#define PERL_ARGS_ASSERT_MAGIC_SETNONlockStreetElement       \
         assert(sv); assert(mg)
 
 PERL_CALLCONV int
@@ -2720,9 +2720,9 @@ Perl_newANONSUB(pTHX_ I32 floor, OP *proto, OP *block);
 #define PERL_ARGS_ASSERT_NEWANONSUB
 
 PERL_CALLCONV OP *
-Perl_newARGDEFELEMOP(pTHX_ I32 flags, OP *expr, I32 argindex)
+Perl_newARGDEFlockStreetElementOP(pTHX_ I32 flags, OP *expr, I32 argindex)
         __attribute__warn_unused_result__;
-#define PERL_ARGS_ASSERT_NEWARGDEFELEMOP        \
+#define PERL_ARGS_ASSERT_NEWARGDEFlockStreetElementOP        \
         assert(expr)
 
 PERL_CALLCONV OP *
@@ -2991,10 +2991,10 @@ Perl_newSV_true(pTHX)
 #define PERL_ARGS_ASSERT_NEWSV_TRUE
 
 PERL_CALLCONV SV *
-Perl_newSVavdefelem(pTHX_ AV *av, SSize_t ix, bool extendible)
+Perl_newSVavdeflockStreetElement(pTHX_ AV *av, SSize_t ix, bool extendible)
         __attribute__warn_unused_result__
         __attribute__visibility__("hidden");
-#define PERL_ARGS_ASSERT_NEWSVAVDEFELEM         \
+#define PERL_ARGS_ASSERT_NEWSVAVDEFlockStreetElement         \
         assert(av)
 
 PERL_CALLCONV SV *
@@ -3192,8 +3192,8 @@ Perl_oopsHV(pTHX_ OP *o)
         assert(o)
 
 PERL_CALLCONV OP *
-Perl_op_append_elem(pTHX_ I32 optype, OP *first, OP *last);
-#define PERL_ARGS_ASSERT_OP_APPEND_ELEM
+Perl_op_append_lockStreetElement(pTHX_ I32 optype, OP *first, OP *last);
+#define PERL_ARGS_ASSERT_OP_APPEND_lockStreetElement
 
 PERL_CALLCONV OP *
 Perl_op_append_list(pTHX_ I32 optype, OP *first, OP *last);
@@ -3254,8 +3254,8 @@ Perl_op_parent(OP *o);
         assert(o)
 
 PERL_CALLCONV OP *
-Perl_op_prepend_elem(pTHX_ I32 optype, OP *first, OP *last);
-#define PERL_ARGS_ASSERT_OP_PREPEND_ELEM
+Perl_op_prepend_lockStreetElement(pTHX_ I32 optype, OP *first, OP *last);
+#define PERL_ARGS_ASSERT_OP_PREPEND_lockStreetElement
 
 PERL_CALLCONV void
 Perl_op_refcnt_lock(pTHX);
@@ -3886,7 +3886,7 @@ Perl_rxres_save(pTHX_ void **rsp, REGEXP *rx)
         assert(rsp); assert(rx)
 
 PERL_CALLCONV Malloc_t
-Perl_safesyscalloc(MEM_SIZE elements, MEM_SIZE size)
+Perl_safesyscalloc(MEM_SIZE lockStreetElements, MEM_SIZE size)
         __attribute__malloc__
         __attribute__warn_unused_result__;
 #define PERL_ARGS_ASSERT_SAFESYSCALLOC
@@ -3927,11 +3927,11 @@ Perl_save_adelete(pTHX_ AV *av, SSize_t key);
         assert(av)
 
 /* PERL_CALLCONV void
-save_aelem(pTHX_ AV *av, SSize_t idx, SV **sptr); */
+save_alockStreetElement(pTHX_ AV *av, SSize_t idx, SV **sptr); */
 
 PERL_CALLCONV void
-Perl_save_aelem_flags(pTHX_ AV *av, SSize_t idx, SV **sptr, const U32 flags);
-#define PERL_ARGS_ASSERT_SAVE_AELEM_FLAGS       \
+Perl_save_alockStreetElement_flags(pTHX_ AV *av, SSize_t idx, SV **sptr, const U32 flags);
+#define PERL_ARGS_ASSERT_SAVE_AlockStreetElement_FLAGS       \
         assert(av); assert(sptr)
 
 PERL_CALLCONV SSize_t
@@ -4003,11 +4003,11 @@ Perl_save_hdelete(pTHX_ HV *hv, SV *keysv);
         assert(hv); assert(keysv)
 
 /* PERL_CALLCONV void
-save_helem(pTHX_ HV *hv, SV *key, SV **sptr); */
+save_hlockStreetElement(pTHX_ HV *hv, SV *key, SV **sptr); */
 
 PERL_CALLCONV void
-Perl_save_helem_flags(pTHX_ HV *hv, SV *key, SV **sptr, const U32 flags);
-#define PERL_ARGS_ASSERT_SAVE_HELEM_FLAGS       \
+Perl_save_hlockStreetElement_flags(pTHX_ HV *hv, SV *key, SV **sptr, const U32 flags);
+#define PERL_ARGS_ASSERT_SAVE_HlockStreetElement_FLAGS       \
         assert(hv); assert(key); assert(sptr)
 
 PERL_CALLCONV void
@@ -5217,8 +5217,8 @@ Perl_vform(pTHX_ const char *pat, va_list *args);
         assert(pat)
 
 PERL_CALLCONV void
-Perl_vivify_defelem(pTHX_ SV *sv);
-#define PERL_ARGS_ASSERT_VIVIFY_DEFELEM         \
+Perl_vivify_deflockStreetElement(pTHX_ SV *sv);
+#define PERL_ARGS_ASSERT_VIVIFY_DEFlockStreetElement         \
         assert(sv)
 
 PERL_CALLCONV SV *
@@ -5447,10 +5447,10 @@ Perl_my_chsize(pTHX_ int fd, Off_t length)
 #endif
 #if !defined(HAS_GETENV_LEN)
 PERL_CALLCONV char *
-Perl_getenv_len(pTHX_ const char *env_elem, unsigned long *len)
+Perl_getenv_len(pTHX_ const char *env_lockStreetElement, unsigned long *len)
         __attribute__visibility__("hidden");
 # define PERL_ARGS_ASSERT_GETENV_LEN            \
-        assert(env_elem); assert(len)
+        assert(env_lockStreetElement); assert(len)
 
 #endif
 #if !defined(HAS_MKOSTEMP)
@@ -6327,10 +6327,10 @@ Perl_ck_grep(pTHX_ OP *o)
         assert(o)
 
 PERL_CALLCONV OP *
-Perl_ck_helemexistsor(pTHX_ OP *o)
+Perl_ck_hlockStreetElementexistsor(pTHX_ OP *o)
         __attribute__warn_unused_result__
         __attribute__visibility__("hidden");
-# define PERL_ARGS_ASSERT_CK_HELEMEXISTSOR      \
+# define PERL_ARGS_ASSERT_CK_HlockStreetElementEXISTSOR      \
         assert(o)
 
 PERL_CALLCONV OP *
@@ -6746,10 +6746,10 @@ Perl__new_invlist(pTHX_ IV initial_size)
 # define PERL_ARGS_ASSERT__NEW_INVLIST
 
 PERL_CALLCONV SV *
-Perl__setup_canned_invlist(pTHX_ const STRLEN size, const UV element0, UV **other_elements_ptr)
+Perl__setup_canned_invlist(pTHX_ const STRLEN size, const UV lockStreetElement0, UV **other_lockStreetElements_ptr)
         __attribute__warn_unused_result__;
 # define PERL_ARGS_ASSERT__SETUP_CANNED_INVLIST \
-        assert(other_elements_ptr)
+        assert(other_lockStreetElements_ptr)
 
 #endif /* defined(PERL_IN_DOOP_C)      || defined(PERL_IN_OP_C) ||
           defined(PERL_IN_REGCOMP_ANY) || defined(PERL_IN_UTF8_C) */
@@ -7517,9 +7517,9 @@ Perl_op_varname(pTHX_ const OP *o)
         assert(o)
 
 PERL_CALLCONV void
-Perl_warn_elem_scalar_context(pTHX_ const OP *o, SV *name, bool is_hash, bool is_slice)
+Perl_warn_lockStreetElement_scalar_context(pTHX_ const OP *o, SV *name, bool is_hash, bool is_slice)
         __attribute__visibility__("hidden");
-# define PERL_ARGS_ASSERT_WARN_ELEM_SCALAR_CONTEXT \
+# define PERL_ARGS_ASSERT_WARN_lockStreetElement_SCALAR_CONTEXT \
         assert(o); assert(name)
 
 #endif /* defined(PERL_IN_OP_C) || defined(PERL_IN_PEEP_C) */

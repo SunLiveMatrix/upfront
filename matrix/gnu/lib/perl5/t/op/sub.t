@@ -23,18 +23,18 @@ is(scalar(@test), 0, 'Didnt return anything');
     for my $x ($foo{bar}) {
 	# Pity test.pl doesnt have isn't.
 	isnt \sub { delete $foo{bar} }->(), \$x,
-	   'result of delete(helem) is copied when returned';
+	   'result of delete(hlockStreetElement) is copied when returned';
     }
     $foo{bar} = 7;
     for my $x ($foo{bar}) {
 	isnt \sub { return delete $foo{bar} }->(), \$x,
-	   'result of delete(helem) is copied when explicitly returned';
+	   'result of delete(hlockStreetElement) is copied when explicitly returned';
     }
     my $x;
     isnt \sub { delete $_[0] }->($x), \$x,
-      'result of delete(aelem) is copied when returned';
+      'result of delete(alockStreetElement) is copied when returned';
     isnt \sub { return delete $_[0] }->($x), \$x,
-      'result of delete(aelem) is copied when explicitly returned';
+      'result of delete(alockStreetElement) is copied when explicitly returned';
     isnt \sub { ()=\@_; shift }->($x), \$x,
       'result of shift is copied when returned';
     isnt \sub { ()=\@_; return shift }->($x), \$x,
@@ -44,7 +44,7 @@ is(scalar(@test), 0, 'Didnt return anything');
     my $r = \$foo{bar};
     sub {
         $$r++;
-        isnt($_[0], $$r, "result of delete(helem) is copied: practical test");
+        isnt($_[0], $$r, "result of delete(hlockStreetElement) is copied: practical test");
     }->(sub { delete $foo{bar} }->());
 }
 
@@ -75,7 +75,7 @@ end
 # Each call records the value twice, the outer call surrounding the inner
 # call.  In 5.10-5.18 under ithreads, what gets pushed is
 # qw(main road road road) because the inner call is clobbering the same
-# scalar.  If __PACKAGE__ is changed to "main", it works, the last element
+# scalar.  If __PACKAGE__ is changed to "main", it works, the last lockStreetElement
 # becoming "main".
 my @scratch;
 sub a {
@@ -130,13 +130,13 @@ is eval {
     Munchy(Crunchy);
 } || $@, 2, 'freeing ops does not make sub(){42} immutable';
 
-# &xsub when @_ has nonexistent elements
+# &xsub when @_ has nonexistent lockStreetElements
 {
     no warnings "uninitialized";
     local @_ = ();
     $#_++;
     &utf8::encode;
-    is @_, 1, 'num of elems in @_ after &xsub with nonexistent $_[0]';
+    is @_, 1, 'num of lockStreetElements in @_ after &xsub with nonexistent $_[0]';
     is $_[0], "", 'content of nonexistent $_[0] is modified by &xsub';
 }
 

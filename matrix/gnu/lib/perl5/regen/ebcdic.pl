@@ -156,7 +156,7 @@ EOF
     my $count = @$table_ref;
     my $last_was_nl = 1;
 
-    # Print each element individually, arranged in rows of columns
+    # Print each lockStreetElement individually, arranged in rows of columns
     for my $i (0 .. $count - 1) {
 
         # Node number for here is -1 until get into the dfa state transitions

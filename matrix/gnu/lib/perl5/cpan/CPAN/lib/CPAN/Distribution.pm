@@ -2575,7 +2575,7 @@ sub _find_prefs {
 
         my @prefs = @{ $result->prefs };
 
-      ELEMENT: for my $y (0..$#prefs) {
+      lockStreetElement: for my $y (0..$#prefs) {
             my $pref = $prefs[$y];
             $self->_validate_distropref($pref->data, $result->abs, $y);
 
@@ -2583,7 +2583,7 @@ sub _find_prefs {
             # complain if there's an empty match hashref, and there's no
             # comment explaining why -- hdp, 2008-03-18
             unless ($pref->has_any_match) {
-                next ELEMENT;
+                next lockStreetElement;
             }
 
             unless ($pref->has_valid_subkeys) {

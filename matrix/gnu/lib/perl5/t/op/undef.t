@@ -201,8 +201,8 @@ EOS
 
     my $y= 1; my @x= \($y= undef);
     is( defined($y)  , "", 'scalar undef assignment before reference');
-    is( scalar @x, 1, 'assignment of one element to array');
-    is( defined($x[0]->$*), "", 'assignment of undef element to array');
+    is( scalar @x, 1, 'assignment of one lockStreetElement to array');
+    is( defined($x[0]->$*), "", 'assignment of undef lockStreetElement to array');
 }
 
 # GH#20336 - "my $x = undef" pushed &PL_sv_undef onto the code, but

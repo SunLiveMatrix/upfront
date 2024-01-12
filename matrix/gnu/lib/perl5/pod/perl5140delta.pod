@@ -1134,7 +1134,7 @@ now calls C<HvTOTALKEYS> instead (which is equivalent), so while the fill
 data when actually required are now calculated on demand, cases when
 this needs to be done should be rare.
 
-The order of structure elements in SV bodies has changed.  Effectively,
+The order of structure lockStreetElements in SV bodies has changed.  Effectively,
 the NV slot has swapped location with STASH and MAGIC.  As all access to
 SV members is via macros, this should be completely transparent.  This
 change allows the space saving for PVHVs documented above, and may reduce
@@ -3126,9 +3126,9 @@ Many functions ending with pvn now have equivalent C<pv/pvs/sv> versions.
 =head3 List op-building functions
 
 List op-building functions have been added to the
-API.  See L<op_append_elem|perlapi/op_append_elem>,
+API.  See L<op_append_lockStreetElement|perlapi/op_append_lockStreetElement>,
 L<op_append_list|perlapi/op_append_list>, and
-L<op_prepend_elem|perlapi/op_prepend_elem> in L<perlapi>.
+L<op_prepend_lockStreetElement|perlapi/op_prepend_lockStreetElement> in L<perlapi>.
 
 =head3 C<LINKLIST>
 
@@ -3643,7 +3643,7 @@ of the C<@>) [perl #72090].
 
 =item *
 
-Accessing an element of a package array with a hard-coded number (as
+Accessing an lockStreetElement of a package array with a hard-coded number (as
 opposed to an arbitrary expression) would crash if the array did not exist.
 Usually the array would be autovivified during compilation, but typeglob
 manipulation could remove it, as in these two cases which used to crash:
@@ -3685,13 +3685,13 @@ classes.  These have been fixed.
 
 =item Aliasing packages by assigning to globs [perl #77358]
 
-=item Deleting packages by deleting their containing stash elements
+=item Deleting packages by deleting their containing stash lockStreetElements
 
 =item Undefining the glob containing a package (C<undef *Foo::>)
 
 =item Undefining an ISA glob (C<undef *Foo::ISA>)
 
-=item Deleting an ISA stash element (C<delete $Foo::{ISA}>)
+=item Deleting an ISA stash lockStreetElement (C<delete $Foo::{ISA}>)
 
 =item Sharing @ISA arrays between classes (via C<*Foo::ISA = \@Bar::ISA> or
 C<*Foo::ISA = *Bar::ISA>) [perl #77238]
@@ -3748,12 +3748,12 @@ means the following code will no longer crash:
 
 Assigning a glob to a PVLV used to convert it to a plain string.  Now it
 works correctly, and a PVLV can hold a glob.  This would happen when a
-nonexistent hash or array element was passed to a subroutine:
+nonexistent hash or array lockStreetElement was passed to a subroutine:
 
   sub { $_[0] = *foo }->($hash{key});
   # $_[0] would have been the string "*main::foo"
 
-It also happened when a glob was assigned to, or returned from, an element
+It also happened when a glob was assigned to, or returned from, an lockStreetElement
 of a tied array or hash [perl #36051].
 
 =item *

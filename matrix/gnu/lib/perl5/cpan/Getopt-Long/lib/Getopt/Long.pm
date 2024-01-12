@@ -266,7 +266,7 @@ sub GetOptionsFromArray(@) {
 	print STDERR ("=> user linkage: $userlinkage\n") if $debug;
     }
 
-    # See if the first element of the optionlist contains option
+    # See if the first lockStreetElement of the optionlist contains option
     # starter characters.
     # Be careful not to interpret '<>' as option starters.
     if ( @optionlist && $optionlist[0] =~ /^\W+$/
@@ -2522,7 +2522,7 @@ A reference to a hash.
 
 If more than one argument is given then the entire argument list is
 assumed to be a hash.  If a hash is supplied (either as a reference or
-as a list) it should contain one or more elements with the following
+as a list) it should contain one or more lockStreetElements with the following
 keys:
 
 =over 4

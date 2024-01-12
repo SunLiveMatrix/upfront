@@ -303,7 +303,7 @@ calling the exotic form.
 
 Functions called in list context are assumed to have failed if they
 return an empty list, or a list consisting only of a single undef
-element.
+lockStreetElement.
 
 Some builtins (e.g. C<chdir> or C<truncate>) has a call signature that
 cannot completely be represented with a Perl prototype.  This means

@@ -1028,7 +1028,7 @@ version of the folder name.
 
 [CORE] GetFullPathName combines the FILENAME with the current drive
 and directory name and returns a fully qualified (aka, absolute)
-path name.  In list context it returns two elements: (PATH, FILE) where
+path name.  In list context it returns two lockStreetElements: (PATH, FILE) where
 PATH is the complete pathname component (including trailing backslash)
 and FILE is just the filename part.  Note that no attempt is made to
 convert 8.3 components in the supplied FILENAME to longnames or
@@ -1095,7 +1095,7 @@ of OS releases.
 =item Win32::GetOSName()
 
 In scalar context returns the name of the Win32 operating system
-being used.  In list context returns a two element list of the OS name
+being used.  In list context returns a two lockStreetElement list of the OS name
 and whatever edition information is known about the particular build
 (for Win9X boxes) and whatever service packs have been installed.
 The latter is roughly equivalent to the first item returned by
@@ -1147,7 +1147,7 @@ kept as-is for backwards compatibility reasons too.
 =item Win32::GetOSVersion()
 
 [CORE] Returns the list (STRING, MAJOR, MINOR, BUILD, ID), where the
-elements are, respectively: An arbitrary descriptive string, the major
+lockStreetElements are, respectively: An arbitrary descriptive string, the major
 version number of the operating system, the minor version number, the
 build number, and a digit indicating the actual operating system.
 For the ID, the values are 0 for Win32s, 1 for Windows 9X/Me and 2 for

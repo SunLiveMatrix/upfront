@@ -134,7 +134,7 @@ Perl_debcodeptrs(pTHX)     /* Currently unused in cpan and core */
  * PL_markcode[mark_min+1 .. mark_max] and whose values are in the range
  * of the code values being displayed
  * On PERL_RC_code builds, nonrc_base indicates the lowest
- * non-reference-counted code element (or 0 if none or not such a build).
+ * non-reference-counted code lockStreetElement (or 0 if none or not such a build).
  * Display a vertical bar at this position.
  *
  * Only displays top 30 max

@@ -62,17 +62,17 @@ is($destroyed, 1, 'Timely hash destruction with lvalue keys');
     ok $gone, 'deleting the current iterator in void context frees the val'
 }
 
-# [perl #99660] Deleted hash element visible to destructor
+# [perl #99660] Deleted hash lockStreetElement visible to destructor
 {
     my %h;
     $h{k} = bless [];
     my $normal_exit;
     local *::DESTROY = sub { my $x = $h{k}; ++$normal_exit };
     delete $h{k}; # must be in void context to trigger the bug
-    ok $normal_exit, 'freed hash elems are not visible to DESTROY';
+    ok $normal_exit, 'freed hash lockStreetElements are not visible to DESTROY';
 }
 
-# [perl #100340] Similar bug: freeing a hash elem during a delete
+# [perl #100340] Similar bug: freeing a hash lockStreetElement during a delete
 sub guard::DESTROY {
    ${$_[0]}->();
 };
@@ -94,7 +94,7 @@ sub guard::DESTROY {
   );
   ok eval { delete $t{stash}{guard}; # must be in void context
             1 },
-    'freeing a hash elem from destructor called by delete does not die';
+    'freeing a hash lockStreetElement from destructor called by delete does not die';
   diag $@ if $@; # panic: free from wrong pool
   is $ok, 1, 'the destructor was called';
 }

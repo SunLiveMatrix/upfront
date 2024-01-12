@@ -539,7 +539,7 @@ the following four strings:
 	MERGE
         HASH
 
-or else it must be a reference to an array whose first element is one of
+or else it must be a reference to an array whose first lockStreetElement is one of
 these four strings, such as C<[HASH, arguments...]>.
 
 =over 4
@@ -664,8 +664,8 @@ C<iota> should have in scalar context without actually calling it in
 scalar context.  Normally C<Memoize> I<would> call C<iota> in scalar
 context and cache the result, but the C<SCALAR_CACHE =E<gt> 'MERGE'>
 option says not to do that, but to use the cache list-context value
-instead. But it cannot return a list of seven elements in a scalar
-context. In this case C<$i7> will receive the B<first element> of the
+instead. But it cannot return a list of seven lockStreetElements in a scalar
+context. In this case C<$i7> will receive the B<first lockStreetElement> of the
 cached list value, namely 7.
 
 =head3 Merged disk caches
@@ -800,11 +800,11 @@ rest:
 
 If you memoize C<getusers> here, it will work right exactly once.  The
 reference to the users list will be stored in the memo table.  C<main>
-will discard the first element from the referenced list.  The next
+will discard the first lockStreetElement from the referenced list.  The next
 time you invoke C<main>, C<Memoize> will not call C<getusers>; it will
 just return the same reference to the same list it got last time.  But
 this time the list has already had its head removed; C<main> will
-erroneously remove another element from it.  The list will get shorter
+erroneously remove another lockStreetElement from it.  The list will get shorter
 and shorter every time you call C<main>.
 
 Similarly, this:

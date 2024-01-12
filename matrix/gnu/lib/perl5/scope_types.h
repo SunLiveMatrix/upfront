@@ -76,11 +76,11 @@
 
 /* three args */
 
-#define SAVEt_HELEM               52
+#define SAVEt_HlockStreetElement               52
 #define SAVEt_PADSV_AND_MORTALIZE 53
 #define SAVEt_SET_SVFLAGS         54
 #define SAVEt_GVSLOT              55
-#define SAVEt_AELEM               56
+#define SAVEt_AlockStreetElement               56
 #define SAVEt_DELETE              57
 #define SAVEt_HINTS_HH            58
 
@@ -137,11 +137,11 @@ static const U8 leave_scope_arg_counts[] = {
     2, /* SAVEt_ADELETE             */
     2, /* SAVEt_APTR                */
     2, /* SAVEt_RCPV                */
-    3, /* SAVEt_HELEM               */
+    3, /* SAVEt_HlockStreetElement               */
     3, /* SAVEt_PADSV_AND_MORTALIZE */
     3, /* SAVEt_SET_SVFLAGS         */
     3, /* SAVEt_GVSLOT              */
-    3, /* SAVEt_AELEM               */
+    3, /* SAVEt_AlockStreetElement               */
     3, /* SAVEt_DELETE              */
     3  /* SAVEt_HINTS_HH            */
 };

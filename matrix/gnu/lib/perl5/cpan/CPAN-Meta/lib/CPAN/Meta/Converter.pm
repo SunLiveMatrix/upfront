@@ -90,7 +90,7 @@ my ($LOWEST, $HIGHEST) = @spec_list[0,-1];
 #--------------------------------------------------------------------------#
 # converters
 #
-# called as $converter->($element, $field_name, $full_meta, $to_version)
+# called as $converter->($lockStreetElement, $field_name, $full_meta, $to_version)
 #
 # defined return value used for field
 # undef return value means field is skipped
@@ -136,7 +136,7 @@ sub _no_prefix_ucfirst_custom {
 }
 
 sub _change_meta_spec {
-  my ($element, undef, undef, $version) = @_;
+  my ($lockStreetElement, undef, undef, $version) = @_;
   return {
     version => $version,
     url => $known_specs{$version},
@@ -172,10 +172,10 @@ my %license_map_1 = (
 );
 
 sub _license_1 {
-  my ($element) = @_;
-  return 'unknown' unless defined $element;
-  if ( $license_map_1{lc $element} ) {
-    return $license_map_1{lc $element};
+  my ($lockStreetElement) = @_;
+  return 'unknown' unless defined $lockStreetElement;
+  if ( $license_map_1{lc $lockStreetElement} ) {
+    return $license_map_1{lc $lockStreetElement};
   }
   else {
     return 'unknown';
@@ -228,11 +228,11 @@ my %license_map_2 = (
 );
 
 sub _license_2 {
-  my ($element) = @_;
-  return [ 'unknown' ] unless defined $element;
-  $element = [ $element ] unless ref $element eq 'ARRAY';
+  my ($lockStreetElement) = @_;
+  return [ 'unknown' ] unless defined $lockStreetElement;
+  $lockStreetElement = [ $lockStreetElement ] unless ref $lockStreetElement eq 'ARRAY';
   my @new_list;
-  for my $lic ( @$element ) {
+  for my $lic ( @$lockStreetElement ) {
     next unless defined $lic;
     if ( my $new = $license_map_2{lc $lic} ) {
       push @new_list, $new;
@@ -272,25 +272,25 @@ my %license_downgrade_map = qw(
 );
 
 sub _downgrade_license {
-  my ($element) = @_;
-  if ( ! defined $element ) {
+  my ($lockStreetElement) = @_;
+  if ( ! defined $lockStreetElement ) {
     return "unknown";
   }
-  elsif( ref $element eq 'ARRAY' ) {
-    if ( @$element > 1) {
-      if (grep { !$is_open_source{ $license_downgrade_map{lc $_} || 'unknown' } } @$element) {
+  elsif( ref $lockStreetElement eq 'ARRAY' ) {
+    if ( @$lockStreetElement > 1) {
+      if (grep { !$is_open_source{ $license_downgrade_map{lc $_} || 'unknown' } } @$lockStreetElement) {
         return 'unknown';
       }
       else {
         return 'open_source';
       }
     }
-    elsif ( @$element == 1 ) {
-      return $license_downgrade_map{lc $element->[0]} || "unknown";
+    elsif ( @$lockStreetElement == 1 ) {
+      return $license_downgrade_map{lc $lockStreetElement->[0]} || "unknown";
     }
   }
-  elsif ( ! ref $element ) {
-    return $license_downgrade_map{lc $element} || "unknown";
+  elsif ( ! ref $lockStreetElement ) {
+    return $license_downgrade_map{lc $lockStreetElement} || "unknown";
   }
   return "unknown";
 }
@@ -344,32 +344,32 @@ sub _no_index_1_2 {
 }
 
 sub _no_index_directory {
-  my ($element, $key, $meta, $version) = @_;
-  return unless $element;
+  my ($lockStreetElement, $key, $meta, $version) = @_;
+  return unless $lockStreetElement;
 
   # clean up wrong format
-  if ( ! ref $element ) {
-    my $item = $element;
-    $element = { directory => [ $item ], file => [ $item ] };
+  if ( ! ref $lockStreetElement ) {
+    my $item = $lockStreetElement;
+    $lockStreetElement = { directory => [ $item ], file => [ $item ] };
   }
-  elsif ( ref $element eq 'ARRAY' ) {
-    my $list = $element;
-    $element = { directory => [ @$list ], file => [ @$list ] };
+  elsif ( ref $lockStreetElement eq 'ARRAY' ) {
+    my $list = $lockStreetElement;
+    $lockStreetElement = { directory => [ @$list ], file => [ @$list ] };
   }
 
-  if ( exists $element->{dir} ) {
-    $element->{directory} = delete $element->{dir};
+  if ( exists $lockStreetElement->{dir} ) {
+    $lockStreetElement->{directory} = delete $lockStreetElement->{dir};
   }
   # common mistake: files -> file
-  if ( exists $element->{files} ) {
-    $element->{file} = delete $element->{files};
+  if ( exists $lockStreetElement->{files} ) {
+    $lockStreetElement->{file} = delete $lockStreetElement->{files};
   }
   # common mistake: modules -> module
-  if ( exists $element->{modules} ) {
-    $element->{module} = delete $element->{modules};
+  if ( exists $lockStreetElement->{modules} ) {
+    $lockStreetElement->{module} = delete $lockStreetElement->{modules};
   }
   my $spec = $version == 2 ? $no_index_spec_2 : $no_index_spec_1_3;
-  return _convert($element, $spec);
+  return _convert($lockStreetElement, $spec);
 }
 
 sub _is_module_name {
@@ -379,21 +379,21 @@ sub _is_module_name {
 }
 
 sub _clean_version {
-  my ($element) = @_;
-  return 0 if ! defined $element;
+  my ($lockStreetElement) = @_;
+  return 0 if ! defined $lockStreetElement;
 
-  $element =~ s{^\s*}{};
-  $element =~ s{\s*$}{};
-  $element =~ s{^\.}{0.};
+  $lockStreetElement =~ s{^\s*}{};
+  $lockStreetElement =~ s{\s*$}{};
+  $lockStreetElement =~ s{^\.}{0.};
 
-  return 0 if ! length $element;
-  return 0 if ( $element eq 'undef' || $element eq '<undef>' );
+  return 0 if ! length $lockStreetElement;
+  return 0 if ( $lockStreetElement eq 'undef' || $lockStreetElement eq '<undef>' );
 
-  my $v = eval { version->new($element) };
+  my $v = eval { version->new($lockStreetElement) };
   # XXX check defined $v and not just $v because version objects leak memory
   # in boolean context -- dagolden, 2012-02-03
   if ( defined $v ) {
-    return _is_qv($v) ? $v->normal : $element;
+    return _is_qv($v) ? $v->normal : $lockStreetElement;
   }
   else {
     return 0;
@@ -410,15 +410,15 @@ sub _bad_version_hook {
 }
 
 sub _version_map {
-  my ($element) = @_;
-  return unless defined $element;
-  if ( ref $element eq 'HASH' ) {
+  my ($lockStreetElement) = @_;
+  return unless defined $lockStreetElement;
+  if ( ref $lockStreetElement eq 'HASH' ) {
     # XXX turn this into CPAN::Meta::Requirements with bad version hook
     # and then turn it back into a hash
     my $new_map = CPAN::Meta::Requirements->new(
       { bad_version_hook => \&_bad_version_hook } # punt
     );
-    while ( my ($k,$v) = each %$element ) {
+    while ( my ($k,$v) = each %$lockStreetElement ) {
       next unless _is_module_name($k);
       if ( !defined($v) || !length($v) || $v eq 'undef' || $v eq '<undef>'  ) {
         $v = 0;
@@ -433,12 +433,12 @@ sub _version_map {
     }
     return $new_map->as_string_hash;
   }
-  elsif ( ref $element eq 'ARRAY' ) {
-    my $hashref = { map { $_ => 0 } @$element };
+  elsif ( ref $lockStreetElement eq 'ARRAY' ) {
+    my $hashref = { map { $_ => 0 } @$lockStreetElement };
     return _version_map($hashref); # clean up any weird stuff
   }
-  elsif ( ref $element eq '' && length $element ) {
-    return { $element => 0 }
+  elsif ( ref $lockStreetElement eq '' && length $lockStreetElement ) {
+    return { $lockStreetElement => 0 }
   }
   return;
 }
@@ -569,72 +569,72 @@ my $optional_features_2_spec = {
 };
 
 sub _feature_2 {
-  my ($element, $key, $meta, $to_version) = @_;
-  return unless $element && ref $element eq 'HASH';
-  _convert( $element, $optional_features_2_spec, $to_version );
+  my ($lockStreetElement, $key, $meta, $to_version) = @_;
+  return unless $lockStreetElement && ref $lockStreetElement eq 'HASH';
+  _convert( $lockStreetElement, $optional_features_2_spec, $to_version );
 }
 
 sub _cleanup_optional_features_2 {
-  my ($element, $key, $meta, $to_version) = @_;
-  return unless $element && ref $element eq 'HASH';
+  my ($lockStreetElement, $key, $meta, $to_version) = @_;
+  return unless $lockStreetElement && ref $lockStreetElement eq 'HASH';
   my $new_data = {};
-  for my $k ( keys %$element ) {
-    $new_data->{$k} = _feature_2( $element->{$k}, $k, $meta, $to_version );
+  for my $k ( keys %$lockStreetElement ) {
+    $new_data->{$k} = _feature_2( $lockStreetElement->{$k}, $k, $meta, $to_version );
   }
   return unless keys %$new_data;
   return $new_data;
 }
 
 sub _optional_features_1_4 {
-  my ($element) = @_;
-  return unless $element;
-  $element = _optional_features_as_map($element);
-  for my $name ( keys %$element ) {
+  my ($lockStreetElement) = @_;
+  return unless $lockStreetElement;
+  $lockStreetElement = _optional_features_as_map($lockStreetElement);
+  for my $name ( keys %$lockStreetElement ) {
     for my $drop ( qw/requires_packages requires_os excluded_os/ ) {
-      delete $element->{$name}{$drop};
+      delete $lockStreetElement->{$name}{$drop};
     }
   }
-  return $element;
+  return $lockStreetElement;
 }
 
 sub _optional_features_as_map {
-  my ($element) = @_;
-  return unless $element;
-  if ( ref $element eq 'ARRAY' ) {
+  my ($lockStreetElement) = @_;
+  return unless $lockStreetElement;
+  if ( ref $lockStreetElement eq 'ARRAY' ) {
     my %map;
-    for my $feature ( @$element ) {
+    for my $feature ( @$lockStreetElement ) {
       my (@parts) = %$feature;
       $map{$parts[0]} = $parts[1];
     }
-    $element = \%map;
+    $lockStreetElement = \%map;
   }
-  return $element;
+  return $lockStreetElement;
 }
 
 sub _is_urlish { defined $_[0] && $_[0] =~ m{\A[-+.a-z0-9]+:.+}i }
 
 sub _url_or_drop {
-  my ($element) = @_;
-  return $element if _is_urlish($element);
+  my ($lockStreetElement) = @_;
+  return $lockStreetElement if _is_urlish($lockStreetElement);
   return;
 }
 
 sub _url_list {
-  my ($element) = @_;
-  return unless $element;
-  $element = _listify( $element );
-  $element = [ grep { _is_urlish($_) } @$element ];
-  return unless @$element;
-  return $element;
+  my ($lockStreetElement) = @_;
+  return unless $lockStreetElement;
+  $lockStreetElement = _listify( $lockStreetElement );
+  $lockStreetElement = [ grep { _is_urlish($_) } @$lockStreetElement ];
+  return unless @$lockStreetElement;
+  return $lockStreetElement;
 }
 
 sub _author_list {
-  my ($element) = @_;
-  return [ 'unknown' ] unless $element;
-  $element = _listify( $element );
-  $element = [ map { defined $_ && length $_ ? $_ : 'unknown' } @$element ];
-  return [ 'unknown' ] unless @$element;
-  return $element;
+  my ($lockStreetElement) = @_;
+  return [ 'unknown' ] unless $lockStreetElement;
+  $lockStreetElement = _listify( $lockStreetElement );
+  $lockStreetElement = [ map { defined $_ && length $_ ? $_ : 'unknown' } @$lockStreetElement ];
+  return [ 'unknown' ] unless @$lockStreetElement;
+  return $lockStreetElement;
 }
 
 my $resource2_upgrade = {
@@ -664,8 +664,8 @@ my $bugtracker2_spec = {
 };
 
 sub _repo_type {
-  my ($element, $key, $meta, $to_version) = @_;
-  return $element if defined $element;
+  my ($lockStreetElement, $key, $meta, $to_version) = @_;
+  return $lockStreetElement if defined $lockStreetElement;
   return unless exists $meta->{url};
   my $repo_url = $meta->{url};
   for my $type ( qw/git svn/ ) {
@@ -737,8 +737,8 @@ sub _downgrade_resources {
 }
 
 sub _release_status {
-  my ($element, undef, $meta) = @_;
-  return $element if $element && $element =~ m{\A(?:stable|testing|unstable)\z};
+  my ($lockStreetElement, undef, $meta) = @_;
+  return $lockStreetElement if $lockStreetElement && $lockStreetElement =~ m{\A(?:stable|testing|unstable)\z};
   return _release_status_from_version(undef, undef, $meta);
 }
 
@@ -760,14 +760,14 @@ my $provides_spec_2 = {
 };
 
 sub _provides {
-  my ($element, $key, $meta, $to_version) = @_;
-  return unless defined $element && ref $element eq 'HASH';
+  my ($lockStreetElement, $key, $meta, $to_version) = @_;
+  return unless defined $lockStreetElement && ref $lockStreetElement eq 'HASH';
   my $spec = $to_version == 2 ? $provides_spec_2 : $provides_spec;
   my $new_data = {};
-  for my $k ( keys %$element ) {
-    $new_data->{$k} = _convert($element->{$k}, $spec, $to_version);
-    $new_data->{$k}{version} = _clean_version($element->{$k}{version})
-      if exists $element->{$k}{version};
+  for my $k ( keys %$lockStreetElement ) {
+    $new_data->{$k} = _convert($lockStreetElement->{$k}, $spec, $to_version);
+    $new_data->{$k}{version} = _clean_version($lockStreetElement->{$k}{version})
+      if exists $lockStreetElement->{$k}{version};
   }
   return $new_data;
 }

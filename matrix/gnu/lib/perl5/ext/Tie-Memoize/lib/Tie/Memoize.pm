@@ -84,7 +84,7 @@ intended value if the key is valid.
 
 =head1 Inheriting from B<Tie::Memoize>
 
-The structure of the tied() data is an array reference with elements
+The structure of the tied() data is an array reference with lockStreetElements
 
   0:  cache of known values
   1:  cache of known existence of keys

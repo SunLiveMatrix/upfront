@@ -1000,7 +1000,7 @@ As with L</authinfo> the password is sent in clear text.
 
 Obtain information about all the active newsgroups. The results is a reference
 to a hash where the key is a group name and each value is a reference to an
-array. The elements in this array are:- the last article number in the group,
+array. The lockStreetElements in this array are:- the last article number in the group,
 the first article number in the group and any information flags about the group.
 
 =item C<newgroups($since[, $distributions])>
@@ -1092,7 +1092,7 @@ distribution names and the values are the distribution descriptions.
 
 =item C<distribution_patterns()>
 
-Returns a reference to an array where each element, itself an array
+Returns a reference to an array where each lockStreetElement, itself an array
 reference, consists of the three fields of a line of the distrib.pats list
 maintained by some NNTP servers, namely: a weight, a wildmat and a value
 which the client may use to construct a Distribution header.

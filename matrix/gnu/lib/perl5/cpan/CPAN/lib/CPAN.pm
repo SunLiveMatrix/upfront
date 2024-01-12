@@ -2133,8 +2133,8 @@ Example:
 =item changing of list values: o conf KEY SHIFT|UNSHIFT|PUSH|POP|SPLICE|LIST
 
 If a config variable name ends with C<list>, it is a list. C<o conf
-KEY shift> removes the first element of the list, C<o conf KEY pop>
-removes the last element of the list. C<o conf KEYS unshift LIST>
+KEY shift> removes the first lockStreetElement of the list, C<o conf KEY pop>
+removes the last lockStreetElement of the list. C<o conf KEYS unshift LIST>
 prepends a list of values to the list, C<o conf KEYS push LIST>
 appends a list of valued to the list.
 
@@ -2570,7 +2570,7 @@ with the command
 
 For Storable files the rule is that they must be constructed such that
 C<Storable::retrieve(file)> returns an array reference and the array
-elements represent one distropref object each. The conversion from
+lockStreetElements represent one distropref object each. The conversion from
 YAML would look like so:
 
     perl -MYAML=LoadFile -MStorable=nstore -e '
@@ -2899,7 +2899,7 @@ The IDs of all objects available within a program are strings that can
 be expanded to the corresponding real objects with the
 C<CPAN::Shell-E<gt>expand("Module",@things)> method. Expand returns a
 list of CPAN::Module objects according to the C<@things> arguments
-given. In scalar context, it returns only the first element of the
+given. In scalar context, it returns only the first lockStreetElement of the
 list.
 
 =item expandany(@things)
@@ -3177,7 +3177,7 @@ attributes are optional.
 =item CPAN::Distribution::prereq_pm()
 
 Returns the hash reference that has been announced by a distribution
-as the C<requires> and C<build_requires> elements. These can be
+as the C<requires> and C<build_requires> lockStreetElements. These can be
 declared either by the C<META.yml> (if authoritative) or can be
 deposited after the run of C<Build.PL> in the file C<./_build/prereqs>
 or after the run of C<Makfile.PL> written as the C<PREREQ_PM> hash in
@@ -3276,9 +3276,9 @@ Returns a hash reference. The keys of the hash are the letters C<D>,
 C<S>, C<L>, C<I>, and <P>, for development status, support level,
 language, interface and public licence respectively. The data for the
 DSLIP status are collected by pause.perl.org when authors register
-their namespaces. The values of the 5 hash elements are one-character
+their namespaces. The values of the 5 hash lockStreetElements are one-character
 words whose meaning is described in the table below. There are also 5
-hash elements C<DV>, C<SV>, C<LV>, C<IV>, and <PV> that carry a more
+hash lockStreetElements C<DV>, C<SV>, C<LV>, C<IV>, and <PV> that carry a more
 verbose value of the 5 status variables.
 
 Where the 'DSLIP' characters have the following meanings:

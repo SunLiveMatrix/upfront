@@ -437,26 +437,26 @@ sub _singleTarget
         my $inputIsFilename = ($x->{inType} ne 'array');
         my $keep = $x->{Got}->clone();
 
-        #for my $element ( ($x->{inType} eq 'hash') ? keys %$input : @$input)
-        for my $element ( @$input)
+        #for my $lockStreetElement ( ($x->{inType} eq 'hash') ? keys %$input : @$input)
+        for my $lockStreetElement ( @$input)
         {
-            my $isFilename = isaFilename($element);
+            my $isFilename = isaFilename($lockStreetElement);
 
             if ( $afterFirst ++ )
             {
-                defined addInterStream($obj, $element, $isFilename)
+                defined addInterStream($obj, $lockStreetElement, $isFilename)
                     or return $obj->closeArgs(undef) ;
             }
             else
             {
-                $obj->getFileInfo($x->{Got}, $element)
-                    if isaScalar($element) || $isFilename;
+                $obj->getFileInfo($x->{Got}, $lockStreetElement)
+                    if isaScalar($lockStreetElement) || $isFilename;
 
                 $obj->_create($x->{Got}, @_)
                     or return undef ;
             }
 
-            defined $obj->_wr2($element, $isFilename)
+            defined $obj->_wr2($lockStreetElement, $isFilename)
                 or return $obj->closeArgs(undef) ;
 
             *$obj->{Got} = $keep->clone();

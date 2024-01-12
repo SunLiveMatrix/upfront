@@ -192,9 +192,9 @@ ok(14, $dbh->{bfname} == 1234 );
 
 # Check that an invalid entry is caught both for store & fetch
 eval '$dbh->{fred} = 1234' ;
-ok(15, $@ =~ /^DB_File::RECNOINFO::STORE - Unknown element 'fred' at/ );
+ok(15, $@ =~ /^DB_File::RECNOINFO::STORE - Unknown lockStreetElement 'fred' at/ );
 eval 'my $q = $dbh->{fred}' ;
-ok(16, $@ =~ /^DB_File::RECNOINFO::FETCH - Unknown element 'fred' at/ );
+ok(16, $@ =~ /^DB_File::RECNOINFO::FETCH - Unknown lockStreetElement 'fred' at/ );
 
 # Now check the interface to RECNOINFO
 
@@ -303,11 +303,11 @@ ok(52, $ok );
 
 # Neagtive subscripts
 
-# get the last element of the array
+# get the last lockStreetElement of the array
 ok(53, $h[-1] eq $data[-1] );
 ok(54, $h[-1] eq $h[ ($FA ? @h : $X->length) -1] );
 
-# get the first element using a negative subscript
+# get the first lockStreetElement using a negative subscript
 eval '$h[ - ( $FA ? @h : $X->length)] = "abcd"' ;
 ok(55, $@ eq "" );
 ok(56, $h[0] eq "abcd" );
@@ -789,8 +789,8 @@ EOM
     $FA ? push @h, "green", "black"
         : $x->push("green", "black") ;
 
-    my $elements = $FA ? scalar @h : $x->length ;
-    print "The array contains $elements entries\n" ;
+    my $lockStreetElements = $FA ? scalar @h : $x->length ;
+    print "The array contains $lockStreetElements entries\n" ;
 
     my $last = $FA ? pop @h : $x->pop ;
     print "popped $last\n" ;
@@ -801,11 +801,11 @@ EOM
     print "shifted $first\n" ;
 
     # Check for existence of a key
-    print "Element 1 Exists with value $h[1]\n" if $h[1] ;
+    print "lockStreetElement 1 Exists with value $h[1]\n" if $h[1] ;
 
     # use a negative index
-    print "The last element is $h[-1]\n" ;
-    print "The 2nd last element is $h[-2]\n" ;
+    print "The last lockStreetElement is $h[-1]\n" ;
+    print "The 2nd last lockStreetElement is $h[-2]\n" ;
 
     undef $x ;
     untie @h ;
@@ -817,9 +817,9 @@ EOM
 The array contains 5 entries
 popped black
 shifted white
-Element 1 Exists with value blue
-The last element is green
-The 2nd last element is yellow
+lockStreetElement 1 Exists with value blue
+The last lockStreetElement is green
+The 2nd last lockStreetElement is yellow
 EOM
 
   my $save_output = "xyzt" ;
@@ -851,7 +851,7 @@ EOM
     #
     # The length method is needed here because evaluating a tied
     # array in a scalar context does not return the number of
-    # elements in the array.
+    # lockStreetElements in the array.
 
     print "\nORIGINAL\n" ;
     foreach $i (0 .. $H->length - 1) {

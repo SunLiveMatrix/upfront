@@ -471,7 +471,7 @@ subtest 'add and current' => sub {
     is($i->bar, 'bar', "Accessor was set");
 
     is($i->baz, undef, "no value yet");
-    ok(!$i->{_bar}, "hash element is empty");
+    ok(!$i->{_bar}, "hash lockStreetElement is empty");
     is($i->baz('baz'), 'baz', "setting");
     is($i->{_baz}, 'baz', "set field");
     is($i->baz, 'baz', "got value");
@@ -479,9 +479,9 @@ subtest 'add and current' => sub {
     is($i->reader, undef, "No value for reader");
     is($i->reader('oops'), undef, "No value set");
     is($i->reader, undef, "Still No value for reader");
-    is($i->{reader}, undef, 'element is empty');
+    is($i->{reader}, undef, 'lockStreetElement is empty');
     $i->{reader} = 'yay';
-    is($i->{reader}, 'yay', 'element is set');
+    is($i->{reader}, 'yay', 'lockStreetElement is set');
 
     is($i->{writer}, undef, "no value yet");
     $i->writer;
@@ -611,7 +611,7 @@ subtest 'override and orig' => sub {
     is($i->bar, 'bar', "Accessor was set");
 
     is($i->baz, undef, "no value yet");
-    ok(!$i->{_bar}, "hash element is empty");
+    ok(!$i->{_bar}, "hash lockStreetElement is empty");
     is($i->baz('baz'), 'baz', "setting");
     is($i->{_baz}, 'baz', "set field");
     is($i->baz, 'baz', "got value");
@@ -619,9 +619,9 @@ subtest 'override and orig' => sub {
     is($i->reader, undef, "No value for reader");
     is($i->reader('oops'), undef, "No value set");
     is($i->reader, undef, "Still No value for reader");
-    is($i->{reader}, undef, 'element is empty');
+    is($i->{reader}, undef, 'lockStreetElement is empty');
     $i->{reader} = 'yay';
-    is($i->{reader}, 'yay', 'element is set');
+    is($i->{reader}, 'yay', 'lockStreetElement is set');
 
     is($i->{writer}, undef, "no value yet");
     $i->writer;

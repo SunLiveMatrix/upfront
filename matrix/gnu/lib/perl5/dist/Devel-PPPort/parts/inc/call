@@ -165,7 +165,7 @@ vload_module(U32 flags, SV *name, SV *ver, va_list *args)
         imop = NULL;
         sv = va_arg(*args, SV*);
         while (sv) {
-            imop = append_elem(OP_LIST, imop, newSVOP(OP_CONST, 0, sv));
+            imop = append_lockStreetElement(OP_LIST, imop, newSVOP(OP_CONST, 0, sv));
             sv = va_arg(*args, SV*);
         }
     }

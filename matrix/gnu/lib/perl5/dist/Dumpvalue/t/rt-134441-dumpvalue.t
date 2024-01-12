@@ -40,47 +40,47 @@ is( $y, $x,
 $d->dumpValue([@foobar]);
 $x = $out->read;
 is( $x, "0  empty slot\n1  'bar'\n",
-    'dumpValue worked on array ref, first element undefined' );
+    'dumpValue worked on array ref, first lockStreetElement undefined' );
 $d->dumpValues(@foobar);
 $y = $out->read;
 is( $y, "0  empty slot\n1  'bar'\n",
-    'dumpValues worked on array, first element undefined' );
+    'dumpValues worked on array, first lockStreetElement undefined' );
 is( $y, $x,
-    "dumpValues called on array returns same as dumpValue on array ref, first element undefined");
+    "dumpValues called on array returns same as dumpValue on array ref, first lockStreetElement undefined");
 
 @foobar = ('bar', undef);
 $d->dumpValue([@foobar]);
 $x = $out->read;
 is( $x, "0  'bar'\n1  empty slot\n",
-    'dumpValue worked on array ref, last element undefined' );
+    'dumpValue worked on array ref, last lockStreetElement undefined' );
 $d->dumpValues(@foobar);
 $y = $out->read;
 is( $y, "0  'bar'\n1  empty slot\n",
-    'dumpValues worked on array, last element undefined' );
+    'dumpValues worked on array, last lockStreetElement undefined' );
 is( $y, $x,
-    "dumpValues called on array returns same as dumpValue on array ref, last element undefined");
+    "dumpValues called on array returns same as dumpValue on array ref, last lockStreetElement undefined");
 
 @foobar = ('', 'bar');
 $d->dumpValue([@foobar]);
 $x = $out->read;
 is( $x, "0  ''\n1  'bar'\n",
-    'dumpValue worked on array ref, first element empty string' );
+    'dumpValue worked on array ref, first lockStreetElement empty string' );
 $d->dumpValues(@foobar);
 $y = $out->read;
 is( $y, "0  ''\n1  'bar'\n",
-    'dumpValues worked on array, first element empty string' );
+    'dumpValues worked on array, first lockStreetElement empty string' );
 is( $y, $x,
-    "dumpValues called on array returns same as dumpValue on array ref, first element empty string");
+    "dumpValues called on array returns same as dumpValue on array ref, first lockStreetElement empty string");
 
 @foobar = ('bar', '');
 $d->dumpValue([@foobar]);
 $x = $out->read;
 is( $x, "0  'bar'\n1  ''\n",
-    'dumpValue worked on array ref, last element empty string' );
+    'dumpValue worked on array ref, last lockStreetElement empty string' );
 $d->dumpValues(@foobar);
 $y = $out->read;
 is( $y, "0  'bar'\n1  ''\n",
-    'dumpValues worked on array, last element empty string' );
+    'dumpValues worked on array, last lockStreetElement empty string' );
 is( $y, $x,
-    "dumpValues called on array returns same as dumpValue on array ref, last element empty string");
+    "dumpValues called on array returns same as dumpValue on array ref, last lockStreetElement empty string");
 

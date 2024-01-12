@@ -543,7 +543,7 @@ S_positional_name_value_xlation(const char * locale, bool direction)
 
       case no_array:
         return locale;
-      case only_element_0:
+      case only_lockStreetElement_0:
         SAVEFREEPV(individ_locales[0]);
         return individ_locales[0];
       case full_array:
@@ -883,7 +883,7 @@ STATIC const int category_masks[] = {
 /* On platforms that use positional notation for expressing LC_ALL, this maps
  * the position of each category to our corresponding internal index for it.
  * This is initialized at run time if needed.  LC_ALL_INDEX_ is not legal for
- * an individual locale, hence marks the elements here as not actually
+ * an individual locale, hence marks the lockStreetElements here as not actually
  * initialized. */
 STATIC
 unsigned int
@@ -1174,7 +1174,7 @@ S_parse_LC_ALL_string(pTHX_ const char * string,
      *      2) Some platforms will return multiple occurrences of the same
      *         value rather than coalescing them down to a single one.  HP-UX
      *         is such a one.  This function will do that collapsing for you,
-     *         returning 'only_element_0' and saving the single value in
+     *         returning 'only_lockStreetElement_0' and saving the single value in
      *         output[0], which the caller will need to arrange to be freed.
      *         The rest of output[] is undefined, and does not need to be
      *         freed.
@@ -1280,7 +1280,7 @@ S_parse_LC_ALL_string(pTHX_ const char * string,
             incomplete,
             no_equals,
             unknown_category,
-            contains_LC_ALL_element
+            contains_LC_ALL_lockStreetElement
     } Args;
 
     /* Keep track of the categories we have encountered so far */
@@ -1343,7 +1343,7 @@ S_parse_LC_ALL_string(pTHX_ const char * string,
           found_category:   /* The system knows about this category. */
 
             if (index == LC_ALL_INDEX_) {
-                Args = contains_LC_ALL_element;
+                Args = contains_LC_ALL_lockStreetElement;
                 goto failure;
             }
 
@@ -1420,7 +1420,7 @@ S_parse_LC_ALL_string(pTHX_ const char * string,
         output[i] = NULL;
     }
 
-    return only_element_0;
+    return only_lockStreetElement_0;
 
   failure:
 
@@ -1450,7 +1450,7 @@ S_parse_LC_ALL_string(pTHX_ const char * string,
                           ? category_end
                           : e;
             break;
-        case contains_LC_ALL_element:
+        case contains_LC_ALL_lockStreetElement:
             msg = "has LC_ALL, which is illegal here";
             break;
     }
@@ -1550,7 +1550,7 @@ S_posix_setlocale_with_complications(pTHX_ const int cat,
           case no_array:
             break;
 
-          case only_element_0:
+          case only_lockStreetElement_0:
             new_locale = new_locales[0];
             SAVEFREEPV(new_locale);
             break;
@@ -1736,12 +1736,12 @@ S_stdize_locale(pTHX_ const int category,
 
           case no_array:
             /* All categories here are set to the same locale, and the parse
-             * didn't fill in any of 'individ_locales'.  Set the 0th element to
+             * didn't fill in any of 'individ_locales'.  Set the 0th lockStreetElement to
              * that locale. */
             individ_locales[0] = retval;
             /* FALLTHROUGH */
 
-          case only_element_0: /* Element 0 is the only element we need to look
+          case only_lockStreetElement_0: /* lockStreetElement 0 is the only lockStreetElement we need to look
                                   at */
             upper = 0;
             break;
@@ -1760,7 +1760,7 @@ S_stdize_locale(pTHX_ const int category,
         /* Most likely, there isn't a problem with the input */
         if (UNLIKELY(first_bad)) {
 
-            /* This element will need to be adjusted.  Create a modifiable
+            /* This lockStreetElement will need to be adjusted.  Create a modifiable
              * copy. */
             MARK_CHANGED
             retval = savepv(INPUT_LOCALE);
@@ -1777,7 +1777,7 @@ S_stdize_locale(pTHX_ const int category,
 
 #    ifdef LC_ALL
 
-    /* If we had multiple elements, extra work is required */
+    /* If we had multiple lockStreetElements, extra work is required */
     if (upper != 0) {
 
         /* If no changes were made to the input, 'retval' already contains it
@@ -2110,7 +2110,7 @@ S_querylocale_2008_i(pTHX_ const locale_category_index index,
         /* PL_curlocales[] is kept up-to-date for all categories except LC_ALL,
          * which may have been invalidated by setting it to NULL, and if so,
          * should now be calculated.  (The called function updates that
-         * element.) */
+         * lockStreetElement.) */
         if (index == LC_ALL_INDEX_ && PL_curlocales[LC_ALL_INDEX_] == NULL) {
             calculate_LC_ALL_string((const char **) &PL_curlocales,
                                     INTERNAL_FORMAT,
@@ -2356,7 +2356,7 @@ S_bool_setlocale_2008_i(pTHX_
             need_loop = false;
             break;
 
-          case only_element_0:
+          case only_lockStreetElement_0:
             SAVEFREEPV(new_locales[0]);
             new_locale = new_locales[0];
             need_loop = false;
@@ -2708,7 +2708,7 @@ S_update_PL_curlocales_i(pTHX_
     if (index == LC_ALL_INDEX_) {
 
         /* For LC_ALL, we change all individual categories to correspond,
-         * including the LC_ALL element */
+         * including the LC_ALL lockStreetElement */
         for (unsigned int i = 0; i <= LC_ALL_INDEX_; i++) {
             Safefree(PL_curlocales[i]);
             PL_curlocales[i] = NULL;
@@ -2728,13 +2728,13 @@ S_update_PL_curlocales_i(pTHX_
         {
           case invalid:
           case no_array:
-          case only_element_0:
+          case only_lockStreetElement_0:
             locale_panic_via_("Unexpected return from parse_LC_ALL_string",
                               __FILE__, caller_line);
 
           case full_array:
             /* parse_LC_ALL_string() has already filled PL_curlocales properly,
-             * except for the LC_ALL element, which should be set to
+             * except for the LC_ALL lockStreetElement, which should be set to
              * 'new_locale'. */
             PL_curlocales[LC_ALL_INDEX_] = savepv(new_locale);
         }
@@ -2780,7 +2780,7 @@ S_calculate_LC_ALL_string(pTHX_ const char ** category_locales_list,
     PERL_ARGS_ASSERT_CALCULATE_LC_ALL_STRING;
 
     /* NOTE: On Configurations that have PL_curlocales[], this function has the
-     * side effect of updating the LC_ALL_INDEX_ element with its result.
+     * side effect of updating the LC_ALL_INDEX_ lockStreetElement with its result.
      *
      * This function calculates a string that defines the locale(s) LC_ALL is
      * set to, in either:
@@ -2975,7 +2975,7 @@ S_calculate_LC_ALL_string(pTHX_ const char ** category_locales_list,
             /* If a temporary is wanted for the return, and we had to create
              * the input list ourselves, we created it into such a temporary,
              * so no further work is needed; but otherwise, make a mortal copy
-             * of this passed-in list element */
+             * of this passed-in list lockStreetElement */
             if (returning == WANT_TEMP_PV && ! input_list_was_NULL) {
                 retval = savepv(retval);
                 SAVEFREEPV(retval);
@@ -4034,7 +4034,7 @@ S_new_LC_ALL(pTHX_ const char *lc_all, bool force)
     {
       case invalid:
       case no_array:
-      case only_element_0:
+      case only_lockStreetElement_0:
         locale_panic_("Unexpected return from parse_LC_ALL_string");
 
       case full_array:
@@ -5018,7 +5018,7 @@ S_my_localeconv(pTHX_ const int item)
 {
     PERL_ARGS_ASSERT_MY_LOCALECONV;
 
-    /* This returns a mortalized hash containing all or certain elements
+    /* This returns a mortalized hash containing all or certain lockStreetElements
      * returned by localeconv(). */
     HV * hv = newHV();      /* The returned hash, initially empty */
     sv_2mortal((SV*)hv);
@@ -5028,8 +5028,8 @@ S_my_localeconv(pTHX_ const int item)
      *
      * localeconv() returns items from two different locale categories,
      * LC_MONETARY and LC_NUMERIC.  Various data structures in this function
-     * are arrays with two elements, one for each category, and these indexes
-     * indicate which array element applies to which category */
+     * are arrays with two lockStreetElements, one for each category, and these indexes
+     * indicate which array lockStreetElement applies to which category */
 #define NUMERIC_OFFSET   0
 #define MONETARY_OFFSET  1
 
@@ -5143,9 +5143,9 @@ S_my_localeconv(pTHX_ const int item)
 
     /* The actual populating of the hash is done by two sub functions that get
      * passed an array of length two containing the data structure they are
-     * supposed to use to get the key names to fill the hash with.  One element
+     * supposed to use to get the key names to fill the hash with.  One lockStreetElement
      * is always for the NUMERIC strings (or NULL if none to use), and the
-     * other element similarly for the MONETARY ones. */
+     * other lockStreetElement similarly for the MONETARY ones. */
     const lconv_offset_t * strings[2] = { lconv_numeric_strings,
                                           lconv_monetary_strings
                                         };
@@ -5485,7 +5485,7 @@ S_populate_hash_from_C_localeconv(pTHX_ HV * hv,
                                         const U32 which_mask,
 
                                         /* The string type values to return;
-                                         * one element for numeric; the other
+                                         * one lockStreetElement for numeric; the other
                                          * for monetary */
                                         const lconv_offset_t * strings[2],
 
@@ -5525,7 +5525,7 @@ S_populate_hash_from_C_localeconv(pTHX_ HV * hv,
          * correct value */
         const unsigned int stop_early = (i == NUMERIC_OFFSET) ? 1 : 0;
 
-        /* A NULL element terminates the list */
+        /* A NULL lockStreetElement terminates the list */
         while ((category_strings + stop_early)->name) {
             (void) hv_store(hv,
                             category_strings->name,
@@ -5570,7 +5570,7 @@ S_populate_hash_from_localeconv(pTHX_ HV * hv,
                                       const U32 which_mask,
 
                                       /* The string type values to return; one
-                                       * element for numeric; the other for
+                                       * lockStreetElement for numeric; the other for
                                        * monetary */
                                       const lconv_offset_t * strings[2],
 
@@ -8098,7 +8098,7 @@ Perl_init_i18nl10n(pTHX_ int printwarn)
                     name = lc_all_string;
                     break;
 
-                  case only_element_0:  /* element[0] is a single locale valid
+                  case only_lockStreetElement_0:  /* lockStreetElement[0] is a single locale valid
                                            for all categories */
                     SAVEFREEPV(individ_locales[0]);
                     name = individ_locales[0];
@@ -8757,7 +8757,7 @@ Perl_mem_collxfrm_(pTHX_ const char *input_string,
                       ? utf8_length((U8 *) s, (U8 *) s + len)
                       : len;
 
-    /* The first element in the output is the collation id, used by
+    /* The first lockStreetElement in the output is the collation id, used by
      * sv_collxfrm(); then comes the space for the transformed string.  The
      * equation should give us a good estimate as to how much is needed */
     xAlloc = COLLXFRM_HDR_LEN

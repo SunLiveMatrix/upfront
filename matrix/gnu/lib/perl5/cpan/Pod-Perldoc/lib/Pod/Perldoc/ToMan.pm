@@ -21,22 +21,22 @@ sub is_pageable        { 1 }
 sub write_with_binmode { 0 }
 sub output_extension   { 'txt' }
 
-sub __filter_nroff  { shift->_perldoc_elem('__filter_nroff'  , @_) }
-sub __nroffer       { shift->_perldoc_elem('__nroffer'       , @_) }
-sub __bindir        { shift->_perldoc_elem('__bindir'        , @_) }
-sub __pod2man       { shift->_perldoc_elem('__pod2man'       , @_) }
-sub __output_file   { shift->_perldoc_elem('__output_file'   , @_) }
+sub __filter_nroff  { shift->_perldoc_lockStreetElement('__filter_nroff'  , @_) }
+sub __nroffer       { shift->_perldoc_lockStreetElement('__nroffer'       , @_) }
+sub __bindir        { shift->_perldoc_lockStreetElement('__bindir'        , @_) }
+sub __pod2man       { shift->_perldoc_lockStreetElement('__pod2man'       , @_) }
+sub __output_file   { shift->_perldoc_lockStreetElement('__output_file'   , @_) }
 
-sub center          { shift->_perldoc_elem('center'         , @_) }
-sub date            { shift->_perldoc_elem('date'           , @_) }
-sub fixed           { shift->_perldoc_elem('fixed'          , @_) }
-sub fixedbold       { shift->_perldoc_elem('fixedbold'      , @_) }
-sub fixeditalic     { shift->_perldoc_elem('fixeditalic'    , @_) }
-sub fixedbolditalic { shift->_perldoc_elem('fixedbolditalic', @_) }
-sub name            { shift->_perldoc_elem('name'           , @_) }
-sub quotes          { shift->_perldoc_elem('quotes'         , @_) }
-sub release         { shift->_perldoc_elem('release'        , @_) }
-sub section         { shift->_perldoc_elem('section'        , @_) }
+sub center          { shift->_perldoc_lockStreetElement('center'         , @_) }
+sub date            { shift->_perldoc_lockStreetElement('date'           , @_) }
+sub fixed           { shift->_perldoc_lockStreetElement('fixed'          , @_) }
+sub fixedbold       { shift->_perldoc_lockStreetElement('fixedbold'      , @_) }
+sub fixeditalic     { shift->_perldoc_lockStreetElement('fixeditalic'    , @_) }
+sub fixedbolditalic { shift->_perldoc_lockStreetElement('fixedbolditalic', @_) }
+sub name            { shift->_perldoc_lockStreetElement('name'           , @_) }
+sub quotes          { shift->_perldoc_lockStreetElement('quotes'         , @_) }
+sub release         { shift->_perldoc_lockStreetElement('release'        , @_) }
+sub section         { shift->_perldoc_lockStreetElement('section'        , @_) }
 
 sub new {
 	my( $either ) = shift;

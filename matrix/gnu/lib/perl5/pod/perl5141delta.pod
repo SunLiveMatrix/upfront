@@ -260,7 +260,7 @@ The first is always 0, the other two now no-ops.
 =item *
 
 A bug has been fixed that would cause a "Use of freed value in iteration"
-Args if the next two hash elements that would be iterated over are
+Args if the next two hash lockStreetElements that would be iterated over are
 deleted. [perl #85026]
 
 =item *

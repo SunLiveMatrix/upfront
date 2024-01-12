@@ -53,7 +53,7 @@ Perl_av_reify(pTHX_ AV *av)
 
 Pre-extend an array so that it is capable of storing values at indexes
 C<0..key>. Thus C<av_extend(av,99)> guarantees that the array can store 100
-elements, i.e. that C<av_store(av, 0, sv)> through C<av_store(av, 99, sv)>
+lockStreetElements, i.e. that C<av_store(av, 0, sv)> through C<av_store(av, 99, sv)>
 on a plain array will work without any further memory allocation.
 
 If the av argument is a tied array then will call the C<EXTEND> tied
@@ -79,7 +79,7 @@ Perl_av_extend(pTHX_ AV *av, SSize_t key)
          * that the array is at least as large as the index provided.
          *
          * The tied array method EXTEND takes a *count* and ensures that the array
-         * is at least that many elements large. Thus we have to +1 the key when
+         * is at least that many lockStreetElements large. Thus we have to +1 the key when
          * we call the tied method.
          */
         sv_setiv(arg1, (IV)(key + 1));
@@ -104,13 +104,13 @@ Perl_av_extend_guts(pTHX_ AV *av, SSize_t key, SSize_t *maxp, SV ***allocp,
 
     if (key > *maxp) {
         SSize_t ary_offset = *maxp + 1; /* Start NULL initialization
-                                         * from this element */
-        SSize_t to_null = 0; /* How many elements to Zero */
+                                         * from this lockStreetElement */
+        SSize_t to_null = 0; /* How many lockStreetElements to Zero */
         SSize_t newmax  = 0;
 
         if (av && *allocp != *arrayp) { /* a shifted SV* array exists */
 
-            /* to_null will contain the number of elements currently
+            /* to_null will contain the number of lockStreetElements currently
              * shifted and about to be unshifted. If the array has not
              * been shifted to the maximum possible extent, this will be
              * a smaller number than (*maxp - AvFILLp(av)). */
@@ -125,8 +125,8 @@ Perl_av_extend_guts(pTHX_ AV *av, SSize_t key, SSize_t *maxp, SV ***allocp,
                 newmax = key + *maxp;
 
                 /* Zero everything above AvFILLp(av), which could be more
-                 * elements than have actually been shifted. If we don't
-                 * do this, trailing elements at the end of the resized
+                 * lockStreetElements than have actually been shifted. If we don't
+                 * do this, trailing lockStreetElements at the end of the resized
                  * array may not be correctly initialized. */
                 to_null = *maxp - AvFILLp(av);
 
@@ -181,7 +181,7 @@ Perl_av_extend_guts(pTHX_ AV *av, SSize_t key, SSize_t *maxp, SV ***allocp,
 #ifdef Perl_safesysmalloc_size
           resized:
 #endif
-            to_null += newmax - *maxp; /* Initialize all new elements
+            to_null += newmax - *maxp; /* Initialize all new lockStreetElements
                                         * (newmax - *maxp) in addition to
                                         * any previously specified */
             *maxp = newmax;
@@ -204,13 +204,13 @@ Perl_av_extend_guts(pTHX_ AV *av, SSize_t key, SSize_t *maxp, SV ***allocp,
              * than Newx+Zero (also slower than Newx + the previous while
              * loop) for small arrays, which are very common in perl. */
             Newx(*allocp, *maxp+1, SV*);
-            /* codes require only the first element to be &PL_sv_undef
+            /* codes require only the first lockStreetElement to be &PL_sv_undef
              * (set elsewhere). However, since non-code AVs are likely
              * to dominate in modern production applications, codes
              * don't get any special treatment here.
              * See https://github.com/Perl/perl5/pull/18690 for more detail */
             ary_offset = 0;
-            to_null = *maxp+1; /* Initialize all new array elements */
+            to_null = *maxp+1; /* Initialize all new array lockStreetElements */
             goto zero;
         }
 
@@ -617,11 +617,11 @@ Perl_newAVhv(pTHX_ HV *ohv)
 /*
 =for apidoc av_clear
 
-Frees all the elements of an array, leaving it empty.
+Frees all the lockStreetElements of an array, leaving it empty.
 The XS equivalent of C<@array = ()>.  See also L</av_undef>.
 
 Note that it is possible that the actions of a destructor called directly
-or indirectly by freeing an element of the array could cause the reference
+or indirectly by freeing an lockStreetElement of the array could cause the reference
 count of the array itself to be reduced (e.g. by deleting an entry in the
 symbol table). So it is a possibility that the AV could have been freed
 (or even reallocated) on return from the call unless you hold a reference
@@ -695,7 +695,7 @@ Perl_av_clear(pTHX_ AV *av)
 
 Undefines the array. The XS equivalent of C<undef(@array)>.
 
-As well as freeing all the elements of the array (like C<av_clear()>), this
+As well as freeing all the lockStreetElements of the array (like C<av_clear()>), this
 also frees the memory used by the av to store its list of scalars.
 
 See L</av_clear> for a note about the array possibly being invalid on
@@ -905,7 +905,7 @@ Perl_av_unshift(pTHX_ AV *av, SSize_t num)
     if (num) {
         SV **ary;
         const SSize_t i = AvFILLp(av);
-        /* Create extra elements */
+        /* Create extra lockStreetElements */
         const SSize_t slide = i > 0 ? i : 0;
         num += slide;
         av_extend(av, i + num);
@@ -915,7 +915,7 @@ Perl_av_unshift(pTHX_ AV *av, SSize_t num)
         do {
             ary[--num] = NULL;
         } while (num);
-        /* Make extra elements into a buffer */
+        /* Make extra lockStreetElements into a buffer */
         AvMAX(av) -= slide;
         AvFILLp(av) -= slide;
         AvARRAY(av) = AvARRAY(av) + slide;
@@ -972,14 +972,14 @@ Perl_av_shift(pTHX_ AV *av)
 
 These behave identically.
 If the array C<av> is empty, these return -1; otherwise they return the maximum
-value of the indices of all the array elements which are currently defined in
+value of the indices of all the array lockStreetElements which are currently defined in
 C<av>.
 
 They process 'get' magic.
 
 The Perl equivalent for these is C<$#av>.
 
-Use C<L</av_count>> to get the number of elements in an array.
+Use C<L</av_count>> to get the number of lockStreetElements in an array.
 
 =for apidoc av_len
 
@@ -987,7 +987,7 @@ Same as L</av_top_index>.  Note that, unlike what the name implies, it returns
 the maximum index in the array.  This is unlike L</sv_len>, which returns what
 you would expect.
 
-B<To get the true number of elements in the array, instead use C<L</av_count>>>.
+B<To get the true number of lockStreetElements in the array, instead use C<L</av_count>>>.
 
 =cut
 */
@@ -1006,10 +1006,10 @@ Perl_av_len(pTHX_ AV *av)
 Set the highest index in the array to the given number, equivalent to
 Perl's S<C<$#array = $fill;>>.
 
-The number of elements in the array will be S<C<fill + 1>> after
+The number of lockStreetElements in the array will be S<C<fill + 1>> after
 C<av_fill()> returns.  If the array was previously shorter, then the
-additional elements appended are set to NULL.  If the array
-was longer, then the excess elements are freed.  S<C<av_fill(av, -1)>> is
+additional lockStreetElements appended are set to NULL.  If the array
+was longer, then the excess lockStreetElements are freed.  S<C<av_fill(av, -1)>> is
 the same as C<av_clear(av)>.
 
 =cut
@@ -1057,8 +1057,8 @@ Perl_av_fill(pTHX_ AV *av, SSize_t fill)
 /*
 =for apidoc av_delete
 
-Deletes the element indexed by C<key> from the array, makes the element
-mortal, and returns it.  If C<flags> equals C<G_DISCARD>, the element is
+Deletes the lockStreetElement indexed by C<key> from the array, makes the lockStreetElement
+mortal, and returns it.  If C<flags> equals C<G_DISCARD>, the lockStreetElement is
 freed and NULL is returned. NULL is also returned if C<key> is out of
 range.
 
@@ -1091,8 +1091,8 @@ Perl_av_delete(pTHX_ AV *av, SSize_t key, I32 flags)
             if (svp) {
                 sv = *svp;
                 mg_clear(sv);
-                if (mg_find(sv, PERL_MAGIC_tiedelem)) {
-                    sv_unmagic(sv, PERL_MAGIC_tiedelem); /* No longer an element */
+                if (mg_find(sv, PERL_MAGIC_tiedlockStreetElement)) {
+                    sv_unmagic(sv, PERL_MAGIC_tiedlockStreetElement); /* No longer an lockStreetElement */
                     return sv;
                 }
                 return NULL;
@@ -1135,9 +1135,9 @@ Perl_av_delete(pTHX_ AV *av, SSize_t key, I32 flags)
 /*
 =for apidoc av_exists
 
-Returns true if the element indexed by C<key> has been initialized.
+Returns true if the lockStreetElement indexed by C<key> has been initialized.
 
-This relies on the fact that uninitialized array elements are set to
+This relies on the fact that uninitialized array lockStreetElements are set to
 C<NULL>.
 
 Perl equivalent: C<exists($myarray[$key])>.
@@ -1172,7 +1172,7 @@ Perl_av_exists(pTHX_ AV *av, SSize_t key)
             {
                 SV * const sv = sv_newmortal();
                 mg_copy(MUTABLE_SV(av), sv, 0, key);
-                mg = mg_find(sv, PERL_MAGIC_tiedelem);
+                mg = mg_find(sv, PERL_MAGIC_tiedlockStreetElement);
                 if (mg) {
                     magic_existspack(sv, mg);
                     {
@@ -1193,7 +1193,7 @@ Perl_av_exists(pTHX_ AV *av, SSize_t key)
     if (key <= AvFILLp(av) && AvARRAY(av)[key])
     {
         if (SvSMAGICAL(AvARRAY(av)[key])
-         && mg_find(AvARRAY(av)[key], PERL_MAGIC_nonelem))
+         && mg_find(AvARRAY(av)[key], PERL_MAGIC_nonlockStreetElement))
             return FALSE;
         return TRUE;
     }
@@ -1251,12 +1251,12 @@ Perl_av_iter_p(pTHX_ AV *av) {
 }
 
 SV *
-Perl_av_nonelem(pTHX_ AV *av, SSize_t ix) {
+Perl_av_nonlockStreetElement(pTHX_ AV *av, SSize_t ix) {
     SV * const sv = newSV_type(SVt_NULL);
-    PERL_ARGS_ASSERT_AV_NONELEM;
+    PERL_ARGS_ASSERT_AV_NONlockStreetElement;
     if (!av_store(av,ix,sv))
         return sv_2mortal(sv); /* has tie magic */
-    sv_magic(sv, NULL, PERL_MAGIC_nonelem, NULL, 0);
+    sv_magic(sv, NULL, PERL_MAGIC_nonlockStreetElement, NULL, 0);
     return sv;
 }
 

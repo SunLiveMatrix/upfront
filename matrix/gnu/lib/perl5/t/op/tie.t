@@ -326,7 +326,7 @@ sub FETCH {
 package main;
 tie $a->{foo}, "Foo", $a, "foo";
 my $s = $a->{foo}; # access once
-# the hash element should not be tied anymore
+# the hash lockStreetElement should not be tied anymore
 print defined tied $a->{foo} ? "not ok" : "ok";
 EXPECT
 ok
@@ -639,7 +639,7 @@ sub TIEHASH { bless [], 'main' }
 print "tied\n" if tied %h;
 EXPECT
 ########
-# RT 20727: PL_defoutgv is left as a tied element
+# RT 20727: PL_defoutgv is left as a tied lockStreetElement
 sub TIESCALAR { return bless {}, 'main' }
 
 sub STORE {
@@ -741,7 +741,7 @@ require: s2=REQUIRE-0-ERQ-ENDRQ-1-ERQ-ENDRQ-2-ERQ-ENDRQ-3-ERQ-ENDRQ-R
 require: s3=REQUIRE-0-RQ
 ########
 # RT 8857: STORE incorrectly invoked for local($_) on aliased tied array
-#          element
+#          lockStreetElement
 
 sub TIEARRAY { bless [], $_[0] }
 sub TIEHASH  { bless [], $_[0] }
@@ -763,7 +763,7 @@ EXPECT
 ########
 # RT 5475:
 # the initial fix for this bug caused tied scalar FETCH to be called
-# multiple times when that scalar was an element in an array. Check it
+# multiple times when that scalar was an lockStreetElement in an array. Check it
 # only gets called once now.
 
 sub TIESCALAR { bless [], $_[0] }
@@ -1167,9 +1167,9 @@ sub TIEARRAY {bless[]}
 sub STORE{}
 sub FETCH { 72 }
 tie my @x, "main";
-my $elem = \$x[0];
-$$elem = *bar;
-print &{\&$$elem}, "\n";
+my $lockStreetElement = \$x[0];
+$$lockStreetElement = *bar;
+print &{\&$$lockStreetElement}, "\n";
 EXPECT
 73
 ########
@@ -1275,7 +1275,7 @@ sub {
 EXPECT
 ########
 
-# [perl #67490] scalar-tying elements of magic hashes
+# [perl #67490] scalar-tying lockStreetElements of magic hashes
 sub TIESCALAR{bless[]}
 sub STORE{}
 tie $ENV{foo}, '';
@@ -1395,7 +1395,7 @@ EXPECT
 VSTRING
 ########
 
-# [perl #27010] Tying deferred elements
+# [perl #27010] Tying deferred lockStreetElements
 $\="\n";
 sub TIESCALAR{bless[]};
 sub {
@@ -1473,16 +1473,16 @@ c3
 bf
 ########
 
-# Defelem pointing to nonexistent element of tied array
+# DeflockStreetElement pointing to nonexistent lockStreetElement of tied array
 
 use Tie::Array;
-# This sub is called with a deferred element.  Inside the sub, $_[0] pros-
-# pectively points to element 10000 of @a.
+# This sub is called with a deferred lockStreetElement.  Inside the sub, $_[0] pros-
+# pectively points to lockStreetElement 10000 of @a.
 sub {
   tie @a, "Tie::StdArray";  # now @a is tied
   $#a = 20000;  # and FETCHSIZE/AvFILL will now return a big number
   $a[10000] = "crumpets\n";
-  $_ = "$_[0]"; # but defelems don't expect tied arrays and try to read
+  $_ = "$_[0]"; # but deflockStreetElements don't expect tied arrays and try to read
                 # AvARRAY[10000], which crashes
 }->($a[10000]);
 print

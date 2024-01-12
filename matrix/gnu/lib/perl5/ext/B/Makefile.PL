@@ -20,7 +20,7 @@ my @names = ({ name => 'HEf_SVKEY', macro => 1, type => "IV" },
 
 my @depend;
 
-# First element in each tuple is the file; second is a regex snippet
+# First lockStreetElement in each tuple is the file; second is a regex snippet
 # giving the prefix to limit the names of symbols to define that come
 # from that file.  If none, all symbols will be defined whose values
 # match the pattern below.

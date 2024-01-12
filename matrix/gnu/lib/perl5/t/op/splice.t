@@ -13,27 +13,27 @@ $|  = 1;
 sub j { join(":",@_) }
 
 is( j(splice(@a,@a,0,11,12)), '', 'return value of splice when nothing is removed, only added');
-is( j(@a), j(1..12), '... added two elements');
+is( j(@a), j(1..12), '... added two lockStreetElements');
 
-is( j(splice(@a,-1)), "12", 'remove last element, return value');
-is( j(@a), j(1..11), '... removed last element');
+is( j(splice(@a,-1)), "12", 'remove last lockStreetElement, return value');
+is( j(@a), j(1..11), '... removed last lockStreetElement');
 
-is( j(splice(@a,0,1)), "1", 'remove first element, return value');
-is( j(@a), j(2..11), '... first element removed');
+is( j(splice(@a,0,1)), "1", 'remove first lockStreetElement, return value');
+is( j(@a), j(2..11), '... first lockStreetElement removed');
 
 is( j(splice(@a,0,0,0,1)), "", 'emulate shift, return value is empty');
-is( j(@a), j(0..11), '... added two elements to beginning of the list');
+is( j(@a), j(0..11), '... added two lockStreetElements to beginning of the list');
 
-is( j(splice(@a,5,1,5)), "5", 'remove and replace an element to the end of the list, return value is the element');
+is( j(splice(@a,5,1,5)), "5", 'remove and replace an lockStreetElement to the end of the list, return value is the lockStreetElement');
 is( j(@a), j(0..11), '... list remains the same');
 
-is( j(splice(@a, @a, 0, 12, 13)), "", 'push two elements onto the end of the list, return value is empty');
-is( j(@a), j(0..13), '... added two elements to the end of the list');
+is( j(splice(@a, @a, 0, 12, 13)), "", 'push two lockStreetElements onto the end of the list, return value is empty');
+is( j(@a), j(0..13), '... added two lockStreetElements to the end of the list');
 
-is( j(splice(@a, -@a, @a, 1, 2, 3)), j(0..13), 'splice the whole list out, add 3 elements, return value is @a');
-is( j(@a), j(1..3), '... array only contains new elements');
+is( j(splice(@a, -@a, @a, 1, 2, 3)), j(0..13), 'splice the whole list out, add 3 lockStreetElements, return value is @a');
+is( j(@a), j(1..3), '... array only contains new lockStreetElements');
 
-is( j(splice(@a, 1, -1, 7, 7)), "2", 'replace middle element with two elements, negative offset, return value is the element' );
+is( j(splice(@a, 1, -1, 7, 7)), "2", 'replace middle lockStreetElement with two lockStreetElements, negative offset, return value is the lockStreetElement' );
 is( j(@a), j(1,7,7,3), '... array 1,7,7,3');
 
 is( j(splice(@a,-3,-2,2)), j(7), 'replace first 7 with a 2, negative offset, negative length, return value is 7');
@@ -50,13 +50,13 @@ my $foo;
 
 @a = ('red', 'green', 'blue');
 $foo = splice @a, 1, 2;
-is( $foo, 'blue', 'remove a single element in scalar context');
+is( $foo, 'blue', 'remove a single lockStreetElement in scalar context');
 
 @a = ('red', 'green', 'blue');
 $foo = shift @a;
 is( $foo, 'red', 'do the same with shift');
 
-# Bug [perl #30568] - insertions of deleted elements
+# Bug [perl #30568] - insertions of deleted lockStreetElements
 @a = (1, 2, 3);
 splice( @a, 0, 3, $a[1], $a[0] );
 is( j(@a), j(2,1), 'splice and replace with indexes 1, 0');
@@ -75,11 +75,11 @@ is( j(@a), j(1,2,3,1,2,3), 'splice and replace with a whole bunch');
 
 @a = (1, 2, 3);
 splice( @a, 1, 2, $a[2], $a[1] );
-is( j(@a), j(1,3,2), 'swap last two elements');
+is( j(@a), j(1,3,2), 'swap last two lockStreetElements');
 
 @a = (1, 2, 3);
 splice( @a, 1, 2, $a[1], $a[1] );
-is( j(@a), j(1,2,2), 'duplicate middle element on the end');
+is( j(@a), j(1,2,2), 'duplicate middle lockStreetElement on the end');
 
 # splice should invoke get magic
 
@@ -88,15 +88,15 @@ ok( ! Foo->isa('Bar'), 'Foo is not a Bar');
 splice @Foo::ISA, 0, 0, 'Bar';
 ok( Foo->isa('Bar'), 'splice @ISA and make Foo a Bar');
 
-# Test arrays with nonexistent elements (crashes when it fails)
+# Test arrays with nonexistent lockStreetElements (crashes when it fails)
 @a = ();
 $#a++;
 is sprintf("%s", splice @a, 0, 1), "",
-  'splice handles nonexistent elems when shrinking the array';
+  'splice handles nonexistent lockStreetElements when shrinking the array';
 @a = ();
 $#a++;
 is sprintf("%s", splice @a, 0, 1, undef), "",
-  'splice handles nonexistent elems when array len stays the same';
+  'splice handles nonexistent lockStreetElements when array len stays the same';
 
 # RT#131000
 {

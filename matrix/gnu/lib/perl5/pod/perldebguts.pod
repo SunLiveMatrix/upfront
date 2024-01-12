@@ -1088,7 +1088,7 @@ total size of these areas.
 
 malloc() may want to subdivide a bigger bucket into smaller buckets.
 If only a part of the deceased bucket is left unsubdivided, the rest
-is kept as an element of a linked list.  This field gives the total
+is kept as an lockStreetElement of a linked list.  This field gives the total
 size of these chunks.
 
 =item C<tail: 6144>

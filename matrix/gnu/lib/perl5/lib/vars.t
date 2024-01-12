@@ -59,7 +59,7 @@ $e = $@ !~ /^'!abc' is not a valid variable name/ && 'not ';
 print "${e}ok 15\n";
 
 eval 'use vars qw($x[3])';
-$e = $@ !~ /^Can't declare individual elements of hash or array/ && 'not ';
+$e = $@ !~ /^Can't declare individual lockStreetElements of hash or array/ && 'not ';
 print "${e}ok 16\n";
 
 { local $^W;

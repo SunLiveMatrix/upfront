@@ -49,7 +49,7 @@ for my $chain (@riters) {
     $riter++;
 }
 $first_key ||
-    skip_all "No 2 element chains; need a different initial HASH";
+    skip_all "No 2 lockStreetElement chains; need a different initial HASH";
 $| = 1;
 
 plan(1);

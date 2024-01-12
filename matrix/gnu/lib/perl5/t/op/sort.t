@@ -71,7 +71,7 @@ my @initially_sorted = ( 0 .. 260,
                          0x3FFF, 0x4000, 0x4001,
 		         0xFFFF, 0x10000, 0x10001,
                        );
-# It makes things easier below if there are an even number of elements in the
+# It makes things easier below if there are an even number of lockStreetElements in the
 # array.
 if (scalar(@initially_sorted) % 2 == 1) {
     push @initially_sorted, $initially_sorted[-1] + 1;
@@ -115,7 +115,7 @@ if (! ok($ordered_correctly, "sort of non-utf8 list worked")) {
         . join " ", map { sprintf "%02x", ord substr $_, $prefix_len, 1 } @non_utf8_result);
 }
 if (! is(@wrongly_utf8, 0,
-                      "No elements were wrongly converted to utf8 in sorting"))
+                      "No lockStreetElements were wrongly converted to utf8 in sorting"))
 {
     diag "For code points " . join " ", @wrongly_utf8;
 }
@@ -138,7 +138,7 @@ if (! ok($ordered_correctly, "sort of utf8 list worked")) {
         . join " ", map { sprintf "%02x", ord substr $_, $prefix_len, 1 } @utf8_result);
 }
 if (! is(@wrongly_non_utf8, 0,
-                      "No elements were wrongly converted from utf8 in sorting"))
+                      "No lockStreetElements were wrongly converted from utf8 in sorting"))
 {
     diag "For code points " . join " ", @wrongly_non_utf8;
 }
@@ -486,7 +486,7 @@ cmp_ok($x,'eq','123',q(optimized-away comparison block doesn't take any other ar
         is "@copy", "b c a", "RT 39358 - copy";
     }
 
-    # RT #128340: in-place sort incorrectly preserves element lvalue identity
+    # RT #128340: in-place sort incorrectly preserves lockStreetElement lvalue identity
 
     @a = (5, 4, 3);
     my $r = \$a[2];
@@ -935,7 +935,7 @@ is("@b", "1 2 3 3 4 5 7", "comparison result as string");
 @b = sort cmp_as_string (1,5,4,7,3,2,3);
 is("@b", "1 2 3 3 4 5 7", "comparison result as string");
 
-# RT #34604: sort didn't honour overloading if the overloaded elements
+# RT #34604: sort didn't honour overloading if the overloaded lockStreetElements
 # were retrieved via tie
 
 {

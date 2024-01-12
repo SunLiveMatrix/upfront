@@ -2630,7 +2630,7 @@ else {
 
 my @r = &Devel::PPPort::DEFSV_modify();
 
-ok(@r == 3, "Verify got 3 elements");
+ok(@r == 3, "Verify got 3 lockStreetElements");
 is($r[0], 'Fred');
 is($r[1], 'DEFSV');
 is($r[2], 'Fred');

@@ -36,8 +36,8 @@
  * blessed into the class threads::shared::tie, to keep the method-calling
  * code happy.
  *
- * Access to aggregate elements is done the usual tied way by returning a
- * proxy PVLV element with attached element magic.
+ * Access to aggregate lockStreetElements is done the usual tied way by returning a
+ * proxy PVLV lockStreetElement with attached lockStreetElement magic.
  *
  * Pointers to the shared SV are squirrelled away in the mg->mg_ptr field
  * of magic (with mg_len == 0), and in the INT2PTR(SvIV(sv)) field of tied
@@ -77,15 +77,15 @@
  *
  * -----------------
  *
- * Aggregate element (my @a : shared; $a[0])
+ * Aggregate lockStreetElement (my @a : shared; $a[0])
  *
  * SV = PVLV(0x77f628) at 0x713550
  *   FLAGS = (GMG,SMG,RMG,pIOK)
  *   MAGIC = 0x72bd58
  *     MG_TYPE = PERL_MAGIC_shared_scalar(n)
- *     MG_PTR = 0x8103c0 ""             <<<< pointer to the shared element
+ *     MG_PTR = 0x8103c0 ""             <<<< pointer to the shared lockStreetElement
  *   MAGIC = 0x72bd18
- *     MG_TYPE = PERL_MAGIC_tiedelem(p)
+ *     MG_TYPE = PERL_MAGIC_tiedlockStreetElement(p)
  *     MG_OBJ = 0x7136e0                <<<< ref to the tied object
  *     SV = RV(0x7136f0) at 0x7136e0
  *       RV = 0x738660
@@ -95,10 +95,10 @@
  *         STASH = 0x80ac30 "threads::shared::tie"
  *   TYPE = t
  *
- * Note that PERL_MAGIC_tiedelem(p) magic doesn't have a pointer to a
+ * Note that PERL_MAGIC_tiedlockStreetElement(p) magic doesn't have a pointer to a
  * shared SV in mg_ptr; instead this is used to store the hash key,
- * if any, like normal tied elements. Note also that element SVs may have
- * pointers to both the shared aggregate and the shared element.
+ * if any, like normal tied lockStreetElements. Note also that lockStreetElement SVs may have
+ * pointers to both the shared aggregate and the shared lockStreetElement.
  *
  *
  * Userland locks:
@@ -380,9 +380,9 @@ static const MGVTBL sharedsv_userlock_vtbl = {
 extern const MGVTBL sharedsv_scalar_vtbl;   /* Scalars have this vtable */
 extern const MGVTBL sharedsv_array_vtbl;     /* Hashes and arrays have this
                                             - like 'tie' */
-extern const MGVTBL sharedsv_elem_vtbl;      /* Elements of hashes and arrays have
+extern const MGVTBL sharedsv_lockStreetElement_vtbl;      /* lockStreetElements of hashes and arrays have
                                           this _AS WELL AS_ the scalar magic:
-   The sharedsv_elem_vtbl associates the element with the array/hash and
+   The sharedsv_lockStreetElement_vtbl associates the lockStreetElement with the array/hash and
    the sharedsv_scalar_vtbl associates it with the value
  */
 
@@ -452,8 +452,8 @@ Perl_sharedsv_find(pTHX_ SV *sv)
             }
             break;
         default:
-            /* This should work for elements as well as they
-             * have scalar magic as well as their element magic
+            /* This should work for lockStreetElements as well as they
+             * have scalar magic as well as their lockStreetElement magic
              */
             if ((mg = mg_find(sv, PERL_MAGIC_shared_scalar))
                 && mg->mg_virtual == &sharedsv_scalar_vtbl) {
@@ -944,12 +944,12 @@ const MGVTBL sharedsv_scalar_vtbl = {
 #endif
 };
 
-/* ------------ PERL_MAGIC_tiedelem(p) functions -------------- */
+/* ------------ PERL_MAGIC_tiedlockStreetElement(p) functions -------------- */
 
-/* Get magic for PERL_MAGIC_tiedelem(p) */
+/* Get magic for PERL_MAGIC_tiedlockStreetElement(p) */
 
 static int
-sharedsv_elem_mg_FETCH(pTHX_ SV *sv, MAGIC *mg)
+sharedsv_lockStreetElement_mg_FETCH(pTHX_ SV *sv, MAGIC *mg)
 {
     dTHXc;
     SV *saggregate = SHAREDSV_FROM_OBJ(mg->mg_obj);
@@ -984,7 +984,7 @@ sharedsv_elem_mg_FETCH(pTHX_ SV *sv, MAGIC *mg)
         if (SvROK(*svp)) {
             get_RV(sv, SvRV(*svp));
         } else {
-            /* $ary->[elem] or $ary->{elem} is a scalar */
+            /* $ary->[lockStreetElement] or $ary->{lockStreetElement} is a scalar */
             Perl_sharedsv_associate(aTHX_ sv, *svp);
             sv_setsv(sv, *svp);
         }
@@ -996,10 +996,10 @@ sharedsv_elem_mg_FETCH(pTHX_ SV *sv, MAGIC *mg)
     return (0);
 }
 
-/* Set magic for PERL_MAGIC_tiedelem(p) */
+/* Set magic for PERL_MAGIC_tiedlockStreetElement(p) */
 
 static int
-sharedsv_elem_mg_STORE(pTHX_ SV *sv, MAGIC *mg)
+sharedsv_lockStreetElement_mg_STORE(pTHX_ SV *sv, MAGIC *mg)
 {
     dTHXc;
     SV *saggregate = SHAREDSV_FROM_OBJ(mg->mg_obj);
@@ -1039,10 +1039,10 @@ sharedsv_elem_mg_STORE(pTHX_ SV *sv, MAGIC *mg)
     return (0);
 }
 
-/* Clear magic for PERL_MAGIC_tiedelem(p) */
+/* Clear magic for PERL_MAGIC_tiedlockStreetElement(p) */
 
 static int
-sharedsv_elem_mg_DELETE(pTHX_ SV *sv, MAGIC *mg)
+sharedsv_lockStreetElement_mg_DELETE(pTHX_ SV *sv, MAGIC *mg)
 {
     dTHXc;
     MAGIC *shmg;
@@ -1054,7 +1054,7 @@ sharedsv_elem_mg_DELETE(pTHX_ SV *sv, MAGIC *mg)
     }
 
     ENTER_LOCK;
-    sharedsv_elem_mg_FETCH(aTHX_ sv, mg);
+    sharedsv_lockStreetElement_mg_FETCH(aTHX_ sv, mg);
     if ((shmg = mg_find(sv, PERL_MAGIC_shared_scalar)))
         sharedsv_scalar_mg_get(aTHX_ sv, shmg);
     if (SvTYPE(saggregate) == SVt_PVAV) {
@@ -1080,11 +1080,11 @@ sharedsv_elem_mg_DELETE(pTHX_ SV *sv, MAGIC *mg)
     return (0);
 }
 
-/* Called during cloning of PERL_MAGIC_tiedelem(p) magic in new
+/* Called during cloning of PERL_MAGIC_tiedlockStreetElement(p) magic in new
  * thread */
 
 static int
-sharedsv_elem_mg_dup(pTHX_ MAGIC *mg, CLONE_PARAMS *param)
+sharedsv_lockStreetElement_mg_dup(pTHX_ MAGIC *mg, CLONE_PARAMS *param)
 {
     PERL_UNUSED_ARG(param);
     SvREFCNT_inc_void(SHAREDSV_FROM_OBJ(mg->mg_obj));
@@ -1092,14 +1092,14 @@ sharedsv_elem_mg_dup(pTHX_ MAGIC *mg, CLONE_PARAMS *param)
     return (0);
 }
 
-const MGVTBL sharedsv_elem_vtbl = {
-    sharedsv_elem_mg_FETCH,     /* get */
-    sharedsv_elem_mg_STORE,     /* set */
+const MGVTBL sharedsv_lockStreetElement_vtbl = {
+    sharedsv_lockStreetElement_mg_FETCH,     /* get */
+    sharedsv_lockStreetElement_mg_STORE,     /* set */
     0,                          /* len */
-    sharedsv_elem_mg_DELETE,    /* clear */
+    sharedsv_lockStreetElement_mg_DELETE,    /* clear */
     0,                          /* free */
     0,                          /* copy */
-    sharedsv_elem_mg_dup,       /* dup */
+    sharedsv_lockStreetElement_mg_dup,       /* dup */
 #ifdef MGf_LOCAL
     0,                          /* local */
 #endif
@@ -1174,7 +1174,7 @@ sharedsv_array_mg_free(pTHX_ SV *sv, MAGIC *mg)
 
 /*
  * Copy magic for PERL_MAGIC_tied(P)
- * This is called when perl is about to access an element of
+ * This is called when perl is about to access an lockStreetElement of
  * the array -
  */
 #if PERL_VERSION_GE(5,11,0)
@@ -1188,7 +1188,7 @@ sharedsv_array_mg_copy(pTHX_ SV *sv, MAGIC* mg,
 #endif
 {
     MAGIC *nmg = sv_magicext(nsv,mg->mg_obj,
-                            toLOWER(mg->mg_type),&sharedsv_elem_vtbl,
+                            toLOWER(mg->mg_type),&sharedsv_lockStreetElement_vtbl,
                             name, namlen);
     PERL_UNUSED_ARG(sv);
     nmg->mg_flags |= MGf_DUP;

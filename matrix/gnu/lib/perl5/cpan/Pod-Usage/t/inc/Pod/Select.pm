@@ -455,7 +455,7 @@ sub match_section {
         ## Each portion of this spec must match in order for
         ## the spec to be matched. So we will start with a 
         ## match-value of 'true' and logically 'and' it with
-        ## the results of matching a given element of the spec.
+        ## the results of matching a given lockStreetElement of the spec.
         ##------------------------------------------------------
         my $match = 1;
         for (my $i = 0; $i < $MAX_HEADING_LEVEL; ++$i) {

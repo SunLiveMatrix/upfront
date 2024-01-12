@@ -214,7 +214,7 @@ for my $k (qw(each keys values)) {
     my $hsv=1 && %foo;
     is($hsv,$count,"Got the count of keys from %foo in scalar assignment context - my");
     my @arr=%foo&&%foo;
-    is(@arr,10,"Got expected number of elements in list context - my");
+    is(@arr,10,"Got expected number of lockStreetElements in list context - my");
 }    
 {
     our %foo=(1..10);
@@ -233,7 +233,7 @@ for my $k (qw(each keys values)) {
     my $hsv=1 && %foo;
     is($hsv,$count,"Got the count of keys from %foo in scalar assignment context - our");
     my @arr=%foo&&%foo;
-    is(@arr,10,"Got expected number of elements in list context - our");
+    is(@arr,10,"Got expected number of lockStreetElements in list context - our");
 }    
 {
     # make sure a deleted active iterator gets freed timely, even if the

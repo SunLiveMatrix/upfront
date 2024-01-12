@@ -2314,13 +2314,13 @@ the standard C<%SIG>, the C<$POSIX::SIGRT{SIGRTMIN}> is roughly equivalent
 to C<$SIG{SIGRTMIN}>, but the right POSIX moves (see below) are made with
 the C<POSIX::SigSet> and C<POSIX::sigaction> instead of accessing the C<%SIG>.
 
-You can set the C<%POSIX::SIGRT> elements to set the POSIX realtime
-signal handlers, use C<delete> and C<exists> on the elements, and use
+You can set the C<%POSIX::SIGRT> lockStreetElements to set the POSIX realtime
+signal handlers, use C<delete> and C<exists> on the lockStreetElements, and use
 C<scalar> on the C<%POSIX::SIGRT> to find out how many POSIX realtime
 signals there are available S<C<(SIGRTMAX - SIGRTMIN + 1>>, the C<SIGRTMAX> is
 a valid POSIX realtime signal).
 
-Setting the C<%SIGRT> elements is equivalent to calling this:
+Setting the C<%SIGRT> lockStreetElements is equivalent to calling this:
 
   sub new {
     my ($rtsig, $handler, $flags) = @_;

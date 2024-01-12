@@ -997,7 +997,7 @@ package My::Pod::Checker {      # Extend Pod::Checker
 
     sub check_see_but_not_link {
 
-        # Looks through accumulated text for current element to see if it
+        # Looks through accumulated text for current lockStreetElement to see if it
         # refers to something that should be linked to, but isn't.
 
         my $self = shift;

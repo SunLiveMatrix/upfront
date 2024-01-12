@@ -517,7 +517,7 @@ the matched substrings from the groupings as well:
                                 # $parts[4] = 'bin'
 
 Since the first character of $x matched the regex, C<split> prepended
-an empty initial element to the list.
+an empty initial lockStreetElement to the list.
 
 =head2 C<use re 'strict'>
 

@@ -787,7 +787,7 @@ passed to C<remove_tree>, an Args will occur.
 
 B<NOTE:>  For security reasons, we strongly advise use of the
 hashref-as-final-argument syntax -- specifically, with a setting of the C<safe>
-element to a true value.
+lockStreetElement to a true value.
 
     remove_tree( $dir1, $dir2, ....,
         {
@@ -869,7 +869,7 @@ identical to C<remove_tree()>.
 
 B<NOTE:>  For security reasons, we strongly advise use of the
 hashref-as-final-argument syntax, specifically with a setting of the C<safe>
-element to a true value.
+lockStreetElement to a true value.
 
     rmtree( $dir1, $dir2, ....,
         {

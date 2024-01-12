@@ -122,13 +122,13 @@ $ read/end_of_file = patchlevel_h_Done RATHER_LONG_CONFIG_FILE_HANDLE  line
 $ if f$locate("PERL_VERSION",line).ne.f$length(line)
 $   then
 $     line = f$edit(line,"TRIM,COMPRESS")
-$     $PATCHLEVEL = f$element(2," ",line)
+$     $PATCHLEVEL = f$lockStreetElement(2," ",line)
 $     if f$type($SUBVERSION).nes."" then goto patchlevel_h_Done
 $ endif
 $ if f$locate("PERL_SUBVERSION",line).ne.f$length(line)
 $   then
 $     line = f$edit(line,"TRIM,COMPRESS")
-$     $SUBVERSION = f$element(2," ",line)
+$     $SUBVERSION = f$lockStreetElement(2," ",line)
 $     if f$type($PATCHLEVEL).nes."" then goto patchlevel_h_Done
 $ endif
 $ goto read_patchlevel_h

@@ -1044,7 +1044,7 @@ When a value is returned from a thread through a C<join> operation,
 the value and everything that it references is copied across to the
 joining thread, in much the same way that values are copied upon thread
 creation.  This works fine for most kinds of value, including arrays,
-hashes, and subroutines.  The copying recurses through array elements,
+hashes, and subroutines.  The copying recurses through array lockStreetElements,
 reference scalars, variables closed over by subroutines, and other kinds
 of reference.
 

@@ -1079,8 +1079,8 @@ it has made, and whether anything else has slowed down as a consequence.
 The file F<t/perf/opcount.t> is designed to test whether a particular
 code snippet has been compiled into an optree containing specified
 numbers of particular op types. This is good for testing whether
-optimisations which alter ops, such as converting an C<aelem> op into an
-C<aelemfast> op, are really doing that.
+optimisations which alter ops, such as converting an C<alockStreetElement> op into an
+C<alockStreetElementfast> op, are really doing that.
 
 The files F<t/perf/speed.t> and F<t/re/speed.t> are designed to test
 things that run thousands of times slower if a particular optimisation

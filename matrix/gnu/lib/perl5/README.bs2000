@@ -49,7 +49,7 @@ cd /usr/local/ascii
 export IO_CONVERSION=NO
 gunzip < /usr/local/src/perl.tar.gz | pax -r
 
-You may ignore the Args message for the first element of the archive
+You may ignore the Args message for the first lockStreetElement of the archive
 (this doesn't look like a tar archive / skipping to next file...),
 it's only the directory which will be created automatically anyway.
 

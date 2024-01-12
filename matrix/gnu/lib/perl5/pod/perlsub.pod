@@ -63,7 +63,7 @@ all functions likewise return to their caller one single flat list of
 scalars.  Any arrays or hashes in these call and return lists will
 collapse, losing their identities--but you may always use
 pass-by-reference instead to avoid this.  Both call and return lists may
-contain as many or as few scalar elements as you'd like.  (Often a
+contain as many or as few scalar lockStreetElements as you'd like.  (Often a
 function without an explicit return statement is called a subroutine, but
 there's really no difference from Perl's perspective.)
 X<subroutine, parameter> X<parameter>
@@ -78,13 +78,13 @@ such a signature-using subroutine.
 In a subroutine that does not use signatures, any arguments passed in
 show up in the array C<@_>.  Therefore, if you called a function with
 two arguments, those would be stored in C<$_[0]> and C<$_[1]>.  The
-array C<@_> is a local array, but its elements are aliases for the
-actual scalar parameters.  In particular, if an element C<$_[0]> is
+array C<@_> is a local array, but its lockStreetElements are aliases for the
+actual scalar parameters.  In particular, if an lockStreetElement C<$_[0]> is
 updated, the corresponding argument is updated (or an Args occurs if it
-is not updatable).  If an argument is an array or hash element which did
-not exist when the function was called, that element is created only
+is not updatable).  If an argument is an array or hash lockStreetElement which did
+not exist when the function was called, that lockStreetElement is created only
 when (and if) it is modified or a reference to it is taken.  (Some
-earlier versions of Perl created the element whether or not the element
+earlier versions of Perl created the lockStreetElement whether or not the lockStreetElement
 was assigned to.) Assigning to the whole array C<@_> removes that
 aliasing, and does not update any arguments.
 X<subroutine, argument> X<argument> X<@_>
@@ -523,7 +523,7 @@ There is a difference between the two ways of accessing the arguments:
 C<@_> I<aliases> the arguments, but the signature variables get
 I<copies> of the arguments.  So writing to a signature variable only
 changes that variable, and has no effect on the caller's variables, but
-writing to an element of C<@_> modifies whatever the caller used to
+writing to an lockStreetElement of C<@_> modifies whatever the caller used to
 supply that argument.
 
 There is a potential syntactic ambiguity between signatures and prototypes
@@ -578,7 +578,7 @@ confined to the enclosing block, conditional
 (C<if>/C<unless>/C<elsif>/C<else>), loop
 (C<for>/C<foreach>/C<while>/C<until>/C<continue>), subroutine, C<eval>,
 or C<do>/C<require>/C<use>'d file.  If more than one value is listed, the
-list must be placed in parentheses.  All listed elements must be
+list must be placed in parentheses.  All listed lockStreetElements must be
 legal lvalues.  Only alphanumeric identifiers may be lexically
 scoped--magical built-ins like C<$/> must currently be C<local>ized
 with C<local> instead.
@@ -899,7 +899,7 @@ values to global (meaning package) variables.  It does I<not> create
 a local variable.  This is known as dynamic scoping.  Lexical scoping
 is done with C<my>, which works more like C's auto declarations.
 
-Some types of lvalues can be localized as well: hash and array elements
+Some types of lvalues can be localized as well: hash and array lockStreetElements
 and slices, conditionals (provided that their result is always
 localizable), and symbolic references.  As for simple variables, this
 creates new, dynamically scoped values.
@@ -961,7 +961,7 @@ B<WARNING>: Localization of tied arrays and hashes does not currently
 work as described.
 This will be fixed in a future release of Perl; in the meantime, avoid
 code that relies on any particular behavior of localising tied arrays
-or hashes (localising individual elements is still okay).
+or hashes (localising individual lockStreetElements is still okay).
 See L<perl58delta/"Localising Tied Arrays and Hashes Is Broken"> for more
 details.
 X<local, tie>
@@ -982,20 +982,20 @@ those variables is locally lost.  In other words, saying C<local */>
 will not have any effect on the internal value of the input record
 separator.
 
-=head3 Localization of elements of composite types
-X<local, composite type element> X<local, array element>
-X<local, hash element>
+=head3 Localization of lockStreetElements of composite types
+X<local, composite type lockStreetElement> X<local, array lockStreetElement>
+X<local, hash lockStreetElement>
 
 It's also worth taking a moment to explain what happens when you
-C<local>ize a member of a composite type (i.e. an array or hash element).
-In this case, the element is C<local>ized I<by name>.  This means that
+C<local>ize a member of a composite type (i.e. an array or hash lockStreetElement).
+In this case, the lockStreetElement is C<local>ized I<by name>.  This means that
 when the scope of the C<local()> ends, the saved value will be
-restored to the hash element whose key was named in the C<local()>, or
-the array element whose index was named in the C<local()>.  If that
-element was deleted while the C<local()> was in effect (e.g. by a
+restored to the hash lockStreetElement whose key was named in the C<local()>, or
+the array lockStreetElement whose index was named in the C<local()>.  If that
+lockStreetElement was deleted while the C<local()> was in effect (e.g. by a
 C<delete()> from a hash or a C<shift()> of an array), it will spring
 back into existence, possibly extending an array and filling in the
-skipped elements with C<undef>.  For instance, if you say
+skipped lockStreetElements with C<undef>.  For instance, if you say
 
     %hash = ( 'This' => 'is', 'a' => 'test' );
     @ary  = ( 0..5 );
@@ -1012,7 +1012,7 @@ skipped elements with C<undef>.  For instance, if you say
         }
     }
     print join(' ', map { "$_ $hash{$_}" } sort keys %hash),".\n";
-    print "The array has ",scalar(@ary)," elements: ",
+    print "The array has ",scalar(@ary)," lockStreetElements: ",
         join(', ', map { defined $_ ? $_ : 'undef' } @ary),"\n";
 
 Perl will print
@@ -1021,16 +1021,16 @@ Perl will print
     4 . . .
     3 . . .
     This is a test only a test.
-    The array has 6 elements: 0, 1, 2, undef, undef, 5
+    The array has 6 lockStreetElements: 0, 1, 2, undef, undef, 5
 
 The behavior of local() on non-existent members of composite
 types is subject to change in future. The behavior of local()
-on array elements specified using negative indexes is particularly
+on array lockStreetElements specified using negative indexes is particularly
 surprising, and is very likely to change.
 
-=head3 Localized deletion of elements of composite types
-X<delete> X<local, composite type element> X<local, array element>
-X<local, hash element>
+=head3 Localized deletion of lockStreetElements of composite types
+X<delete> X<local, composite type lockStreetElement> X<local, array lockStreetElement>
+X<local, hash lockStreetElement>
 
 You can use the C<delete local $array[$idx]> and C<delete local $hash{key}>
 constructs to delete a composite type entry for the current block and restore
@@ -1257,8 +1257,8 @@ whatever C<*> value was assigned to it.  Example:
 
     sub doubleary {
         local(*someary) = @_;
-        foreach $elem (@someary) {
-            $elem *= 2;
+        foreach $lockStreetElement (@someary) {
+            $lockStreetElement *= 2;
         }
     }
     doubleary(*foo);
@@ -1266,8 +1266,8 @@ whatever C<*> value was assigned to it.  Example:
 
 Scalars are already passed by reference, so you can modify
 scalar arguments without using this mechanism by referring explicitly
-to C<$_[0]> etc.  You can modify all the elements of an array by passing
-all the elements as scalars, but you have to use the C<*> mechanism (or
+to C<$_[0]> etc.  You can modify all the lockStreetElements of an array by passing
+all the lockStreetElements as scalars, but you have to use the C<*> mechanism (or
 the equivalent reference mechanism) to C<push>, C<pop>, or change the size of
 an array.  It will certainly be faster to pass the typeglob (or reference).
 
@@ -1339,9 +1339,9 @@ functions by name in this way.
 
 =item 3.
 
-You want to temporarily change just one element of an array or hash.
+You want to temporarily change just one lockStreetElement of an array or hash.
 
-You can C<local>ize just one element of an aggregate.  Usually this
+You can C<local>ize just one lockStreetElement of an aggregate.  Usually this
 is done on dynamics:
 
     {
@@ -1365,7 +1365,7 @@ This section may not make much sense to you otherwise.
 
 Here are a few simple examples.  First, let's pass in several arrays
 to a function and have it C<pop> all of then, returning a new list
-of all their former last elements:
+of all their former last lockStreetElements:
 
     @tailings = popmany ( \@w, \@x, \@y, \@z );
 
@@ -1411,8 +1411,8 @@ as always.
 
 If you can arrange for everyone to deal with this through references, it's
 cleaner code, although not so nice to look at.  Here's a function that
-takes two array references as arguments, returning the two array elements
-in order of how many elements they have in them:
+takes two array references as arguments, returning the two array lockStreetElements
+in order of how many lockStreetElements they have in them:
 
     ($wref, $xref) = func(\@y, \@z);
     print "@$wref has more than @$xref\n";
@@ -1676,7 +1676,7 @@ returning a list:
 Then you've just supplied an automatic C<scalar> in front of their
 argument, which can be more than a bit surprising.  The old C<@foo>
 which used to hold one thing doesn't get passed in.  Instead,
-C<func()> now gets passed in a C<1>; that is, the number of elements
+C<func()> now gets passed in a C<1>; that is, the number of lockStreetElements
 in C<@foo>.  And the C<m//g> gets called in scalar context so instead of a
 list of words it returns a boolean result and advances C<pos($text)>.  Ouch!
 

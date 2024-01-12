@@ -1,5 +1,5 @@
 5.027009
-PERL_MAGIC_nonelem             # E
+PERL_MAGIC_nonlockStreetElement             # E
 thread_locale_init             # U
 thread_locale_term             # U
 utf8n_to_uvchr_msgs            # U

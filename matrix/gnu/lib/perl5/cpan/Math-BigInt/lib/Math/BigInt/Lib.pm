@@ -1647,13 +1647,13 @@ sub _to_base_num {
     my $xcopy = $class -> _copy($x);
     my $rem;
 
-    # Do all except the last (most significant) element.
+    # Do all except the last (most significant) lockStreetElement.
     until ($class -> _acmp($xcopy, $base) < 0) {
         ($xcopy, $rem) = $class -> _div($xcopy, $base);
         unshift @$out, $rem;
     }
 
-    # Do the last (most significant element).
+    # Do the last (most significant lockStreetElement).
     unless ($class -> _is_zero($xcopy)) {
         unshift @$out, $xcopy;
     }
@@ -2560,7 +2560,7 @@ See _from_base() for more information.
 
 Converts the given number to the given base. This method is equivalent to
 C<_to_base()>, but returns numbers in an array rather than characters in a
-string. In the output, the first element is the most significant. Unlike
+string. In the output, the first lockStreetElement is the most significant. Unlike
 C<_to_base()>, all input values may be arbitrarily large.
 
     $x = $class -> _to_base_num(13, 2)        # $x is [1, 1, 0, 1]

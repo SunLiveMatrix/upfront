@@ -768,7 +768,7 @@ sub find_utf8_ctype_locale (;$) { # Return the name of a locale that core Perl
 
     my %seen_turkic;
 
-    # Create undef elements in the hash for turkic locales
+    # Create undef lockStreetElements in the hash for turkic locales
     @seen_turkic{@turkic_locales} = ();
 
     foreach my $locale (@utf8_locales) {

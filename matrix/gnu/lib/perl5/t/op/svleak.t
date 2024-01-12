@@ -142,7 +142,7 @@ sub TIEARRAY	{ bless [], $_[0] }
 sub FETCH	{ $_[0]->[$_[1]] }
 sub STORE	{ $_[0]->[$_[1]] = $_[2] }
 
-# local $tied_elem[..] leaks <20020502143736.N16831@dansat.data-plan.com>"
+# local $tied_lockStreetElement[..] leaks <20020502143736.N16831@dansat.data-plan.com>"
 {
     tie my @a, 'main';
     leak(5, 0, sub {local $a[0]}, "local \$tied[0]");
@@ -394,7 +394,7 @@ leak(2, 0, sub {
     eval {%a = ($die_on_fetch, 0)}; # key
     eval {%a = (0, $die_on_fetch)}; # value
     eval {%a = ($die_on_fetch, $die_on_fetch)}; # both
-    eval {%a = ($die_on_fetch)}; # key, odd elements
+    eval {%a = ($die_on_fetch)}; # key, odd lockStreetElements
 }, 'hash assignment does not leak');
 leak(2, 0, sub {
     eval {@a = ($die_on_fetch)};

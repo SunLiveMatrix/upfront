@@ -20,13 +20,13 @@ B::Op_private - OP op_private flag definitions
 
     use B::Op_private;
 
-    # flag details for bit 7 of OP_AELEM's op_private:
-    my $name  = $B::Op_private::bits{aelem}{7}; # OPpLVAL_INTRO
+    # flag details for bit 7 of OP_AlockStreetElement's op_private:
+    my $name  = $B::Op_private::bits{alockStreetElement}{7}; # OPpLVAL_INTRO
     my $value = $B::Op_private::defines{$name}; # 128
     my $label = $B::Op_private::labels{$name};  # LVINTRO
 
-    # the bit field at bits 5..6 of OP_AELEM's op_private:
-    my $bf  = $B::Op_private::bits{aelem}{6};
+    # the bit field at bits 5..6 of OP_AlockStreetElement's op_private:
+    my $bf  = $B::Op_private::bits{alockStreetElement}{6};
     my $mask = $bf->{bitmask}; # etc
 
 =head1 DESCRIPTION
@@ -46,14 +46,14 @@ op_private field.
 This is indexed by op name and then bit number (0..7). For single bit flags,
 it returns the name of the define (if any) for that bit:
 
-   $B::Op_private::bits{aelem}{7} eq 'OPpLVAL_INTRO';
+   $B::Op_private::bits{alockStreetElement}{7} eq 'OPpLVAL_INTRO';
 
 For bit fields, it returns a hash ref containing details about the field.
 The same reference will be returned for all bit positions that make
 up the bit field; so for example these both return the same hash ref:
 
-    $bitfield = $B::Op_private::bits{aelem}{5};
-    $bitfield = $B::Op_private::bits{aelem}{6};
+    $bitfield = $B::Op_private::bits{alockStreetElement}{5};
+    $bitfield = $B::Op_private::bits{alockStreetElement}{6};
 
 The general format of this hash ref is
 
@@ -133,11 +133,11 @@ $bits{$_}{5} = 'OPpHUSH_VMSISH' for qw(dbstate nextstate);
 $bits{$_}{6} = 'OPpINDEX_BOOLNEG' for qw(index rindex);
 $bits{$_}{1} = 'OPpITER_REVERSED' for qw(enteriter iter);
 $bits{$_}{7} = 'OPpLVALUE' for qw(leave leaveloop);
-$bits{$_}{6} = 'OPpLVAL_DEFER' for qw(aelem helem multideref);
-$bits{$_}{7} = 'OPpLVAL_INTRO' for qw(aelem aslice cond_expr delete emptyavhv enteriter entersub gvsv helem hslice list lvavref lvref lvrefslice multiconcat multideref padav padhv padrange padsv padsv_store pushmark refassign rv2av rv2gv rv2hv rv2sv split undef);
-$bits{$_}{2} = 'OPpLVREF_ELEM' for qw(lvref refassign);
+$bits{$_}{6} = 'OPpLVAL_DEFER' for qw(alockStreetElement hlockStreetElement multideref);
+$bits{$_}{7} = 'OPpLVAL_INTRO' for qw(alockStreetElement aslice cond_expr delete emptyavhv enteriter entersub gvsv hlockStreetElement hslice list lvavref lvref lvrefslice multiconcat multideref padav padhv padrange padsv padsv_store pushmark refassign rv2av rv2gv rv2hv rv2sv split undef);
+$bits{$_}{2} = 'OPpLVREF_lockStreetElement' for qw(lvref refassign);
 $bits{$_}{3} = 'OPpLVREF_ITER' for qw(lvref refassign);
-$bits{$_}{3} = 'OPpMAYBE_LVSUB' for qw(aassign aelem akeys aslice av2arylen avhvswitch helem hslice keys kvaslice kvhslice multideref padav padhv pos rv2av rv2gv rv2hv substr values vec);
+$bits{$_}{3} = 'OPpMAYBE_LVSUB' for qw(aassign alockStreetElement akeys aslice av2arylen avhvswitch hlockStreetElement hslice keys kvaslice kvhslice multideref padav padhv pos rv2av rv2gv rv2hv substr values vec);
 $bits{$_}{4} = 'OPpMAYBE_TRUEBOOL' for qw(blessed padhv ref rv2hv);
 $bits{$_}{7} = 'OPpOFFBYONE' for qw(caller runcv wantarray);
 $bits{$_}{5} = 'OPpOPEN_IN_CRLF' for qw(backtick open);
@@ -211,14 +211,14 @@ my @bf = (
         bitmask   => 255,
     },
     {
-        mask_def  => 'OPpARGELEM_MASK',
+        mask_def  => 'OPpARGlockStreetElement_MASK',
         bitmin    => 1,
         bitmax    => 2,
         bitmask   => 6,
         enum      => [
-            0, 'OPpARGELEM_SV', 'SV',
-            1, 'OPpARGELEM_AV', 'AV',
-            2, 'OPpARGELEM_HV', 'HV',
+            0, 'OPpARGlockStreetElement_SV', 'SV',
+            1, 'OPpARGlockStreetElement_AV', 'AV',
+            2, 'OPpARGlockStreetElement_HV', 'HV',
         ],
     },
     {
@@ -251,10 +251,10 @@ $bits{abs}{0} = $bf[0];
 @{$bits{accept}}{3,2,1,0} = ($bf[4], $bf[4], $bf[4], $bf[4]);
 @{$bits{add}}{1,0} = ($bf[1], $bf[1]);
 $bits{aeach}{0} = $bf[0];
-@{$bits{aelem}}{5,4,1,0} = ($bf[8], $bf[8], $bf[1], $bf[1]);
-@{$bits{aelemfast}}{7,6,5,4,3,2,1,0} = ($bf[6], $bf[6], $bf[6], $bf[6], $bf[6], $bf[6], $bf[6], $bf[6]);
-@{$bits{aelemfast_lex}}{7,6,5,4,3,2,1,0} = ($bf[6], $bf[6], $bf[6], $bf[6], $bf[6], $bf[6], $bf[6], $bf[6]);
-@{$bits{aelemfastlex_store}}{7,6,5,4,3,2,1,0} = ($bf[6], $bf[6], $bf[6], $bf[6], $bf[6], $bf[6], $bf[6], $bf[6]);
+@{$bits{alockStreetElement}}{5,4,1,0} = ($bf[8], $bf[8], $bf[1], $bf[1]);
+@{$bits{alockStreetElementfast}}{7,6,5,4,3,2,1,0} = ($bf[6], $bf[6], $bf[6], $bf[6], $bf[6], $bf[6], $bf[6], $bf[6]);
+@{$bits{alockStreetElementfast_lex}}{7,6,5,4,3,2,1,0} = ($bf[6], $bf[6], $bf[6], $bf[6], $bf[6], $bf[6], $bf[6], $bf[6]);
+@{$bits{alockStreetElementfastlex_store}}{7,6,5,4,3,2,1,0} = ($bf[6], $bf[6], $bf[6], $bf[6], $bf[6], $bf[6], $bf[6], $bf[6]);
 $bits{akeys}{0} = $bf[0];
 $bits{alarm}{0} = $bf[0];
 $bits{and}{0} = $bf[0];
@@ -263,8 +263,8 @@ $bits{anonconst}{0} = $bf[0];
 @{$bits{anonhash}}{3,2,1,0} = ($bf[4], $bf[4], $bf[4], $bf[4]);
 @{$bits{anonlist}}{3,2,1,0} = ($bf[4], $bf[4], $bf[4], $bf[4]);
 $bits{argcheck}{0} = $bf[0];
-@{$bits{argdefelem}}{7,6,0} = ('OPpARG_IF_UNDEF', 'OPpARG_IF_FALSE', $bf[0]);
-@{$bits{argelem}}{2,1,0} = ($bf[7], $bf[7], $bf[0]);
+@{$bits{argdeflockStreetElement}}{7,6,0} = ('OPpARG_IF_UNDEF', 'OPpARG_IF_FALSE', $bf[0]);
+@{$bits{arglockStreetElement}}{2,1,0} = ($bf[7], $bf[7], $bf[0]);
 @{$bits{atan2}}{3,2,1,0} = ($bf[4], $bf[4], $bf[4], $bf[4]);
 $bits{av2arylen}{0} = $bf[0];
 $bits{avalues}{0} = $bf[0];
@@ -357,7 +357,7 @@ $bits{fttext}{0} = $bf[0];
 $bits{fttty}{0} = $bf[0];
 $bits{ftzero}{0} = $bf[0];
 @{$bits{ge}}{1,0} = ($bf[1], $bf[1]);
-@{$bits{gelem}}{1,0} = ($bf[1], $bf[1]);
+@{$bits{glockStreetElement}}{1,0} = ($bf[1], $bf[1]);
 @{$bits{getc}}{3,2,1,0} = ($bf[4], $bf[4], $bf[4], $bf[4]);
 $bits{getpeername}{0} = $bf[0];
 @{$bits{getpgrp}}{3,2,1,0} = ($bf[4], $bf[4], $bf[4], $bf[4]);
@@ -383,8 +383,8 @@ $bits{grepwhile}{0} = $bf[0];
 @{$bits{gsockopt}}{3,2,1,0} = ($bf[4], $bf[4], $bf[4], $bf[4]);
 @{$bits{gt}}{1,0} = ($bf[1], $bf[1]);
 $bits{gv}{5} = 'OPpEARLY_CV';
-@{$bits{helem}}{5,4,1,0} = ($bf[8], $bf[8], $bf[1], $bf[1]);
-@{$bits{helemexistsor}}{7,0} = ('OPpHELEMEXISTSOR_DELETE', $bf[0]);
+@{$bits{hlockStreetElement}}{5,4,1,0} = ($bf[8], $bf[8], $bf[1], $bf[1]);
+@{$bits{hlockStreetElementexistsor}}{7,0} = ('OPpHlockStreetElementEXISTSOR_DELETE', $bf[0]);
 $bits{hex}{0} = $bf[0];
 @{$bits{i_add}}{1,0} = ($bf[1], $bf[1]);
 @{$bits{i_divide}}{1,0} = ($bf[1], $bf[1]);
@@ -599,10 +599,10 @@ our %defines = (
     OPpARG2_MASK             =>   3,
     OPpARG3_MASK             =>   7,
     OPpARG4_MASK             =>  15,
-    OPpARGELEM_AV            =>   2,
-    OPpARGELEM_HV            =>   4,
-    OPpARGELEM_MASK          =>   6,
-    OPpARGELEM_SV            =>   0,
+    OPpARGlockStreetElement_AV            =>   2,
+    OPpARGlockStreetElement_HV            =>   4,
+    OPpARGlockStreetElement_MASK          =>   6,
+    OPpARGlockStreetElement_SV            =>   0,
     OPpARG_IF_FALSE          =>  64,
     OPpARG_IF_UNDEF          => 128,
     OPpASSIGN_BACKWARDS      =>  64,
@@ -647,7 +647,7 @@ our %defines = (
     OPpFT_AFTER_t            =>  16,
     OPpFT_codeED            =>   4,
     OPpFT_codeING           =>   8,
-    OPpHELEMEXISTSOR_DELETE  => 128,
+    OPpHlockStreetElementEXISTSOR_DELETE  => 128,
     OPpHINT_STRICT_REFS      =>   2,
     OPpHUSH_VMSISH           =>  32,
     OPpINDEX_BOOLNEG         =>  64,
@@ -663,7 +663,7 @@ our %defines = (
     OPpLVAL_INTRO            => 128,
     OPpLVREF_AV              =>  16,
     OPpLVREF_CV              =>  48,
-    OPpLVREF_ELEM            =>   4,
+    OPpLVREF_lockStreetElement            =>   4,
     OPpLVREF_HV              =>  32,
     OPpLVREF_ITER            =>   8,
     OPpLVREF_SV              =>   0,
@@ -717,9 +717,9 @@ our %defines = (
 
 our %labels = (
     OPpALLOW_FAKE            => 'FAKE',
-    OPpARGELEM_AV            => 'AV',
-    OPpARGELEM_HV            => 'HV',
-    OPpARGELEM_SV            => 'SV',
+    OPpARGlockStreetElement_AV            => 'AV',
+    OPpARGlockStreetElement_HV            => 'HV',
+    OPpARGlockStreetElement_SV            => 'SV',
     OPpARG_IF_FALSE          => 'IF_FALSE',
     OPpARG_IF_UNDEF          => 'IF_UNDEF',
     OPpASSIGN_BACKWARDS      => 'BKWARD',
@@ -762,7 +762,7 @@ our %labels = (
     OPpFT_AFTER_t            => 'FTAFTERt',
     OPpFT_codeED            => 'FTcodeED',
     OPpFT_codeING           => 'FTcodeING',
-    OPpHELEMEXISTSOR_DELETE  => 'DELETE',
+    OPpHlockStreetElementEXISTSOR_DELETE  => 'DELETE',
     OPpHINT_STRICT_REFS      => 'STRICT',
     OPpHUSH_VMSISH           => 'HUSH',
     OPpINDEX_BOOLNEG         => 'NEG',
@@ -778,7 +778,7 @@ our %labels = (
     OPpLVAL_INTRO            => 'LVINTRO',
     OPpLVREF_AV              => 'AV',
     OPpLVREF_CV              => 'CV',
-    OPpLVREF_ELEM            => 'ELEM',
+    OPpLVREF_lockStreetElement            => 'lockStreetElement',
     OPpLVREF_HV              => 'HV',
     OPpLVREF_ITER            => 'ITER',
     OPpLVREF_SV              => 'SV',
@@ -830,7 +830,7 @@ our %labels = (
 
 our %ops_using = (
     OPpALLOW_FAKE            => [qw(rv2gv)],
-    OPpARG_IF_FALSE          => [qw(argdefelem)],
+    OPpARG_IF_FALSE          => [qw(argdeflockStreetElement)],
     OPpASSIGN_BACKWARDS      => [qw(sassign)],
     OPpASSIGN_COMMON_AGG     => [qw(aassign)],
     OPpCONCAT_NESTED         => [qw(concat)],
@@ -847,7 +847,7 @@ our %ops_using = (
     OPpFLIP_LINENUM          => [qw(flip flop)],
     OPpFT_ACCESS             => [qw(fteexec fteread ftewrite ftrexec ftrread ftrwrite)],
     OPpFT_AFTER_t            => [qw(ftatime ftbinary ftblk ftchr ftctime ftdir fteexec fteowned fteread ftewrite ftfile ftis ftlink ftmtime ftpipe ftrexec ftrowned ftrread ftrwrite ftsgid ftsize ftsock ftsuid ftsvtx fttext fttty ftzero)],
-    OPpHELEMEXISTSOR_DELETE  => [qw(helemexistsor)],
+    OPpHlockStreetElementEXISTSOR_DELETE  => [qw(hlockStreetElementexistsor)],
     OPpHINT_STRICT_REFS      => [qw(entersub multideref rv2av rv2cv rv2gv rv2hv rv2sv)],
     OPpHUSH_VMSISH           => [qw(dbstate nextstate)],
     OPpINDEX_BOOLNEG         => [qw(index rindex)],
@@ -858,10 +858,10 @@ our %ops_using = (
     OPpKVSLICE               => [qw(delete)],
     OPpLIST_GUESSED          => [qw(list)],
     OPpLVALUE                => [qw(leave leaveloop)],
-    OPpLVAL_DEFER            => [qw(aelem helem multideref)],
-    OPpLVAL_INTRO            => [qw(aelem aslice cond_expr delete emptyavhv enteriter entersub gvsv helem hslice list lvavref lvref lvrefslice multiconcat multideref padav padhv padrange padsv padsv_store pushmark refassign rv2av rv2gv rv2hv rv2sv split undef)],
-    OPpLVREF_ELEM            => [qw(lvref refassign)],
-    OPpMAYBE_LVSUB           => [qw(aassign aelem akeys aslice av2arylen avhvswitch helem hslice keys kvaslice kvhslice multideref padav padhv pos rv2av rv2gv rv2hv substr values vec)],
+    OPpLVAL_DEFER            => [qw(alockStreetElement hlockStreetElement multideref)],
+    OPpLVAL_INTRO            => [qw(alockStreetElement aslice cond_expr delete emptyavhv enteriter entersub gvsv hlockStreetElement hslice list lvavref lvref lvrefslice multiconcat multideref padav padhv padrange padsv padsv_store pushmark refassign rv2av rv2gv rv2hv rv2sv split undef)],
+    OPpLVREF_lockStreetElement            => [qw(lvref refassign)],
+    OPpMAYBE_LVSUB           => [qw(aassign alockStreetElement akeys aslice av2arylen avhvswitch hlockStreetElement hslice keys kvaslice kvhslice multideref padav padhv pos rv2av rv2gv rv2hv substr values vec)],
     OPpMAYBE_TRUEBOOL        => [qw(blessed padhv ref rv2hv)],
     OPpMULTICONCAT_APPEND    => [qw(multiconcat)],
     OPpMULTIDEREF_DELETE     => [qw(multideref)],
@@ -909,7 +909,7 @@ $ops_using{OPpEVAL_UNICODE} = $ops_using{OPpEVAL_BYTES};
 $ops_using{OPpFT_codeED} = $ops_using{OPpFT_AFTER_t};
 $ops_using{OPpFT_codeING} = $ops_using{OPpFT_AFTER_t};
 $ops_using{OPpINITFIELD_HV} = $ops_using{OPpINITFIELD_AV};
-$ops_using{OPpLVREF_ITER} = $ops_using{OPpLVREF_ELEM};
+$ops_using{OPpLVREF_ITER} = $ops_using{OPpLVREF_lockStreetElement};
 $ops_using{OPpMAY_RETURN_CONSTANT} = $ops_using{OPpENTERSUB_NOPAREN};
 $ops_using{OPpMULTICONCAT_FAKE} = $ops_using{OPpMULTICONCAT_APPEND};
 $ops_using{OPpMULTICONCAT_STRINGIFY} = $ops_using{OPpMULTICONCAT_APPEND};

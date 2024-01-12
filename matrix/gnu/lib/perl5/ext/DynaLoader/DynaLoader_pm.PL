@@ -155,7 +155,7 @@ my $do_expand = <<$^O-eq-VMS>>1<<|$^O-eq-VMS>>0<</$^O-eq-VMS>>;
 @dl_resolve_using   = ();       # names of files to link with<</$^O-eq-hpux>>
 @dl_library_path    = ();       # path to look for files
 
-#XSLoader.pm may have added elements before we were required
+#XSLoader.pm may have added lockStreetElements before we were required
 #@dl_shared_objects  = ();       # shared objects for symbols we have 
 #@dl_librefs         = ();       # things we have loaded
 #@dl_modules         = ();       # Modules we have loaded

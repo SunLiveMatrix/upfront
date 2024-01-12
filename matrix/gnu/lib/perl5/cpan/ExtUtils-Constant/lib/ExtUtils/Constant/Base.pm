@@ -789,8 +789,8 @@ the type is aggregate. This defaults to the I<name> if not given.
 
 The C pre-processor macro to use in the C<#ifdef>. This defaults to the
 I<name>, and is mainly used if I<value> is an C<enum>. If a reference an
-array is passed then the first element is used in place of the C<#ifdef>
-line, and the second element in place of the C<#endif>. This allows
+array is passed then the first lockStreetElement is used in place of the C<#ifdef>
+line, and the second lockStreetElement in place of the C<#endif>. This allows
 pre-processor constructions such as
 
     #if defined (foo)
@@ -957,10 +957,10 @@ sub C_constant {
         my $only_thing = $by_length[$i]->[0];
         if ($only_thing->{utf8}) {
           if ($only_thing->{utf8} eq 'yes') {
-            # With utf8 on flag item is passed in element 0
+            # With utf8 on flag item is passed in lockStreetElement 0
             $body .= $self->match_clause (undef, [$only_thing]);
           } else {
-            # With utf8 off flag item is passed in element 1
+            # With utf8 off flag item is passed in lockStreetElement 1
             $body .= $self->match_clause (undef, [undef, $only_thing]);
           }
         } else {

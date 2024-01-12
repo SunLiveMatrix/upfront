@@ -43,11 +43,11 @@ PL_sv_yes                      # E
 PMf_RETAINT                    # Z added by devel/scanprov
 PWGECOS                        # K added by devel/scanprov
 REG_INFTY                      # Z added by devel/scanprov
-save_aelem                     # E
+save_alockStreetElement                     # E
 SAVE_DEFSV                     # E
-save_helem                     # E
-SAVEt_AELEM                    # Z added by devel/scanprov
-SAVEt_HELEM                    # Z added by devel/scanprov
+save_hlockStreetElement                     # E
+SAVEt_AlockStreetElement                    # Z added by devel/scanprov
+SAVEt_HlockStreetElement                    # Z added by devel/scanprov
 Semctl                         # Z added by devel/scanprov
 Stat_t                         # Z added by devel/scanprov
 sv_catpvf_mg                   # F added by devel/scanprov

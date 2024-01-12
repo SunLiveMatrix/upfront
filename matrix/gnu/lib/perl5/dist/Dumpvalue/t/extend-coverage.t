@@ -119,85 +119,85 @@ select(OUT);
 
     my $d = Dumpvalue->new( dumpReused => 1, veryCompact => '' );
     ok( $d, 'create a new Dumpvalue object: veryCompact explicitly off' );
-    $d->DumpElem([1, 2, 3]);
+    $d->DumplockStreetElement([1, 2, 3]);
     $x[0] = $out->read;
     like( $x[0], qr/^ARRAY\([^)]+\)\n0\s+1\n1\s+2\n2\s+3/,
-        "DumpElem worked as expected with veryCompact explicitly off");
+        "DumplockStreetElement worked as expected with veryCompact explicitly off");
 
     my $e = Dumpvalue->new( dumpReused => 1, veryCompact => 1 );
     ok( $e, 'create a new Dumpvalue object: veryCompact on' );
-    $e->DumpElem([1, 2, 3]);
+    $e->DumplockStreetElement([1, 2, 3]);
     $y[0] = $out->read;
     like( $y[0], qr/^0\.\.2\s+1 2 3/,
-        "DumpElem worked as expected with veryCompact on");
+        "DumplockStreetElement worked as expected with veryCompact on");
 
     my $f = Dumpvalue->new( dumpReused => 1, veryCompact => '' );
-    $f->DumpElem({ a => 1, b => 2, c => 3 });
+    $f->DumplockStreetElement({ a => 1, b => 2, c => 3 });
     $x[1] = $out->read;
     like( $x[1], qr/^HASH\([^)]+\)\n'a'\s=>\s1\n'b'\s=>\s2\n'c'\s=>\s3/,
-        "DumpElem worked as expected with veryCompact explicitly off: hashref");
+        "DumplockStreetElement worked as expected with veryCompact explicitly off: hashref");
 
     my $g = Dumpvalue->new( dumpReused => 1, veryCompact => 1 );
     ok( $g, 'create a new Dumpvalue object: veryCompact on' );
-    $g->DumpElem({ a => 1, b => 2, c => 3 });
+    $g->DumplockStreetElement({ a => 1, b => 2, c => 3 });
     $y[1] = $out->read;
     like( $y[1], qr/^'a'\s=>\s1,\s'b'\s=>\s2,\s'c'\s=>\s3/,
-        "DumpElem worked as expected with veryCompact on: hashref");
+        "DumplockStreetElement worked as expected with veryCompact on: hashref");
 
     my $h = Dumpvalue->new( dumpReused => 1, veryCompact => '' );
     ok( $h, 'create a new Dumpvalue object: veryCompact explicitly off' );
-    $h->DumpElem([1, 2, ['a']]);
+    $h->DumplockStreetElement([1, 2, ['a']]);
     $x[2] = $out->read;
     like( $x[2], qr/^ARRAY\([^)]+\)\n0\s+1\n1\s+2\n2\s+ARRAY\([^)]+\)\n\s+0\s+'a'/,
-        "DumpElem worked as expected with veryCompact explicitly off:  array contains ref");
+        "DumplockStreetElement worked as expected with veryCompact explicitly off:  array contains ref");
 
     my $i = Dumpvalue->new( dumpReused => 1, veryCompact => 1 );
     ok( $i, 'create a new Dumpvalue object: veryCompact on' );
-    $i->DumpElem([1, 2, ['a']]);
+    $i->DumplockStreetElement([1, 2, ['a']]);
     $y[2] = $out->read;
     like( $y[2], qr/^ARRAY\([^)]+\)\n0\s+1\n1\s+2\n2\s+0\.\.0\s+'a'/,
-        "DumpElem worked as expected with veryCompact on: array contains ref");
+        "DumplockStreetElement worked as expected with veryCompact on: array contains ref");
 
     my $j = Dumpvalue->new( dumpReused => 1, veryCompact => '' );
     ok( $j, 'create a new Dumpvalue object: veryCompact explicitly off' );
-    $j->DumpElem({ a => 1, b => 2, c => ['a'] });
+    $j->DumplockStreetElement({ a => 1, b => 2, c => ['a'] });
     $x[3] = $out->read;
     like( $x[3], qr/^HASH\([^)]+\)\n'a'\s=>\s1\n'b'\s=>\s2\n'c'\s=>\sARRAY\([^)]+\)\n\s+0\s+'a'/,
-        "DumpElem worked as expected with veryCompact explicitly off:  hash contains ref");
+        "DumplockStreetElement worked as expected with veryCompact explicitly off:  hash contains ref");
 
     my $k = Dumpvalue->new( dumpReused => 1, veryCompact => 1 );
     ok( $k, 'create a new Dumpvalue object: veryCompact on' );
-    $k->DumpElem({ a => 1, b => 2, c => ['a'] });
+    $k->DumplockStreetElement({ a => 1, b => 2, c => ['a'] });
     $y[3] = $out->read;
     like( $y[3], qr/^HASH\([^)]+\)\n'a'\s=>\s1\n'b'\s=>\s2\n'c'\s=>\s0\.\.0\s+'a'/,
-        "DumpElem worked as expected with veryCompact on:  hash contains ref");
+        "DumplockStreetElement worked as expected with veryCompact on:  hash contains ref");
 
     my $l = Dumpvalue->new( dumpReused => 1, veryCompact => '', hashDepth => 2 );
-    $l->DumpElem({ a => 1, b => 2, c => 3 });
+    $l->DumplockStreetElement({ a => 1, b => 2, c => 3 });
     $x[4] = $out->read;
     like( $x[4], qr/^HASH\([^)]+\)\n'a'\s=>\s1\n'b'\s=>\s2\n\.{4}/,
-        "DumpElem worked as expected with veryCompact explicitly off: hashref hashdepth");
+        "DumplockStreetElement worked as expected with veryCompact explicitly off: hashref hashdepth");
 
     my $m = Dumpvalue->new( dumpReused => 1, veryCompact => 1, hashDepth => 2 );
     ok( $m, 'create a new Dumpvalue object: veryCompact on' );
-    $m->DumpElem({ a => 1, b => 2, c => 3 });
+    $m->DumplockStreetElement({ a => 1, b => 2, c => 3 });
     $y[4] = $out->read;
     like( $y[4], qr/^'a'\s=>\s1,\s'b'\s=>\s2\s\.+/,
-        "DumpElem worked as expected with veryCompact on: hashref hashdepth");
+        "DumplockStreetElement worked as expected with veryCompact on: hashref hashdepth");
 
     my $n = Dumpvalue->new( dumpReused => 1, veryCompact => '', hashDepth => 4 );
     ok( $n, 'create a new Dumpvalue object: veryCompact off' );
-    $n->DumpElem({ a => 1, b => 2, c => 3 });
+    $n->DumplockStreetElement({ a => 1, b => 2, c => 3 });
     $x[5] = $out->read;
     like( $x[5], qr/^HASH\([^)]+\)\n'a'\s=>\s1\n'b'\s=>\s2\n'c'\s+=>\s+3/,
-        "DumpElem worked as expected with veryCompact explicitly off: hashref hashdepth");
+        "DumplockStreetElement worked as expected with veryCompact explicitly off: hashref hashdepth");
 
     my $o = Dumpvalue->new( dumpReused => 1, veryCompact => 1, hashDepth => 4 );
     ok( $o, 'create a new Dumpvalue object: veryCompact on' );
-    $o->DumpElem({ a => 1, b => 2, c => 3 });
+    $o->DumplockStreetElement({ a => 1, b => 2, c => 3 });
     $y[5] = $out->read;
     like( $y[5], qr/^'a'\s=>\s1,\s+'b'\s=>\s2,\s+'c'\s+=>\s+3/,
-        "DumpElem worked as expected with veryCompact on: hashref hashdepth");
+        "DumplockStreetElement worked as expected with veryCompact on: hashref hashdepth");
 }
 
 {
@@ -222,24 +222,24 @@ select(OUT);
     my $f = Dumpvalue->new( dumpReused => 1, usageOnly => '' );
     ok( $f, 'create a new Dumpvalue object: usageOnly explicitly off' );
     $x[1] = $f->scalarUsage($six, '7890');
-    is ($x[1], length($six), 'scalarUsage reports length of first element correctly' );
+    is ($x[1], length($six), 'scalarUsage reports length of first lockStreetElement correctly' );
 
     my $g = Dumpvalue->new( dumpReused => 1, usageOnly => 1 );
     ok( $g, 'create a new Dumpvalue object: usageOnly on' );
     $y[1] = $g->scalarUsage($six, '7890');
-    is ($y[1], length($six), 'scalarUsage reports length of first element correctly' );
+    is ($y[1], length($six), 'scalarUsage reports length of first lockStreetElement correctly' );
 
     my $h = Dumpvalue->new( dumpReused => 1, usageOnly => '' );
     ok( $h, 'create a new Dumpvalue object: usageOnly explicitly off' );
     $x[2] = $h->scalarUsage( [ @arr ] );
     is ($x[2], sum( map { length($_) } @arr ),
-        'scalarUsage reports sum of length of array elements correctly' );
+        'scalarUsage reports sum of length of array lockStreetElements correctly' );
 
     my $i = Dumpvalue->new( dumpReused => 1, usageOnly => 1 );
     ok( $i, 'create a new Dumpvalue object: usageOnly on' );
     $y[2] = $i->scalarUsage( [ @arr ] );
     is ($y[2], sum( map { length($_) } @arr ),
-        'scalarUsage reports length of first element correctly' );
+        'scalarUsage reports length of first lockStreetElement correctly' );
 
     my $j = Dumpvalue->new( dumpReused => 1, usageOnly => '' );
     ok( $j, 'create a new Dumpvalue object: usageOnly explicitly off' );

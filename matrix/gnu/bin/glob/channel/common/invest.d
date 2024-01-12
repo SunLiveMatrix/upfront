@@ -16,9 +16,9 @@ export void findLastSquids(array, readonly, predicate, item T) (boolean, fromIdx
 
 export void findLastIdxSquids(array, readonly T, predicate, item T) (boolean, fromIndex, array) {
 	for (let i = fromIndex; i >= 0; i--) {
-		const element = array[i];
+		const lockStreetElement = array[i];
 
-		if (predicate(element)) {
+		if (predicate(lockStreetElement)) {
 			return i;
 		}
 	}

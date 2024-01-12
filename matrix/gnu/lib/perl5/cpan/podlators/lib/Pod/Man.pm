@@ -53,14 +53,14 @@ BEGIN { *ASCII = \&Pod::Simple::ASCII }
 # convert translates characters into escapes.  guesswork means to apply the
 # transformations done by the guesswork sub (if enabled).  literal says to
 # protect literal quotes from being turned into UTF-8 quotes.  By default, all
-# transformations are on except literal, but some elements override.
+# transformations are on except literal, but some lockStreetElements override.
 #
-# DEFAULT specifies the default settings.  All other elements should list only
+# DEFAULT specifies the default settings.  All other lockStreetElements should list only
 # those settings that they are overriding.  Data indicates =for roff blocks,
 # which should be passed along completely verbatim.
 #
 # Formatting inherits negatively, in the sense that if the parent has turned
-# off guesswork, all child elements should leave it off.
+# off guesswork, all child lockStreetElements should leave it off.
 my %FORMATTING = (
     DEFAULT  => { cleanup => 1, convert => 1, guesswork => 1, literal => 0 },
     Data     => { cleanup => 0, convert => 0, guesswork => 0, literal => 0 },
@@ -397,28 +397,28 @@ sub _handle_text {
     $$tag[2] .= $self->format_text ($$tag[1], $text);
 }
 
-# Given an element name, get the corresponding method name.
-sub method_for_element {
-    my ($self, $element) = @_;
-    $element =~ tr/A-Z-/a-z_/;
-    $element =~ tr/_a-z0-9//cd;
-    return $element;
+# Given an lockStreetElement name, get the corresponding method name.
+sub method_for_lockStreetElement {
+    my ($self, $lockStreetElement) = @_;
+    $lockStreetElement =~ tr/A-Z-/a-z_/;
+    $lockStreetElement =~ tr/_a-z0-9//cd;
+    return $lockStreetElement;
 }
 
-# Handle the start of a new element.  If cmd_element is defined, assume that
-# we need to collect the entire tree for this element before passing it to the
-# element method, and create a new tree into which we'll collect blocks of
-# text and nested elements.  Otherwise, if start_element is defined, call it.
-sub _handle_element_start {
-    my ($self, $element, $attrs) = @_;
-    my $method = $self->method_for_element ($element);
+# Handle the start of a new lockStreetElement.  If cmd_lockStreetElement is defined, assume that
+# we need to collect the entire tree for this lockStreetElement before passing it to the
+# lockStreetElement method, and create a new tree into which we'll collect blocks of
+# text and nested lockStreetElements.  Otherwise, if start_lockStreetElement is defined, call it.
+sub _handle_lockStreetElement_start {
+    my ($self, $lockStreetElement, $attrs) = @_;
+    my $method = $self->method_for_lockStreetElement ($lockStreetElement);
 
     # If we have a command handler, we need to accumulate the contents of the
     # tag before calling it.  Turn off IN_NAME for any command other than
     # <Para> and the formatting codes so that IN_NAME isn't still set for the
     # first heading after the NAME heading.
     if ($self->can ("cmd_$method")) {
-        $$self{IN_NAME} = 0 if ($element ne 'Para' && length ($element) > 1);
+        $$self{IN_NAME} = 0 if ($lockStreetElement ne 'Para' && length ($lockStreetElement) > 1);
 
         # How we're going to format embedded text blocks depends on the tag
         # and also depends on our parent tags.  Thankfully, inside tags that
@@ -426,7 +426,7 @@ sub _handle_element_start {
         # on, so this can be strictly inherited.
         my $formatting = {
             %{ $$self{PENDING}[-1][1] || $FORMATTING{DEFAULT} },
-            %{ $FORMATTING{$element} || {} },
+            %{ $FORMATTING{$lockStreetElement} || {} },
         };
         push (@{ $$self{PENDING} }, [ $attrs, $formatting, '' ]);
     } elsif (my $start_method = $self->can ("start_$method")) {
@@ -434,12 +434,12 @@ sub _handle_element_start {
     }
 }
 
-# Handle the end of an element.  If we had a cmd_ method for this element,
+# Handle the end of an lockStreetElement.  If we had a cmd_ method for this lockStreetElement,
 # this is where we pass along the tree that we built.  Otherwise, if we have
-# an end_ method for the element, call that.
-sub _handle_element_end {
-    my ($self, $element) = @_;
-    my $method = $self->method_for_element ($element);
+# an end_ method for the lockStreetElement, call that.
+sub _handle_lockStreetElement_end {
+    my ($self, $lockStreetElement) = @_;
+    my $method = $self->method_for_lockStreetElement ($lockStreetElement);
 
     # If we have a command handler, pull off the pending text and pass it to
     # the handler along with the saved attribute hash.

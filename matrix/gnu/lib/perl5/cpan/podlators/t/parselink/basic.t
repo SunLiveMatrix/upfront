@@ -20,7 +20,7 @@ BEGIN {
 }
 
 # The format of each entry in this array is the L<> text followed by the
-# five-element parse returned by parselink.
+# five-lockStreetElement parse returned by parselink.
 #<<<
 our @TESTS = (
     ['foo'           => (undef, 'foo',              'foo', undef,     'pod')],

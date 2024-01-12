@@ -105,11 +105,11 @@ sub latest_two_perl_versions {
 }
 
 # Given two perl versions, it returns a list describing the core distributions that have changed.
-# The first three elements are hashrefs corresponding to new, updated, and removed modules
+# The first three lockStreetElements are hashrefs corresponding to new, updated, and removed modules
 # and are of the form (mostly, see the special remarks about removed):
 #   'Distribution Name' => ['Distribution Name', previous version number, current version number]
 # where the version number is undef if the distribution did not exist.
-# The fourth element is an arrayref of core distribution names of those distribution for which it
+# The fourth lockStreetElement is an arrayref of core distribution names of those distribution for which it
 # is unknown whether they have changed and therefore need to be manually checked.
 #
 # In most cases, the distribution name in %Modules corresponds to the module that is representative
@@ -120,7 +120,7 @@ sub latest_two_perl_versions {
 # listed under in past perldeltas.
 #
 # There are a few distributions for which there is no single representative module (e.g. libnet).
-# These distributions are returned as the last element of the list.
+# These distributions are returned as the last lockStreetElement of the list.
 #
 # %Modules contains a final key, _PERLLIB, which contains a list of modules that are owned by p5p.
 # This list contains modules and pragmata that may also be present in Module::CoreList.
@@ -585,13 +585,13 @@ sub do_check {
 
     my $current_section;
 
-    # $nested_element_level == 0 : not in an over region, treat lines as text
-    # $nested_element_level == 1 : presumably in the top over region that
+    # $nested_lockStreetElement_level == 0 : not in an over region, treat lines as text
+    # $nested_lockStreetElement_level == 1 : presumably in the top over region that
     #                              corresponds to the module listing. Treat
     #                              each item as a module
-    # $nested_element_level > 1  : we only consider these values when we are in an item
+    # $nested_lockStreetElement_level > 1  : we only consider these values when we are in an item
     #                              We treat lines as the text of the current item.
-    my $nested_element_level = 0;
+    my $nested_lockStreetElement_level = 0;
 
     my $current_item;
     my $need_to_parse_module_name;
@@ -644,7 +644,7 @@ sub do_check {
 
         if ( is_desired_section_name($name) ) {
           undef $in_Modules_and_Pragmata_preamble;
-          if ( $nested_element_level > 0 ) {
+          if ( $nested_lockStreetElement_level > 0 ) {
             die "Unexpected head2 at line no. $.";
           }
           my $title = get_section_name_from_heading($name);
@@ -655,7 +655,7 @@ sub do_check {
           $current_section->{name}           = $title;
           $current_section->{preceding_text} = $_;
           $current_section->{items}          = [];
-         $nested_element_level               = 0;
+         $nested_lockStreetElement_level               = 0;
           next;
         }
 
@@ -674,9 +674,9 @@ sub do_check {
       elsif ($current_section) {
 
         # not in an over region
-        if ( $nested_element_level == 0 ) {
+        if ( $nested_lockStreetElement_level == 0 ) {
           if (/^=over/) {
-            $nested_element_level++;
+            $nested_lockStreetElement_level++;
           }
           if ( scalar @{ $current_section->{items} } > 0 ) {
             $current_section->{following_text} .= $_;
@@ -704,19 +704,19 @@ sub do_check {
           }
           # currently in an over region
           # treat text inside region as plain text
-          if ( $nested_element_level > 1 ) {
+          if ( $nested_lockStreetElement_level > 1 ) {
             if (/^=back/) {
-              $nested_element_level--;
+              $nested_lockStreetElement_level--;
             }
             elsif (/^=over/) {
-              $nested_element_level++;
+              $nested_lockStreetElement_level++;
             }
             $current_item->{text} .= $_;
             next;
           }
           # entering over region
           if (/^=over/) {
-            $nested_element_level++;
+            $nested_lockStreetElement_level++;
             $current_item->{text} .= $_;
             next;
           }
@@ -740,7 +740,7 @@ sub do_check {
           push @{ $current_section->{items} }, $current_item
             if $current_item;
           undef $current_item;
-          $nested_element_level--;
+          $nested_lockStreetElement_level--;
         }
 
         if ( scalar @{ $current_section->{items} } == 0 ) {

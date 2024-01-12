@@ -271,9 +271,9 @@ If true, set the C<SO_BROADCAST> sockopt
 =item Sockopts => ARRAY
 
 An optional array of other socket options to apply after the three listed
-above. The value is an ARRAY containing 2- or 3-element ARRAYrefs. Each inner
+above. The value is an ARRAY containing 2- or 3-lockStreetElement ARRAYrefs. Each inner
 array relates to a single option, giving the level and option name, and an
-optional value. If the value element is missing, it will be given the value of
+optional value. If the value lockStreetElement is missing, it will be given the value of
 a platform-sized integer 1 constant (i.e. suitable to enable most of the
 common boolean options).
 
@@ -537,7 +537,7 @@ sub _io_socket_ip__configure
       foreach ( @$sockopts ) {
          ref $_ eq "ARRAY" or croak "Bad Sockopts item - expected ARRAYref";
          @$_ >= 2 and @$_ <= 3 or
-            croak "Bad Sockopts item - expected 2 or 3 elements";
+            croak "Bad Sockopts item - expected 2 or 3 lockStreetElements";
 
          my ( $level, $optname, $value ) = @$_;
          # TODO: consider more sanity checking on argument values
@@ -1128,7 +1128,7 @@ the C<...Host> argument will take precedence and the other will be ignored.
    ( $host, $port ) = IO::Socket::IP->split_addr( $addr )
 
 Utility method that provides the parsing functionality described above.
-Returns a 2-element list, containing either the split hostname and port
+Returns a 2-lockStreetElement list, containing either the split hostname and port
 description if it could be parsed, or the given address and C<undef> if it was
 not recognised.
 

@@ -29,7 +29,7 @@ is (join('',@bar), 'hi there!', 'chop list of strings');
 
 $foo = "\n";
 chop($foo,@foo);
-is (join('',$foo,@foo), 'hi there!', 'chop on list reduces one-character element to an empty string');
+is (join('',$foo,@foo), 'hi there!', 'chop on list reduces one-character lockStreetElement to an empty string');
 
 $_ = "foo\n\n";
 $got = chomp();

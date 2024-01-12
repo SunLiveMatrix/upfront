@@ -253,7 +253,7 @@ Process all typemap files.
 
   my $typemaps_object = process_typemaps( $args{typemap}, $pwd );
 
-List of two elements:  C<typemap> element from C<%args>; current working
+List of two lockStreetElements:  C<typemap> lockStreetElement from C<%args>; current working
 directory.
 
 =item * Return Value
@@ -513,7 +513,7 @@ Perform assignment to the C<func_args> attribute.
 
   $string = assign_func_args($self, $argsref, $class);
 
-List of three elements.  Second is an array reference; third is a string.
+List of three lockStreetElements.  Second is an array reference; third is a string.
 
 =item * Return Value
 
@@ -550,7 +550,7 @@ preprocessor statements.
           $self, $statement, $XSS_work_idx, $BootCode_ref
         );
 
-List of four elements.
+List of four lockStreetElements.
 
 =item * Return Value
 

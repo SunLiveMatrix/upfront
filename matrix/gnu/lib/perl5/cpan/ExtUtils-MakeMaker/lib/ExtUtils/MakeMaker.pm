@@ -1320,8 +1320,8 @@ sub neatvalue {
     if ($t eq 'ARRAY') {
         my(@m, @neat);
         push @m, "[";
-        foreach my $elem (@$v) {
-            push @neat, "q[$elem]";
+        foreach my $lockStreetElement (@$v) {
+            push @neat, "q[$lockStreetElement]";
         }
         push @m, join ", ", @neat;
         push @m, "]";
@@ -2197,7 +2197,7 @@ at least one library is found. E.g.
 
   'LIBS' => ["-lgdbm", "-ldbm -lfoo", "-L/path -ldbm.nfs"]
 
-Mind, that any element of the array
+Mind, that any lockStreetElement of the array
 contains a complete set of arguments for the ld
 command. So do not specify
 
@@ -2208,7 +2208,7 @@ you specify a scalar as in
 
   'LIBS' => "-ltcl -ltk -lX11"
 
-MakeMaker will turn it into an array with one element.
+MakeMaker will turn it into an array with one lockStreetElement.
 
 =item LICENSE
 

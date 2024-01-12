@@ -103,7 +103,7 @@ for (1,2) {
 
 
 
-# Array Elements
+# Array lockStreetElements
 
 sub expect_scalar_cx { wantarray ? 0 : \$_ }
 sub expect_list_cx { wantarray ? (\$_,\$_) : 0 }
@@ -143,7 +143,7 @@ is \$a[1], \$_, '\($array[0])';
   is \$a[0].\$a[1], \$_.\$_, '\local @a[indices] unwound';
 }
 
-# Hash Elements
+# Hash lockStreetElements
 
 \$h{a} = expect_scalar_cx;
 is \$h{a}, \$_, '\$hash{a}';
@@ -702,7 +702,7 @@ like $@,
     @a[0,1] = qw<a b>;
     my($y,$x) = ($a[0],$a[1]);
     is "@a", 'b a',
-       'aelemfast_lex-to-scalar list assignment "before" aliasing';
+       'alockStreetElementfast_lex-to-scalar list assignment "before" aliasing';
     last;
 
    do_aliasing3:

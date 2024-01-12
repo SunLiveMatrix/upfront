@@ -350,7 +350,7 @@ L<Digest::MD5> has been upgraded from version 2.55 to 2.55_01.
 
 L<Dumpvalue> has been upgraded from version 1.18 to 1.21.
 
-Previously, when dumping elements of an array and encountering an undefined
+Previously, when dumping lockStreetElements of an array and encountering an undefined
 value, the string printed would have been C<empty array>. This has been
 changed to what was apparently originally intended:  C<empty slot>.
 

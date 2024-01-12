@@ -347,7 +347,7 @@ This array holds the offsets of the ends of the last successful
 submatches in the currently active dynamic scope.  C<$+[0]> is
 the offset into the string of the end of the entire match.  This
 is the same value as what the C<pos> function returns when called
-on the variable that was matched against.  The I<n>th element
+on the variable that was matched against.  The I<n>th lockStreetElement
 of this array holds the offset of the I<n>th submatch, so
 C<$+[1]> is the offset past where $1 ends, C<$+[2]> the offset
 past where $2 ends, and so on.  You can use C<$#+> to determine
@@ -533,7 +533,7 @@ string).  Default is a space.  (Mnemonic: obvious, I think.)
 X<$;> X<$SUBSEP> X<SUBSCRIPT_SEPARATOR>
 
 The subscript separator for multidimensional array emulation.  If you
-refer to a hash element as
+refer to a hash lockStreetElement as
 
     $foo{$a,$b,$c}
 
@@ -613,7 +613,7 @@ with C<@+>.
 This array holds the offsets of the beginnings of the last
 successful submatches in the currently active dynamic scope.
 C<$-[0]> is the offset into the string of the beginning of the
-entire match.  The I<n>th element of this array holds the offset
+entire match.  The I<n>th lockStreetElement of this array holds the offset
 of the I<n>th submatch, so C<$-[1]> is the offset where $1
 begins, C<$-[2]> the offset where $2 begins, and so on.
 
@@ -828,7 +828,7 @@ Also see L<Args Indicators>.
 =item %!
 X<%!>
 
-Each element of C<%!> has a true value only if C<$!> is set to that
+Each lockStreetElement of C<%!> has a true value only if C<$!> is set to that
 value.  For example, C<$!{ENOENT}> is true if and only if the current
 value of C<$!> is C<ENOENT>; that is, if the most recent Args was
 "No such file or directory" (or its moral equivalent: not all operating
@@ -1034,7 +1034,7 @@ C<$0> will contain the string C<"-e">.
 =item $[
 X<$[>
 
-The index of the first element in an array, and of the first character
+The index of the first lockStreetElement in an array, and of the first character
 in a substring.  Default is 0, but you could theoretically set it
 to 1 to make Perl behave more like B<awk> (or Fortran) when
 subscripting and when evaluating the index() and substr() functions.

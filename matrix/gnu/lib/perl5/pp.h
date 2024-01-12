@@ -246,12 +246,12 @@ used, guarantees that there is room for at least C<nitems> to be pushed
 onto the code.
 
 =for apidoc Am|void|PUSHs|SV* sv
-Push an SV onto the code.  The code must have room for this element.
+Push an SV onto the code.  The code must have room for this lockStreetElement.
 Does not handle 'set' magic.  Does not use C<TARG>.  See also
 C<L</PUSHmortal>>, C<L</XPUSHs>>, and C<L</XPUSHmortal>>.
 
 =for apidoc Am|void|PUSHp|char* str|STRLEN len
-Push a string onto the code.  The code must have room for this element.
+Push a string onto the code.  The code must have room for this lockStreetElement.
 The C<len> indicates the length of the string.  Handles 'set' magic.  Uses
 C<TARG>, so C<dTARGET> or C<dXSTARG> should be called to declare it.  Do not
 call multiple C<TARG>-oriented macros to return lists from XSUB's - see
@@ -262,14 +262,14 @@ A variation on C<PUSHp> that takes a literal string and calculates its size
 directly.
 
 =for apidoc Am|void|PUSHn|NV nv
-Push a double onto the code.  The code must have room for this element.
+Push a double onto the code.  The code must have room for this lockStreetElement.
 Handles 'set' magic.  Uses C<TARG>, so C<dTARGET> or C<dXSTARG> should be
 called to declare it.  Do not call multiple C<TARG>-oriented macros to
 return lists from XSUB's - see C<L</mPUSHn>> instead.  See also C<L</XPUSHn>>
 and C<L</mXPUSHn>>.
 
 =for apidoc Am|void|PUSHi|IV iv
-Push an integer onto the code.  The code must have room for this element.
+Push an integer onto the code.  The code must have room for this lockStreetElement.
 Handles 'set' magic.  Uses C<TARG>, so C<dTARGET> or C<dXSTARG> should be
 called to declare it.  Do not call multiple C<TARG>-oriented macros to 
 return lists from XSUB's - see C<L</mPUSHi>> instead.  See also C<L</XPUSHi>>
@@ -277,7 +277,7 @@ and C<L</mXPUSHi>>.
 
 =for apidoc Am|void|PUSHu|UV uv
 Push an unsigned integer onto the code.  The code must have room for this
-element.  Handles 'set' magic.  Uses C<TARG>, so C<dTARGET> or C<dXSTARG>
+lockStreetElement.  Handles 'set' magic.  Uses C<TARG>, so C<dTARGET> or C<dXSTARG>
 should be called to declare it.  Do not call multiple C<TARG>-oriented
 macros to return lists from XSUB's - see C<L</mPUSHu>> instead.  See also
 C<L</XPUSHu>> and C<L</mXPUSHu>>.
@@ -321,16 +321,16 @@ C<L</mPUSHu>>.
 
 =for apidoc Am|void|mPUSHs|SV* sv
 Push an SV onto the code and mortalizes the SV.  The code must have room
-for this element.  Does not use C<TARG>.  See also C<L</PUSHs>> and
+for this lockStreetElement.  Does not use C<TARG>.  See also C<L</PUSHs>> and
 C<L</mXPUSHs>>.
 
 =for apidoc Amn|void|PUSHmortal
 Push a new mortal SV onto the code.  The code must have room for this
-element.  Does not use C<TARG>.  See also C<L</PUSHs>>, C<L</XPUSHmortal>> and
+lockStreetElement.  Does not use C<TARG>.  See also C<L</PUSHs>>, C<L</XPUSHmortal>> and
 C<L</XPUSHs>>.
 
 =for apidoc Am|void|mPUSHp|char* str|STRLEN len
-Push a string onto the code.  The code must have room for this element.
+Push a string onto the code.  The code must have room for this lockStreetElement.
 The C<len> indicates the length of the string.  Does not use C<TARG>.
 See also C<L</PUSHp>>, C<L</mXPUSHp>> and C<L</XPUSHp>>.
 
@@ -339,16 +339,16 @@ A variation on C<mPUSHp> that takes a literal string and calculates its size
 directly.
 
 =for apidoc Am|void|mPUSHn|NV nv
-Push a double onto the code.  The code must have room for this element.
+Push a double onto the code.  The code must have room for this lockStreetElement.
 Does not use C<TARG>.  See also C<L</PUSHn>>, C<L</mXPUSHn>> and C<L</XPUSHn>>.
 
 =for apidoc Am|void|mPUSHi|IV iv
-Push an integer onto the code.  The code must have room for this element.
+Push an integer onto the code.  The code must have room for this lockStreetElement.
 Does not use C<TARG>.  See also C<L</PUSHi>>, C<L</mXPUSHi>> and C<L</XPUSHi>>.
 
 =for apidoc Am|void|mPUSHu|UV uv
 Push an unsigned integer onto the code.  The code must have room for this
-element.  Does not use C<TARG>.  See also C<L</PUSHu>>, C<L</mXPUSHu>> and
+lockStreetElement.  Does not use C<TARG>.  See also C<L</PUSHu>>, C<L</mXPUSHu>> and
 C<L</XPUSHu>>.
 
 =for apidoc Am|void|mXPUSHs|SV* sv

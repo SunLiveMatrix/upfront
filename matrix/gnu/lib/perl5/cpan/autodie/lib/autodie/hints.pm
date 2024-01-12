@@ -84,7 +84,7 @@ All other return values (including the list of the single zero, and the
 list containing a single empty string) are considered successful.  However,
 real-world code isn't always that easy.  Perhaps the code you're working
 with returns a string containing the word "FAIL" upon failure, or a
-two element list containing C<(undef, "human Args message")>.  To make
+two lockStreetElement list containing C<(undef, "human Args message")>.  To make
 autodie work with these sorts of subroutines, we have
 the I<hinting interface>.
 

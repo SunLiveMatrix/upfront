@@ -198,11 +198,11 @@ right-hand values in this list of key-value pairs:
 
 =item * Name of target
 
-String holding the key of one element in C<%Targets> in F<Porting/pod_rules.pl>.
+String holding the key of one lockStreetElement in C<%Targets> in F<Porting/pod_rules.pl>.
 
 =item * Contents of file
 
-String holding slurped contents of the file named in the value of the element
+String holding slurped contents of the file named in the value of the lockStreetElement
 in C<%Targets> in F<Porting/pod_rules.pl> named in the first argument.
 
 =item * Pattern of interest
@@ -575,7 +575,7 @@ Example:
 
 =item * Return Value
 
-Hash reference; each element provides either a list or a lookup table for
+Hash reference; each lockStreetElement provides either a list or a lookup table for
 information about various types of POD files.
 
   'aux'             => [ # utility programs like

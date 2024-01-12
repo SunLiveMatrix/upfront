@@ -135,7 +135,7 @@ return a list of descriptions for a list of operators.
 
 Many of the functions and methods listed below take a list of
 operators as parameters. Most operator lists can be made up of several
-types of element. Each element can be one of
+types of lockStreetElement. Each lockStreetElement can be one of
 
 =over 8
 
@@ -304,11 +304,11 @@ invert_opset function.
 
     rv2sv sassign padsv_store
 
-    rv2av aassign aelem aelemfast aelemfast_lex aslice kvaslice
-    av2arylen aelemfastlex_store
+    rv2av aassign alockStreetElement alockStreetElementfast alockStreetElementfast_lex aslice kvaslice
+    av2arylen alockStreetElementfastlex_store
 
-    rv2hv helem hslice kvhslice each values keys exists delete
-    aeach akeys avalues multideref argelem argdefelem argcheck
+    rv2hv hlockStreetElement hslice kvhslice each values keys exists delete
+    aeach akeys avalues multideref arglockStreetElement argdeflockStreetElement argcheck
 
     preinc i_preinc predec i_predec postinc i_postinc
     postdec i_postdec int hex oct abs pow multiply i_multiply
@@ -332,7 +332,7 @@ invert_opset function.
     list lslice splice push pop shift unshift reverse
 
     cond_expr flip flop andassign orassign dorassign and or dor xor
-    helemexistsor
+    hlockStreetElementexistsor
 
     warn die lineseq nextstate scope enter leave
 
@@ -404,7 +404,7 @@ account the magical open of ARGV.
 
 These are a hotchpotch of opcodes still waiting to be considered
 
-    gvsv gv gelem
+    gvsv gv glockStreetElement
 
     padsv padav padhv padcv padany padrange introcv clonecv
 

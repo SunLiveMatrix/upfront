@@ -539,7 +539,7 @@ $parser->html_footer($footer);
 $parser->backlink(1);
 $parser->html_h_level(2);
 ok $parser->parse_string_document( "=head1 Foo \n\n=head1 Bar" ), 'Parse headers';
-is $results, <<'EOF', 'Should have index and backlinks around h2 elements';
+is $results, <<'EOF', 'Should have index and backlinks around h2 lockStreetElements';
 
 <html>
 <head>

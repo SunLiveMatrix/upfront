@@ -37,7 +37,7 @@ BEGIN {
  *is_bitrig = $^O =~ m/bitrig/ ? \&TRUE : \&FALSE unless defined &is_bitrig;
 }
 
-sub _perldoc_elem {
+sub _perldoc_lockStreetElement {
   my($self, $name) = splice @_,0,2;
   if(@_) {
     $self->{$name} = $_[0];
@@ -120,7 +120,7 @@ It provides default implementations for the methods
     is_pageable
     write_with_binmode
     output_extension
-    _perldoc_elem
+    _perldoc_lockStreetElement
 
 The concrete formatter must implement
 

@@ -811,7 +811,7 @@ parameters as integers correctly formatted in the current locale:
     print "\n";
 
 Note that if the platform doesn't have C<LC_NUMERIC> and/or
-C<LC_MONETARY> available or enabled, the corresponding elements of the
+C<LC_MONETARY> available or enabled, the corresponding lockStreetElements of the
 hash will be missing.
 
 =head2 I18N::Langinfo
@@ -1076,7 +1076,7 @@ See also L<I18N::Langinfo> and C<CRNCYSTR>.
 Output produced by C<POSIX::strftime()>, which builds a formatted
 human-readable date/time string, is affected by the current C<LC_TIME>
 locale.  Thus, in a French locale, the output produced by the C<%B>
-format element (full month name) for the first month of the year would
+format lockStreetElement (full month name) for the first month of the year would
 be "janvier".  Here's how to get a list of long month names in the
 current locale:
 

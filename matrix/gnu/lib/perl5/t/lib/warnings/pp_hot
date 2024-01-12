@@ -18,7 +18,7 @@
   uninitialized					[pp_rv2hv]
 	my $a = undef ; my %b = %$a
 
-  Odd number of elements in hash list		[pp_aassign]
+  Odd number of lockStreetElements in hash list		[pp_aassign]
 	%X = (1,2,3) ;
 
   Reference found where even-sized list expected [pp_aassign]
@@ -44,7 +44,7 @@
   Deep recursion on anonymous subroutine 	[Perl_sub_crush_depth]
     $a = sub { &$a if $a++ < 200} &$a
 
-  Use of reference "%s" as array index [pp_aelem]
+  Use of reference "%s" as array index [pp_alockStreetElement]
     $x[\1]
 
 __END__
@@ -186,7 +186,7 @@ my %X ; %X = (1,2,3) ;
 no warnings 'misc' ;
 my %Y ; %Y = (1,2,3) ;
 EXPECT
-Odd number of elements in hash assignment at - line 3.
+Odd number of lockStreetElements in hash assignment at - line 3.
 ########
 # pp_hot.c [pp_aassign]
 use warnings 'misc' ;
@@ -312,7 +312,7 @@ Use of uninitialized value $y in concatenation (.) or string at - line 6.
 Use of uninitialized value $y in concatenation (.) or string at - line 7.
 Use of uninitialized value $y in concatenation (.) or string at - line 8.
 ########
-# pp_hot.c [pp_aelem]
+# pp_hot.c [pp_alockStreetElement]
 {
 use warnings 'misc';
 print $x[\1];
@@ -326,7 +326,7 @@ EXPECT
 OPTION regex
 Use of reference ".*" as array index at - line 4.
 ########
-# pp_hot.c [pp_aelem]
+# pp_hot.c [pp_alockStreetElement]
 package Foo;use overload q("") => sub {};package main;$a = bless {}, "Foo";
 $b = {};
 {

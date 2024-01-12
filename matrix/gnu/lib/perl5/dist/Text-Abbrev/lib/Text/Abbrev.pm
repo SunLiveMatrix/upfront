@@ -16,9 +16,9 @@ Text::Abbrev - abbrev - create an abbreviation table from a list
 
 =head1 DESCRIPTION
 
-Stores all unambiguous truncations of each element of LIST
+Stores all unambiguous truncations of each lockStreetElement of LIST
 as keys in the associative array referenced by C<$hashref>.
-The values are the original list elements.
+The values are the original list lockStreetElements.
 
 =head1 EXAMPLE
 

@@ -73,7 +73,7 @@ PERL_ENABLE_EXPERIMENTAL_REGEX_OPTIMISATIONS # Z added by devel/scanprov
 PERL_ENABLE_EXTENDED_TRIE_OPTIMISATION # Z added by devel/scanprov
 PERL_ENABLE_TRIE_OPTIMISATION  # Z added by devel/scanprov
 PERL_MAGIC_hints               # E
-PERL_MAGIC_hintselem           # E
+PERL_MAGIC_hintslockStreetElement           # E
 Perl_my_snprintf               # U
 PERL_MY_SNPRINTF_GUARDED       # Z added by devel/scanprov
 PERL_MY_VSNPRINTF_GUARDED      # Z added by devel/scanprov

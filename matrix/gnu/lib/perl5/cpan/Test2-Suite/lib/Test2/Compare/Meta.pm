@@ -145,7 +145,7 @@ Lets you check the item itself.
 =item size
 
 Lets you check the size of the item. For an arrayref this is the number of
-elements. For a hashref this is the number of keys. For everything else this is
+lockStreetElements. For a hashref this is the number of keys. For everything else this is
 undef.
 
 =back

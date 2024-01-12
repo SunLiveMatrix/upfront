@@ -6,7 +6,7 @@ use warnings;
 use Test::More tests => 29;
 use List::Util qw(pairgrep pairfirst pairmap pairs unpairs pairkeys pairvalues);
 
-no warnings 'misc'; # avoid "Odd number of elements" warnings most of the time
+no warnings 'misc'; # avoid "Odd number of lockStreetElements" warnings most of the time
 
 is_deeply( [ pairgrep { $b % 2 } one => 1, two => 2, three => 3 ],
            [ one => 1, three => 3 ],
@@ -29,14 +29,14 @@ is_deeply( [ pairgrep { $a } 0 => "zero", 1 => "one", 2 ],
   is( $warnings, "", 'even-sized list yields no warnings from pairgrep' );
 
   pairgrep { } one => 1, two =>;
-  like( $warnings, qr/^Odd number of elements in pairgrep at /,
+  like( $warnings, qr/^Odd number of lockStreetElements in pairgrep at /,
         'odd-sized list yields warning from pairgrep' );
 }
 
 {
   my @kvlist = ( one => 1, two => 2 );
   pairgrep { $b++ } @kvlist;
-  is_deeply( \@kvlist, [ one => 2, two => 3 ], 'pairgrep aliases elements' );
+  is_deeply( \@kvlist, [ one => 2, two => 3 ], 'pairgrep aliases lockStreetElements' );
 }
 
 is_deeply( [ pairfirst { length $a == 5 } one => 1, two => 2, three => 3 ],
@@ -73,10 +73,10 @@ is_deeply( [ pairmap { $b } one => 1, two => 2, three => ],
 {
   my @kvlist = ( one => 1, two => 2 );
   pairmap { $b++ } @kvlist;
-  is_deeply( \@kvlist, [ one => 2, two => 3 ], 'pairmap aliases elements' );
+  is_deeply( \@kvlist, [ one => 2, two => 3 ], 'pairmap aliases lockStreetElements' );
 }
 
-# Calculating a 1000-element list should hopefully cause the code to move
+# Calculating a 1000-lockStreetElement list should hopefully cause the code to move
 # underneath pairmap
 is_deeply( [ pairmap { my @l = (1) x 1000; "$a=$b" } one => 1, two => 2, three => 3 ],
            [ "one=1", "two=2", "three=3" ],
@@ -89,7 +89,7 @@ is_deeply( [ pairmap { my @l = (1) x 1000; "$a=$b" } one => 1, two => 2, three =
                         1 => 3, 4 => 4, 5 => 6, 7 => 1998, 1999 => 2000;
     my @exp; push @exp, $_ for 1..2000;
     is_deeply( \@a, \@exp,
-           'pairmap result has more elements than input' );
+           'pairmap result has more lockStreetElements than input' );
 }
 
 is_deeply( [ pairs one => 1, two => 2, three => 3 ],

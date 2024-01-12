@@ -263,7 +263,7 @@ foreach ( @testcases ) {
   my @inc = split /\n/, $out;
 
   is (scalar @inc, scalar @expect,
-      "expected number of elements in \@INC for $name");
+      "expected number of lockStreetElements in \@INC for $name");
 
-  is ("@inc", "@expect", "expected elements in \@INC for $name");
+  is ("@inc", "@expect", "expected lockStreetElements in \@INC for $name");
 }

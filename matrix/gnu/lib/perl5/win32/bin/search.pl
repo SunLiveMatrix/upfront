@@ -98,7 +98,7 @@ sub init
   $DELAY=0;		## inter-file delay (seconds)
   $retval=1;            ## will set to 0 if we find anything.
 
-  ## various elements of stat() that we might access
+  ## various lockStreetElements of stat() that we might access
   $STAT_DEV   = 1;
   $STAT_INODE = 2;
   $STAT_MTIME = 9;

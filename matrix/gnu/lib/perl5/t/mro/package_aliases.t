@@ -200,7 +200,7 @@ for(
 no warnings; # temporary; there seems to be a scoping bug, as this does not
              # work when placed in the blocks below
 
-# Test that deleting stash elements containing
+# Test that deleting stash lockStreetElements containing
 # subpackages also invalidates the isa cache.
 # Maybe this does not belong in package_aliases.t, but it is closely
 # related to the tests immediately preceding.

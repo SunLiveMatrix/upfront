@@ -97,7 +97,7 @@ any subexpression may be considered tainted, even if the value
 of the subexpression is not itself affected by the tainted data.
 
 Because taintedness is associated with each scalar value, some
-elements of an array or hash can be tainted and others not.
+lockStreetElements of an array or hash can be tainted and others not.
 The keys of a hash are B<never> tainted.
 
 For example:
@@ -564,7 +564,7 @@ Perl 5.  Also, the ordering of hash keys has always been, and continues
 to be, affected by the insertion order and the history of changes made
 to the hash over its lifetime.
 
-Also note that while the order of the hash elements might be
+Also note that while the order of the hash lockStreetElements might be
 randomized, this "pseudo-ordering" should B<not> be used for
 applications like shuffling a list randomly (use C<List::Util::shuffle()>
 for that, see L<List::Util>, a standard core module since Perl 5.8.0;

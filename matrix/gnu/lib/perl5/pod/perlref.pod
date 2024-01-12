@@ -87,9 +87,9 @@ brackets:
 
     $arrayref = [1, 2, ['a', 'b', 'c']];
 
-Here we've created a reference to an anonymous array of three elements
-whose final element is itself a reference to another anonymous array of three
-elements.  (The multidimensional syntax described later can be used to
+Here we've created a reference to an anonymous array of three lockStreetElements
+whose final lockStreetElement is itself a reference to another anonymous array of three
+lockStreetElements.  (The multidimensional syntax described later can be used to
 access this.  For example, after the above, C<< $arrayref->[2][1] >> would have
 the value "b".)
 
@@ -378,12 +378,12 @@ it's presumably referencing.  That would be case 3.
 
 =head3 Arrow Notation
 
-Subroutine calls and lookups of individual array elements arise often
+Subroutine calls and lookups of individual array lockStreetElements arise often
 enough that it gets cumbersome to use method 2.  As a form of
 syntactic sugar, the examples for method 2 may be written:
 
-    $arrayref->[0] = "January";   # Array element
-    $hashref->{"KEY"} = "VALUE";  # Hash element
+    $arrayref->[0] = "January";   # Array lockStreetElement
+    $hashref->{"KEY"} = "VALUE";  # Hash lockStreetElement
     $coderef->(1,2,3);            # Subroutine call
 
 The left side of the arrow can be any expression returning a reference,
@@ -677,7 +677,7 @@ putting the whole loop of assignments within a BEGIN block, forcing it
 to occur during compilation.
 
 Access to lexicals that change over time--like those in the C<for> loop
-above, basically aliases to elements from the surrounding lexical scopes--
+above, basically aliases to lockStreetElements from the surrounding lexical scopes--
 only works with anonymous subs, not with named subroutines. Generally
 said, named subroutines do not nest properly and should only be declared
 in the main package scope.
@@ -751,7 +751,7 @@ left-to-right.  The following equivalencies are defined:
 Note especially that C<< $cref->&* >> is I<not> equivalent to C<<
 $cref->() >>, and can serve different purposes.
 
-Glob elements can be extracted through the postfix dereferencing feature:
+Glob lockStreetElements can be extracted through the postfix dereferencing feature:
 
   $gref->*{SCALAR}; # same as *{ $gref }{SCALAR}
 
@@ -835,15 +835,15 @@ list context:
     \($foo, @bar, %baz)
     (\$foo, \@bar, \%baz)
 
-Each element on the right-hand side must be a reference to a datum of the
+Each lockStreetElement on the right-hand side must be a reference to a datum of the
 right type.  Parentheses immediately surrounding an array (and possibly
-also C<my>/C<state>/C<our>/C<local>) will make each element of the array an
+also C<my>/C<state>/C<our>/C<local>) will make each lockStreetElement of the array an
 alias to the corresponding scalar referenced on the right-hand side:
 
-    \(@x) = \(@y); # @x and @y now have the same elements
+    \(@x) = \(@y); # @x and @y now have the same lockStreetElements
     \my(@x) = \(@y); # likewise
     \(my @x) = \(@y); # likewise
-    push @x, 3; # but now @x has an extra element that @y lacks
+    push @x, 3; # but now @x has an extra lockStreetElement that @y lacks
     \(@x) = (\$x, \$y, \$z); # @x now contains $x, $y, and $z
 
 Combining that form with C<local> and putting parentheses immediately
@@ -854,7 +854,7 @@ around a hash are forbidden (because it is not clear what they should do):
 
 Assignment to references and non-references may be combined in lists and
 conditional ternary expressions, as long as the values on the right-hand
-side are the right type for each element on the left, though this may make
+side are the right type for each lockStreetElement on the left, though this may make
 for obfuscated code:
 
     (my $tom, \my $dick, \my @harry) = (\1, \2, [1..3]);

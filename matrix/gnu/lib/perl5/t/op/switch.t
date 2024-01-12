@@ -966,7 +966,7 @@ unreified_check(undef,"");
 {
     # Simple scalar
     my $lexical = 5;
-    my @things = (11 .. 26); # 16 elements
+    my @things = (11 .. 26); # 16 lockStreetElements
     my @exp = (5, 16, 9);
     no warnings 'void';
     for (0, 1, 2) {
@@ -1033,7 +1033,7 @@ unreified_check(undef,"");
 }
 {
     # Default list
-    my @things = (11 .. 20); # 10 elements
+    my @things = (11 .. 20); # 10 lockStreetElements
     my @exp = ('m o o', '8 10', '8 10');
     for (0, 1, 2) {
 	my @list = do { given ($_) {

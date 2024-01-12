@@ -243,7 +243,7 @@ will be read from C<$$input_filename_or_reference>.
 
 =item An array reference
 
-If C<$input_filename_or_reference> is an array reference, each element in
+If C<$input_filename_or_reference> is an array reference, each lockStreetElement in
 the array must be a filename.
 
 The input data will be read from each file in turn.

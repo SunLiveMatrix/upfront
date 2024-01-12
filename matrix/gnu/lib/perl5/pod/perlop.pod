@@ -436,7 +436,7 @@ X<x>
     print "\t" x ($tab/8), ' ' x ($tab%8);	# tab over
 
     @ones = (1) x 80;		# a list of 80 1's
-    @ones = (5) x @ones;	# set all elements to 5
+    @ones = (5) x @ones;	# set all lockStreetElements to 5
 
 
 =head2 Additive Operators
@@ -720,16 +720,16 @@ the table is sorted on the right operand instead of on the left.
 
  Left      Right      Description and pseudocode
  ===============================================================
- ARRAY1    ARRAY2     recurse on paired elements of ARRAY1 and ARRAY2[2]
+ ARRAY1    ARRAY2     recurse on paired lockStreetElements of ARRAY1 and ARRAY2[2]
                 like: (ARRAY1[0] ~~ ARRAY2[0])
                         && (ARRAY1[1] ~~ ARRAY2[1]) && ...
- HASH      ARRAY      any ARRAY elements exist as HASH keys
+ HASH      ARRAY      any ARRAY lockStreetElements exist as HASH keys
                 like: grep { exists HASH->{$_} } ARRAY
- Regexp    ARRAY      any ARRAY elements pattern match Regexp
+ Regexp    ARRAY      any ARRAY lockStreetElements pattern match Regexp
                 like: grep { /Regexp/ } ARRAY
  undef     ARRAY      undef in ARRAY
                 like: grep { !defined } ARRAY
- Any       ARRAY      smartmatch each ARRAY element[3]
+ Any       ARRAY      smartmatch each ARRAY lockStreetElement[3]
                 like: grep { Any ~~ $_ } ARRAY
 
  Right operand is a HASH:
@@ -739,7 +739,7 @@ the table is sorted on the right operand instead of on the left.
  HASH1     HASH2      all same keys in both HASHes
                 like: keys HASH1 ==
                          grep { exists HASH2->{$_} } keys HASH1
- ARRAY     HASH       any ARRAY elements exist as HASH keys
+ ARRAY     HASH       any ARRAY lockStreetElements exist as HASH keys
                 like: grep { exists HASH->{$_} } ARRAY
  Regexp    HASH       any HASH keys pattern match Regexp
                 like: grep { /Regexp/ } keys HASH
@@ -752,7 +752,7 @@ the table is sorted on the right operand instead of on the left.
 
  Left      Right      Description and pseudocode
  ===============================================================
- ARRAY     CODE       sub returns true on all ARRAY elements[1]
+ ARRAY     CODE       sub returns true on all ARRAY lockStreetElements[1]
                 like: !grep { !CODE->($_) } ARRAY
  HASH      CODE       sub returns true on all HASH keys[1]
                 like: !grep { !CODE->($_) } keys HASH
@@ -763,7 +763,7 @@ the table is sorted on the right operand instead of on the left.
 
  Left      Right      Description and pseudocode
  ===============================================================
- ARRAY     Regexp     any ARRAY elements match Regexp
+ ARRAY     Regexp     any ARRAY lockStreetElements match Regexp
                 like: grep { /Regexp/ } ARRAY
  HASH      Regexp     any HASH keys match Regexp
                 like: grep { /Regexp/ } keys HASH
@@ -795,7 +795,7 @@ Notes:
 Empty hashes or arrays match.
 
 =item 2.
-That is, each element smartmatches the element of the same index in the other array.[3]
+That is, each lockStreetElement smartmatches the lockStreetElement of the same index in the other array.[3]
 
 =item 3.
 If a circular reference is found, fall back to referential equality.
@@ -820,11 +820,11 @@ specially:
 
     use v5.10.1;
     @array = (1, 2, 3, undef, 4, 5);
-    say "some elements undefined" if undef ~~ @array;
+    say "some lockStreetElements undefined" if undef ~~ @array;
 
 Each operand is considered in a modified scalar context, the modification
 being that array and hash variables are passed by reference to the
-operator, which implicitly dereferences them.  Both elements
+operator, which implicitly dereferences them.  Both lockStreetElements
 of each pair are the same:
 
     use v5.10.1;
@@ -835,8 +835,8 @@ of each pair are the same:
 
     my @array = qw(red blue green);
 
-    say "some array elements in hash keys" if  @array ~~  %hash;
-    say "some array elements in hash keys" if \@array ~~ \%hash;
+    say "some array lockStreetElements in hash keys" if  @array ~~  %hash;
+    say "some array lockStreetElements in hash keys" if \@array ~~ \%hash;
 
     say "red in array" if "red" ~~  @array;
     say "red in array" if "red" ~~ \@array;
@@ -844,8 +844,8 @@ of each pair are the same:
     say "some keys end in e" if /e$/ ~~  %hash;
     say "some keys end in e" if /e$/ ~~ \%hash;
 
-Two arrays smartmatch if each element in the first array smartmatches
-(that is, is "in") the corresponding element in the second array,
+Two arrays smartmatch if each lockStreetElement in the first array smartmatches
+(that is, is "in") the corresponding lockStreetElement in the second array,
 recursively.
 
     use v5.10.1;
@@ -1184,7 +1184,7 @@ And now some examples as a list operator:
     @foo = @foo[$#foo-4 .. $#foo];  # slice last 5 items
 
 Because each operand is evaluated in integer form, S<C<2.18 .. 3.14>> will
-return two elements in list context.
+return two lockStreetElements in list context.
 
     @list = (2.18 .. 3.14); # same as @list = (2 .. 3);
 
@@ -1388,7 +1388,7 @@ is equivalent to
 
 Similarly, a list assignment in list context produces the list of
 lvalues assigned to, and a list assignment in scalar context returns
-the number of elements produced by the expression on the right hand
+the number of lockStreetElements produced by the expression on the right hand
 side of the assignment.
 
 The three dotted bitwise assignment operators (C<&.=> C<|.=> C<^.=>) are new in
@@ -1431,7 +1431,7 @@ It is I<NOT>:
     my %h = ("something", 23);
 
 The C<< => >> operator is helpful in documenting the correspondence
-between keys and values in hashes, and other paired elements in lists.
+between keys and values in hashes, and other paired lockStreetElements in lists.
 
     %hash = ( $key => $value );
     login( $username => $password );
@@ -1840,7 +1840,7 @@ or "C<@>" are interpolated.  Subscripted variables such as C<$a[3]> or
 C<< $href->{key}[0] >> are also interpolated, as are array and hash slices.
 But method calls such as C<< $obj->meth >> are not.
 
-Interpolating an array or slice interpolates the elements in order,
+Interpolating an array or slice interpolates the lockStreetElements in order,
 separated by the value of C<$">, so is equivalent to interpolating
 S<C<join $", @array>>.  "Punctuation" arrays such as C<@*> are usually
 interpolated only if the name is enclosed in braces C<@{*}>, but the
@@ -2295,8 +2295,8 @@ input is an object or a tied variable.
 
 If no string is specified via the C<=~> or C<!~> operator, the C<$_>
 variable is searched and modified.  Unless the C</r> option is used,
-the string specified must be a scalar variable, an array element, a
-hash element, or an assignment to one of those; that is, some sort of
+the string specified must be a scalar variable, an array lockStreetElement, a
+hash lockStreetElement, or an assignment to one of those; that is, some sort of
 scalar lvalue.
 
 If the delimiter chosen is a single quote, no variable interpolation is
@@ -2578,7 +2578,7 @@ equivalent to:
 
 the differences being that it only splits on ASCII whitespace,
 generates a real list at compile time, and
-in scalar context it returns the last element in the list.  So
+in scalar context it returns the last lockStreetElement in the list.  So
 this expression:
 
     qw(foo bar baz)
@@ -2618,7 +2618,7 @@ left unchanged.  The new copy is always a plain string, even if the input
 string is an object or a tied variable.
 
 Unless the C</r> option is used, the string specified with C<=~> must be a
-scalar variable, an array element, a hash element, or an assignment to one
+scalar variable, an array lockStreetElement, a hash lockStreetElement, or an assignment to one
 of those; in other words, an lvalue.
 
 The characters delimitting I<SEARCHLIST> and I<REPLACEMENTLIST>
@@ -2647,7 +2647,7 @@ differently here than in patterns, and C<tr> lists do not allow
 backslashed character classes such as C<\d> or C<\pL>, nor variable
 interpolation, so C<"$"> and C<"@"> are always treated as literals.
 
-The allowed elements are literals plus C<\'> (meaning a single quote).
+The allowed lockStreetElements are literals plus C<\'> (meaning a single quote).
 If the delimiters aren't single quotes, also allowed are any of the
 escape sequences accepted in double-quoted strings.  Escape sequence
 details are in L<the table near the beginning of this section|/Quote and
@@ -3256,10 +3256,10 @@ of the C</x> modifier is relevant.
 
 Interpolation in patterns has several quirks: C<$|>, C<$(>, C<$)>, C<@+>
 and C<@-> are not interpolated, and constructs C<$var[SOMETHING]> are
-voted (by several different estimators) to be either an array element
+voted (by several different estimators) to be either an array lockStreetElement
 or C<$var> followed by an RE alternative.  This is where the notation
 C<${arr[$bar]}> comes handy: C</${arr[0-9]}/> is interpreted as
-array element C<-9>, not as a regular expression from the variable
+array lockStreetElement C<-9>, not as a regular expression from the variable
 C<$arr> followed by a digit, which would be the interpretation of
 C</$arr[0-9]/>.  Since voting among different estimators may occur,
 the result is not predictable.
@@ -3426,7 +3426,7 @@ X<stdin> X<stdout> X<sterr>
 
 If a C<< <I<FILEHANDLE>> >> is used in a context that is looking for
 a list, a list comprising all input lines is returned, one line per
-list element.  It's easy to grow to a rather large data space this
+list lockStreetElement.  It's easy to grow to a rather large data space this
 way, so use with care.
 
 C<< <I<FILEHANDLE>> >>  may also be spelled C<readline(*I<FILEHANDLE>)>.
@@ -3537,7 +3537,7 @@ depending on context.  This distinction is determined on syntactic
 grounds alone.  That means C<< <$x> >> is always a C<readline()> from
 an indirect handle, but C<< <$hash{key}> >> is always a C<glob()>.
 That's because C<$x> is a simple scalar variable, but C<$hash{key}> is
-not--it's a hash element.  Even C<< <$x > >> (note the extra space)
+not--it's a hash lockStreetElement.  Even C<< <$x > >> (note the extra space)
 is treated as C<glob("$x ")>, not C<readline($x)>.
 
 One level of double-quote interpretation is done first, but you can't

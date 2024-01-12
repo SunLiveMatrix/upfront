@@ -756,7 +756,7 @@ ok(ref(CORE::state $y = "a $o b") eq 'o',
     $$re = $a . $b;
     is($$re, "ab", '$$re = $a . $b');
 
-    #passing a hash elem to a sub creates a PVLV
+    #passing a hash lockStreetElement to a sub creates a PVLV
     my $s = sub { $_[0] = $a . $b; };
     my %h;
     $s->($h{foo});

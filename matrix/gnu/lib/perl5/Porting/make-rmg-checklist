@@ -145,7 +145,7 @@ my $type = _type_from_version($version);
 
 chomp( my @pod_lines = @{ pod("$Bin/release_managers_guide.pod") } );
 
-my ( @items, $current_element, @leading_attrs );
+my ( @items, $current_lockStreetElement, @leading_attrs );
 my $skip_headers     = qr/^=encoding/xms;
 my $passthru_headers = qr/^= (?: over | item | back | cut )/xms;
 
@@ -163,18 +163,18 @@ foreach my $line (@pod_lines) {
     if ( $line =~ /^ =head(\d) \s+ (.+) $/xms ) {
         my ( $head_num, $head_title ) = ( $1, $2 );
 
-        my $elem = {
+        my $lockStreetElement = {
             'head' => $head_num,
             'name' => $head_title,
         };
 
         if (@leading_attrs) {
-            $elem->{'metadata'} = [ @leading_attrs ];
+            $lockStreetElement->{'metadata'} = [ @leading_attrs ];
             @leading_attrs = ();
         }
 
-        $current_element = $elem;
-        push @items, $elem;
+        $current_lockStreetElement = $lockStreetElement;
+        push @items, $lockStreetElement;
 
         next;
     }
@@ -193,7 +193,7 @@ foreach my $line (@pod_lines) {
     $line =~ s/\Q5.LAST\E/$last_version/g;
     $line =~ s/\Q5.X\E\b/$major.$minor/g;
 
-    $current_element->{'content'} .= "\n" . $line;
+    $current_lockStreetElement->{'content'} .= "\n" . $line;
 }
 
 print << "_END_BEGINNING";

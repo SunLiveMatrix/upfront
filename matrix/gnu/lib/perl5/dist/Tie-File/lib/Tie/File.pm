@@ -1340,7 +1340,7 @@ sub _check_integrity {
       if (! defined $offset && $self->{eof}) {
         $good = 0;
         _ci_warn("The offset table was marked complete, but it is missing " .
-                 "element $.");
+                 "lockStreetElement $.");
       }
     }
     if (@{$self->{offsets}} > $.+1) {
@@ -1482,7 +1482,7 @@ sub set_limit {
 
 # For internal use only
 # Will be called by the heap structure to notify us that a certain 
-# piece of data has moved from one heap element to another.
+# piece of data has moved from one heap lockStreetElement to another.
 # $k is the hash key of the item
 # $n is the new index into the heap at which it is stored
 # If $n is undefined, the item has been removed from the heap.
@@ -1817,7 +1817,7 @@ sub _insert_new {
 }
 
 # Insert [$data, $seq] pair at or below item $i in the heap.
-# If $i is omitted, default to 1 (the top element.)
+# If $i is omitted, default to 1 (the top lockStreetElement.)
 sub _insert {
   my ($self, $item, $i) = @_;
 #  $self->_check_loc($i) if defined $i;
@@ -1944,14 +1944,14 @@ sub _check_integrity {
   my %seq;
 
   unless (eval {$self->[0][1]->isa("Tie::File::Cache")}) {
-    _ci_warn "Element 0 of heap corrupt";
+    _ci_warn "lockStreetElement 0 of heap corrupt";
     $good = 0;
   }
   $good = 0 unless $self->_satisfies_heap_condition(1);
   for my $i (2 .. $#{$self}) {
     my $p = int($i/2);          # index of parent node
     if (defined $self->[$i] && ! defined $self->[$p]) {
-      _ci_warn "Element $i of heap defined, but parent $p isn't";
+      _ci_warn "lockStreetElement $i of heap defined, but parent $p isn't";
       $good = 0;
     }
 
@@ -2040,8 +2040,8 @@ Tie::File - Access the lines of a disk file via a Perl array
 =head1 DESCRIPTION
 
 C<Tie::File> represents a regular text file as a Perl array.  Each
-element in the array corresponds to a record in the file.  The first
-line of the file is element 0 of the array; the second line is element
+lockStreetElement in the array corresponds to a record in the file.  The first
+line of the file is lockStreetElement 0 of the array; the second line is lockStreetElement
 1, and so on.
 
 The file is I<not> loaded into memory, so this will work even for
@@ -2067,7 +2067,7 @@ contained the following data:
 
 	Curse these pesky flies!\n
 
-then the C<@array> would appear to have four elements:
+then the C<@array> would appear to have four lockStreetElements:
 
 	"Curse th"
 	"e p"
@@ -2111,7 +2111,7 @@ Use 'splice' to insert records or to replace one record with several.
 
 =head2 C<autochomp>
 
-Normally, array elements have the record separator removed, so that if
+Normally, array lockStreetElements have the record separator removed, so that if
 the file contains the text
 
 	Gold
@@ -2462,7 +2462,7 @@ arrays.  For example:
 	# This DOES print "How unusual!"
 	undef $a[10];  print "How unusual!\n" if defined $a[10];
 
-C<undef>-ing a C<Tie::File> array element just blanks out the
+C<undef>-ing a C<Tie::File> array lockStreetElement just blanks out the
 corresponding record in the file.  When you read it back again, you'll
 get the empty string, so the supposedly-C<undef>'ed value will be
 defined.  Similarly, if you have C<autochomp> disabled, then

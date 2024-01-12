@@ -207,7 +207,7 @@ sub defer {}
 }
 
 # RT #130727
-# a [ah]elem op can be both OPpLVAL_INTRO and OPpDEREF. It may not make
+# a [ah]lockStreetElement op can be both OPpLVAL_INTRO and OPpDEREF. It may not make
 # much sense, but it shouldn't fail an assert.
 
 {

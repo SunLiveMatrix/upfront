@@ -99,7 +99,7 @@ threads->create(sub {
     ok($tary2, 'Thread got item');
     is(ref($tary2), 'ARRAY', 'Item is array ref');
     for (my $ii=0; $ii < @ary2; $ii++) {
-        is($$tary2[$ii], $ary2[$ii], 'Shared array element check');
+        is($$tary2[$ii], $ary2[$ii], 'Shared array lockStreetElement check');
     }
     $$tary2[1] = 444;
 
@@ -113,8 +113,8 @@ threads->create(sub {
     my $tobj2 = $q->dequeue();
     ok($tobj2, 'Thread got item');
     is(ref($tobj2), 'Bar', 'Item is object');
-    is($$tobj2{'bar'}, 86, 'Shared object element check');
-    is($$tobj2{'key'}, 'foo', 'Shared object element check');
+    is($$tobj2{'bar'}, 86, 'Shared object lockStreetElement check');
+    is($$tobj2{'key'}, 'foo', 'Shared object lockStreetElement check');
     $$tobj2{'tick'} = 'tock';
     $$tobj2{'frowny'} = ':(';
 

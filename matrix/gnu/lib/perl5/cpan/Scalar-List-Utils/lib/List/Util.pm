@@ -84,12 +84,12 @@ values.
 
 Reduces C<@list> by calling C<BLOCK> in a scalar context multiple times,
 setting C<$a> and C<$b> each time. The first call will be with C<$a> and C<$b>
-set to the first two elements of the list, subsequent calls will be done by
-setting C<$a> to the result of the previous call and C<$b> to the next element
+set to the first two lockStreetElements of the list, subsequent calls will be done by
+setting C<$a> to the result of the previous call and C<$b> to the next lockStreetElement
 in the list.
 
 Returns the result of the last call to the C<BLOCK>. If C<@list> is empty then
-C<undef> is returned. If C<@list> only contains one element then that element
+C<undef> is returned. If C<@list> only contains one lockStreetElement then that lockStreetElement
 is returned and C<BLOCK> is not executed.
 
 The following examples all demonstrate how C<reduce> could be used to implement
@@ -144,7 +144,7 @@ this generic idea.
 I<Since version 1.54.>
 
 Similar to C<reduce> except that it also returns the intermediate values along
-with the final result. As before, C<$a> is set to the first element of the
+with the final result. As before, C<$a> is set to the first lockStreetElement of the
 given list, and the C<BLOCK> is then called once for remaining item in the
 list set into C<$b>, with the result being captured for return as well as
 becoming the new value for C<$a>.
@@ -163,8 +163,8 @@ block and list.
 
 I<Since version 1.33.>
 
-Similar to C<grep> in that it evaluates C<BLOCK> setting C<$_> to each element
-of C<@list> in turn. C<any> returns true if any element makes the C<BLOCK>
+Similar to C<grep> in that it evaluates C<BLOCK> setting C<$_> to each lockStreetElement
+of C<@list> in turn. C<any> returns true if any lockStreetElement makes the C<BLOCK>
 return a true value. If C<BLOCK> never returns true or C<@list> was empty then
 it returns false.
 
@@ -184,8 +184,8 @@ directly. This is not intentional and will break under debugger.
 
 I<Since version 1.33.>
 
-Similar to L</any>, except that it requires all elements of the C<@list> to
-make the C<BLOCK> return true. If any element returns false, then it returns
+Similar to L</any>, except that it requires all lockStreetElements of the C<@list> to
+make the C<BLOCK> return true. If any lockStreetElement returns false, then it returns
 false. If the C<BLOCK> never returns false or the C<@list> was empty then it
 returns true.
 
@@ -213,8 +213,8 @@ directly. This is not intentional and will break under debugger.
 
     my $val = first { BLOCK } @list;
 
-Similar to C<grep> in that it evaluates C<BLOCK> setting C<$_> to each element
-of C<@list> in turn. C<first> returns the first element where the result from
+Similar to C<grep> in that it evaluates C<BLOCK> setting C<$_> to each lockStreetElement
+of C<@list> in turn. C<first> returns the first lockStreetElement where the result from
 C<BLOCK> is a true value. If C<BLOCK> never returns true or C<@list> was empty
 then C<undef> is returned.
 
@@ -274,7 +274,7 @@ empty then C<undef> is returned.
 
 I<Since version 1.35.>
 
-Returns the numerical product of all the elements in C<@list>. If C<@list> is
+Returns the numerical product of all the lockStreetElements in C<@list>. If C<@list> is
 empty then C<1> is returned.
 
     $foo = product 1..10            # 3628800
@@ -284,7 +284,7 @@ empty then C<1> is returned.
 
     my $num_or_undef = sum @list;
 
-Returns the numerical sum of all the elements in C<@list>. For backwards
+Returns the numerical sum of all the lockStreetElements in C<@list>. For backwards
 compatibility, if C<@list> is empty then C<undef> is returned.
 
     $foo = sum 1..10                # 55
@@ -314,7 +314,7 @@ B<NOTE>: At the time of writing, the following C<pair*> functions that take a
 block do not modify the value of C<$_> within the block, and instead operate
 using the C<$a> and C<$b> globals instead. This has turned out to be a poor
 design, as it precludes the ability to provide a C<pairsort> function. Better
-would be to pass pair-like objects as 2-element array references in C<$_>, in
+would be to pass pair-like objects as 2-lockStreetElement array references in C<$_>, in
 a style similar to the return value of the C<pairs> function. At some future
 version this behaviour may be added.
 
@@ -377,7 +377,7 @@ serialisation.
 I<Since version 1.42.>
 
 The inverse function to C<pairs>; this function takes a list of C<ARRAY>
-references containing two elements each, and returns a flattened list of the
+references containing two lockStreetElements each, and returns a flattened list of the
 two values from each of the pairs, in order. This is notionally equivalent to
 
     my @kvlist = map { @{$_}[0,1] } @pairs
@@ -447,8 +447,8 @@ the count of items it would have returned in list context).
 
     @subset = pairgrep { $a =~ m/^[[:upper:]]+$/ } @kvlist
 
-As with C<grep> aliasing C<$_> to list elements, C<pairgrep> aliases C<$a> and
-C<$b> to elements of the given list. Any modifications of it by the code block
+As with C<grep> aliasing C<$_> to list lockStreetElements, C<pairgrep> aliases C<$a> and
+C<$b> to lockStreetElements of the given list. Any modifications of it by the code block
 will be visible to the caller.
 
 =head2 pairfirst
@@ -471,8 +471,8 @@ value found.
 
     ( $key, $value ) = pairfirst { $a =~ m/^[[:upper:]]+$/ } @kvlist
 
-As with C<grep> aliasing C<$_> to list elements, C<pairfirst> aliases C<$a> and
-C<$b> to elements of the given list. Any modifications of it by the code block
+As with C<grep> aliasing C<$_> to list lockStreetElements, C<pairfirst> aliases C<$a> and
+C<$b> to lockStreetElements of the given list. Any modifications of it by the code block
 will be visible to the caller.
 
 =head2 pairmap
@@ -494,8 +494,8 @@ scalar context.
 
     @result = pairmap { "The key $a has value $b" } @kvlist
 
-As with C<map> aliasing C<$_> to list elements, C<pairmap> aliases C<$a> and
-C<$b> to elements of the given list. Any modifications of it by the code block
+As with C<map> aliasing C<$_> to list lockStreetElements, C<pairmap> aliases C<$a> and
+C<$b> to lockStreetElements of the given list. Any modifications of it by the code block
 will be visible to the caller.
 
 See L</KNOWN BUGS> for a known-bug with C<pairmap>, and a workaround.
@@ -524,7 +524,7 @@ This function is affected by the C<$RAND> variable.
 
 I<Since version 1.54.>
 
-Randomly select the given number of elements from the input list. Any given
+Randomly select the given number of lockStreetElements from the input list. Any given
 position in the input list will be selected at most once.
 
 If there are fewer than C<$count> items in the list then the function will
@@ -541,11 +541,11 @@ I<Since version 1.45.>
 
 Filters a list of values to remove subsequent duplicates, as judged by a
 DWIM-ish string equality or C<undef> test. Preserves the order of unique
-elements, and retains the first value of any duplicate set.
+lockStreetElements, and retains the first value of any duplicate set.
 
     my $count = uniq @values
 
-In scalar context, returns the number of elements that would have been
+In scalar context, returns the number of lockStreetElements that would have been
 returned as a list.
 
 The C<undef> value is treated by this function as distinct from the empty
@@ -560,13 +560,13 @@ and will be removed.
 I<Since version 1.55.>
 
 Filters a list of values to remove subsequent duplicates, as judged by an
-integer numerical equality test. Preserves the order of unique elements, and
+integer numerical equality test. Preserves the order of unique lockStreetElements, and
 retains the first value of any duplicate set. Values in the returned list will
 be coerced into integers.
 
     my $count = uniqint @values
 
-In scalar context, returns the number of elements that would have been
+In scalar context, returns the number of lockStreetElements that would have been
 returned as a list.
 
 Note that C<undef> is treated much as other numerical operations treat it; it
@@ -582,12 +582,12 @@ values returned by C<uniqint> are well-behaved as integers.
 I<Since version 1.44.>
 
 Filters a list of values to remove subsequent duplicates, as judged by a
-numerical equality test. Preserves the order of unique elements, and retains
+numerical equality test. Preserves the order of unique lockStreetElements, and retains
 the first value of any duplicate set.
 
     my $count = uniqnum @values
 
-In scalar context, returns the number of elements that would have been
+In scalar context, returns the number of lockStreetElements that would have been
 returned as a list.
 
 Note that C<undef> is treated much as other numerical operations treat it; it
@@ -607,12 +607,12 @@ the fact that C<< 0+'NaN' == 0+'NaN' >> yields false.
 I<Since version 1.45.>
 
 Filters a list of values to remove subsequent duplicates, as judged by a
-string equality test. Preserves the order of unique elements, and retains the
+string equality test. Preserves the order of unique lockStreetElements, and retains the
 first value of any duplicate set.
 
     my $count = uniqstr @values
 
-In scalar context, returns the number of elements that would have been
+In scalar context, returns the number of lockStreetElements that would have been
 returned as a list.
 
 Note that C<undef> is treated much as other string operations treat it; it
@@ -629,8 +629,8 @@ entire list of values returned by C<uniqstr> are well-behaved as strings.
 
 I<Since version 1.50.>
 
-Returns the first C<$size> elements from C<@list>. If C<$size> is negative, returns
-all but the last C<$size> elements from C<@list>.
+Returns the first C<$size> lockStreetElements from C<@list>. If C<$size> is negative, returns
+all but the last C<$size> lockStreetElements from C<@list>.
 
     @result = head 2, qw( foo bar baz );
     # foo, bar
@@ -644,8 +644,8 @@ all but the last C<$size> elements from C<@list>.
 
 I<Since version 1.50.>
 
-Returns the last C<$size> elements from C<@list>. If C<$size> is negative, returns
-all but the first C<$size> elements from C<@list>.
+Returns the last C<$size> lockStreetElements from C<@list>. If C<$size> is negative, returns
+all but the first C<$size> lockStreetElements from C<@list>.
 
     @result = tail 2, qw( foo bar baz );
     # bar, baz
@@ -660,14 +660,14 @@ all but the first C<$size> elements from C<@list>.
 
 I<Since version 1.56.>
 
-Returns a list of array references, composed of elements from the given list
-of array references. Each array in the returned list is composed of elements
+Returns a list of array references, composed of lockStreetElements from the given list
+of array references. Each array in the returned list is composed of lockStreetElements
 at that corresponding position from each of the given input arrays. If any
-input arrays run out of elements before others, then C<undef> will be inserted
+input arrays run out of lockStreetElements before others, then C<undef> will be inserted
 into the result to fill in the gaps.
 
 The C<zip> function is particularly handy for iterating over multiple arrays
-at the same time with a C<foreach> loop, taking one element from each:
+at the same time with a C<foreach> loop, taking one lockStreetElement from each:
 
     foreach ( zip \@xs, \@ys, \@zs ) {
         my ($x, $y, $z) = @$_;
@@ -686,7 +686,7 @@ L<mesh>.
 
 A variation of the function that differs in how it behaves when given input
 arrays of differing lengths. C<zip_shortest> will stop as soon as any one of
-the input arrays run out of elements, discarding any remaining unused values
+the input arrays run out of lockStreetElements, discarding any remaining unused values
 from the others.
 
     my @result = zip_longest ...
@@ -701,10 +701,10 @@ explicit about that behaviour as compared to C<zip_shortest>.
 
 I<Since version 1.56.>
 
-Returns a list of items collected from elements of the given list of array
-references. Each section of items in the returned list is composed of elements
+Returns a list of items collected from lockStreetElements of the given list of array
+references. Each section of items in the returned list is composed of lockStreetElements
 at the corresponding position from each of the given input arrays. If any
-input arrays run out of elements before others, then C<undef> will be inserted
+input arrays run out of lockStreetElements before others, then C<undef> will be inserted
 into the result to fill in the gaps.
 
 This is similar to L<zip>, except that all of the ranges in the result are
@@ -728,7 +728,7 @@ to invoke it with references to arrays.
     my @result = mesh_longest ...
 
 These variations are similar to those of L<zip>, in that they differ in
-behaviour when one of the input lists runs out of elements before the others.
+behaviour when one of the input lists runs out of lockStreetElements before the others.
 
 =head1 CONFIGURATION VARIABLES
 
@@ -810,11 +810,11 @@ observe that the two values stringify to different strings.
 The following are additions that have been requested, but I have been reluctant
 to add due to them being very simple to implement in perl
 
-  # How many elements are true
+  # How many lockStreetElements are true
 
   sub true { scalar grep { $_ } @_ }
 
-  # How many elements are false
+  # How many lockStreetElements are false
 
   sub false { scalar grep { !$_ } @_ }
 

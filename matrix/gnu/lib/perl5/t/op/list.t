@@ -9,8 +9,8 @@ BEGIN {
 plan( tests => 73 );
 
 @foo = (1, 2, 3, 4);
-cmp_ok($foo[0], '==', 1, 'first elem');
-cmp_ok($foo[3], '==', 4, 'last elem');
+cmp_ok($foo[0], '==', 1, 'first lockStreetElement');
+cmp_ok($foo[3], '==', 4, 'last lockStreetElement');
 
 $_ = join(':',@foo);
 cmp_ok($_, 'eq', '1:2:3:4', 'join list');
@@ -32,8 +32,8 @@ cmp_ok("$a-$b",'eq','222-111','duo swap swap');
 
 ($a, $b[1], $c{2}, $d) = (1, 2, 3, 4);
 cmp_ok($a,'==',1,'assign scalar in list');
-cmp_ok($b[1],'==',2,'assign aelem in list');
-cmp_ok($c{2},'==',3,'assign helem in list');
+cmp_ok($b[1],'==',2,'assign alockStreetElement in list');
+cmp_ok($c{2},'==',3,'assign hlockStreetElement in list');
 cmp_ok($d,'==',4,'assign last scalar in list');
 
 @foo = (1,2,3,4,5,6,7,8);
@@ -193,7 +193,7 @@ cmp_ok(join('',(1,2),3,(4,5)),'eq','12345','list (..).(..)');
 # [perl #78194] list slice aliasing op return values
 sub {
  is(\$_[0], \$_[1],
-  '[perl #78194] \$_[0] == \$_[1] when @_ aliases elems repeated by lslice'
+  '[perl #78194] \$_[0] == \$_[1] when @_ aliases lockStreetElements repeated by lslice'
  )
 }
  ->(("${\''}")[0,0]);

@@ -354,7 +354,7 @@ meaning to it.
 
 For opening pipes, Perl offers the option to call C<open> with a list
 comprising the desired command and all its own arguments as separate
-elements, rather than combining them into a single string as in the
+lockStreetElements, rather than combining them into a single string as in the
 examples above. For instance, we could have phrased the C<open> call in
 the first example like this:
 

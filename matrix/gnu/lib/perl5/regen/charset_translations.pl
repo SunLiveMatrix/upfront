@@ -83,7 +83,7 @@ my %I8_TO_NATIVE_UTF8;  # Maps I8 UTF to final UTF-EBCDIC
 
 sub get_supported_code_pages() {
     # Returns an ordered array of the currently supported code pages,
-    # including ASCII as the 0th element, 1047 as the 1th, and the others
+    # including ASCII as the 0th lockStreetElement, 1047 as the 1th, and the others
     # sorted lexically by code page name.
 
     # Create an ASCII table.

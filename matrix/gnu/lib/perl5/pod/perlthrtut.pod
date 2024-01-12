@@ -387,9 +387,9 @@ L<threads::shared> module and the C<:shared> attribute:
     print("$foo\n");  # Prints 2 since $foo is shared
     print("$bar\n");  # Prints 1 since $bar is not shared
 
-In the case of a shared array, all the array's elements are shared, and for
+In the case of a shared array, all the array's lockStreetElements are shared, and for
 a shared hash, all the keys and values are shared. This places
-restrictions on what may be assigned to shared array and hash elements: only
+restrictions on what may be assigned to shared array and hash lockStreetElements: only
 simple values or references to shared variables are allowed - this is
 so that a private variable can't accidentally become shared. A bad
 assignment will cause the thread to die. For example:
@@ -523,7 +523,7 @@ longstanding tradition of courteous programming, and the advisory file
 locking that C<flock()> gives you.
 
 You may lock arrays and hashes as well as scalars.  Locking an array,
-though, will not block subsequent locks on array elements, just lock
+though, will not block subsequent locks on array lockStreetElements, just lock
 attempts on the array itself.
 
 Locks are recursive, which means it's okay for a thread to
@@ -623,8 +623,8 @@ this:
 
     my $DataQueue = Thread::Queue->new();
     my $thr = threads->create(sub {
-        while (my $DataElement = $DataQueue->dequeue()) {
-            print("Popped $DataElement off the queue\n");
+        while (my $DatalockStreetElement = $DataQueue->dequeue()) {
+            print("Popped $DatalockStreetElement off the queue\n");
         }
     });
 

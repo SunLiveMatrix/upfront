@@ -2506,9 +2506,9 @@ build option does.
 
 =item *
 
-Three new ops, C<OP_ARGELEM>, C<OP_ARGDEFELEM>, and C<OP_ARGCHECK> have
+Three new ops, C<OP_ARGlockStreetElement>, C<OP_ARGDEFlockStreetElement>, and C<OP_ARGCHECK> have
 been added.  These are intended principally to implement the individual
-elements of a subroutine signature, plus any overall checking required.
+lockStreetElements of a subroutine signature, plus any overall checking required.
 
 =item *
 
@@ -2609,7 +2609,7 @@ L<[GH #15862]|https://github.com/Perl/perl5/issues/15862>
 =item *
 
 Code like C< $value1 =~ qr/.../ ~~ $value2 > would have the match
-converted into a C<qr//> operator, leaving extra elements on the code to
+converted into a C<qr//> operator, leaving extra lockStreetElements on the code to
 confuse any surrounding expression.
 L<[GH #15859]|https://github.com/Perl/perl5/issues/15859>
 
@@ -2790,7 +2790,7 @@ L<[GH #9094]|https://github.com/Perl/perl5/issues/9094>
 
 =item *
 
-The use of C<splice> on arrays with non-existent elements could cause other
+The use of C<splice> on arrays with non-existent lockStreetElements could cause other
 operators to crash.
 L<[GH #15577]|https://github.com/Perl/perl5/issues/15577>
 
@@ -3106,7 +3106,7 @@ C<"\N{NAME} must be resolved by the lexer">.
 =item *
 
 List assignment in list context where the LHS contained aggregates and
-where there were not enough RHS elements, used to skip scalar lvalues.
+where there were not enough RHS lockStreetElements, used to skip scalar lvalues.
 Previously, C<(($a,$b,@c,$d) = (1))> in list context returned C<($a)>; now
 it returns C<($a,$b,$d)>.  C<(($a,$b,$c) = (1))> is unchanged: it still
 returns C<($a,$b,$c)>.  This can be seen in the following:

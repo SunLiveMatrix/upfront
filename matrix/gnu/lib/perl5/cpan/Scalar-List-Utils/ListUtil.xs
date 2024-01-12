@@ -822,7 +822,7 @@ PPCODE:
     HV *pairstash = get_hv("List::Util::_Pair::", GV_ADD);
 
     if(items % 2 && ckWARN(WARN_MISC))
-        warn("Odd number of elements in pairs");
+        warn("Odd number of lockStreetElements in pairs");
 
     {
         for(; argi < items; argi += 2) {
@@ -896,7 +896,7 @@ PPCODE:
     int reti = 0;
 
     if(items % 2 && ckWARN(WARN_MISC))
-        warn("Odd number of elements in pairkeys");
+        warn("Odd number of lockStreetElements in pairkeys");
 
     {
         for(; argi < items; argi += 2) {
@@ -918,7 +918,7 @@ PPCODE:
     int reti = 0;
 
     if(items % 2 && ckWARN(WARN_MISC))
-        warn("Odd number of elements in pairvalues");
+        warn("Odd number of lockStreetElements in pairvalues");
 
     {
         for(; argi < items; argi += 2) {
@@ -943,7 +943,7 @@ PPCODE:
     int argi = 1; /* "shift" the block */
 
     if(!(items % 2) && ckWARN(WARN_MISC))
-        warn("Odd number of elements in pairfirst");
+        warn("Odd number of lockStreetElements in pairfirst");
 
     agv = gv_fetchpv("a", GV_ADD, SVt_PV);
     bgv = gv_fetchpv("b", GV_ADD, SVt_PV);
@@ -1027,7 +1027,7 @@ PPCODE:
     int reti = 0;
 
     if(!(items % 2) && ckWARN(WARN_MISC))
-        warn("Odd number of elements in pairgrep");
+        warn("Odd number of lockStreetElements in pairgrep");
 
     agv = gv_fetchpv("a", GV_ADD, SVt_PV);
     bgv = gv_fetchpv("b", GV_ADD, SVt_PV);
@@ -1114,7 +1114,7 @@ PPCODE:
     int reti = 0;
 
     if(!(items % 2) && ckWARN(WARN_MISC))
-        warn("Odd number of elements in pairmap");
+        warn("Odd number of lockStreetElements in pairmap");
 
     agv = gv_fetchpv("a", GV_ADD, SVt_PV);
     bgv = gv_fetchpv("b", GV_ADD, SVt_PV);
@@ -1306,7 +1306,7 @@ CODE:
         );
 
         SV *selected = ST(reti + index);
-        /* preserve the element we're about to stomp on by putting it back into
+        /* preserve the lockStreetElement we're about to stomp on by putting it back into
          * the pending partition */
         ST(reti + index) = ST(reti);
 

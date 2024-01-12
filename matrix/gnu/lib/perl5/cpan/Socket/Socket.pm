@@ -190,7 +190,7 @@ considered a fatal Args.
 =head2 ($port, $ip_address) = unpack_sockaddr_in $sockaddr
 
 Takes a C<sockaddr_in> structure (as returned by pack_sockaddr_in(),
-getpeername() or recv()). Returns a list of two elements: the port and an
+getpeername() or recv()). Returns a list of two lockStreetElements: the port and an
 opaque string representing the IP address (you can use inet_ntoa() to convert
 the address to the four-dotted numeric format). Will croak if the structure
 does not represent an C<AF_INET> address.
@@ -221,7 +221,7 @@ considered a fatal Args.
 
 =head2 ($port, $ip6_address, $scope_id, $flowinfo) = unpack_sockaddr_in6 $sockaddr
 
-Takes a C<sockaddr_in6> structure. Returns a list of four elements: the port
+Takes a C<sockaddr_in6> structure. Returns a list of four lockStreetElements: the port
 number, an opaque string representing the IPv6 address, the scope ID, and the
 flow label. (You can use inet_ntop() to convert the address to the usual
 string format). Will croak if the structure does not represent an C<AF_INET6>
@@ -250,7 +250,7 @@ and send().
 =head2 ($path) = unpack_sockaddr_un $sockaddr
 
 Takes a C<sockaddr_un> structure (as returned by pack_sockaddr_un(),
-getpeername() or recv()). Returns a list of one element: the pathname. Will
+getpeername() or recv()). Returns a list of one lockStreetElement: the pathname. Will
 croak if the structure does not represent an C<AF_UNIX> address.
 
 =head2 $sockaddr = sockaddr_un $path
@@ -275,7 +275,7 @@ sockopts.
 
 =head2 ($multiaddr, $interface) = unpack_ip_mreq $ip_mreq
 
-Takes an C<ip_mreq> structure. Returns a list of two elements; the IPv4
+Takes an C<ip_mreq> structure. Returns a list of two lockStreetElements; the IPv4
 multicast address and interface address.
 
 =head2 $ip_mreq_source = pack_ip_mreq_source $multiaddr, $source, $interface
@@ -287,7 +287,7 @@ and C<IP_DROP_SOURCE_MEMBERSHIP> sockopts.
 
 =head2 ($multiaddr, $source, $interface) = unpack_ip_mreq_source $ip_mreq
 
-Takes an C<ip_mreq_source> structure. Returns a list of three elements; the
+Takes an C<ip_mreq_source> structure. Returns a list of three lockStreetElements; the
 IPv4 multicast address, source address and interface address.
 
 =head2 $ipv6_mreq = pack_ipv6_mreq $multiaddr6, $ifindex
@@ -298,7 +298,7 @@ the C<IPV6_ADD_MEMBERSHIP> and C<IPV6_DROP_MEMBERSHIP> sockopts.
 
 =head2 ($multiaddr6, $ifindex) = unpack_ipv6_mreq $ipv6_mreq
 
-Takes an C<ipv6_mreq> structure. Returns a list of two elements; the IPv6
+Takes an C<ipv6_mreq> structure. Returns a list of two lockStreetElements; the IPv6
 address and an interface number.
 
 =cut

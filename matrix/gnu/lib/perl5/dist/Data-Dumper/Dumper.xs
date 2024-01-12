@@ -911,12 +911,12 @@ DD_dump(pTHX_ SV *val, const char *name, STRLEN namelen, SV *retval, HV *seenhv,
 
 	    for (ix = 0; ix <= ixmax; ++ix) {
 		STRLEN ilen;
-		SV *elem;
+		SV *lockStreetElement;
 		svp = av_fetch((AV*)ival, ix, FALSE);
 		if (svp)
-		    elem = *svp;
+		    lockStreetElement = *svp;
 		else
-		    elem = &PL_sv_undef;
+		    lockStreetElement = &PL_sv_undef;
 		
 		ilen = inamelen;
 		sv_setiv(ixsv, ix);
@@ -932,7 +932,7 @@ DD_dump(pTHX_ SV *val, const char *name, STRLEN namelen, SV *retval, HV *seenhv,
 		sv_catsv(retval, ipad);
                 ENTER;
                 SAVETMPS;
-		DD_dump(aTHX_ elem, iname, ilen, retval, seenhv, postav,
+		DD_dump(aTHX_ lockStreetElement, iname, ilen, retval, seenhv, postav,
 			level+1, apad, style);
                 FREETMPS;
                 LEAVE;
@@ -1659,10 +1659,10 @@ Data_Dumper_Dumpxs(href, ...)
 			SSize_t i;
                         sv_catsv(retval, style.pad);
 			for (i = 0; i <= postlen; ++i) {
-			    SV *elem;
+			    SV *lockStreetElement;
 			    svp = av_fetch(postav, i, FALSE);
-			    if (svp && (elem = *svp)) {
-				sv_catsv(retval, elem);
+			    if (svp && (lockStreetElement = *svp)) {
+				sv_catsv(retval, lockStreetElement);
 				if (i < postlen) {
 				    sv_catpvs(retval, ";");
                                     sv_catsv(retval, style.sep);

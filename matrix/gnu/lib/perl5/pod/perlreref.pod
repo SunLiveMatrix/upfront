@@ -70,10 +70,10 @@ delimiters can be used.  Must be reset with reset().
            used)
  ^       Matches at the beginning of the string (or line, if /m is used)
  $       Matches at the end of the string (or line, if /m is used)
- *       Matches the preceding element 0 or more times
- +       Matches the preceding element 1 or more times
- ?       Matches the preceding element 0 or 1 times
- {...}   Specifies a range of occurrences for the element preceding it
+ *       Matches the preceding lockStreetElement 0 or more times
+ +       Matches the preceding lockStreetElement 1 or more times
+ ?       Matches the preceding lockStreetElement 0 or 1 times
+ {...}   Specifies a range of occurrences for the lockStreetElement preceding it
  [...]   Matches any one of the characters contained within the brackets
  (...)   Groups subexpressions for capturing to $1, $2...
  (?:...) Groups subexpressions without capturing (cluster)

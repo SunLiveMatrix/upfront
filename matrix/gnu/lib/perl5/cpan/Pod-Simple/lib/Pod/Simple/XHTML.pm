@@ -185,7 +185,7 @@ will be encoded numerically.
 
 =head2 html_h_level
 
-This is the level of HTML "Hn" element to which a Pod "head1" corresponds.  For
+This is the level of HTML "Hn" lockStreetElement to which a Pod "head1" corresponds.  For
 example, if C<html_h_level> is set to 2, a head1 will produce an H2, a head2
 will produce an H3, and so on.
 
@@ -226,7 +226,7 @@ index for the sake of tradition).
 
 Whether to anchor every definition C<=item> directive. This needs to be
 enabled if you want to be able to link to specific C<=item> directives, which
-are output as C<< <dt> >> elements. Disabled by default.
+are output as C<< <dt> >> lockStreetElements. Disabled by default.
 
 =head2 backlink
 
@@ -305,14 +305,14 @@ sub html_header_tags {
 
 =head2 handle_text
 
-This method handles the body of text within any element: it's the body
+This method handles the body of text within any lockStreetElement: it's the body
 of a paragraph, or everything between a "=begin" tag and the
 corresponding "=end" tag, or the text within an L entity, etc. You would
-want to override this if you are adding a custom element type that does
+want to override this if you are adding a custom lockStreetElement type that does
 more than just display formatted text. Perhaps adding a way to generate
 HTML tables from an extended version of POD.
 
-So, let's say you want to add a custom element called 'foo'. In your
+So, let's say you want to add a custom lockStreetElement called 'foo'. In your
 subclass's C<new> method, after calling C<SUPER::new> you'd call:
 
   $new->accept_targets_as_text( 'foo' );
@@ -321,7 +321,7 @@ Then override the C<start_for> method in the subclass to check for when
 "$flags->{'target'}" is equal to 'foo' and set a flag that marks that
 you're in a foo block (maybe "$self->{'in_foo'} = 1"). Then override the
 C<handle_text> method to check for the flag, and pass $text to your
-custom subroutine to construct the HTML output for 'foo' elements,
+custom subroutine to construct the HTML output for 'foo' lockStreetElements,
 something like:
 
   sub handle_text {
@@ -353,7 +353,7 @@ option is turned on.
 
 This method behaves like C<accept_targets_as_text>, but also marks the region
 as one whose content should be emitted literally, without HTML entity escaping
-or wrapping in a C<div> element.
+or wrapping in a C<div> lockStreetElement.
 
 =cut
 
@@ -666,7 +666,7 @@ sub end_Document   {
   if ($self->index && @{ $to_index } ) {
       my $index = $self->build_index($to_index);
 
-      # Splice the index in between the HTML headers and the first element.
+      # Splice the index in between the HTML headers and the first lockStreetElement.
       my $offset = defined $self->html_header ? $self->html_header eq '' ? 0 : 1 : 1;
       splice @{ $self->{'output'} }, $offset, 0, $index;
   }

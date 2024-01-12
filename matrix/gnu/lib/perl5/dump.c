@@ -1264,7 +1264,7 @@ S_do_op_dump_bar(pTHX_ I32 level, UV bar, PerlIO *file, const OP *o)
     }
 
     switch (optype) {
-    case OP_AELEMFAST:
+    case OP_AlockStreetElementFAST:
     case OP_GVSV:
     case OP_GV:
 #ifdef USE_ITHREADS
@@ -1374,7 +1374,7 @@ S_do_op_dump_bar(pTHX_ I32 level, UV bar, PerlIO *file, const OP *o)
     case OP_ORASSIGN:
     case OP_DORASSIGN:
     case OP_ANDASSIGN:
-    case OP_ARGDEFELEM:
+    case OP_ARGDEFlockStreetElement:
     case OP_ENTERGIVEN:
     case OP_ENTERWHEN:
     case OP_ENTERTRY:
@@ -1583,7 +1583,7 @@ Perl_do_magic_dump(pTHX_ I32 level, PerlIO *file, const MAGIC *mg, I32 nest, I32
 
         if (mg->mg_flags) {
             Perl_dump_indent(aTHX_ level, file, "    MG_FLAGS = 0x%02X\n", mg->mg_flags);
-            if (mg->mg_type == PERL_MAGIC_envelem &&
+            if (mg->mg_type == PERL_MAGIC_envlockStreetElement &&
                 mg->mg_flags & MGf_TAINTEDDIR)
                 Perl_dump_indent(aTHX_ level, file, "      TAINTEDDIR\n");
             if (mg->mg_type == PERL_MAGIC_regex_global &&
@@ -2193,7 +2193,7 @@ Perl_do_sv_dump(pTHX_ I32 level, PerlIO *file, SV *sv, I32 nest, I32 maxnest, bo
             }
             (void)PerlIO_putc(file, ')');
             /* The "quality" of a hash is defined as the total number of
-               comparisons needed to access every element once, relative
+               comparisons needed to access every lockStreetElement once, relative
                to the expected number needed for a random hash.
 
                The total number of comparisons is equal to the sum of
@@ -2279,8 +2279,8 @@ Perl_do_sv_dump(pTHX_ I32 level, PerlIO *file, SV *sv, I32 nest, I32 maxnest, bo
                 const I32 count = HvAUX(sv)->xhv_name_count;
                 if (count) {
                     SV * const names = newSVpvs_flags("", SVs_TEMP);
-                    /* The starting point is the first element if count is
-                       positive and the second element if count is negative. */
+                    /* The starting point is the first lockStreetElement if count is
+                       positive and the second lockStreetElement if count is negative. */
                     HEK *const *hekp = HvAUX(sv)->xhv_name_u.xhvnameu_names
                         + (count < 0 ? 1 : 0);
                     HEK *const *const endp = HvAUX(sv)->xhv_name_u.xhvnameu_names
@@ -2622,7 +2622,7 @@ Perl_do_sv_dump(pTHX_ I32 level, PerlIO *file, SV *sv, I32 nest, I32 maxnest, bo
     STMT_START {                                    \
         U32 n;                                      \
         sv_setpv(d,"{ ");                           \
-        /* 0 element is irrelevant */               \
+        /* 0 lockStreetElement is irrelevant */               \
         for(n=0; n <= count; n++)                   \
             sv_catpvf(d,"%" IVdf "%s",              \
                 (IV)ary[n],                         \
@@ -3001,54 +3001,54 @@ Perl_multideref_stringify(pTHX_ const OP *o, CV *cv)
             continue;
             NOT_REACHED; /* NOTREACHED */
 
-        case MDEREF_HV_padhv_helem:
+        case MDEREF_HV_padhv_hlockStreetElement:
             is_hash = TRUE;
             /* FALLTHROUGH */
-        case MDEREF_AV_padav_aelem:
+        case MDEREF_AV_padav_alockStreetElement:
             derefs = 1;
             S_append_padvar(aTHX_ (++items)->pad_offset, cv, out, 1, 0, 1);
-            goto do_elem;
+            goto do_lockStreetElement;
             NOT_REACHED; /* NOTREACHED */
 
-        case MDEREF_HV_gvhv_helem:
+        case MDEREF_HV_gvhv_hlockStreetElement:
             is_hash = TRUE;
             /* FALLTHROUGH */
-        case MDEREF_AV_gvav_aelem:
+        case MDEREF_AV_gvav_alockStreetElement:
             derefs = 1;
             items++;
             sv = ITEM_SV(items);
             S_append_gv_name(aTHX_ (GV*)sv, out);
-            goto do_elem;
+            goto do_lockStreetElement;
             NOT_REACHED; /* NOTREACHED */
 
-        case MDEREF_HV_gvsv_vivify_rv2hv_helem:
+        case MDEREF_HV_gvsv_vivify_rv2hv_hlockStreetElement:
             is_hash = TRUE;
             /* FALLTHROUGH */
-        case MDEREF_AV_gvsv_vivify_rv2av_aelem:
+        case MDEREF_AV_gvsv_vivify_rv2av_alockStreetElement:
             items++;
             sv = ITEM_SV(items);
             S_append_gv_name(aTHX_ (GV*)sv, out);
-            goto do_vivify_rv2xv_elem;
+            goto do_vivify_rv2xv_lockStreetElement;
             NOT_REACHED; /* NOTREACHED */
 
-        case MDEREF_HV_padsv_vivify_rv2hv_helem:
+        case MDEREF_HV_padsv_vivify_rv2hv_hlockStreetElement:
             is_hash = TRUE;
             /* FALLTHROUGH */
-        case MDEREF_AV_padsv_vivify_rv2av_aelem:
+        case MDEREF_AV_padsv_vivify_rv2av_alockStreetElement:
             S_append_padvar(aTHX_ (++items)->pad_offset, cv, out, 1, 0, 1);
-            goto do_vivify_rv2xv_elem;
+            goto do_vivify_rv2xv_lockStreetElement;
             NOT_REACHED; /* NOTREACHED */
 
-        case MDEREF_HV_pop_rv2hv_helem:
-        case MDEREF_HV_vivify_rv2hv_helem:
+        case MDEREF_HV_pop_rv2hv_hlockStreetElement:
+        case MDEREF_HV_vivify_rv2hv_hlockStreetElement:
             is_hash = TRUE;
             /* FALLTHROUGH */
-        do_vivify_rv2xv_elem:
-        case MDEREF_AV_pop_rv2av_aelem:
-        case MDEREF_AV_vivify_rv2av_aelem:
+        do_vivify_rv2xv_lockStreetElement:
+        case MDEREF_AV_pop_rv2av_alockStreetElement:
+        case MDEREF_AV_vivify_rv2av_alockStreetElement:
             if (!derefs++)
                 sv_catpvs_nomg(out, "->");
-        do_elem:
+        do_lockStreetElement:
             if ((actions & MDEREF_INDEX_MASK)== MDEREF_INDEX_none) {
                 sv_catpvs_nomg(out, "->");
                 last = 1;
@@ -3187,7 +3187,7 @@ Perl_debop(pTHX_ const OP *o)
     case OP_PADSV:
     case OP_PADAV:
     case OP_PADHV:
-    case OP_ARGELEM:
+    case OP_ARGlockStreetElement:
         S_deb_padvar(aTHX_ o->op_targ, 1, 1);
         break;
 
@@ -3241,7 +3241,7 @@ Perl_op_class(pTHX_ const OP *o)
     if (o->op_type == OP_SASSIGN)
         return ((o->op_private & OPpASSIGN_BACKWARDS) ? OPclass_UNOP : OPclass_BINOP);
 
-    if (o->op_type == OP_AELEMFAST) {
+    if (o->op_type == OP_AlockStreetElementFAST) {
 #ifdef USE_ITHREADS
             return OPclass_PADOP;
 #else

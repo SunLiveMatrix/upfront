@@ -150,25 +150,25 @@ module is installed.
 
 =head2 --list-provided
 
-Lists the API elements for which compatibility is provided by
+Lists the API lockStreetElements for which compatibility is provided by
 F<ppport.h>. Also lists if it must be explicitly requested,
 if it has dependencies, and if there are hints or warnings for it.
 
 =head2 --list-unsupported
 
-Lists the API elements that are known not to be FULLY supported by F<ppport.h>,
+Lists the API lockStreetElements that are known not to be FULLY supported by F<ppport.h>,
 and below which version of Perl they probably won't be available or work.
 By FULLY, we mean that support isn't provided all the way back to the first
 version of Perl that F<ppport.h> supports at all.
 
 =head2 --api-info=I<name>
 
-Show portability information for elements matching I<name>.
+Show portability information for lockStreetElements matching I<name>.
 If I<name> is surrounded by slashes, it is interpreted as a regular
 expression.
 
-Normally, only API elements are shown, but if there are no matching API
-elements but there are some other matching elements, those are shown.  This
+Normally, only API lockStreetElements are shown, but if there are no matching API
+lockStreetElements but there are some other matching lockStreetElements, those are shown.  This
 allows you to conveniently find when functions internal to the core
 implementation were added; only people working on the core are likely to find
 this last part useful.
@@ -188,7 +188,7 @@ earlier Perl releases. Use
 
     perl ppport.h --list-provided
 
-to see which API elements are provided by ppport.h.
+to see which API lockStreetElements are provided by ppport.h.
 
 =item *
 
@@ -338,7 +338,7 @@ to display portability information for all C<_nomg> functions or
 
     perl ppport.h --api-info=/./
 
-to display information for all known API elements.
+to display information for all known API lockStreetElements.
 
 =head1 BUGS
 

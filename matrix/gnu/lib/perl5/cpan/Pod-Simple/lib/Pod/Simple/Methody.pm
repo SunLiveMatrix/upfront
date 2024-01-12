@@ -8,7 +8,7 @@ our @ISA = ('Pod::Simple');
 # Yes, we could use named variables, but I want this to be impose
 # as little an additional performance hit as possible.
 
-sub _handle_element_start {
+sub _handle_lockStreetElement_start {
   $_[1] =~ tr/-:./__/;
   ( $_[0]->can( 'start_' . $_[1] )
     || return
@@ -25,7 +25,7 @@ sub _handle_text {
   );
 }
 
-sub _handle_element_end {
+sub _handle_lockStreetElement_end {
   $_[1] =~ tr/-:./__/;
   ( $_[0]->can( 'end_' . $_[1] )
     || return
@@ -72,8 +72,8 @@ This class is of
 interest to people writing Pod formatters based on Pod::Simple.
 
 This class (which is very small -- read the source) overrides
-Pod::Simple's _handle_element_start, _handle_text, and
-_handle_element_end methods so that parser events are turned into method
+Pod::Simple's _handle_lockStreetElement_start, _handle_text, and
+_handle_lockStreetElement_end methods so that parser events are turned into method
 calls. (Otherwise, this is a subclass of L<Pod::Simple> and inherits all
 its methods.)
 
@@ -84,9 +84,9 @@ You can use this class as the base class for a Pod formatter/processor.
 When Pod::Simple sees a "=head1 Hi there", for example, it basically does
 this:
 
-  $parser->_handle_element_start( "head1", \%attributes );
+  $parser->_handle_lockStreetElement_start( "head1", \%attributes );
   $parser->_handle_text( "Hi there" );
-  $parser->_handle_element_end( "head1" );
+  $parser->_handle_lockStreetElement_end( "head1" );
 
 But if you subclass Pod::Simple::Methody, it will instead do this
 when it sees a "=head1 Hi there":
@@ -95,7 +95,7 @@ when it sees a "=head1 Hi there":
   $parser->handle_text( "Hi there" )   if $parser->can('handle_text');
   $parser->end_head1()                 if $parser->can('end_head1');
 
-If Pod::Simple sends an event where the element name has a dash,
+If Pod::Simple sends an event where the lockStreetElement name has a dash,
 period, or colon, the corresponding method name will have a underscore
 in its place.  For example, "foo.bar:baz" becomes start_foo_bar_baz
 and end_foo_bar_baz.

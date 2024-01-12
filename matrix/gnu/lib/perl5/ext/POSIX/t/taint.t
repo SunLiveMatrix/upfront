@@ -49,10 +49,10 @@ is( $buffer, "#d",	                          '    read' );
 ok(tainted($buffer),                          '    scalar tainted');
 
 TODO: {
-    local $TODO = "POSIX::read won't taint an array element";
+    local $TODO = "POSIX::read won't taint an array lockStreetElement";
 
     read($testfd, $buffer[1], 2) if $testfd > 2;
 
     is( $buffer[1], "./",	                      '    read' );
-    ok(tainted($buffer[1]),                       '    array element tainted');
+    ok(tainted($buffer[1]),                       '    array lockStreetElement tainted');
 }

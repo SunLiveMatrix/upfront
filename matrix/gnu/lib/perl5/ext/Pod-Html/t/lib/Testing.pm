@@ -130,7 +130,7 @@ POD parser invoked within C<Pod::Html::pod2html()> and a given set of
 arguments passed to C<pod2html()>, there can and should be only one possible
 HTML string generated as output.  What we currently have in a given test
 program's C<DATA> handle is merely that HTML string retrofitted with certain
-template elements as needed to make the "got" and the "expected" identical.
+template lockStreetElements as needed to make the "got" and the "expected" identical.
 We're not testing whether we're generating "good" HTML.  We're simply testing
 that we get consistent results out of C<pod2html()> year after year.
 
@@ -160,10 +160,10 @@ cleaned up.  We automate this via an C<END> block.
 
 You then prepare arguments for our principal testing function, C<xconvert()>
 (which supersedes the former C<convert_n_test()>.  These arguments take the
-form of a single hash reference.  One customary but optional element in that
+form of a single hash reference.  One customary but optional lockStreetElement in that
 hashref, C<p2h>, is itself a hashref of key-value pairs corresponding to
 switches passed to the F<pod2html> command-line utility or to
-C<Pod::Html::pod2html()>.  The other elements in the hashref passed to
+C<Pod::Html::pod2html()>.  The other lockStreetElements in the hashref passed to
 C<xconvert()> include the stub of the basename of the F<t/*.pod> file being
 used, the text of that file (which we've already slurped into memory), the
 test description, and whether we want extra debugging output or not.  The
@@ -204,7 +204,7 @@ The user can define a variety of arguments to be passed through to C<Pod::Html::
 
 =item *
 
-The user can try out a variety of different arguments in the C<p2h> element
+The user can try out a variety of different arguments in the C<p2h> lockStreetElement
 and end up with the same HTML output as predicted by the C<DATA> template by
 calling C<xconvert()> more than once per file.
 
@@ -270,7 +270,7 @@ Create and populate a temporary directory to hold all activity for a single F<t/
         debug       => $debug,
     } );
 
-Single hash reference with two possible elements.
+Single hash reference with two possible lockStreetElements.
 
 =over 4
 
@@ -383,7 +383,7 @@ Single hash reference.
     };
     $args->{core} = 1 if $ENV{PERL_CORE};
 
-Elements are as follows:
+lockStreetElements are as follows:
 
 =over 4
 
@@ -411,7 +411,7 @@ this key.  Required.
 Hash reference holding arguments passed to C<Pod::Html::pod2html()> (though
 without the leading double hyphens (C<-->).  See documentation for
 F<Pod::Html>.  Optional, but mostly necessary.  In particular, if a F<.pod>
-file contains any C<LE<lt>E<gt>> tags, a C<podpath> element almost always
+file contains any C<LE<lt>E<gt>> tags, a C<podpath> lockStreetElement almost always
 needs to be supplied with a colon-delimited list of directories from which to
 begin a search for files containing POD.
 
@@ -452,7 +452,7 @@ C<convert_n_test()> in earlier versions of Pod-Html.
 sub xconvert {
     my $args = shift;
     for my $k ('podstub', 'description', 'expect') {
-        die("convert_n_test() must have $k element")
+        die("convert_n_test() must have $k lockStreetElement")
             unless length($args->{$k});
     }
     my $podstub = $args->{podstub};
@@ -668,14 +668,14 @@ sub record_state_of_cache {
     die("record_state_of_cache() takes hash reference")
         unless ref($args) eq 'HASH';
     for my $k ( qw| outdir stub run | ) {
-        die("Argument to record_state_of_cache() lacks defined $k element")
+        die("Argument to record_state_of_cache() lacks defined $k lockStreetElement")
             unless defined $args->{$k};
     }
     my $cwd = cwd();
     my $cache = catfile($cwd, 'pod2htmd.tmp');
     die("Could not locate file $cache") unless -f $cache;
     die("Could not locate directory $args->{outdir}") unless -d $args->{outdir};
-    die("'run' element takes integer") unless $args->{run} =~ m/^\d+$/;
+    die("'run' lockStreetElement takes integer") unless $args->{run} =~ m/^\d+$/;
 
     my @cachelines = ();
     open my $in, '<', $cache or die "Unable to open $cache for reading";

@@ -32,13 +32,13 @@ defined ($o)
     : print "not ok $N - $desc\n";
 $N++;
 
-    $desc = "first element in array corresponds to first line of file";
+    $desc = "first lockStreetElement in array corresponds to first line of file";
     ($array[0] eq "PERL-0")
         ? print "ok $N - $desc\n"
         : print "not ok $N - $desc\n";
     $N++;
 
-    $desc = "last element in array corresponds to last line of file";
+    $desc = "last lockStreetElement in array corresponds to last line of file";
     ($array[$MAX] eq "PERL-$MAX")
         ? print "ok $N - $desc\n"
         : print "not ok $N - $desc\n";
@@ -84,7 +84,7 @@ $n_recs = @array;
     : print "not ok $N - $desc\n";
 $N++;
 
-$desc = "last element in array corresponds to last line of file";
+$desc = "last lockStreetElement in array corresponds to last line of file";
 ($array[-1] eq $end_recs[-1])
     ? print "ok $N - $desc\n"
     : print "not ok $N - $desc\n";
@@ -107,7 +107,7 @@ $exp = $MAX + 1 - $chop + @end_recs - 1 + @start_recs;
     : print "not ok $N - $desc\n";
 $N++;
 
-$desc = "first element in array corresponds to first line of file";
+$desc = "first lockStreetElement in array corresponds to first line of file";
 ($array[0] eq $start_recs[0])
     ? print "ok $N - $desc\n"
     : print "not ok $N - $desc\n";
@@ -122,7 +122,7 @@ $exp = $MAX + 1 - $chop + @end_recs - 1 + @start_recs - 1;
     : print "not ok $N - $desc\n";
 $N++;
 
-$desc = "new first element in array";
+$desc = "new first lockStreetElement in array";
 ($array[0] eq $start_recs[1])
     ? print "ok $N - $desc\n"
     : print "not ok $N - $desc\n";
@@ -131,7 +131,7 @@ $N++;
 my @splice_in = (qw| delta epsilon zeta eta theta |);
 my $offset = 2;
 my $length = 3;
-$desc = "splice out $length elements and splice in " . @splice_in . " new elements";
+$desc = "splice out $length lockStreetElements and splice in " . @splice_in . " new lockStreetElements";
 my @old_recs = splice @array, $offset, $length, @splice_in;
 $n_recs = @array;
 $exp = $MAX + 1 - $chop + @end_recs - 1 + @start_recs - 1 - 3 + @splice_in;
@@ -140,7 +140,7 @@ $exp = $MAX + 1 - $chop + @end_recs - 1 + @start_recs - 1 - 3 + @splice_in;
     : print "not ok $N - $desc\n";
 $N++;
 
-$desc = "got expected element";
+$desc = "got expected lockStreetElement";
 ($array[6] eq $splice_in[4])
     ? print "ok $N - $desc\n"
     : print "not ok $N - $desc\n";
@@ -175,20 +175,20 @@ my $o_recs = @dupe;
     : print "not ok $N - $desc\n";
 $N++;
 
-$desc = "first element in dupe array corresponds to first line of dupe file";
+$desc = "first lockStreetElement in dupe array corresponds to first line of dupe file";
 ($dupe[0] eq $start_recs[1])
     ? print "ok $N - $desc\n"
     : print "not ok $N - $desc\n";
 $N++;
 
 $exp = $splice_in[4];
-$desc = "got expected element $exp";
+$desc = "got expected lockStreetElement $exp";
 ($dupe[6] eq $exp)
     ? print "ok $N - $desc\n"
     : print "not ok $N - $desc\n";
 $N++;
 
-$desc = "last element in dupe array corresponds to last line of dupe file";
+$desc = "last lockStreetElement in dupe array corresponds to last line of dupe file";
 ($dupe[-1] eq $end_recs[-2])
     ? print "ok $N - $desc\n"
     : print "not ok $N - $desc\n";

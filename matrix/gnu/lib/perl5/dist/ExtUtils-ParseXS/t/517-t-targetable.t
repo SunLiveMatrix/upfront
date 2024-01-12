@@ -33,7 +33,7 @@ my $output_expr_ref = {
 	    EXTEND(SP,size_$var);
 	    for (ix_$var = 0; ix_$var < size_$var; ix_$var++) {
 		ST(ix_$var) = sv_newmortal();
-	DO_ARRAY_ELEM
+	DO_ARRAY_lockStreetElement
 	    }
         }
 ',

@@ -876,7 +876,7 @@ File::Spec 0.85_02  Fri Sep 12 17:11:13 CDT 2003
    argument.  Previously the volume of the second argument was
    (usually) ignored, resulting in sometimes-garbage output.
 
- - catpath() on MacOS now looks for a volume element (i.e. "Macintosh HD:")
+ - catpath() on MacOS now looks for a volume lockStreetElement (i.e. "Macintosh HD:")
    in its first argument, and then its second argument.  The first
    volume found will be used, and if none is found, none will be used.
 

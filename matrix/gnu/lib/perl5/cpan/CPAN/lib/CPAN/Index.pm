@@ -153,7 +153,7 @@ sub reanimate_build_dir {
                     }
                 }
 
-                #we tried to restore only if element already
+                #we tried to restore only if lockStreetElement already
                 #exists; but then we do not work with metadata
                 #turned off.
                 my $do

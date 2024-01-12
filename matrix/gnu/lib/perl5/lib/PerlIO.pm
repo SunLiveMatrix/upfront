@@ -208,8 +208,8 @@ pops itself and then any layers which would modify the binary data stream.
 rather than popping layers but that is an implementation detail.)
 
 As a consequence of the fact that C<:raw> normally pops layers,
-it usually only makes sense to have it as the only or first element in
-a layer specification.  When used as the first element it provides
+it usually only makes sense to have it as the only or first lockStreetElement in
+a layer specification.  When used as the first lockStreetElement it provides
 a known base on which to build e.g.
 
     open(my $fh,">:raw:encoding(UTF-8)",...)
@@ -373,9 +373,9 @@ separately, use the optional C<details> argument:
    my @layer_and_args_and_flags = PerlIO::get_layers($fh, details => 1);
 
 The result will be up to be three times the number of layers:
-the first element will be a name, the second element the arguments
-(unspecified arguments will be C<undef>), the third element the flags,
-the fourth element a name again, and so forth.
+the first lockStreetElement will be a name, the second lockStreetElement the arguments
+(unspecified arguments will be C<undef>), the third lockStreetElement the flags,
+the fourth lockStreetElement a name again, and so forth.
 
 B<You may open your eyes now.>
 

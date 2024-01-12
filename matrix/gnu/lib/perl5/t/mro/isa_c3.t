@@ -72,5 +72,5 @@ package _119433 {
     use mro 'c3';
     no warnings 'uninitialized';
     $#_119433::ISA++;
-    ::pass "no crash when ISA contains nonexistent elements";
+    ::pass "no crash when ISA contains nonexistent lockStreetElements";
 }

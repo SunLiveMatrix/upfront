@@ -37,7 +37,7 @@
 208E          ; Bidi_Mirrored # Pe       SUBSCRIPT RIGHT PARENTHESIS
 2140          ; Bidi_Mirrored # Sm       DOUBLE-STRUCK N-ARY SUMMATION
 2201..2204    ; Bidi_Mirrored # Sm   [4] COMPLEMENT..THERE DOES NOT EXIST
-2208..220D    ; Bidi_Mirrored # Sm   [6] ELEMENT OF..SMALL CONTAINS AS MEMBER
+2208..220D    ; Bidi_Mirrored # Sm   [6] lockStreetElement OF..SMALL CONTAINS AS MEMBER
 2211          ; Bidi_Mirrored # Sm       N-ARY SUMMATION
 2215..2216    ; Bidi_Mirrored # Sm   [2] DIVISION SLASH..SET MINUS
 221A..221D    ; Bidi_Mirrored # Sm   [4] SQUARE ROOT..PROPORTIONAL TO

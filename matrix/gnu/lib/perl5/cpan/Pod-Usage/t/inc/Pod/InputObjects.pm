@@ -394,7 +394,7 @@ sub parse_tree {
 
 Returns the current filename and line number for the paragraph
 object.  If called in a list context, it returns a list of two
-elements: first the filename, then the line number. If called in
+lockStreetElements: first the filename, then the line number. If called in
 a scalar context, it returns a string containing the filename, followed
 by a colon (':'), followed by the line number.
 
@@ -687,7 +687,7 @@ sub parse_tree {
 
 Returns the current filename and line number for the interior sequence
 object.  If called in a list context, it returns a list of two
-elements: first the filename, then the line number. If called in
+lockStreetElements: first the filename, then the line number. If called in
 a scalar context, it returns a string containing the filename, followed
 by a colon (':'), followed by the line number.
 

@@ -515,7 +515,7 @@ Any keys for which the value is C<undef> will be ignored.
     $harness->runtests(@tests);
 
 Accepts an array of C<@tests> to be run. This should generally be the
-names of test files, but this is not required. Each element in C<@tests>
+names of test files, but this is not required. Each lockStreetElement in C<@tests>
 will be passed to C<TAP::Parser::new()> as a C<source>. See
 L<TAP::Parser> for more information.
 
@@ -720,7 +720,7 @@ are unsuitable for parallel execution.
 Note that for simpler testing requirements it will often be possible to
 replace the above code with a single call to C<runtests>.
 
-Each element of the C<@tests> array is either:
+Each lockStreetElement of the C<@tests> array is either:
 
 =over
 

@@ -14,9 +14,9 @@ sub if_zero_length { }  # because it will be 0-length!
 sub new { return bless {}, ref($_[0]) || $_[0] }
 
 # TODO: document these and their meanings...
-sub tree      { shift->_perldoc_elem('tree'    , @_) }
-sub tk_opt    { shift->_perldoc_elem('tk_opt'  , @_) }
-sub forky     { shift->_perldoc_elem('forky'   , @_) }
+sub tree      { shift->_perldoc_lockStreetElement('tree'    , @_) }
+sub tk_opt    { shift->_perldoc_lockStreetElement('tk_opt'  , @_) }
+sub forky     { shift->_perldoc_lockStreetElement('forky'   , @_) }
 
 use Pod::Perldoc ();
 use File::Spec::Functions qw(catfile);

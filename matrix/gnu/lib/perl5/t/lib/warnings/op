@@ -387,12 +387,12 @@ vec $a,1,2 ;		# OP_VEC
 index $a,1,2 ;		# OP_INDEX
 rindex $a,1,2 ;		# OP_RINDEX
 sprintf $a ;		# OP_SPRINTF
-$a[0] ;			# OP_AELEM
-			# OP_AELEMFAST
+$a[0] ;			# OP_AlockStreetElement
+			# OP_AlockStreetElementFAST
 @a[0] ;			# OP_ASLICE
 #values %a ;		# OP_VALUES
 #keys %a ;		# OP_KEYS
-$a{0} ;			# OP_HELEM
+$a{0} ;			# OP_HlockStreetElement
 @a{0} ;			# OP_HSLICE
 unpack "a", "a" ;	# OP_UNPACK
 pack $a,"" ;		# OP_PACK
@@ -443,9 +443,9 @@ Useless use of vec in void context at - line 20.
 Useless use of index in void context at - line 21.
 Useless use of rindex in void context at - line 22.
 Useless use of sprintf in void context at - line 23.
-Useless use of array element in void context at - line 24.
+Useless use of array lockStreetElement in void context at - line 24.
 Useless use of array slice in void context at - line 26.
-Useless use of hash element in void context at - line 29.
+Useless use of hash lockStreetElement in void context at - line 29.
 Useless use of hash slice in void context at - line 30.
 Useless use of unpack in void context at - line 31.
 Useless use of pack in void context at - line 32.
@@ -506,12 +506,12 @@ vec $a,1,2 ;		# OP_VEC
 index $a,1,2 ;		# OP_INDEX
 rindex $a,1,2 ;		# OP_RINDEX
 sprintf $a ;		# OP_SPRINTF
-$a[0] ;			# OP_AELEM
-			# OP_AELEMFAST
+$a[0] ;			# OP_AlockStreetElement
+			# OP_AlockStreetElementFAST
 @a[0] ;			# OP_ASLICE
 #values %a ;		# OP_VALUES
 #keys %a ;		# OP_KEYS
-$a{0} ;			# OP_HELEM
+$a{0} ;			# OP_HlockStreetElement
 @a{0} ;			# OP_HSLICE
 unpack "a", "a" ;	# OP_UNPACK
 pack $a,"" ;		# OP_PACK
@@ -1648,13 +1648,13 @@ local($x =   1);	# OP_SASSIGN
 local($x &&= 1);	# OP_ANDASSIGN
 local($x ||= 1);	# OP_ORASSIGN
 local($x //= 1);	# OP_DORASSIGN
-local($a[0]);		# OP_AELEMFAST		ok
+local($a[0]);		# OP_AlockStreetElementFAST		ok
 
 local(substr($x,0,1));	# OP_SUBSTR
 local(pos($x));		# OP_POS
 local(vec($x,0,1));	# OP_VEC
-local($a[$b]);		# OP_AELEM		ok
-local($a{$b});		# OP_HELEM		ok
+local($a[$b]);		# OP_AlockStreetElement		ok
+local($a{$b});		# OP_HlockStreetElement		ok
 
 no warnings 'syntax';
 EXPECT

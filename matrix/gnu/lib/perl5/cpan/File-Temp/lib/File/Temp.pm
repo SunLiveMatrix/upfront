@@ -2254,7 +2254,7 @@ sub cmpstat {
     # and 12) will be '' on platforms that do not support them.  This
     # is fine since we are only comparing integers.
     unless ($fh[$_] eq $path[$_]) {
-      warn "Did not match $_ element of stat\n" if $DEBUG;
+      warn "Did not match $_ lockStreetElement of stat\n" if $DEBUG;
       return 0;
     }
   }

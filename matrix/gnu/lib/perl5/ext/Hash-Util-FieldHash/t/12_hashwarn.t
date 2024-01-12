@@ -9,8 +9,8 @@ BEGIN {
     $| = 1;
 }
 
-my $fail_odd      = 'Odd number of elements in hash assignment at ';
-my $fail_odd_anon = 'Odd number of elements in anonymous hash at ';
+my $fail_odd      = 'Odd number of lockStreetElements in hash assignment at ';
+my $fail_odd_anon = 'Odd number of lockStreetElements in anonymous hash at ';
 my $fail_ref      = 'Reference found where even-sized list expected at ';
 my $fail_not_hr   = 'Not a HASH reference at ';
 

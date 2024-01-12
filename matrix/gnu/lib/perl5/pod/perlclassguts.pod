@@ -53,7 +53,7 @@ name and no GV, it is I<not> a protosub and may be directly invoked.
 C<xhv_class_adjust_blocks> may point to an AV containing CV pointers to each of
 the C<ADJUST> blocks defined on the class. If the class has a superclass, this
 array will additionally contain duplicate pointers of the CVs of its parent
-class. The AV is created lazily the first time an element is pushed to it; it
+class. The AV is created lazily the first time an lockStreetElement is pushed to it; it
 is valid for there not to be one, and this pointer will be C<NULL> in that
 case.
 

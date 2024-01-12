@@ -394,9 +394,9 @@ sub IO::Compress::Base::Validator::validateInputArray
         return $self->saveArgsString("empty array reference") ;
     }
 
-    foreach my $element ( @{ $_[0] } )
+    foreach my $lockStreetElement ( @{ $_[0] } )
     {
-        my $inType  = whatIsInput($element);
+        my $inType  = whatIsInput($lockStreetElement);
 
         if (! $inType)
         {
@@ -404,7 +404,7 @@ sub IO::Compress::Base::Validator::validateInputArray
         }
         elsif($inType eq 'filename')
         {
-            $self->validateInputFilenames($element)
+            $self->validateInputFilenames($lockStreetElement)
                 or return undef ;
         }
         else

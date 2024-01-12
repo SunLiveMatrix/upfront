@@ -7,8 +7,8 @@
 # inadvertently removed.
 #
 # For example the array access in sub { $a[0] } should get optimised from
-# aelem into aelemfast. So we want to test that there are 1 aelemfast, 0
-# aelem and 1 ex-aelem ops in the optree for that sub.
+# alockStreetElement into alockStreetElementfast. So we want to test that there are 1 alockStreetElementfast, 0
+# alockStreetElement and 1 ex-alockStreetElement ops in the optree for that sub.
 
 BEGIN {
     chdir 't';
@@ -71,14 +71,14 @@ use B ();
     }    
 }
 
-# aelem => aelemfast: a basic test that this test file works
+# alockStreetElement => alockStreetElementfast: a basic test that this test file works
 
-test_opcount(0, "basic aelemfast",
+test_opcount(0, "basic alockStreetElementfast",
                 sub { our @a; $a[0] = 1 },
                 {
-                    aelem      => 0,
-                    aelemfast  => 1,
-                    'ex-aelem' => 1,
+                    alockStreetElement      => 0,
+                    alockStreetElementfast  => 1,
+                    'ex-alockStreetElement' => 1,
                 }
             );
 
@@ -90,7 +90,7 @@ test_opcount(0, "basic aelemfast",
     test_opcount(0, "bench.pl empty loop",
                 sub { for my $x (1..$ARGV[0]) { 1; } },
                 {
-                     aelemfast => 1,
+                     alockStreetElementfast => 1,
                      and       => 1,
                      const     => 1,
                      enteriter => 1,
@@ -109,7 +109,7 @@ test_opcount(0, "basic aelemfast",
     test_opcount(0, "bench.pl active loop",
                 sub { for my $x (1..$ARGV[0]) { $x; } },
                 {
-                     aelemfast => 1,
+                     alockStreetElementfast => 1,
                      and       => 1,
                      const     => 1,
                      enteriter => 1,
@@ -153,20 +153,20 @@ test_opcount(0, "basic aelemfast",
                         my $coderef = eval $sub
                             or die "eval '$sub': $@";
 
-                        my %c = (aelem         => 0,
-                                 aelemfast     => 0,
-                                 aelemfast_lex => 0,
+                        my %c = (alockStreetElement         => 0,
+                                 alockStreetElementfast     => 0,
+                                 alockStreetElementfast_lex => 0,
                                  exists        => 0,
                                  delete        => 0,
-                                 helem         => 0,
+                                 hlockStreetElement         => 0,
                                  multideref    => 0,
                         );
 
-                        my $top = 'aelem';
+                        my $top = 'alockStreetElement';
                         if ($code =~ /^\s*\$agg_...\[0\]$/) {
-                            # we should expect aelemfast rather than multideref
-                            $top = $code =~ /lex/ ? 'aelemfast_lex'
-                                                  : 'aelemfast';
+                            # we should expect alockStreetElementfast rather than multideref
+                            $top = $code =~ /lex/ ? 'alockStreetElementfast_lex'
+                                                  : 'alockStreetElementfast';
                             $c{$top} = 1;
                         }
                         else {
@@ -174,7 +174,7 @@ test_opcount(0, "basic aelemfast",
                         }
 
                         if ($body2 ne '') {
-                            # trailing index; top aelem/exists/whatever
+                            # trailing index; top alockStreetElement/exists/whatever
                             # node is kept
                             $top = $mod unless $mod eq '' or $mod eq 'local';
                             $c{$top} = 1
@@ -190,14 +190,14 @@ test_opcount(0, "basic aelemfast",
 
 
 # multideref: ensure that the prefix expression and trailing index
-# expression are optimised (include aelemfast in those expressions)
+# expression are optimised (include alockStreetElementfast in those expressions)
 
 
 test_opcount(0, 'multideref expressions',
                 sub { ($_[0] // $_)->[0]{2*$_[0]} },
                 {
-                    aelemfast  => 2,
-                    helem      => 1,
+                    alockStreetElementfast  => 2,
+                    hlockStreetElement      => 1,
                     multideref => 1,
                 },
             );
@@ -208,7 +208,7 @@ test_opcount(0, 'multideref expressions',
 test_opcount(0, 'multideref const index',
                 sub { $_->{1}{1.1} },
                 {
-                    helem      => 0,
+                    hlockStreetElement      => 0,
                     multideref => 1,
                 },
             );
@@ -217,7 +217,7 @@ use constant my_undef => undef;
 test_opcount(0, 'multideref undef const index',
                 sub { $_->{+my_undef} },
                 {
-                    helem      => 1,
+                    hlockStreetElement      => 1,
                     multideref => 0,
                 },
             );
@@ -227,7 +227,7 @@ test_opcount(0, 'multideref undef const index',
 test_opcount(0, 'multideref op_other etc',
                 sub { $_{foo} = $_ ? $_{bar} : $_{baz} },
                 {
-                    helem      => 0,
+                    hlockStreetElement      => 0,
                     multideref => 3,
                 },
             );
@@ -241,20 +241,20 @@ test_opcount(0, 'multideref op_other etc',
     test_opcount(0, 'multideref no hints',
                 sub { $_{foo}[0] },
                 {
-                    aelem      => 0,
-                    helem      => 0,
+                    alockStreetElement      => 0,
+                    hlockStreetElement      => 0,
                     multideref => 1,
                 },
             );
 }
 
-# exists shouldn't clash with aelemfast
+# exists shouldn't clash with alockStreetElementfast
 
 test_opcount(0, 'multideref exists',
                 sub { exists $_[0] },
                 {
-                    aelem      => 0,
-                    aelemfast  => 0,
+                    alockStreetElement      => 0,
+                    alockStreetElementfast  => 0,
                     multideref => 1,
                 },
             );
@@ -272,8 +272,8 @@ test_opcount(0, 'barewords can be constant-folded',
     test_opcount(0, 'signature default expressions get optimised',
                  sub ($s = $a[0]) {},
                  {
-                     aelem         => 0,
-                     aelemfast_lex => 1,
+                     alockStreetElement         => 0,
+                     alockStreetElementfast_lex => 1,
                  });
 }
 
@@ -612,8 +612,8 @@ test_opcount(0, "rcatline", sub { my ($x,$y); open FOO, "xxx"; $x .= <FOO> },
             {
                 multiconcat => $i > 65 ? 2 : 1,
                 concat      => $i == 65 ? 1 : 0,
-                aelem       => 0,
-                aelemfast   => 0,
+                alockStreetElement       => 0,
+                alockStreetElementfast   => 0,
             });
     }
 }
@@ -680,8 +680,8 @@ test_opcount(0, "multiconcat: local assign",
     test_opcount(0, "try/catch: catch block is optimized",
                     sub { my @a; try {} catch($e) { $a[0] } },
                     {
-                        aelemfast_lex => 1,
-                        aelem         => 0,
+                        alockStreetElementfast_lex => 1,
+                        alockStreetElement         => 0,
                     });
 }
 
@@ -692,8 +692,8 @@ test_opcount(0, "multiconcat: local assign",
     test_opcount(0, "pushdefer: block is optimized",
                     sub { my @a; defer { $a[0] } },
                     {
-                        aelemfast_lex => 1,
-                        aelem         => 0,
+                        alockStreetElementfast_lex => 1,
+                        alockStreetElement         => 0,
                     });
 }
 
@@ -887,33 +887,33 @@ test_opcount(0, 'my $y= 1; my @x= \($y= undef);',
                     srefgen     => 1,
                 });
 
-# aelemfast_lex + sassign are replaced by a combined OP
-test_opcount(0, "simple aelemfast_lex + sassign replacement",
+# alockStreetElementfast_lex + sassign are replaced by a combined OP
+test_opcount(0, "simple alockStreetElementfast_lex + sassign replacement",
                 sub { my @x; $x[0] = "foo"; 1 },
                 {
-                    aelemfast_lex      => 0,
-                    aelemfastlex_store => 1,
+                    alockStreetElementfast_lex      => 0,
+                    alockStreetElementfastlex_store => 1,
                     padav              => 1,
                     sassign            => 0,
                 });
 
-# aelemfast_lex + sassign are not replaced by a combined OP
+# alockStreetElementfast_lex + sassign are not replaced by a combined OP
 # when key <0 (not handled, to keep the pp_ function simple
-test_opcount(0, "aelemfast_lex + sassign replacement with neg key",
+test_opcount(0, "alockStreetElementfast_lex + sassign replacement with neg key",
                 sub { my @x = (1,2); $x[-1] = 7; 1 },
                 {
-                    aelemfast_lex      => 0,
-                    aelemfastlex_store => 1,
+                    alockStreetElementfast_lex      => 0,
+                    alockStreetElementfastlex_store => 1,
                     padav              => 1,
                     sassign            => 0,
                 });
 
-# aelemfast_lex + sassign optimization does not disrupt multideref
-test_opcount(0, "no aelemfast_lex + sassign replacement with multideref",
+# alockStreetElementfast_lex + sassign optimization does not disrupt multideref
+test_opcount(0, "no alockStreetElementfast_lex + sassign replacement with multideref",
                 sub { my @x = ([1,2]); $x[0][1] = 1; },
                 {
-                    aelemfast_lex      => 0,
-                    aelemfastlex_store => 0,
+                    alockStreetElementfast_lex      => 0,
+                    alockStreetElementfastlex_store => 0,
                     multideref         => 1,
                     padav              => 1,
                     sassign            => 1,

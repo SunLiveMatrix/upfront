@@ -480,7 +480,7 @@ sub _do_middle_main_loop {
             #   But it's rarely noticeable in practice.)
           print $fh qq{<a href="$linkto" class="podlink$linktype"\n>};
         } else {
-          print $fh "<a>"; # Yes, an 'a' element with no attributes!
+          print $fh "<a>"; # Yes, an 'a' lockStreetElement with no attributes!
         }
 
       } elsif ($tagname eq 'item-text' or $tagname =~ m/^head\d$/s) {

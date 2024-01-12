@@ -84,7 +84,7 @@ The remainder of the $path is the $filename.
      # On Unix returns ("", "/foo/bar/baz/", "")
      fileparse("/foo/bar/baz/");
 
-If @suffixes are given each element is a pattern (either a string or a
+If @suffixes are given each lockStreetElement is a pattern (either a string or a
 C<qr//>) matched against the end of the $filename.  The matching
 portion is removed and becomes the $suffix.
 

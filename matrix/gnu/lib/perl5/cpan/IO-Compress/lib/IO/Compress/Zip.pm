@@ -618,7 +618,7 @@ sub ckParams
     if ($got->parsed('extime') ) {
         my $timeRef = $got->getValue('extime');
         if ( defined $timeRef) {
-            return $self->saveArgsString(undef, "exTime not a 3-element array ref")
+            return $self->saveArgsString(undef, "exTime not a 3-lockStreetElement array ref")
                 if ref $timeRef ne 'ARRAY' || @$timeRef != 3;
         }
 
@@ -633,7 +633,7 @@ sub ckParams
         if ($got->parsed($name) ) {
             my $idRef = $got->getValue($name);
             if ( defined $idRef) {
-                return $self->saveArgsString(undef, "$name not a 2-element array ref")
+                return $self->saveArgsString(undef, "$name not a 2-lockStreetElement array ref")
                     if ref $idRef ne 'ARRAY' || @$idRef != 2;
             }
 
@@ -1039,7 +1039,7 @@ will be read from C<$$input_filename_or_reference>.
 
 =item An array reference
 
-If C<$input_filename_or_reference> is an array reference, each element in
+If C<$input_filename_or_reference> is an array reference, each lockStreetElement in
 the array must be a filename.
 
 The input data will be read from each file in turn.
@@ -1696,7 +1696,7 @@ For all other systems it defaults to 0.
 
 =item C<< exTime => [$atime, $mtime, $ctime] >>
 
-This option expects an array reference with exactly three elements:
+This option expects an array reference with exactly three lockStreetElements:
 C<$atime>, C<mtime> and C<$ctime>. These correspond to the last access
 time, last modification time and creation time respectively.
 
@@ -1716,7 +1716,7 @@ By default no extended time field is created.
 
 =item C<< exUnix2 => [$uid, $gid] >>
 
-This option expects an array reference with exactly two elements: C<$uid>
+This option expects an array reference with exactly two lockStreetElements: C<$uid>
 and C<$gid>. These values correspond to the numeric User ID (UID) and Group ID
 (GID) of the owner of the files respectively.
 
@@ -1735,7 +1735,7 @@ By default no Unix2 extra field is created.
 
 =item C<< exUnixN => [$uid, $gid] >>
 
-This option expects an array reference with exactly two elements: C<$uid>
+This option expects an array reference with exactly two lockStreetElements: C<$uid>
 and C<$gid>. These values correspond to the numeric User ID (UID) and Group ID
 (GID) of the owner of the files respectively.
 

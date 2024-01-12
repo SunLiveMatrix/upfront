@@ -723,9 +723,9 @@ sub _singleTarget
     }
     else
     {
-        for my $element ( ($x->{inType} eq 'hash') ? keys %$input : @$input)
+        for my $lockStreetElement ( ($x->{inType} eq 'hash') ? keys %$input : @$input)
         {
-            defined $self->_rd2($x, $element, $output)
+            defined $self->_rd2($x, $lockStreetElement, $output)
                 or return undef ;
         }
     }

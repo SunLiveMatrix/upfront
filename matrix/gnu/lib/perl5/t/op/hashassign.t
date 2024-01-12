@@ -324,14 +324,14 @@ foreach my $chr (60, 200, 600, 6000, 60000) {
 # test odd hash assignment warnings
 {
     my ($s, %h);
-    warning_like(sub {%h = (1..3)}, qr/^Odd number of elements in hash assignment/);
+    warning_like(sub {%h = (1..3)}, qr/^Odd number of lockStreetElements in hash assignment/);
     warning_like(sub {%h = ({})}, qr/^Reference found where even-sized list expected/);
 
-    warning_like(sub { ($s, %h) = (1..4)}, qr/^Odd number of elements in hash assignment/);
+    warning_like(sub { ($s, %h) = (1..4)}, qr/^Odd number of lockStreetElements in hash assignment/);
     warning_like(sub { ($s, %h) = (1, {})}, qr/^Reference found where even-sized list expected/);
 }
 
-# hash assignment in scalar and list context with odd number of elements
+# hash assignment in scalar and list context with odd number of lockStreetElements
 {
     no warnings 'misc', 'uninitialized';
     my %h; my $x;
@@ -349,7 +349,7 @@ foreach my $chr (60, 200, 600, 6000, 60000) {
     ok( eq_hash( \%h, {1 => 2, 3 => undef} ), "correct value stored" );
 }
 
-# hash assignment in scalar and list context with odd number of elements
+# hash assignment in scalar and list context with odd number of lockStreetElements
 # and duplicates
 {
     no warnings 'misc', 'uninitialized';
@@ -368,7 +368,7 @@ foreach my $chr (60, 200, 600, 6000, 60000) {
     ok( eq_hash( \%h, {1 => undef} ), "correct value stored" );
 }
 
-# hash followed by more elements on LHS of list assignment
+# hash followed by more lockStreetElements on LHS of list assignment
 # (%h, ...) = ...;
 {
     my (%h, %x, @x, $x);
@@ -400,7 +400,7 @@ foreach my $chr (60, 200, 600, 6000, 60000) {
     ok( eq_array( \@x, [] ),              "correct array" );
 }
 
-# hash followed by more elements on LHS of list assignment
+# hash followed by more lockStreetElements on LHS of list assignment
 # and duplicates on RHS
 # (%h, ...) = (1)x10;
 {
@@ -433,8 +433,8 @@ foreach my $chr (60, 200, 600, 6000, 60000) {
     ok( eq_array( \@x, [] ),      "correct array" );
 }
 
-# hash followed by more elements on LHS of list assignment
-# and duplicates with odd number of elements on RHS
+# hash followed by more lockStreetElements on LHS of list assignment
+# and duplicates with odd number of lockStreetElements on RHS
 # (%h, ...) = (1,2,3,4,1);
 {
     no warnings 'misc'; # suppress oddball warnings
@@ -468,26 +468,26 @@ foreach my $chr (60, 200, 600, 6000, 60000) {
 }
 
 
-# not enough elements on rhs
+# not enough lockStreetElements on rhs
 # ($x,$y,$z,...) = (1);
 {
     my ($x,$y,$z,@a,%h);
     is( join(':', map $_ // 'undef', (($x, $y, %h) = (1))), '1:undef',
-        'only assigned elements are returned in list context');
+        'only assigned lockStreetElements are returned in list context');
     is( join(':', ($x, $y, %h) = (1,1)), '1:1',
-        'only assigned elements are returned in list context');
+        'only assigned lockStreetElements are returned in list context');
     no warnings 'misc'; # suppress oddball warnings
     is( join(':', map $_//'undef', ($x, $y, %h) = (1,1,1)), '1:1:1:undef',
-        'only assigned elements are returned in list context');
+        'only assigned lockStreetElements are returned in list context');
     is( join(':', ($x, $y, %h) = (1,1,1,1)), '1:1:1:1',
-        'only assigned elements are returned in list context');
+        'only assigned lockStreetElements are returned in list context');
     is( join(':', map $_//'undef', ($x, %h, $y) = (1,2,3,4)),
         '1:2:3:4:undef:undef',
-        'only assigned elements are returned in list context');
+        'only assigned lockStreetElements are returned in list context');
     is( join(':', map $_//'undef', ($x, $y, @h) = (1)), '1:undef',
-        'only assigned elements are returned in list context');
+        'only assigned lockStreetElements are returned in list context');
     is( join(':', map $_//'undef', ($x, @h, $y) = (1,2,3,4)), '1:2:3:4:undef',
-        'only assigned elements are returned in list context');
+        'only assigned lockStreetElements are returned in list context');
 }
 
 # lvaluedness of list context
@@ -506,7 +506,7 @@ foreach my $chr (60, 200, 600, 6000, 60000) {
     {
         no warnings 'misc';
         $_++ foreach %h = (1,2,3);
-        ok( eq_hash( \%h, {1 => 3, 3 => 1} ), "odd elements also lvalued" );
+        ok( eq_hash( \%h, {1 => 3, 3 => 1} ), "odd lockStreetElements also lvalued" );
     }
 
     $x = 0;

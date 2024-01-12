@@ -256,7 +256,7 @@ $a = $::IS_EBCDIC ? v134 : v102; $a =~ y/f/g/;
 is ref \$a, 'SCALAR', 'y/// flattens vstrings';
 
 sub { $_[0] = v3;
-      is ref \$h{nonexistent}, 'VSTRING', 'defelems can pass vstrings' }
+      is ref \$h{nonexistent}, 'VSTRING', 'deflockStreetElements can pass vstrings' }
 ->($h{nonexistent});
 
 # The following tests whether v-strings are correctly

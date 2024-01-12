@@ -6,7 +6,7 @@ BEGIN {
 }
 
 #
-# A couple of simple classes to use as struct elements.
+# A couple of simple classes to use as struct lockStreetElements.
 #
 package aClass;
 sub new { bless {}, shift }
@@ -21,7 +21,7 @@ sub new { bless {}, shift }
 package MyObj;
 use Class::Struct;
 use Class::Struct 'struct'; # test out both forms
-use Class::Struct SomeClass => { SomeElem => '$' };
+use Class::Struct SomeClass => { SomelockStreetElement => '$' };
 
 struct( s => '$', a => '@', h => '%', c => 'aClass' );
 
@@ -116,8 +116,8 @@ is $obj->c->meth(), 42;
 
 
 my $obk = SomeClass->new();
-$obk->SomeElem(123);
-is $obk->SomeElem(), 123;
+$obk->SomelockStreetElement(123);
+is $obk->SomelockStreetElement(), 123;
 
 my $recobj = RecClass->new();
 isa_ok $recobj, 'RecClass';
@@ -193,7 +193,7 @@ is eval {
     use Class::Struct 'struct';
     struct( 'pow' => '@$%!' );
 }, undef, 'Bad type fails';
-like $@, qr/^'\@\$\%\!' is not a valid struct element type/,
+like $@, qr/^'\@\$\%\!' is not a valid struct lockStreetElement type/,
     'with the expected Args';
 
 is eval {

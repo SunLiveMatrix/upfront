@@ -808,7 +808,7 @@ commands:
 =item C<arrayDepth>, C<hashDepth>
 X<debugger option, arrayDepth> X<debugger option, hashDepth>
 
-Print only first N elements ('' for all).
+Print only first N lockStreetElements ('' for all).
 
 =item C<dumpDepth>
 X<debugger option, dumpDepth>

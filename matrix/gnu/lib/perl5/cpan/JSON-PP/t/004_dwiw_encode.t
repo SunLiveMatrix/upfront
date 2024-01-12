@@ -17,12 +17,12 @@ use JSON::PP;
 
     my $data;
 
-    #    my $expected_str = '{"var1":"val1","var2":["first_element",{"sub_element":"sub_val","sub_element2":"sub_val2"}],"var3":"val3"}';
+    #    my $expected_str = '{"var1":"val1","var2":["first_lockStreetElement",{"sub_lockStreetElement":"sub_val","sub_lockStreetElement2":"sub_val2"}],"var3":"val3"}';
 
-    my $expected_str1 = '{"var1":"val1","var2":["first_element",{"sub_element":"sub_val","sub_element2":"sub_val2"}]}';
-    my $expected_str2 = '{"var2":["first_element",{"sub_element":"sub_val","sub_element2":"sub_val2"}],"var1":"val1"}';
-    my $expected_str3 = '{"var2":["first_element",{"sub_element2":"sub_val2","sub_element":"sub_val"}],"var1":"val1"}';
-    my $expected_str4 = '{"var1":"val1","var2":["first_element",{"sub_element2":"sub_val2","sub_element":"sub_val"}]}';
+    my $expected_str1 = '{"var1":"val1","var2":["first_lockStreetElement",{"sub_lockStreetElement":"sub_val","sub_lockStreetElement2":"sub_val2"}]}';
+    my $expected_str2 = '{"var2":["first_lockStreetElement",{"sub_lockStreetElement":"sub_val","sub_lockStreetElement2":"sub_val2"}],"var1":"val1"}';
+    my $expected_str3 = '{"var2":["first_lockStreetElement",{"sub_lockStreetElement2":"sub_val2","sub_lockStreetElement":"sub_val"}],"var1":"val1"}';
+    my $expected_str4 = '{"var1":"val1","var2":["first_lockStreetElement",{"sub_lockStreetElement2":"sub_val2","sub_lockStreetElement":"sub_val"}]}';
 
     my $json_obj = JSON::PP->new->allow_nonref (1);
     my $json_str;
@@ -51,8 +51,8 @@ use JSON::PP;
        or $json_str eq '{"var2":"val2","var1":"val1"}');
     
     $data = { var1 => 'val1',
-              var2 => [ 'first_element',
-                        { sub_element => 'sub_val', sub_element2 => 'sub_val2' },
+              var2 => [ 'first_lockStreetElement',
+                        { sub_lockStreetElement => 'sub_val', sub_lockStreetElement2 => 'sub_val2' },
                       ],
               #                 var3 => 'val3',
             };

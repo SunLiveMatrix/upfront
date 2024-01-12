@@ -82,7 +82,7 @@ my $cwd = cwd();
 
     delete $dirx{'X'};
 
-    ok(!(-f 'X'), "Using DIR_UNLINK deletes tied hash element and directory entry");
+    ok(!(-f 'X'), "Using DIR_UNLINK deletes tied hash lockStreetElement and directory entry");
 
     chdir $cwd or die "Unable to chdir back to $cwd";
 }

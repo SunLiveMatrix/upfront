@@ -153,14 +153,14 @@ is(
     undef,
     'Trying to merge a different bugtracker URL gives an exception',
 );
-like $@, qr/^Duplication of element resources\.bugtracker\.web /, 'Exception looks right';
+like $@, qr/^Duplication of lockStreetElement resources\.bugtracker\.web /, 'Exception looks right';
 
 is(
     eval { $merger->merge(\%base, { provides => { Baz => { file => 'Baz.pm' } } }) },
     undef,
     'Trying to merge different provides.$module.file gives an exception',
 );
-like $@, qr/^Duplication of element provides\.Baz\.file /, 'Exception looks right';
+like $@, qr/^Duplication of lockStreetElement provides\.Baz\.file /, 'Exception looks right';
 
 my $provides_result = $merger->merge(\%base, { provides => { Baz => { file => 'lib/Baz.pm', version => '0.001' } } });
 is_deeply(

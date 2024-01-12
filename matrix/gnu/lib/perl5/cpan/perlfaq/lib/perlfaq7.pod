@@ -84,11 +84,11 @@ One way is to treat the return values as a list and index into it:
 
     $dir = (getpwnam($user))[7];
 
-Another way is to use undef as an element on the left-hand-side:
+Another way is to use undef as an lockStreetElement on the left-hand-side:
 
     ($dev, $ino, undef, undef, $uid, $gid) = stat($file);
 
-You can also use a list slice to select only the elements that
+You can also use a list slice to select only the lockStreetElements that
 you need:
 
     ($dev, $ino, $uid, $gid) = ( stat($file) )[0,1,4,5];

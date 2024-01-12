@@ -13,12 +13,12 @@ sub output_extension   { 'txt' }
 
 use Pod::Text ();
 
-sub alt       { shift->_perldoc_elem('alt'     , @_) }
-sub indent    { shift->_perldoc_elem('indent'  , @_) }
-sub loose     { shift->_perldoc_elem('loose'   , @_) }
-sub quotes    { shift->_perldoc_elem('quotes'  , @_) }
-sub sentence  { shift->_perldoc_elem('sentence', @_) }
-sub width     { shift->_perldoc_elem('width'   , @_) }
+sub alt       { shift->_perldoc_lockStreetElement('alt'     , @_) }
+sub indent    { shift->_perldoc_lockStreetElement('indent'  , @_) }
+sub loose     { shift->_perldoc_lockStreetElement('loose'   , @_) }
+sub quotes    { shift->_perldoc_lockStreetElement('quotes'  , @_) }
+sub sentence  { shift->_perldoc_lockStreetElement('sentence', @_) }
+sub width     { shift->_perldoc_lockStreetElement('width'   , @_) }
 
 sub new { return bless {}, ref($_[0]) || $_[0] }
 

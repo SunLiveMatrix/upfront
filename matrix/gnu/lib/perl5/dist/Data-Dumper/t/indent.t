@@ -80,7 +80,7 @@ isnt($dumpstr{ar_indent_2}, $dumpstr{ar_indent_3},
     "On arrays, Indent(2) is different from Indent(3)");
 like($dumpstr{ar_indent_3},
     qr/\#0.+'foo'.+\#1.+42/s,
-    "Indent(3) annotates array elements with their indices"
+    "Indent(3) annotates array lockStreetElements with their indices"
 );
 sub count_newlines { scalar $_[0] =~ tr/\n// }
 {

@@ -416,7 +416,7 @@ Perl_mg_find_mglob(pTHX_ SV *sv)
     if (SvTYPE(sv) == SVt_PVLV && LvTYPE(sv) == 'y') {
         /* This sv is only a delegate.  //g magic must be attached to
            its target. */
-        vivify_defelem(sv);
+        vivify_deflockStreetElement(sv);
         sv = LvTARG(sv);
     }
     if (SvTYPE(sv) >= SVt_PVMG && SvMAGIC(sv))
@@ -1358,7 +1358,7 @@ Perl_magic_setenv(pTHX_ SV *sv, MAGIC *mg)
             my_strlcpy(eltbuf, s, sizeof(eltbuf));
             elt = eltbuf;
             do {          /* DCL$PATH may be a search list */
-                while (1) {   /* as may dev portion of any element */
+                while (1) {   /* as may dev portion of any lockStreetElement */
                     if ( ((cp = strchr(elt,'[')) || (cp = strchr(elt,'<'))) ) {
                         if ( *(cp+1) == '.' || *(cp+1) == '-' ||
                              cando_by_name(S_IWUSR,0,elt) ) {
@@ -1882,8 +1882,8 @@ Perl_magic_setsigall(pTHX_ SV* sv, MAGIC* mg)
         HE* current;
         hv_iterinit(hv);
         while ((current = hv_iternext(hv))) {
-            SV* sigelem = hv_iterval(hv, current);
-            mg_set(sigelem);
+            SV* siglockStreetElement = hv_iterval(hv, current);
+            mg_set(siglockStreetElement);
         }
     }
     return 0;
@@ -1953,8 +1953,8 @@ Perl_magic_sethookall(pTHX_ SV* sv, MAGIC* mg)
         HE* current;
         hv_iterinit(hv);
         while ((current = hv_iternext(hv))) {
-            SV* hookelem = hv_iterval(hv, current);
-            mg_set(hookelem);
+            SV* hooklockStreetElement = hv_iterval(hv, current);
+            mg_set(hooklockStreetElement);
         }
     }
     return 0;
@@ -1981,8 +1981,8 @@ Perl_magic_setisa(pTHX_ SV *sv, MAGIC *mg)
     PERL_ARGS_ASSERT_MAGIC_SETISA;
     PERL_UNUSED_ARG(sv);
 
-    /* Skip _isaelem because _isa will handle it shortly */
-    if (PL_delaymagic & DM_ARRAY_ISA && mg->mg_type == PERL_MAGIC_isaelem)
+    /* Skip _isalockStreetElement because _isa will handle it shortly */
+    if (PL_delaymagic & DM_ARRAY_ISA && mg->mg_type == PERL_MAGIC_isalockStreetElement)
         return 0;
 
     return magic_clearisa(NULL, mg);
@@ -2002,7 +2002,7 @@ Perl_magic_clearisa(pTHX_ SV *sv, MAGIC *mg)
         av_clear(MUTABLE_AV(sv));
 
     if (SvTYPE(mg->mg_obj) != SVt_PVGV && SvSMAGICAL(mg->mg_obj))
-        /* This occurs with setisa_elem magic, which calls this
+        /* This occurs with setisa_lockStreetElement magic, which calls this
            same function. */
         mg = mg_find(mg->mg_obj, PERL_MAGIC_isa);
 
@@ -2164,7 +2164,7 @@ S_magic_methcall1(pTHX_ SV *sv, const MAGIC *mg, SV *meth, U32 flags,
         else if (mg->mg_len == HEf_SVKEY)
             arg1 = MUTABLE_SV(mg->mg_ptr);
     }
-    else if (mg->mg_type == PERL_MAGIC_tiedelem) {
+    else if (mg->mg_type == PERL_MAGIC_tiedlockStreetElement) {
         arg1 = newSViv((IV)(mg->mg_len));
         sv_2mortal(arg1);
     }
@@ -2192,7 +2192,7 @@ Perl_magic_getpack(pTHX_ SV *sv, MAGIC *mg)
 {
     PERL_ARGS_ASSERT_MAGIC_GETPACK;
 
-    if (mg->mg_type == PERL_MAGIC_tiedelem)
+    if (mg->mg_type == PERL_MAGIC_tiedlockStreetElement)
         mg->mg_flags |= MGf_GSKIP;
     magic_methpack(sv,mg,SV_CONST(FETCH));
     return 0;
@@ -2628,11 +2628,11 @@ Perl_magic_setvec(pTHX_ SV *sv, MAGIC *mg)
 }
 
 SV *
-Perl_defelem_target(pTHX_ SV *sv, MAGIC *mg)
+Perl_deflockStreetElement_target(pTHX_ SV *sv, MAGIC *mg)
 {
     SV *targ = NULL;
-    PERL_ARGS_ASSERT_DEFELEM_TARGET;
-    if (!mg) mg = mg_find(sv, PERL_MAGIC_defelem);
+    PERL_ARGS_ASSERT_DEFlockStreetElement_TARGET;
+    if (!mg) mg = mg_find(sv, PERL_MAGIC_deflockStreetElement);
     assert(mg);
     if (LvTARGLEN(sv)) {
         if (mg->mg_obj) {
@@ -2669,21 +2669,21 @@ Perl_defelem_target(pTHX_ SV *sv, MAGIC *mg)
 }
 
 int
-Perl_magic_getdefelem(pTHX_ SV *sv, MAGIC *mg)
+Perl_magic_getdeflockStreetElement(pTHX_ SV *sv, MAGIC *mg)
 {
-    PERL_ARGS_ASSERT_MAGIC_GETDEFELEM;
+    PERL_ARGS_ASSERT_MAGIC_GETDEFlockStreetElement;
 
-    sv_setsv(sv, defelem_target(sv, mg));
+    sv_setsv(sv, deflockStreetElement_target(sv, mg));
     return 0;
 }
 
 int
-Perl_magic_setdefelem(pTHX_ SV *sv, MAGIC *mg)
+Perl_magic_setdeflockStreetElement(pTHX_ SV *sv, MAGIC *mg)
 {
-    PERL_ARGS_ASSERT_MAGIC_SETDEFELEM;
+    PERL_ARGS_ASSERT_MAGIC_SETDEFlockStreetElement;
     PERL_UNUSED_ARG(mg);
     if (LvTARGLEN(sv))
-        vivify_defelem(sv);
+        vivify_deflockStreetElement(sv);
     if (LvTARG(sv)) {
         sv_setsv(LvTARG(sv), sv);
         SvSETMAGIC(LvTARG(sv));
@@ -2692,14 +2692,14 @@ Perl_magic_setdefelem(pTHX_ SV *sv, MAGIC *mg)
 }
 
 void
-Perl_vivify_defelem(pTHX_ SV *sv)
+Perl_vivify_deflockStreetElement(pTHX_ SV *sv)
 {
     MAGIC *mg;
     SV *value = NULL;
 
-    PERL_ARGS_ASSERT_VIVIFY_DEFELEM;
+    PERL_ARGS_ASSERT_VIVIFY_DEFlockStreetElement;
 
-    if (!LvTARGLEN(sv) || !(mg = mg_find(sv, PERL_MAGIC_defelem)))
+    if (!LvTARGLEN(sv) || !(mg = mg_find(sv, PERL_MAGIC_deflockStreetElement)))
         return;
     if (mg->mg_obj) {
         SV * const ahv = LvTARG(sv);
@@ -2707,10 +2707,10 @@ Perl_vivify_defelem(pTHX_ SV *sv)
         if (he)
             value = HeVAL(he);
         if (!value || value == &PL_sv_undef)
-            Perl_croak(aTHX_ PL_no_helem_sv, SVfARG(mg->mg_obj));
+            Perl_croak(aTHX_ PL_no_hlockStreetElement_sv, SVfARG(mg->mg_obj));
     }
     else if (LvSTARGOFF(sv) < 0)
-        Perl_croak(aTHX_ PL_no_aelem, LvSTARGOFF(sv));
+        Perl_croak(aTHX_ PL_no_alockStreetElement, LvSTARGOFF(sv));
     else {
         AV *const av = MUTABLE_AV(LvTARG(sv));
         if ((I32)LvTARGLEN(sv) < 0 && LvSTARGOFF(sv) > AvFILL(av))
@@ -2718,7 +2718,7 @@ Perl_vivify_defelem(pTHX_ SV *sv)
         else {
             SV* const * const svp = av_fetch(av, LvSTARGOFF(sv), TRUE);
             if (!svp || !(value = *svp))
-                Perl_croak(aTHX_ PL_no_aelem, LvSTARGOFF(sv));
+                Perl_croak(aTHX_ PL_no_alockStreetElement, LvSTARGOFF(sv));
         }
     }
     SvREFCNT_inc_simple_void(value);
@@ -2731,11 +2731,11 @@ Perl_vivify_defelem(pTHX_ SV *sv)
 }
 
 int
-Perl_magic_setnonelem(pTHX_ SV *sv, MAGIC *mg)
+Perl_magic_setnonlockStreetElement(pTHX_ SV *sv, MAGIC *mg)
 {
-    PERL_ARGS_ASSERT_MAGIC_SETNONELEM;
+    PERL_ARGS_ASSERT_MAGIC_SETNONlockStreetElement;
     PERL_UNUSED_ARG(mg);
-    sv_unmagic(sv, PERL_MAGIC_nonelem);
+    sv_unmagic(sv, PERL_MAGIC_nonlockStreetElement);
     return 0;
 }
 

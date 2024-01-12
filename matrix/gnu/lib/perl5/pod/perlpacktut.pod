@@ -1111,7 +1111,7 @@ And even if you take all the above into account, ANSI still lets this:
    } foo_t;
 
 vary in size. The alignment constraint of the structure can be greater than
-any of its elements. [And if you think that this doesn't affect anything
+any of its lockStreetElements. [And if you think that this doesn't affect anything
 common, dismember the next cellphone that you see. Many have ARM cores, and
 the ARM structure rules make C<sizeof (foo_t)> == 4]
 

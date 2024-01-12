@@ -108,7 +108,7 @@ Perl_isfinite                  # U
 Perl_isinf                     # U
 PERL_MAGIC_shared              # E
 PERL_MAGIC_shared_scalar       # E
-PERL_MAGIC_uvar_elem           # E
+PERL_MAGIC_uvar_lockStreetElement           # E
 PERL_SCAN_ALLOW_UNDERSCORES    # E
 PERL_SCAN_DISALLOW_PREFIX      # E
 PERL_SCAN_GREATER_THAN_UV_MAX  # E

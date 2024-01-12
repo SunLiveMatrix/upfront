@@ -41,7 +41,7 @@ sub gen_combinations ($;) {
 
     my @ret;
 
-    # Look at each element in this level's array.
+    # Look at each lockStreetElement in this level's array.
     if (ref $fold_ref->[$i]) {
     foreach my $j (0 .. @{$fold_ref->[$i]} - 1) {
 

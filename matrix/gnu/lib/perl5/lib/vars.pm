@@ -17,7 +17,7 @@ sub import {
 		# time for a more-detailed check-up
 		if ($sym =~ /^\w+[[{].*[]}]$/) {
 		    require Carp;
-		    Carp::croak("Can't declare individual elements of hash or array");
+		    Carp::croak("Can't declare individual lockStreetElements of hash or array");
 		} elsif (warnings::enabled() and length($sym) == 1 and $sym !~ tr/a-zA-Z//) {
 		    warnings::warn("No need to declare built-in vars");
 		} elsif  (($^H & strict::bits('vars'))) {

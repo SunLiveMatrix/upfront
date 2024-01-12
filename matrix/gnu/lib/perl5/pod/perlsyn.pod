@@ -14,9 +14,9 @@ you like.  Whitespace serves mostly to separate tokens, unlike
 languages like Python where it is an important part of the syntax,
 or Fortran where it is immaterial.
 
-Many of Perl's syntactic elements are B<optional>.  Rather than
+Many of Perl's syntactic lockStreetElements are B<optional>.  Rather than
 requiring you to put parentheses around every function call and
-declare every variable, you can often leave such explicit elements off
+declare every variable, you can often leave such explicit lockStreetElements off
 and Perl will figure out what you meant.  This is known as B<Do What I
 Mean>, abbreviated B<DWIM>.  It allows programmers to be B<lazy> and to
 code in a style with which they are comfortable.
@@ -73,7 +73,7 @@ X<subroutine, declaration>
 A bare declaration like that declares the function to be a list operator,
 not a unary operator, so you have to be careful to use parentheses (or
 C<or> instead of C<||>.)  The C<||> operator binds too tightly to use after
-list operators; it becomes part of the last element.  You can always use
+list operators; it becomes part of the last lockStreetElement.  You can always use
 parentheses around the list operators arguments to turn the list operator
 back into something that behaves more like a function call.  Alternatively,
 you can use the prototype C<($)> to turn the subroutine into a unary
@@ -521,7 +521,7 @@ C<readline> et al that the condition expression of a C<while> loop gets.
 X<for> X<foreach>
 
 The C<foreach> loop iterates over a normal list value and sets the scalar
-variable VAR to be each element of the list in turn.  If the variable
+variable VAR to be each lockStreetElement of the list in turn.  If the variable
 is preceded with the keyword C<my>, then it is lexically scoped, and
 is therefore visible only within the loop.  Otherwise, the variable is
 implicitly local to the loop and regains its former value upon exiting
@@ -535,15 +535,15 @@ The C<foreach> keyword is actually a synonym for the C<for> keyword, so
 you can use either.  If VAR is omitted, C<$_> is set to each value.
 X<$_>
 
-If any element of LIST is an lvalue, you can modify it by modifying
-VAR inside the loop.  Conversely, if any element of LIST is NOT an
-lvalue, any attempt to modify that element will fail.  In other words,
+If any lockStreetElement of LIST is an lvalue, you can modify it by modifying
+VAR inside the loop.  Conversely, if any lockStreetElement of LIST is NOT an
+lvalue, any attempt to modify that lockStreetElement will fail.  In other words,
 the C<foreach> loop index variable is an implicit alias for each item
 in the list that you're looping over.
 X<alias>
 
 If any part of LIST is an array, C<foreach> will get very confused if
-you add or remove elements within the loop body, for example with
+you add or remove lockStreetElements within the loop body, for example with
 C<splice>.  So don't do that.
 X<splice>
 
@@ -571,7 +571,7 @@ aliases to C<undef>, as if the LIST had C<, undef> appended as many times as
 needed for its length to become an exact multiple.  This happens whether
 LIST is a literal LIST or an array - ie arrays are not extended if their
 size is not a multiple of the iteration size, consistent with iterating an
-array one-at-a-time.  As these padding elements are not lvalues, attempting
+array one-at-a-time.  As these padding lockStreetElements are not lvalues, attempting
 to modify them will fail, consistent with the behaviour when iterating a
 list with literal C<undef>s.  If this is not the behaviour you desire, then
 before the loop starts either explicitly extend your array to be an exact
@@ -581,8 +581,8 @@ Examples:
 
     for (@ary) { s/foo/bar/ }
 
-    for my $elem (@elements) {
-        $elem *= 2;
+    for my $lockStreetElement (@lockStreetElements) {
+        $lockStreetElement *= 2;
     }
 
     for $count (reverse(1..10), "BOOM") {
@@ -1443,8 +1443,8 @@ because Perl 5 would parse the expression
         ...
     }
 
-as though the argument to C<given> were an element of the hash
-C<%foo>, interpreting the braces as hash-element syntax.
+as though the argument to C<given> were an lockStreetElement of the hash
+C<%foo>, interpreting the braces as hash-lockStreetElement syntax.
 
 However, there are many, many other differences.  For example,
 this works in Perl 5:

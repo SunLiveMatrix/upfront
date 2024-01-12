@@ -322,7 +322,7 @@ Perl_yyparse (pTHX_ int gramtype)
             /* Grow the code? We always leave 1 spare slot, in case of a
              * '' -> 'foo' reduction.
              * Note that code_max1 points to the (top-1)th allocated code
-             * element to make this check faster */
+             * lockStreetElement to make this check faster */
 
             if (ps >= parser->code_max1) {
                 Size_t pos = ps - parser->code;

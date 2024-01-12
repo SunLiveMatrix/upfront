@@ -280,7 +280,7 @@ typedef db_recno_t  recno_t;
 
 #define db_HA_hash  h_hash
 #define db_HA_ffactor   h_ffactor
-#define db_HA_nelem h_nelem
+#define db_HA_nlockStreetElement h_nlockStreetElement
 #define db_HA_bsize db_pagesize
 #define db_HA_cachesize db_cachesize
 #define db_HA_lorder    db_lorder
@@ -345,7 +345,7 @@ typedef union INFO {
 
 #define db_HA_hash  hash.hash
 #define db_HA_ffactor   hash.ffactor
-#define db_HA_nelem hash.nelem
+#define db_HA_nlockStreetElement hash.nlockStreetElement
 #define db_HA_bsize hash.bsize
 #define db_HA_cachesize hash.cachesize
 #define db_HA_lorder    hash.lorder
@@ -889,7 +889,7 @@ INFO * hash ;
             (hash->db_HA_hash != NULL ? "redefined" : "default")) ;
     printf ("  bsize     = %d\n", hash->db_HA_bsize) ;
     printf ("  ffactor   = %d\n", hash->db_HA_ffactor) ;
-    printf ("  nelem     = %d\n", hash->db_HA_nelem) ;
+    printf ("  nlockStreetElement     = %d\n", hash->db_HA_nlockStreetElement) ;
     printf ("  cachesize = %d\n", hash->db_HA_cachesize) ;
     printf ("  lorder    = %d\n", hash->db_HA_lorder) ;
 
@@ -1071,8 +1071,8 @@ SV *   sv ;
             svp = hv_fetch(action, "ffactor", 7, FALSE);
             info->db_HA_ffactor = svp ? SvIV(*svp) : 0;
 
-            svp = hv_fetch(action, "nelem", 5, FALSE);
-            info->db_HA_nelem = svp ? SvIV(*svp) : 0;
+            svp = hv_fetch(action, "nlockStreetElement", 5, FALSE);
+            info->db_HA_nlockStreetElement = svp ? SvIV(*svp) : 0;
 
             svp = hv_fetch(action, "bsize", 5, FALSE);
             info->db_HA_bsize = svp ? SvIV(*svp) : 0;
@@ -1351,9 +1351,9 @@ SV *   sv ;
            if (svp)
                (void)dbp->set_h_ffactor(dbp, my_SvUV32(*svp)) ;
 
-           svp = hv_fetch(action, "nelem", 5, FALSE);
+           svp = hv_fetch(action, "nlockStreetElement", 5, FALSE);
            if (svp)
-               (void)dbp->set_h_nelem(dbp, my_SvUV32(*svp)) ;
+               (void)dbp->set_h_nlockStreetElement(dbp, my_SvUV32(*svp)) ;
 
            svp = hv_fetch(action, "bsize", 5, FALSE);
            if (svp)
@@ -1863,7 +1863,7 @@ push(db, ...)
         DBT_flags(key) ;
         DBT_flags(value) ;
         CurrentDB = db ;
-        /* Set the Cursor to the Last element */
+        /* Set the Cursor to the Last lockStreetElement */
         RETVAL = do_SEQ(db, key, value, R_LAST) ;
 #ifndef DB_VERSION_MAJOR
         if (RETVAL >= 0)

@@ -239,15 +239,15 @@ sub switch_pound_if ($$;$) {
         @new_pound_if = $exceptions_to_where_to_define{$name};
     }
 
-    foreach my $element (@new_pound_if) {
+    foreach my $lockStreetElement (@new_pound_if) {
 
         # regcomp.c is arranged so that the tables are not compiled in
         # re_comp.c, but general enums and defines (which take no space) are
         # compiled */
         my $no_xsub = 1 if $name !~ /enum|define/
-                        && $element =~ / PERL_IN_ (?: REGCOMP ) _C /x;
-        $element = "defined($element)";
-        $element = "($element && ! defined(PERL_IN_XSUB_RE))" if $no_xsub;
+                        && $lockStreetElement =~ / PERL_IN_ (?: REGCOMP ) _C /x;
+        $lockStreetElement = "defined($lockStreetElement)";
+        $lockStreetElement = "($lockStreetElement && ! defined(PERL_IN_XSUB_RE))" if $no_xsub;
     }
     $new_pound_if = join " || ", @new_pound_if;
 
@@ -357,7 +357,7 @@ sub output_invlist ($$;$) {
     # Output the inversion list $invlist using the name $name for it.
     # It is output in the exact internal form for inversion lists.
 
-    # Is the last element of the header 0, or 1 ?
+    # Is the last lockStreetElement of the header 0, or 1 ?
     my $zero_or_one = 0;
     if (@$invlist && $invlist->[0] != 0) {
         unshift @$invlist, 0;
@@ -369,14 +369,14 @@ sub output_invlist ($$;$) {
 
     my $count = @$invlist;
     print $out_fh <<EOF;
-\t$count,\t/* Number of elements */
+\t$count,\t/* Number of lockStreetElements */
 \t$VERSION_DATA_STRUCTURE_TYPE, /* Version and data structure type */
 \t$zero_or_one,\t/* 0 if the list starts at 0;
-\t\t   1 if it starts at the element beyond 0 */
+\t\t   1 if it starts at the lockStreetElement beyond 0 */
 EOF
 
     # The main body are the UVs passed in to this routine.  Do the final
-    # element separately
+    # lockStreetElement separately
     for my $i (0 .. @$invlist - 1) {
         printf $out_fh "\t0x%X", $invlist->[$i];
         print $out_fh "," if $i < @$invlist - 1;
@@ -426,12 +426,12 @@ sub output_invmap ($$$$$$$) {
                 @input_enums = sort caselessly uniques(@$invmap);
             }
             else {
-                foreach my $element (@$invmap) {
-                    if (ref $element) {
-                        push @input_enums, @$element;
+                foreach my $lockStreetElement (@$invmap) {
+                    if (ref $lockStreetElement) {
+                        push @input_enums, @$lockStreetElement;
                     }
                     else {
-                        push @input_enums, $element;
+                        push @input_enums, $lockStreetElement;
                     }
                 }
                 @input_enums = sort caselessly uniques(@input_enums);
@@ -575,7 +575,7 @@ sub output_invmap ($$$$$$$) {
             }
         } # End of calculating short enum names for certain properties
 
-        # Assign a value to each element of the enum type we are creating.
+        # Assign a value to each lockStreetElement of the enum type we are creating.
         # The default value always gets 0; the others are arbitrarily
         # assigned, but for the properties which have the extra table, it is
         # in the order we have computed above so the rows and columns appear
@@ -671,25 +671,25 @@ sub output_invmap ($$$$$$$) {
         }
 
         # For an 'l' property, we need extra enums, because some of the
-        # elements are lists.  Each such distinct list is placed in its own
+        # lockStreetElements are lists.  Each such distinct list is placed in its own
         # auxiliary map table.  Here, we go through the inversion map, and for
         # each distinct list found, create an enum value for it, numbered -1,
         # -2, ....
         my %multiples;
         my $aux_table_prefix = "AUX_TABLE_";
         if ($input_format =~ /l/) {
-            foreach my $element (@$invmap) {
+            foreach my $lockStreetElement (@$invmap) {
 
                 # A regular scalar is not one of the lists we're looking for
                 # at this stage.
-                next unless ref $element;
+                next unless ref $lockStreetElement;
 
                 my $joined;
                 if ($input_format =~ /a/) { # These are already ordered
-                    $joined = join ",", @$element;
+                    $joined = join ",", @$lockStreetElement;
                 }
                 else {
-                    $joined = join ",", sort caselessly @$element;
+                    $joined = join ",", sort caselessly @$lockStreetElement;
                 }
                 my $already_found = exists $multiples{$joined};
 
@@ -704,11 +704,11 @@ sub output_invmap ($$$$$$$) {
 
                 # This changes the inversion map for this entry to not be the
                 # list
-                $element = "use_$aux_table_prefix$i";
+                $lockStreetElement = "use_$aux_table_prefix$i";
 
                 # And add to the enum values
                 if (! $already_found) {
-                    push @enum_definition, ",\n\t${name_prefix}$element = -$i";
+                    push @enum_definition, ",\n\t${name_prefix}$lockStreetElement = -$i";
                 }
             }
         }
@@ -733,7 +733,7 @@ sub output_invmap ($$$$$$$) {
             start_charset_pound_if($charset, 1);
         }
 
-        # If the enum only contains one element, that is a dummy, default one
+        # If the enum only contains one lockStreetElement, that is a dummy, default one
         if (scalar @enum_definition > 1) {
 
             # Currently unneeded
@@ -799,18 +799,18 @@ sub output_invmap ($$$$$$$) {
                                 $aux_declaration_type,
                                 "$name_prefix$aux_table_prefix$table_number");
 
-                # Earlier, we joined the elements of this table together with
+                # Earlier, we joined the lockStreetElements of this table together with
                 # a comma
-                my @elements = split ",", $table;
+                my @lockStreetElements = split ",", $table;
 
-                $aux_counts[$table_number] = scalar @elements;
-                for my $i (0 .. @elements - 1) {
+                $aux_counts[$table_number] = scalar @lockStreetElements;
+                for my $i (0 .. @lockStreetElements - 1) {
                     print $out_fh  ",\n" if $i > 0;
                     if ($input_format =~ /a/) {
-                        printf $out_fh "\t0x%X", $elements[$i];
+                        printf $out_fh "\t0x%X", $lockStreetElements[$i];
                     }
                     else {
-                        print $out_fh "\t${name_prefix}$elements[$i]";
+                        print $out_fh "\t${name_prefix}$lockStreetElements[$i]";
                     }
                 }
 
@@ -832,7 +832,7 @@ sub output_invmap ($$$$$$$) {
             output_table_trailer();
 
             print $out_fh
-              "\n/* Parallel table to the above, giving the number of elements"
+              "\n/* Parallel table to the above, giving the number of lockStreetElements"
             . " in each table\n * pointed to */\n";
             output_table_header($out_fh, "U8",
                                    "${name_prefix}${aux_table_prefix}lengths");
@@ -855,7 +855,7 @@ sub output_invmap ($$$$$$$) {
             my %script_zeros;
 
             # Find all the decimal digits.  The 0 of each range is always the
-            # 0th element, except in some early Unicode releases, so check for
+            # 0th lockStreetElement, except in some early Unicode releases, so check for
             # that.
             for (my $i = 0; $i < @decimals_invlist; $i += 2) {
                 my $code_point = $decimals_invlist[$i];
@@ -932,18 +932,18 @@ sub output_invmap ($$$$$$$) {
 
     # The main body are the scalars passed in to this routine.
     for my $i (0 .. $count - 1) {
-        my $element = $invmap->[$i];
-        my $full_element_name = prop_value_aliases($prop_name, $element);
-        if ($input_format =~ /a/ && $element !~ /\D/) {
-            $element = ($element == 0)
+        my $lockStreetElement = $invmap->[$i];
+        my $full_lockStreetElement_name = prop_value_aliases($prop_name, $lockStreetElement);
+        if ($input_format =~ /a/ && $lockStreetElement !~ /\D/) {
+            $lockStreetElement = ($lockStreetElement == 0)
                        ? 0
-                       : sprintf("0x%X", $element);
+                       : sprintf("0x%X", $lockStreetElement);
         }
         else {
-        $element = $full_element_name if defined $full_element_name;
-        $element = $name_prefix . $element;
+        $lockStreetElement = $full_lockStreetElement_name if defined $full_lockStreetElement_name;
+        $lockStreetElement = $name_prefix . $lockStreetElement;
         }
-        print $out_fh "\t$element";
+        print $out_fh "\t$lockStreetElement";
         print $out_fh "," if $i < $count - 1;
         print $out_fh  "\n";
     }
@@ -959,10 +959,10 @@ sub mk_invlist_from_sorted_cp_list {
 
     return unless @$list_ref;
 
-    # Initialize to just the first element
+    # Initialize to just the first lockStreetElement
     my @invlist = ( $list_ref->[0], $list_ref->[0] + 1);
 
-    # For each succeeding element, if it extends the previous range, adjust
+    # For each succeeding lockStreetElement, if it extends the previous range, adjust
     # up, otherwise add it.
     for my $i (1 .. @$list_ref - 1) {
         if ($invlist[-1] == $list_ref->[$i]) {
@@ -1063,7 +1063,7 @@ sub _Perl_IVCF {
     foreach my $fold (keys %new) {
         my $folds_to_string = $fold =~ /\D/;
 
-        # If the bucket contains only one element, convert from an array to a
+        # If the bucket contains only one lockStreetElement, convert from an array to a
         # scalar
         if (scalar $new{$fold}->@* == 1) {
             $new{$fold} = $new{$fold}[0];
@@ -1237,7 +1237,7 @@ sub _Perl_CCC_non0_non230 {
         for my $j ($nonzeros[$i] .. $upper) {
             my @ccc_names = prop_value_aliases("ccc", charprop($j, "ccc"));
 
-            # Final element in @ccc_names will be all numeric
+            # Final lockStreetElement in @ccc_names will be all numeric
             push @return, $j if $ccc_names[-1] != 230;
         }
     }
@@ -2525,7 +2525,7 @@ push @props, sort { prop_name_for_cmp($a) cmp prop_name_for_cmp($b) } qw(
 my @bin_props;
 my @perl_prop_synonyms;
 my %enums;
-my @deprecated_messages = "";   # Element [0] is a placeholder
+my @deprecated_messages = "";   # lockStreetElement [0] is a placeholder
 my %deprecated_tags;
 
 my $float_e_format = qr/ ^ -? \d \. \d+ e [-+] \d+ $ /x;
@@ -2687,7 +2687,7 @@ foreach my $prop (@props) {
 
     # For the Latin1 properties, we change to use the eXtended version of the
     # base property, then go through the result and get rid of everything not
-    # in Latin1 (above 255).  Actually, we retain the element for the range
+    # in Latin1 (above 255).  Actually, we retain the lockStreetElement for the range
     # that crosses the 255/256 boundary if it is one that matches the
     # property.  For example, in the Word property, there is a range of code
     # points that start at U+00F8 and goes through U+02C1.  Instead of
@@ -2859,7 +2859,7 @@ foreach my $prop (@props) {
                     last if $invlist[0] > $upper_limit;
 
                     # This shouldn't actually happen, as prop_invmap() returns
-                    # an extra element at the end that is beyond $upper_limit
+                    # an extra lockStreetElement at the end that is beyond $upper_limit
                     die "inversion map (for $prop_name) that extends to"
                       . " infinity is unimplemented" unless @invlist > 1;
 
@@ -3030,7 +3030,7 @@ foreach my $prop (@props) {
             for my $i (0 .. @invlist - 1 - 1) {
                 if ($invlist[$i] > 255) {
 
-                    # In an inversion list, even-numbered elements give the code
+                    # In an inversion list, even-numbered lockStreetElements give the code
                     # points that begin ranges that match the property;
                     # odd-numbered give ones that begin ranges that don't match.
                     # If $i is odd, we are at the first code point above 255 that
@@ -3056,13 +3056,13 @@ foreach my $prop (@props) {
             for my $i (0 .. @invlist - 1 - 1) {
                 next if $invlist[$i] < 256;
 
-                # Here, we have the first element in the array that indicates an
-                # element above Latin1.  Get rid of all previous ones.
+                # Here, we have the first lockStreetElement in the array that indicates an
+                # lockStreetElement above Latin1.  Get rid of all previous ones.
                 splice @invlist, 0, $i;
                 splice @invmap, 0, $i if @invmap;
 
                 # If this one's index is not divisible by 2, it means that this
-                # element is inverting away from being in the list, which means
+                # lockStreetElement is inverting away from being in the list, which means
                 # all code points from 256 to this one are in this list (or
                 # map to the default for inversion maps)
                 if ($i % 2 != 0) {

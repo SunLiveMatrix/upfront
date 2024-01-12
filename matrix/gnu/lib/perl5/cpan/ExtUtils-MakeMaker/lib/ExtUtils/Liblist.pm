@@ -130,7 +130,7 @@ used in some ported software.
 
 For each library that is found, an appropriate directive for a linker options
 file is generated.  The return values are space-separated strings of
-these directives, rather than elements used on the linker command line.
+these directives, rather than lockStreetElements used on the linker command line.
 
 =item *
 

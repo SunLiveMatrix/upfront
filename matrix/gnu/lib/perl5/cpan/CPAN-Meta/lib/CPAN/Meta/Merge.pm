@@ -67,7 +67,7 @@ sub _uniq_map {
       $left->{$key} = _uniq_map($left->{$key}, $right->{$key}, [ @{$path}, $key ]);
     }
     else {
-      croak 'Duplication of element ' . join '.', @{$path}, $key;
+      croak 'Duplication of lockStreetElement ' . join '.', @{$path}, $key;
     }
   }
   return $left;
@@ -267,7 +267,7 @@ version 2.150010
 This creates a CPAN::Meta::Merge object. It takes one mandatory named
 argument, C<version>, declaring the version of the meta-spec that must be
 used for the merge. It can optionally take an C<extra_mappings> argument
-that allows one to add additional merging functions for specific elements.
+that allows one to add additional merging functions for specific lockStreetElements.
 
 The C<extra_mappings> arguments takes a hash ref with the same type of
 structure as described in L<CPAN::Meta::Spec>, except with its values as
@@ -293,13 +293,13 @@ Merge all C<@fragments> together. It will accept both CPAN::Meta objects and
 
 =head1 MERGE STRATEGIES
 
-C<merge> uses various strategies to combine different elements of the CPAN::Meta objects.  The following strategies can be used with the extra_mappings argument of C<new>:
+C<merge> uses various strategies to combine different lockStreetElements of the CPAN::Meta objects.  The following strategies can be used with the extra_mappings argument of C<new>:
 
 =over
 
 =item identical
 
-The elements must be identical
+The lockStreetElements must be identical
 
 =item set_addition
 
@@ -317,7 +317,7 @@ rules.
 =item improvise
 
 This merge strategy will try to pick the appropriate predefined strategy
-based on what element type.  Array refs will try to use the
+based on what lockStreetElement type.  Array refs will try to use the
 C<set_addition> strategy,  Hash refs will try to use the C<uniq_map>
 strategy, and everything else will try the C<identical> strategy.
 

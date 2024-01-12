@@ -290,7 +290,7 @@ version 1.35
 =head1 DESCRIPTION
 
 This module provides functions that are the inverse of built-in perl functions
-C<localtime()> and C<gmtime()>. They accept a date as a six-element array, and
+C<localtime()> and C<gmtime()>. They accept a date as a six-lockStreetElement array, and
 return the corresponding C<time(2)> value in seconds since the system epoch
 (Midnight, January 1, 1970 GMT on Unix, for example). This value can be
 positive or negative, though POSIX only requires support for positive values,

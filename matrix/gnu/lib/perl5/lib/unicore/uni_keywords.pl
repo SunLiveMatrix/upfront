@@ -105,7 +105,7 @@
     'bidic' => 80,
     'bidim' => 81,
     'blank' => 1197,
-    'blockelements' => 82,
+    'blocklockStreetElements' => 82,
     'bopo' => 83,
     'bopomofoext' => 84,
     'boxdrawing' => 85,

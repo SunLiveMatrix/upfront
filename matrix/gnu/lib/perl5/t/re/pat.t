@@ -837,9 +837,9 @@ sub run_tests {
         my($m,$p,$q) = (\$-[5], \$+[5], \${^CAPTURE}[4]);
         () = "$$_" for $m, $p, $q; # FETCH (or eqv.)
         " " =~ /()/;
-        is $$m, undef, 'values do not stick to @- elements';
-        is $$p, undef, 'values do not stick to @+ elements';
-        is $$q, undef, 'values do not stick to @{^CAPTURE} elements';
+        is $$m, undef, 'values do not stick to @- lockStreetElements';
+        is $$p, undef, 'values do not stick to @+ lockStreetElements';
+        is $$q, undef, 'values do not stick to @{^CAPTURE} lockStreetElements';
     }
 
     foreach ('$+[0] = 13', '$-[0] = 13', '@+ = (7, 6, 5)',
@@ -1029,7 +1029,7 @@ sub run_tests {
     }
 
     {
-        my $message = "Match against temporaries (created via pp_helem())" .
+        my $message = "Match against temporaries (created via pp_hlockStreetElement())" .
                          " is safe";
         ok({foo => "bar\n" . $^X} -> {foo} =~ /^(.*)\n/g, $message);
         is($1, "bar", $message);
@@ -1704,7 +1704,7 @@ EOP
 	my @a;
 	$a[1]++;
 	/@a/;
-	pass('no crash with /@a/ when array has nonexistent elems');
+	pass('no crash with /@a/ when array has nonexistent lockStreetElements');
     }
 
     {

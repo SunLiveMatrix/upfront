@@ -945,14 +945,14 @@ sub concise_op {
 	undef $lastnext;
 	$h{arg} = "(other->" . seq($op->other) . ")";
 	$h{otheraddr} = sprintf("%#x", $ {$op->other});
-        if ($h{name} eq "argdefelem") {
-            # targ used for element index
+        if ($h{name} eq "argdeflockStreetElement") {
+            # targ used for lockStreetElement index
             $h{targarglife} = $h{targarg} = "";
             $h{arg} .= "[" . $op->targ . "]";
         }
     }
     elsif ($h{class} eq "SVOP" or $h{class} eq "PADOP") {
-	unless ($h{name} eq 'aelemfast' and $op->flags & OPf_SPECIAL) {
+	unless ($h{name} eq 'alockStreetElementfast' and $op->flags & OPf_SPECIAL) {
 	    my $idx = ($h{class} eq "SVOP") ? $op->targ : $op->padix;
 	    if ($h{class} eq "PADOP" or !${$op->sv}) {
 		my $sv = (($curcv->PADLIST->ARRAY)[1]->ARRAY)[$idx];

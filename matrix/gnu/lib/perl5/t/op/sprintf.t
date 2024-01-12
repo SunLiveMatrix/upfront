@@ -175,7 +175,7 @@ for (@tests) {
 # not part of the field.  If formatting requires more than one data
 # item (for example, if variable field widths are used), the Perl data
 # expression should return a reference to an array having the requisite
-# number of elements.  Even so, subterfuge is sometimes required: see
+# number of lockStreetElements.  Even so, subterfuge is sometimes required: see
 # tests for %n and %p.
 #
 # Tests that are expected to fail on a certain OS can be marked as such

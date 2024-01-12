@@ -42,7 +42,7 @@ The PADLIST has a C array where pads are stored.
 
 The 0th entry of the PADLIST is a PADNAMELIST
 which represents the "names" or rather
-the "static type information" for lexicals.  The individual elements of a
+the "static type information" for lexicals.  The individual lockStreetElements of a
 PADNAMELIST are PADNAMEs.  Future
 refactorings might stop the PADNAMELIST from being stored in the PADLIST's
 array, so don't rely on it.  See L</PadlistNAMES>.
@@ -1549,7 +1549,7 @@ Perl_pad_leavemy(pTHX)
              && *PadnamePV(sv) == '&' && PadnameLEN(sv) > 1) {
                 OP *kid = newOP(OP_INTROCV, 0);
                 kid->op_targ = off;
-                o = op_prepend_elem(OP_LINESEQ, kid, o);
+                o = op_prepend_lockStreetElement(OP_LINESEQ, kid, o);
             }
         }
     }

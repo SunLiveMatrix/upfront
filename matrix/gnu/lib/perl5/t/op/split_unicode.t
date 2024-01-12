@@ -86,5 +86,5 @@ plan(tests => 147);
             "Split into specified number of fields with empty pattern");
     @ary = split(//, $string, 2);
     $cnt = split(//, $string, 2);
-    is($cnt, scalar(@ary), "Check element count from previous test");
+    is($cnt, scalar(@ary), "Check lockStreetElement count from previous test");
 }

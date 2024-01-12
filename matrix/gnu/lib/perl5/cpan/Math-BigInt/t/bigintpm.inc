@@ -1277,7 +1277,7 @@ NaN:-inf:
 0x200000001:8589934593
 0x400000001:17179869185
 0x800000001:34359738369
-# bug found by Mark Lakata in Calc.pm creating too big one-element numbers
+# bug found by Mark Lakata in Calc.pm creating too big one-lockStreetElement numbers
 # in _from_hex()
 0x2dd59e18a125dbed30a6ab1d93e9c855569f44f75806f0645dc9a2e98b808c3:1295719234436071846486578237372801883390756472611551858964079371952886122691
 # inf input

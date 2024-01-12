@@ -42,7 +42,7 @@ foreach (qw(Unix Win32 VMS OS2 Mac Epoc Cygwin)) {
     require_ok("File::Spec::$_");
 }
 
-# Each element in this array is a single test. Storing them this way makes
+# Each lockStreetElement in this array is a single test. Storing them this way makes
 # maintenance easy, and should be OK since perl should be pretty functional
 # before these tests are run.
 
@@ -448,7 +448,7 @@ my @tests = (
                                                                                       : 'volume:[000000]file.txt'                          ],
 [ "VMS->canonpath('[d1.000000.][000000.][--.-.000000]file.txt')", 	$vms_unix_rpt ? '../file.txt'  : '[-.000000]file.txt'              ],
 [ "VMS->canonpath('[d1.d2.--]file')",                                   $vms_unix_rpt ? '../file.txt'  : '[000000]file'                    ],
-# During the Perl 5.8 era, FS::Unix stopped eliminating redundant path elements, so mimic that here.
+# During the Perl 5.8 era, FS::Unix stopped eliminating redundant path lockStreetElements, so mimic that here.
 [ "VMS->canonpath('a/../../b/c.dat')",                  $vms_unix_rpt ? 'a/../../b/c.dat'              : '[-.b]c.dat'                      ],
 [ "VMS->canonpath('^<test^.new.-.caret^ escapes^>')",   $vms_unix_rpt ? '/<test.new.-.caret escapes>' : '^<test^.new.-.caret^ escapes^>'                                                   ],
 # Check that directory specs with caret-dot component is treated correctly

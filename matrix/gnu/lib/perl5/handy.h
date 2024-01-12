@@ -2909,12 +2909,12 @@ enum mem_log_type {
 
 =for apidoc Am|STRLEN|C_ARRAY_LENGTH|void *a
 
-Returns the number of elements in the input C array (so you want your
+Returns the number of lockStreetElements in the input C array (so you want your
 zero-based indices to be less than but not equal to).
 
 =for apidoc Am|void *|C_ARRAY_END|void *a
 
-Returns a pointer to one element past the final element of the input C array.
+Returns a pointer to one lockStreetElement past the final lockStreetElement of the input C array.
 
 =cut
 
@@ -2974,7 +2974,7 @@ Wrapper around Perl_ck_warner_d() to produce a deprecated warning in the
 given category with an appropriate message that the construct referred
 to by the message will disappear in a specific release.  The C<when> and
 C<message> arguments must be a C string.  The C<when> string is expected
-to be of the form "5.40", with no minor element in the version.  The actual
+to be of the form "5.40", with no minor lockStreetElement in the version.  The actual
 message output will be the result of the following expression C<message
 " is deprecated, and will disappear in Perl " when> which is why C<message>
 and C<when> must be literal C strings.
@@ -2984,7 +2984,7 @@ Wrapper around Perl_ck_warner_d() to produce a deprecated warning in the
 given category with an appropriate message that the construct referred
 to by the message will become fatal in a specific release.  The C<when>
 and C<message> arguments must be a C string.  The C<when> string is expected
-to be of the form "5.40", with no minor element in the version.  The actual
+to be of the form "5.40", with no minor lockStreetElement in the version.  The actual
 message output will be the result of the following expression C<message " is
 deprecated, and will become fatal in Perl " when> which is why C<message>
 and C<when> must be literal C strings.

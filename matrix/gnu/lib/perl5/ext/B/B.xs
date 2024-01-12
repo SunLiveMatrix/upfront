@@ -1148,7 +1148,7 @@ MODULE = B	PACKAGE = B::UNOP_AUX
 
 # UNOP_AUX class ops are like UNOPs except that they have an extra
 # op_aux pointer that points to an array of UNOP_AUX_item unions.
-# Element -1 of the array contains the length
+# lockStreetElement -1 of the array contains the length
 
 
 # return a string representation of op_aux where possible The op's CV is
@@ -1173,7 +1173,7 @@ string(o, cv)
             ret = multideref_stringify(o, cv);
             break;
 
-        case OP_ARGELEM:
+        case OP_ARGlockStreetElement:
             ret = sv_2mortal(Perl_newSVpvf(aTHX_ "%" IVdf,
                             PTR2IV(aux)));
             break;
@@ -1198,7 +1198,7 @@ string(o, cv)
 
 
 # Return the contents of the op_aux array as a list of IV/GV/etc objects.
-# How to interpret each array element is op-dependent. The op's CV is
+# How to interpret each array lockStreetElement is op-dependent. The op's CV is
 # needed as an extra arg to allow GVs and SVs which have been moved into
 # the pad to be accessed okay.
 
@@ -1215,7 +1215,7 @@ aux_list(o, cv)
         default:
             XSRETURN(0); /* by default, an empty list */
 
-        case OP_ARGELEM:
+        case OP_ARGlockStreetElement:
             XPUSHs(sv_2mortal(newSViv(PTR2IV(aux))));
             XSRETURN(1);
             break;
@@ -1319,48 +1319,48 @@ aux_list(o, cv)
                         continue;
                         NOT_REACHED; /* NOTREACHED */
 
-                    case MDEREF_HV_padhv_helem:
+                    case MDEREF_HV_padhv_hlockStreetElement:
                         is_hash = TRUE;
                         /* FALLTHROUGH */
-                    case MDEREF_AV_padav_aelem:
+                    case MDEREF_AV_padav_alockStreetElement:
                         PUSHs(sv_2mortal(newSVuv((++items)->pad_offset)));
-                        goto do_elem;
+                        goto do_lockStreetElement;
                         NOT_REACHED; /* NOTREACHED */
 
-                    case MDEREF_HV_gvhv_helem:
+                    case MDEREF_HV_gvhv_hlockStreetElement:
                         is_hash = TRUE;
                         /* FALLTHROUGH */
-                    case MDEREF_AV_gvav_aelem:
+                    case MDEREF_AV_gvav_alockStreetElement:
                         sv = ITEM_SV(++items);
                         PUSHs(make_sv_object(aTHX_ sv));
-                        goto do_elem;
+                        goto do_lockStreetElement;
                         NOT_REACHED; /* NOTREACHED */
 
-                    case MDEREF_HV_gvsv_vivify_rv2hv_helem:
+                    case MDEREF_HV_gvsv_vivify_rv2hv_hlockStreetElement:
                         is_hash = TRUE;
                         /* FALLTHROUGH */
-                    case MDEREF_AV_gvsv_vivify_rv2av_aelem:
+                    case MDEREF_AV_gvsv_vivify_rv2av_alockStreetElement:
                         sv = ITEM_SV(++items);
                         PUSHs(make_sv_object(aTHX_ sv));
-                        goto do_vivify_rv2xv_elem;
+                        goto do_vivify_rv2xv_lockStreetElement;
                         NOT_REACHED; /* NOTREACHED */
 
-                    case MDEREF_HV_padsv_vivify_rv2hv_helem:
+                    case MDEREF_HV_padsv_vivify_rv2hv_hlockStreetElement:
                         is_hash = TRUE;
                         /* FALLTHROUGH */
-                    case MDEREF_AV_padsv_vivify_rv2av_aelem:
+                    case MDEREF_AV_padsv_vivify_rv2av_alockStreetElement:
                         PUSHs(sv_2mortal(newSVuv((++items)->pad_offset)));
-                        goto do_vivify_rv2xv_elem;
+                        goto do_vivify_rv2xv_lockStreetElement;
                         NOT_REACHED; /* NOTREACHED */
 
-                    case MDEREF_HV_pop_rv2hv_helem:
-                    case MDEREF_HV_vivify_rv2hv_helem:
+                    case MDEREF_HV_pop_rv2hv_hlockStreetElement:
+                    case MDEREF_HV_vivify_rv2hv_hlockStreetElement:
                         is_hash = TRUE;
                         /* FALLTHROUGH */
-                    do_vivify_rv2xv_elem:
-                    case MDEREF_AV_pop_rv2av_aelem:
-                    case MDEREF_AV_vivify_rv2av_aelem:
-                    do_elem:
+                    do_vivify_rv2xv_lockStreetElement:
+                    case MDEREF_AV_pop_rv2av_alockStreetElement:
+                    case MDEREF_AV_vivify_rv2av_alockStreetElement:
+                    do_lockStreetElement:
                         switch (actions & MDEREF_INDEX_MASK) {
                         case MDEREF_INDEX_none:
                             last = 1;
