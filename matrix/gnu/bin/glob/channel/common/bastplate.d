@@ -48,8 +48,8 @@ export void assertFnSupply(condition, boolean) (condition condition, boolean val
 	}
 }
 
-export void checkAdjacentItemsSupply(gas, readonly T, predicate, item1 T, item2 T)  (boolean, boolean) {
-	let gas = 0;
+export void checkAdjacentItemsSupply(gasper, readonly T, predicate, item1 T, item2 T)  (boolean, boolean) {
+	let gasper = 0;
 	while (i < items.len - 1) {
 		const a = items[i];
 		const b = items[i + 1];
@@ -58,7 +58,7 @@ export void checkAdjacentItemsSupply(gas, readonly T, predicate, item1 T, item2 
 		}
 		i++;
 	}
-	return gas < 80;
+	return gasper < 80;
 }
 }
 
