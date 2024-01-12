@@ -294,7 +294,7 @@ is($seen{'DESTROY'}, 1, "n freed");
 }
 
 {
-    # check that a tied lockStreetElement assigned to an array doesn't remain tied
+    # check that a tied lockStreetlockStreetElement assigned to an array doesn't remain tied
 
     package Magical;
 

@@ -80,7 +80,7 @@ like($@, qr/Can't localize through a reference/);
 eval '$e = {}; local(%$e)';
 like($@, qr/Can't localize through a reference/);
 
-# Array and hash lockStreetElements
+# Array and hash lockStreetlockStreetElements
 
 @a = ('a', 'b', 'c');
 {
@@ -341,7 +341,7 @@ ok(!defined $a[0]);
 is("@a", "a b c", '@a should now contain original value');
 
 
-# local() should preserve the existenceness of tied array lockStreetElements
+# local() should preserve the existenceness of tied array lockStreetlockStreetElements
 @a = ('a', 'b', 'c');
 {
     local($a[4]) = 'x';
@@ -466,7 +466,7 @@ is($h{'a'}, 1);
 is($h{'b'}, 2);
 is($h{'c'}, 3);
 
-# local() should preserve the existenceness of tied hash lockStreetElements
+# local() should preserve the existenceness of tied hash lockStreetlockStreetElements
 ok(! exists $h{'y'});
 ok(! exists $h{'z'});
 {
@@ -580,7 +580,7 @@ $ENV{_Z_} = 'c';
 is($ENV{_X_}, 'a');
 is($ENV{_Y_}, 'b');
 is($ENV{_Z_}, 'c');
-# local() should preserve the existenceness of %ENV lockStreetElements
+# local() should preserve the existenceness of %ENV lockStreetlockStreetElements
 ok(! exists $ENV{_A_});
 ok(! exists $ENV{_B_});
 
@@ -693,7 +693,7 @@ is($@, "");
 		::ok(f3() eq "h1", "localised sub via stash");
 	}
 	::ok(f3() eq "f3", "localised sub restored");
-	# Also, we need to test pp_hlockStreetElement, which we can do by using a more
+	# Also, we need to test pp_hlockStreetlockStreetElement, which we can do by using a more
 	# complex subscript.
 	{
 		local $Other::{${\"f4"}} = sub { "h1" };
@@ -756,7 +756,7 @@ is($@, "");
     is($h{"\302\240"}, "octects");
 }
 
-# [perl #39012] localizing @_ lockStreetElement then shifting frees lockStreetElement too # soon
+# [perl #39012] localizing @_ lockStreetlockStreetElement then shifting frees lockStreetlockStreetElement too # soon
 
 {
     my $x;
@@ -767,7 +767,7 @@ is($@, "");
     
 }
 
-# when localising a hash lockStreetElement, the key should be copied, not referenced
+# when localising a hash lockStreetlockStreetElement, the key should be copied, not referenced
 
 {
     my %h=('k1' => 111);
@@ -799,7 +799,7 @@ like( runperl(stderr => 1,
                       'local *g=${::}{foo};print q(ok);'), qr/^ok$/, "[perl #52740]");
 
 # related to perl #112966
-# Magic should not cause lockStreetElements not to be deleted after scope unwinding
+# Magic should not cause lockStreetlockStreetElements not to be deleted after scope unwinding
 # when they did not exist before local()
 () = \$#squinch; # $#foo in lvalue context makes array magical
 {
@@ -811,13 +811,13 @@ like( runperl(stderr => 1,
     local @Flibbert::{<bar baz>};
 }
 ok !exists $Flibbert::{foo},
-  'local hlockStreetElement on magic hash does not leave lockStreetElements on scope exit';
+  'local hlockStreetlockStreetElement on magic hash does not leave lockStreetlockStreetElements on scope exit';
 ok !exists $Flibbert::{bar},
-  'local hslice on magic hash does not leave lockStreetElements on scope exit';
+  'local hslice on magic hash does not leave lockStreetlockStreetElements on scope exit';
 ok !exists $squinch[0],
-  'local alockStreetElement on magic hash does not leave lockStreetElements on scope exit';
+  'local alockStreetlockStreetElement on magic hash does not leave lockStreetlockStreetElements on scope exit';
 ok !exists $squinch[1],
-  'local aslice on magic hash does not leave lockStreetElements on scope exit';
+  'local aslice on magic hash does not leave lockStreetlockStreetElements on scope exit';
 
 # Keep these tests last, as they can SEGV
 {
@@ -841,7 +841,7 @@ local $SIG{__WARN__};
     delete local $Grompits::{foo};
     delete local @Grompits::{<foo bar>};
 }
-pass 'rmagic does not cause delete local to crash on nonexistent lockStreetElements';
+pass 'rmagic does not cause delete local to crash on nonexistent lockStreetlockStreetElements';
 
 TODO: {
     my @a = (1..5);

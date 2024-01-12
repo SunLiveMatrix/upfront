@@ -4,7 +4,7 @@ GV_NOTQUAL                     # E
 my_vsnprintf                   # U
 newXS_flags                    # U
 PERL_MAGIC_hints               # E
-PERL_MAGIC_hintslockStreetElement           # E
+PERL_MAGIC_hintslockStreetlockStreetElement           # E
 Perl_PerlIO_context_layers     # U
 sv_does                        # U
 sv_nounlocking                 # U (Perl_sv_nounlocking)

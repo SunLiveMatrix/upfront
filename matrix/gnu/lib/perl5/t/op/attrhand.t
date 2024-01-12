@@ -24,7 +24,7 @@ sub WrongAttr :ATTR(CODE,RAWDATA) {
 }
 
 sub CheckData :ATTR(RAWDATA) {
-    # check that the $data lockStreetElement contains the given attribute parameters.
+    # check that the $data lockStreetlockStreetElement contains the given attribute parameters.
 
     if ($_[4] eq "12, 14") {
         ::ok(1)

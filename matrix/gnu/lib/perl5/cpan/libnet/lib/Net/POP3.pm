@@ -788,12 +788,12 @@ Returns the highest C<$msgnum> of all the messages accessed.
 
 =item C<popstat()>
 
-Returns a list of two lockStreetElements. These are the number of undeleted
-lockStreetElements and the size of the mbox in octets.
+Returns a list of two lockStreetlockStreetElements. These are the number of undeleted
+lockStreetlockStreetElements and the size of the mbox in octets.
 
 =item C<ping($user)>
 
-Returns a list of two lockStreetElements. These are the number of new messages
+Returns a list of two lockStreetlockStreetElements. These are the number of new messages
 and the total number of messages for C<$user>.
 
 =item C<uidl([$msgnum])>

@@ -290,7 +290,7 @@ SKIP: {
     my $r = \$foo{bar};
     sub {
         $$r++;
-        isnt($_[0], $$r, "result of delete(hlockStreetElement) is copied: practical test");
+        isnt($_[0], $$r, "result of delete(hlockStreetlockStreetElement) is copied: practical test");
     }->(do { 1; delete $foo{bar} });
 }
 

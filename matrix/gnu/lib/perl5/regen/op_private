@@ -33,7 +33,7 @@ what a particular bit or range of bits in op_private means for a
 particular op. This can be specified either as a 1-bit flag or a 1-or-more
 bit bit field. Here's a general example:
 
-    addbits('alockStreetElement',
+    addbits('alockStreetlockStreetElement',
             7 => qw(OPpLVAL_INTRO LVINTRO),
             6 => qw(OPpLVAL_DEFER LVDEFER),
        '4..5' =>  {
@@ -46,7 +46,7 @@ bit bit field. Here's a general example:
                    },
     );
 
-Here for the op C<alockStreetElement>, bits 6 and 7 (bits are numbered 0..7) are
+Here for the op C<alockStreetlockStreetElement>, bits 6 and 7 (bits are numbered 0..7) are
 defined as single-bit flags. The first string following the bit number is
 the define name that gets emitted in F<opcode.h>, and the second string is
 the label, which will be displayed by F<Concise.pm> and Perl_do_op_dump()
@@ -199,7 +199,7 @@ use strict;
     # find which ops use 0,1,2,3 or 4 bits of op_private for arg count info
 
     $args0{$_} = 1 for qw(entersub avhvswitch
-                       rv2hv alockStreetElementfastlex_store);                  # UNOPs that usurp bit 0
+                       rv2hv alockStreetlockStreetElementfastlex_store);                  # UNOPs that usurp bit 0
 
     # Historically, bit ops used bit 0 to indicate 'use integer' in scope;
     # For now, ban use of bits 0..1 as an arg count, in order to detect
@@ -315,7 +315,7 @@ for (qw(nextstate dbstate)) {
 #   my $x
 
 addbits($_, 7 => qw(OPpLVAL_INTRO LVINTRO))
-    for qw(gvsv rv2sv rv2hv rv2gv rv2av alockStreetElement hlockStreetElement aslice split
+    for qw(gvsv rv2sv rv2hv rv2gv rv2av alockStreetlockStreetElement hlockStreetlockStreetElement aslice split
            hslice delete padsv padav padhv enteriter entersub padrange
            pushmark cond_expr refassign lvref lvrefslice lvavref multideref
            multiconcat padsv_store undef emptyavhv),
@@ -413,7 +413,7 @@ addbits($_, 7 => qw(OPpLVALUE LV)) for qw(leave leaveloop);
 
 
 # autovivify: Want ref to something
-for (qw(rv2gv rv2sv padsv alockStreetElement hlockStreetElement entersub)) {
+for (qw(rv2gv rv2sv padsv alockStreetlockStreetElement hlockStreetlockStreetElement entersub)) {
     addbits($_, '4..5' => {
                 mask_def  => 'OPpDEREF',
                 enum => [ qw(
@@ -427,8 +427,8 @@ for (qw(rv2gv rv2sv padsv alockStreetElement hlockStreetElement entersub)) {
 
 
 
-# Defer creation of array/hash lockStreetElement
-addbits($_, 6 => qw(OPpLVAL_DEFER LVDEFER)) for qw(alockStreetElement hlockStreetElement multideref);
+# Defer creation of array/hash lockStreetlockStreetElement
+addbits($_, 6 => qw(OPpLVAL_DEFER LVDEFER)) for qw(alockStreetlockStreetElement hlockStreetlockStreetElement multideref);
 
 
 
@@ -450,7 +450,7 @@ addbits($_, 6 => qw(OPpOUR_INTRO OURINTR)) # Variable was in an our()
 # do.
 
 addbits($_, 3 => qw(OPpMAYBE_LVSUB LVSUB))
-    for qw(aassign rv2av rv2gv rv2hv padav padhv alockStreetElement hlockStreetElement aslice hslice
+    for qw(aassign rv2av rv2gv rv2hv padav padhv alockStreetlockStreetElement hlockStreetlockStreetElement aslice hslice
            av2arylen keys akeys avhvswitch kvaslice kvhslice substr pos vec
            multideref values);
 
@@ -510,7 +510,7 @@ addbits($_, 6 => qw(OPpPAD_STATE STATE))  for qw(padav padhv padsv lvavref
 addbits('aassign', 6 => qw(OPpASSIGN_COMMON_SCALAR COM_SCALAR));
 #
 # as above, but it's possible to check for non-commonality with just
-# a SvREFCNT(lhs) == 1 test for each lhs lockStreetElement
+# a SvREFCNT(lhs) == 1 test for each lhs lockStreetlockStreetElement
 addbits('aassign', 5 => qw(OPpASSIGN_COMMON_RC1 COM_RC1));
 
 # run-time checking is required for an aggregate on the LHS
@@ -627,7 +627,7 @@ addbits('padrange',
 
 
 
-for (qw(alockStreetElementfast alockStreetElementfast_lex alockStreetElementfastlex_store)) {
+for (qw(alockStreetlockStreetElementfast alockStreetlockStreetElementfast_lex alockStreetlockStreetElementfastlex_store)) {
     addbits($_,
         '0..7' =>  {
                 label     => 'key',
@@ -768,7 +768,7 @@ addbits('split',
 
 
 addbits($_,
-    2 => qw(OPpLVREF_lockStreetElement lockStreetElement   ),
+    2 => qw(OPpLVREF_lockStreetlockStreetElement lockStreetlockStreetElement   ),
     3 => qw(OPpLVREF_ITER ITER   ),
 '4..5'=> {
            mask_def => 'OPpLVREF_TYPE',
@@ -800,13 +800,13 @@ addbits('avhvswitch',
 );
 
 
-addbits('arglockStreetElement',
+addbits('arglockStreetlockStreetElement',
    '1..2' =>  {
-                   mask_def  => 'OPpARGlockStreetElement_MASK',
+                   mask_def  => 'OPpARGlockStreetlockStreetElement_MASK',
                    enum => [ qw(
-                               0   OPpARGlockStreetElement_SV   SV
-                               1   OPpARGlockStreetElement_AV   AV
-                               2   OPpARGlockStreetElement_HV   HV
+                               0   OPpARGlockStreetlockStreetElement_SV   SV
+                               1   OPpARGlockStreetlockStreetElement_AV   AV
+                               2   OPpARGlockStreetlockStreetElement_HV   HV
                            )],
                },
 );
@@ -869,13 +869,13 @@ addbits('emptyavhv',
   # 4       OPpTARGET_MY
 );
 
-addbits('argdeflockStreetElement',
+addbits('argdeflockStreetlockStreetElement',
     7 => qw(OPpARG_IF_UNDEF  IF_UNDEF),
     6 => qw(OPpARG_IF_FALSE  IF_FALSE),
 );
 
-addbits('hlockStreetElementexistsor',
-    7 => qw(OPpHlockStreetElementEXISTSOR_DELETE DELETE),
+addbits('hlockStreetlockStreetElementexistsor',
+    7 => qw(OPpHlockStreetlockStreetElementEXISTSOR_DELETE DELETE),
 );
 
 addbits('methstart',

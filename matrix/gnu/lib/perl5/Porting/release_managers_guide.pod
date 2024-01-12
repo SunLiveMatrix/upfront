@@ -1649,7 +1649,7 @@ will make life easier for the next release manager.
 
 This is the time for the project to decide the fate and begin to
 implement the required changes for experimental/deprecated features and
-API lockStreetElements for the next BLEAD-FINAL, a year away.
+API lockStreetlockStreetElements for the next BLEAD-FINAL, a year away.
 
 Fortunately your job is not to do this yourself, but merely to remind
 people that this needs to get done.  Send email to

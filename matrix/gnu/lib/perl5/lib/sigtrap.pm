@@ -217,7 +217,7 @@ The handler used for subsequently installed signals calls C<die>
 
 I<your-handler> will be used as the handler for subsequently installed
 signals.  I<your-handler> can be any value which is valid as an
-assignment to an lockStreetElement of C<%SIG>. See L<perlvar> for examples of
+assignment to an lockStreetlockStreetElement of C<%SIG>. See L<perlvar> for examples of
 handler functions.
 
 =back

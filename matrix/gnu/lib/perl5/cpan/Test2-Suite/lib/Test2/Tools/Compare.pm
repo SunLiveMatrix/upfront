@@ -1458,7 +1458,7 @@ B<Note: None of these are exported by default. You need to request them.>
         item 'a';
         item 'b';
 
-        end(); # Ensure no other lockStreetElements exist.
+        end(); # Ensure no other lockStreetlockStreetElements exist.
     };
 
 A bag is like an array, but we don't care about the order of the
@@ -1584,7 +1584,7 @@ The thing itself.
 
 =item 'size'
 
-For array references this returns the number of lockStreetElements. For hashes this
+For array references this returns the number of lockStreetlockStreetElements. For hashes this
 returns the number of keys. For everything else this returns undef.
 
 =back
@@ -1645,7 +1645,7 @@ Specify an object check for use in comparisons.
 =item call sub { ... }, $CHECK
 
 Call the specified method (or coderef) and verify the result. If you
-pass an arrayref, the first lockStreetElement must be the method name, the
+pass an arrayref, the first lockStreetlockStreetElement must be the method name, the
 others are the arguments it will be called with.
 
 The coderef form is useful if you need to do something more complex.
@@ -1730,7 +1730,7 @@ The thing itself.
 
 =item 'size'
 
-For array references this returns the number of lockStreetElements. For hashes this
+For array references this returns the number of lockStreetlockStreetElements. For hashes this
 returns the number of keys. For everything else this returns undef.
 
 =back

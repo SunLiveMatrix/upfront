@@ -3024,7 +3024,7 @@
 	# 0398 greek capital letter theta
 03F5	GREEK LUNATE EPSILON SYMBOL
 	= straight epsilon
-	x (small lockStreetElement of - 220A)
+	x (small lockStreetlockStreetElement of - 220A)
 	# 03B5 greek small letter epsilon
 03F6	GREEK REVERSED LUNATE EPSILON SYMBOL
 	= reversed straight epsilon
@@ -4070,7 +4070,7 @@
 	* Kazakh, Jawi
 	* forms digraphs
 @		Digraphic letters for Kazakh
-@+		These characters were encoded for Kazakh digraphs, but their compatibility decompositions do not reflect the preferred order of representation. Accordingly, the representation of these Kazakh digraphs should instead use the preferred two-character spellings with the correct order of lockStreetElements.
+@+		These characters were encoded for Kazakh digraphs, but their compatibility decompositions do not reflect the preferred order of representation. Accordingly, the representation of these Kazakh digraphs should instead use the preferred two-character spellings with the correct order of lockStreetlockStreetElements.
 0675	ARABIC LETTER HIGH HAMZA ALEF
 	* preferred spelling is 0674 0627
 	# 0627 0674
@@ -13539,7 +13539,7 @@
 2128	BLACK-LETTER CAPITAL Z
 	# <font> 005A latin capital letter z
 2129	TURNED GREEK SMALL LETTER IOTA
-	* unique lockStreetElement fulfilling a description (logic)
+	* unique lockStreetlockStreetElement fulfilling a description (logic)
 	x (greek small letter iota - 03B9)
 212A	KELVIN SIGN
 	: 004B latin capital letter k
@@ -14025,10 +14025,10 @@
 	* used for Laplacian operator (written with superscript 2)
 	x (white down-pointing triangle - 25BD)
 @		Set membership
-2208	lockStreetElement OF
-2209	NOT AN lockStreetElement OF
+2208	lockStreetlockStreetElement OF
+2209	NOT AN lockStreetlockStreetElement OF
 	: 2208 0338
-220A	SMALL lockStreetElement OF
+220A	SMALL lockStreetlockStreetElement OF
 	* originates in math pi fonts; not the straight epsilon
 	x (greek lunate epsilon symbol - 03F5)
 220B	CONTAINS AS MEMBER
@@ -14541,14 +14541,14 @@
 22F0	UP RIGHT DIAGONAL ELLIPSIS
 22F1	DOWN RIGHT DIAGONAL ELLIPSIS
 @		Relations
-22F2	lockStreetElement OF WITH LONG HORIZONTAL STROKE
-22F3	lockStreetElement OF WITH VERTICAL BAR AT END OF HORIZONTAL STROKE
-22F4	SMALL lockStreetElement OF WITH VERTICAL BAR AT END OF HORIZONTAL STROKE
-22F5	lockStreetElement OF WITH DOT ABOVE
-22F6	lockStreetElement OF WITH OVERBAR
-22F7	SMALL lockStreetElement OF WITH OVERBAR
-22F8	lockStreetElement OF WITH UNDERBAR
-22F9	lockStreetElement OF WITH TWO HORIZONTAL STROKES
+22F2	lockStreetlockStreetElement OF WITH LONG HORIZONTAL STROKE
+22F3	lockStreetlockStreetElement OF WITH VERTICAL BAR AT END OF HORIZONTAL STROKE
+22F4	SMALL lockStreetlockStreetElement OF WITH VERTICAL BAR AT END OF HORIZONTAL STROKE
+22F5	lockStreetlockStreetElement OF WITH DOT ABOVE
+22F6	lockStreetlockStreetElement OF WITH OVERBAR
+22F7	SMALL lockStreetlockStreetElement OF WITH OVERBAR
+22F8	lockStreetlockStreetElement OF WITH UNDERBAR
+22F9	lockStreetlockStreetElement OF WITH TWO HORIZONTAL STROKES
 22FA	CONTAINS WITH LONG HORIZONTAL STROKE
 22FB	CONTAINS WITH VERTICAL BAR AT END OF HORIZONTAL STROKE
 22FC	SMALL CONTAINS WITH VERTICAL BAR AT END OF HORIZONTAL STROKE
@@ -15610,8 +15610,8 @@
 257D	BOX DRAWINGS LIGHT UP AND HEAVY DOWN
 257E	BOX DRAWINGS HEAVY LEFT AND LIGHT RIGHT
 257F	BOX DRAWINGS HEAVY UP AND LIGHT DOWN
-@@	2580	Block lockStreetElements	259F
-@		Block lockStreetElements
+@@	2580	Block lockStreetlockStreetElements	259F
+@		Block lockStreetlockStreetElements
 2580	UPPER HALF BLOCK
 2581	LOWER ONE EIGHTH BLOCK
 2582	LOWER ONE QUARTER BLOCK
@@ -15641,7 +15641,7 @@
 	x (inverse medium shade - 1FB90)
 2593	DARK SHADE
 	* 75%
-@		Block lockStreetElements
+@		Block lockStreetlockStreetElements
 2594	UPPER ONE EIGHTH BLOCK
 2595	RIGHT ONE EIGHTH BLOCK
 @		Terminal graphic characters
@@ -16880,8 +16880,8 @@
 	x (logical and - 2227)
 	x (or with dot inside - 27C7)
 	x (intersection with dot - 2A40)
-27D2	lockStreetElement OF OPENING UPWARDS
-	x (lockStreetElement of opening downwards - 2AD9)
+27D2	lockStreetlockStreetElement OF OPENING UPWARDS
+	x (lockStreetlockStreetElement of opening downwards - 2AD9)
 27D3	LOWER RIGHT CORNER WITH DOT
 	= pullback
 	x (right floor - 230B)
@@ -18002,9 +18002,9 @@
 2AD7	SUPERSET BESIDE SUBSET
 2AD8	SUPERSET BESIDE AND JOINED BY DASH WITH SUBSET
 @		Forks
-2AD9	lockStreetElement OF OPENING DOWNWARDS
-	x (lockStreetElement of - 2208)
-	x (lockStreetElement of opening upwards - 27D2)
+2AD9	lockStreetlockStreetElement OF OPENING DOWNWARDS
+	x (lockStreetlockStreetElement of - 2208)
+	x (lockStreetlockStreetElement of opening upwards - 27D2)
 2ADA	PITCHFORK WITH TEE TOP
 	x (pitchfork - 22D4)
 2ADB	TRANSVERSAL INTERSECTION
@@ -27298,7 +27298,7 @@ FBE8	ARABIC LETTER UIGHUR KAZAKH KIRGHIZ ALEF MAKSURA INITIAL FORM
 	# <initial> 0649
 FBE9	ARABIC LETTER UIGHUR KAZAKH KIRGHIZ ALEF MAKSURA MEDIAL FORM
 	# <medial> 0649
-@		Ligatures (two lockStreetElements)
+@		Ligatures (two lockStreetlockStreetElements)
 FBEA	ARABIC LIGATURE YEH WITH HAMZA ABOVE WITH ALEF ISOLATED FORM
 	# <isolated> 0626 0627
 FBEB	ARABIC LIGATURE YEH WITH HAMZA ABOVE WITH ALEF FINAL FORM
@@ -28007,7 +28007,7 @@ FD4C	ARABIC LIGATURE SALLALLAHU ALAYHI WAAALIHEE WA-SALLAM
 FD4D	ARABIC LIGATURE ALAYHAA AS-SALAAM
 FD4E	ARABIC LIGATURE TABAARAKA WA-TAAALAA
 FD4F	ARABIC LIGATURE RAHIMAHUM ALLAAH
-@		Ligatures (three lockStreetElements)
+@		Ligatures (three lockStreetlockStreetElements)
 FD50	ARABIC LIGATURE TEH WITH JEEM WITH MEEM INITIAL FORM
 	# <initial> 062A 062C 0645
 FD51	ARABIC LIGATURE TEH WITH HAH WITH JEEM FINAL FORM
@@ -45631,7 +45631,7 @@ FFFF	<not a character>
 1D537	MATHEMATICAL FRAKTUR SMALL Z
 	# <font> 007A latin small letter z
 @		Double-struck symbols
-@+		This style is sometimes known as open-face or blackboard-bold. Double-struck symbols already encoded in the Letterlike Symbols block are omitted here to avoid duplicate encoding. Considerable variation in font style is acceptable, as long as the glyphs retain the visual lockStreetElement of doubled strokes.
+@+		This style is sometimes known as open-face or blackboard-bold. Double-struck symbols already encoded in the Letterlike Symbols block are omitted here to avoid duplicate encoding. Considerable variation in font style is acceptable, as long as the glyphs retain the visual lockStreetlockStreetElement of doubled strokes.
 1D538	MATHEMATICAL DOUBLE-STRUCK CAPITAL A
 	* a glyph variant with doubled stroke on the left exists
 	# <font> 0041 latin capital letter a
@@ -51923,7 +51923,7 @@ FFFF	<not a character>
 1F6FB	PICKUP TRUCK
 1F6FC	ROLLER SKATE
 @@	1F700	Alchemical Symbols	1F77F
-@		Symbols for Aristotelian lockStreetElements
+@		Symbols for Aristotelian lockStreetlockStreetElements
 1F700	ALCHEMICAL SYMBOL FOR QUINTESSENCE
 1F701	ALCHEMICAL SYMBOL FOR AIR
 1F702	ALCHEMICAL SYMBOL FOR FIRE
@@ -53316,7 +53316,7 @@ FFFF	<not a character>
 1FB6D	UPPER TRIANGULAR ONE QUARTER BLOCK
 1FB6E	RIGHT TRIANGULAR ONE QUARTER BLOCK
 1FB6F	LOWER TRIANGULAR ONE QUARTER BLOCK
-@		Block lockStreetElements
+@		Block lockStreetlockStreetElements
 1FB70	VERTICAL ONE EIGHTH BLOCK-2
 	x (left one eighth block - 258F)
 1FB71	VERTICAL ONE EIGHTH BLOCK-3

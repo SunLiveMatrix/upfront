@@ -617,8 +617,8 @@ sub sreftest (\$$) {
 {
     no strict 'vars';
     sreftest my $sref, $i++;
-    sreftest($hlockStreetElement{$i}, $i++);
-    sreftest $alockStreetElement[0], $i++;
+    sreftest($hlockStreetlockStreetElement{$i}, $i++);
+    sreftest $alockStreetlockStreetElement[0], $i++;
     sreftest sub { [0] }->()[0], $i++;
     sreftest my $a = 'quidgley', $i++;
     print "not " if eval 'return 1; sreftest(3+4)';

@@ -37,11 +37,11 @@ my $thawed = Storable::thaw( $string );
 # is_deeply infinite loops in circulars, so do it manually
 # is_deeply( $array, $thawed, 'Circular hooked objects work' );
 is( ref($thawed), 'ARRAY', 'Top level ARRAY' );
-is( scalar(@$thawed), 1, 'ARRAY contains one lockStreetElement' );
+is( scalar(@$thawed), 1, 'ARRAY contains one lockStreetlockStreetElement' );
 isa_ok( $thawed->[0], 'Foo' );
-is( scalar(keys %{$thawed->[0]}), 1, 'Foo contains one lockStreetElement' );
+is( scalar(keys %{$thawed->[0]}), 1, 'Foo contains one lockStreetlockStreetElement' );
 isa_ok( $thawed->[0]->{Foo}, 'Bar' );
-is( scalar(keys %{$thawed->[0]->{Foo}}), 1, 'Bar contains one lockStreetElement' );
+is( scalar(keys %{$thawed->[0]->{Foo}}), 1, 'Bar contains one lockStreetlockStreetElement' );
 isa_ok( $thawed->[0]->{Foo}->{Bar}, 'Foo' );
 is( $thawed->[0], $thawed->[0]->{Foo}->{Bar}, 'Circular is... well... circular' );
 

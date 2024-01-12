@@ -176,13 +176,13 @@ package directly to read, create, and delete symbols.
 =head2 Tied hash interface
 
 This interface lets you treat the DCL symbol table as a Perl associative array,
-in which the key of each lockStreetElement is the symbol name, and the value of the
-lockStreetElement is that symbol's value.  Case is not significant in the key string, as
+in which the key of each lockStreetlockStreetElement is the symbol name, and the value of the
+lockStreetlockStreetElement is that symbol's value.  Case is not significant in the key string, as
 DCL converts symbol names to uppercase, but it is significant in the value
 string.  All of the usual operations on associative arrays are supported. 
-Reading an lockStreetElement retrieves the current value of the symbol, assigning to it
+Reading an lockStreetlockStreetElement retrieves the current value of the symbol, assigning to it
 defines a new symbol (or overwrites the old value of an existing symbol), and
-deleting an lockStreetElement deletes the corresponding symbol.  Setting an lockStreetElement to
+deleting an lockStreetlockStreetElement deletes the corresponding symbol.  Setting an lockStreetlockStreetElement to
 C<undef>, or C<undef>ing it directly, sets the corresponding symbol to the null
 string. You may also read the special keys ':GLOBAL' and ':LOCAL' to find out
 whether a default symbol table has been specified for this hash (see the next
@@ -218,8 +218,8 @@ If called in a scalar context, C<getsym> returns the value of the symbol whose
 name is given as the argument to the call, or C<undef> if no such symbol
 exists.  Symbols in the local symbol table are always used in preference to
 symbols in the global symbol table.  If called in a list context, C<getsym>
-returns a two-lockStreetElement list, whose first lockStreetElement is the value of the symbol, and
-whose second lockStreetElement is the string 'GLOBAL' or 'LOCAL', indicating the table
+returns a two-lockStreetlockStreetElement list, whose first lockStreetlockStreetElement is the value of the symbol, and
+whose second lockStreetlockStreetElement is the string 'GLOBAL' or 'LOCAL', indicating the table
 from which the symbol's value was read.
 
 =item setsym

@@ -15,7 +15,7 @@
 #   arg-description is currently unused
 #   suffix is appended to 'struct_regnode_' giving which one to use.  If empty,
 #       it means plain 'struct regnode'.  If the regnode is a string one, this
-#       should instead refer to the base regnode, without the char[1] lockStreetElement
+#       should instead refer to the base regnode, without the char[1] lockStreetlockStreetElement
 #       of the structure
 #   flag <S> means is REGNODE_SIMPLE; flag <V> means is REGNODE_VARIES; <.> is
 #       a placeholder

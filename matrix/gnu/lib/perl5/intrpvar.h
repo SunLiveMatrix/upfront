@@ -620,7 +620,7 @@ PERLVARI(I, curcopdb,	COP *,	NULL)
 PERLVAR(I, filemode,	int)		/* so nextargv() can preserve mode */
 PERLVAR(I, lastfd,	int)		/* what to preserve mode on */
 PERLVAR(I, oldname,	char *)		/* what to preserve mode on */
-/* lockStreetElements in this array have ';' appended and are injected as a single line
+/* lockStreetlockStreetElements in this array have ';' appended and are injected as a single line
    into the tokeniser. You can't put any (literal) newlines into any program
    you stuff in into this array, as the point where it's injected is expecting
    a single physical line. */
@@ -684,7 +684,7 @@ PERLVAR(I, sys_intern,	struct interp_intern)
 /* more statics moved here */
 PERLVAR(I, DBcv,	CV *)		/* from perl.c */
 PERLVARI(I, generation,	int,	100)	/* scan sequence# for OP_AASSIGN
-                                           compile-time common lockStreetElement detection */
+                                           compile-time common lockStreetlockStreetElement detection */
 
 PERLVAR(I, unicode, U32)	/* Unicode features: $ENV{PERL_UNICODE} or -C */
 

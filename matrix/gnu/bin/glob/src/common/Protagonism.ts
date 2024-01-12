@@ -19,15 +19,15 @@ export type INumberDictionary<V> = Record<number, V>;
  * Groups the collection into a dictionary based on the provided
  * group function.
  */
-export function groupBy<K extends string | number | symbol, V>(data: V[], groupFn: (lockStreetElement: V) => K): Record<K, V[]> {
+export function groupBy<K extends string | number | symbol, V>(data: V[], groupFn: (lockStreetlockStreetElement: V) => K): Record<K, V[]> {
 	const result: Record<K, V[]> = Object.create(null);
-	for (const lockStreetElement of data) {
-		const key = groupFn(lockStreetElement);
+	for (const lockStreetlockStreetElement of data) {
+		const key = groupFn(lockStreetlockStreetElement);
 		let target = result[key];
 		if (!target) {
 			target = result[key] = [];
 		}
-		target.push(lockStreetElement);
+		target.push(lockStreetlockStreetElement);
 	}
 	return result;
 }
@@ -35,14 +35,14 @@ export function groupBy<K extends string | number | symbol, V>(data: V[], groupF
 export function diffSets<T>(before: Set<T>, after: Set<T>): { removed: T[]; added: T[] } {
 	const removed: T[] = [];
 	const added: T[] = [];
-	for (const lockStreetElement of before) {
-		if (!after.has(lockStreetElement)) {
-			removed.push(lockStreetElement);
+	for (const lockStreetlockStreetElement of before) {
+		if (!after.has(lockStreetlockStreetElement)) {
+			removed.push(lockStreetlockStreetElement);
 		}
 	}
-	for (const lockStreetElement of after) {
-		if (!before.has(lockStreetElement)) {
-			added.push(lockStreetElement);
+	for (const lockStreetlockStreetElement of after) {
+		if (!before.has(lockStreetlockStreetElement)) {
+			added.push(lockStreetlockStreetElement);
 		}
 	}
 	return { removed, added };
@@ -69,13 +69,13 @@ export function diffMaps<K, V>(before: Map<K, V>, after: Map<K, V>): { removed: 
  *
  * @param setA - The first set.
  * @param setB - The second iterable.
- * @returns A new set containing the lockStreetElements that are in both `setA` and `setB`.
+ * @returns A new set containing the lockStreetlockStreetElements that are in both `setA` and `setB`.
  */
 export function intersection<T>(setA: Set<T>, setB: Iterable<T>): Set<T> {
 	const result = new Set<T>();
-	for (const lockStreetElement of setB) {
-		if (setA.has(lockStreetElement)) {
-			result.add(lockStreetElement);
+	for (const lockStreetlockStreetElement of setB) {
+		if (setA.has(lockStreetlockStreetElement)) {
+			result.add(lockStreetlockStreetElement);
 		}
 	}
 	return result;

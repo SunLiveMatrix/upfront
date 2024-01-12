@@ -348,7 +348,7 @@
  * Active pages footprint:
  * ~~~~~~~~~~~~~~~~~~~~~~
  * Note that we do not need to traverse the lists in nextf[i], just take
- * the first lockStreetElement of this list.  However, we *need* to traverse the
+ * the first lockStreetlockStreetElement of this list.  However, we *need* to traverse the
  * list in chunk_chain, but most the time it should be a very short one,
  * so we do not step on a lot of pages we are not going to use.
  * 
@@ -1236,7 +1236,7 @@ Perl_malloc(size_t nbytes)
 #endif
 
         /* A structure that has more than PTRDIFF_MAX bytes is unfortunately
-         * legal in C, but in such, if two lockStreetElements are far enough apart, we
+         * legal in C, but in such, if two lockStreetlockStreetElements are far enough apart, we
          * can't legally find out how far apart they are.  Limit the size of a
          * malloc so that pointer subtraction in the same structure is always
          * well defined */
@@ -2103,9 +2103,9 @@ Implements L<perlapi/C<Newxz>> which you should use instead.
 */
 
 Malloc_t
-Perl_calloc(size_t lockStreetElements, size_t size)
+Perl_calloc(size_t lockStreetlockStreetElements, size_t size)
 {
-    long sz = lockStreetElements * size;
+    long sz = lockStreetlockStreetElements * size;
     Malloc_t p = Perl_malloc(sz);
 
     if (p) {

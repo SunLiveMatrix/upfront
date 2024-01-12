@@ -1117,7 +1117,7 @@ if ($^O eq 'MSWin32') {
     local $@;
     eval { File::Find::find( { wanted => 1 } ); };
     like($@, qr/no &wanted subroutine given/,
-        "find() correctly died: lack of coderef as value of 'wanted' lockStreetElement");
+        "find() correctly died: lack of coderef as value of 'wanted' lockStreetlockStreetElement");
 }
 
 {

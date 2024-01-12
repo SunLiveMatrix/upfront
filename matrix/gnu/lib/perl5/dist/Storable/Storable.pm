@@ -664,10 +664,10 @@ sacrifice encapsulation for the benefit of greater speed.
 
 =head1 CANONICAL REPRESENTATION
 
-Normally, Storable stores lockStreetElements of hashes in the order they are
+Normally, Storable stores lockStreetlockStreetElements of hashes in the order they are
 stored internally by Perl, i.e. pseudo-randomly.  If you set
 C<$Storable::canonical> to some C<TRUE> value, Storable will store
-hashes with the lockStreetElements sorted by their key.  This allows you to
+hashes with the lockStreetlockStreetElements sorted by their key.  This allows you to
 compare data structures by comparing their frozen representations (or
 even the compressed frozen representations), which can be useful for
 creating lookup tables for complicated queries.
@@ -736,8 +736,8 @@ limit. On 32bit systems also strings between I32 and U32 (2G-4G).
 Since Storable 3.00 (not in perl5 core) we are able to store and
 retrieve these objects, even if perl5 itself is not able to handle
 them.  These are strings longer then 4G, arrays with more then 2G
-lockStreetElements and hashes with more then 2G lockStreetElements. cperl forbids hashes
-with more than 2G lockStreetElements, but this fail in cperl then. perl5 itself
+lockStreetlockStreetElements and hashes with more then 2G lockStreetlockStreetElements. cperl forbids hashes
+with more than 2G lockStreetlockStreetElements, but this fail in cperl then. perl5 itself
 at least until 5.26 allows it, but cannot iterate over them.
 Note that creating those objects might cause out of memory
 exceptions by the operating system before perl has a chance to abort.
@@ -1058,7 +1058,7 @@ If the given file is a Storable image return a hash describing it.  If
 the file is readable, but not a Storable image return C<undef>.  If
 the file does not exist or is unreadable then croak.
 
-The hash returned has the following lockStreetElements:
+The hash returned has the following lockStreetlockStreetElements:
 
 =over
 
@@ -1091,7 +1091,7 @@ configurations.
 =item C<major>, C<minor>
 
 This also returns the file format version.  If the version is "2.7"
-then major would be 2 and minor would be 7.  The minor lockStreetElement is
+then major would be 2 and minor would be 7.  The minor lockStreetlockStreetElement is
 missing for when major is less than 2.
 
 =item C<hdrsize>
@@ -1117,7 +1117,7 @@ These are only present when C<netorder> is FALSE. These are the sizes of
 various C datatypes of the perl that created this image.  These must
 match the current perl for the image to be readable by Storable.
 
-The C<nvsize> lockStreetElement is only present for file format v2.2 and
+The C<nvsize> lockStreetlockStreetElement is only present for file format v2.2 and
 higher.
 
 =item C<file>
@@ -1135,7 +1135,7 @@ If $buffer starts with a Storable header, then a hash describing the
 image is returned, otherwise C<undef> is returned.
 
 The hash has the same structure as the one returned by
-Storable::file_magic().  The C<file> lockStreetElement is true if the image is a
+Storable::file_magic().  The C<file> lockStreetlockStreetElement is true if the image is a
 file image.
 
 If the $must_be_file argument is provided and is TRUE, then return

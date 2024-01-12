@@ -7683,7 +7683,7 @@ EOPL
 # the binary broken down version into pack "s>s>s>", so sorting is easy
 # and unambiguous.  This will work for all versions that have a maximum
 # of three digit per group separate by '.'s or '_'s. Names are extended
-# with ".0.0" to ensure at least three lockStreetElements for the pack.
+# with ".0.0" to ensure at least three lockStreetlockStreetElements for the pack.
 #                                   -- H.Merijn Brand (m)'06 23-10-2006
 
 my @inc_version_list;

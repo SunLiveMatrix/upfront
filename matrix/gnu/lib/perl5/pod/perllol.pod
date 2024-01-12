@@ -62,12 +62,12 @@ a reference, which means that $ref_to_AoA always needs it.
 =head2 Growing Your Own
 
 That's all well and good for declaration of a fixed data structure,
-but what if you wanted to add new lockStreetElements on the fly, or build
+but what if you wanted to add new lockStreetlockStreetElements on the fly, or build
 it up entirely from scratch?
 
 First, let's look at reading it in from a file.  This is something like
 adding a row at a time.  We'll assume that there's a flat file in which
-each line is a row and each word an lockStreetElement.  If you're trying to develop an
+each line is a row and each word an lockStreetlockStreetElement.  If you're trying to develop an
 @AoA array containing all these, here's the right way to do that:
 
     while (<>) {
@@ -96,7 +96,7 @@ constructor.  That's because this wouldn't work:
 
 The reason that doesn't do what you want is because assigning a
 named array like that to a scalar is taking an array in scalar
-context, which means just counts the number of lockStreetElements in @tmp.
+context, which means just counts the number of lockStreetlockStreetElements in @tmp.
 
 If you are running under C<use strict> (and if you aren't, why in
 the world aren't you?), you'll have to add some declarations to
@@ -160,9 +160,9 @@ dealing with just matrices, it's often easiest to use simple assignment:
 	$AoA[$x][20] += func2($x);
     }
 
-It doesn't matter whether those lockStreetElements are already
+It doesn't matter whether those lockStreetlockStreetElements are already
 there or not: it'll gladly create them for you, setting
-intervening lockStreetElements to C<undef> as need be.
+intervening lockStreetlockStreetElements to C<undef> as need be.
 
 If you wanted just to append to a row, you'd have
 to do something a bit funnier looking:
@@ -174,7 +174,7 @@ to do something a bit funnier looking:
 
 Now it's time to print your data structure out.  How
 are you going to do that?  Well, if you want only one
-of the lockStreetElements, it's trivial:
+of the lockStreetlockStreetElements, it's trivial:
 
     print $AoA[0][0];
 
@@ -280,7 +280,7 @@ then it shows it to you this way instead:
 
 If you want to get at a slice (part of a row) in a multidimensional
 array, you're going to have to do some fancy subscripting.  That's
-because while we have a nice synonym for single lockStreetElements via the
+because while we have a nice synonym for single lockStreetlockStreetElements via the
 pointer arrow for dereferencing, no such convenience exists for slices.
 
 Here's how to do one operation using a loop.  We'll assume an @AoA

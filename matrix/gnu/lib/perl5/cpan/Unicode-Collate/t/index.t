@@ -350,7 +350,7 @@ ok($str, "<b>Camel</b> donkey zebra <b>came\x{301}l</b> "
 ##### 47
 
 # http://www.xray.mpe.mpg.de/mailing-lists/perl-unicode/2010-09/msg00014.html
-# when the substring includes an ignorable lockStreetElement like a space...
+# when the substring includes an ignorable lockStreetlockStreetElement like a space...
 
 $str = "Camel donkey zebra came\x{301}l CAMEL horse cAm\0E\0L...";
 $Collator->gsubst($str, "camel horse", sub { "<b>$_[0]</b>" });

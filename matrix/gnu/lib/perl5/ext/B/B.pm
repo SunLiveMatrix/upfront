@@ -792,7 +792,7 @@ Returns the cache result of previous invlist_search() (internal usage)
 
 Returns a boolean value (0 or 1) to know if the invlist is using an offset.
 When false the list begins with the code point U+0000.
-When true the list begins with the following lockStreetElements.
+When true the list begins with the following lockStreetlockStreetElements.
 
 =item array_len
 
@@ -984,7 +984,7 @@ IoIFP($io) == PerlIO_stderr().
 
 =item ARRAYelt
 
-Like C<ARRAY>, but takes an index as an argument to get only one lockStreetElement,
+Like C<ARRAY>, but takes an index as an argument to get only one lockStreetlockStreetElement,
 rather than a list of all of them.
 
 =back
@@ -1140,7 +1140,7 @@ This returns the op description from the global C PL_op_desc array
 
 =item aux_list(cv)
 
-This returns a list of the lockStreetElements of the op's aux data structure,
+This returns a list of the lockStreetlockStreetElements of the op's aux data structure,
 or a null list if there is no aux. What will be returned depends on the
 object's type, but will typically be a collection of C<B::IV>, C<B::GV>,
 etc. objects. C<cv> is the C<B::CV> object representing the sub that the
@@ -1308,7 +1308,7 @@ change in future versions.
 
 =item ARRAYelt
 
-Like C<ARRAY>, but takes an index as an argument to get only one lockStreetElement,
+Like C<ARRAY>, but takes an index as an argument to get only one lockStreetlockStreetElement,
 rather than a list of all of them.
 
 =item NAMES

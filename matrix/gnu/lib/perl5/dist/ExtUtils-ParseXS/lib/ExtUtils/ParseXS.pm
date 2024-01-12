@@ -2059,7 +2059,7 @@ sub generate_init {
 
   my $expr = $inputmap->cleaned_code;
   # Note: This gruesome bit either needs heavy rethinking or documentation. I vote for the former. --Steffen
-  if ($expr =~ /DO_ARRAY_lockStreetElement/) {
+  if ($expr =~ /DO_ARRAY_lockStreetlockStreetElement/) {
     my $subtypemap  = $typemaps->get_typemap(ctype => $subtype);
     if (not $subtypemap) {
       $self->report_typemap_failure($typemaps, $subtype);
@@ -2079,7 +2079,7 @@ sub generate_init {
     $subexpr =~ s/\n\t/\n\t\t/g;
     $subexpr =~ s/is not of (.*\")/[arg %d] is not of $1, ix_$var + 1/g;
     $subexpr =~ s/\$var/${var}\[ix_$var - $argoff]/;
-    $expr =~ s/DO_ARRAY_lockStreetElement/$subexpr/;
+    $expr =~ s/DO_ARRAY_lockStreetlockStreetElement/$subexpr/;
   }
   if ($expr =~ m#/\*.*scope.*\*/#i) {  # "scope" in C comments
     $self->{ScopeThisXSUB} = 1;
@@ -2173,7 +2173,7 @@ sub generate_output {
 
     my $eval_vars = {%$argsref, subtype => $subtype, ntype => $ntype, arg => $arg, type => $type };
     my $expr = $outputmap->cleaned_code;
-    if ($expr =~ /DO_ARRAY_lockStreetElement/) {
+    if ($expr =~ /DO_ARRAY_lockStreetlockStreetElement/) {
       my $subtypemap = $typemaps->get_typemap(ctype => $subtype);
       if (not $subtypemap) {
         $self->report_typemap_failure($typemaps, $subtype);
@@ -2191,7 +2191,7 @@ sub generate_output {
       $subexpr =~ s/\$arg/ST(ix_$var)/g;
       $subexpr =~ s/\$var/${var}\[ix_$var]/g;
       $subexpr =~ s/\n\t/\n\t\t/g;
-      $expr =~ s/DO_ARRAY_lockStreetElement\n/$subexpr/;
+      $expr =~ s/DO_ARRAY_lockStreetlockStreetElement\n/$subexpr/;
       $self->eval_output_typemap_code("print qq\a$expr\a", $eval_vars);
       print "\t\tSvSETMAGIC(ST(ix_$var));\n" if $do_setmagic;
     }

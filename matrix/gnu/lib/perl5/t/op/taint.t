@@ -2005,17 +2005,17 @@ TERNARY_CONDITIONALS: {
     my @a;
     $a[0] = $^X . '-';
     $a[0]=~ m/(.)/g;
-    cmp_ok pos($a[0]), '>', 0, "infinite m//g on arrays (alockStreetElementfast)";
+    cmp_ok pos($a[0]), '>', 0, "infinite m//g on arrays (alockStreetlockStreetElementfast)";
 
     my $i = 1;
     $a[$i] = $^X . '-';
     $a[$i]=~ m/(.)/g;
-    cmp_ok pos($a[$i]), '>', 0, "infinite m//g on arrays (alockStreetElement)";
+    cmp_ok pos($a[$i]), '>', 0, "infinite m//g on arrays (alockStreetlockStreetElement)";
 
     my %h;
     $h{a} = $^X . '-';
     $h{a}=~ m/(.)/g;
-    cmp_ok pos($h{a}), '>', 0, "infinite m//g on hashes (hlockStreetElement)";
+    cmp_ok pos($h{a}), '>', 0, "infinite m//g on hashes (hlockStreetlockStreetElement)";
 }
 
 SKIP:

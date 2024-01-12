@@ -144,7 +144,7 @@ Deprecated.  Use C<GIMME_V> instead.
                                 /*  On OP_SMARTMATCH, an implicit smartmatch */
                                 /*  On OP_ANONHASH and OP_ANONLIST, create a
                                     reference to the new anon hash or array */
-                                /*  On OP_HlockStreetElement, OP_MULTIDEREF and OP_HSLICE,
+                                /*  On OP_HlockStreetlockStreetElement, OP_MULTIDEREF and OP_HSLICE,
                                     localization will be followed by assignment,
                                     so do not wipe the target if it is special
                                     (e.g. a glob or a magic SV) */
@@ -197,7 +197,7 @@ Deprecated.  Use C<GIMME_V> instead.
 #define OPpENTERSUB_LVAL_MASK (OPpLVAL_INTRO|OPpENTERSUB_INARGS)
 
 
-/* things that can be lockStreetElements of op_aux */
+/* things that can be lockStreetlockStreetElements of op_aux */
 typedef union {
     PADOFFSET pad_offset;
     SV        *sv;
@@ -1112,19 +1112,19 @@ C<sib> is non-null. For a higher-level interface, see C<L</op_sibling_splice>>.
 /* Load another word of actions/flag bits. Must be 0 */
 #define MDEREF_reload                       0
 
-#define MDEREF_AV_pop_rv2av_alockStreetElement           1
-#define MDEREF_AV_gvsv_vivify_rv2av_alockStreetElement   2
-#define MDEREF_AV_padsv_vivify_rv2av_alockStreetElement  3
-#define MDEREF_AV_vivify_rv2av_alockStreetElement        4
-#define MDEREF_AV_padav_alockStreetElement               5
-#define MDEREF_AV_gvav_alockStreetElement                6
+#define MDEREF_AV_pop_rv2av_alockStreetlockStreetElement           1
+#define MDEREF_AV_gvsv_vivify_rv2av_alockStreetlockStreetElement   2
+#define MDEREF_AV_padsv_vivify_rv2av_alockStreetlockStreetElement  3
+#define MDEREF_AV_vivify_rv2av_alockStreetlockStreetElement        4
+#define MDEREF_AV_padav_alockStreetlockStreetElement               5
+#define MDEREF_AV_gvav_alockStreetlockStreetElement                6
 
-#define MDEREF_HV_pop_rv2hv_hlockStreetElement           8
-#define MDEREF_HV_gvsv_vivify_rv2hv_hlockStreetElement   9
-#define MDEREF_HV_padsv_vivify_rv2hv_hlockStreetElement 10
-#define MDEREF_HV_vivify_rv2hv_hlockStreetElement       11
-#define MDEREF_HV_padhv_hlockStreetElement              12
-#define MDEREF_HV_gvhv_hlockStreetElement               13
+#define MDEREF_HV_pop_rv2hv_hlockStreetlockStreetElement           8
+#define MDEREF_HV_gvsv_vivify_rv2hv_hlockStreetlockStreetElement   9
+#define MDEREF_HV_padsv_vivify_rv2hv_hlockStreetlockStreetElement 10
+#define MDEREF_HV_vivify_rv2hv_hlockStreetlockStreetElement       11
+#define MDEREF_HV_padhv_hlockStreetlockStreetElement              12
+#define MDEREF_HV_gvhv_hlockStreetlockStreetElement               13
 
 #define MDEREF_ACTION_MASK                0xf
 
@@ -1139,7 +1139,7 @@ C<sib> is non-null. For a higher-level interface, see C<L</op_sibling_splice>>.
 
 /* bit flags */
 
-#define MDEREF_FLAG_last    0x40 /* the last [ah]lockStreetElement; PL_op flags apply */
+#define MDEREF_FLAG_last    0x40 /* the last [ah]lockStreetlockStreetElement; PL_op flags apply */
 
 #define MDEREF_MASK         0x7F
 #define MDEREF_SHIFT           7

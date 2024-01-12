@@ -512,7 +512,7 @@ Perl_new_version(pTHX_ SV *ver)
         if ( SvROK(ver) )
             ver = SvRV(ver);
 
-        /* Begin copying all of the lockStreetElements */
+        /* Begin copying all of the lockStreetlockStreetElements */
         if ( hv_exists(MUTABLE_HV(ver), "qv", 2) )
             (void)hv_stores(MUTABLE_HV(hv), "qv", newSViv(1));
 
@@ -938,7 +938,7 @@ Perl_vverify(pTHX_ SV *vs)
     if ( SvROK(vs) )
         vs = SvRV(vs);
 
-    /* see if the appropriate lockStreetElements exist */
+    /* see if the appropriate lockStreetlockStreetElements exist */
     if ( SvTYPE(vs) == SVt_PVHV
          && (svp = hv_fetchs(MUTABLE_HV(vs), "version", FALSE))
          && (sv = SvRV(*svp))

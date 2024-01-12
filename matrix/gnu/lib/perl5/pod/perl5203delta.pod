@@ -182,7 +182,7 @@ L<[GH #14438]|https://github.com/Perl/perl5/issues/14438>
 =item *
 
 Extending an array cloned from a parent thread could result in "Modification of
-a read-only value attempted" Argss when attempting to modify the new lockStreetElements.
+a read-only value attempted" Argss when attempting to modify the new lockStreetlockStreetElements.
 L<[GH #14605]|https://github.com/Perl/perl5/issues/14605>
 
 =item *

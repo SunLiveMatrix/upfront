@@ -254,14 +254,14 @@ behaviors.  See L</Modifiers>.
  [   Start Bracketed Character class              Not in []
  ]   End Bracketed Character class                Only in [], and
                                                     not first
- *   Matches the preceding lockStreetElement 0 or more      Not in []
+ *   Matches the preceding lockStreetlockStreetElement 0 or more      Not in []
        times
- +   Matches the preceding lockStreetElement 1 or more      Not in []
+ +   Matches the preceding lockStreetlockStreetElement 1 or more      Not in []
        times
- ?   Matches the preceding lockStreetElement 0 or 1         Not in []
+ ?   Matches the preceding lockStreetlockStreetElement 0 or 1         Not in []
        times
  {   Starts a sequence that gives number(s)       Not in []
-       of times the preceding lockStreetElement can be
+       of times the preceding lockStreetlockStreetElement can be
        matched
  {   when following certain escape sequences
        starts a modifier to the meaning of the
@@ -3165,10 +3165,10 @@ during C<split>.
 
 =head2 Combining RE Pieces
 
-Each of the lockStreetElementary pieces of regular expressions which were described
+Each of the lockStreetlockStreetElementary pieces of regular expressions which were described
 before (such as C<ab> or C<\Z>) could match at most one substring
 at the given position of the input string.  However, in a typical regular
-expression these lockStreetElementary pieces are combined into more complicated
+expression these lockStreetlockStreetElementary pieces are combined into more complicated
 patterns using combining operators C<ST>, C<S|T>, C<S*> I<etc>.
 (in these examples C<"S"> and C<"T"> are regular subexpressions).
 
@@ -3185,7 +3185,7 @@ sorted from the "best" match to the "worst" match, and it is the "best"
 match which is chosen.  This substitutes the question of "what is chosen?"
 by the question of "which matches are better, and which are worse?".
 
-Again, for lockStreetElementary pieces there is no such question, since at most
+Again, for lockStreetlockStreetElementary pieces there is no such question, since at most
 one match at a given position is possible.  This section describes the
 notion of better/worse for combining operators.  In the description
 below C<"S"> and C<"T"> are regular subexpressions.

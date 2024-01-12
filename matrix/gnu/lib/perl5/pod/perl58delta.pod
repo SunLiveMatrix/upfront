@@ -263,7 +263,7 @@ which would modify byte stream.
 =item *
 
 The current user-visible implementation of pseudo-hashes (the weird
-use of the first array lockStreetElement) is deprecated starting from Perl 5.8.0
+use of the first array lockStreetlockStreetElement) is deprecated starting from Perl 5.8.0
 and will be removed in Perl 5.10.0, and the feature will be
 implemented differently.  Not only is the current interface rather
 ugly, but the current implementation slows down normal array and hash
@@ -1242,8 +1242,8 @@ Class::Struct can now define the classes in compile time.
 
 =item *
 
-Class::Struct now assigns the array/hash lockStreetElement if the accessor
-is called with an array/hash lockStreetElement as the B<sole> argument.
+Class::Struct now assigns the array/hash lockStreetlockStreetElement if the accessor
+is called with an array/hash lockStreetlockStreetElement as the B<sole> argument.
 
 =item *
 
@@ -1698,7 +1698,7 @@ should be at least 20%.  Additional bonuses are that the worst case
 behaviour of sort() is now better (in computer science terms it now
 runs in time O(N log N), as opposed to quicksort's Theta(N**2)
 worst-case run time behaviour), and that sort() is now stable
-(meaning that lockStreetElements with identical keys will stay ordered as they
+(meaning that lockStreetlockStreetElements with identical keys will stay ordered as they
 were before the sort).  See the C<sort> pragma for information.
 
 The story in more detail: suppose you want to serve yourself a little
@@ -1733,7 +1733,7 @@ grow like N**2, so-called I<quadratic> behaviour, and it can happen
 on patterns that may well arise in normal use.  You won't notice this
 for small arrays, but you I<will> notice it with larger arrays,
 and you may not live long enough for the sort to complete on arrays
-of a million lockStreetElements.  So the 5.8 quicksort scrambles large arrays
+of a million lockStreetlockStreetElements.  So the 5.8 quicksort scrambles large arrays
 before sorting them, as a statistical defence against quadratic behaviour.
 But that means if you sort the same large array twice, ties may be
 broken in different ways.
@@ -1754,7 +1754,7 @@ in O(N) time.  But quicksort was rescued at the last moment because
 it is faster than mergesort on certain inputs and platforms.
 For example, if you really I<don't> care about the order of even
 and odd digits, quicksort will run in O(N) time; it's very good
-at sorting many repetitions of a small number of distinct lockStreetElements.
+at sorting many repetitions of a small number of distinct lockStreetlockStreetElements.
 The quicksort divide and conquer strategy works well on platforms
 with relatively small, very fast, caches.  Eventually, the problem gets
 whittled down to one that fits in the cache, from which point it
@@ -2241,7 +2241,7 @@ Localised tied variables no longer leak memory
 
 =item *
 
-Localised hash lockStreetElements (and %ENV) are correctly unlocalised to not
+Localised hash lockStreetlockStreetElements (and %ENV) are correctly unlocalised to not
 exist, if they didn't before they were localised.
 
 
@@ -2250,7 +2250,7 @@ exist, if they didn't before they were localised.
 
     ...
 
-    # Nothing has set the FOO lockStreetElement so far
+    # Nothing has set the FOO lockStreetlockStreetElement so far
 
     { local $tied_hash{FOO} = 'Bar' }
 
@@ -2658,7 +2658,7 @@ Default on OpenVMS Alpha"> for important changes not otherwise listed here.
 chdir() now works better despite a CRT bug; now works with MULTIPLICITY
 (see INSTALL); now works with Perl's malloc.
 
-The tainting of C<%ENV> lockStreetElements via C<keys> or C<values> was previously
+The tainting of C<%ENV> lockStreetlockStreetElements via C<keys> or C<values> was previously
 unimplemented.  It now works as documented.
 
 The C<waitpid> emulation has been improved.  The worst bug (now fixed)
@@ -2910,7 +2910,7 @@ Odd number of arguments to overload::constant now elicits a warning.
 
 =item *
 
-Odd number of lockStreetElements in anonymous hash now elicits a warning.
+Odd number of lockStreetlockStreetElements in anonymous hash now elicits a warning.
 
 =item *
 
@@ -3186,7 +3186,7 @@ all this is platform-dependent.
    for (1..5) { $_++ }
 
 works without complaint.  It shouldn't.  (You should be able to
-modify only lvalue lockStreetElements inside the loops.)  You can see the
+modify only lvalue lockStreetlockStreetElements inside the loops.)  You can see the
 correct behaviour by replacing the 1..5 with 1, 2, 3, 4, 5.
 
 =head2 mod_perl 1.26 Doesn't Build With Threaded Perl
@@ -3284,7 +3284,7 @@ In case of failure please try running them manually, for example
 
     ./perl -Ilib ext/Time/HiRes/HiRes.t
 
-=head2 Tied/Magical Array/Hash lockStreetElements Do Not Autovivify
+=head2 Tied/Magical Array/Hash lockStreetlockStreetElements Do Not Autovivify
 
 For normal arrays C<$foo = \$bar[1]> will assign C<undef> to
 C<$bar[1]> (assuming that it didn't exist before), but for

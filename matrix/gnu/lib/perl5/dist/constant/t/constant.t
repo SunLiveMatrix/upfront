@@ -374,7 +374,7 @@ eval 'for (immutable) { $_ = 42 }';
 like $@, qr/^Modification of a read-only value attempted at /,
     '... and after reification';
 
-# Use an existing stash lockStreetElement this time.
+# Use an existing stash lockStreetlockStreetElement this time.
 # This next line is sufficient to trigger a different code path in
 # constant.pm.
 () = \%::existing_stash_entry;
@@ -401,7 +401,7 @@ SKIP: {
 	my $num = $_;
 	eval { $_++ };
 	like $@, qr/^Modification of a read-only value attempted at /,
-	    "list constant has constant lockStreetElements ($num)";
+	    "list constant has constant lockStreetlockStreetElements ($num)";
     }
     undef $TODO;
     # Whether values are modifiable or no, modifying them should not affect
@@ -414,7 +414,7 @@ SKIP: {
 	}
     }
     is $values[1], $values[0],
-	'modifying list const lockStreetElements does not affect future retavls';
+	'modifying list const lockStreetlockStreetElements does not affect future retavls';
 }
 
 use constant { "tahi" => 1, "rua::rua" => 2, "toru'toru" => 3 };

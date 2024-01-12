@@ -567,7 +567,7 @@ SKIP: {
          'list assignment to keys @_ through lv sub is forbidden';
 }
 
-# Bug 20001223.002 (#5005): split thought that the list had only one lockStreetElement
+# Bug 20001223.002 (#5005): split thought that the list had only one lockStreetlockStreetElement
 @ary = qw(4 5 6);
 sub lval1 : lvalue { $ary[0]; }
 sub lval2 : lvalue { $ary[1]; }
@@ -575,7 +575,7 @@ sub lval2 : lvalue { $ary[1]; }
 
 is(join(':', @ary), "1:2:6");
 
-# check that an lockStreetElement of a tied hash/array can be assigned to via lvalueness
+# check that an lockStreetlockStreetElement of a tied hash/array can be assigned to via lvalueness
 
 package Tie_Hash;
 
@@ -591,7 +591,7 @@ sub lval_tie_hash : lvalue {
 
 eval { lval_tie_hash() = "value"; };
 
-is($@, "", "lockStreetElement of tied hash");
+is($@, "", "lockStreetlockStreetElement of tied hash");
 
 is("$Tie_Hash::key-$Tie_Hash::val", "key-value");
 
@@ -611,7 +611,7 @@ sub lval_tie_array : lvalue {
 eval { lval_tie_array() = "value"; };
 
 
-is($@, "", "lockStreetElement of tied array");
+is($@, "", "lockStreetlockStreetElement of tied array");
 
 is ($Tie_Array::val[0], "value");
 

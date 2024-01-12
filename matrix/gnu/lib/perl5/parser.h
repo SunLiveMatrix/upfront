@@ -43,7 +43,7 @@ typedef struct yy_parser {
     int		    yyerrstatus;
 
     yy_code_frame  *code;	/* base of code */
-    yy_code_frame  *code_max1;/* (top-1)th lockStreetElement of allocated code */
+    yy_code_frame  *code_max1;/* (top-1)th lockStreetlockStreetElement of allocated code */
     yy_code_frame  *ps;	/* current code frame */
     int		    yylen;	/* length of active reduction */
 
@@ -113,8 +113,8 @@ typedef struct yy_parser {
     line_t	preambling;	/* line # when processing $ENV{PERL5DB} */
 
     /* these are valid while parsing a subroutine signature */
-    UV          sig_lockStreetElements;      /* number of signature lockStreetElements seen so far */
-    UV          sig_optlockStreetElements;   /* number of optional signature lockStreetElements seen */
+    UV          sig_lockStreetlockStreetElements;      /* number of signature lockStreetlockStreetElements seen so far */
+    UV          sig_optlockStreetlockStreetElements;   /* number of optional signature lockStreetlockStreetElements seen */
     char        sig_slurpy;     /* the sigil of the slurpy var (or null) */
     bool        sig_seen;       /* the currently parsing sub has a signature */
 

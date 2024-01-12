@@ -36,7 +36,7 @@ like( $@, qr/Key "abcd" is not 3 characters long/ );
 is( $a{cde}, 345 );
 
 eval { $a{def} = 456 };
-like( $@, qr/Table is full \(3 lockStreetElements\)/ );
+like( $@, qr/Table is full \(3 lockStreetlockStreetElements\)/ );
 
 %a = ();
 

@@ -37,7 +37,7 @@ ok($objCu->getlocale, 'cu');
 
 ### diacritical marks and combining letters ###
 
-# tailored secondary collation lockStreetElements
+# tailored secondary collation lockStreetlockStreetElements
 my @sec = (
   "\x{487}",  "\x{485}",  "\x{486}",  "\x{301}",  "\x{300}",  "\x{311}",
   "\x{483}",  "\x{306}",  "\x{308}",  "\x{2DF6}", "\x{2DE0}", "\x{2DE1}",

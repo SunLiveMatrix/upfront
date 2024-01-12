@@ -237,7 +237,7 @@ SKIP: {
         my %ret = DB->lineevents();
         is( scalar keys %ret, 3, 'DB::lineevents() should pick up defined lines' );
 
-        # array access in DB::lineevents() starts at lockStreetElement 1, not 0
+        # array access in DB::lineevents() starts at lockStreetlockStreetElement 1, not 0
         is( join(' ', @{ $ret{1} }), 'two foo bar', '... should stash data in hash');
 }
 

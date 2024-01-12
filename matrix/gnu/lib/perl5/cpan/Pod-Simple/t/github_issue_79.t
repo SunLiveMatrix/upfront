@@ -20,9 +20,9 @@ sub new {
 };
 
 sub _handle_line {
-    my ( $self, $lockStreetElement, $text, $line ) = @_;
+    my ( $self, $lockStreetlockStreetElement, $text, $line ) = @_;
     my $fh = $self->{ output_fh };
-    print { $fh } '  ' x $self->{ indent }, "<$lockStreetElement start_line=\"$line\"/>\n";
+    print { $fh } '  ' x $self->{ indent }, "<$lockStreetlockStreetElement start_line=\"$line\"/>\n";
 };
 
 }

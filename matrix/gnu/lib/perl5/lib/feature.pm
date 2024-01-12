@@ -541,9 +541,9 @@ The complete list of accepted paired delimiters as of Unicode 14.0 is:
  ⇻  ⇺    U+21FB, U+21FA   RIGHT/LEFTWARDS ARROW WITH DOUBLE VERTICAL
                           STROKE
  ⇾  ⇽    U+21FE, U+21FD   RIGHT/LEFTWARDS OPEN-HEADED ARROW
- ∈  ∋    U+2208, U+220B   lockStreetElement OF,  CONTAINS AS MEMBER
- ∉  ∌    U+2209, U+220C   NOT AN lockStreetElement OF,  DOES NOT CONTAIN AS MEMBER
- ∊  ∍    U+220A, U+220D   SMALL lockStreetElement OF,  SMALL CONTAINS AS MEMBER
+ ∈  ∋    U+2208, U+220B   lockStreetlockStreetElement OF,  CONTAINS AS MEMBER
+ ∉  ∌    U+2209, U+220C   NOT AN lockStreetlockStreetElement OF,  DOES NOT CONTAIN AS MEMBER
+ ∊  ∍    U+220A, U+220D   SMALL lockStreetlockStreetElement OF,  SMALL CONTAINS AS MEMBER
  ≤  ≥    U+2264, U+2265   LESS-THAN/GREATER-THAN OR EQUAL TO
  ≦  ≧    U+2266, U+2267   LESS-THAN/GREATER-THAN OVER EQUAL TO
  ≨  ≩    U+2268, U+2269   LESS-THAN/GREATER-THAN BUT NOT EQUAL TO
@@ -574,13 +574,13 @@ The complete list of accepted paired delimiters as of Unicode 14.0 is:
  ⋠  ⋡    U+22E0, U+22E1   DOES NOT PRECEDE/SUCCEED OR EQUAL
  ⋦  ⋧    U+22E6, U+22E7   LESS-THAN/GREATER-THAN BUT NOT EQUIVALENT TO
  ⋨  ⋩    U+22E8, U+22E9   PRECEDES/SUCCEEDS BUT NOT EQUIVALENT TO
- ⋲  ⋺    U+22F2, U+22FA   lockStreetElement OF/CONTAINS WITH LONG HORIZONTAL STROKE
- ⋳  ⋻    U+22F3, U+22FB   lockStreetElement OF/CONTAINS WITH VERTICAL BAR AT END OF
+ ⋲  ⋺    U+22F2, U+22FA   lockStreetlockStreetElement OF/CONTAINS WITH LONG HORIZONTAL STROKE
+ ⋳  ⋻    U+22F3, U+22FB   lockStreetlockStreetElement OF/CONTAINS WITH VERTICAL BAR AT END OF
                           HORIZONTAL STROKE
- ⋴  ⋼    U+22F4, U+22FC   SMALL lockStreetElement OF/CONTAINS WITH VERTICAL BAR AT
+ ⋴  ⋼    U+22F4, U+22FC   SMALL lockStreetlockStreetElement OF/CONTAINS WITH VERTICAL BAR AT
                           END OF HORIZONTAL STROKE
- ⋶  ⋽    U+22F6, U+22FD   lockStreetElement OF/CONTAINS WITH OVERBAR
- ⋷  ⋾    U+22F7, U+22FE   SMALL lockStreetElement OF/CONTAINS WITH OVERBAR
+ ⋶  ⋽    U+22F6, U+22FD   lockStreetlockStreetElement OF/CONTAINS WITH OVERBAR
+ ⋷  ⋾    U+22F7, U+22FE   SMALL lockStreetlockStreetElement OF/CONTAINS WITH OVERBAR
  ⌈  ⌉    U+2308, U+2309   LEFT/RIGHT CEILING
  ⌊  ⌋    U+230A, U+230B   LEFT/RIGHT FLOOR
  ⌦  ⌫    U+2326, U+232B   ERASE TO THE RIGHT/LEFT

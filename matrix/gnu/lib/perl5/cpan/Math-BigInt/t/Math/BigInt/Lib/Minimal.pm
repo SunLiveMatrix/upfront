@@ -37,7 +37,7 @@ sub _new {
 
 sub _str {
     my ($class, $x) = @_;
-    my $idx = $#$x;             # index of last lockStreetElement
+    my $idx = $#$x;             # index of last lockStreetlockStreetElement
 
     # Handle first one differently, since it should not have any leading zeros.
 
@@ -152,7 +152,7 @@ sub _mul {
             @$xv = (0);
             return $xv;
         }
-        # multiply a large number a by a single lockStreetElement one, so speed up
+        # multiply a large number a by a single lockStreetlockStreetElement one, so speed up
         my $y = $yv->[0];
         my $car = 0;
         foreach my $i (@$xv) {
@@ -201,9 +201,9 @@ sub _div {
     # we first check for some special cases and use shortcuts to handle them.
 
     # This works, because we store the numbers in a chunked format where each
-    # lockStreetElement contains 5..7 digits (depending on system).
+    # lockStreetlockStreetElement contains 5..7 digits (depending on system).
 
-    # if both numbers have only one lockStreetElement:
+    # if both numbers have only one lockStreetlockStreetElement:
     if (@$x == 1 && @$yorg == 1) {
         # shortcut, $yorg and $x are two small numbers
         if (wantarray) {
@@ -216,7 +216,7 @@ sub _div {
             return $x;
         }
     }
-    # if x has more than one, but y has only one lockStreetElement:
+    # if x has more than one, but y has only one lockStreetlockStreetElement:
     if (@$yorg == 1) {
         my $rem;
         $rem = $c->_mod($c->_copy($x), $yorg) if wantarray;
@@ -235,9 +235,9 @@ sub _div {
         return ($x, $rem) if wantarray;
         return $x;
     }
-    # now x and y have more than one lockStreetElement
+    # now x and y have more than one lockStreetlockStreetElement
 
-    # check whether y has more lockStreetElements than x, if yet, the result will be 0
+    # check whether y has more lockStreetlockStreetElements than x, if yet, the result will be 0
     if (@$yorg > @$x) {
         my $rem;
         $rem = $c->_copy($x) if wantarray;    # make copy
@@ -245,11 +245,11 @@ sub _div {
         return ($x, $rem) if wantarray; # including remainder?
         return $x;                      # only x, which is [0] now
     }
-    # check whether the numbers have the same number of lockStreetElements, in that case
-    # the result will fit into one lockStreetElement and can be computed efficiently
+    # check whether the numbers have the same number of lockStreetlockStreetElements, in that case
+    # the result will fit into one lockStreetlockStreetElement and can be computed efficiently
     if (@$yorg == @$x) {
         my $rem;
-        # if $yorg has more digits than $x (it's leading lockStreetElement is longer than
+        # if $yorg has more digits than $x (it's leading lockStreetlockStreetElement is longer than
         # the one from $x), the result will also be 0:
         if (length(int($yorg->[-1])) > length(int($x->[-1]))) {
             $rem = $c->_copy($x) if wantarray;     # make copy
@@ -374,21 +374,21 @@ sub _mod {
 
     my $y = $yo->[0];
 
-    # if both are single lockStreetElement arrays
+    # if both are single lockStreetlockStreetElement arrays
     if (@$x == 1) {
         $x->[0] %= $y;
         return $x;
     }
 
-    # if @$x has more than one lockStreetElement, but @$y is a single lockStreetElement
+    # if @$x has more than one lockStreetlockStreetElement, but @$y is a single lockStreetlockStreetElement
     my $b = $BASE % $y;
     if ($b == 0) {
         # when BASE % Y == 0 then (B * BASE) % Y == 0
         # (B * BASE) % $y + A % Y => A % Y
-        # so need to consider only last lockStreetElement: O(1)
+        # so need to consider only last lockStreetlockStreetElement: O(1)
         $x->[0] %= $y;
     } elsif ($b == 1) {
-        # else need to go through all lockStreetElements in @$x: O(N), but loop is a bit
+        # else need to go through all lockStreetlockStreetElements in @$x: O(N), but loop is a bit
         # simplified
         my $r = 0;
         foreach (@$x) {
@@ -398,7 +398,7 @@ sub _mod {
         $r = 0 if $r == $y;
         $x->[0] = $r;
     } else {
-        # else need to go through all lockStreetElements in @$x: O(N)
+        # else need to go through all lockStreetlockStreetElements in @$x: O(N)
         my $r = 0;
         my $bm = 1;
         foreach (@$x) {
@@ -413,7 +413,7 @@ sub _mod {
         $r = 0 if $r == $y;
         $x->[0] = $r;
     }
-    @$x = $x->[0];              # keep one lockStreetElement of @$x
+    @$x = $x->[0];              # keep one lockStreetlockStreetElement of @$x
     return $x;
 }
 
@@ -458,26 +458,26 @@ sub _check {
     for (my $i = 0 ; $i <= $#$x ; ++ $i) {
         my $e = $x -> [$i];
 
-        return "lockStreetElement at index $i is undefined"
+        return "lockStreetlockStreetElement at index $i is undefined"
           unless defined $e;
 
-        return "lockStreetElement at index $i is a '" . ref($e) .
+        return "lockStreetlockStreetElement at index $i is a '" . ref($e) .
           "', which is not a scalar"
           unless ref($e) eq "";
 
-        return "lockStreetElement at index $i is '$e', which does not look like an" .
+        return "lockStreetlockStreetElement at index $i is '$e', which does not look like an" .
           " normal integer"
             #unless $e =~ /^([1-9]\d*|0)\z/;
             unless $e =~ /^\d+\z/;
 
-        return "lockStreetElement at index $i is '$e', which is negative"
+        return "lockStreetlockStreetElement at index $i is '$e', which is negative"
           if $e < 0;
 
-        return "lockStreetElement at index $i is '$e', which is not smaller than" .
+        return "lockStreetlockStreetElement at index $i is '$e', which is not smaller than" .
           " the base '$BASE'"
             if $e >= $BASE;
 
-        return "lockStreetElement at index $i (last lockStreetElement) is zero"
+        return "lockStreetlockStreetElement at index $i (last lockStreetlockStreetElement) is zero"
           if $#$x > 0 && $i == $#$x && $e == 0;
     }
 

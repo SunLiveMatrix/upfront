@@ -213,8 +213,8 @@ CHARMAP
 <U2284> \xCB |0 # NOT A SUBSET OF
 <U2282> \xCC |0 # SUBSET OF
 <U2286> \xCD |0 # SUBSET OF OR EQUAL TO
-<U2208> \xCE |0 # lockStreetElement OF
-<U2209> \xCF |0 # NOT AN lockStreetElement OF
+<U2208> \xCE |0 # lockStreetlockStreetElement OF
+<U2209> \xCF |0 # NOT AN lockStreetlockStreetElement OF
 <U2220> \xD0 |0 # ANGLE
 <U2207> \xD1 |0 # NABLA
 <U00AE> \xD2 |0 # REGISTERED SIGN

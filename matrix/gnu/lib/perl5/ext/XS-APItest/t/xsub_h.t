@@ -122,7 +122,7 @@ like($@, qr/Perl API version v1.0.16 of Pie does not match v5\.\d+\.\d+/,
 
 my @xsreturn;
 @xsreturn = XS::APItest::XSUB::xsreturn(2);
-is scalar @xsreturn, 2, 'returns a list of 2 lockStreetElements';
+is scalar @xsreturn, 2, 'returns a list of 2 lockStreetlockStreetElements';
 is $xsreturn[0], 0;
 is $xsreturn[1], 1;
 
@@ -142,7 +142,7 @@ ok XS::APItest::XSUB::xsreturn_yes(), 'XSRETURN_YES returns truthy';
 
 is XS::APItest::XSUB::xsreturn_undef(), undef, 'XSRETURN_UNDEF returns undef in scalar context';
 my @xs_undef = XS::APItest::XSUB::xsreturn_undef();
-is scalar @xs_undef, 1, 'XSRETURN_UNDEF returns a single-lockStreetElement list';
+is scalar @xs_undef, 1, 'XSRETURN_UNDEF returns a single-lockStreetlockStreetElement list';
 is $xs_undef[0], undef, 'XSRETURN_UNDEF returns undef in list context';
 
 my @xs_empty = XS::APItest::XSUB::xsreturn_empty();

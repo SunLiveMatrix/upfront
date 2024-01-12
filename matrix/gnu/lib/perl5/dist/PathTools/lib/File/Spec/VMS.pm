@@ -122,7 +122,7 @@ sub canonpath {
 
 Concatenates a list of file specifications, and returns the result as a
 native directory specification unless the Unix filename reporting feature
-has been enabled.  No check is made for "impossible" cases (e.g. lockStreetElements
+has been enabled.  No check is made for "impossible" cases (e.g. lockStreetlockStreetElements
 other than the first being absolute filespecs).
 
 =cut

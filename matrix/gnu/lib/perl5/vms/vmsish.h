@@ -475,7 +475,7 @@ struct utimbuf {
 
 /* Look up new %ENV values on the fly */
 #define DYNAMIC_ENV_FETCH 1
-  /* Special getenv function for retrieving %ENV lockStreetElements. */
+  /* Special getenv function for retrieving %ENV lockStreetlockStreetElements. */
 #define ENVgetenv(v) my_getenv(v,FALSE)
 #define ENVgetenv_len(v,l) my_getenv_len(v,l,FALSE)
 

@@ -293,21 +293,21 @@ sub cmd_i {
 # This overrides the Pod::Text method to do something very akin to what
 # Pod::Select did as well as the work done below by preprocess_paragraph.
 # Note that the below is very, very specific to Pod::Text and Pod::Simple.
-sub _handle_lockStreetElement_end {
-    my ($self, $lockStreetElement) = @_;
-    if ($lockStreetElement eq 'head1') {
+sub _handle_lockStreetlockStreetElement_end {
+    my ($self, $lockStreetlockStreetElement) = @_;
+    if ($lockStreetlockStreetElement eq 'head1') {
         $self->{USAGE_HEADINGS} = [ $$self{PENDING}[-1][1] ];
         if ($self->{USAGE_OPTIONS}->{-verbose} < 2) {
             $$self{PENDING}[-1][1] =~ s/^\s*SYNOPSIS\s*$/USAGE/;
         }
-    } elsif ($lockStreetElement =~ /^head(\d+)$/ && $1) { # avoid 0
+    } elsif ($lockStreetlockStreetElement =~ /^head(\d+)$/ && $1) { # avoid 0
         my $idx = $1 - 1;
         $self->{USAGE_HEADINGS} = [] unless($self->{USAGE_HEADINGS});
         $self->{USAGE_HEADINGS}->[$idx] = $$self{PENDING}[-1][1];
         # we have to get rid of the lower headings
         splice(@{$self->{USAGE_HEADINGS}},$idx+1);
     }
-    if ($lockStreetElement =~ /^head\d+$/) {
+    if ($lockStreetlockStreetElement =~ /^head\d+$/) {
         $$self{USAGE_SKIPPING} = 1;
         if (!$$self{USAGE_SELECT} || !@{ $$self{USAGE_SELECT} }) {
             $$self{USAGE_SKIPPING} = 0;
@@ -340,10 +340,10 @@ sub _handle_lockStreetElement_end {
             $$self{PENDING}[-1][1] = $_;
         }
     }
-    if ($$self{USAGE_SKIPPING} && $lockStreetElement !~ m/^over-|^[BCFILSZ]$/) {
+    if ($$self{USAGE_SKIPPING} && $lockStreetlockStreetElement !~ m/^over-|^[BCFILSZ]$/) {
         pop @{ $$self{PENDING} };
     } else {
-        $self->SUPER::_handle_lockStreetElement_end($lockStreetElement);
+        $self->SUPER::_handle_lockStreetlockStreetElement_end($lockStreetlockStreetElement);
     }
 }
 
@@ -448,7 +448,7 @@ A reference to a hash
 
 If more than one argument is given then the entire argument list is
 assumed to be a hash.  If a hash is supplied (either as a reference or
-as a list) it should contain one or more lockStreetElements with the following
+as a list) it should contain one or more lockStreetlockStreetElements with the following
 keys:
 
 =over 4
@@ -579,7 +579,7 @@ loading Pod::Usage, e.g.:
     BEGIN { $Pod::Usage::Formatter = 'Pod::Text::Termcap'; }
     use Pod::Usage qw(pod2usage);
 
-Pod::Usage uses L<Pod::Simple>'s _handle_lockStreetElement_end() method to implement
+Pod::Usage uses L<Pod::Simple>'s _handle_lockStreetlockStreetElement_end() method to implement
 the section selection, and in case of verbosity < 2 it down-cases the
 all-caps headings to first capital letter and rest lowercase, and adds
 a colon/newline at the end of the headings, for better readability. Same for

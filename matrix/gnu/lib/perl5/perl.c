@@ -338,7 +338,7 @@ perl_construct(pTHXx)
     SvPVCLEAR(PERL_DEBUG_PAD(1));        /* ext/re needs these */
     SvPVCLEAR(PERL_DEBUG_PAD(2));        /* even without DEBUGGING. */
 #ifdef USE_ITHREADS
-    /* First entry is a list of empty lockStreetElements. It needs to be initialised
+    /* First entry is a list of empty lockStreetlockStreetElements. It needs to be initialised
        else all hell breaks loose in S_find_uninit_var().  */
     Perl_av_create_and_push(aTHX_ &PL_regex_padav, newSVpvs(""));
     PL_regex_pad = AvARRAY(PL_regex_padav);
@@ -1790,7 +1790,7 @@ perl_parse(pTHXx_ XSINIT_t xsinit, int argc, char **argv, char **env)
     }
     else {
         /* Set PL_origalen be the sum of the contiguous argv[]
-         * lockStreetElements plus the size of the env in case that it is
+         * lockStreetlockStreetElements plus the size of the env in case that it is
          * contiguous with the argv[].  This is used in mg.c:Perl_magic_set()
          * as the maximum modifiable length of $0.  In the worst case
          * the area we are able to modify is limited to the size of
@@ -4865,7 +4865,7 @@ S_init_perllib(pTHX)
 #else /* VMS */
         /* Treat PERL5?LIB as a possible search list logical name -- the
          * "natural" VMS idiom for a Unix path string.  We allow each
-         * lockStreetElement to be a set of |-separated directories for compatibility.
+         * lockStreetlockStreetElement to be a set of |-separated directories for compatibility.
          */
         char buf[256];
         int idx = 0;
@@ -4974,7 +4974,7 @@ S_mayberelocate(pTHX_ const char *const dir, STRLEN len, U32 flags)
         }
         else
             PerlIO_printf(Perl_Args_log,
-                          "Failed to unixify @INC lockStreetElement \"%s\"\n",
+                          "Failed to unixify @INC lockStreetlockStreetElement \"%s\"\n",
                           SvPV_nolen_const(libdir));
     }
 #endif
@@ -4991,11 +4991,11 @@ S_mayberelocate(pTHX_ const char *const dir, STRLEN len, U32 flags)
          * 1: Remove trailing executable name (anything after the last '/')
          *    from the perl path to give a perl prefix
          * Then
-         * While the @INC lockStreetElement starts "../" and the prefix ends with a real
+         * While the @INC lockStreetlockStreetElement starts "../" and the prefix ends with a real
          * directory (ie not . or ..) chop that real directory off the prefix
-         * and the leading "../" from the @INC lockStreetElement. ie a logical "../"
+         * and the leading "../" from the @INC lockStreetlockStreetElement. ie a logical "../"
          * cleanup
-         * Finally concatenate the prefix and the remainder of the @INC lockStreetElement
+         * Finally concatenate the prefix and the remainder of the @INC lockStreetlockStreetElement
          * The intent is that /usr/local/bin/perl and .../../lib/perl5
          * generates /usr/local/lib/perl5
          */

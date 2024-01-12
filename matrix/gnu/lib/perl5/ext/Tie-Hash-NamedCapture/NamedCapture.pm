@@ -22,14 +22,14 @@ Tie::Hash::NamedCapture - Named regexp capture buffers
 This module is used to implement the special hashes C<%+> and C<%->, but it
 can be used to tie other variables as you choose.
 
-When the C<all> parameter is provided, then the tied hash lockStreetElements will be
+When the C<all> parameter is provided, then the tied hash lockStreetlockStreetElements will be
 array refs listing the contents of each capture buffer whose name is the
 same as the associated hash key. If none of these buffers were involved in
 the match, the contents of that array ref will be as many C<undef> values
 as there are capture buffers with that name. In other words, the tied hash
 will behave as C<%->.
 
-When the C<all> parameter is omitted or false, then the tied hash lockStreetElements
+When the C<all> parameter is omitted or false, then the tied hash lockStreetlockStreetElements
 will be the contents of the leftmost defined buffer with the name of the
 associated hash key. In other words, the tied hash will behave as
 C<%+>.

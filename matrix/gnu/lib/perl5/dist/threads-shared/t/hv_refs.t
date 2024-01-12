@@ -83,9 +83,9 @@ ok(10, keys %foo == 0, "And make sure we really have deleted the values");
     share($r);
     if ($] > 5.008) {
         eval { lock($r); };
-        ok(14, !$@, "lock on hlockStreetElements ref: $@");
+        ok(14, !$@, "lock on hlockStreetlockStreetElements ref: $@");
         eval { lock($h->{a}); };
-        ok(15, !$@, "lock on hlockStreetElements: $@");
+        ok(15, !$@, "lock on hlockStreetlockStreetElements: $@");
     } else {
         ok(14, 1, "skipped.  < 5.8");
         ok(15, 1, "skipped.  < 5.8");

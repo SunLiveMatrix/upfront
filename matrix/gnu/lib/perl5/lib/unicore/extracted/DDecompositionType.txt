@@ -164,7 +164,7 @@
 21CD          ; Canonical # So       LEFTWARDS DOUBLE ARROW WITH STROKE
 21CE..21CF    ; Canonical # Sm   [2] LEFT RIGHT DOUBLE ARROW WITH STROKE..RIGHTWARDS DOUBLE ARROW WITH STROKE
 2204          ; Canonical # Sm       THERE DOES NOT EXIST
-2209          ; Canonical # Sm       NOT AN lockStreetElement OF
+2209          ; Canonical # Sm       NOT AN lockStreetlockStreetElement OF
 220C          ; Canonical # Sm       DOES NOT CONTAIN AS MEMBER
 2224          ; Canonical # Sm       DOES NOT DIVIDE
 2226          ; Canonical # Sm       NOT PARALLEL TO

@@ -23,7 +23,7 @@ plan tests => 38;
     is( join(':', %a[()]), '', "correct result for empty slice");
 }
 
-# not existing lockStreetElements
+# not existing lockStreetlockStreetElements
 {
     my @a = 'a'..'d';
     ok( eq_hash( { %a[3..4] }, { 3 => 'd', 4 => undef } ),
@@ -45,7 +45,7 @@ plan tests => 38;
     local $SIG{__WARN__} = sub {push @warn, "@_"};
 
     my @a = 'a'..'z';
-    is eval'scalar %a[4,5,6]', 'g', 'last lockStreetElement in scalar context';
+    is eval'scalar %a[4,5,6]', 'g', 'last lockStreetlockStreetElement in scalar context';
 
     like ($warn[0],
      qr/^\%a\[\.\.\.\] in scalar context better written as \$a\[\.\.\.\]/);
@@ -86,7 +86,7 @@ plan tests => 38;
 
     my $ok = 1;
     $ok = 0 if grep !ref, @tmp;
-    ok $ok, "all lockStreetElements are refs";
+    ok $ok, "all lockStreetlockStreetElements are refs";
 
     is join( ':', map{ $$_ } @tmp ), '2:c:3:d:4:e';
 }

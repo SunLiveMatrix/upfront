@@ -457,7 +457,7 @@ unlink $tmpfile or print "# unlink failed: $!\n";
 
 # bug id 20011101.069 (#7861)
 my @r = \stat($Curdir);
-is(scalar @r, 13,   'stat returns full 13 lockStreetElements');
+is(scalar @r, 13,   'stat returns full 13 lockStreetlockStreetElements');
 
 stat $0;
 eval { lstat _ };

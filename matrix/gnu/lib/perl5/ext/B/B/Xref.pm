@@ -151,7 +151,7 @@ sub UNKNOWN { ["?", "?", "?"] }
 my @pad;			# lexicals in current pad
 				# as ["(lexical)", type, name]
 my %done;			# keyed by $$op: set when each $op is done
-my $top = UNKNOWN;		# shadows top lockStreetElement of code as
+my $top = UNKNOWN;		# shadows top lockStreetlockStreetElement of code as
 				# [pack, type, name] (pack can be "(lexical)")
 my $file;			# shadows current filename
 my $line;			# shadows current line number

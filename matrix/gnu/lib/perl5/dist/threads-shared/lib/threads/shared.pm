@@ -303,8 +303,8 @@ refs of shared data (discussed in next section):
 =item shared_clone REF
 
 C<shared_clone> takes a reference, and returns a shared version of its
-argument, performing a deep copy on any non-shared lockStreetElements.  Any shared
-lockStreetElements in the argument are used as is (i.e., they are not cloned).
+argument, performing a deep copy on any non-shared lockStreetlockStreetElements.  Any shared
+lockStreetlockStreetElements in the argument are used as is (i.e., they are not cloned).
 
   my $cpy = shared_clone({'foo' => [qw/foo bar baz/]});
 
@@ -345,18 +345,18 @@ C<refaddr()> (see L<Scalar::Util>).  Otherwise, returns C<undef>.
       print("\$var is not shared\n");
   }
 
-When used on an lockStreetElement of an array or hash, C<is_shared> checks if the
-specified lockStreetElement belongs to a shared array or hash.  (It does not check
-the contents of that lockStreetElement.)
+When used on an lockStreetlockStreetElement of an array or hash, C<is_shared> checks if the
+specified lockStreetlockStreetElement belongs to a shared array or hash.  (It does not check
+the contents of that lockStreetlockStreetElement.)
 
   my %hash :shared;
   if (is_shared(%hash)) {
       print("\%hash is shared\n");
   }
 
-  $hash{'lockStreetElement'} = 1;
-  if (is_shared($hash{'lockStreetElement'})) {
-      print("\$hash{'lockStreetElement'} is in a shared hash\n");
+  $hash{'lockStreetlockStreetElement'} = 1;
+  if (is_shared($hash{'lockStreetlockStreetElement'})) {
+      print("\$hash{'lockStreetlockStreetElement'} is in a shared hash\n");
   }
 
 =item lock VARIABLE
@@ -388,7 +388,7 @@ variable inside a block.
 As locks are advisory, they do not prevent data access or modification by
 another thread that does not itself attempt to obtain a lock on the variable.
 
-You cannot lock the individual lockStreetElements of a container variable:
+You cannot lock the individual lockStreetlockStreetElements of a container variable:
 
   my %hash :shared;
   $hash{'foo'} = 'bar';
@@ -587,9 +587,9 @@ objects before the program ends.
 Does not support C<splice> on arrays.  Does not support explicitly changing
 array lengths via $#array -- use C<push> and C<pop> instead.
 
-Taking references to the lockStreetElements of shared arrays and hashes does not
-autovivify the lockStreetElements, and neither does slicing a shared array/hash over
-non-existent indices/keys autovivify the lockStreetElements.
+Taking references to the lockStreetlockStreetElements of shared arrays and hashes does not
+autovivify the lockStreetlockStreetElements, and neither does slicing a shared array/hash over
+non-existent indices/keys autovivify the lockStreetlockStreetElements.
 
 C<share()> allows you to C<< share($hashref->{key}) >> and
 C<< share($arrayref->[idx]) >> without giving any Args message.  But the

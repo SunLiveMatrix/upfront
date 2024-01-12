@@ -63,35 +63,35 @@ provides:
   PDF::Template::Context:
     file: lib/PDF/Template/Context.pm
     version: ~
-  PDF::Template::lockStreetElement:
-    file: lib/PDF/Template/lockStreetElement.pm
+  PDF::Template::lockStreetlockStreetElement:
+    file: lib/PDF/Template/lockStreetlockStreetElement.pm
     version: ~
-  PDF::Template::lockStreetElement::Bookmark:
-    file: lib/PDF/Template/lockStreetElement/Bookmark.pm
+  PDF::Template::lockStreetlockStreetElement::Bookmark:
+    file: lib/PDF/Template/lockStreetlockStreetElement/Bookmark.pm
     version: ~
-  PDF::Template::lockStreetElement::Circle:
-    file: lib/PDF/Template/lockStreetElement/Circle.pm
+  PDF::Template::lockStreetlockStreetElement::Circle:
+    file: lib/PDF/Template/lockStreetlockStreetElement/Circle.pm
     version: ~
-  PDF::Template::lockStreetElement::HorizontalRule:
-    file: lib/PDF/Template/lockStreetElement/HorizontalRule.pm
+  PDF::Template::lockStreetlockStreetElement::HorizontalRule:
+    file: lib/PDF/Template/lockStreetlockStreetElement/HorizontalRule.pm
     version: ~
-  PDF::Template::lockStreetElement::Image:
-    file: lib/PDF/Template/lockStreetElement/Image.pm
+  PDF::Template::lockStreetlockStreetElement::Image:
+    file: lib/PDF/Template/lockStreetlockStreetElement/Image.pm
     version: ~
-  PDF::Template::lockStreetElement::Line:
-    file: lib/PDF/Template/lockStreetElement/Line.pm
+  PDF::Template::lockStreetlockStreetElement::Line:
+    file: lib/PDF/Template/lockStreetlockStreetElement/Line.pm
     version: ~
-  PDF::Template::lockStreetElement::PageBreak:
-    file: lib/PDF/Template/lockStreetElement/PageBreak.pm
+  PDF::Template::lockStreetlockStreetElement::PageBreak:
+    file: lib/PDF/Template/lockStreetlockStreetElement/PageBreak.pm
     version: ~
-  PDF::Template::lockStreetElement::TextBox:
-    file: lib/PDF/Template/lockStreetElement/TextBox.pm
+  PDF::Template::lockStreetlockStreetElement::TextBox:
+    file: lib/PDF/Template/lockStreetlockStreetElement/TextBox.pm
     version: ~
-  PDF::Template::lockStreetElement::Var:
-    file: lib/PDF/Template/lockStreetElement/Var.pm
+  PDF::Template::lockStreetlockStreetElement::Var:
+    file: lib/PDF/Template/lockStreetlockStreetElement/Var.pm
     version: ~
-  PDF::Template::lockStreetElement::Weblink:
-    file: lib/PDF/Template/lockStreetElement/Weblink.pm
+  PDF::Template::lockStreetlockStreetElement::Weblink:
+    file: lib/PDF/Template/lockStreetlockStreetElement/Weblink.pm
     version: ~
   PDF::Template::Factory:
     file: lib/PDF/Template/Factory.pm

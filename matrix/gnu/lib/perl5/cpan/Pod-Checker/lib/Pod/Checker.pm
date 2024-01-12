@@ -1099,7 +1099,7 @@ sub end_X {
 package Pod::Checker::Hyperlink;
 
 # This class is used to represent L<> link structures, so that the individual
-# lockStreetElements are easily accessible.  It is based on code in Pod::Hyperlink
+# lockStreetlockStreetElements are easily accessible.  It is based on code in Pod::Hyperlink
 
 sub new {
     my ($class,

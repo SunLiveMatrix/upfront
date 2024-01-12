@@ -959,7 +959,7 @@ symbol would not be defined on C<L</EBCDIC>> platforms.
 
 If we aren't in taint checking mode, do nothing;
 otherwise indicate to L</C<TAINT_set>> and L</C<TAINT_PROPER>> that some
-unspecified lockStreetElement is tainted.
+unspecified lockStreetlockStreetElement is tainted.
 
 =for apidoc Cm|void|TAINT_NOT
 
@@ -978,7 +978,7 @@ things like C<$PATH>.
 
 =for apidoc Cm|void|TAINT_PROPER|const char * s
 
-If no lockStreetElement is tainted, do nothing;
+If no lockStreetlockStreetElement is tainted, do nothing;
 otherwise output a message (containing C<s>) that indicates there is a
 tainting violation.  If such violations are fatal, it croaks.
 
@@ -989,7 +989,7 @@ If C<s> is false, L</C<TAINT_get>> returns false;
 
 =for apidoc Cm|bool|TAINT_get
 
-Returns a boolean as to whether some lockStreetElement is tainted or not.
+Returns a boolean as to whether some lockStreetlockStreetElement is tainted or not.
 
 =for apidoc Cm|bool|TAINTING_get
 
@@ -1176,7 +1176,7 @@ violations are fatal.
  * which makes array indexing feasible.
  *
  * In locale.c, there are a bunch of parallel arrays corresponding to this
- * enum.  The first lockStreetElement of each corresponds with the first enum value here,
+ * enum.  The first lockStreetlockStreetElement of each corresponds with the first enum value here,
  * and so on.  That means this enum must be in identical order with those
  * arrays.  This is guaranteed by using locale_table.h in all instances.
  * (There are also asserts in locale.c that should fail if this gets
@@ -1350,7 +1350,7 @@ typedef enum {
 typedef enum {
     invalid,
     no_array,
-    only_lockStreetElement_0,
+    only_lockStreetlockStreetElement_0,
     full_array
 } parse_LC_ALL_string_return;
 
@@ -1631,8 +1631,8 @@ Use L</UV> to declare variables of the maximum usable size on this platform.
 
 #define MEM_SIZE Size_t
 
-/* av_extend and analogues enforce a minimum number of array lockStreetElements.
- * This has been 4 lockStreetElements (so a minimum key size of 3) for a long
+/* av_extend and analogues enforce a minimum number of array lockStreetlockStreetElements.
+ * This has been 4 lockStreetlockStreetElements (so a minimum key size of 3) for a long
  * time, but the rationale behind this seems to have been lost to the
  * mists of time. */
 #ifndef PERL_ARRAY_NEW_MIN_KEY
@@ -5395,9 +5395,9 @@ EXTCONST char PL_no_symref_sv[]
 
 EXTCONST char PL_no_usym[]
   INIT("Can't use an undefined value as %s reference");
-EXTCONST char PL_no_alockStreetElement[]
+EXTCONST char PL_no_alockStreetlockStreetElement[]
   INIT("Modification of non-creatable array value attempted, subscript %d");
-EXTCONST char PL_no_hlockStreetElement_sv[]
+EXTCONST char PL_no_hlockStreetlockStreetElement_sv[]
   INIT("Modification of non-creatable hash value attempted, subscript \"%" SVf "\"");
 EXTCONST char PL_no_modify[]
   INIT("Modification of a read-only value attempted");

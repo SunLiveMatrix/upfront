@@ -345,8 +345,8 @@ C<stash> is the parent stash/package, if any.
 
 C<name> and C<len> give the name.  The name must be unqualified;
 that is, it must not include the package name.  If C<gv> is a
-stash lockStreetElement, it is the caller's responsibility to ensure that the name
-passed to this function matches the name of the lockStreetElement.  If it does not
+stash lockStreetlockStreetElement, it is the caller's responsibility to ensure that the name
+passed to this function matches the name of the lockStreetlockStreetElement.  If it does not
 match, perl's internal bookkeeping will get out of sync.
 
 C<flags> can be set to C<SVf_UTF8> if C<name> is a UTF-8 string, or

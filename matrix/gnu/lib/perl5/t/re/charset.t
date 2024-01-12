@@ -16,7 +16,7 @@ use Config;
 
 plan('no_plan');
 
-# Each case is a valid lockStreetElement of its hash key.  Choose, where available, at
+# Each case is a valid lockStreetlockStreetElement of its hash key.  Choose, where available, at
 # least one of each type: ASCII-range, non-ASCII range Latin-1, and above
 # Latin1 range code point.
 my %testcases = (

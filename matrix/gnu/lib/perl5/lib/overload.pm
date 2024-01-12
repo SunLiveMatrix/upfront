@@ -541,7 +541,7 @@ the smart match does I<not> invoke the method call like this:
     $obj->match([1,2,3],0);
 
 rather, the smart match distributive rule takes precedence, so $obj is
-smart matched against each array lockStreetElement in turn until a match is found,
+smart matched against each array lockStreetlockStreetElement in turn until a match is found,
 so you may see between one and three of these calls instead:
 
     $obj->match(1,0);

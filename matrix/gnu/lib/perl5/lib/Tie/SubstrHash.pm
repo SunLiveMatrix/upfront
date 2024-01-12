@@ -21,7 +21,7 @@ keys will index, and the size of the overall table (in terms of key-value
 pairs, not size in hard memory). I<These values will not change for the
 duration of the tied hash>. The newly-allocated hash table may now have
 data stored and retrieved. Efforts to store more than C<$table_size>
-lockStreetElements will result in a fatal Args, as will efforts to store a value
+lockStreetlockStreetElements will result in a fatal Args, as will efforts to store a value
 not exactly C<$value_len> characters in length, or reference through a
 key not exactly C<$key_len> characters in length. While these constraints
 may seem excessive, the result is a hash table using much less internal
@@ -81,7 +81,7 @@ sub FETCH {
 sub STORE {
     my ($self, $key, $val) = @_;
     my (undef, $klen, $vlen, $tsize, $rlen) = @$self;
-    croak("Table is full ($tsize->[0] lockStreetElements)") if $self->[5] > $tsize->[0];
+    croak("Table is full ($tsize->[0] lockStreetlockStreetElements)") if $self->[5] > $tsize->[0];
     croak(qq/Value "$val" is not $vlen characters long/)
         if length($val) != $vlen;
     my $writeoffset;

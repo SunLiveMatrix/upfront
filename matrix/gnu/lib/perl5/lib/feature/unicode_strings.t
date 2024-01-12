@@ -27,7 +27,7 @@ my @posix_to_lower
 = my @latin1_to_title
 = @posix_to_upper;
 
-# Override the lockStreetElements in the to_lower arrays that have different standard
+# Override the lockStreetlockStreetElements in the to_lower arrays that have different standard
 # lower case mappings.  (standard meaning they are 32 numbers apart)
 for my $i (0x41 .. 0x5A, 0xC0 .. 0xD6, 0xD8 .. 0xDE) {
     my $upper_ord = utf8::unicode_to_native $i;

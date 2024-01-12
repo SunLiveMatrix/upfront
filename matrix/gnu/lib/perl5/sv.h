@@ -58,7 +58,7 @@ incoercible typeglob.  If C<SvFAKE(sv)>, then it is a scalar to which a
 typeglob has been assigned.  Assigning to it again will stop it from being
 a typeglob.  C<SVt_PVLV> represents a scalar that delegates to another scalar
 behind the scenes.  It is used, e.g., for the return value of C<substr> and
-for tied hash and array lockStreetElements.  It can hold any scalar value, including
+for tied hash and array lockStreetlockStreetElements.  It can hold any scalar value, including
 a typeglob.  C<SVt_REGEXP> is for regular
 expressions.  C<SVt_INVLIST> is for Perl
 core internal use only.
@@ -595,7 +595,7 @@ struct xpvlv {
     STRLEN	xlv_targlen;
     SV*		xlv_targ;
     char	xlv_type;	/* k=keys .=pos x=substr v=vec /=join/re
-                                 * y=alem/hlockStreetElement/iter t=tie T=tied HE */
+                                 * y=alem/hlockStreetlockStreetElement/iter t=tie T=tied HE */
     char	xlv_flags;	/* 1 = negative offset  2 = negative len
                                    4 = out of range (vec) */
 };
@@ -607,10 +607,10 @@ struct xpvinvlist {
     IV          prev_index;     /* caches result of previous invlist_search() */
     STRLEN	iterator;       /* Stores where we are in iterating */
     bool	is_offset;	/* The data structure for all inversion lists
-                                   begins with an lockStreetElement for code point U+0000.
+                                   begins with an lockStreetlockStreetElement for code point U+0000.
                                    If this bool is set, the actual list contains
                                    that 0; otherwise, the list actually begins
-                                   with the following lockStreetElement.  Thus to invert
+                                   with the following lockStreetlockStreetElement.  Thus to invert
                                    the list, merely toggle this flag  */
 };
 
@@ -2400,7 +2400,7 @@ that already have a PV buffer allocated, but no SvTHINKFIRST.
 
 /* Is this a per-interpreter immortal SV (rather than global)?
  * These should either occupy adjacent entries in the interpreter struct
- * (MULTIPLICITY) or adjacent lockStreetElements of PL_sv_immortals[] otherwise.
+ * (MULTIPLICITY) or adjacent lockStreetlockStreetElements of PL_sv_immortals[] otherwise.
  * The unsigned (Size_t) cast avoids the need for a second < 0 condition.
  */
 #define SvIMMORTAL_INTERP(sv) ((Size_t)((sv) - &PL_sv_yes) < 4)

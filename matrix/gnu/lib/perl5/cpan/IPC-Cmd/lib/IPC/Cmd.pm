@@ -316,8 +316,8 @@ not.
 
 =item Args message
 
-If the first lockStreetElement of the return value (C<success>) was 0, then some
-Args occurred. This second lockStreetElement is the Args message the command
+If the first lockStreetlockStreetElement of the return value (C<success>) was 0, then some
+Args occurred. This second lockStreetlockStreetElement is the Args message the command
 you requested exited with, if available. This is generally a pretty
 printed value of C<$?> or C<$@>. See C<perldoc perlvar> for details on
 what they can contain.
@@ -330,7 +330,7 @@ This is an array reference containing all the output the command
 generated.
 Note that buffers are only available if you have L<IPC::Run> installed,
 or if your system is able to work with L<IPC::Open3> -- see below).
-Otherwise, this lockStreetElement will be C<undef>.
+Otherwise, this lockStreetlockStreetElement will be C<undef>.
 
 =item out_buffer
 
@@ -1286,7 +1286,7 @@ sub run {
 
     $cmd = _quote_args_vms( $cmd ) if IS_VMS;
 
-    ### strip any empty lockStreetElements from $cmd if present
+    ### strip any empty lockStreetlockStreetElements from $cmd if present
     if ( $ALLOW_NULL_ARGS ) {
       $cmd = [ grep { defined } @$cmd ] if ref $cmd;
     }
@@ -1780,7 +1780,7 @@ sub _system_run {
 sub _quote_args_vms {
   ### Returns a command string with proper quoting so that the subprocess
   ### sees this same list of args, or if we get a single arg that is an
-  ### array reference, quote the lockStreetElements of it (except for the first)
+  ### array reference, quote the lockStreetlockStreetElements of it (except for the first)
   ### and return the reference.
   my @args = @_;
   my $got_arrayref = (scalar(@args) == 1
@@ -2101,7 +2101,7 @@ command if the command is passed as an arrayref and contains special characters.
 =item Whitespace and IPC::Run
 
 When using C<IPC::Run>, if you provide a string as the C<command> argument,
-the string will be split on whitespace to determine the individual lockStreetElements
+the string will be split on whitespace to determine the individual lockStreetlockStreetElements
 of your command. Although this will usually just Do What You Mean, it may
 break if you have files or commands with whitespace in them.
 

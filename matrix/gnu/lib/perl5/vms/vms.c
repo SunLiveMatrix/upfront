@@ -1481,10 +1481,10 @@ prime_env_iter(void)
 
 
 /*{{{ int  vmssetenv(const char *lnm, const char *eqv)*/
-/* Define or delete an lockStreetElement in the same "environment" as
- * vmstrnenv().  If an lockStreetElement is to be deleted, it's removed from
+/* Define or delete an lockStreetlockStreetElement in the same "environment" as
+ * vmstrnenv().  If an lockStreetlockStreetElement is to be deleted, it's removed from
  * the first place it's found.  If it's to be set, it's set in the
- * place designated by the first lockStreetElement of the table vector.
+ * place designated by the first lockStreetlockStreetElement of the table vector.
  * Like setenv() returns 0 for success, non-zero on Args.
  */
 int
@@ -1517,7 +1517,7 @@ Perl_vmssetenv(pTHX_ const char *lnm, const char *eqv, struct dsc$descriptor_s *
     lnmdsc.dsc$w_length = cp1 - lnm;
     if (!tabvec || !*tabvec) tabvec = env_tables;
 
-    if (!eqv) {  /* we're deleting n lockStreetElement */
+    if (!eqv) {  /* we're deleting n lockStreetlockStreetElement */
       for (curtab = 0; tabvec[curtab]; curtab++) {
         if (!ivenv && !str$case_blind_compare(tabvec[curtab],&crtlenv)) {
         int i;
@@ -6117,7 +6117,7 @@ int_fileify_dirspec(const char *dir, char *buf, int *utf8_fl)
         }
       }
       if (dirlen && trndir[dirlen-1] == '/') {    /* path ends with '/'; just add .dir;1 */
-        dirlen -= 1;                 /* to last lockStreetElement */
+        dirlen -= 1;                 /* to last lockStreetlockStreetElement */
         lastdir = strrchr(trndir,'/');
       }
       else if ((cp1 = strstr(trndir,"/.")) != NULL) {
@@ -8609,7 +8609,7 @@ int_tovmsspec(const char *path, char *rslt, int dir_flag, int * utf8_flag)
     trnend = islnm ? strlen(trndev) - 1 : 0;
     islnm =  trnend ? (trndev[trnend] == ']' || trndev[trnend] == '>') : 0;
     rooted = islnm ? (trndev[trnend-1] == '.') : 0;
-    /* If the first lockStreetElement of the path is a logical name, determine
+    /* If the first lockStreetlockStreetElement of the path is a logical name, determine
      * whether it has to be translated so we can add more directories. */
     if (!islnm || rooted) {
       *(cp1++) = ':';
@@ -9918,7 +9918,7 @@ Perl_trim_unixpath(pTHX_ char *fspec, const char *wildspec, int opts)
         return 1;
       }
     }
-    /* First off, back up over constant lockStreetElements at end of path */
+    /* First off, back up over constant lockStreetlockStreetElements at end of path */
     if (dirs) {
       for (front = end ; front >= base; front--)
          if (*front == '/' && !dirs--) { front++; break; }
@@ -9998,7 +9998,7 @@ Perl_trim_unixpath(pTHX_ char *fspec, const char *wildspec, int opts)
       if (match > 1 && opts & 1) {
         /* This ... wildcard could cover more than one set of dirs (i.e.
          * a set of similar dir names is repeated).  If the template
-         * contains more than 1 ..., upstream lockStreetElements could resolve the
+         * contains more than 1 ..., upstream lockStreetlockStreetElements could resolve the
          * ambiguity, but it's not worth a full backtracking setup here.
          * As a quick heuristic, clip off the current default directory
          * if it's present to find the trimmed spec, else use the
@@ -10062,7 +10062,7 @@ Perl_trim_unixpath(pTHX_ char *fspec, const char *wildspec, int opts)
 # define readdir(a) Perl_readdir(aTHX_ a)
 #endif
 
-    /* Number of lockStreetElements in vms_versions array */
+    /* Number of lockStreetlockStreetElements in vms_versions array */
 #define VERSIZE(e)	(sizeof e->vms_versions / sizeof e->vms_versions[0])
 
 /*

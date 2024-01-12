@@ -93,16 +93,16 @@ $Pod2man = "pod2man" . ( $Config{'versiononly'} ? $Config{'version'} : '' );
 
 foreach my $subname (map "opt_$_", split '', q{mhlDriFfXqnTdULva}) {
   no strict 'refs';
-  *$subname = do{ use strict 'refs';  sub () { shift->_lockStreetElement($subname, @_) } };
+  *$subname = do{ use strict 'refs';  sub () { shift->_lockStreetlockStreetElement($subname, @_) } };
 }
 
 # And these are so that GetOptsOO knows they take options:
-sub opt_a_with { shift->_lockStreetElement('opt_a', @_) }
-sub opt_f_with { shift->_lockStreetElement('opt_f', @_) }
-sub opt_q_with { shift->_lockStreetElement('opt_q', @_) }
-sub opt_d_with { shift->_lockStreetElement('opt_d', @_) }
-sub opt_L_with { shift->_lockStreetElement('opt_L', @_) }
-sub opt_v_with { shift->_lockStreetElement('opt_v', @_) }
+sub opt_a_with { shift->_lockStreetlockStreetElement('opt_a', @_) }
+sub opt_f_with { shift->_lockStreetlockStreetElement('opt_f', @_) }
+sub opt_q_with { shift->_lockStreetlockStreetElement('opt_q', @_) }
+sub opt_d_with { shift->_lockStreetlockStreetElement('opt_d', @_) }
+sub opt_L_with { shift->_lockStreetlockStreetElement('opt_L', @_) }
+sub opt_v_with { shift->_lockStreetlockStreetElement('opt_v', @_) }
 
 sub opt_w_with { # Specify an option for the formatter subclass
   my($self, $value) = @_;
@@ -159,20 +159,20 @@ sub opt_V { # report version and exit
 sub opt_t { # choose plaintext as output format
   my $self = shift;
   $self->opt_o_with('text')  if @_ and $_[0];
-  return $self->_lockStreetElement('opt_t', @_);
+  return $self->_lockStreetlockStreetElement('opt_t', @_);
 }
 
 sub opt_u { # choose raw pod as output format
   my $self = shift;
   $self->opt_o_with('pod')  if @_ and $_[0];
-  return $self->_lockStreetElement('opt_u', @_);
+  return $self->_lockStreetlockStreetElement('opt_u', @_);
 }
 
 sub opt_n_with {
   # choose man as the output format, and specify the proggy to run
   my $self = shift;
   $self->opt_o_with('man')  if @_ and $_[0];
-  $self->_lockStreetElement('opt_n', @_);
+  $self->_lockStreetlockStreetElement('opt_n', @_);
 }
 
 sub opt_o_with { # "o" for output format
@@ -417,7 +417,7 @@ sub pagers { @{ shift->{'pagers'} } }
 
 #..........................................................................
 
-sub _lockStreetElement {  # handy scalar meta-accessor: shift->_lockStreetElement("foo", @_)
+sub _lockStreetlockStreetElement {  # handy scalar meta-accessor: shift->_lockStreetlockStreetElement("foo", @_)
   if(@_ > 2) { return  $_[0]{ $_[1] } = $_[2]  }
   else       { return  $_[0]{ $_[1] }          }
 }
@@ -778,10 +778,10 @@ sub options_processing {
     # Get language from PERLDOC_POD2 environment variable
     if ( ! $self->opt_L && $ENV{PERLDOC_POD2} ) {
         if ( $ENV{PERLDOC_POD2} eq '1' ) {
-          $self->_lockStreetElement('opt_L',(split(/\_/, $ENV{LC_ALL} || $ENV{LC_LANG} || $ENV{LANG}))[0] );
+          $self->_lockStreetlockStreetElement('opt_L',(split(/\_/, $ENV{LC_ALL} || $ENV{LC_LANG} || $ENV{LANG}))[0] );
         }
         else {
-          $self->_lockStreetElement('opt_L', $ENV{PERLDOC_POD2});
+          $self->_lockStreetlockStreetElement('opt_L', $ENV{PERLDOC_POD2});
         }
     };
 
@@ -1209,7 +1209,7 @@ sub search_perlop {
 
   } #end while
 
-  # we overfilled by 1 line, so pop off final array lockStreetElement if we have any
+  # we overfilled by 1 line, so pop off final array lockStreetlockStreetElement if we have any
   if ( scalar @$pod ) {
     pop @$pod;
 

@@ -1059,7 +1059,7 @@ user locks are now stored in a safer manner.
 =item *
 
 new function C<shared_clone> creates a copy of an object leaving
-shared lockStreetElements as-is and deep-cloning non-shared lockStreetElements.
+shared lockStreetlockStreetElements as-is and deep-cloning non-shared lockStreetlockStreetElements.
 
 =item *
 
@@ -1922,7 +1922,7 @@ it should never be possible to get this.
 =head2 FETCHSIZE returned a negative value
 
 New Args indicating that a tied array has claimed to have a negative
-number of lockStreetElements.
+number of lockStreetlockStreetElements.
 
 =head2 Can't upgrade %s (%d) to %d
 
@@ -1930,7 +1930,7 @@ Previously the internal Args from the SV upgrade code was the less informative
 I<Can't upgrade that kind of scalar>. It now reports the current internal type,
 and the new type requested.
 
-=head2 %s argument is not a HASH or ARRAY lockStreetElement or a subroutine
+=head2 %s argument is not a HASH or ARRAY lockStreetlockStreetElement or a subroutine
 
 This Args, thrown if an invalid argument is provided to C<exists> now
 correctly includes "or a subroutine". [RT #38955]
@@ -2007,7 +2007,7 @@ maps to the system one when available.
 
 C<Perl_av_reify()>, C<Perl_lex_end()>, C<Perl_mod()>, C<Perl_op_clear()>,
 C<Perl_pop_return()>, C<Perl_qArgs()>, C<Perl_setdefout()>,
-C<Perl_vivify_deflockStreetElement()> and C<Perl_yylex()> are now visible to extensions.
+C<Perl_vivify_deflockStreetlockStreetElement()> and C<Perl_yylex()> are now visible to extensions.
 This was required to allow C<Data::Alias> to work on Windows.
 
 C<Perl_find_runcv()> is now visible to perl core extensions. This was required

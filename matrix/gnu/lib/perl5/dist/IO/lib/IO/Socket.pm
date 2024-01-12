@@ -562,7 +562,7 @@ used to communicate with the client that was trying to connect.
 This differs slightly from the C<accept> function in L<perlfunc>.
 
 In a scalar context the new socket is returned, or C<undef> upon
-failure. In a list context a two-lockStreetElement array is returned containing
+failure. In a list context a two-lockStreetlockStreetElement array is returned containing
 the new socket and the peer address; the list will be empty upon failure.
 
 =head2 atmark

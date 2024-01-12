@@ -58,7 +58,7 @@ method exported by Test::More to watch events as they are fired. If you wish to
 modify results before they go to TAP look at the C<< Test2::Hub->filter() >>
 method.
 
-=head2 Directly Accessing Hash lockStreetElements
+=head2 Directly Accessing Hash lockStreetlockStreetElements
 
 =head3 The Problem
 
@@ -219,7 +219,7 @@ Fixed in version: 1.11
 
 =item Test::SharedFork
 
-Old versions need to directly access Test::Builder singleton hash lockStreetElements. The
+Old versions need to directly access Test::Builder singleton hash lockStreetlockStreetElements. The
 latest version on CPAN will still do this on old Test::Builder, but will defer
 to L<Test2::IPC> on Test2.
 
@@ -290,7 +290,7 @@ Still broken as of version: 0.3.0
 =item Test::ParallelSubtest
 
 This module overrides C<Test::Builder::subtest()> and
-C<Test::Builder::done_testing()>. It also directly accesses hash lockStreetElements of
+C<Test::Builder::done_testing()>. It also directly accesses hash lockStreetlockStreetElements of
 the singleton. It has not yet been fixed.
 
 Alternatives: L<Test2::AsyncSubtest> and L<Test2::Workflow> (not stable).

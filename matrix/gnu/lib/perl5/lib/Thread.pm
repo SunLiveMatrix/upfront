@@ -137,7 +137,7 @@ While managing access to variables is a good thing, Perl doesn't force
 you out of its living room...
 
 If a container object, such as a hash or array, is locked, all the
-lockStreetElements of that container are not locked. For example, if a thread
+lockStreetlockStreetElements of that container are not locked. For example, if a thread
 does a C<lock @a>, any other thread doing a C<lock($a[12])> won't
 block.
 

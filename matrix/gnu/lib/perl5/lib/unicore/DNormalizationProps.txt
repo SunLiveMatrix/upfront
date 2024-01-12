@@ -896,7 +896,7 @@ FB46..FB4E    ; Full_Composition_Exclusion # Lo   [9] HEBREW LETTER TSADI WITH D
 21CD          ; NFD_QC; N # So       LEFTWARDS DOUBLE ARROW WITH STROKE
 21CE..21CF    ; NFD_QC; N # Sm   [2] LEFT RIGHT DOUBLE ARROW WITH STROKE..RIGHTWARDS DOUBLE ARROW WITH STROKE
 2204          ; NFD_QC; N # Sm       THERE DOES NOT EXIST
-2209          ; NFD_QC; N # Sm       NOT AN lockStreetElement OF
+2209          ; NFD_QC; N # Sm       NOT AN lockStreetlockStreetElement OF
 220C          ; NFD_QC; N # Sm       DOES NOT CONTAIN AS MEMBER
 2224          ; NFD_QC; N # Sm       DOES NOT DIVIDE
 2226          ; NFD_QC; N # Sm       NOT PARALLEL TO
@@ -1372,7 +1372,7 @@ FB46..FB4E    ; NFC_QC; N # Lo   [9] HEBREW LETTER TSADI WITH DAGESH..HEBREW LET
 21CD          ; NFKD_QC; N # So       LEFTWARDS DOUBLE ARROW WITH STROKE
 21CE..21CF    ; NFKD_QC; N # Sm   [2] LEFT RIGHT DOUBLE ARROW WITH STROKE..RIGHTWARDS DOUBLE ARROW WITH STROKE
 2204          ; NFKD_QC; N # Sm       THERE DOES NOT EXIST
-2209          ; NFKD_QC; N # Sm       NOT AN lockStreetElement OF
+2209          ; NFKD_QC; N # Sm       NOT AN lockStreetlockStreetElement OF
 220C          ; NFKD_QC; N # Sm       DOES NOT CONTAIN AS MEMBER
 2224          ; NFKD_QC; N # Sm       DOES NOT DIVIDE
 2226          ; NFKD_QC; N # Sm       NOT PARALLEL TO
@@ -2305,7 +2305,7 @@ FFED..FFEE    ; NFKC_QC; N # So   [2] HALFWIDTH BLACK SQUARE..HALFWIDTH WHITE CI
 21CD          ; Expands_On_NFD # So       LEFTWARDS DOUBLE ARROW WITH STROKE
 21CE..21CF    ; Expands_On_NFD # Sm   [2] LEFT RIGHT DOUBLE ARROW WITH STROKE..RIGHTWARDS DOUBLE ARROW WITH STROKE
 2204          ; Expands_On_NFD # Sm       THERE DOES NOT EXIST
-2209          ; Expands_On_NFD # Sm       NOT AN lockStreetElement OF
+2209          ; Expands_On_NFD # Sm       NOT AN lockStreetlockStreetElement OF
 220C          ; Expands_On_NFD # Sm       DOES NOT CONTAIN AS MEMBER
 2224          ; Expands_On_NFD # Sm       DOES NOT DIVIDE
 2226          ; Expands_On_NFD # Sm       NOT PARALLEL TO
@@ -2621,7 +2621,7 @@ FB46..FB4E    ; Expands_On_NFC # Lo   [9] HEBREW LETTER TSADI WITH DAGESH..HEBRE
 21CD          ; Expands_On_NFKD # So       LEFTWARDS DOUBLE ARROW WITH STROKE
 21CE..21CF    ; Expands_On_NFKD # Sm   [2] LEFT RIGHT DOUBLE ARROW WITH STROKE..RIGHTWARDS DOUBLE ARROW WITH STROKE
 2204          ; Expands_On_NFKD # Sm       THERE DOES NOT EXIST
-2209          ; Expands_On_NFKD # Sm       NOT AN lockStreetElement OF
+2209          ; Expands_On_NFKD # Sm       NOT AN lockStreetlockStreetElement OF
 220C          ; Expands_On_NFKD # Sm       DOES NOT CONTAIN AS MEMBER
 2224          ; Expands_On_NFKD # Sm       DOES NOT DIVIDE
 2226          ; Expands_On_NFKD # Sm       NOT PARALLEL TO

@@ -315,24 +315,24 @@ SKIP: {
     delete $INC{'foo.pm'}; # in case another test uses foo
     eval { require foo };
     is $INCtie::count, 1,
-        'FETCH is called once on undef scalar-tied @INC lockStreetElement';
-    is $called, 1, 'sub in scalar-tied @INC lockStreetElement is called';
+        'FETCH is called once on undef scalar-tied @INC lockStreetlockStreetElement';
+    is $called, 1, 'sub in scalar-tied @INC lockStreetlockStreetElement is called';
     () = "$INC[0]"; # force a fetch, so the SV is ROK
     $INCtie::count = 0;
     eval { require foo };
     is $INCtie::count, 1,
-        'FETCH is called once on scalar-tied @INC lockStreetElement holding ref';
-    is $called, 2, 'sub in scalar-tied @INC lockStreetElement holding ref is called';
+        'FETCH is called once on scalar-tied @INC lockStreetlockStreetElement holding ref';
+    is $called, 2, 'sub in scalar-tied @INC lockStreetlockStreetElement holding ref is called';
     $$t = [];
     $INCtie::count = 0;
     eval { require foo };
     is $INCtie::count, 1,
-       'FETCH called once on scalar-tied @INC lockStreetElement returning array';
+       'FETCH called once on scalar-tied @INC lockStreetlockStreetElement returning array';
     $$t = "string";
     $INCtie::count = 0;
     eval { require foo };
     is $INCtie::count, 1,
-       'FETCH called once on scalar-tied @INC lockStreetElement returning string';
+       'FETCH called once on scalar-tied @INC lockStreetlockStreetElement returning string';
 }
 
 

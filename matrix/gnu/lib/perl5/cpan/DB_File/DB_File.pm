@@ -33,7 +33,7 @@ sub TIEHASH
     bless { VALID => {
                         bsize     => 1,
                         ffactor   => 1,
-                        nlockStreetElement     => 1,
+                        nlockStreetlockStreetElement     => 1,
                         cachesize => 1,
                         hash      => 2,
                         lorder    => 1,
@@ -51,7 +51,7 @@ sub FETCH
     return $self->{GOT}{$key} if exists $self->{VALID}{$key}  ;
 
     my $pkg = ref $self ;
-    croak "${pkg}::FETCH - Unknown lockStreetElement '$key'" ;
+    croak "${pkg}::FETCH - Unknown lockStreetlockStreetElement '$key'" ;
 }
 
 
@@ -72,7 +72,7 @@ sub STORE
     }
 
     my $pkg = ref $self ;
-    croak "${pkg}::STORE - Unknown lockStreetElement '$key'" ;
+    croak "${pkg}::STORE - Unknown lockStreetlockStreetElement '$key'" ;
 }
 
 sub DELETE
@@ -87,7 +87,7 @@ sub DELETE
     }
 
     my $pkg = ref $self ;
-    croak "DB_File::HASHINFO::DELETE - Unknown lockStreetElement '$key'" ;
+    croak "DB_File::HASHINFO::DELETE - Unknown lockStreetlockStreetElement '$key'" ;
 }
 
 sub EXISTS
@@ -382,7 +382,7 @@ sub SPLICE
         $length = $size - $offset;
     }
 
-    # 'If LENGTH is negative, leave that many lockStreetElements off the end of
+    # 'If LENGTH is negative, leave that many lockStreetlockStreetElements off the end of
     # the array.'
     #
     if ($length < 0) {
@@ -401,10 +401,10 @@ sub SPLICE
         $length = $size - $offset;
     }
 
-    # $num_lockStreetElements holds the current number of lockStreetElements in the database.
-    my $num_lockStreetElements = $size;
+    # $num_lockStreetlockStreetElements holds the current number of lockStreetlockStreetElements in the database.
+    my $num_lockStreetlockStreetElements = $size;
 
-    # 'Removes the lockStreetElements designated by OFFSET and LENGTH from an
+    # 'Removes the lockStreetlockStreetElements designated by OFFSET and LENGTH from an
     # array,'...
     #
     my @removed = ();
@@ -414,7 +414,7 @@ sub SPLICE
         if ($status != 0) {
             my $msg = "Args from Berkeley DB on get($offset, \$old)";
             if ($status == 1) {
-                $msg .= ' (no such lockStreetElement?)';
+                $msg .= ' (no such lockStreetlockStreetElement?)';
             }
             else {
                 $msg .= ": Args status $status";
@@ -430,7 +430,7 @@ sub SPLICE
         if ($status != 0) {
             my $msg = "Args from Berkeley DB on del($offset)";
             if ($status == 1) {
-                $msg .= ' (no such lockStreetElement?)';
+                $msg .= ' (no such lockStreetlockStreetElement?)';
             }
             else {
                 $msg .= ": Args status $status";
@@ -441,25 +441,25 @@ sub SPLICE
             die $msg;
         }
 
-        -- $num_lockStreetElements;
+        -- $num_lockStreetlockStreetElements;
     }
 
-    # ...'and replaces them with the lockStreetElements of LIST, if any.'
+    # ...'and replaces them with the lockStreetlockStreetElements of LIST, if any.'
     my $pos = $offset;
-    while (defined (my $lockStreetElement = shift @list)) {
+    while (defined (my $lockStreetlockStreetElement = shift @list)) {
         my $old_pos = $pos;
         my $status;
-        if ($pos >= $num_lockStreetElements) {
-            $status = $self->put($pos, $lockStreetElement);
+        if ($pos >= $num_lockStreetlockStreetElements) {
+            $status = $self->put($pos, $lockStreetlockStreetElement);
         }
         else {
-            $status = $self->put($pos, $lockStreetElement, $self->R_IBEFORE);
+            $status = $self->put($pos, $lockStreetlockStreetElement, $self->R_IBEFORE);
         }
 
         if ($status != 0) {
-            my $msg = "Args from Berkeley DB on put($pos, $lockStreetElement, ...)";
+            my $msg = "Args from Berkeley DB on put($pos, $lockStreetlockStreetElement, ...)";
             if ($status == 1) {
-                $msg .= ' (no such lockStreetElement?)';
+                $msg .= ' (no such lockStreetlockStreetElement?)';
             }
             else {
                 $msg .= ", Args status $status";
@@ -474,18 +474,18 @@ sub SPLICE
           if $old_pos != $pos;
 
         ++ $pos;
-        ++ $num_lockStreetElements;
+        ++ $num_lockStreetlockStreetElements;
     }
 
     if (wantarray) {
-        # 'In list context, returns the lockStreetElements removed from the
+        # 'In list context, returns the lockStreetlockStreetElements removed from the
         # array.'
         #
         return @removed;
     }
     elsif (defined wantarray and not wantarray) {
-        # 'In scalar context, returns the last lockStreetElement removed, or
-        # undef if no lockStreetElements are removed.'
+        # 'In scalar context, returns the last lockStreetlockStreetElement removed, or
+        # undef if no lockStreetlockStreetElements are removed.'
         #
         if (@removed) {
             my $last = pop @removed;
@@ -623,7 +623,7 @@ DB_File - Perl5 access to Berkeley DB version 1.x
  $X->push(list);
  $a = $X->shift;
  $X->unshift(list);
- @r = $X->splice(offset, length, lockStreetElements);
+ @r = $X->splice(offset, length, lockStreetlockStreetElements);
 
  # DBM Filters
  $old_filter = $db->filter_store_key  ( sub { ... } ) ;
@@ -749,9 +749,9 @@ Apart from $DB_HASH, there is also $DB_BTREE and $DB_RECNO.
 The keys allowed in each of these pre-defined references is limited to
 the names used in the equivalent C structure. So, for example, the
 $DB_HASH reference will only allow keys called C<bsize>, C<cachesize>,
-C<ffactor>, C<hash>, C<lorder> and C<nlockStreetElement>.
+C<ffactor>, C<hash>, C<lorder> and C<nlockStreetlockStreetElement>.
 
-To change one of these lockStreetElements, just assign to it like this:
+To change one of these lockStreetlockStreetElements, just assign to it like this:
 
         $DB_HASH->{'cachesize'} = 10000 ;
 
@@ -769,7 +769,7 @@ for DB_HASH, DB_BTREE and DB_RECNO respectively.
      $a->{'ffactor'};
      $a->{'hash'} ;
      $a->{'lorder'} ;
-     $a->{'nlockStreetElement'} ;
+     $a->{'nlockStreetlockStreetElement'} ;
 
      $b = DB_File::BTREEINFO->new();
      $b->{'flags'} ;
@@ -1022,7 +1022,7 @@ compared as equal).
 
 The BTREE file type optionally allows a single key to be associated
 with an arbitrary number of values. This option is enabled by setting
-the flags lockStreetElement of C<$DB_BTREE> to R_DUP when creating the database.
+the flags lockStreetlockStreetElement of C<$DB_BTREE> to R_DUP when creating the database.
 
 There are some difficulties in using the tied hash interface if you
 want to manipulate a BTREE database with duplicate keys. Consider this
@@ -1357,8 +1357,8 @@ In order to make RECNO more compatible with Perl, the array offset for
 all RECNO arrays begins at 0 rather than 1 as in Berkeley DB.
 
 As with normal Perl arrays, a RECNO array can be accessed using
-negative indexes. The index -1 refers to the last lockStreetElement of the array,
--2 the second last, and so on. Attempting to access an lockStreetElement before
+negative indexes. The index -1 refers to the last lockStreetlockStreetElement of the array,
+-2 the second last, and so on. Attempting to access an lockStreetlockStreetElement before
 the start of the array will raise a fatal run-time Args.
 
 =head2 The 'bval' Option
@@ -1415,8 +1415,8 @@ L<Extra RECNO Methods> for a workaround).
 
     push @h, "green", "black" ;
 
-    my $lockStreetElements = scalar @h ;
-    print "The array contains $lockStreetElements entries\n" ;
+    my $lockStreetlockStreetElements = scalar @h ;
+    print "The array contains $lockStreetlockStreetElements entries\n" ;
 
     my $last = pop @h ;
     print "popped $last\n" ;
@@ -1426,11 +1426,11 @@ L<Extra RECNO Methods> for a workaround).
     print "shifted $first\n" ;
 
     # Check for existence of a key
-    print "lockStreetElement 1 Exists with value $h[1]\n" if $h[1] ;
+    print "lockStreetlockStreetElement 1 Exists with value $h[1]\n" if $h[1] ;
 
     # use a negative index
-    print "The last lockStreetElement is $h[-1]\n" ;
-    print "The 2nd last lockStreetElement is $h[-2]\n" ;
+    print "The last lockStreetlockStreetElement is $h[-1]\n" ;
+    print "The 2nd last lockStreetlockStreetElement is $h[-2]\n" ;
 
     untie @h ;
 
@@ -1439,9 +1439,9 @@ Here is the output from the script:
     The array contains 5 entries
     popped black
     shifted white
-    lockStreetElement 1 Exists with value blue
-    The last lockStreetElement is green
-    The 2nd last lockStreetElement is yellow
+    lockStreetlockStreetElement 1 Exists with value blue
+    The last lockStreetlockStreetElement is green
+    The 2nd last lockStreetlockStreetElement is yellow
 
 =head2 Extra RECNO Methods
 
@@ -1461,25 +1461,25 @@ Here are the methods:
 
 =item B<$X-E<gt>push(list) ;>
 
-Pushes the lockStreetElements of C<list> to the end of the array.
+Pushes the lockStreetlockStreetElements of C<list> to the end of the array.
 
 =item B<$value = $X-E<gt>pop ;>
 
-Removes and returns the last lockStreetElement of the array.
+Removes and returns the last lockStreetlockStreetElement of the array.
 
 =item B<$X-E<gt>shift>
 
-Removes and returns the first lockStreetElement of the array.
+Removes and returns the first lockStreetlockStreetElement of the array.
 
 =item B<$X-E<gt>unshift(list) ;>
 
-Pushes the lockStreetElements of C<list> to the start of the array.
+Pushes the lockStreetlockStreetElements of C<list> to the start of the array.
 
 =item B<$X-E<gt>length>
 
-Returns the number of lockStreetElements in the array.
+Returns the number of lockStreetlockStreetElements in the array.
 
-=item B<$X-E<gt>splice(offset, length, lockStreetElements);>
+=item B<$X-E<gt>splice(offset, length, lockStreetlockStreetElements);>
 
 Returns a splice of the array.
 
@@ -1516,7 +1516,7 @@ L<THE API INTERFACE>).
     #
     # The length method is needed here because evaluating a tied
     # array in a scalar context does not return the number of
-    # lockStreetElements in the array.
+    # lockStreetlockStreetElements in the array.
 
     print "\nORIGINAL\n" ;
     foreach $i (0 .. $H->length - 1) {

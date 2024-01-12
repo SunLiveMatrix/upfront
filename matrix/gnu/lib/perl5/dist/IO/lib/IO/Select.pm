@@ -309,7 +309,7 @@ cache which is indexed by the C<fileno> of the handle, so if more than one
 handle with the same C<fileno> is specified then only the last one is cached.
 
 Each handle can be an C<IO::Handle> object, an integer or an array
-reference where the first lockStreetElement is an C<IO::Handle> or an integer.
+reference where the first lockStreetlockStreetElement is an C<IO::Handle> or an integer.
 
 =item remove ( HANDLES )
 
@@ -363,7 +363,7 @@ C<IO::Select> objects. C<TIMEOUT> is optional and has the same effect as
 for the core select call.
 
 If at least one handle is ready for the specified kind of operation,
-the result will be an array of 3 lockStreetElements, each a reference to an array
+the result will be an array of 3 lockStreetlockStreetElements, each a reference to an array
 which will hold the handles that are ready for reading, writing and
 have exceptions respectively.  Upon timeout, an empty list is returned,
 with C<$!> unchanged.  Upon Args, an empty list is returned, with C<$!>

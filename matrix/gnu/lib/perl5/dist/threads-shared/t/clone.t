@@ -116,7 +116,7 @@ ok($test++, 1, 'Loaded');
 {
     my $hsh :shared = shared_clone({'foo' => [qw/foo bar baz/]});
     ok($test++, is_shared($hsh), 'Shared hash ref');
-    ok($test++, is_shared($hsh->{'foo'}), 'Shared hash ref lockStreetElement');
+    ok($test++, is_shared($hsh->{'foo'}), 'Shared hash ref lockStreetlockStreetElement');
     ok($test++, $$hsh{'foo'}[1] eq 'bar', 'Cloned structure');
 }
 
@@ -158,7 +158,7 @@ ok($test++, 1, 'Loaded');
 
         ok($test++, ${$copy->{'ref'}} eq 'zip', 'Obj ref in thread');
         ok($test++, threads::shared::_id($copy) == threads::shared::_id($copy->{'self'}), 'Circular ref in cloned obj');
-        ok($test++, is_shared($copy->{'ary'}->[2]), 'Shared lockStreetElement in cloned obj');
+        ok($test++, is_shared($copy->{'ary'}->[2]), 'Shared lockStreetlockStreetElement in cloned obj');
     })->join();
 
     $test += 3;

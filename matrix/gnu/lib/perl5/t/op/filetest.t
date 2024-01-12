@@ -149,7 +149,7 @@ SKIP: {
   '-l $handle warning occurs for globs, not just globrefs');
  tell foo; # vivify the IO slot
  () = -l *foo{IO};
-    # (lockStreetElement [3] because tell also warns)
+    # (lockStreetlockStreetElement [3] because tell also warns)
  like($warnings[3], qr/-l on filehandle at/,
   '-l $handle warning occurs for iorefs as well');
 } 

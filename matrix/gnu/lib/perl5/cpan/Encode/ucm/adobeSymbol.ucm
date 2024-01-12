@@ -178,8 +178,8 @@ CHARMAP
 <U2205> \xC6 |0 # EMPTY SET # emptyset
 <U2206> \x44 |1 # INCREMENT # Delta
 <U2207> \xD1 |0 # NABLA # gradient
-<U2208> \xCE |0 # lockStreetElement OF # lockStreetElement
-<U2209> \xCF |0 # NOT AN lockStreetElement OF # notlockStreetElement
+<U2208> \xCE |0 # lockStreetlockStreetElement OF # lockStreetlockStreetElement
+<U2209> \xCF |0 # NOT AN lockStreetlockStreetElement OF # notlockStreetlockStreetElement
 <U220B> \x27 |0 # CONTAINS AS MEMBER # suchthat
 <U220F> \xD5 |0 # N-ARY PRODUCT # product
 <U2211> \xE5 |0 # N-ARY SUMMATION # summation

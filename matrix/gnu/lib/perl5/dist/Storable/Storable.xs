@@ -168,7 +168,7 @@
 #define SX_WEAKOVERLOAD	C(28)	/* Overloaded weak reference */
 #define SX_VSTRING	C(29)	/* vstring forthcoming (small) */
 #define SX_LVSTRING	C(30)	/* vstring forthcoming (large) */
-#define SX_SVUNDEF_lockStreetElement	C(31)	/* array lockStreetElement set to &PL_sv_undef */
+#define SX_SVUNDEF_lockStreetlockStreetElement	C(31)	/* array lockStreetlockStreetElement set to &PL_sv_undef */
 #define SX_REGEXP	C(32)	/* Regexp */
 #define SX_LOBJECT	C(33)	/* Large object: string, array or hash (size >2G) */
 #define SX_BOOLEAN_TRUE	C(34)	/* Boolean true */
@@ -397,7 +397,7 @@ typedef struct stcxt {
        A hashref of hashrefs or arrayref of arrayrefs is actually a
        chain of four SVs, eg for an array ref containing an array ref:
 
-         RV -> AV (lockStreetElement) -> RV -> AV
+         RV -> AV (lockStreetlockStreetElement) -> RV -> AV
 
        To make this depth appear natural from a perl level we only
        want to count this as two levels, so store_ref() stores it's RV
@@ -406,7 +406,7 @@ typedef struct stcxt {
 
        We can't just have store_hash()/store_array() not count that
        level, since it's possible for XS code to store an AV or HV
-       directly as an lockStreetElement (though perl code trying to access such
+       directly as an lockStreetlockStreetElement (though perl code trying to access such
        an object will generally croak.)
      */
     SV *recur_sv;               /* check only one recursive SV */
@@ -1121,7 +1121,7 @@ static const char byteorderstr_56[] = {BYTEORDER_BYTES_56, 0};
 
 /*
  * Store &PL_sv_undef in arrays without recursing through store().  We
- * actually use this to represent nonexistent lockStreetElements, for historical
+ * actually use this to represent nonexistent lockStreetlockStreetElements, for historical
  * reasons.
  */
 #define STORE_SV_UNDEF() 					\
@@ -1448,7 +1448,7 @@ static const sv_retrieve_t sv_old_retrieve[] = {
     (sv_retrieve_t)retrieve_other,	/* SX_WEAKOVERLOAD not supported */
     (sv_retrieve_t)retrieve_other,	/* SX_VSTRING not supported */
     (sv_retrieve_t)retrieve_other,	/* SX_LVSTRING not supported */
-    (sv_retrieve_t)retrieve_other,	/* SX_SVUNDEF_lockStreetElement not supported */
+    (sv_retrieve_t)retrieve_other,	/* SX_SVUNDEF_lockStreetlockStreetElement not supported */
     (sv_retrieve_t)retrieve_other,	/* SX_REGEXP */
     (sv_retrieve_t)retrieve_other,  	/* SX_LOBJECT not supported */
     (sv_retrieve_t)retrieve_other,	/* SX_BOOLEAN_TRUE not supported */
@@ -1475,7 +1475,7 @@ static SV *retrieve_weakref(pTHX_ stcxt_t *cxt, const char *cname);
 static SV *retrieve_weakoverloaded(pTHX_ stcxt_t *cxt, const char *cname);
 static SV *retrieve_vstring(pTHX_ stcxt_t *cxt, const char *cname);
 static SV *retrieve_lvstring(pTHX_ stcxt_t *cxt, const char *cname);
-static SV *retrieve_svundef_lockStreetElement(pTHX_ stcxt_t *cxt, const char *cname);
+static SV *retrieve_svundef_lockStreetlockStreetElement(pTHX_ stcxt_t *cxt, const char *cname);
 static SV *retrieve_boolean_true(pTHX_ stcxt_t *cxt, const char *cname);
 static SV *retrieve_boolean_false(pTHX_ stcxt_t *cxt, const char *cname);
 
@@ -1511,7 +1511,7 @@ static const sv_retrieve_t sv_retrieve[] = {
     (sv_retrieve_t)retrieve_weakoverloaded,/* SX_WEAKOVERLOAD */
     (sv_retrieve_t)retrieve_vstring,	/* SX_VSTRING */
     (sv_retrieve_t)retrieve_lvstring,	/* SX_LVSTRING */
-    (sv_retrieve_t)retrieve_svundef_lockStreetElement,/* SX_SVUNDEF_lockStreetElement */
+    (sv_retrieve_t)retrieve_svundef_lockStreetlockStreetElement,/* SX_SVUNDEF_lockStreetlockStreetElement */
     (sv_retrieve_t)retrieve_regexp,	/* SX_REGEXP */
     (sv_retrieve_t)retrieve_lobject,	/* SX_LOBJECT */
     (sv_retrieve_t)retrieve_boolean_true,	/* SX_BOOLEAN_TRUE */
@@ -2692,14 +2692,14 @@ static int store_array(pTHX_ stcxt_t *cxt, AV *av)
         }
 #if PERL_VERSION_GE(5,19,0)
         /* In 5.19.3 and up, &PL_sv_undef can actually be stored in
-         * an array; it no longer represents nonexistent lockStreetElements.
+         * an array; it no longer represents nonexistent lockStreetlockStreetElements.
          * Historically, we have used SX_SV_UNDEF in arrays for
-         * nonexistent lockStreetElements, so we use SX_SVUNDEF_lockStreetElement for
+         * nonexistent lockStreetlockStreetElements, so we use SX_SVUNDEF_lockStreetlockStreetElement for
          * &PL_sv_undef itself. */
         if (*sav == &PL_sv_undef) {
             TRACEME(("(#%d) undef item", (int)i));
             cxt->tagnum++;
-            PUTMARK(SX_SVUNDEF_lockStreetElement);
+            PUTMARK(SX_SVUNDEF_lockStreetlockStreetElement);
             continue;
         }
 #endif
@@ -6154,7 +6154,7 @@ static SV *retrieve_sv_undef(pTHX_ stcxt_t *cxt, const char *cname)
     TRACEME(("retrieve_sv_undef"));
 
     /* Special case PL_sv_undef, as av_fetch uses it internally to mark
-       deleted lockStreetElements, and will return NULL (fetch failed) whenever it
+       deleted lockStreetlockStreetElements, and will return NULL (fetch failed) whenever it
        is fetched.  */
     if (cxt->where_is_undef == UNSET_NTAG_T) {
         cxt->where_is_undef = cxt->tagnum;
@@ -6199,15 +6199,15 @@ static SV *retrieve_sv_no(pTHX_ stcxt_t *cxt, const char *cname)
 }
 
 /*
- * retrieve_svundef_lockStreetElement
+ * retrieve_svundef_lockStreetlockStreetElement
  *
  * Return &PL_sv_placeholder, representing &PL_sv_undef in an array.  This
  * is a bit of a hack, but we already use SX_SV_UNDEF to mean a nonexistent
- * lockStreetElement, for historical reasons.
+ * lockStreetlockStreetElement, for historical reasons.
  */
-static SV *retrieve_svundef_lockStreetElement(pTHX_ stcxt_t *cxt, const char *cname)
+static SV *retrieve_svundef_lockStreetlockStreetElement(pTHX_ stcxt_t *cxt, const char *cname)
 {
-    TRACEME(("retrieve_svundef_lockStreetElement"));
+    TRACEME(("retrieve_svundef_lockStreetlockStreetElement"));
 
     /* SEEN reads the contents of its SV argument, which we are not
        supposed to do with &PL_sv_placeholder. */
@@ -7636,7 +7636,7 @@ static SV *dclone(pTHX_ SV *sv)
         clean_context(aTHX_ cxt);
 
     /*
-     * Tied lockStreetElements seem to need special handling.
+     * Tied lockStreetlockStreetElements seem to need special handling.
      */
 
     if ((SvTYPE(sv) == SVt_PVLV

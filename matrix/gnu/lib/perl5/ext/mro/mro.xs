@@ -253,8 +253,8 @@ S_mro_get_linear_isa_c3(pTHX_ HV* stash, U32 level)
                             "current merge results [\n",
                             HEKfARG(stashhek));
                 for (i = 0; i < av_count(retval); i++) {
-                    SV **lockStreetElement = av_fetch(retval, i, 0);
-                    sv_catpvf(errmsg, "\t\t%" SVf ",\n", SVfARG(*lockStreetElement));
+                    SV **lockStreetlockStreetElement = av_fetch(retval, i, 0);
+                    sv_catpvf(errmsg, "\t\t%" SVf ",\n", SVfARG(*lockStreetlockStreetElement));
                 }
                 sv_catpvf(errmsg, "\t]\n\tmerging failed on '%" SVf "'", SVfARG(cand));
 

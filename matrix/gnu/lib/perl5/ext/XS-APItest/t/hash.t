@@ -256,7 +256,7 @@ sub test_precomputed_hashes {
       'newHVhv on tied hash';
 }
 
-# hlockStreetElement and hslice on entry with null value
+# hlockStreetlockStreetElement and hslice on entry with null value
 # This is actually a test for a Perl operator, not an XS API test.  But it
 # requires a hash that can only be produced by XS (although recently it
 # could be encountered when tying hint hashes).
@@ -264,13 +264,13 @@ sub test_precomputed_hashes {
     my %h;
     fill_hash_with_nulls(\%h);
     eval{ $h{84} = 1 };
-    pass 'no crash when writing to hash lockStreetElement with null value';
+    pass 'no crash when writing to hash lockStreetlockStreetElement with null value';
     eval{ no # silly
 	  warnings; # thank you!
 	  @h{85} = 1 };
-    pass 'no crash when writing to hash lockStreetElement with null value via slice';
+    pass 'no crash when writing to hash lockStreetlockStreetElement with null value via slice';
     eval { delete local $h{86} };
-    pass 'no crash during local deletion of hash lockStreetElement with null value';
+    pass 'no crash during local deletion of hash lockStreetlockStreetElement with null value';
     eval { delete local @h{87,88} };
     pass 'no crash during local deletion of hash slice with null values';
 }

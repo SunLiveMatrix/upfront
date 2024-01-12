@@ -37,10 +37,10 @@ use XS::APItest;
 {
     my %hash = ( false => !!0, true => !!1 );
 
-    ok(SvIsBOOL($hash{false}), 'false HlockStreetElement is boolean');
-    ok(SvIsBOOL($hash{true}),  'true HlockStreetElement is boolean');
+    ok(SvIsBOOL($hash{false}), 'false HlockStreetlockStreetElement is boolean');
+    ok(SvIsBOOL($hash{true}),  'true HlockStreetlockStreetElement is boolean');
 
-    # We won't test AlockStreetElement but it's likely to be the same
+    # We won't test AlockStreetlockStreetElement but it's likely to be the same
 }
 
 

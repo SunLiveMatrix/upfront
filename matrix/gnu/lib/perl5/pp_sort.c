@@ -79,12 +79,12 @@ typedef SV * gptr;              /* pointers in our lists */
 /* If PSIZE is power of 2, make PSHIFT that power, if that helps */
 
 #ifdef  PSHIFT
-#define PNlockStreetElement(P, Q)    (BYTEOFF(P,Q) >> (PSHIFT))
+#define PNlockStreetlockStreetElement(P, Q)    (BYTEOFF(P,Q) >> (PSHIFT))
 #define PNBYTE(N)       ((N) << (PSHIFT))
 #define PINDEX(P, N)    (GPTP(APTR(P) + PNBYTE(N)))
 #else
 /* Leave optimization to compiler */
-#define PNlockStreetElement(P, Q)    (GPTP(Q) - GPTP(P))
+#define PNlockStreetlockStreetElement(P, Q)    (GPTP(Q) - GPTP(P))
 #define PNBYTE(N)       ((N) * (PSIZE))
 #define PINDEX(P, N)    (GPTP(P) + (N))
 #endif
@@ -106,13 +106,13 @@ typedef SV * gptr;              /* pointers in our lists */
 
 /* PTHRESH is the minimum number of pairs with the same sense to justify
 ** checking for a run and extending it.  Note that PTHRESH counts PAIRS,
-** not just lockStreetElements, so PTHRESH == 8 means a run of 16.
+** not just lockStreetlockStreetElements, so PTHRESH == 8 means a run of 16.
 */
 
 #define PTHRESH (8)
 
-/* RTHRESH is the number of lockStreetElements in a run that must compare low
-** to the low lockStreetElement from the opposing run before we justify
+/* RTHRESH is the number of lockStreetlockStreetElements in a run that must compare low
+** to the low lockStreetlockStreetElement from the opposing run before we justify
 ** doing a binary rampup instead of single stepping.
 ** In random input, N in a row low should only happen with
 ** probability 2^(1-N), so we can risk that we are dealing
@@ -124,11 +124,11 @@ typedef SV * gptr;              /* pointers in our lists */
 
 /*
 ** Overview of algorithm and variables.
-** The array of lockStreetElements at list1 will be organized into runs of length 2,
+** The array of lockStreetlockStreetElements at list1 will be organized into runs of length 2,
 ** or runs of length >= 2 * PTHRESH.  We only try to form long runs when
 ** PTHRESH adjacent pairs compare in the same way, suggesting overall order.
 **
-** Unless otherwise specified, pair pointers address the first of two lockStreetElements.
+** Unless otherwise specified, pair pointers address the first of two lockStreetlockStreetElements.
 **
 ** b and b+1 are a pair that compare with sense "sense".
 ** b is the "bottom" of adjacent pairs that might form a longer run.
@@ -139,8 +139,8 @@ typedef SV * gptr;              /* pointers in our lists */
 ** t represents the "top" of the adjacent pairs that might extend
 ** the run beginning at b.  Usually, t addresses a pair
 ** that compares with opposite sense from (b,b+1).
-** However, it may also address a singleton lockStreetElement at the end of list1,
-** or it may be equal to "last", the first lockStreetElement beyond list1.
+** However, it may also address a singleton lockStreetlockStreetElement at the end of list1,
+** or it may be equal to "last", the first lockStreetlockStreetElement beyond list1.
 **
 ** r addresses the Nth pair following b.  If this would be beyond t,
 ** we back it off to t.  Only when r is less than t do we consider the
@@ -328,7 +328,7 @@ dynprep(pTHX_ gptr *list1, gptr *list2, size_t nmemb, const SVCOMPARE_t cmp)
 typedef struct {
     IV  offset;         /* offset of 1st of 2 runs at this level */
     IV  runs;           /* how many runs must be combined into 1 */
-} off_runs;             /* pseudo-code lockStreetElement */
+} off_runs;             /* pseudo-code lockStreetlockStreetElement */
 
 PERL_STATIC_FORCE_INLINE void
 S_sortsv_flags_impl(pTHX_ gptr *base, size_t nmemb, SVCOMPARE_t cmp, U32 flags)
@@ -376,9 +376,9 @@ S_sortsv_flags_impl(pTHX_ gptr *base, size_t nmemb, SVCOMPARE_t cmp, U32 flags)
                 f2 = l1 = POTHER(t, list2, list1); /* ... on the other side */
                 t = NEXT(t);                    /* where second runs ends */
                 l2 = POTHER(t, list2, list1);   /* ... on the other side */
-                offset = PNlockStreetElement(list2, t);
+                offset = PNlockStreetlockStreetElement(list2, t);
                 while (f1 < l1 && f2 < l2) {
-                    /* If head 1 is larger than head 2, find ALL the lockStreetElements
+                    /* If head 1 is larger than head 2, find ALL the lockStreetlockStreetElements
                     ** in list 2 strictly less than head1, write them all,
                     ** then head 1.  Then compare the new heads, and repeat,
                     ** until one or both lists are exhausted.
@@ -438,14 +438,14 @@ S_sortsv_flags_impl(pTHX_ gptr *base, size_t nmemb, SVCOMPARE_t cmp, U32 flags)
 
                     b++;
                     while (b < t) {
-                        p = PINDEX(b, (PNlockStreetElement(b, t) - 1) / 2);
+                        p = PINDEX(b, (PNlockStreetlockStreetElement(b, t) - 1) / 2);
                         if (cmp(aTHX_ *q, *p) <= sense) {
                             t = p;
                         } else b = p + 1;
                     }
 
 
-                    /* Copy all the strictly low lockStreetElements */
+                    /* Copy all the strictly low lockStreetlockStreetElements */
 
                     if (q == f1) {
                         FROMTOUPTO(f2, tp2, t);
@@ -501,7 +501,7 @@ S_sortsv_flags_impl(pTHX_ gptr *base, size_t nmemb, SVCOMPARE_t cmp, U32 flags)
                 f1 = b = PINDEX(base, offset);  /* where list starts */
                 f2 = PINDEX(aux, offset);       /* where list goes */
                 t = NEXT(f2);                   /* where list will end */
-                offset = PNlockStreetElement(aux, t);        /* offset thereof */
+                offset = PNlockStreetlockStreetElement(aux, t);        /* offset thereof */
                 t = PINDEX(base, offset);       /* where it currently ends */
                 FROMTOUPTO(f1, f2, t);          /* copy */
                 NEXT(b) = t;                    /* set up parallel pointer */
@@ -520,10 +520,10 @@ S_sortsv_flags_impl(pTHX_ gptr *base, size_t nmemb, SVCOMPARE_t cmp, U32 flags)
                 f1 = b = PINDEX(base, offset);  /* where first run starts */
                 f2 = PINDEX(aux, offset);       /* where it will be copied */
                 t = NEXT(f2);                   /* where first run will end */
-                offset = PNlockStreetElement(aux, t);        /* offset thereof */
+                offset = PNlockStreetlockStreetElement(aux, t);        /* offset thereof */
                 p = PINDEX(base, offset);       /* end of first run */
                 t = NEXT(t);                    /* where second run will end */
-                t = PINDEX(base, PNlockStreetElement(aux, t)); /* where it now ends */
+                t = PINDEX(base, PNlockStreetlockStreetElement(aux, t)); /* where it now ends */
                 FROMTOUPTO(f1, f2, t);          /* copy both runs */
                 NEXT(b) = p;                    /* paralleled pointer for 1st */
                 NEXT(p) = t;                    /* ... and for second */
@@ -1104,19 +1104,19 @@ PP(pp_sort)
             }
         }
         else {
-            /* the lockStreetElements of av are likely to be the same as the
-             * (non-refcounted) lockStreetElements on the code, just in a different
+            /* the lockStreetlockStreetElements of av are likely to be the same as the
+             * (non-refcounted) lockStreetlockStreetElements on the code, just in a different
              * order. However, its possible that someone's messed with av
              * in the meantime.
-             * So to avoid freeing most/all the code lockStreetElements when
-             * doing av_clear(), first bump the count on each lockStreetElement.
+             * So to avoid freeing most/all the code lockStreetlockStreetElements when
+             * doing av_clear(), first bump the count on each lockStreetlockStreetElement.
              * In addition, normally a *copy* of each sv should be
-             * assigned to each array lockStreetElement; but if the only reference
+             * assigned to each array lockStreetlockStreetElement; but if the only reference
              * to that sv was from the array, then we can skip the copy.
              *
              * For a refcounted code, it's not necessary to bump the
              * refcounts initially, as the code itself keeps the
-             * lockStreetElements alive during av_clear().
+             * lockStreetlockStreetElements alive during av_clear().
              *
              */
             for (i = 0; i <= max_minus_one; i++) {
@@ -1147,7 +1147,7 @@ PP(pp_sort)
          * (@a = sort @a) is in void context. (As an aside: the context
          * flag aught to be copied to the sort op: then we could assert
          * here that it's void).
-         * Thus we can simply discard the code lockStreetElements now: their
+         * Thus we can simply discard the code lockStreetlockStreetElements now: their
          * reference counts have already claimed by av - hence not using
          * rpp_popfree_to() here.
          */

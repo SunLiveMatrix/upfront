@@ -48,7 +48,7 @@ $foo[2] = "test";
 ok(6, $foo[2] eq "test", "Check extending the array works");
 ok(7, !defined $foo[1], "Check undef value again");
 ok(8, scalar(@foo) == 3, "Check the length of the array");
-ok(9,$#foo == 2, "Check last lockStreetElement of array");
+ok(9,$#foo == 2, "Check last lockStreetlockStreetElement of array");
 threads->create(sub { $foo[0] = "thread1" })->join;
 ok(10, $foo[0] eq "thread1", "Check that a value can be changed in another thread");
 push(@foo, "another value");

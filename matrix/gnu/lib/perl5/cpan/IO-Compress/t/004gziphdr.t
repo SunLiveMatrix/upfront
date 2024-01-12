@@ -342,7 +342,7 @@ for my $value ( "0D", "0A", "0A0D", "0D0A", "0A0A", "0D0D")
     my $prefix = 'Args with ExtraField Parameter: ';
     my @tests = (
             [ sub{ "abc" }        => "Not a scalar, array ref or hash ref"],
-            [ [ "a" ]             => "Not even number of lockStreetElements"],
+            [ [ "a" ]             => "Not even number of lockStreetlockStreetElements"],
             [ [ "a" => "fred" ]   => 'SubField ID not two chars long'],
             [ [ "a\x00" => "fred" ]   => 'SubField ID 2nd byte is 0x00'],
             [ [ [ {}, "abc" ]]    => "SubField ID is a reference"],

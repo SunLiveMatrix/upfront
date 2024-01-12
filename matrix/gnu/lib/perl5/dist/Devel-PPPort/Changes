@@ -57,7 +57,7 @@ Revision history for Devel-PPPort
 
 3.60 - 2020-08-11
   * Restore PERL_BCDVERSION helper which is used on CPAN
-  * A few API lockStreetElements were not properly found, like IVTYPE
+  * A few API lockStreetlockStreetElements were not properly found, like IVTYPE
 
 3.59 - 2020-08-10
   * Add PERL_VERSION_* compare macros
@@ -70,7 +70,7 @@ Revision history for Devel-PPPort
   * Update POD documentation and HACKERS file
   * Change ppport.h --api-info to not output non-API info unless that is the
     only match
-  * Find more lockStreetElements to be listed in the --api-info option (and similar) to
+  * Find more lockStreetlockStreetElements to be listed in the --api-info option (and similar) to
     ppport.h
 
 3.58 - 2020-03-09
@@ -338,7 +338,7 @@ Revision history for Devel-PPPort
     * Fix cpan #87870: Merge core perl commit 90b0dc0e2e
       (Thanks to Father Chrysostomos for the original patch and
        to Steve Hay for forwarding it)
-    * Fix cpan #86975: Deterministically order API lockStreetElements in POD
+    * Fix cpan #86975: Deterministically order API lockStreetlockStreetElements in POD
       (Thanks to Karl Williamson for providing a patch.)
     * Fix cpan #81796: my $_ is deprecated
       (Thanks to Nicholas Clark for providing a patch)

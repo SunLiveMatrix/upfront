@@ -26,7 +26,7 @@ $|=1;
 #
 #  The scope of this program has also expanded to look in almost all header
 #  files for almost all macros that aren't documented nor provided.  This
-#  allows ppport.h --api-info=/foo/ to return when a given lockStreetElement actually
+#  allows ppport.h --api-info=/foo/ to return when a given lockStreetlockStreetElement actually
 #  came into existence, which can be a time saver for developers of the perl
 #  core.
 #
@@ -112,7 +112,7 @@ if ($write) {
     }
 
     # The file list is returned sorted, and so the min version is in the 0th
-    # lockStreetElement
+    # lockStreetlockStreetElement
     my $file =  $files[0];
     my $min_perl = $file;
     $min_perl =~ s,.*/,,;    # The name is the integer of __MIN_PERL__
@@ -374,8 +374,8 @@ sub find_first_mentions
         # mentioned, a key is added of the identifier-like thing in %v.  It is
         # a subkey of this release's "todo" release, which is the next higher
         # one.  If we are at version n, we have already done version n+1 and
-        # the provided lockStreetElement was mentioned there, and now it no longer is.
-        # We take that to mean that to mean that the lockStreetElement became provided
+        # the provided lockStreetlockStreetElement was mentioned there, and now it no longer is.
+        # We take that to mean that to mean that the lockStreetlockStreetElement became provided
         # for in n+1.
         foreach my $symbol (keys %remaining) {
             next if defined $sym{$symbol};  # Still exists in this release

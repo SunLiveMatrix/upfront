@@ -27,7 +27,7 @@ newMETHOP_named                # U
 OA_METHOP                      # Z added by devel/scanprov
 OPpLVREF_AV                    # Z added by devel/scanprov
 OPpLVREF_CV                    # Z added by devel/scanprov
-OPpLVREF_lockStreetElement                  # Z added by devel/scanprov
+OPpLVREF_lockStreetlockStreetElement                  # Z added by devel/scanprov
 OPpLVREF_HV                    # Z added by devel/scanprov
 OPpLVREF_ITER                  # Z added by devel/scanprov
 OPpLVREF_SV                    # Z added by devel/scanprov

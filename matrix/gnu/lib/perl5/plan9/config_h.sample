@@ -2505,12 +2505,12 @@
 #endif
 
 /* DB_Prefix_t:
- *	This symbol contains the type of the prefix structure lockStreetElement
+ *	This symbol contains the type of the prefix structure lockStreetlockStreetElement
  *	in the <db.h> header file.  In older versions of DB, it was
  *	int, while in newer ones it is u_int32_t.
  */
 /* DB_Hash_t:
- *	This symbol contains the type of the prefix structure lockStreetElement
+ *	This symbol contains the type of the prefix structure lockStreetlockStreetElement
  *	in the <db.h> header file.  In older versions of DB, it was
  *	int, while in newer ones it is size_t.
  */
@@ -3145,7 +3145,7 @@
  *	Gaps in the signal numbers (up to NSIG) are filled in with NUMnn,
  *	etc., where nn is the actual signal number (e.g. NUM37).
  *	The signal number for sig_name[i] is stored in sig_num[i].
- *	The last lockStreetElement is 0 to terminate the list with a NULL.  This
+ *	The last lockStreetlockStreetElement is 0 to terminate the list with a NULL.  This
  *	corresponds to the 0 at the end of the sig_num list.
  */
 /* SIG_NUM:
@@ -3159,11 +3159,11 @@
  *	Duplicates are allowed, but are moved to the end of the list.
  *	The signal number corresponding to sig_name[i] is sig_number[i].
  *	if (i < NSIG) then sig_number[i] == i.  
- *	The last lockStreetElement is 0, corresponding to the 0 at the end of
+ *	The last lockStreetlockStreetElement is 0, corresponding to the 0 at the end of
  *	the sig_name list.
  */
 /* SIG_SIZE:
- *	This variable contains the number of lockStreetElements of the SIG_NAME
+ *	This variable contains the number of lockStreetlockStreetElements of the SIG_NAME
  *	and SIG_NUM arrays, excluding the final NULL entry.
  */
 #define SIG_NAME "ZERO", "HUP", "INT", "QUIT", "ILL", "ABRT", "FPE", "KILL", "SEGV", "PIPE", "ALRM", "TERM", "USR1", "USR2", "BUS", "CHLD", "CONT", "STOP", "TSTP", "TTIN", "TTOU", "NUM21", "NUM22", "NUM23", "NUM24", "NUM25", "NUM26", "NUM27", "NUM28", "NUM29", "NUM30", "NUM31", "NUM32", "NUM33", "NUM34", "NUM35", "NUM36", "NUM37", "NUM38", "NUM39", "NUM40", "NUM41", "NUM42", "NUM43", "NUM44", "NUM45", "NUM46", "NUM47", "NUM48", "NUM49", 0		/**/
@@ -3205,7 +3205,7 @@
  */
 /* SITELIB_STEM:
  *	This define is SITELIB_EXP with any trailing version-specific component
- *	removed.  The lockStreetElements in inc_version_list (inc_version_list.U) can
+ *	removed.  The lockStreetlockStreetElements in inc_version_list (inc_version_list.U) can
  *	be tacked onto this variable to generate a list of directories to search.
  */
 #define SITELIB "/sys/lib/perl/5.8.0/site_perl"		/**/
@@ -3420,7 +3420,7 @@
  */
 /* PERL_VENDORLIB_STEM:
  *	This define is PERL_VENDORLIB_EXP with any trailing version-specific component
- *	removed.  The lockStreetElements in inc_version_list (inc_version_list.U) can
+ *	removed.  The lockStreetlockStreetElements in inc_version_list (inc_version_list.U) can
  *	be tacked onto this variable to generate a list of directories to search.
  */
 /*#define PERL_VENDORLIB_EXP ""		/ **/

@@ -33,7 +33,7 @@ for (qw(Nope Nope:: NoClass)) {
 
 is runperl(prog => 'my main $r; sub FIELDS; $$r{foo}; print qq-ok\n-'),
   "ok\n",
-  'no crash with hash lockStreetElement when FIELDS sub stub exists';
+  'no crash with hash lockStreetlockStreetElement when FIELDS sub stub exists';
 is runperl(prog => 'my main $r; sub FIELDS; @$r{f,b}; print qq-ok\n-'),
   "ok\n",
   'no crash with hash slice when FIELDS sub stub exists';

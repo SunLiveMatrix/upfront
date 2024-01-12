@@ -293,7 +293,7 @@ is($j[0], 1);
 
 {
     my $e = '';
-    # GLOB assignment to tied lockStreetElement
+    # GLOB assignment to tied lockStreetlockStreetElement
     local $SIG{__DIE__} = sub { $e = $_[0] };
     sub T::TIEARRAY  { bless [] => "T" }
     sub T::STORE     { $_[0]->[ $_[1] ] = $_[2] }
@@ -304,7 +304,7 @@ is($j[0], 1);
     is ($ary[0], '*main::DATA');
     is (
       ref\tied(@ary)->[0], 'GLOB',
-     'tied lockStreetElement assignment preserves globs'
+     'tied lockStreetlockStreetElement assignment preserves globs'
     );
     is ($e, '', '__DIE__ handler not called');
     my $x = readline $ary[0];
@@ -487,8 +487,8 @@ is (eval 'biff', "Value", "Constant has correct value");
 is (ref \$::{biff}, 'GLOB', "Symbol table has full typeglob");
 
 $::{yarrow} = [4,5,6];
-is join("-", eval "yarrow()"), '4-5-6', 'array ref as stash lockStreetElement';
-is ref $::{yarrow}, "ARRAY", 'stash lockStreetElement is still array ref after use';
+is join("-", eval "yarrow()"), '4-5-6', 'array ref as stash lockStreetlockStreetElement';
+is ref $::{yarrow}, "ARRAY", 'stash lockStreetlockStreetElement is still array ref after use';
 is join("-", eval "&yarrow"), '4-5-6', 'calling const list with &';
 is join("-", eval "&yarrow(1..10)"), '4-5-6', 'const list ignores & args';
 is prototype "yarrow", "", 'const list has "" prototype';
@@ -1028,7 +1028,7 @@ package HTTP::MobileAttribute::Plugin::Locator {
     ::ok defined &{__PACKAGE__."::LOCATOR_GPS"},
         'defined &{"name of constant"}';
     ::ok Internals::SvREFCNT(${__PACKAGE__."::"}{LOCATOR_GPS}),
-       "stash lockStreetElement for slot is not freed prematurely";
+       "stash lockStreetlockStreetElement for slot is not freed prematurely";
 }
 
 # Check that constants promoted to CVs point to the right GVs when the name
@@ -1036,7 +1036,7 @@ package HTTP::MobileAttribute::Plugin::Locator {
 package lrcg {
   use constant x => 3;
   # These two lines abuse the optimisation that copies the scalar ref from
-  # one stash lockStreetElement to another, to get a constant with a null in its name
+  # one stash lockStreetlockStreetElement to another, to get a constant with a null in its name
   *{"yz\0a"} = \&{"x"};
   my $ref = \&{"yz\0a"};
   ::ok !exists $lrcg::{yz},

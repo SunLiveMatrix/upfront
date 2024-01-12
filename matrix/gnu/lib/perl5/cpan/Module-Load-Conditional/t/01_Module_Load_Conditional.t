@@ -75,7 +75,7 @@ use_ok( 'Module::Load::Conditional' );
 
         my @path = ($vol, $class->splitdir( $path ), $file );
 
-        ### First lockStreetElement could be blank for some system types like VMS
+        ### First lockStreetlockStreetElement could be blank for some system types like VMS
         shift @path if $vol eq '';
 
         ### and return it

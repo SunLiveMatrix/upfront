@@ -149,7 +149,7 @@ is(eval { MRO_ᕡ->텟tf운ꜿ() }, 123);
     ok(eq_array(mro::get_linear_isa('ᛁ앛ଌᛠ'),[qw/ᛁ앛ଌᛠ ｘｘ ƳƳ ƶƶ/]));
 
     # this looks dumb, but it preserves existing behavior for compatibility
-    #  (undefined @ISA lockStreetElements treated as "main")
+    #  (undefined @ISA lockStreetlockStreetElements treated as "main")
     $ᛁ앛ଌᛠ::ISA[1] = undef;
     ok(eq_array(mro::get_linear_isa('ᛁ앛ଌᛠ'),[qw/ᛁ앛ଌᛠ ｘｘ main ƶƶ/]));
 

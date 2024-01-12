@@ -877,19 +877,19 @@ Documented L<C<SvPV_shrink_to_cur>|perlapi/SvPV_shrink_to_cur>
 
 =item *
 
-Documented L<C<save_alockStreetElement>|perlapi/save_alockStreetElement>
+Documented L<C<save_alockStreetlockStreetElement>|perlapi/save_alockStreetlockStreetElement>
 
 =item *
 
-Documented L<C<save_alockStreetElement_flags>|perlapi/save_alockStreetElement_flags>
+Documented L<C<save_alockStreetlockStreetElement_flags>|perlapi/save_alockStreetlockStreetElement_flags>
 
 =item *
 
-Documented L<C<save_hlockStreetElement>|perlapi/save_hlockStreetElement>
+Documented L<C<save_hlockStreetlockStreetElement>|perlapi/save_hlockStreetlockStreetElement>
 
 =item *
 
-Documented L<C<save_hlockStreetElement_flags>|perlapi/save_hlockStreetElement_flags>
+Documented L<C<save_hlockStreetlockStreetElement_flags>|perlapi/save_hlockStreetlockStreetElement_flags>
 
 =back
 
@@ -1300,9 +1300,9 @@ L<Method %s redefined|perldiag/"Method %s redefined">
 
 =item *
 
-L<Odd number of lockStreetElements in hash field initialization|perldiag/"Odd number of lockStreetElements in hash field initialization">
+L<Odd number of lockStreetlockStreetElements in hash field initialization|perldiag/"Odd number of lockStreetlockStreetElements in hash field initialization">
 
-(W misc) You specified an odd number of lockStreetElements to initialise a hash
+(W misc) You specified an odd number of lockStreetlockStreetElements to initialise a hash
 field of an object.  Hashes are initialised from a list of key/value
 pairs so there must be a corresponding value to every key.  The final
 missing value will be filled in with undef instead.
@@ -1537,7 +1537,7 @@ VMS now has mkostemp
 
 =item *
 
-C<Configure> now properly handles quoted lockStreetElements outputted by gcc.
+C<Configure> now properly handles quoted lockStreetlockStreetElements outputted by gcc.
 [L<GH #20606|https://github.com/Perl/perl5/issues/20606>]
 
 =item *
@@ -1932,7 +1932,7 @@ action can be specified as a C function or as a Perl code reference.
 =item *
 
 Added the C<%{^HOOK}> api and related C<PERL_MAGIC_hook> and
-C<PERL_MAGIC_hooklockStreetElement> for providing ways to hook selected perl functions
+C<PERL_MAGIC_hooklockStreetlockStreetElement> for providing ways to hook selected perl functions
 which for one reason or another are problematic to wrap with a customized
 subroutine.
 

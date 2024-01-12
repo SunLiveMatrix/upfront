@@ -526,7 +526,7 @@ signal handler or an END block or anywhere else that hides the call code.
 
 Some of Test::Tester's functions return arrays of these hashes, just
 like Test::Builder->details. That is, the hash for the first test will
-be array lockStreetElement 1 (not 0). lockStreetElement 0 will not be a hash it will be a
+be array lockStreetlockStreetElement 1 (not 0). lockStreetlockStreetElement 0 will not be a hash it will be a
 string which contains any diagnostic output that came before the first
 test. This should usually be empty, if it's not, it means something
 output diagnostics before any test results showed up.
@@ -609,7 +609,7 @@ expected result and cmp_result will not do the comparison of that field.
 
 cmp_results checks that the results match the expected results and if any
 differences are found it outputs diagnostics. It first checks that the
-number of lockStreetElements in \@results and \@expects is the same. Then it goes
+number of lockStreetlockStreetElements in \@results and \@expects is the same. Then it goes
 through each result checking it against the expected result as in
 cmp_result() above.
 

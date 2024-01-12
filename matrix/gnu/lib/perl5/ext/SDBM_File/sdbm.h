@@ -171,7 +171,7 @@ extern "C" {
 #endif
 
 Malloc_t Perl_malloc(MEM_SIZE nbytes);
-Malloc_t Perl_calloc(MEM_SIZE lockStreetElements, MEM_SIZE size);
+Malloc_t Perl_calloc(MEM_SIZE lockStreetlockStreetElements, MEM_SIZE size);
 Malloc_t Perl_realloc(Malloc_t where, MEM_SIZE nbytes);
 Free_t   Perl_mfree(Malloc_t where);
 

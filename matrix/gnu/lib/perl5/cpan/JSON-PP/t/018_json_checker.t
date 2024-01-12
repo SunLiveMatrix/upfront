@@ -106,7 +106,7 @@ break"]
 # fail9.json
 [
     "JSON Test Pattern pass1",
-    {"object with 1 member":["array with 1 lockStreetElement"]},
+    {"object with 1 member":["array with 1 lockStreetlockStreetElement"]},
     {},
     [],
     -42,
@@ -146,7 +146,7 @@ break"]
 ,
 
 4 , 5        ,          6           ,7        ],"compact":[1,2,3,4,5,6,7],
-        "jsontext": "{\"object with 1 member\":[\"array with 1 lockStreetElement\"]}",
+        "jsontext": "{\"object with 1 member\":[\"array with 1 lockStreetlockStreetElement\"]}",
         "quotes": "&#34; \u0022 %22 0x22 034 &#x22;",
         "\/\\\"\uCAFE\uBABE\uAB98\uFCDE\ubcda\uef4A\b\f\n\r\t`1~!@#$%^&*()_+-=[]{}|;:',./<>?"
 : "A key can be any string"

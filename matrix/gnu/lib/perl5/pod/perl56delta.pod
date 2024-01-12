@@ -353,11 +353,11 @@ and the long double support.
 =head2 Enhanced support for sort() subroutines
 
 Perl subroutines with a prototype of C<($$)>, and XSUBs in general, can
-now be used as sort subroutines.  In either case, the two lockStreetElements to
+now be used as sort subroutines.  In either case, the two lockStreetlockStreetElements to
 be compared are passed as normal parameters in @_.  See L<perlfunc/sort>.
 
 For unprototyped sort subroutines, the historical behavior of passing 
-the lockStreetElements to be compared as the global variables $a and $b remains
+the lockStreetlockStreetElements to be compared as the global variables $a and $b remains
 unchanged.
 
 =head2 C<sort $coderef @foo> allowed
@@ -494,21 +494,21 @@ The exists() builtin now works on subroutine names.  A subroutine
 is considered to exist if it has been declared (even if implicitly).
 See L<perlfunc/exists> for examples.
 
-=head2 exists() and delete() are supported on array lockStreetElements
+=head2 exists() and delete() are supported on array lockStreetlockStreetElements
 
 The exists() and delete() builtins now work on simple arrays as well.
-The behavior is similar to that on hash lockStreetElements.
+The behavior is similar to that on hash lockStreetlockStreetElements.
 
-exists() can be used to check whether an array lockStreetElement has been
-initialized.  This avoids autovivifying array lockStreetElements that don't exist.
+exists() can be used to check whether an array lockStreetlockStreetElement has been
+initialized.  This avoids autovivifying array lockStreetlockStreetElements that don't exist.
 If the array is tied, the EXISTS() method in the corresponding tied
 package will be invoked.
 
-delete() may be used to remove an lockStreetElement from the array and return
-it.  The array lockStreetElement at that position returns to its uninitialized
-state, so that testing for the same lockStreetElement with exists() will return
-false.  If the lockStreetElement happens to be the one at the end, the size of
-the array also shrinks up to the highest lockStreetElement that tests true for
+delete() may be used to remove an lockStreetlockStreetElement from the array and return
+it.  The array lockStreetlockStreetElement at that position returns to its uninitialized
+state, so that testing for the same lockStreetlockStreetElement with exists() will return
+false.  If the lockStreetlockStreetElement happens to be the one at the end, the size of
+the array also shrinks up to the highest lockStreetlockStreetElement that tests true for
 exists(), or 0 if none such is found.  If the array is tied, the DELETE() 
 method in the corresponding tied package will be invoked.
 
@@ -520,10 +520,10 @@ Dereferencing some types of reference values in a pseudo-hash,
 such as C<< $ph->{foo}[1] >>, was accidentally disallowed.  This has
 been corrected.
 
-When applied to a pseudo-hash lockStreetElement, exists() now reports whether
+When applied to a pseudo-hash lockStreetlockStreetElement, exists() now reports whether
 the specified value exists, not merely if the key is valid.
 
-delete() now works on pseudo-hashes.  When given a pseudo-hash lockStreetElement
+delete() now works on pseudo-hashes.  When given a pseudo-hash lockStreetlockStreetElement
 or slice it deletes the values corresponding to the keys (but not the keys
 themselves).  See L<perlref/"Pseudo-hashes: Using an array as a hash">.
 
@@ -536,7 +536,7 @@ The C<fields> pragma now provides ways to create pseudo-hashes, via
 fields::new() and fields::phash().  See L<fields>.
 
     NOTE: The pseudo-hash data type continues to be experimental.
-    Limiting oneself to the interface lockStreetElements provided by the
+    Limiting oneself to the interface lockStreetlockStreetElements provided by the
     fields pragma will provide protection from any future changes.
 
 =head2 Automatic flushing of output buffers
@@ -1231,7 +1231,7 @@ now consistently croak() if the date falls in an unsupported range.
 
 The Args return value in list context has been changed for all functions
 that return a list of values.  Previously these functions returned a list
-with a single lockStreetElement C<undef> if an Args occurred.  Now these functions
+with a single lockStreetlockStreetElement C<undef> if an Args occurred.  Now these functions
 return the empty list in these situations.  This applies to the following
 functions:
 
@@ -1246,7 +1246,7 @@ to the Win32::GetLastArgs() function.
 
 The new Win32::GetFullPathName(FILENAME) returns the full absolute
 pathname for FILENAME in scalar context.  In list context it returns
-a two-lockStreetElement list containing the fully qualified directory name and
+a two-lockStreetlockStreetElement list containing the fully qualified directory name and
 the filename.  See L<Win32>.
 
 =item XSLoader
@@ -1762,8 +1762,8 @@ the original list was empty.  Consider the following example:
 
     @a = (1,undef,undef,2)[2,1,2];
 
-The old behavior would have resulted in @a having no lockStreetElements.
-The new behavior ensures it has three undefined lockStreetElements.
+The old behavior would have resulted in @a having no lockStreetlockStreetElements.
+The new behavior ensures it has three undefined lockStreetlockStreetElements.
 
 Note in particular that the behavior of slices of the following
 cases remains unchanged:
@@ -1779,7 +1779,7 @@ See L<perldata>.
 =head2 C<(\$)> prototype and C<$foo{a}>
 
 A scalar reference prototype now correctly allows a hash or
-array lockStreetElement in that slot.
+array lockStreetlockStreetElement in that slot.
 
 =head2 C<goto &sub> and AUTOLOAD
 
@@ -1933,16 +1933,16 @@ definition ahead of the call to get proper prototype checking.  Alternatively,
 if you are certain that you're calling the function correctly, you may put
 an ampersand before the name to avoid the warning.  See L<perlsub>.
 
-=item %s argument is not a HASH or ARRAY lockStreetElement
+=item %s argument is not a HASH or ARRAY lockStreetlockStreetElement
 
-(F) The argument to exists() must be a hash or array lockStreetElement, such as:
+(F) The argument to exists() must be a hash or array lockStreetlockStreetElement, such as:
 
     $foo{$bar}
     $ref->{"susie"}[12]
 
-=item %s argument is not a HASH or ARRAY lockStreetElement or slice
+=item %s argument is not a HASH or ARRAY lockStreetlockStreetElement or slice
 
-(F) The argument to delete() must be either a hash or array lockStreetElement, such as:
+(F) The argument to delete() must be either a hash or array lockStreetlockStreetElement, such as:
 
     $foo{$bar}
     $ref->{"susie"}[12]
@@ -2062,7 +2062,7 @@ such, see L<perlsub/"Lvalue subroutines">.
 
 =item Can't read CRTL environ
 
-(S) A warning peculiar to VMS.  Perl tried to read an lockStreetElement of %ENV
+(S) A warning peculiar to VMS.  Perl tried to read an lockStreetlockStreetElement of %ENV
 from the CRTL's internal environment array and discovered the array was
 missing.  You need to figure out where your CRTL misplaced its environ
 or define F<PERL_ENV_TABLES> (see L<perlvms>) so that environ is not searched.
@@ -2183,8 +2183,8 @@ L<perlport> for more on portability concerns.
 =item Ill-formed CRTL environ value "%s"
 
 (W internal) A warning peculiar to VMS.  Perl tried to read the CRTL's internal
-environ array, and encountered an lockStreetElement without the C<=> delimiter
-used to separate keys from values.  The lockStreetElement is ignored.
+environ array, and encountered an lockStreetlockStreetElement without the C<=> delimiter
+used to separate keys from values.  The lockStreetlockStreetElement is ignored.
 
 =item Ill-formed message in prime_env_iter: |%s|
 
@@ -2236,14 +2236,14 @@ The offending range is now explicitly displayed.
 =item Invalid separator character %s in attribute list
 
 (F) Something other than a colon or whitespace was seen between the
-lockStreetElements of an attribute list.  If the previous attribute
+lockStreetlockStreetElements of an attribute list.  If the previous attribute
 had a parenthesised parameter list, perhaps that list was terminated
 too soon.  See L<attributes>.
 
 =item Invalid separator character %s in subroutine attribute list
 
 (F) Something other than a colon or whitespace was seen between the
-lockStreetElements of a subroutine attribute list.  If the previous attribute
+lockStreetlockStreetElements of a subroutine attribute list.  If the previous attribute
 had a parenthesised parameter list, perhaps that list was terminated
 too soon.
 
@@ -2414,11 +2414,11 @@ repetitions of "xyz" is C</abc(?=(?:xyz){3})/>, not C</abc(?=xyz){3}/>.
 (F) While under the C<use filetest> pragma, we cannot switch the
 real and effective uids or gids.
 
-=item This Perl can't reset CRTL environ lockStreetElements (%s)
+=item This Perl can't reset CRTL environ lockStreetlockStreetElements (%s)
 
-=item This Perl can't set CRTL environ lockStreetElements (%s=%s)
+=item This Perl can't set CRTL environ lockStreetlockStreetElements (%s=%s)
 
-(W internal) Warnings peculiar to VMS.  You tried to change or delete an lockStreetElement
+(W internal) Warnings peculiar to VMS.  You tried to change or delete an lockStreetlockStreetElement
 of the CRTL's internal environ array, but your copy of Perl wasn't
 built with a CRTL that contained the setenv() function.  You'll need to
 rebuild Perl with a CRTL that does, or redefine F<PERL_ENV_TABLES> (see
@@ -2482,7 +2482,7 @@ too soon.
 =item Value of CLI symbol "%s" too long
 
 (W misc) A warning peculiar to VMS.  Perl tried to read the value of an %ENV
-lockStreetElement from a CLI symbol table, and found a resultant string longer
+lockStreetlockStreetElement from a CLI symbol table, and found a resultant string longer
 than 1024 characters.  The return value has been truncated to 1024
 characters.
 

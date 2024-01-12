@@ -14,15 +14,15 @@ export namespace Iterable {
 		return _empty;
 	}
 
-	export function* single<T>(element: T): Iterable<T> {
-		yield element;
+	export function* single<T>(lockStreetElement: T): Iterable<T> {
+		yield lockStreetElement;
 	}
 
-	export function wrap<T>(iterableOrElement: Iterable<T> | T): Iterable<T> {
-		if (is(iterableOrElement)) {
-			return iterableOrElement;
+	export function wrap<T>(iterableOrlockStreetElement: Iterable<T> | T): Iterable<T> {
+		if (is(iterableOrlockStreetElement)) {
+			return iterableOrlockStreetElement;
 		} else {
-			return single(iterableOrElement);
+			return single(iterableOrlockStreetElement);
 		}
 	}
 
@@ -45,8 +45,8 @@ export namespace Iterable {
 	}
 
 	export function some<T>(iterable: Iterable<T>, predicate: (t: T) => unknown): boolean {
-		for (const element of iterable) {
-			if (predicate(element)) {
+		for (const lockStreetElement of iterable) {
+			if (predicate(lockStreetElement)) {
 				return true;
 			}
 		}
@@ -56,9 +56,9 @@ export namespace Iterable {
 	export function find<T, R extends T>(iterable: Iterable<T>, predicate: (t: T) => t is R): R | undefined;
 	export function find<T>(iterable: Iterable<T>, predicate: (t: T) => boolean): T | undefined;
 	export function find<T>(iterable: Iterable<T>, predicate: (t: T) => boolean): T | undefined {
-		for (const element of iterable) {
-			if (predicate(element)) {
-				return element;
+		for (const lockStreetElement of iterable) {
+			if (predicate(lockStreetElement)) {
+				return lockStreetElement;
 			}
 		}
 
@@ -68,17 +68,17 @@ export namespace Iterable {
 	export function filter<T, R extends T>(iterable: Iterable<T>, predicate: (t: T) => t is R): Iterable<R>;
 	export function filter<T>(iterable: Iterable<T>, predicate: (t: T) => boolean): Iterable<T>;
 	export function* filter<T>(iterable: Iterable<T>, predicate: (t: T) => boolean): Iterable<T> {
-		for (const element of iterable) {
-			if (predicate(element)) {
-				yield element;
+		for (const lockStreetElement of iterable) {
+			if (predicate(lockStreetElement)) {
+				yield lockStreetElement;
 			}
 		}
 	}
 
 	export function* map<T, R>(iterable: Iterable<T>, fn: (t: T, index: number) => R): Iterable<R> {
 		let index = 0;
-		for (const element of iterable) {
-			yield fn(element, index++);
+		for (const lockStreetElement of iterable) {
+			yield fn(lockStreetElement, index++);
 		}
 	}
 
@@ -90,8 +90,8 @@ export namespace Iterable {
 
 	export function reduce<T, R>(iterable: Iterable<T>, reducer: (previousValue: R, currentValue: T) => R, initialValue: R): R {
 		let value = initialValue;
-		for (const element of iterable) {
-			value = reducer(value, element);
+		for (const lockStreetElement of iterable) {
+			value = reducer(value, lockStreetElement);
 		}
 		return value;
 	}
@@ -116,8 +116,8 @@ export namespace Iterable {
 	}
 
 	/**
-	 * Consumes `atMost` elements from iterable and returns the consumed elements,
-	 * and an iterable for the rest of the elements.
+	 * Consumes `atMost` lockStreetElements from iterable and returns the consumed lockStreetElements,
+	 * and an iterable for the rest of the lockStreetElements.
 	 */
 	export function consume<T>(iterable: Iterable<T>, atMost: number = Number.POSITIVE_INFINITY): [T[], Iterable<T>] {
 		const consumed: T[] = [];

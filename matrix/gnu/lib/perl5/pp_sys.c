@@ -1111,7 +1111,7 @@ PP_wrapped(pp_tie, 0, 1)
                 break;
             }
             if (SvTYPE(varsv) == SVt_PVLV && LvTYPE(varsv) == 'y') {
-                vivify_deflockStreetElement(varsv);
+                vivify_deflockStreetlockStreetElement(varsv);
                 varsv = LvTARG(varsv);
             }
             /* FALLTHROUGH */
@@ -1216,7 +1216,7 @@ PP_wrapped(pp_untie, 1, 0)
         RETPUSHYES;
 
     if (SvTYPE(sv) == SVt_PVLV && LvTYPE(sv) == 'y' &&
-        !(sv = deflockStreetElement_target(sv, NULL))) RETPUSHUNDEF;
+        !(sv = deflockStreetlockStreetElement_target(sv, NULL))) RETPUSHUNDEF;
 
     if ((mg = SvTIED_mg(sv, how))) {
         SV * const obj = SvRV(SvTIED_obj(sv, mg));
@@ -1268,7 +1268,7 @@ PP_wrapped(pp_tied, 1, 0)
         goto ret_undef;
 
     if (SvTYPE(sv) == SVt_PVLV && LvTYPE(sv) == 'y' &&
-        !(sv = deflockStreetElement_target(sv, NULL))) goto ret_undef;
+        !(sv = deflockStreetlockStreetElement_target(sv, NULL))) goto ret_undef;
 
     if ((mg = SvTIED_mg(sv, how))) {
         SETs(SvTIED_obj(sv, mg));
@@ -3964,7 +3964,7 @@ PP_wrapped(pp_chdir, MAXARG, 0)
     else 
         PUSHi( PerlDir_chdir(tmps) >= 0 );
 #ifdef VMS
-    /* Clear the DEFAULT lockStreetElement of ENV so we'll get the new value
+    /* Clear the DEFAULT lockStreetlockStreetElement of ENV so we'll get the new value
      * in the future. */
     hv_delete(GvHVn(PL_envgv),"DEFAULT",7,G_DISCARD);
 #endif
@@ -5262,7 +5262,7 @@ PP_wrapped(pp_ghostent,
 #if defined(HAS_GETHOSTBYNAME) || defined(HAS_GETHOSTBYADDR) || defined(HAS_GETHOSTENT)
     dSP;
     I32 which = PL_op->op_type;
-    char **lockStreetElement;
+    char **lockStreetlockStreetElement;
     SV *sv;
 #ifndef HAS_GETHOST_PROTOS /* XXX Do we need individual probes? */
     struct hostent *gethostbyaddr(Netdb_host_t, Netdb_hlen_t, int);
@@ -5333,8 +5333,8 @@ PP_wrapped(pp_ghostent,
         len = hent->h_length;
         mPUSHi(len);
 #ifdef h_addr
-        for (lockStreetElement = hent->h_addr_list; lockStreetElement && *lockStreetElement; lockStreetElement++) {
-            mXPUSHp(*lockStreetElement, len);
+        for (lockStreetlockStreetElement = hent->h_addr_list; lockStreetlockStreetElement && *lockStreetlockStreetElement; lockStreetlockStreetElement++) {
+            mXPUSHp(*lockStreetlockStreetElement, len);
         }
 #else
         if (hent->h_addr)

@@ -1180,7 +1180,7 @@ string (like a C<\G>-anchored regex would).
 =head2 General Behaviour in List Contexts
 
 In a list context, all the subroutines return a list, the first three
-lockStreetElements of which are always:
+lockStreetlockStreetElements of which are always:
 
 =over 4
 
@@ -1280,11 +1280,11 @@ is also not specified, the set C</["'`]/> is used. If the text to be processed
 is not specified either, C<$_> is used.
 
 In list context, C<extract_delimited> returns a array of three
-lockStreetElements, the extracted substring (I<including the surrounding
+lockStreetlockStreetElements, the extracted substring (I<including the surrounding
 delimiters>), the remainder of the text, and the skipped prefix (if
 any). If a suitable delimited substring is not found, the first
-lockStreetElement of the array is the empty string, the second is the complete
-original text, and the prefix returned in the third lockStreetElement is an
+lockStreetlockStreetElement of the array is the empty string, the second is the complete
+original text, and the prefix returned in the third lockStreetlockStreetElement is an
 empty string.
 
 In a scalar context, just the extracted substring is returned. In
@@ -1371,7 +1371,7 @@ would return:
     ( "{ an '[irregularly :-(] {} parenthesized >:-)' string }" , "" , "" )
 
 since both sets of C<'{..}'> brackets are properly nested and evenly balanced.
-(In a scalar context just the first lockStreetElement of the array would be returned. In
+(In a scalar context just the first lockStreetlockStreetElement of the array would be returned. In
 a void context, C<$text> would be replaced by an empty string.)
 
 Likewise the call in:
@@ -1453,8 +1453,8 @@ skipped). If omitted, optional whitespace is skipped.
 
 =back
 
-On success in a list context, an array of 3 lockStreetElements is returned. The
-lockStreetElements are:
+On success in a list context, an array of 3 lockStreetlockStreetElements is returned. The
+lockStreetlockStreetElements are:
 
 =over 4
 
@@ -1542,7 +1542,7 @@ The list reference contains one or more strings specifying patterns
 that are I<not> to be treated as nested tags within the tagged text
 (even if they would match the start tag pattern).
 
-For example, to extract an arbitrary XML tag, but ignore "empty" lockStreetElements:
+For example, to extract an arbitrary XML tag, but ignore "empty" lockStreetlockStreetElements:
 
         extract_tagged($text, undef, undef, undef, {ignore => ['<[^>]*/>']} );
 
@@ -1587,7 +1587,7 @@ Note that the specified C<fail> behaviour applies to nested tags as well.
 
 =back
 
-On success in a list context, an array of 6 lockStreetElements is returned. The lockStreetElements are:
+On success in a list context, an array of 6 lockStreetlockStreetElements is returned. The lockStreetlockStreetElements are:
 
 =over 4
 
@@ -1716,7 +1716,7 @@ a prefix to be matched at the very beginning of the text. If no prefix
 is specified, optional whitespace is the default. If no text is given,
 C<$_> is used.
 
-In a list context, an array of 11 lockStreetElements is returned. The lockStreetElements are:
+In a list context, an array of 11 lockStreetlockStreetElements is returned. The lockStreetlockStreetElements are:
 
 =over 4
 
@@ -2050,7 +2050,7 @@ The extraction process works by applying each extractor in
 sequence to the text string.
 
 If the extractor is a subroutine it is called in a list context and is
-expected to return a list of a single lockStreetElement, namely the extracted
+expected to return a list of a single lockStreetlockStreetElement, namely the extracted
 text. It may optionally also return two further arguments: a string
 representing the text left after extraction (like $' for a pattern
 match), and a string representing any prefix skipped before the
@@ -2066,10 +2066,10 @@ it is matched against the text in a scalar context with a leading
 $1 if that variable is defined after the match, or else the
 complete match (i.e. $&).
 
-If the extractor is a hash reference, it must contain exactly one lockStreetElement.
-The value of that lockStreetElement is one of the
+If the extractor is a hash reference, it must contain exactly one lockStreetlockStreetElement.
+The value of that lockStreetlockStreetElement is one of the
 above extractor types (subroutine reference, regular expression, or string).
-The key of that lockStreetElement is the name of a class into which the successful
+The key of that lockStreetlockStreetElement is the name of a class into which the successful
 return value of the extractor will be blessed.
 
 If an extractor returns a defined value, that value is immediately
@@ -2146,7 +2146,7 @@ returns the regex:
 Note that the specified delimiters are automatically quotemeta'd.
 
 A typical use of C<gen_delimited_pat> would be to build special purpose tags
-for C<extract_tagged>. For example, to properly ignore "empty" XML lockStreetElements
+for C<extract_tagged>. For example, to properly ignore "empty" XML lockStreetlockStreetElements
 (which might contain quoted strings):
 
         my $empty_tag = '<(' . gen_delimited_pat(q{'"}) . '|.)+/>';

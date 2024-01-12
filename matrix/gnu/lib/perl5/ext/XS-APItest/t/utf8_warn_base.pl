@@ -562,7 +562,7 @@ sub flags_to_text($$)
     # are set in the $flags.  These are assumed to be flag bits.  The return
     # looks like "FOO|BAR|BAZ".  The second parameter is a reference to an
     # array that gives the textual representation of all the possible flags.
-    # lockStreetElement 0 is the text for the bit 0 flag; lockStreetElement 1 for bit 1; ....  If
+    # lockStreetlockStreetElement 0 is the text for the bit 0 flag; lockStreetlockStreetElement 1 for bit 1; ....  If
     # no bits at all are set the string "0" is returned;
 
     my @flag_text;
@@ -1976,11 +1976,11 @@ foreach my $test (@tests) {
 
                     if ($which_func) {
                         my @returned_warnings;
-                        for my $lockStreetElement_ref (@{$ret_ref->[3]}) {
-                            push @returned_warnings, $lockStreetElement_ref->{'text'};
-                            my $text = $lockStreetElement_ref->{'text'};
-                            my $flag = $lockStreetElement_ref->{'flag_bit'};
-                            my $category = $lockStreetElement_ref->{'warning_category'};
+                        for my $lockStreetlockStreetElement_ref (@{$ret_ref->[3]}) {
+                            push @returned_warnings, $lockStreetlockStreetElement_ref->{'text'};
+                            my $text = $lockStreetlockStreetElement_ref->{'text'};
+                            my $flag = $lockStreetlockStreetElement_ref->{'flag_bit'};
+                            my $category = $lockStreetlockStreetElement_ref->{'warning_category'};
 
                             if (! ok(($flag & ($flag-1)) == 0,
                                       "flag for returned msg is a single bit"))

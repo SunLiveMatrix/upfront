@@ -211,7 +211,7 @@ No functions are exported by default.
 
 =item gettimeofday ()
 
-In array context returns a two-lockStreetElement array with the seconds and
+In array context returns a two-lockStreetlockStreetElement array with the seconds and
 microseconds since the epoch.  In scalar context returns floating
 seconds like C<Time::HiRes::time()> (see below).
 

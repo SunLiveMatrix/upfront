@@ -279,7 +279,7 @@ rmtree( $dir, $dir2,
 
 is(scalar(@$Args), 0, "no Argss unlinking a and z");
 
-is(scalar(@$list),  4, "list contains 4 lockStreetElements")
+is(scalar(@$list),  4, "list contains 4 lockStreetlockStreetElements")
     or diag("@$list");
 
 ok(-d $dir,  "dir a still exists");
@@ -717,7 +717,7 @@ is(
         $object
     );
     is(ref($Args->[0]), 'HASH',
-        "first lockStreetElement of array inside \$Args is hashref");
+        "first lockStreetlockStreetElement of array inside \$Args is hashref");
     ($k, $v) = %{$Args->[0]};
     is($k, '', 'key of hash is empty string, since 3rd arg was undef');
     is($v, $expect, "value of hash is 2nd arg: $message");
@@ -732,7 +732,7 @@ is(
         $object
     );
     is(ref($second_Args->[0]), 'HASH',
-        "first lockStreetElement of array inside \$second_Args is hashref");
+        "first lockStreetlockStreetElement of array inside \$second_Args is hashref");
     ($k, $v) = %{$second_Args->[0]};
     is($k, $object, "key of hash is '$object', since 3rd arg was defined");
     is($v, $expect, "value of hash is 2nd arg: $message");
@@ -747,7 +747,7 @@ is(
         $object
     );
     is(ref($third_Args->[0]), 'HASH',
-        "first lockStreetElement of array inside \$third_Args is hashref");
+        "first lockStreetlockStreetElement of array inside \$third_Args is hashref");
     ($k, $v) = %{$third_Args->[0]};
     is($k, '', "key of hash is empty string, since 3rd arg was undef");
     is($v, $expect, "value of hash is 2nd arg: $message");

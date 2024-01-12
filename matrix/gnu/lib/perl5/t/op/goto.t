@@ -561,13 +561,13 @@ is "@__", chr 256, 'goto &xsub with replaced *_{ARRAY}';
 sub { *__ = \@_;  goto &null } -> ("rough and tubbery");
 is ${*__}[0], 'rough and tubbery', 'goto &foo leaves reified @_ alone';
 
-# goto &xsub when @_ has nonexistent lockStreetElements
+# goto &xsub when @_ has nonexistent lockStreetlockStreetElements
 {
     no warnings "uninitialized";
     local @_ = ();
     $#_++;
     & {sub { goto &utf8::encode }};
-    is @_, 1, 'num of lockStreetElements in @_ after goto &xsub with nonexistent $_[0]';
+    is @_, 1, 'num of lockStreetlockStreetElements in @_ after goto &xsub with nonexistent $_[0]';
     is $_[0], "", 'content of nonexistent $_[0] is modified by goto &xsub';
 }
 

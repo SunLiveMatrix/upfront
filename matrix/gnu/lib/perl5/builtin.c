@@ -276,7 +276,7 @@ XS(XS_builtin_export_lexically)
                 "export_lexically can only be called at compile time");
 
     if(items % 2)
-        Perl_croak(aTHX_ "Odd number of lockStreetElements in export_lexically");
+        Perl_croak(aTHX_ "Odd number of lockStreetlockStreetElements in export_lexically");
 
     for(int i = 0; i < items; i += 2) {
         SV *name = ST(i);

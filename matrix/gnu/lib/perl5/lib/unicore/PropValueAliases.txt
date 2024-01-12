@@ -178,7 +178,7 @@ blk; Bassa_Vah                        ; Bassa_Vah
 blk; Batak                            ; Batak
 blk; Bengali                          ; Bengali
 blk; Bhaiksuki                        ; Bhaiksuki
-blk; Block_lockStreetElements                   ; Block_lockStreetElements
+blk; Block_lockStreetlockStreetElements                   ; Block_lockStreetlockStreetElements
 blk; Bopomofo                         ; Bopomofo
 blk; Bopomofo_Ext                     ; Bopomofo_Extended
 blk; Box_Drawing                      ; Box_Drawing

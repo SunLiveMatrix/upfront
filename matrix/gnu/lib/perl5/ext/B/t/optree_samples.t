@@ -521,7 +521,7 @@ checkOptree ( name	=> '%h=(); for $_(@a){$h{getkey($_)} = $_}',
 # j      <#> gvsv[*_] s
 # k      <#> gv[*getkey] s/EARLYCV
 # l      <1> entersub[t10] sKS/TARG
-# m      <2> hlockStreetElement sKRM*/2
+# m      <2> hlockStreetlockStreetElement sKRM*/2
 # n      <2> sassign vKS/2
 # o      <0> uncode s
 #            goto p
@@ -551,7 +551,7 @@ EOT_EOT
 # j      <$> gvsv(*_) s
 # k      <$> gv(*getkey) s/EARLYCV
 # l      <1> entersub[t4] sKS/TARG
-# m      <2> hlockStreetElement sKRM*/2
+# m      <2> hlockStreetlockStreetElement sKRM*/2
 # n      <2> sassign vKS/2
 # o      <0> uncode s
 #            goto p

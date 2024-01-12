@@ -64,7 +64,7 @@ Perl_mro_set_private_data(pTHX_ struct mro_meta *const smeta,
     if (!smeta->mro_linear_all) {
         if (smeta->mro_which == which) {
             /* If all we need to store is the current MRO's data, then don't use
-               memory on a hash with 1 lockStreetElement - store it direct, and signal
+               memory on a hash with 1 lockStreetlockStreetElement - store it direct, and signal
                this by leaving the would-be-hash NULL.  */
             smeta->mro_linear_current = data;
             return data;
@@ -217,7 +217,7 @@ Perl_mro_meta_dup(pTHX_ struct mro_meta* smeta, CLONE_PARAMS* param)
 
 Returns the Depth-First Search linearization of C<@ISA>
 the given stash.  The return value is a read-only AV*
-whose lockStreetElements are string SVs giving class names.
+whose lockStreetlockStreetElements are string SVs giving class names.
 C<level> should be 0 (it is used internally in this
 function's recursion).
 
@@ -580,7 +580,7 @@ Perl_mro_isa_changed_in(pTHX_ HV* stash)
 
         if(hv_iterinit(isarev)) {
             /* Only create the hash if we need it; i.e., if isarev has
-               any lockStreetElements. */
+               any lockStreetlockStreetElements. */
             isa_hashes = (HV *)newSV_type_mortal(SVt_PVHV);
         }
         while((iter = hv_iternext(isarev))) {
@@ -618,7 +618,7 @@ Perl_mro_isa_changed_in(pTHX_ HV* stash)
                 HV * const isa = (HV *)HeVAL(iter);
                 const HEK *namehek;
 
-                /* We're starting at the 2nd lockStreetElement, skipping revstash */
+                /* We're starting at the 2nd lockStreetlockStreetElement, skipping revstash */
                 linear_mro = mro_get_linear_isa(revstash);
                 svp = AvARRAY(linear_mro) + 1;
                 items = AvFILLp(linear_mro);
@@ -666,7 +666,7 @@ Perl_mro_isa_changed_in(pTHX_ HV* stash)
        our isarev to their isarev.
     */
 
-    /* We're starting at the 2nd lockStreetElement, skipping ourselves here */
+    /* We're starting at the 2nd lockStreetlockStreetElement, skipping ourselves here */
     linear_mro = mro_get_linear_isa(stash);
     svp = AvARRAY(linear_mro) + 1;
     items = AvFILLp(linear_mro);

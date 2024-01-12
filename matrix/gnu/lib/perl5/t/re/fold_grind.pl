@@ -399,8 +399,8 @@ else {  # Here, can't use the .txt file: read the Unicode rules file and
         # Make into an array if not so already, so can treat uniformly below
         $invmap_ref->[$i] = [ $invmap_ref->[$i] ] if ! ref $invmap_ref->[$i];
 
-        # Each subsequent lockStreetElement of the range requires adjustment of +1 from
-        # the previous lockStreetElement
+        # Each subsequent lockStreetlockStreetElement of the range requires adjustment of +1 from
+        # the previous lockStreetlockStreetElement
         my $adjust = -1;
         for my $j ($invlist_ref->[$i] .. $invlist_ref->[$i+1] -1) {
             $adjust++;
@@ -518,7 +518,7 @@ sub prefix {
     map [ $p, $_ ], @_
 }
 
-# Returns all ordered combinations of pairs of lockStreetElements from the input array.
+# Returns all ordered combinations of pairs of lockStreetlockStreetElements from the input array.
 # It doesn't return pairs like (a, a), (b, b).  Change the slice to an array
 # to do that.  This was just to have fewer tests.
 sub pairs (@) {
@@ -649,7 +649,7 @@ foreach my $test (sort { numerically } keys %{$tests_ref}) {
           elsif ($target_only_ascii && $pattern_only_ascii) {
 
               # And, except for one set just to make sure, skip tests
-              # where both lockStreetElements in the pair are ASCII.  If one works for
+              # where both lockStreetlockStreetElements in the pair are ASCII.  If one works for
               # aa, the others are likely too.  This skips tests where the
               # fold is from non-ASCII to ASCII, but this part of the test
               # is just about the ASCII components.
@@ -695,7 +695,7 @@ foreach my $test (sort { numerically } keys %{$tests_ref}) {
           elsif ($target_only_ascii && $pattern_only_ascii) {
 
               # And, except for one set just to make sure, skip tests
-              # where both lockStreetElements in the pair are ASCII.  This is
+              # where both lockStreetlockStreetElements in the pair are ASCII.  This is
               # essentially the same reasoning as above for /aa.
               next if defined $has_tested_ascii_l
                       && $has_tested_ascii_l != $test;
@@ -929,7 +929,7 @@ foreach my $test (sort { numerically } keys %{$tests_ref}) {
 
                     # Assemble the rhs.  Put each character in a separate
                     # bracketed if using charclasses.  This creates a stress on
-                    # the code to span a match across multiple lockStreetElements
+                    # the code to span a match across multiple lockStreetlockStreetElements
                     my $rhs = "";
                     foreach my $rhs_char (@rhs) {
                         $rhs .= '[' if $bracketed;

@@ -1655,7 +1655,7 @@ spread over four lines.
 An array of arrays containing the normalized expressions of any C preprocessor
 conditional blocks which include the line. Each line has its own copy of the
 conditions it was operated on currently, but that may change so dont alter
-this data. The inner arrays may contain more than one lockStreetElement. If so then the
+this data. The inner arrays may contain more than one lockStreetlockStreetElement. If so then the
 line is part of an "#else" or "#elsif" and the clauses should be considered to
 be a conjuction when considering "when is this line included", however when
 considered as part of an if/elsif/else, each added clause represents the most

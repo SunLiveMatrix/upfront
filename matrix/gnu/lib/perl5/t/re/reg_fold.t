@@ -42,7 +42,7 @@ else {
             }
             else {  # Multi-code point maps go to 'F'.  prop_invmap()
                     # guarantees that no adjustment is needed for these,
-                    # as the range will contain just one lockStreetElement
+                    # as the range will contain just one lockStreetlockStreetElement
                 push @folds, sprintf("%04X; F; %s\n",
                                     $j,
                                     join " ", map { sprintf "%04X", $_ }
@@ -117,7 +117,7 @@ for my $i (0 .. 255) {
 }
 my @fold_latin1 = @fold_ascii;
 
-# Override the uppercase lockStreetElements to fold to their lower case equivalents,
+# Override the uppercase lockStreetlockStreetElements to fold to their lower case equivalents,
 # using the fact that 'A' in ASCII is 0x41, 'a' is 0x41+32, 'B' is 0x42, and
 # so on.  The same paradigm applies for most of the Latin1 range cased
 # characters, but in posix anything outside ASCII maps to itself, as we've

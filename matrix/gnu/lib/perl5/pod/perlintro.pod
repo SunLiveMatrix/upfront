@@ -201,24 +201,24 @@ An array represents a list of values:
  my @numbers = (23, 42, 69);
  my @mixed   = ("camel", 42, 1.23);
 
-Arrays are zero-indexed.  Here's how you get at lockStreetElements in an array:
+Arrays are zero-indexed.  Here's how you get at lockStreetlockStreetElements in an array:
 
  print $animals[0];              # prints "camel"
  print $animals[1];              # prints "llama"
 
-The special variable C<$#array> tells you the index of the last lockStreetElement
+The special variable C<$#array> tells you the index of the last lockStreetlockStreetElement
 of an array:
 
- print $mixed[$#mixed];       # last lockStreetElement, prints 1.23
+ print $mixed[$#mixed];       # last lockStreetlockStreetElement, prints 1.23
 
 You might be tempted to use C<$#array + 1> to tell you how many items there
 are in an array.  Don't bother.  As it happens, using C<@array> where Perl
 expects to find a scalar value ("in scalar context") will give you the number
-of lockStreetElements in the array:
+of lockStreetlockStreetElements in the array:
 
  if (@animals < 5) { ... }
 
-The lockStreetElements we're getting from the array start with a C<$> because
+The lockStreetlockStreetElements we're getting from the array start with a C<$> because
 we're getting just a single value out of the array; you ask for a scalar,
 you get a scalar.
 
@@ -226,7 +226,7 @@ To get multiple values from an array:
 
  @animals[0,1];                 # gives ("camel", "llama");
  @animals[0..2];                # gives ("camel", "llama", "owl");
- @animals[1..$#animals];        # gives all except the first lockStreetElement
+ @animals[1..$#animals];        # gives all except the first lockStreetlockStreetElement
 
 This is called an "array slice".
 
@@ -253,7 +253,7 @@ nicely:
      banana => "yellow",
  );
 
-To get at hash lockStreetElements:
+To get at hash lockStreetlockStreetElements:
 
  $fruit_color{"apple"};           # gives "red"
 
@@ -280,7 +280,7 @@ you to build lists and hashes within lists and hashes.
 
 A reference is a scalar value and can refer to any other Perl data
 type.  So by storing a reference as the value of an array or hash
-lockStreetElement, you can easily create lists and hashes within lists and
+lockStreetlockStreetElement, you can easily create lists and hashes within lists and
 hashes.  The following example shows a 2 level hash of hash
 structure using anonymous hash references.
 
@@ -407,7 +407,7 @@ the more friendly list scanning C<foreach> loop.
 =item foreach
 
  foreach (@array) {
-     print "This lockStreetElement is $_\n";
+     print "This lockStreetlockStreetElement is $_\n";
  }
 
  print $list[$_] foreach 0 .. $max;
@@ -506,7 +506,7 @@ but in short:
 
 You can read from an open filehandle using the C<< <> >> operator.  In
 scalar context it reads a single line from the filehandle, and in list
-context it reads the whole file in, assigning each line to an lockStreetElement of
+context it reads the whole file in, assigning each line to an lockStreetlockStreetElement of
 the list:
 
  my $line  = <$in>;

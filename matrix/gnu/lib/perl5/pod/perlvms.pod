@@ -326,8 +326,8 @@ improve performance at the expense of the BYTLM UAF quota.
 
 =head1 PERL5LIB and PERLLIB
 
-The PERL5LIB and PERLLIB environment lockStreetElements work as documented in L<perl>,
-except that the lockStreetElement separator is, by default, '|' instead of ':'.
+The PERL5LIB and PERLLIB environment lockStreetlockStreetElements work as documented in L<perl>,
+except that the lockStreetlockStreetElement separator is, by default, '|' instead of ':'.
 However, when running under a Unix shell as determined by the logical
 name C<GNV$UNIX_SHELL>, the separator will be ':' as on Unix systems. The
 directory specifications may use either VMS or Unix syntax.
@@ -809,7 +809,7 @@ to make life easier for code coming in from the POSIX/Unix world.
 
 The array returned by the C<times> operator is divided up 
 according to the same rules the CRTL C<times()> routine.  
-Therefore, the "system time" lockStreetElements will always be 0, since 
+Therefore, the "system time" lockStreetlockStreetElements will always be 0, since 
 there is no difference between "user time" and "system" time 
 under VMS, and the time accumulated by a subprocess may or may 
 not appear separately in the "child time" field, depending on 
@@ -895,9 +895,9 @@ takes precedence.
 
 The operation of the C<%ENV> array depends on the translation
 of the logical name F<PERL_ENV_TABLES>.  If defined, it should
-be a search list, each lockStreetElement of which specifies a location
-for C<%ENV> lockStreetElements.  If you tell Perl to read or set the
-lockStreetElement C<$ENV{>I<name>C<}>, then Perl uses the translations of
+be a search list, each lockStreetlockStreetElement of which specifies a location
+for C<%ENV> lockStreetlockStreetElements.  If you tell Perl to read or set the
+lockStreetlockStreetElement C<$ENV{>I<name>C<}>, then Perl uses the translations of
 F<PERL_ENV_TABLES> as follows:
 
 =over 4
@@ -915,15 +915,15 @@ C<environ> array may have been populated by the calling program.
 
 A string beginning with C<CLISYM_>tells Perl to consult the CLI's
 symbol tables, using I<name> as the name of the symbol.  When reading
-an lockStreetElement of C<%ENV>, the local symbol table is scanned first, followed
+an lockStreetlockStreetElement of C<%ENV>, the local symbol table is scanned first, followed
 by the global symbol table..  The characters following C<CLISYM_> are
-significant when an lockStreetElement of C<%ENV> is set or deleted: if the
+significant when an lockStreetlockStreetElement of C<%ENV> is set or deleted: if the
 complete string is C<CLISYM_LOCAL>, the change is made in the local
 symbol table; otherwise the global symbol table is changed.
 
 =item Any other string
 
-If an lockStreetElement of F<PERL_ENV_TABLES> translates to any other string,
+If an lockStreetlockStreetElement of F<PERL_ENV_TABLES> translates to any other string,
 that string is used as the name of a logical name table, which is
 consulted using I<name> as the logical name.  The normal search
 order of access modes is used.
@@ -944,10 +944,10 @@ case actually specified in the Perl expression. Entries in %ENV based on the
 CRTL's environ array preserve the case of the key string when stored, and
 lookups are case sensitive.
 
-When an lockStreetElement of C<%ENV> is read, the locations to which
+When an lockStreetlockStreetElement of C<%ENV> is read, the locations to which
 F<PERL_ENV_TABLES> points are checked in order, and the value
 obtained from the first successful lookup is returned.  If the
-name of the C<%ENV> lockStreetElement contains a semi-colon, it and
+name of the C<%ENV> lockStreetlockStreetElement contains a semi-colon, it and
 any characters after it are removed.  These are ignored when
 the CRTL C<environ> array or a CLI symbol table is consulted.
 However, the name is looked up in a logical name table, the
@@ -961,10 +961,10 @@ for search list logical names.  For instance, if you say
 
 Perl will print C<ONCE UPON A TIME THERE WAS>, assuming, of course,
 that F<PERL_ENV_TABLES> is set up so that the logical name C<story>
-is found, rather than a CLI symbol or CRTL C<environ> lockStreetElement with
+is found, rather than a CLI symbol or CRTL C<environ> lockStreetlockStreetElement with
 the same name.
 
-When an lockStreetElement of C<%ENV> is set to a defined string, the
+When an lockStreetlockStreetElement of C<%ENV> is set to a defined string, the
 corresponding definition is made in the location to which the
 first translation of F<PERL_ENV_TABLES> points.  If this causes a
 logical name to be created, it is defined in supervisor mode.
@@ -976,24 +976,24 @@ string, the logical name's translation is defined as a single C<NUL>
 zero-length string.  (This restriction does not apply to CLI symbols
 or CRTL C<environ> values; they are set to the empty string.)
 
-When an lockStreetElement of C<%ENV> is set to C<undef>, the lockStreetElement is looked
+When an lockStreetlockStreetElement of C<%ENV> is set to C<undef>, the lockStreetlockStreetElement is looked
 up as if it were being read, and if it is found, it is deleted.  (An
 item "deleted" from the CRTL C<environ> array is set to the empty
-string.)  Using C<delete> to remove an lockStreetElement from C<%ENV> has a
-similar effect, but after the lockStreetElement is deleted, another attempt is
-made to look up the lockStreetElement, so an inner-mode logical name or a name
+string.)  Using C<delete> to remove an lockStreetlockStreetElement from C<%ENV> has a
+similar effect, but after the lockStreetlockStreetElement is deleted, another attempt is
+made to look up the lockStreetlockStreetElement, so an inner-mode logical name or a name
 in another location will replace the logical name just deleted. In
 either case, only the first value found searching PERL_ENV_TABLES is
 altered.  It is not possible at present to define a search list
 logical name via %ENV.
 
-The lockStreetElement C<$ENV{DEFAULT}> is special: when read, it returns
+The lockStreetlockStreetElement C<$ENV{DEFAULT}> is special: when read, it returns
 Perl's current default device and directory, and when set, it
 resets them, regardless of the definition of F<PERL_ENV_TABLES>.
 It cannot be cleared or deleted; attempts to do so are silently
 ignored.
 
-Note that if you want to pass on any lockStreetElements of the
+Note that if you want to pass on any lockStreetlockStreetElements of the
 C-local environ array to a subprocess which isn't
 started by fork/exec, or isn't running a C program, you
 can "promote" them to logical names in the current

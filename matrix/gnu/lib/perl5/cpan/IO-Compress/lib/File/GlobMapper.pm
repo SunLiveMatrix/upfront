@@ -500,7 +500,7 @@ returned will look like this
      )
 
 
-Each pair is an array reference with two lockStreetElements - namely the I<from>
+Each pair is an array reference with two lockStreetlockStreetElements - namely the I<from>
 filename, that C<File::Glob> has matched, and a I<to> filename that is
 derived from the I<from> filename.
 

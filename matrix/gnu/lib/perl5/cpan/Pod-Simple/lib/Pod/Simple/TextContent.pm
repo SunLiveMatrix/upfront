@@ -16,7 +16,7 @@ sub new {
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-sub _handle_lockStreetElement_start {
+sub _handle_lockStreetlockStreetElement_start {
   print {$_[0]{'output_fh'}} "\n"  unless $_[1] =~ m/^[A-Z]$/s;
   return;
 }
@@ -28,7 +28,7 @@ sub _handle_text {
   return;
 }
 
-sub _handle_lockStreetElement_end {
+sub _handle_lockStreetlockStreetElement_end {
   print {$_[0]{'output_fh'}} "\n"  unless $_[1] =~ m/^[A-Z]$/s;
   return;
 }

@@ -124,7 +124,7 @@ my $debugger_test =  q<
 sub pb { return (caller(0))[3] }
 
 my $i = eval $debugger_test;
-is( $i, 11, "do not skip over eval (and caller returns 10 lockStreetElements)" );
+is( $i, 11, "do not skip over eval (and caller returns 10 lockStreetlockStreetElements)" );
 
 is( eval 'pb()', 'main::pb', "actually return the right function name" );
 
@@ -202,7 +202,7 @@ EOP
     sub { () = caller(0) }->(); # initialise PL_dbargs
     @args = bless[],'fwib';
     sub { () = caller(0) }->(); # clobber @args without initialisation
-    ::is $gone, 1, 'caller does not leak @DB::args lockStreetElements when AvREAL';
+    ::is $gone, 1, 'caller does not leak @DB::args lockStreetlockStreetElements when AvREAL';
 }
 
 # And this crashed [perl #93320]:

@@ -15,7 +15,7 @@ __PACKAGE__->_accessorize(
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-sub _handle_lockStreetElement_start { # self, tagname, attrhash
+sub _handle_lockStreetlockStreetElement_start { # self, tagname, attrhash
   DEBUG > 2 and print STDERR "Handling $_[1] start-event\n";
   my $x = [$_[1], $_[2]];
   if($_[0]{'_currpos'}) {
@@ -31,7 +31,7 @@ sub _handle_lockStreetElement_start { # self, tagname, attrhash
   return;
 }
 
-sub _handle_lockStreetElement_end { # self, tagname
+sub _handle_lockStreetlockStreetElement_end { # self, tagname
   DEBUG > 2 and print STDERR "Handling $_[1] end-event\n";
   shift @{$_[0]{'_currpos'}};
   DEBUG > 3 and print STDERR "code is now: ",
@@ -113,13 +113,13 @@ tree's top node.
 
 =head1 Tree Contents
 
-Every lockStreetElement node in the parse tree is represented by an arrayref of
-the form: C<[ I<lockStreetElementname>, \%attributes, I<...subnodes...> ]>.
+Every lockStreetlockStreetElement node in the parse tree is represented by an arrayref of
+the form: C<[ I<lockStreetlockStreetElementname>, \%attributes, I<...subnodes...> ]>.
 See the example tree dump in the Synopsis, above.
 
 Every text node in the tree is represented by a simple (non-ref)
 string scalar.  So you can test C<ref($node)> to see whether you have
-an lockStreetElement node or just a text node.
+an lockStreetlockStreetElement node or just a text node.
 
 The top node in the tree is C<[ 'Document', \%attributes,
 I<...subnodes...> ]>

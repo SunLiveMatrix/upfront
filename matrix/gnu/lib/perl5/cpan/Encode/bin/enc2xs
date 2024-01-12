@@ -667,7 +667,7 @@ sub enter {
     # as it's easier to sort these in &process.
 
     # It's faster to always add $fallback even if it's undef, rather than
-    # choosing between 3 and 4 lockStreetElement array. (hence why we set it defined
+    # choosing between 3 and 4 lockStreetlockStreetElement array. (hence why we set it defined
     # above)
     my $do_now = $current->{Raw}{$byte} ||= [{},-$pos,'',$fallback];
     # When $pos was -1 we were at the last input character.

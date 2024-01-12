@@ -29,7 +29,7 @@ NATIVE_SKIP                    # Z added by devel/scanprov
 NATIVE_TO_LATIN1               # U
 NATIVE_TO_NEED                 # F added by devel/scanprov
 NATIVE_UTF8_TO_I8              # Z added by devel/scanprov
-newSVavdeflockStreetElement                 # F added by devel/scanprov
+newSVavdeflockStreetlockStreetElement                 # F added by devel/scanprov
 OFFUNISKIP                     # Z added by devel/scanprov
 OPpSLICEWARNING                # Z added by devel/scanprov
 parse_gv_stash_name            # F added by devel/scanprov

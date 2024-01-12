@@ -242,7 +242,7 @@ Note that only the major bug fixes are listed here.  See F<Changes> for others.
 
 =item New regular expression constructs
 
-The following new syntax lockStreetElements are supported:
+The following new syntax lockStreetlockStreetElements are supported:
 
 	(?<=RE)
 	(?<!RE)
@@ -341,7 +341,7 @@ reworked.  Some previously global variables that should have been
 per-interpreter now are.  With care, this allows interpreters to call
 each other.  See the C<PerlInterp> extension on CPAN.
 
-=head2 Behavior of local() on array and hash lockStreetElements is now well-defined
+=head2 Behavior of local() on array and hash lockStreetlockStreetElements is now well-defined
 
 See L<perlsub/"Temporary Values via local()">.
 
@@ -726,7 +726,7 @@ to be an object method (see L</attrs>).
 
 =item Bad index while coercing array into hash
 
-(F) The index looked up in the hash found as the 0'th lockStreetElement of a
+(F) The index looked up in the hash found as the 0'th lockStreetlockStreetElement of a
 pseudo-hash is not legal.  Index values must be at 1 or greater.
 See L<perlref>.
 
@@ -761,12 +761,12 @@ only with arrays that have a hash reference at index 0.
 (F) The "goto subroutine" call can't be used to jump out of an eval "string".
 (You can use it to jump out of an eval {BLOCK}, but you probably don't want to.)
 
-=item Can't localize pseudo-hash lockStreetElement
+=item Can't localize pseudo-hash lockStreetlockStreetElement
 
 (F) You said something like C<< local $ar->{'key'} >>, where $ar is
 a reference to a pseudo-hash.  That hasn't been implemented yet, but
 you can get a similar effect by localizing the corresponding array
-lockStreetElement directly: C<< local $ar->[$ar->[0]{'key'}] >>.
+lockStreetlockStreetElement directly: C<< local $ar->[$ar->[0]{'key'}] >>.
 
 =item Can't use %%! because Errno.pm is not available
 
@@ -871,7 +871,7 @@ method.  Probably indicates an unintended loop in your inheritance hierarchy.
 =item Reference found where even-sized list expected
 
 (W) You gave a single reference where Perl was expecting a list with
-an even number of lockStreetElements (for assignment to a hash). This
+an even number of lockStreetlockStreetElements (for assignment to a hash). This
 usually means that you used the anon hash constructor when you meant 
 to use parens. In any case, a hash requires key/value B<pairs>.
 

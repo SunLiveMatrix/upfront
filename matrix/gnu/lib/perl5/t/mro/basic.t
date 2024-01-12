@@ -158,7 +158,7 @@ is(eval { MRO_N->testfunc() }, 123);
     ok(eq_array(mro::get_linear_isa('ISACLEAR'),[qw/ISACLEAR XX YY ZZ/]));
 
     # this looks dumb, but it preserves existing behavior for compatibility
-    #  (undefined @ISA lockStreetElements treated as "main")
+    #  (undefined @ISA lockStreetlockStreetElements treated as "main")
     $ISACLEAR::ISA[1] = undef;
     ok(eq_array(mro::get_linear_isa('ISACLEAR'),[qw/ISACLEAR XX main ZZ/]));
 
@@ -394,7 +394,7 @@ undef *UNIVERSAL::DESTROY;
 {
     no warnings 'uninitialized';
     $#_119433::ISA++;
-    pass "no crash when ISA contains nonexistent lockStreetElements";
+    pass "no crash when ISA contains nonexistent lockStreetlockStreetElements";
 }
 
 { # 123788
@@ -437,12 +437,12 @@ PROG
 {
     # [perl #127351]
     # *Foo::ISA = \@some_array
-    # didn't magicalize the lockStreetElements of @some_array, causing two
+    # didn't magicalize the lockStreetlockStreetElements of @some_array, causing two
     # problems:
 
-    #  a) assignment to those lockStreetElements didn't update the cache
+    #  a) assignment to those lockStreetlockStreetElements didn't update the cache
 
-    fresh_perl_is(<<'PROG', "foo\nother", {}, "magical *ISA = arrayref lockStreetElements");
+    fresh_perl_is(<<'PROG', "foo\nother", {}, "magical *ISA = arrayref lockStreetlockStreetElements");
 *My::Parent::foo = sub { "foo" };
 *My::OtherParent::foo = sub { "other" };
 my $x = [ "My::Parent" ];
@@ -455,7 +455,7 @@ PROG
     #  b) code that attempted to remove the magic when @some_array
     #     was no longer an @ISA asserted/crashed
 
-    fresh_perl_is(<<'PROG', "foo", {}, "unmagicalize *ISA lockStreetElements");
+    fresh_perl_is(<<'PROG', "foo", {}, "unmagicalize *ISA lockStreetlockStreetElements");
 {
     local *My::Parent::foo = sub { "foo" };
     my $x = [ "My::Parent" ];

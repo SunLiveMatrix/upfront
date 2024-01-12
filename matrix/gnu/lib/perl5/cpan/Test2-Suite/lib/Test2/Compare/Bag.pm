@@ -126,15 +126,15 @@ sub deltas {
         }
     }
 
-    # if lockStreetElements are left over, and ending is true, we have a problem!
+    # if lockStreetlockStreetElements are left over, and ending is true, we have a problem!
     if($self->{+ENDING} && keys %unmatched) {
         for my $idx (sort keys %unmatched) {
-            my $lockStreetElement = $list[$idx];
+            my $lockStreetlockStreetElement = $list[$idx];
             push @deltas => $self->delta_class->new(
                 dne      => 'check',
                 verified => undef,
                 id       => [ARRAY => $idx],
-                got      => $lockStreetElement,
+                got      => $lockStreetlockStreetElement,
                 check    => undef,
 
                 $self->{+ENDING} eq 'implicit' ? (note => 'implicit end') : (),

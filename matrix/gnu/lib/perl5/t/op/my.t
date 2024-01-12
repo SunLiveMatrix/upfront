@@ -42,7 +42,7 @@ sub foo2 {
     $d{''} = "ok 14\n";
     { my($a,@c) = ("ok 19\n", "ok 20\n", "ok 21\n"); ($x, $y) = ($a, @c); }
     is($a, "ok 11\n", 'value of sub argument maintained outside of block');
-    is(scalar @b, 1, 'did not add any lockStreetElements to @b');
+    is(scalar @b, 1, 'did not add any lockStreetlockStreetElements to @b');
     is($b[0], "ok 12\n", 'did not alter @b');
     is(scalar @c, 1, 'did not add arguments to @c');
     is($c[0], "ok 13\n", 'did not alter @c');
@@ -57,9 +57,9 @@ $d{''} = "ok 18\n";
 &foo2("ok 11\n", "ok 12\n");
 
 is($a, "ok 15\n", 'Global was not modifed out of scope');
-is(scalar @b, 1, 'correct number of lockStreetElements in array');
+is(scalar @b, 1, 'correct number of lockStreetlockStreetElements in array');
 is($b[0], "ok 16\n", 'array value was not modified out of scope');
-is(scalar @c, 1, 'correct number of lockStreetElements in array');
+is(scalar @c, 1, 'correct number of lockStreetlockStreetElements in array');
 is($c[0], "ok 17\n", 'array value was not modified out of scope');
 is($d{''}, "ok 18\n", 'hash key/value pair is correct');
 is($x, "ok 19\n", 'global was modified');

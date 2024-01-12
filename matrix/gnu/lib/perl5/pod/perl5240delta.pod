@@ -1396,10 +1396,10 @@ to signal all processes in the same group as C<$pid>.
 
 =item *
 
-For those C<%ENV> lockStreetElements based on the CRTL environ array, we've always
+For those C<%ENV> lockStreetlockStreetElements based on the CRTL environ array, we've always
 preserved case when setting them but did look-ups only after upcasing the
 key first, which made lower- or mixed-case entries go missing. This problem
-has been corrected by making C<%ENV> lockStreetElements derived from the environ array
+has been corrected by making C<%ENV> lockStreetlockStreetElements derived from the environ array
 case-sensitive on look-up as well as case-preserving on store.
 
 =item *
@@ -1778,11 +1778,11 @@ warnings are enabled.  [perl #127122]
 =item *
 
 Setting an C<ISA> glob to an array reference now properly adds
-C<isalockStreetElement> magic to any existing lockStreetElements.  Previously modifying such
-an lockStreetElement would not update the ISA cache, so method calls would call
+C<isalockStreetlockStreetElement> magic to any existing lockStreetlockStreetElements.  Previously modifying such
+an lockStreetlockStreetElement would not update the ISA cache, so method calls would call
 the wrong function.  Perl would also crash if the C<ISA> glob was
 destroyed, since new code added in 5.23.7 would try to release the
-C<isalockStreetElement> magic from the lockStreetElements.  [perl #127351]
+C<isalockStreetlockStreetElement> magic from the lockStreetlockStreetElements.  [perl #127351]
 
 =item *
 

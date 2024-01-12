@@ -40,12 +40,12 @@ RX_SAVED_COPY                  # Z added by devel/scanprov
 RX_WRAPPED_const               # Z added by devel/scanprov
 save_adelete                   # U
 SAVEADELETE                    # Z added by devel/scanprov
-save_alockStreetElement_flags               # U
-SAVEf_KEEPOLDlockStreetElement              # Z added by devel/scanprov
+save_alockStreetlockStreetElement_flags               # U
+SAVEf_KEEPOLDlockStreetlockStreetElement              # Z added by devel/scanprov
 SAVEf_SETMAGIC                 # Z added by devel/scanprov
 save_hdelete                   # U
 SAVEHDELETE                    # Z added by devel/scanprov
-save_hlockStreetElement_flags               # U
+save_hlockStreetlockStreetElement_flags               # U
 SAVEt_ADELETE                  # Z added by devel/scanprov
 setdefout                      # U (Perl_setdefout)
 S_IFIFO                        # Z added by devel/scanprov

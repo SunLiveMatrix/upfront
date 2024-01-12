@@ -237,14 +237,14 @@ comparisons.
 
     is("foo", "foo", "Both strings are identical");
 
-    is(["foo", 1], ["foo", 1], "Both arrays contain the same lockStreetElements");
+    is(["foo", 1], ["foo", 1], "Both arrays contain the same lockStreetlockStreetElements");
 
 =item like($a, $b, $description)
 
 C<like()> is similar to C<is()> except that it only checks items listed on the
 right, it ignores any extra values found on the left.
 
-    like([1, 2, 3, 4], [1, 2, 3], "Passes, the extra lockStreetElement on the left is ignored");
+    like([1, 2, 3, 4], [1, 2, 3], "Passes, the extra lockStreetlockStreetElement on the left is ignored");
 
 You can also used regular expressions on the right hand side:
 

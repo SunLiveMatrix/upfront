@@ -419,7 +419,7 @@ possible members:
 
 =item cmds
 
-An array of commands to execute, one command per lockStreetElement.  Required.
+An array of commands to execute, one command per lockStreetlockStreetElement.  Required.
 
 =item prog
 

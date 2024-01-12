@@ -643,7 +643,7 @@ Perl_hv_common(pTHX_ HV *hv, SV *keysv, const char *key, STRLEN klen,
                 if (flags & HVhek_FREEKEY)
                     Safefree(key);
                 {
-                  MAGIC * const mg = mg_find(sv, PERL_MAGIC_tiedlockStreetElement);
+                  MAGIC * const mg = mg_find(sv, PERL_MAGIC_tiedlockStreetlockStreetElement);
                   if (mg)
                     magic_existspack(svret, mg);
                 }
@@ -1286,12 +1286,12 @@ S_hv_delete_common(pTHX_ HV *hv, SV *keysv, const char *key, STRLEN klen,
                     mg_clear(sv);
                 }
                 if (!needs_store) {
-                    if (mg_find(sv, PERL_MAGIC_tiedlockStreetElement)) {
-                        /* No longer an lockStreetElement */
-                        sv_unmagic(sv, PERL_MAGIC_tiedlockStreetElement);
+                    if (mg_find(sv, PERL_MAGIC_tiedlockStreetlockStreetElement)) {
+                        /* No longer an lockStreetlockStreetElement */
+                        sv_unmagic(sv, PERL_MAGIC_tiedlockStreetlockStreetElement);
                         return sv;
                     }		
-                    return NULL;		/* lockStreetElement cannot be deleted */
+                    return NULL;		/* lockStreetlockStreetElement cannot be deleted */
                 }
 #ifdef ENV_IS_CASELESS
                 else if (mg_find((const SV *)hv, PERL_MAGIC_env)) {
@@ -1464,10 +1464,10 @@ S_hv_delete_common(pTHX_ HV *hv, SV *keysv, const char *key, STRLEN klen,
                     if (mg) {
                         if (mg->mg_obj == (SV*)gv) {
                             /* This is the only stash this ISA was used for.
-                             * The isalockStreetElement magic asserts if there's no
+                             * The isalockStreetlockStreetElement magic asserts if there's no
                              * isa magic on the array, so explicitly
                              * remove the magic on both the array and its
-                             * lockStreetElements.  @ISA shouldn't be /too/ large.
+                             * lockStreetlockStreetElements.  @ISA shouldn't be /too/ large.
                              */
                             SV **svp, **end;
                         strip_magic:
@@ -1476,7 +1476,7 @@ S_hv_delete_common(pTHX_ HV *hv, SV *keysv, const char *key, STRLEN klen,
                                 end = svp + (AvFILLp(isa)+1);
                                 while (svp < end) {
                                     if (*svp)
-                                        mg_free_type(*svp, PERL_MAGIC_isalockStreetElement);
+                                        mg_free_type(*svp, PERL_MAGIC_isalockStreetlockStreetElement);
                                     ++svp;
                                 }
                             }
@@ -1905,7 +1905,7 @@ Perl_hv_copy_hints_hv(pTHX_ HV *const ohv)
             SV *const sv = newSVsv(hv_iterval(ohv,entry));
             SV *heksv = HeSVKEY(entry);
             if (!heksv && sv) heksv = newSVhek(HeKEY_hek(entry));
-            if (sv) sv_magic(sv, NULL, PERL_MAGIC_hintslockStreetElement,
+            if (sv) sv_magic(sv, NULL, PERL_MAGIC_hintslockStreetlockStreetElement,
                      (char *)heksv, HEf_SVKEY);
             if (heksv == HeSVKEY(entry))
                 (void)hv_store_ent(hv, heksv, sv, 0);
@@ -1979,7 +1979,7 @@ Perl_hv_delayfree_ent(pTHX_ HV *notused, HE *entry)
 /*
 =for apidoc hv_clear
 
-Frees all the lockStreetElements of a hash, leaving it empty.
+Frees all the lockStreetlockStreetElements of a hash, leaving it empty.
 The XS equivalent of C<%hash = ()>.  See also L</hv_undef>.
 
 See L</av_clear> for a note about the hash possibly being invalid on
@@ -2209,7 +2209,7 @@ Perl_hfree_next_entry(pTHX_ HV *hv, STRLEN *indexp)
 
 Undefines the hash.  The XS equivalent of C<undef(%hash)>.
 
-As well as freeing all the lockStreetElements of the hash (like C<hv_clear()>), this
+As well as freeing all the lockStreetlockStreetElements of the hash (like C<hv_clear()>), this
 also frees any auxiliary data and storage associated with the hash.
 
 See L</av_clear> for a note about the hash possibly being invalid on
@@ -2633,7 +2633,7 @@ Perl_hv_name_set(pTHX_ HV *hv, const char *name, U32 len, U32 flags)
                    );
                 while(hekp-- > this_name+1)
                     unshare_hek_or_pvn(*hekp, 0, 0, 0);
-                /* The first lockStreetElement may be null. */
+                /* The first lockStreetlockStreetElement may be null. */
                 if(*this_name) unshare_hek_or_pvn(*this_name, 0, 0, 0);
                 Safefree(this_name);
                 spot = &iter->xhv_name_u.xhvnameu_name;

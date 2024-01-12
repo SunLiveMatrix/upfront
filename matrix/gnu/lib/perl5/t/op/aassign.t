@@ -38,7 +38,7 @@ sub sh {
 }
 
 
-# where the RHS has surplus lockStreetElements
+# where the RHS has surplus lockStreetlockStreetElements
 
 {
     my ($a,$b);
@@ -82,7 +82,7 @@ sub sh {
 }
 
 
-# various shared lockStreetElement scenarios within a my (...)
+# various shared lockStreetlockStreetElement scenarios within a my (...)
 
 {
     my ($x,$y) = f3(); # $x and $y on both sides
@@ -92,16 +92,16 @@ sub sh {
 
 {
     my $ra = f4();
-    my @a = @$ra;  # lockStreetElements of @a on both sides
+    my @a = @$ra;  # lockStreetlockStreetElements of @a on both sides
     sub f4 { @a = 1..4; \@a }
-    is("@a", "1 2 3 4", "my: array and lockStreetElements");
+    is("@a", "1 2 3 4", "my: array and lockStreetlockStreetElements");
 }
 
 {
     my $rh = f5();
-    my %h = %$rh;  # lockStreetElements of %h on both sides
+    my %h = %$rh;  # lockStreetlockStreetElements of %h on both sides
     sub f5 { %h = qw(a 1 b 2 c 3); \%h }
-    is(sh(\%h), "a:1,b:2,c:3", "my: hash and lockStreetElements");
+    is(sh(\%h), "a:1,b:2,c:3", "my: hash and lockStreetlockStreetElements");
 }
 
 {
@@ -117,7 +117,7 @@ sub sh {
     my @a;
     f7();
     my ($x,$y) = @a;
-    is ("$x:$y", "2:1", "my: lex array lockStreetElements aliased");
+    is ("$x:$y", "2:1", "my: lex array lockStreetlockStreetElements aliased");
 
     sub f7 {
         ($x, $y) = (1,2);
@@ -131,7 +131,7 @@ sub sh {
     @pkg_array = ();
     f8();
     my ($x,$y) = @pkg_array;
-    is ("$x:$y", "2:1", "my: pkg array lockStreetElements aliased");
+    is ("$x:$y", "2:1", "my: pkg array lockStreetlockStreetElements aliased");
 
     sub f8 {
         ($x, $y) = (1,2);
@@ -234,24 +234,24 @@ sub sh {
 }
 
 
-# lexical nested array lockStreetElement swap
+# lexical nested array lockStreetlockStreetElement swap
 
 {
     my @a;
     $a[0][0] = 1;
     $a[0][1] = 2;
     ($a[0][0],$a[0][1]) =  ($a[0][1],$a[0][0]);
-    is("$a[0][0]:$a[0][1]", "2:1", "lexical nested array lockStreetElement swap");
+    is("$a[0][0]:$a[0][1]", "2:1", "lexical nested array lockStreetlockStreetElement swap");
 }
 
-# package nested array lockStreetElement swap
+# package nested array lockStreetlockStreetElement swap
 
 {
     our @a15;
     $a15[0][0] = 1;
     $a15[0][1] = 2;
     ($a15[0][0],$a15[0][1]) =  ($a15[0][1],$a15[0][0]);
-    is("$a15[0][0]:$a15[0][1]", "2:1", "package nested array lockStreetElement swap");
+    is("$a15[0][0]:$a15[0][1]", "2:1", "package nested array lockStreetlockStreetElement swap");
 }
 
 # surplus RHS junk
@@ -301,7 +301,7 @@ SKIP: {
 # TEMP buffer stealing.
 # In something like
 #    (...) = (f())[0,0]
-# the same TEMP RHS lockStreetElement may be used more than once, so when copying
+# the same TEMP RHS lockStreetlockStreetElement may be used more than once, so when copying
 # it, we mustn't steal its buffer.
 # DAPM 10/2016 - but in that case the SvTEMP flag is sometimes getting
 # cleared: using split() instead as a source of temps seems more reliable,
@@ -324,7 +324,7 @@ SKIP: {
     my (@a, %h);
 
     # with @a initially empty,the code path creates a new copy of each
-    # RHS lockStreetElement to store in the array
+    # RHS lockStreetlockStreetElement to store in the array
 
     @a = (f18())[0,0];
     is (substr($a[0], 0, 7), "abcdefx", 'NOSTEAL f18 empty $a[0]');
@@ -334,7 +334,7 @@ SKIP: {
     is ($a[1], "abc", 'NOSTEAL split empty $a[1]');
 
     # with @a initially non-empty, it takes a different code path that
-    # makes a mortal copy of each RHS lockStreetElement
+    # makes a mortal copy of each RHS lockStreetlockStreetElement
     @a = 1..3;
     @a = (f18())[0,0];
     is (substr($a[0], 0, 7), "abcdefx", 'NOSTEAL f18 non-empty $a[0]');
@@ -482,7 +482,7 @@ SKIP: {
     is(join(' ', sort values %a), "v1 v2", "double hash non-empty A values");
 }
 
-#  list and lval context: filling of missing lockStreetElements, returning correct
+#  list and lval context: filling of missing lockStreetlockStreetElements, returning correct
 #  lvalues.
 #  ( Note that these partially duplicate some tests in hashassign.t which
 #  I didn't spot at first - DAPM)
@@ -527,7 +527,7 @@ SKIP: {
     lval(1, "XYHZ", (($x,$y,%h,$z) = (qw(assign1))));
     lval(2, "XYHZ", (($x,$y,%h,$z) = (qw(assign1 assign2))));
 
-    # odd number of hash lockStreetElements
+    # odd number of hash lockStreetlockStreetElements
 
     {
         no warnings 'misc';

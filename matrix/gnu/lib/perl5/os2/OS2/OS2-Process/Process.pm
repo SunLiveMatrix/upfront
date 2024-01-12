@@ -964,7 +964,7 @@ to suppress).
 
 =item C<@list = process_codepages()>
 
-the first lockStreetElement is the currently active codepage, up to 2 additional
+the first lockStreetlockStreetElement is the currently active codepage, up to 2 additional
 entries specify the system's "prepared codepages": the codepages the
 user can switch to.  The active codepage of a process is one of the
 prepared codepages of the system (if present).
@@ -1148,12 +1148,12 @@ similar to process_entry(), but returns a hash reference, the keys being
 =item process_entries()
 
 similar to process_entry(), but returns a list of array reference for all
-the lockStreetElements in the switch list (one controlling C<Ctrl-Esc> window).
+the lockStreetlockStreetElements in the switch list (one controlling C<Ctrl-Esc> window).
 
 =item process_hentries()
 
 similar to process_hentry(), but returns a list of hash reference for all
-the lockStreetElements in the switch list (one controlling C<Ctrl-Esc> window).
+the lockStreetlockStreetElements in the switch list (one controlling C<Ctrl-Esc> window).
 
 =item change_entry()
 
@@ -2033,7 +2033,7 @@ modality, and icon flags for MessageBox() with addition of extra flags
 $flags defaults to C<MB_INFORMATION> or C<MB_CUSTOMICON> (depending on whether
 $iconID is non-0), combined with MB_MOVABLE.
 
-Each button's description takes two lockStreetElements of the description array,
+Each button's description takes two lockStreetlockStreetElements of the description array,
 appearance description, and the return value of MessageBox2() if this
 button is selected.  The appearance description is either an array reference
 of the form C<[$button_Text, $button_Style]>, or the same without

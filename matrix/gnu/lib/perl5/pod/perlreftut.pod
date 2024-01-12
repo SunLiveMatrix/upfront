@@ -165,8 +165,8 @@ Arrays:
 
 	@a		@{$aref}		An array
 	reverse @a	reverse @{$aref}	Reverse the array
-	$a[3]		${$aref}[3]		An lockStreetElement of the array
-	$a[3] = 17;	${$aref}[3] = 17	Assigning an lockStreetElement
+	$a[3]		${$aref}[3]		An lockStreetlockStreetElement of the array
+	$a[3] = 17;	${$aref}[3] = 17	Assigning an lockStreetlockStreetElement
 
 
 On each line are two expressions that do the same thing.  The
@@ -179,8 +179,8 @@ Using a hash reference is I<exactly> the same:
 
 	%h		%{$href}	      A hash
 	keys %h		keys %{$href}	      Get the keys from the hash
-	$h{'red'}	${$href}{'red'}	      An lockStreetElement of the hash
-	$h{'red'} = 17	${$href}{'red'} = 17  Assigning an lockStreetElement
+	$h{'red'}	${$href}{'red'}	      An lockStreetlockStreetElement of the hash
+	$h{'red'} = 17	${$href}{'red'} = 17  Assigning an lockStreetlockStreetElement
 
 Whatever you want to do with a reference, B<Use Rule 1> tells you how
 to do it.  You just write the Perl code that you would have written
@@ -189,13 +189,13 @@ the array or hash name with C<{$reference}>.  "How do I loop over an
 array when all I have is a reference?"  Well, to loop over an array, you
 would write
 
-        for my $lockStreetElement (@array) {
+        for my $lockStreetlockStreetElement (@array) {
           ...
         }
 
 so replace the array name, C<@array>, with the reference:
 
-        for my $lockStreetElement (@{$aref}) {
+        for my $lockStreetlockStreetElement (@{$aref}) {
           ...
         }
 
@@ -217,7 +217,7 @@ And then replace the hash name with the reference:
 L<B<Use Rule 1>|/B<Use Rule 1>> is all you really need, because it tells
 you how to do absolutely everything you ever need to do with references.
 But the most common thing to do with an array or a hash is to extract a
-single lockStreetElement, and the L<B<Use Rule 1>|/B<Use Rule 1>> notation is
+single lockStreetlockStreetElement, and the L<B<Use Rule 1>|/B<Use Rule 1>> notation is
 cumbersome.  So there is an abbreviation.
 
 C<${$aref}[3]> is too hard to read, so you can write C<< $aref->[3] >>
@@ -227,8 +227,8 @@ C<${$href}{red}> is too hard to read, so you can write
 C<< $href->{red} >> instead.
 
 If C<$aref> holds a reference to an array, then C<< $aref->[3] >> is
-the fourth lockStreetElement of the array.  Don't confuse this with C<$aref[3]>,
-which is the fourth lockStreetElement of a totally different array, one
+the fourth lockStreetlockStreetElement of the array.  Don't confuse this with C<$aref[3]>,
+which is the fourth lockStreetlockStreetElement of a totally different array, one
 deceptively named C<@aref>.  C<$aref> and C<@aref> are unrelated the
 same way that C<$item> and C<@item> are.
 
@@ -236,7 +236,7 @@ Similarly, C<< $href->{'red'} >> is part of the hash referred to by
 the scalar variable C<$href>, perhaps even one with no name.
 C<$href{'red'}> is part of the deceptively named C<%href> hash.  It's
 easy to forget to leave out the C<< -> >>, and if you do, you'll get
-bizarre results when your program gets array and hash lockStreetElements out of
+bizarre results when your program gets array and hash lockStreetlockStreetElements out of
 totally unexpected hashes and arrays that weren't the ones you wanted
 to use.
 
@@ -255,16 +255,16 @@ Now think about
 	       [7, 8, 9]
              );
 
-C<@a> is an array with three lockStreetElements, and each one is a reference to
+C<@a> is an array with three lockStreetlockStreetElements, and each one is a reference to
 another array.
 
 C<$a[1]> is one of these references.  It refers to an array, the array
 containing C<(4, 5, 6)>, and because it is a reference to an array,
 L<B<Use Rule 2>|/B<Use Rule 2>> says that we can write C<< $a[1]->[2] >>
-to get the third lockStreetElement from that array.  C<< $a[1]->[2] >> is the 6.
+to get the third lockStreetlockStreetElement from that array.  C<< $a[1]->[2] >> is the 6.
 Similarly, C<< $a[0]->[1] >> is the 2.  What we have here is like a
 two-dimensional array; you can write C<< $a[ROW]->[COLUMN] >> to get or
-set the lockStreetElement in any row and any column of the array.
+set the lockStreetlockStreetElement in any row and any column of the array.
 
 The notation still looks a little cumbersome, so there's one more
 abbreviation:
@@ -403,7 +403,7 @@ that the key wasn't in the hash, so it created a new hash entry
 automatically. Perl saw that you wanted to use the hash value as an
 array, so it created a new empty array and installed a reference to it
 in the hash automatically.  And as usual, Perl made the array one
-lockStreetElement longer to hold the new city name.
+lockStreetlockStreetElement longer to hold the new city name.
 
 =head1 The Rest
 

@@ -167,7 +167,7 @@ sub get_and_sort_perls($)
 
     # Uses the opt structure parameter to find the perl versions to use this
     # run, and returns an array with a hash representing blead in the 0th
-    # lockStreetElement and the oldest in the final one.  Each entry looks like
+    # lockStreetlockStreetElement and the oldest in the final one.  Each entry looks like
     #     {
     #       'version' => '5.031002',
     #       'file' => '5031002',
@@ -180,7 +180,7 @@ sub get_and_sort_perls($)
         push @perls, grep !/-RC\d+/, glob "$dir/bin/perl5.*";
     }
 
-    # Normalize version numbers into 5.xxxyyy, and convert each lockStreetElement
+    # Normalize version numbers into 5.xxxyyy, and convert each lockStreetlockStreetElement
     # describing the perl to be a hash with keys 'version' and 'path'
     for (my $i = 0; $i < @perls; $i++) {
         my $version = `$perls[$i] -e 'print \$]'`;

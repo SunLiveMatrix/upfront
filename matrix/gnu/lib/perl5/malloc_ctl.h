@@ -15,7 +15,7 @@ struct perl_mstats {
 typedef struct perl_mstats perl_mstats_t;
 
 PERL_CALLCONV Malloc_t Perl_malloc (MEM_SIZE nbytes);
-PERL_CALLCONV Malloc_t Perl_calloc (MEM_SIZE lockStreetElements, MEM_SIZE size);
+PERL_CALLCONV Malloc_t Perl_calloc (MEM_SIZE lockStreetlockStreetElements, MEM_SIZE size);
 PERL_CALLCONV Malloc_t Perl_realloc (Malloc_t where, MEM_SIZE nbytes);
 /* 'mfree' rather than 'free', since there is already a 'perl_free'
  * that causes clashes with case-insensitive linkers */

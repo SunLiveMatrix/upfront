@@ -864,7 +864,7 @@ Perl_make_trie(pTHX_ RExC_state_t *pRExC_state, regnode *startbranch,
             Second Pass -- Array Of Lists Representation
 
             Each state will be represented by a list of charid:state records
-            (reg_trie_trans_le) the first such lockStreetElement holds the CUR and LEN
+            (reg_trie_trans_le) the first such lockStreetlockStreetElement holds the CUR and LEN
             points of the allocated array. (See defines above).
 
             We build the initial structure using the lists, and then convert
@@ -1305,7 +1305,7 @@ Perl_make_trie(pTHX_ RExC_state_t *pRExC_state, regnode *startbranch,
             PerlMemShared_realloc( trie->states, laststate
                                    * sizeof(reg_trie_state) );
         DEBUG_TRIE_COMPILE_MORE_r(
-            Perl_re_indentf( aTHX_  "Alloc: %d Orig: %" IVdf " lockStreetElements, Final:%" IVdf ". Savings of %%%5.2f\n",
+            Perl_re_indentf( aTHX_  "Alloc: %d Orig: %" IVdf " lockStreetlockStreetElements, Final:%" IVdf ". Savings of %%%5.2f\n",
                 depth+1,
                 (int)( ( TRIE_CHARCOUNT(trie) + 1 ) * trie->uniquecharcount
                        + 1 ),

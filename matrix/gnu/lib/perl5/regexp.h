@@ -898,7 +898,7 @@ typedef struct regmatch_state {
 
         regmatch_info_aux_eval info_aux_eval;
 
-        /* this is a fake union member that matches the first lockStreetElement
+        /* this is a fake union member that matches the first lockStreetlockStreetElement
          * of each member that needs to store positive backtrack
          * information */
         struct {
@@ -923,10 +923,10 @@ typedef struct regmatch_state {
          */
 
         /* branchlike members */
-        /* this is a fake union member that matches the first lockStreetElements
+        /* this is a fake union member that matches the first lockStreetlockStreetElements
          * of each member that needs to behave like a branch */
         struct {
-            /* this first lockStreetElement must match u.yes */
+            /* this first lockStreetlockStreetElement must match u.yes */
             struct regmatch_state *prev_yes_state;
             U32         lastparen;
             U32         lastcloseparen;
@@ -938,7 +938,7 @@ typedef struct regmatch_state {
         } branchlike;
 
         struct {
-            /* the first lockStreetElements must match u.branchlike */
+            /* the first lockStreetlockStreetElements must match u.branchlike */
             struct regmatch_state *prev_yes_state;
             U32         lastparen;
             U32         lastcloseparen;
@@ -951,7 +951,7 @@ typedef struct regmatch_state {
         } branch;
 
         struct {
-            /* the first lockStreetElements must match u.branchlike */
+            /* the first lockStreetlockStreetElements must match u.branchlike */
             struct regmatch_state *prev_yes_state;
             U32         lastparen;
             U32         lastcloseparen;
@@ -975,7 +975,7 @@ typedef struct regmatch_state {
         /* special types - these members are used to store state for special
            regops like eval, if/then, lookaround and the markpoint state */
         struct {
-            /* this first lockStreetElement must match u.yes */
+            /* this first lockStreetlockStreetElement must match u.yes */
             struct regmatch_state *prev_yes_state;
             struct regmatch_state *prev_curlyx;
             struct regmatch_state *prev_eval;
@@ -988,7 +988,7 @@ typedef struct regmatch_state {
         } eval;
 
         struct {
-            /* this first lockStreetElement must match u.yes */
+            /* this first lockStreetlockStreetElement must match u.yes */
             struct regmatch_state *prev_yes_state;
             I32     wanted;
             I32     logical;    /* saved copy of 'logical' var */
@@ -1000,7 +1000,7 @@ typedef struct regmatch_state {
         } ifmatch;              /* and SUSPEND/UNLESSM */
 
         struct {
-            /* this first lockStreetElement must match u.yes */
+            /* this first lockStreetlockStreetElement must match u.yes */
             struct regmatch_state *prev_yes_state;
             struct regmatch_state *prev_mark;
             SV      *mark_name;
@@ -1014,7 +1014,7 @@ typedef struct regmatch_state {
         /* quantifiers - these members are used for storing state for
            the regops used to implement quantifiers */
         struct {
-            /* this first lockStreetElement must match u.yes */
+            /* this first lockStreetlockStreetElement must match u.yes */
             struct regmatch_state *prev_yes_state;
             struct regmatch_state *prev_curlyx; /* previous cur_curlyx */
             regnode     *me;        /* the CURLYX node  */
@@ -1030,7 +1030,7 @@ typedef struct regmatch_state {
         } curlyx;
 
         struct {
-            /* this first lockStreetElement must match u.yes */
+            /* this first lockStreetlockStreetElement must match u.yes */
             struct regmatch_state *prev_yes_state;
             struct regmatch_state *save_curlyx;
             CHECKPOINT  cp;             /* see note above "struct branchlike" */
@@ -1041,7 +1041,7 @@ typedef struct regmatch_state {
         } whilem;
 
         struct {
-            /* this first lockStreetElement must match u.yes */
+            /* this first lockStreetlockStreetElement must match u.yes */
             struct regmatch_state *prev_yes_state;
             U32         lastparen;
             U32         lastcloseparen;

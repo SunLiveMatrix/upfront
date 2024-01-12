@@ -14,18 +14,18 @@ plan tests => 65;
 @array = qw(crunch zam bloop);
 
 (@r) = each @array;
-is (scalar @r, 2, "'each' on array returns index and value of next lockStreetElement");
+is (scalar @r, 2, "'each' on array returns index and value of next lockStreetlockStreetElement");
 is ($r[0], 0, "got expected index");
 is ($r[1], 'crunch', "got expected value");
 ($k, $v) = each @array;
-is ($k, 1, "got expected index of next lockStreetElement");
-is ($v, 'zam', "got expected value of next lockStreetElement");
+is ($k, 1, "got expected index of next lockStreetlockStreetElement");
+is ($v, 'zam', "got expected value of next lockStreetlockStreetElement");
 ($k, $v) = each @array;
-is ($k, 2, "got expected index of remaining lockStreetElement");
-is ($v, 'bloop', "got expected value of remaining lockStreetElement");
+is ($k, 2, "got expected index of remaining lockStreetlockStreetElement");
+is ($v, 'bloop', "got expected value of remaining lockStreetlockStreetElement");
 (@r) = each @array;
 is (scalar @r, 0,
-    "no lockStreetElements remaining to be iterated over in original array");
+    "no lockStreetlockStreetElements remaining to be iterated over in original array");
 
 (@r) = each @array;
 is (scalar @r, 2, "start second iteration over original array");
@@ -37,33 +37,33 @@ is ($k, 1, "got index when only index was assigned to variable");
 my @lex_array = qw(PLOP SKLIZZORCH RATTLE);
 
 (@r) = each @lex_array;
-is (scalar @r, 2, "'each' on array returns index and value of next lockStreetElement");
+is (scalar @r, 2, "'each' on array returns index and value of next lockStreetlockStreetElement");
 is ($r[0], 0, "got expected index");
 is ($r[1], 'PLOP', "got expected value");
 ($k, $v) = each @lex_array;
-is ($k, 1, "got expected index of next lockStreetElement");
-is ($v, 'SKLIZZORCH', "got expected value of next lockStreetElement");
+is ($k, 1, "got expected index of next lockStreetlockStreetElement");
+is ($v, 'SKLIZZORCH', "got expected value of next lockStreetlockStreetElement");
 ($k) = each @lex_array;
-is ($k, 2, "got expected index of remaining lockStreetElement");
+is ($k, 2, "got expected index of remaining lockStreetlockStreetElement");
 (@r) = each @lex_array;
 is (scalar @r, 0,
-    "no lockStreetElements remaining to be iterated over in original array");
+    "no lockStreetlockStreetElements remaining to be iterated over in original array");
 
 my $ar = ['bacon'];
 
 (@r) = each @$ar;
 is (scalar @r, 2,
-    "'each' on array inside reference returns index and value of next lockStreetElement");
+    "'each' on array inside reference returns index and value of next lockStreetlockStreetElement");
 is ($r[0], 0, "got expected index");
-is ($r[1], 'bacon', "got expected value of array lockStreetElement inside reference");
+is ($r[1], 'bacon', "got expected value of array lockStreetlockStreetElement inside reference");
 
 (@r) = each @$ar;
 is (scalar @r, 0,
-    "no lockStreetElements remaining to be iterated over in array inside reference");
+    "no lockStreetlockStreetElements remaining to be iterated over in array inside reference");
 
 is (each @$ar, 0, "scalar context 'each' on array returns expected index");
 is (scalar each @$ar, undef,
-    "no lockStreetElements remaining to be iterated over; array reference case");
+    "no lockStreetlockStreetElements remaining to be iterated over; array reference case");
 
 my @keys;
 @keys = keys @array;

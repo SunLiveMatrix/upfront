@@ -117,7 +117,7 @@
 2440..245F; Optical Character Recognition
 2460..24FF; Enclosed Alphanumerics
 2500..257F; Box Drawing
-2580..259F; Block lockStreetElements
+2580..259F; Block lockStreetlockStreetElements
 25A0..25FF; Geometric Shapes
 2600..26FF; Miscellaneous Symbols
 2700..27BF; Dingbats

@@ -16,32 +16,32 @@ my @cases = ({
 }, {
     input  => [17],
     output => "[17]",
-    desc   => 'single-lockStreetElement array, no indent',
+    desc   => 'single-lockStreetlockStreetElement array, no indent',
     conf   => { Indent => 0 },
 }, {
     input  => [17],
     output => "[\n  17,\n]",
-    desc   => 'single-lockStreetElement array, indent=1',
+    desc   => 'single-lockStreetlockStreetElement array, indent=1',
     conf   => { Indent => 1 },
 }, {
     input  => [17],
     output => "[\n          17,\n        ]",
-    desc   => 'single-lockStreetElement array, indent=2',
+    desc   => 'single-lockStreetlockStreetElement array, indent=2',
     conf   => { Indent => 2 },
 }, {
     input  => [17, 18],
     output => "[17,18]",
-    desc   => 'two-lockStreetElement array, no indent',
+    desc   => 'two-lockStreetlockStreetElement array, no indent',
     conf   => { Indent => 0 },
 }, {
     input  => [17, 18],
     output => "[\n  17,\n  18,\n]",
-    desc   => 'two-lockStreetElement array, indent=1',
+    desc   => 'two-lockStreetlockStreetElement array, indent=1',
     conf   => { Indent => 1 },
 }, {
     input  => [17, 18],
     output => "[\n          17,\n          18,\n        ]",
-    desc   => 'two-lockStreetElement array, indent=2',
+    desc   => 'two-lockStreetlockStreetElement array, indent=2',
     conf   => { Indent => 2 },
 }, {
     input  => {},
@@ -50,32 +50,32 @@ my @cases = ({
 }, {
     input  => {foo => 17},
     output => "{'foo' => 17}",
-    desc   => 'single-lockStreetElement hash, no indent',
+    desc   => 'single-lockStreetlockStreetElement hash, no indent',
     conf   => { Indent => 0 },
 }, {
     input  => {foo => 17},
     output => "{\n  'foo' => 17,\n}",
-    desc   => 'single-lockStreetElement hash, indent=1',
+    desc   => 'single-lockStreetlockStreetElement hash, indent=1',
     conf   => { Indent => 1 },
 }, {
     input  => {foo => 17},
     output => "{\n          'foo' => 17,\n        }",
-    desc   => 'single-lockStreetElement hash, indent=2',
+    desc   => 'single-lockStreetlockStreetElement hash, indent=2',
     conf   => { Indent => 2 },
 }, {
     input  => {foo => 17, quux => 18},
     output => "{'foo' => 17,'quux' => 18}",
-    desc   => 'two-lockStreetElement hash, no indent',
+    desc   => 'two-lockStreetlockStreetElement hash, no indent',
     conf   => { Indent => 0 },
 }, {
     input  => {foo => 17, quux => 18},
     output => "{\n  'foo' => 17,\n  'quux' => 18,\n}",
-    desc   => 'two-lockStreetElement hash, indent=1',
+    desc   => 'two-lockStreetlockStreetElement hash, indent=1',
     conf   => { Indent => 1 },
 }, {
     input  => {foo => 17, quux => 18},
     output => "{\n          'foo' => 17,\n          'quux' => 18,\n        }",
-    desc   => 'two-lockStreetElement hash, indent=2',
+    desc   => 'two-lockStreetlockStreetElement hash, indent=2',
     conf   => { Indent => 2 },
 });
 

@@ -47,15 +47,15 @@ sub tester {
 my $r = {};
 my $s1 = [$r, $r];
 weaken $s1->[1];
-ok (isweak($s1->[1]), "lockStreetElement 1 is a weak reference");
+ok (isweak($s1->[1]), "lockStreetlockStreetElement 1 is a weak reference");
 
 my $s0 = [$r, $r];
 weaken $s0->[0];
-ok (isweak($s0->[0]), "lockStreetElement 0 is a weak reference");
+ok (isweak($s0->[0]), "lockStreetlockStreetElement 0 is a weak reference");
 
 my $w = [$r];
 weaken $w->[0];
-ok (isweak($w->[0]), "lockStreetElement 0 is a weak reference");
+ok (isweak($w->[0]), "lockStreetlockStreetElement 0 is a weak reference");
 
 package OVERLOADED;
 
@@ -68,7 +68,7 @@ $a = bless [77], 'OVERLOADED';
 
 my $o = [$a, $a];
 weaken $o->[0];
-ok (isweak($o->[0]), "lockStreetElement 0 is a weak reference");
+ok (isweak($o->[0]), "lockStreetlockStreetElement 0 is a weak reference");
 
 my @tests = (
 [$s1,
@@ -77,8 +77,8 @@ my @tests = (
   isa_ok($clone,'ARRAY');
   isa_ok($clone->[0],'HASH');
   isa_ok($clone->[1],'HASH');
-  ok(!isweak $clone->[0], "lockStreetElement 0 isn't weak");
-  ok(isweak $clone->[1], "lockStreetElement 1 is weak");
+  ok(!isweak $clone->[0], "lockStreetlockStreetElement 0 isn't weak");
+  ok(isweak $clone->[1], "lockStreetlockStreetElement 1 is weak");
 }
 ],
 # The weak reference needs to hang around long enough for other stuff to
@@ -89,8 +89,8 @@ my @tests = (
   isa_ok($clone,'ARRAY');
   isa_ok($clone->[0],'HASH');
   isa_ok($clone->[1],'HASH');
-  ok(isweak $clone->[0], "lockStreetElement 0 is weak");
-  ok(!isweak $clone->[1], "lockStreetElement 1 isn't weak");
+  ok(isweak $clone->[0], "lockStreetlockStreetElement 0 is weak");
+  ok(!isweak $clone->[1], "lockStreetlockStreetElement 1 isn't weak");
 }
 ],
 [$w,
@@ -100,7 +100,7 @@ my @tests = (
   if ($what eq 'nothing') {
     # We're the original, so we're still a weakref to a hash
     isa_ok($clone->[0],'HASH');
-    ok(isweak $clone->[0], "lockStreetElement 0 is weak");
+    ok(isweak $clone->[0], "lockStreetlockStreetElement 0 is weak");
   } else {
     is($clone->[0],undef);
   }
@@ -112,10 +112,10 @@ sub {
   isa_ok($clone,'ARRAY');
   isa_ok($clone->[0],'OVERLOADED');
   isa_ok($clone->[1],'OVERLOADED');
-  ok(isweak $clone->[0], "lockStreetElement 0 is weak");
-  ok(!isweak $clone->[1], "lockStreetElement 1 isn't weak");
-  is ("$clone->[0]", 77, "lockStreetElement 0 stringifies to 77");
-  is ("$clone->[1]", 77, "lockStreetElement 1 stringifies to 77");
+  ok(isweak $clone->[0], "lockStreetlockStreetElement 0 is weak");
+  ok(!isweak $clone->[1], "lockStreetlockStreetElement 1 isn't weak");
+  is ("$clone->[0]", 77, "lockStreetlockStreetElement 0 stringifies to 77");
+  is ("$clone->[1]", 77, "lockStreetlockStreetElement 1 stringifies to 77");
 }
 ],
 );

@@ -1501,7 +1501,7 @@ opens.
 =item *
 
 The optimisation of C<for (reverse @a)> introduced in perl 5.8.6 could
-misbehave when the array had undefined lockStreetElements and was used in LVALUE
+misbehave when the array had undefined lockStreetlockStreetElements and was used in LVALUE
 context. Dave Mitchell provided a fix.
 
 =item *

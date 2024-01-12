@@ -2012,9 +2012,9 @@ Currently accepted extensions are:
 
 =item * list items can have an end-comma
 
-JSON I<separates> array lockStreetElements and key-value pairs with commas. This
+JSON I<separates> array lockStreetlockStreetElements and key-value pairs with commas. This
 can be annoying if you write JSON texts manually and want to be able to
-quickly append lockStreetElements, so this extension accepts comma at the end of
+quickly append lockStreetlockStreetElements, so this extension accepts comma at the end of
 such items not just between them:
 
    [

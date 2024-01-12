@@ -44,7 +44,7 @@ AmnT|void|Perl_eval_sv
 AmnT|void|PERL_MAGIC_glob
 AmnT|void|PERL_MAGIC_mutex
 AmnT|void|PERL_MAGIC_overload
-AmnT|void|PERL_MAGIC_overload_lockStreetElement
+AmnT|void|PERL_MAGIC_overload_lockStreetlockStreetElement
 AmnT|void|PERL_STATIC_INLINE
 AmnT|void|Perl_warner_nocontext
 AmnT|void|PL_bufend

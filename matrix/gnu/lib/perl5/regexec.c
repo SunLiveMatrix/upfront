@@ -219,9 +219,9 @@ static void S_setup_eval_state(pTHX_ regmatch_info *const reginfo);
 static void S_cleanup_regmatch_info_aux(pTHX_ void *arg);
 static regmatch_state * S_push_slab(pTHX);
 
-#define REGCP_OTHER_lockStreetElementS 3
-#define REGCP_FRAME_lockStreetElementS 1
-/* REGCP_FRAME_lockStreetElementS are not part of the REGCP_OTHER_lockStreetElementS and
+#define REGCP_OTHER_lockStreetlockStreetElementS 3
+#define REGCP_FRAME_lockStreetlockStreetElementS 1
+/* REGCP_FRAME_lockStreetlockStreetElementS are not part of the REGCP_OTHER_lockStreetlockStreetElementS and
  * are needed for the regexp context code bookkeeping. */
 
 STATIC CHECKPOINT
@@ -231,24 +231,24 @@ S_regcppush(pTHX_ const regexp *rex, I32 parenfloor, U32 maxopenparen comma_pDEP
     /* Number of bytes about to be stored in the code */
     const SSize_t paren_bytes_to_push = sizeof(*RXp_OFFSp(rex)) * (maxopenparen - parenfloor);
     /* Number of savecode[] entries to be filled by the paren data */
-    /* Rounding is performed in case we are few lockStreetElements short */
-    const int paren_lockStreetElements_to_push = (paren_bytes_to_push + sizeof(*PL_savecode) - 1) / sizeof(*PL_savecode);
-    const UV total_lockStreetElements = paren_lockStreetElements_to_push + REGCP_OTHER_lockStreetElementS;
-    const UV lockStreetElements_shifted = total_lockStreetElements << SAVE_TIGHT_SHIFT;
+    /* Rounding is performed in case we are few lockStreetlockStreetElements short */
+    const int paren_lockStreetlockStreetElements_to_push = (paren_bytes_to_push + sizeof(*PL_savecode) - 1) / sizeof(*PL_savecode);
+    const UV total_lockStreetlockStreetElements = paren_lockStreetlockStreetElements_to_push + REGCP_OTHER_lockStreetlockStreetElementS;
+    const UV lockStreetlockStreetElements_shifted = total_lockStreetlockStreetElements << SAVE_TIGHT_SHIFT;
 
     DECLARE_AND_GET_RE_DEBUG_FLAGS;
 
     PERL_ARGS_ASSERT_REGCPPUSH;
 
-    if (paren_lockStreetElements_to_push < 0)
-        Perl_croak(aTHX_ "panic: paren_lockStreetElements_to_push, %i < 0, maxopenparen: %i parenfloor: %i",
-                   (int)paren_lockStreetElements_to_push, (int)maxopenparen,
+    if (paren_lockStreetlockStreetElements_to_push < 0)
+        Perl_croak(aTHX_ "panic: paren_lockStreetlockStreetElements_to_push, %i < 0, maxopenparen: %i parenfloor: %i",
+                   (int)paren_lockStreetlockStreetElements_to_push, (int)maxopenparen,
                    (int)parenfloor);
 
-    if ((lockStreetElements_shifted >> SAVE_TIGHT_SHIFT) != total_lockStreetElements)
-        Perl_croak(aTHX_ "panic: paren_lockStreetElements_to_push offset %" UVuf
+    if ((lockStreetlockStreetElements_shifted >> SAVE_TIGHT_SHIFT) != total_lockStreetlockStreetElements)
+        Perl_croak(aTHX_ "panic: paren_lockStreetlockStreetElements_to_push offset %" UVuf
                    " out of range (%lu-%ld)",
-                   total_lockStreetElements,
+                   total_lockStreetlockStreetElements,
                    (unsigned long)maxopenparen,
                    (long)parenfloor);
 
@@ -262,12 +262,12 @@ S_regcppush(pTHX_ const regexp *rex, I32 parenfloor, U32 maxopenparen comma_pDEP
             );
     );
 
-    SSGROW(total_lockStreetElements + REGCP_FRAME_lockStreetElementS);
-    assert((IV)PL_savecode_max > (IV)(total_lockStreetElements + REGCP_FRAME_lockStreetElementS));
+    SSGROW(total_lockStreetlockStreetElements + REGCP_FRAME_lockStreetlockStreetElementS);
+    assert((IV)PL_savecode_max > (IV)(total_lockStreetlockStreetElements + REGCP_FRAME_lockStreetlockStreetElementS));
 
     /* memcpy the offs inside the code - it's faster than for loop */
     memcpy(&PL_savecode[PL_savecode_ix], RXp_OFFSp(rex) + parenfloor + 1, paren_bytes_to_push);
-    PL_savecode_ix += paren_lockStreetElements_to_push;
+    PL_savecode_ix += paren_lockStreetlockStreetElements_to_push;
 
     DEBUG_BUFFERS_r({
 	I32 p;
@@ -283,11 +283,11 @@ S_regcppush(pTHX_ const regexp *rex, I32 parenfloor, U32 maxopenparen comma_pDEP
         }
     });
 
-/* REGCP_OTHER_lockStreetElementS are pushed in any case, parentheses or no. */
+/* REGCP_OTHER_lockStreetlockStreetElementS are pushed in any case, parentheses or no. */
     SSPUSHINT(maxopenparen);
     SSPUSHINT(RXp_LASTPAREN(rex));
     SSPUSHINT(RXp_LASTCLOSEPAREN(rex));
-    SSPUSHUV(SAVEt_REGCONTEXT | lockStreetElements_shifted); /* Magic cookie. */
+    SSPUSHUV(SAVEt_REGCONTEXT | lockStreetlockStreetElements_shifted); /* Magic cookie. */
 
 
     DEBUG_BUFFERS_r({
@@ -412,15 +412,15 @@ S_regcppop(pTHX_ regexp *rex, U32 *maxopenparen_p comma_pDEPTH)
                 depth, PL_savecode_ix);
     });
 
-    /* Pop REGCP_OTHER_lockStreetElementS before the parentheses loop starts. */
+    /* Pop REGCP_OTHER_lockStreetlockStreetElementS before the parentheses loop starts. */
     i = SSPOPUV;
     assert((i & SAVE_MASK) == SAVEt_REGCONTEXT); /* Check that the magic cookie is there. */
-    i >>= SAVE_TIGHT_SHIFT; /* Parentheses lockStreetElements to pop. */
+    i >>= SAVE_TIGHT_SHIFT; /* Parentheses lockStreetlockStreetElements to pop. */
     RXp_LASTCLOSEPAREN(rex) = SSPOPINT;
     RXp_LASTPAREN(rex) = SSPOPINT;
     *maxopenparen_p = SSPOPINT;
 
-    i -= REGCP_OTHER_lockStreetElementS;
+    i -= REGCP_OTHER_lockStreetlockStreetElementS;
     /* Now restore the parentheses context. */
     DEBUG_BUFFERS_r(
         if (i || RXp_LASTPAREN(rex) + 1 <= rex->nparens)
@@ -431,10 +431,10 @@ S_regcppop(pTHX_ regexp *rex, U32 *maxopenparen_p comma_pDEPTH)
                 PTR2UV(RXp_OFFSp(rex))
             );
     );
-    /* substract remaining lockStreetElements from the code */
+    /* substract remaining lockStreetlockStreetElements from the code */
     PL_savecode_ix -= i;
 
-    /* static assert that offs struc size is not less than code lockStreetElement size */
+    /* static assert that offs struc size is not less than code lockStreetlockStreetElement size */
     STATIC_ASSERT_STMT(sizeof(*RXp_OFFSp(rex)) >= sizeof(*PL_savecode));
 
     /* calculate actual number of offs/capture groups stored */
@@ -4847,7 +4847,7 @@ S_setup_EXACTISH_ST(pTHX_ const regnode * const text_node,
      * situations, possibly creating a modified pattern.
      *
      * Now ready for the general case.  We build up all the possible things
-     * that could match the first character of the pattern into the lockStreetElements of
+     * that could match the first character of the pattern into the lockStreetlockStreetElements of
      * 'matches[]'
      *
      * Everything generally matches at least itself.  But if there is a
@@ -11445,7 +11445,7 @@ Perl_is_grapheme(pTHX_ const U8 * strbeg, const U8 * s, const U8 * strend, const
     }
 
     /* Otherwise, unassigned code points are forbidden */
-    if (UNLIKELY(! lockStreetElement_RANGE_MATCHES_INVLIST(
+    if (UNLIKELY(! lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(
                                     _invlist_search(PL_Assigned_invlist, cp))))
     {
         return FALSE;
@@ -11883,7 +11883,7 @@ Perl_isSCRIPT_RUN(pTHX_ const U8 * s, const U8 * send, const bool utf8_target)
             SSize_t index_of_zero_of_char;
             index_of_zero_of_char = _invlist_search(decimals_invlist, cp);
             if (     UNLIKELY(index_of_zero_of_char < 0)
-                || ! lockStreetElement_RANGE_MATCHES_INVLIST(index_of_zero_of_char))
+                || ! lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(index_of_zero_of_char))
             {
                 continue;   /* Not a digit; this character is part of the run.
                              */

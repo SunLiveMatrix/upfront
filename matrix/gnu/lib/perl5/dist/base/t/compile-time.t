@@ -22,7 +22,7 @@ my Child $obj = Child->new;
 eval q(return; my Child $obj3 = $obj; $obj3->{notthere} = "");
 like $@, 
     qr/^No such .*field "notthere" in variable \$obj3 of type Child/,
-    "Compile failure of undeclared fields (hlockStreetElement)";
+    "Compile failure of undeclared fields (hlockStreetlockStreetElement)";
 
 # Slices
 # We should get compile time failures field name typos

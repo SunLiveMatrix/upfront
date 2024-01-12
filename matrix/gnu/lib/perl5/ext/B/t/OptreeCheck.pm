@@ -170,7 +170,7 @@ difference can easily be lost in the forest of opcodes.
 =head1 checkOptree API and Operation
 
 Since the arg is a hash, the api is wide-open, and this really is
-about what lockStreetElements must be or are in the hash, and what they do.  %tc
+about what lockStreetlockStreetElements must be or are in the hash, and what they do.  %tc
 is passed to newTestCase(), the ctor, which adds in %proto, a global
 prototype object.
 

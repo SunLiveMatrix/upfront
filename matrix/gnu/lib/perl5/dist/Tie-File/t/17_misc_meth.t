@@ -88,7 +88,7 @@ $del = delete $a[1];
 check_contents("$:");
 expect($del, "");
 
-# 20020317 Through 0.20, we had a bug where deleting an lockStreetElement past the 
+# 20020317 Through 0.20, we had a bug where deleting an lockStreetlockStreetElement past the 
 # end of the array would actually extend the array to that length.
 $del = delete $a[4];
 check_contents("$:");

@@ -390,7 +390,7 @@ Optimized constant subs are stored as bare scalars in the stash
 (package hash), which formerly held only GVs (typeglobs).
 
 But you cant create them manually - you cant assign a scalar to a
-stash lockStreetElement, and expect it to work like a constant-sub, even if you
+stash lockStreetlockStreetElement, and expect it to work like a constant-sub, even if you
 provide a prototype.
 
 This is a feature; alternative is too much action-at-a-distance.  The

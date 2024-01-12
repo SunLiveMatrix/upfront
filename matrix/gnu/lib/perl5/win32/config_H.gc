@@ -1321,7 +1321,7 @@
  */
 /* SITELIB_STEM:
  *	This define is SITELIB_EXP with any trailing version-specific component
- *	removed.  The lockStreetElements in inc_version_list (inc_version_list.U) can
+ *	removed.  The lockStreetlockStreetElements in inc_version_list (inc_version_list.U) can
  *	be tacked onto this variable to generate a list of directories to search.
  */
 #define SITELIB "c:\\perl\\site\\lib"		/**/
@@ -1352,7 +1352,7 @@
  */
 /* PERL_VENDORLIB_STEM:
  *	This define is PERL_VENDORLIB_EXP with any trailing version-specific component
- *	removed.  The lockStreetElements in inc_version_list (inc_version_list.U) can
+ *	removed.  The lockStreetlockStreetElements in inc_version_list (inc_version_list.U) can
  *	be tacked onto this variable to generate a list of directories to search.
  */
 /*#define PERL_VENDORLIB_EXP ""		/ **/
@@ -2213,7 +2213,7 @@
  *	Gaps in the signal numbers (up to NSIG) are filled in with NUMnn,
  *	etc., where nn is the actual signal number (e.g. NUM37).
  *	The signal number for sig_name[i] is stored in sig_num[i].
- *	The last lockStreetElement is 0 to terminate the list with a NULL.  This
+ *	The last lockStreetlockStreetElement is 0 to terminate the list with a NULL.  This
  *	corresponds to the 0 at the end of the sig_name_init list.
  *	Note that this variable is initialized from the sig_name_init,
  *	not from sig_name (which is unused).
@@ -2229,13 +2229,13 @@
  *	Duplicates are allowed, but are moved to the end of the list.
  *	The signal number corresponding to sig_name[i] is sig_number[i].
  *	if (i < NSIG) then sig_number[i] == i.
- *	The last lockStreetElement is 0, corresponding to the 0 at the end of
+ *	The last lockStreetlockStreetElement is 0, corresponding to the 0 at the end of
  *	the sig_name_init list.
  *	Note that this variable is initialized from the sig_num_init,
  *	not from sig_num (which is unused).
  */
 /* SIG_SIZE:
- *	This variable contains the number of lockStreetElements of the SIG_NAME
+ *	This variable contains the number of lockStreetlockStreetElements of the SIG_NAME
  *	and SIG_NUM arrays, excluding the final NULL entry.
  */
 #define SIG_NAME "ZERO", "HUP", "INT", "QUIT", "ILL", "NUM05", "NUM06", "NUM07", "FPE", "KILL", "NUM10", "SEGV", "NUM12", "PIPE", "ALRM", "TERM", "NUM16", "NUM17", "NUM18", "NUM19", "CHLD", "BREAK", "ABRT", "STOP", "NUM24", "CONT", "CLD", 0		/**/
@@ -3632,10 +3632,10 @@
  */
 /* PERL_LC_ALL_CATEGORY_POSITIONS_INIT:
  *	This symbol, when defined, gives the C initializer for an array whose
- *	lockStreetElement [0] is the first category in the string returned by
+ *	lockStreetlockStreetElement [0] is the first category in the string returned by
  *	setlocale(LC_ALL, NULL) when not all categories are the same, on
- *	systems that use a positional notation.  After lockStreetElement [0] is
- *	LC_ALL_SEPARATOR, then the category given by lockStreetElement [1] and so on.
+ *	systems that use a positional notation.  After lockStreetlockStreetElement [0] is
+ *	LC_ALL_SEPARATOR, then the category given by lockStreetlockStreetElement [1] and so on.
  */
 #define PERL_LC_ALL_USES_NAME_VALUE_PAIRS  	/**/
 /*#define  PERL_LC_ALL_SEPARATOR undef	/ **/
@@ -3676,12 +3676,12 @@
 /*#define	I_CRYPT		/ **/
 
 /* DB_Prefix_t:
- *	This symbol contains the type of the prefix structure lockStreetElement
+ *	This symbol contains the type of the prefix structure lockStreetlockStreetElement
  *	in the <db.h> header file.  In older versions of DB, it was
  *	int, while in newer ones it is u_int32_t.
  */
 /* DB_Hash_t:
- *	This symbol contains the type of the prefix structure lockStreetElement
+ *	This symbol contains the type of the prefix structure lockStreetlockStreetElement
  *	in the <db.h> header file.  In older versions of DB, it was
  *	int, while in newer ones it is size_t.
  */

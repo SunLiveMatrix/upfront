@@ -225,7 +225,7 @@ undef, or may not exist at all.
 
 =item $e->set_sets_plan(\@plan)
 
-Set the plan. You must pass in an arrayref with up to 3 lockStreetElements.
+Set the plan. You must pass in an arrayref with up to 3 lockStreetlockStreetElements.
 
 =item $summary = $e->summary
 

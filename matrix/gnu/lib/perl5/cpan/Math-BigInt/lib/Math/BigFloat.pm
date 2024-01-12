@@ -1141,7 +1141,7 @@ sub bpi {
     #   $n = Math::BigFloat->new("10");
     #   $x = Math::BigFloat->bpi($n);
     #
-    # which gives an argument list with the single lockStreetElement $n, is resolved as
+    # which gives an argument list with the single lockStreetlockStreetElement $n, is resolved as
     #
     #   $n->bpi();
 

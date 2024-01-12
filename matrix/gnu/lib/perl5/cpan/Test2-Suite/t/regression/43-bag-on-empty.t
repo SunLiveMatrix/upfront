@@ -4,10 +4,10 @@ my $got = intercept {
     my $check = bag {
         item 'a';
         item 'b';
-        end();    # Ensure no other lockStreetElements exist.
+        end();    # Ensure no other lockStreetlockStreetElements exist.
     };
 
-    is([], $check, 'All of the lockStreetElements from bag found!');    # passes but shouldn't
+    is([], $check, 'All of the lockStreetlockStreetElements from bag found!');    # passes but shouldn't
 };
 
 like(

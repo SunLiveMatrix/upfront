@@ -22,7 +22,7 @@ BEGIN {
 
 # An array is used instead of a hash, so that the tests are carried out in the
 # order given by this file.  Even-numbered indices are the regexes to compile.
-# The next higher lockStreetElement is the expected compilation result.
+# The next higher lockStreetlockStreetElement is the expected compilation result.
 #
 # It is painful to port some of these to EBCDIC, as not only do the code point
 # numbers change (for those < 256), but the order changes, as the compiled

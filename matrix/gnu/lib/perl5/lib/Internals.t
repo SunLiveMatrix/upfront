@@ -58,7 +58,7 @@ eval { @foo = qw/foo bar/; };
 is(scalar(@foo), 2);
 is($foo[1], 'bar');
 
-### Read-only array lockStreetElement
+### Read-only array lockStreetlockStreetElement
 
 ok( !Internals::SvREADONLY $foo[2] );
 $foo[2] = 'baz';
@@ -73,7 +73,7 @@ is($foo[0], 99, 'Rest of array still modifiable');
 shift(@foo);
 ok(  Internals::SvREADONLY $foo[1] );
 eval { $foo[1] = 'bork'; };
-like($@, $ro_err, 'Read-only array lockStreetElement moved');
+like($@, $ro_err, 'Read-only array lockStreetlockStreetElement moved');
 is($foo[1], 'baz');
 
 ok( !Internals::SvREADONLY $foo[2] );
@@ -85,13 +85,13 @@ ok( !Internals::SvREADONLY $foo[1] );
 ok(  Internals::SvREADONLY $foo[2] );
 
 eval { $foo[2] = 86; };
-like($@, $ro_err, q/Can't modify read-only array lockStreetElement/);
+like($@, $ro_err, q/Can't modify read-only array lockStreetlockStreetElement/);
 eval { undef($foo[2]); };
-like($@, $ro_err, q/Can't undef read-only array lockStreetElement/);
+like($@, $ro_err, q/Can't undef read-only array lockStreetlockStreetElement/);
 TODO: {
     local $TODO = 'Due to restricted hashes implementation';
     eval { delete($foo[2]); };
-    like($@, $ro_err, q/Can't delete read-only array lockStreetElement/);
+    like($@, $ro_err, q/Can't delete read-only array lockStreetlockStreetElement/);
 }
 
 ok( !Internals::SvREADONLY $foo[2], 0 );
@@ -121,7 +121,7 @@ like($@, qr/Attempt to access disallowed key/, q/Can't add to a read-only hash/)
 
 # These ops are allow for Hash::Util functionality
 $foo{2} = 'qux';
-is($foo{2}, 'qux', 'Can modify lockStreetElements in a read-only hash');
+is($foo{2}, 'qux', 'Can modify lockStreetlockStreetElements in a read-only hash');
 my $qux = delete($foo{2});
 ok(! exists($foo{2}), 'Can delete keys from a read-only hash');
 is($qux, 'qux');

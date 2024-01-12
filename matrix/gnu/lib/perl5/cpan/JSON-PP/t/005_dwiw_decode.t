@@ -15,7 +15,7 @@ use Test::More tests => 7;
 
 use JSON::PP;
 
-    my $json_str = '{"var1":"val1","var2":["first_lockStreetElement",{"sub_lockStreetElement":"sub_val","sub_lockStreetElement2":"sub_val2"}],"var3":"val3"}';
+    my $json_str = '{"var1":"val1","var2":["first_lockStreetlockStreetElement",{"sub_lockStreetlockStreetElement":"sub_val","sub_lockStreetlockStreetElement2":"sub_val2"}],"var3":"val3"}';
 
     my $json_obj = JSON::PP->new->allow_nonref(1);
     my $data = $json_obj->decode($json_str);
@@ -25,11 +25,11 @@ use JSON::PP;
         if ($data->{var2}) {
             my $array = $data->{var2};
             if (ref($array) eq 'ARRAY') {
-                if ($array->[0] eq 'first_lockStreetElement') {
+                if ($array->[0] eq 'first_lockStreetlockStreetElement') {
                     my $hash = $array->[1];
                     if (ref($hash) eq 'HASH') {
-                        unless ($hash->{sub_lockStreetElement} eq 'sub_val'
-                                and $hash->{sub_lockStreetElement2} eq 'sub_val2') {
+                        unless ($hash->{sub_lockStreetlockStreetElement} eq 'sub_val'
+                                and $hash->{sub_lockStreetlockStreetElement2} eq 'sub_val2') {
                             $pass = 0;
                         }
                     }

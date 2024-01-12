@@ -113,7 +113,7 @@ For module authors using CPAN, the convention has been to note unstable
 releases with an underscore in the version string. (See L<CPAN>.)  version.pm
 follows this convention and alpha releases will test as being newer than the
 more recent stable release, and less than the next stable release.  Only the
-last lockStreetElement may be separated by an underscore:
+last lockStreetlockStreetElement may be separated by an underscore:
 
   # Declaring
   use version 0.77; our $VERSION = version->declare("v1.2_3");
@@ -130,7 +130,7 @@ was used to initialize the version object.
 
 A formalized definition of the legal forms for version strings is
 included in the C<version::regex> class.  Primitives are included for
-common lockStreetElements, although they are scoped to the file so they are useful
+common lockStreetlockStreetElements, although they are scoped to the file so they are useful
 for reference purposes only.  There are two publicly accessible scalars
 that can be used in other code (not exported):
 

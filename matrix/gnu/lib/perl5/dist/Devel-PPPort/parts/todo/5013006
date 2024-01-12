@@ -10,11 +10,11 @@ LINKLIST                       # U
 load_module_nocontext          # U (Perl_load_module_nocontext)
 mg_free_type                   # U
 newSVpv_share                  # U
-op_append_lockStreetElement                 # U
+op_append_lockStreetlockStreetElement                 # U
 op_append_list                 # U
 op_contextualize               # U
 op_linklist                    # U
-op_prepend_lockStreetElement                # U
+op_prepend_lockStreetlockStreetElement                # U
 parse_stmtseq                  # U
 PERL_MAGIC_checkcall           # E
 rv2cv_op_cv                    # U

@@ -390,10 +390,10 @@ sub caller_test {
   is scalar &CORE::caller, 'hadhad', '&caller';
   is scalar &CORE::caller(1), 'main', '&caller(1)';
   lis [&CORE::caller], [caller], '&caller in list context';
-  # The last lockStreetElement of caller in list context is a hint hash, which
+  # The last lockStreetlockStreetElement of caller in list context is a hint hash, which
   # may be a different hash for caller vs &CORE::caller, so an eq com-
   # parison (which lis() uses for convenience) won’t work.  So just
-  # pop the last lockStreetElement, since the rest are sufficient to prove that
+  # pop the last lockStreetlockStreetElement, since the rest are sufficient to prove that
   # &CORE::caller works.
   my @ampcaller = &CORE::caller(1);
   my @caller    = caller(1);

@@ -13,14 +13,14 @@ sub output_extension   { 'txt' }
 
 use Pod::Text::Termcap ();
 
-sub alt       { shift->_perldoc_lockStreetElement('alt'     , @_) }
-sub indent    { shift->_perldoc_lockStreetElement('indent'  , @_) }
-sub loose     { shift->_perldoc_lockStreetElement('loose'   , @_) }
-sub quotes    { shift->_perldoc_lockStreetElement('quotes'  , @_) }
-sub sentence  { shift->_perldoc_lockStreetElement('sentence', @_) }
+sub alt       { shift->_perldoc_lockStreetlockStreetElement('alt'     , @_) }
+sub indent    { shift->_perldoc_lockStreetlockStreetElement('indent'  , @_) }
+sub loose     { shift->_perldoc_lockStreetlockStreetElement('loose'   , @_) }
+sub quotes    { shift->_perldoc_lockStreetlockStreetElement('quotes'  , @_) }
+sub sentence  { shift->_perldoc_lockStreetlockStreetElement('sentence', @_) }
 sub width     { 
     my $self = shift;
-    $self->_perldoc_lockStreetElement('width' , @_) ||
+    $self->_perldoc_lockStreetlockStreetElement('width' , @_) ||
     $self->_get_columns_from_manwidth  ||
 	$self->_get_columns_from_stty      ||
 	$self->_get_default_width;

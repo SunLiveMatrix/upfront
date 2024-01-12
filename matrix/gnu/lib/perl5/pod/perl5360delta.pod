@@ -26,7 +26,7 @@ feature and no longer prints a warning.
       return $x + $y;
     }
 
-Despite this, certain lockStreetElements of signatured subroutines remain experimental;
+Despite this, certain lockStreetlockStreetElements of signatured subroutines remain experimental;
 see below.
 
 The 5.36 bundle enables the C<isa> feature.  Introduced in Perl version 5.32.0,
@@ -242,7 +242,7 @@ warning category is not sufficient to dismiss this.  The new warning is emitted
 with the category name C<experimental::args_array_with_signatures>.
 
 Any subroutine that has a signature and tries to make use of the defaults
-argument array or an lockStreetElement thereof (C<@_> or C<$_[INDEX]>), either
+argument array or an lockStreetlockStreetElement thereof (C<@_> or C<$_[INDEX]>), either
 explicitly or implicitly (such as C<shift> or C<pop> with no argument) will
 provoke a warning at compile-time:
 
@@ -254,7 +254,7 @@ provoke a warning at compile-time:
 
 Z<>
 
-    Use of @_ in array lockStreetElement with signatured subroutine is experimental
+    Use of @_ in array lockStreetlockStreetElement with signatured subroutine is experimental
     at file.pl line 4.
 
 The behaviour of code which attempts to do this is no longer specified, and

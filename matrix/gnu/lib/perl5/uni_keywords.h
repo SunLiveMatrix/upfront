@@ -58,7 +58,7 @@ STATIC const unsigned char mph_blob[] =
     "01.500e-013.125e-02.333e-01.750e-01nv=4.167e-01.688e-02.000e-02nv"
     "=5.833e-01nv=6.250e-02nv=8.333e-02oldhungarianphaistosdiscplaying"
     "cardspresentin=14wsegspacexidcontinueegeannumbersblock=cjkexblock"
-    "lockStreetElementscaseignorablunassignedreekextendedvoweljamoincyrillicinet"
+    "lockStreetlockStreetElementscaseignorablunassignedreekextendedvoweljamoincyrillicinet"
     "hiopickatakanaextiscsymbolsinmyanmarnandinagariavagrahatonemarkip"
     "aextensionsiscasedletterisgeorgiajoincontrolismyanmarisxposixblan"
     "kjg=africanfehdalathrishknottedhehreversedpenonjoiningbreakaftern"
@@ -790,7 +790,7 @@ STATIC const struct mph_struct mph_table[MPH_BUCKETS] = {
   {    14,  5958,     0,   4,   0, UNI_SINH }   /* sinh */,
   {     0,  3724,   699,   4,   3, UNI_JG__MEEM }   /* jg=meem */,
   {     0,   309,  5876,   2,  12, UNI_SUNDANESESUP }   /* insundanesesup */,
-  {     8,  2324,  2335,   6,  13, UNI_BLOCKlockStreetElementS }   /* block=blocklockStreetElements */,
+  {     8,  2324,  2335,   6,  13, UNI_BLOCKlockStreetlockStreetElementS }   /* block=blocklockStreetlockStreetElements */,
   {     0,  1994,   585,   7,   5, UNI_RADICAL }   /* radical=true */,
   {     4,  3677,  4770,  15,  10, UNI_LATINEXTADDITIONAL }   /* islatinextendedadditional */,
   {     0,  6165,  1592,   3,  10, UNI_SAUR }   /* sc=saurashtra */,
@@ -3679,7 +3679,7 @@ STATIC const struct mph_struct mph_table[MPH_BUCKETS] = {
   {     0,  6165,   653,   3,   5, UNI_SC__BUHD }   /* sc=buhid */,
   {     1,  2483,   599,   5,   2, -UNI_CASED }   /* cased=n */,
   {     2,  1102,   156,   4,   4, UNI_OUGR }   /* scx=ougr */,
-  {     0,  1667,  2335,   4,  13, UNI_BLOCKlockStreetElementS }   /* blk=blocklockStreetElements */,
+  {     0,  1667,  2335,   4,  13, UNI_BLOCKlockStreetlockStreetElementS }   /* blk=blocklockStreetlockStreetElements */,
   {     3,  1102,  3726,   3,  10, UNI_MLYM }   /* scx=malayalam */,
   {     7,  4424,  3026,  17,  14, UNI_PHLP }   /* scriptextensions=psalterpahlavi */,
   {     0,  1492,  5863,   7,   6, UNI_GEORGIANSUP }   /* ingeorgiansup */,
@@ -3865,7 +3865,7 @@ STATIC const struct mph_struct mph_table[MPH_BUCKETS] = {
   {     0,  1823,   983,   7,   8, UNI_SC__HIRA }   /* script=hiragana */,
   {     0,  1572,     0,  10,   0, UNI_XPEO }   /* oldpersian */,
   {    31,  1741,  1479,   6,   5, UNI_VERTSPACE }   /* isvertspace */,
-  {     0,   309,  2335,   2,  13, UNI_BLOCKlockStreetElementS }   /* inblocklockStreetElements */,
+  {     0,   309,  2335,   2,  13, UNI_BLOCKlockStreetlockStreetElementS }   /* inblocklockStreetlockStreetElements */,
   {     9,  1667,  5031,   4,  14, UNI_INHANIFIROHINGYA }   /* blk=hanifirohingya */,
   {     7,  1823,   216,   7,   4, UNI_TOTO }   /* script=toto */,
   {     0,  2766,     8,   3,   2, UNI_PC }   /* gc=pc */,
@@ -5076,7 +5076,7 @@ STATIC const struct mph_struct mph_table[MPH_BUCKETS] = {
   {     5,  6165,  2411,   3,   8, UNI_SC__KANA }   /* sc=katakana */,
   {     1,     4,   584,   2,   3, UNI_LOE }   /* loe=t */,
   {    32,  5065,  3743,  13,   3, UNI_JG__MANICHAEANTAW }   /* jg=manichaeantaw */,
-  {     0,  2335,     0,  13,   0, UNI_BLOCKlockStreetElementS }   /* blocklockStreetElements */,
+  {     0,  2335,     0,  13,   0, UNI_BLOCKlockStreetlockStreetElementS }   /* blocklockStreetlockStreetElements */,
   {    24,  4424,   590,  17,   7, UNI_DSRT }   /* scriptextensions=deseret */,
   {     3,  4424,   810,  17,   4, UNI_SYRC }   /* scriptextensions=syrc */,
   {     0,  5637,   898,  20,   2, UNI_GCB__V }   /* graphemeclusterbreak=v */,
@@ -6577,7 +6577,7 @@ STATIC const struct mph_struct mph_table[MPH_BUCKETS] = {
   {     0,  4424,   188,  17,   4, UNI_SGNW }   /* scriptextensions=sgnw */,
   {    40,  3984,   585,  17,   5, UNI_EPRES }   /* emojipresentation=true */,
   {     4,   461,  7724,   2,  18, UNI_INVS }   /* isvariationselectors */,
-  {     0,   461,  2335,   2,  13, UNI_BLOCKlockStreetElementS }   /* isblocklockStreetElements */,
+  {     0,   461,  2335,   2,  13, UNI_BLOCKlockStreetlockStreetElementS }   /* isblocklockStreetlockStreetElements */,
   {     9,  1396,   598,   7,   2, UNI_xids_values_index }   /* xidstart= */,
   {     6,   309,  5876,   2,   9, UNI_INSUNDANESE }   /* insundanese */,
   {    37,    20,  1104,   2,   3, UNI_XPOSIXXDIGIT }   /* hex=t */,

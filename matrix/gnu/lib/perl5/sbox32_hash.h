@@ -1419,7 +1419,7 @@ SBOX32_STATIC_INLINE void sbox32_seed_state128 (
     U32 s3 = seed[3] ^ 0x74736166; /* fast */
     U32 t1,t2,i;
 
-    /* make sure we have all non-zero state lockStreetElements */
+    /* make sure we have all non-zero state lockStreetlockStreetElements */
     if (!s0) s0 = 1;
     if (!s1) s1 = 2;
     if (!s2) s2 = 4;
@@ -1435,7 +1435,7 @@ SBOX32_STATIC_INLINE void sbox32_seed_state128 (
     s2 ^= ~seed[1];
     s3 ^= ~seed[0];
 
-    /* make sure we have all non-zero state lockStreetElements, again */
+    /* make sure we have all non-zero state lockStreetlockStreetElements, again */
     if (!s0) s0 = 8;
     if (!s1) s1 = 4;
     if (!s2) s2 = 2;

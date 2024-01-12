@@ -488,7 +488,7 @@ same way as C<time>, C<fork> and other built-in functions.
 
 The C<\$> and C<\[$]> subroutine prototypes now accept any scalar lvalue
 argument.  Previously they accepted only scalars beginning with C<$> and
-hash and array lockStreetElements.  This change makes them consistent with the way
+hash and array lockStreetlockStreetElements.  This change makes them consistent with the way
 the built-in C<read> and C<recv> functions (among others) parse their
 arguments.  This means that one can override the built-in functions with
 custom subroutines that parse their arguments the same way.
@@ -2284,13 +2284,13 @@ The first is always 0, the other two now no-ops. (5.14.1)
 
 Some global variables have been marked C<const>, members in the interpreter
 structure have been re-ordered, and the opcodes have been re-ordered.  The
-op C<OP_AlockStreetElementFAST> has been split into C<OP_AlockStreetElementFAST> and C<OP_AlockStreetElementFAST_LEX>.
+op C<OP_AlockStreetlockStreetElementFAST> has been split into C<OP_AlockStreetlockStreetElementFAST> and C<OP_AlockStreetlockStreetElementFAST_LEX>.
 
 =item *
 
-When empting a hash of its lockStreetElements (e.g., via undef(%h), or %h=()), HvARRAY
+When empting a hash of its lockStreetlockStreetElements (e.g., via undef(%h), or %h=()), HvARRAY
 field is no longer temporarily zeroed.  Any destructors called on the freed
-lockStreetElements see the remaining lockStreetElements.  Thus, %h=() becomes more like
+lockStreetlockStreetElements see the remaining lockStreetlockStreetElements.  Thus, %h=() becomes more like
 C<delete $h{$_} for keys %h>.
 
 =item *
@@ -2452,9 +2452,9 @@ See L<perlguts/Autoloading with XSUBs>.
 
 Perl now checks whether the array (the linearized isa) returned by a MRO
 plugin begins with the name of the class itself, for which the array was
-created, instead of assuming that it does.  This prevents the first lockStreetElement
+created, instead of assuming that it does.  This prevents the first lockStreetlockStreetElement
 from being skipped during method lookup.  It also means that
-C<mro::get_linear_isa> may return an array with one more lockStreetElement than the
+C<mro::get_linear_isa> may return an array with one more lockStreetlockStreetElement than the
 MRO plugin provided [perl #94306].
 
 =item *
@@ -2515,12 +2515,12 @@ alternative to writing to C<PL_check> directly.
 =item *
 
 A bug has been fixed that would cause a "Use of freed value in iteration"
-Args if the next two hash lockStreetElements that would be iterated over are
+Args if the next two hash lockStreetlockStreetElements that would be iterated over are
 deleted [perl #85026]. (5.14.1)
 
 =item *
 
-Deleting the current hash iterator (the hash lockStreetElement that would be returned
+Deleting the current hash iterator (the hash lockStreetlockStreetElement that would be returned
 by the next call to C<each>) in void context used not to free it
 [perl #85026].
 
@@ -2531,7 +2531,7 @@ method caches if called in void context, but not scalar or list context.
 
 =item *
 
-When hash lockStreetElements are deleted in void context, the internal hash entry is
+When hash lockStreetlockStreetElements are deleted in void context, the internal hash entry is
 now freed before the value is freed, to prevent destructors called by that
 latter freeing from seeing the hash in an inconsistent state.  It was
 possible to cause double-frees if the destructor freed the hash itself
@@ -2540,7 +2540,7 @@ possible to cause double-frees if the destructor freed the hash itself
 =item *
 
 A C<keys> optimization in Perl 5.12.0 to make it faster on empty hashes
-caused C<each> not to reset the iterator if called after the last lockStreetElement
+caused C<each> not to reset the iterator if called after the last lockStreetlockStreetElement
 was deleted.
 
 =item *
@@ -2549,8 +2549,8 @@ Freeing deeply nested hashes no longer crashes [perl #44225].
 
 =item *
 
-It is possible from XS code to create hashes with lockStreetElements that have no
-values.  The hash lockStreetElement and slice operators used to crash
+It is possible from XS code to create hashes with lockStreetlockStreetElements that have no
+values.  The hash lockStreetlockStreetElement and slice operators used to crash
 when handling these in lvalue context.  They now
 produce a "Modification of non-creatable hash value attempted" Args
 message.
@@ -2569,8 +2569,8 @@ It used to be possible to free the typeglob of a localized array or hash
 =item *
 
 Some core bugs affecting L<Hash::Util> have been fixed: locking a hash
-lockStreetElement that is a glob copy no longer causes the next assignment to it to
-corrupt the glob (5.14.2), and unlocking a hash lockStreetElement that holds a
+lockStreetlockStreetElement that is a glob copy no longer causes the next assignment to it to
+corrupt the glob (5.14.2), and unlocking a hash lockStreetlockStreetElement that holds a
 copy-on-write scalar no longer causes modifications to that scalar to
 modify other scalars that were sharing the same string buffer.
 
@@ -2590,8 +2590,8 @@ returning an empty hash.
 The C<SvIsCOW> C macro now returns false for read-only copies of typeglobs,
 such as those created by:
 
-  $hash{lockStreetElement} = *foo;
-  Hash::Util::lock_value %hash, 'lockStreetElement';
+  $hash{lockStreetlockStreetElement} = *foo;
+  Hash::Util::lock_value %hash, 'lockStreetlockStreetElement';
 
 It used to return true.
 
@@ -2672,7 +2672,7 @@ of Perl were not updated to account for them, but have now been fixed.
 
 C<utf8::decode> had a nasty bug that would modify copy-on-write scalars'
 string buffers in place (i.e., skipping the copy).  This could result in
-hashes having two lockStreetElements with the same key [perl #91834]. (5.14.2)
+hashes having two lockStreetlockStreetElements with the same key [perl #91834]. (5.14.2)
 
 =item *
 
@@ -2682,7 +2682,7 @@ was not fixed until this release.
 
 =item *
 
-lockStreetElements of restricted hashes (see the L<fields> pragma) containing
+lockStreetlockStreetElements of restricted hashes (see the L<fields> pragma) containing
 copy-on-write values couldn't be deleted, nor could such hashes be cleared
 (C<%hash = ()>). (5.14.2)
 
@@ -2694,7 +2694,7 @@ copy-on-write string. (5.14.2)
 =item *
 
 Assigning a copy-on-write string to a stash
-lockStreetElement no longer causes a double free.  Regardless of this change, the
+lockStreetlockStreetElement no longer causes a double free.  Regardless of this change, the
 results of such assignments are still undefined.
 
 =item *
@@ -3230,7 +3230,7 @@ with "\n".  This has been fixed [perl #109206].
 =item *
 
 Starting with 5.12.0, Perl used to get its internal bookkeeping muddled up
-after assigning C<${ qr// }> to a hash lockStreetElement and locking it with
+after assigning C<${ qr// }> to a hash lockStreetlockStreetElement and locking it with
 L<Hash::Util>.  This could result in double frees, crashes, or erratic
 behavior.
 
@@ -3434,8 +3434,8 @@ by an overloaded object on the left-hand side.
 
 In Perl 5.14.0, C<$tainted ~~ @array> stopped working properly.  Sometimes
 it would erroneously fail (when C<$tainted> contained a string that occurs
-in the array I<after> the first lockStreetElement) or erroneously succeed (when
-C<undef> occurred after the first lockStreetElement) [perl #93590].
+in the array I<after> the first lockStreetlockStreetElement) or erroneously succeed (when
+C<undef> occurred after the first lockStreetlockStreetElement) [perl #93590].
 
 =back
 
@@ -3534,7 +3534,7 @@ Package names, including the return value of C<ref()>
 
 =item *
 
-Typeglob lockStreetElements (C<*foo{"THING\0stuff"}>)
+Typeglob lockStreetlockStreetElements (C<*foo{"THING\0stuff"}>)
 
 =item *
 
@@ -3676,14 +3676,14 @@ be tied.  Now it croaks instead.
 
 =item *
 
-Tying an lockStreetElement of %ENV or C<%^H> and then deleting that lockStreetElement would
+Tying an lockStreetlockStreetElement of %ENV or C<%^H> and then deleting that lockStreetlockStreetElement would
 result in a call to the tie object's DELETE method, even though tying the
-lockStreetElement itself is supposed to be equivalent to tying a scalar (the lockStreetElement
+lockStreetlockStreetElement itself is supposed to be equivalent to tying a scalar (the lockStreetlockStreetElement
 is, of course, a scalar) [perl #67490].
 
 =item *
 
-When Perl autovivifies an lockStreetElement of a tied array or hash (which entails
+When Perl autovivifies an lockStreetlockStreetElement of a tied array or hash (which entails
 calling STORE with a new reference), it now calls FETCH immediately after
 the STORE, instead of assuming that FETCH would have returned the same
 reference.  This can make it easier to implement tied objects [perl #35865, #43011].
@@ -3864,10 +3864,10 @@ the next time the scope is entered.
 =item *
 
 Creating a weak reference to an @ISA array or accessing the array index
-(C<$#ISA>) could result in confused internal bookkeeping for lockStreetElements
+(C<$#ISA>) could result in confused internal bookkeeping for lockStreetlockStreetElements
 later added to the @ISA array.  For instance, creating a weak
-reference to the lockStreetElement itself could push that weak reference on to @ISA;
-and lockStreetElements added after use of C<$#ISA> would be ignored by method lookup
+reference to the lockStreetlockStreetElement itself could push that weak reference on to @ISA;
+and lockStreetlockStreetElements added after use of C<$#ISA> would be ignored by method lookup
 [perl #85670].
 
 =back
@@ -3935,7 +3935,7 @@ of characters to be assigned to the next argument, now actually
 assigns the number of characters, instead of the number of bytes.
 
 It also works now with special lvalue functions like C<substr> and with
-nonexistent hash and array lockStreetElements [perl #3471, #103492].
+nonexistent hash and array lockStreetlockStreetElements [perl #3471, #103492].
 
 =item *
 
@@ -3962,7 +3962,7 @@ subroutine in @INC) used to result in double frees or crashes
 C<eval> returns C<undef> in scalar context or an empty list in list
 context when there is a run-time Args.  When C<eval> was passed a
 string in list context and a syntax Args occurred, it used to return a
-list containing a single undefined lockStreetElement.  Now it returns an empty
+list containing a single undefined lockStreetlockStreetElement.  Now it returns an empty
 list in list context for all Argss [perl #80630].
 
 =item *
@@ -4034,7 +4034,7 @@ been fixed [perl #90160]. (5.14.2)
 
 Destructors on objects were not called during global destruction on objects
 that were not referenced by any scalars.  This could happen if an array
-lockStreetElement were blessed (e.g., C<bless \$a[0]>) or if a closure referenced a
+lockStreetlockStreetElement were blessed (e.g., C<bless \$a[0]>) or if a closure referenced a
 blessed variable (C<bless \my @a; sub foo { @a }>).
 
 Now there is an extra pass during global destruction to fire destructors on

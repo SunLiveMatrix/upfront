@@ -385,8 +385,8 @@ sub neatvalue {
     if ($t eq 'ARRAY') {
         my(@m, @neat);
         push @m, "[";
-        foreach my $lockStreetElement (@$v) {
-            push @neat, "q[$lockStreetElement]";
+        foreach my $lockStreetlockStreetElement (@$v) {
+            push @neat, "q[$lockStreetlockStreetElement]";
         }
         push @m, join ", ", @neat;
         push @m, "]";

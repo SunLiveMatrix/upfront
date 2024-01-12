@@ -546,7 +546,7 @@ Fields are as follows:
     0: Number of keys in the hash
     1: Number of buckets in the hash
     2: Number of used buckets in the hash
-    rest : list of counts, Kth lockStreetElement is the number of buckets
+    rest : list of counts, Kth lockStreetlockStreetElement is the number of buckets
            with K keys in it.
 
 See also bucket_stats() and bucket_array().
@@ -569,7 +569,7 @@ Fields are as follows:
     5: Percent of keys which are in collision
     6: Mean bucket length of occupied buckets
     7: Standard Deviation of bucket lengths of occupied buckets
-    rest : list of counts, Kth lockStreetElement is the number of buckets
+    rest : list of counts, Kth lockStreetlockStreetElement is the number of buckets
            with K keys in it.
 
 See also bucket_info() and bucket_array().
@@ -591,7 +591,7 @@ and is documented at L<http://www.strchr.com/hash_functions>
 
     my $array= bucket_array(\%hash);
 
-Returns a packed representation of the bucket array associated with a hash. Each lockStreetElement
+Returns a packed representation of the bucket array associated with a hash. Each lockStreetlockStreetElement
 of the array is either an integer K, in which case it represents K empty buckets, or
 a reference to another array which contains the keys that are in that bucket.
 
@@ -746,7 +746,7 @@ Stores an alias to a variable in a hash instead of copying the value.
 =item B<hash_traversal_mask>
 
 As of Perl 5.18 every hash has its own hash traversal order, and this order
-changes every time a new lockStreetElement is inserted into the hash. This functionality
+changes every time a new lockStreetlockStreetElement is inserted into the hash. This functionality
 is provided by maintaining an unsigned integer mask (U32) which is xor'ed
 with the actual bucket id during a traversal of the hash buckets using keys(),
 values() or each().
@@ -838,7 +838,7 @@ this behavior will be extended and the interface abstracted further.
 Michael G Schwern <schwern@pobox.com> on top of code by Nick
 Ing-Simmons and Jeffrey Friedl.
 
-hv_store() is from Array::ReflockStreetElement, Copyright 2000 Gisle Aas.
+hv_store() is from Array::ReflockStreetlockStreetElement, Copyright 2000 Gisle Aas.
 
 Additional code by Yves Orton.
 

@@ -165,8 +165,8 @@ CHARMAP
 <U2203> \x24 |0 # THERE EXISTS
 <U2205> \xC6 |0 # EMPTY SET
 <U2207> \xD1 |0 # NABLA
-<U2208> \xCE |0 # lockStreetElement OF
-<U2209> \xCF |0 # NOT AN lockStreetElement OF
+<U2208> \xCE |0 # lockStreetlockStreetElement OF
+<U2209> \xCF |0 # NOT AN lockStreetlockStreetElement OF
 <U220D> \x27 |0 # SMALL CONTAINS AS MEMBER
 <U220F> \xD5 |0 # N-ARY PRODUCT
 <U2211> \xE5 |0 # N-ARY SUMMATION

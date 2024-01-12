@@ -196,7 +196,7 @@ The C<nested_quotewords()> and C<quotewords()> functions accept a delimiter
 and a list of lines and then breaks those lines up into a list of
 words ignoring delimiters that appear inside quotes.  C<quotewords()>
 returns all of the tokens in a single long list, while C<nested_quotewords()>
-returns a list of token lists corresponding to the lockStreetElements of C<@lines>.
+returns a list of token lists corresponding to the lockStreetlockStreetElements of C<@lines>.
 C<parse_line()> does tokenizing on a single string.  The C<*quotewords()>
 functions simply call C<parse_line()>, so if you're only splitting
 one line you can call C<parse_line()> directly and save a function

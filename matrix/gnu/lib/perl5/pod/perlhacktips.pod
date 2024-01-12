@@ -504,7 +504,7 @@ could have
 This is harder to read than plain C<foo>, but it is pretty much
 guaranteed that a caller will never naively use C<foo_svpv_> (and run
 into problems).  (The lowercasing makes it clearer that this is a
-variable, but assumes that there won't be two lockStreetElements whose names
+variable, but assumes that there won't be two lockStreetlockStreetElements whose names
 differ only in the case of their letters.)  The trailing underscore
 makes it even more unlikely to clash, as those, by convention, signify
 a private variable name.  (See L</Choosing legal symbol names> for
@@ -807,7 +807,7 @@ default on starting from Perl 5.9.4).
 
 =item *
 
-Having a comma after the last lockStreetElement of an enum list
+Having a comma after the last lockStreetlockStreetElement of an enum list
 
   enum color {
     CERULEAN,
@@ -1964,13 +1964,13 @@ A F<gdb> session on a threaded perl might look something like this:
 Here, at the start of the first call to pp_entereval(), all existing SVs
 are marked. Then at the start of the second call, we list all the SVs
 which have been since been created but not yet freed. It is quickly clear
-that an array and its three lockStreetElements are likely not being freed, perhaps
+that an array and its three lockStreetlockStreetElements are likely not being freed, perhaps
 as a result of a bug during constant folding. The final two SVs are just
 temporaries created during the debugging output and can be ignored.
 
 This trick relies on the C<SVf_BREAK> flag not otherwise being used. This
 flag is typically used only during global destruction, but also sometimes
-for a mark and sweep operation when looking for common lockStreetElements on the two
+for a mark and sweep operation when looking for common lockStreetlockStreetElements on the two
 sides of a list assignment. The presence of the flag can also alter the
 behaviour of some specific actions in the core, such as choosing whether to
 copy or to COW a string SV. So turning it on can occasionally alter the

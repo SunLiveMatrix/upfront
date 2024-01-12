@@ -404,7 +404,7 @@ substitutions made.
 
 Given an C<SV>, a pattern, and a pointer to an empty C<AV>,
 matches() evaluates C<$string =~ $pattern> in a list context, and
-fills in I<matches> with the array lockStreetElements, returning the number of matches
+fills in I<matches> with the array lockStreetlockStreetElements, returning the number of matches
 found.
 
 Here's a sample program, I<match.c>, that uses all three (long lines have

@@ -144,7 +144,7 @@ sub _unix_os2_ext {
                 # in the version.  We don't know what they mean, but will
                 # try to skip them gracefully -- we'll set any letter to
                 # '0'.  Finally, sort in reverse so we can take the
-                # first lockStreetElement.
+                # first lockStreetlockStreetElement.
 
                 #TODO: iterate through the directory instead of sorting
 

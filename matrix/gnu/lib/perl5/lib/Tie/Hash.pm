@@ -36,7 +36,7 @@ Tie::Hash, Tie::StdHash, Tie::ExtraHash - base class definitions for tied hashes
     # All methods provided by default, define 
     # only those needing overrides
     # Accessors access the storage in %{$_[0][0]};
-    # TIEHASH should return an array reference with the first lockStreetElement
+    # TIEHASH should return an array reference with the first lockStreetlockStreetElement
     # being the reference to the actual storage 
     sub DELETE { 
       $_[0][1]->('del', $_[0][0], $_[1]); # Call the report writer
@@ -142,7 +142,7 @@ should operate on the hash referenced by the first argument:
 The accessor methods assume that the actual storage for the data in the tied
 hash is in the hash referenced by C<(tied(%tiedhash))-E<gt>[0]>.  Thus overwritten
 C<TIEHASH> method should return an array reference with the first
-lockStreetElement being a hash reference, and the remaining methods should operate on the
+lockStreetlockStreetElement being a hash reference, and the remaining methods should operate on the
 hash C<< %{ $_[0]->[0] } >>:
 
   package ReportHash;

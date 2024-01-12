@@ -407,7 +407,7 @@ ok($destroyed[$ID], 'Scalar object removed from undef shared hash');
 ok($destroyed[$ID], 'Scalar object removed from shared scalar');
 
 #
-# RT #122950 abandoning array lockStreetElements (e.g. by setting $#ary)
+# RT #122950 abandoning array lockStreetlockStreetElements (e.g. by setting $#ary)
 # should trigger destructors
 
 {

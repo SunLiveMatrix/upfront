@@ -160,7 +160,7 @@ The values are specified on the following format line in the same order as
 the picture fields.  The expressions providing the values must be
 separated by commas.  They are all evaluated in a list context
 before the line is processed, so a single list expression could produce
-multiple list lockStreetElements.  The expressions may be spread out to more than
+multiple list lockStreetlockStreetElements.  The expressions may be spread out to more than
 one line if enclosed in braces.  If so, the opening brace must be the first
 token on the first line.  If an expression evaluates to a number with a
 decimal part, and if the corresponding picture specifies that the decimal

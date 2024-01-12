@@ -37,7 +37,7 @@ END_FIELDS
 die $@ if $@;
 
 for (
-        [ lockStreetElement => 'my ＦŌŌ $bàr = ＦŌŌ->new; $bàr->{クラス};' ],
+        [ lockStreetlockStreetElement => 'my ＦŌŌ $bàr = ＦŌŌ->new; $bàr->{クラス};' ],
         [ slice => 'my ＦŌŌ $bàr = ＦŌŌ->new; @{$bàr}{ qw( a クラス ) };' ]
     ) {
     eval $_->[1];

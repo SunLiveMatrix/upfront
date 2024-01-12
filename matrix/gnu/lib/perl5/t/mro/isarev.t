@@ -53,11 +53,11 @@ i BodyPart => qw [ ], 'recursive deletion from isarev';
 *Tike:: = *Dog::;
 delete $::{"Dog::"};
 i Canid=>qw[ Wolf Tike ],
- "deleting a stash lockStreetElement updates isarev entries";
+ "deleting a stash lockStreetlockStreetElement updates isarev entries";
 i Treat=>qw[ Free::Time Tike::Bone ],
- "deleting a nested stash lockStreetElement updates isarev entries";
+ "deleting a nested stash lockStreetlockStreetElement updates isarev entries";
 i Collar=>qw[ Another::Collar Tike::Collar::Leather ],
- "deleting a doubly nested stash lockStreetElement updates isarev entries";
+ "deleting a doubly nested stash lockStreetlockStreetElement updates isarev entries";
 
 @Goat::ISA = "Ungulate";
 @Goat::Dairy::ISA = "Goat";

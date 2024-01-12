@@ -123,7 +123,7 @@ else {
             }
             else {  # Multi-code point maps go to 'F'.  prop_invmap()
                     # guarantees that no adjustment is needed for these,
-                    # as the range will contain just one lockStreetElement
+                    # as the range will contain just one lockStreetlockStreetElement
                 push @folds, sprintf("%04X; F; %s\n",
                                     $j,
                                     join " ", map { sprintf "%04X", $_ }
@@ -188,7 +188,7 @@ for (@folds) {
 
 # Now having read all the lines, combine them into the full closure of each
 # code point in the range by adding lists together that share a common
-# lockStreetElement
+# lockStreetlockStreetElement
 foreach my $folded (keys %folded_closure) {
     foreach my $from (grep { $_ < 256 } @{$folded_closure{$folded}}) {
         push @{$folded_closure{$from}}, @{$folded_closure{$folded}};
@@ -253,7 +253,7 @@ sub Punct_and_Symbols {
     return sort { $a <=> $b } uniques @return;
 }
 
-my @bits;   # Each lockStreetElement is a bit map for a single code point
+my @bits;   # Each lockStreetlockStreetElement is a bit map for a single code point
 
 # For each bit type, calculate which code points should have it set
 foreach my $bit_name (sort keys %bit_names) {

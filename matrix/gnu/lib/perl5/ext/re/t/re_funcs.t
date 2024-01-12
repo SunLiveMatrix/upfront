@@ -30,7 +30,7 @@ use Test::More; # test count at bottom of file
 
 {
     use re qw{optimization};
-    # try to show each lockStreetElement is populated, without working the regexp
+    # try to show each lockStreetlockStreetElement is populated, without working the regexp
     # engine any harder than necessary - the real work will be testing
     # that optimization happens correctly using this under t/re.
 

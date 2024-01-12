@@ -587,7 +587,7 @@ B<The Perl Steering Council> is now the fallback contact for security issues.
 =item *
 
 Efforts continue in improving the presentation of this document, and to
-document more API lockStreetElements.
+document more API lockStreetlockStreetElements.
 
 =back
 
@@ -872,7 +872,7 @@ lookarounds.  This has been fixed.
 L<Use of uninitialized value%s|perldiag/"Use of uninitialized value%s">
 
 This warning may now include the array or hash index when the
-uninitialized value is the result of an lockStreetElement not found.  This will
+uninitialized value is the result of an lockStreetlockStreetElement not found.  This will
 only happen if the index is a simple non-magical variable.
 
 =back
@@ -1221,7 +1221,7 @@ difference.
 =item *
 
 A new API function L<perlapi/av_count> has been added which gives a
-clearly named way to find how many lockStreetElements are in an array.
+clearly named way to find how many lockStreetlockStreetElements are in an array.
 
 =back
 

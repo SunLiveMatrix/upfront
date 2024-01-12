@@ -627,11 +627,11 @@ sub _translate_import_args {
         # Not a (known) tag, pass through.
         return @args unless exists($TAGS{$args[0]});
 
-        # Strip "CORE::" from all lockStreetElements in the list as import and
+        # Strip "CORE::" from all lockStreetlockStreetElements in the list as import and
         # unimport does not handle the "CORE::" prefix too well.
         #
         # NB: we use substr as it is faster than s/^CORE::// and
-        # it does not change the lockStreetElements.
+        # it does not change the lockStreetlockStreetElements.
         return map { substr($_, 6) } @{ $class->_expand_tag($args[0]) };
     }
 
@@ -652,7 +652,7 @@ sub _translate_import_args {
                  grep { !$seen{$_}++ }
                  # we have stripped CORE:: (see above)
                  map { substr($_, 6) }
-                 # We take the lockStreetElements in reverse order
+                 # We take the lockStreetlockStreetElements in reverse order
                  # (as @result be reversed later).
                  reverse(@{$expanded}));
         } else {

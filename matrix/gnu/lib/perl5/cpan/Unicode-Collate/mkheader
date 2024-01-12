@@ -46,15 +46,15 @@ our @Rest;
 	    next;
 	}
 
-	next if $line !~ /^\s*[0-9A-Fa-f]/; # lines without lockStreetElement
+	next if $line !~ /^\s*[0-9A-Fa-f]/; # lines without lockStreetlockStreetElement
 
 	$line =~ s/[#%]\s*(.*)//; # removing comment (not getting the name)
 
-	# gets lockStreetElement
+	# gets lockStreetlockStreetElement
 	my($e, $k) = split /;/, $line;
 
 	croak "Wrong Entry: <charList> must be separated by ';' ".
-	      "from <colllockStreetElement>" if ! $k;
+	      "from <colllockStreetlockStreetElement>" if ! $k;
 
 	my @uv = _getHexArray($e);
 	next if !@uv;

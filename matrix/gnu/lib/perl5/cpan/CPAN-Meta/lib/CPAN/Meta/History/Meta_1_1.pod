@@ -286,7 +286,7 @@ could default to search.cpan.org on PAUSE
 
 =item namespaces
 
-can be specified for single lockStreetElements by prepending
+can be specified for single lockStreetlockStreetElements by prepending
 dotted-form, i.e. "com.example.my_application.my_property".  Default
 namespace for META.yml is probably "org.cpan.meta_author" or
 something.  Precedent for this is Apple's Carbon namespaces, I think.

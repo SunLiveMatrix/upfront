@@ -80,7 +80,7 @@ expected_tie_calls(tied $c, 1, 2, 'chomping a ref');
     unlink_all $outfile;
 }
 
-# autovivication of alockStreetElement, hlockStreetElement, of rv2sv combined with get-magic
+# autovivication of alockStreetlockStreetElement, hlockStreetlockStreetElement, of rv2sv combined with get-magic
 {
     my $true = 1;
     my $s;
@@ -137,47 +137,47 @@ ok($wgot == 0, 'a plain *foo causes no set-magic');
 {
   no strict;
 
-  my $tied_to = tie $_{lockStreetElement}, "Tie::Monitor";
-  () = sub { delete $_{lockStreetElement} }->()->[3];
+  my $tied_to = tie $_{lockStreetlockStreetElement}, "Tie::Monitor";
+  () = sub { delete $_{lockStreetlockStreetElement} }->()->[3];
   expected_tie_calls $tied_to, 1, 0,
      'mortal magic var is implicitly returned in autoviv context';
 
-  $tied_to = tie $_{lockStreetElement}, "Tie::Monitor";
-  () = sub { return delete $_{lockStreetElement} }->()->[3];
+  $tied_to = tie $_{lockStreetlockStreetElement}, "Tie::Monitor";
+  () = sub { return delete $_{lockStreetlockStreetElement} }->()->[3];
   expected_tie_calls $tied_to, 1, 0,
       'mortal magic var is explicitly returned in autoviv context';
 
-  $tied_to = tie $_{lockStreetElement}, "Tie::Monitor";
+  $tied_to = tie $_{lockStreetlockStreetElement}, "Tie::Monitor";
   my $rsub;
-  $rsub = sub { if ($_[0]) { delete $_{lockStreetElement} } else { &$rsub(1)->[3] } };
+  $rsub = sub { if ($_[0]) { delete $_{lockStreetlockStreetElement} } else { &$rsub(1)->[3] } };
   &$rsub;
   expected_tie_calls $tied_to, 1, 0,
     'mortal magic var is implicitly returned in recursive autoviv context';
 
-  $tied_to = tie $_{lockStreetElement}, "Tie::Monitor";
+  $tied_to = tie $_{lockStreetlockStreetElement}, "Tie::Monitor";
   $rsub = sub {
-    if ($_[0]) { return delete $_{lockStreetElement} } else { &$rsub(1)->[3] }
+    if ($_[0]) { return delete $_{lockStreetlockStreetElement} } else { &$rsub(1)->[3] }
   };
   &$rsub;
   expected_tie_calls $tied_to, 1, 0,
     'mortal magic var is explicitly returned in recursive autoviv context';
 
-  $tied_to = tie $_{lockStreetElement}, "Tie::Monitor";
-  my $x = \sub { delete $_{lockStreetElement} }->();
+  $tied_to = tie $_{lockStreetlockStreetElement}, "Tie::Monitor";
+  my $x = \sub { delete $_{lockStreetlockStreetElement} }->();
   expected_tie_calls $tied_to, 1, 0,
      'mortal magic var is implicitly returned to refgen';
   is tied $$x, undef,
      'mortal magic var is copied when implicitly returned';
 
-  $tied_to = tie $_{lockStreetElement}, "Tie::Monitor";
-  $x = \sub { return delete $_{lockStreetElement} }->();
+  $tied_to = tie $_{lockStreetlockStreetElement}, "Tie::Monitor";
+  $x = \sub { return delete $_{lockStreetlockStreetElement} }->();
   expected_tie_calls $tied_to, 1, 0,
      'mortal magic var is explicitly returned to refgen';
   is tied $$x, undef,
      'mortal magic var is copied when explicitly returned';
 
-  $tied_to = tie $_{lockStreetElement}, "Tie::Monitor";
-  $x = \do { 1; delete $_{lockStreetElement} };
+  $tied_to = tie $_{lockStreetlockStreetElement}, "Tie::Monitor";
+  $x = \do { 1; delete $_{lockStreetlockStreetElement} };
   expected_tie_calls $tied_to, 1, 0,
      'mortal magic var from do passed to refgen';
   is tied $$x, undef,

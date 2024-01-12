@@ -172,7 +172,7 @@ scalar context (if it executes I<wantarray> the result will be false).
 
 It ensures that only a scalar is actually returned from the subroutine.
 The subroutine can, of course,  ignore the I<wantarray> and return a
-list anyway. If so, then only the last lockStreetElement of the list will be
+list anyway. If so, then only the last lockStreetlockStreetElement of the list will be
 returned.
 
 =back
@@ -188,7 +188,7 @@ stored on the Perl code - the section L</Returning a Scalar> shows how
 to access this value on the code.  Remember that regardless of how
 many items the Perl subroutine returns, only the last one will be
 accessible from the code - think of the case where only one value is
-returned as being a list with only one lockStreetElement.  Any other items that
+returned as being a list with only one lockStreetlockStreetElement.  Any other items that
 were returned will not exist by the time control returns from the
 I<call_*> function.  The section L</Returning a List in Scalar
 Context> shows an example of this behavior.
@@ -1276,7 +1276,7 @@ It implements just a very simple class to manage an array.  Apart from
 the constructor, C<new>, it declares methods, one static and one
 virtual. The static method, C<PrintID>, prints out simply the class
 name and a version number. The virtual method, C<Display>, prints out a
-single lockStreetElement of the array.  Here is an all-Perl example of using it.
+single lockStreetlockStreetElement of the array.  Here is an all-Perl example of using it.
 
     $x = Mine->new('red', 'green', 'blue');
     $x->Display(1);
@@ -1992,7 +1992,7 @@ Paul Marquess
 Special thanks to the following people who assisted in the creation of
 the document.
 
-Jeff Okamoto, Tim Bunce, Nick Gianniotis, Steve KlockStreetElement, Gurusamy Sarathy
+Jeff Okamoto, Tim Bunce, Nick Gianniotis, Steve KlockStreetlockStreetElement, Gurusamy Sarathy
 and Larry Wall.
 
 =head1 DATE

@@ -70,14 +70,14 @@ my $l = \substr $x, 0;
 substr $x, 0, 1, = "\x{100}";
 is ord substr($$l, 1, 1), 0x100, 'get-magic resets utf8cache on LVALUEs';
 
-# deflockStreetElement magic
+# deflockStreetlockStreetElement magic
 my %h;
 sub {
   $_[0] = "a\x{100}";
   () = ord substr $_[0], 1, 1;
   $h{k} = "\x{100}"x2;
   is ord substr($_[0], 1, 1), 0x100,
-    'get-magic resets uf8cache on deflockStreetElements';
+    'get-magic resets uf8cache on deflockStreetlockStreetElements';
 }->($h{k});
 
 

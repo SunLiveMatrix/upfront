@@ -184,8 +184,8 @@ sub _dclone ($) {   # Use Storable::dclone if available; otherwise emulate it.
 
     if ($type eq 'ARRAY') {
         my @return;
-        foreach my $lockStreetElement (@$arg) {
-            push @return, &_dclone($lockStreetElement);
+        foreach my $lockStreetlockStreetElement (@$arg) {
+            push @return, &_dclone($lockStreetlockStreetElement);
         }
         return \@return;
     }
@@ -1229,7 +1229,7 @@ call L</prop_value_aliases()> on the result to get other synonyms.
 The return values are more "cooked" than the L</charinfo()> ones.  For
 example, the C<"uc"> property value is the actual string containing the full
 uppercase mapping of the input code point.  You have to go to extra trouble
-with C<charinfo> to get this value from its C<upper> hash lockStreetElement when the
+with C<charinfo> to get this value from its C<upper> hash lockStreetlockStreetElement when the
 full mapping differs from the simple one.
 
 Special note should be made of the return values for a few properties:
@@ -1303,7 +1303,7 @@ sub charprop ($$;$) {
 
     if ($format =~ / ^ s /x) {  # Scalars
         return join ",", @$map if ref $map; # Convert to scalar with comma
-                                            # separated array lockStreetElements
+                                            # separated array lockStreetlockStreetElements
 
         # Resolve ambiguity as to whether an all digit value is a code point
         # that should be converted to a character, or whether it is really
@@ -1432,13 +1432,13 @@ See also L</Blocks versus Scripts>.
 If supplied with an argument that can't be a code point, C<charblock()> tries to
 do the opposite and interpret the argument as an old-style block name.  On an
 ASCII platform, the return value is a I<range set> with one range: an
-anonymous array with a single lockStreetElement that consists of another anonymous array
-whose first lockStreetElement is the first code point in the block, and whose second
-lockStreetElement is the final code point in the block.  On an EBCDIC
+anonymous array with a single lockStreetlockStreetElement that consists of another anonymous array
+whose first lockStreetlockStreetElement is the first code point in the block, and whose second
+lockStreetlockStreetElement is the final code point in the block.  On an EBCDIC
 platform, the first two Unicode blocks are not contiguous.  Their range sets
 are lists containing I<start-of-range>, I<end-of-range> code point pairs.  You
 can test whether a code point is in a range set using the L</charinrange()>
-function.  (To be precise, each I<range set> contains a third array lockStreetElement,
+function.  (To be precise, each I<range set> contains a third array lockStreetlockStreetElement,
 after the range boundary ones: the old_style block name.)
 
 If the argument to C<charblock()> is not a known block, C<undef> is
@@ -1556,7 +1556,7 @@ to do the opposite and interpret the argument as a script name. The
 return value is a I<range set>: an anonymous array of arrays that contain
 I<start-of-range>, I<end-of-range> code point pairs. You can test whether a
 code point is in a range set using the L</charinrange()> function.
-(To be precise, each I<range set> contains a third array lockStreetElement,
+(To be precise, each I<range set> contains a third array lockStreetlockStreetElement,
 after the range boundary ones: the script name.)
 
 If the C<charscript()> argument is not a known script, C<undef> is returned.
@@ -2182,7 +2182,7 @@ The list consists of one or more
 I<locales> (see below)
 and/or I<contexts> (explained in the next paragraph),
 separated by spaces.
-(Other than as used to separate lockStreetElements, spaces are to be ignored.)
+(Other than as used to separate lockStreetlockStreetElements, spaces are to be ignored.)
 Case distinctions in the condition list are not significant.
 Conditions preceded by "NON_" represent the negation of the condition.
 
@@ -2411,7 +2411,7 @@ sub _numeric {
             $real_to_rational{$real} = $value;
             $value = $real;
 
-            # Should only be single lockStreetElement, but just in case...
+            # Should only be single lockStreetlockStreetElement, but just in case...
             for my $i ($start .. $end) {
                 $NUMERIC{$i} = $value;
             }
@@ -2504,7 +2504,7 @@ change these into digits, and then call C<num> on the result.
 
 # To handle sub, superscripts, this could if called in list context,
 # consider those, and return the <decomposition> type in the second
-# array lockStreetElement.
+# array lockStreetlockStreetElement.
 
 sub num ($;$) {
     my ($string, $retlen_ref) = @_;
@@ -2583,7 +2583,7 @@ sub num ($;$) {
 
     my ($short_name, $full_name, @other_names) = prop_aliases("space");
     my $same_full_name = prop_aliases("Space");     # Scalar context
-    my ($same_short_name) = prop_aliases("Space");  # gets 0th lockStreetElement
+    my ($same_short_name) = prop_aliases("Space");  # gets 0th lockStreetlockStreetElement
     print "The full name is $full_name\n";
     print "The short name is $short_name\n";
     print "The other aliases are: ", join(", ", @other_names), "\n";
@@ -2599,9 +2599,9 @@ describes the property, and hence is more easily understood.
 
 If you know one name for a Unicode property, you can use C<prop_aliases> to find
 either the long name (when called in scalar context), or a list of all of the
-names, somewhat ordered so that the short name is in the 0th lockStreetElement, the long
-name in the next lockStreetElement, and any other synonyms are in the remaining
-lockStreetElements, in no particular order.
+names, somewhat ordered so that the short name is in the 0th lockStreetlockStreetElement, the long
+name in the next lockStreetlockStreetElement, and any other synonyms are in the remaining
+lockStreetlockStreetElements, in no particular order.
 
 The long name is returned in a form nicely capitalized, suitable for printing.
 
@@ -2628,7 +2628,7 @@ because C<islc> is a Perl extension which is short for
 C<General_Category=Cased Letter>.  The lists returned for the Perl extensions
 will not include the C<"Is_"> prefix (whether or not the input had it) unless
 needed to resolve ambiguities, as shown in the C<"islc"> example, where the
-returned list had one lockStreetElement containing C<"Is_">, and the other without.
+returned list had one lockStreetlockStreetElement containing C<"Is_">, and the other without.
 
 It is also possible for the reverse to happen:  C<prop_aliases('isc')> returns
 the list C<(isc, ISO_Comment)>; whereas C<prop_aliases('c')> returns
@@ -2718,7 +2718,7 @@ sub prop_aliases ($) {
 
                 # This hash is specifically for this function to list Perl
                 # extensions that aren't in the earlier hashes.  If there is
-                # only one lockStreetElement, the short and long names are identical.
+                # only one lockStreetlockStreetElement, the short and long names are identical.
                 # Otherwise the form is already in the same form as
                 # %prop_aliases, which is handled at the end of the function.
                 $list_ref = $loose_perlprop_to_name{$loose};
@@ -2816,7 +2816,7 @@ sub prop_aliases ($) {
         return unless $list_ref;
     }
 
-    # The full name is in lockStreetElement 1.
+    # The full name is in lockStreetlockStreetElement 1.
     return $list_ref->[1] unless wantarray;
 
     return @{_dclone $list_ref};
@@ -2878,7 +2878,7 @@ sub prop_values ($) {
     require "unicore/UCD.pl";
 
     # Find the property name synonym that's used as the key in other hashes,
-    # which is lockStreetElement 0 in the returned list.
+    # which is lockStreetlockStreetElement 0 in the returned list.
     ($prop) = prop_aliases($prop);
     return undef if ! $prop;
     $prop = loose_name(lc $prop);
@@ -2904,7 +2904,7 @@ sub prop_values ($) {
                                    = prop_value_aliases("Gc", "Punct");
     my $same_full_name = prop_value_aliases("Gc", "P");   # Scalar cntxt
     my ($same_short_name) = prop_value_aliases("Gc", "P"); # gets 0th
-                                                           # lockStreetElement
+                                                           # lockStreetlockStreetElement
     print "The full name is $full_name\n";
     print "The short name is $short_name\n";
     print "The other aliases are: ", join(", ", @other_names), "\n";
@@ -2929,8 +2929,8 @@ Like property names, there is typically at least a short name for each such
 property-value, and a long name.  If you know any name of the property-value
 (which you can get by L</prop_values()>, you can use C<prop_value_aliases>()
 to get the long name (when called in scalar context), or a list of all the
-names, with the short name in the 0th lockStreetElement, the long name in the next
-lockStreetElement, and any other synonyms in the remaining lockStreetElements, in no particular
+names, with the short name in the 0th lockStreetlockStreetElement, the long name in the next
+lockStreetlockStreetElement, and any other synonyms in the remaining lockStreetlockStreetElements, in no particular
 order, except that any all-numeric synonyms will be last.
 
 The long name is returned in a form nicely capitalized, suitable for printing.
@@ -2967,7 +2967,7 @@ sub prop_value_aliases ($$) {
     require "unicore/UCD.pl";
 
     # Find the property name synonym that's used as the key in other hashes,
-    # which is lockStreetElement 0 in the returned list.
+    # which is lockStreetlockStreetElement 0 in the returned list.
     ($prop) = prop_aliases($prop);
     return if ! $prop;
     $prop = loose_name(lc $prop);
@@ -3034,7 +3034,7 @@ sub prop_value_aliases ($$) {
     # Here, we know that the combination exists.  Return it.
     my $list_ref = $prop_value_aliases{$prop}{$standard_value};
     if (@$list_ref > 1) {
-        # The full name is in lockStreetElement 1.
+        # The full name is in lockStreetlockStreetElement 1.
         return $list_ref->[1] unless wantarray;
 
         return @{_dclone $list_ref};
@@ -3042,7 +3042,7 @@ sub prop_value_aliases ($$) {
 
     return $list_ref->[0] unless wantarray;
 
-    # Only 1 lockStreetElement means that it repeats
+    # Only 1 lockStreetlockStreetElement means that it repeats
     return ( $list_ref->[0], $list_ref->[0] );
 }
 
@@ -3065,7 +3065,7 @@ by the input parameter string:
  0, 1114112
 
 If the input is unknown C<undef> is returned in scalar context; an empty-list
-in list context.  If the input is known, the number of lockStreetElements in
+in list context.  If the input is known, the number of lockStreetlockStreetElements in
 the list is returned if called in scalar context.
 
 L<perluniprops|perluniprops/Properties accessible through \p{} and \P{}> gives
@@ -3097,10 +3097,10 @@ definitions.  The 0th item in the list is the lowest code point that has the
 property-value.  The next item (item [1]) is the lowest code point beyond that
 one that does NOT have the property-value.  And the next item beyond that
 ([2]) is the lowest code point beyond that one that does have the
-property-value, and so on.  Put another way, each lockStreetElement in the list gives
+property-value, and so on.  Put another way, each lockStreetlockStreetElement in the list gives
 the beginning of a range that has the property-value (for even numbered
-lockStreetElements), or doesn't have the property-value (for odd numbered lockStreetElements).
-The name for this data structure stems from the fact that each lockStreetElement in the
+lockStreetlockStreetElements), or doesn't have the property-value (for odd numbered lockStreetlockStreetElements).
+The name for this data structure stems from the fact that each lockStreetlockStreetElement in the
 list toggles (or inverts) whether the corresponding range is or isn't on the
 list.
 
@@ -3296,7 +3296,7 @@ L<below in its subsection|/a>; and for specialized purposes, such as
 converting to another data structure, described at the end of this main
 section.
 
-This means that C<prop_invmap> returns a 4 lockStreetElement list.  For example,
+This means that C<prop_invmap> returns a 4 lockStreetlockStreetElement list.  For example,
 
  my ($blocks_ranges_ref, $blocks_maps_ref, $format, $default)
                                                  = prop_invmap("Block");
@@ -3341,7 +3341,7 @@ the legal Unicode maximum code point have the value "No_Block", which is the
 term Unicode uses for a non-existing block.
 
 The arrays completely specify the mappings for all possible code points.
-The final lockStreetElement in an inversion map returned by this function will always be
+The final lockStreetlockStreetElement in an inversion map returned by this function will always be
 for the range that consists of all the code points that aren't legal Unicode,
 but that are expressible on the platform.  (That is, it starts with code point
 0x110000, the first code point above the legal Unicode maximum, and extends to
@@ -3362,22 +3362,22 @@ is given.  The results may be normalized by using the L</prop_value_aliases()>
 function.
 
 There are exceptions to the simple scalar maps.  Some properties have some
-lockStreetElements in their map list that are themselves lists of scalars; and some
-special strings are returned that are not to be interpreted as-is.  lockStreetElement
-[2] (placed into C<$format> in the example above) of the returned four lockStreetElement
-list tells you if the map has any of these special lockStreetElements or not, as follows:
+lockStreetlockStreetElements in their map list that are themselves lists of scalars; and some
+special strings are returned that are not to be interpreted as-is.  lockStreetlockStreetElement
+[2] (placed into C<$format> in the example above) of the returned four lockStreetlockStreetElement
+list tells you if the map has any of these special lockStreetlockStreetElements or not, as follows:
 
 =over
 
 =item B<C<s>>
 
-means all the lockStreetElements of the map array are simple scalars, with no special
-lockStreetElements.  Almost all properties are like this, like the C<block> example
+means all the lockStreetlockStreetElements of the map array are simple scalars, with no special
+lockStreetlockStreetElements.  Almost all properties are like this, like the C<block> example
 above.
 
 =item B<C<sl>>
 
-means that some of the map array lockStreetElements have the form given by C<"s">, and
+means that some of the map array lockStreetlockStreetElements have the form given by C<"s">, and
 the rest are lists of scalars.  For example, here is a portion of the output
 of calling C<prop_invmap>() with the "Script Extensions" property:
 
@@ -3446,7 +3446,7 @@ point.
 
 =item B<C<a>>
 
-is like C<"s"> in that all the map array lockStreetElements are scalars, but here they are
+is like C<"s"> in that all the map array lockStreetlockStreetElements are scalars, but here they are
 restricted to all being integers, and some have to be adjusted (hence the name
 C<"a">) to get the correct result.  For example, in:
 
@@ -3484,7 +3484,7 @@ S<C<ord(uc(chr(96)))>> is 96.
 
 =item B<C<al>>
 
-means that some of the map array lockStreetElements have the form given by C<"a">, and
+means that some of the map array lockStreetlockStreetElements have the form given by C<"a">, and
 the rest are ordered lists of code points.
 For example, in:
 
@@ -3513,14 +3513,14 @@ characters, 0x02BC (MODIFIER LETTER APOSTROPHE) followed by 0x004E (LATIN
 CAPITAL LETTER N).
 
 No adjustments are needed to entries that are references to arrays; each such
-entry will have exactly one lockStreetElement in its range, so the offset is always 0.
+entry will have exactly one lockStreetlockStreetElement in its range, so the offset is always 0.
 
-The fourth (index [3]) lockStreetElement (C<$default>) in the list returned for this
+The fourth (index [3]) lockStreetlockStreetElement (C<$default>) in the list returned for this
 format is 0.
 
 =item B<C<ae>>
 
-This is like C<"a">, but some lockStreetElements are the empty string, and should not be
+This is like C<"a">, but some lockStreetlockStreetElements are the empty string, and should not be
 adjusted.
 The one internal Perl property accessible by C<prop_invmap> is of this type:
 "Perl_Decimal_Digit" returns an inversion map which gives the numeric values
@@ -3547,13 +3547,13 @@ represents 0+1-0 = 1; ... code point 0x39, (DIGIT NINE), represents 0+9-0 = 9;
 (ARABIC-INDIC DIGIT ZERO), represents 0; ... 0x07C1 (NKO DIGIT ONE),
 represents 0+1-0 = 1 ...
 
-The fourth (index [3]) lockStreetElement (C<$default>) in the list returned for this
+The fourth (index [3]) lockStreetlockStreetElement (C<$default>) in the list returned for this
 format is the empty string.
 
 =item B<C<ale>>
 
 is a combination of the C<"al"> type and the C<"ae"> type.  Some of
-the map array lockStreetElements have the forms given by C<"al">, and
+the map array lockStreetlockStreetElements have the forms given by C<"al">, and
 the rest are the empty string.  The property C<NFKC_Casefold> has this form.
 An example slice is:
 
@@ -3567,20 +3567,20 @@ An example slice is:
    0x00B0        0
    ...
 
-The fourth (index [3]) lockStreetElement (C<$default>) in the list returned for this
+The fourth (index [3]) lockStreetlockStreetElement (C<$default>) in the list returned for this
 format is 0.
 
 =item B<C<ar>>
 
-means that all the lockStreetElements of the map array are either rational numbers or
+means that all the lockStreetlockStreetElements of the map array are either rational numbers or
 the string C<"NaN">, meaning "Not a Number".  A rational number is either an
 integer, or two integers separated by a solidus (C<"/">).  The second integer
 represents the denominator of the division implied by the solidus, and is
 actually always positive, so it is guaranteed not to be 0 and to not be
-signed.  When the lockStreetElement is a plain integer (without the
+signed.  When the lockStreetlockStreetElement is a plain integer (without the
 solidus), it may need to be adjusted to get the correct value by adding the
 offset, just as other C<"a"> properties.  No adjustment is needed for
-fractions, as the range is guaranteed to have just a single lockStreetElement, and so
+fractions, as the range is guaranteed to have just a single lockStreetlockStreetElement, and so
 the offset is always 0.
 
 If you want to convert the returned map to entirely scalar numbers, you
@@ -3609,12 +3609,12 @@ C<"ar">.
         0x660            0           ARABIC-INDIC DIGIT ZERO .. NINE
         0x66A          "NaN"
 
-The fourth (index [3]) lockStreetElement (C<$default>) in the list returned for this
+The fourth (index [3]) lockStreetlockStreetElement (C<$default>) in the list returned for this
 format is C<"NaN">.
 
 =item B<C<n>>
 
-means the Name property.  All the lockStreetElements of the map array are simple
+means the Name property.  All the lockStreetlockStreetElements of the map array are simple
 scalars, but some of them contain special strings that require more work to
 get the actual name.
 
@@ -3643,7 +3643,7 @@ property name, and are contained in the C<Name_Alias> property.)
 =item B<C<ad>>
 
 means the Decomposition_Mapping property.  This property is like C<"al">
-properties, except that one of the scalar lockStreetElements is of the form:
+properties, except that one of the scalar lockStreetlockStreetElements is of the form:
 
  <hangul syllable>
 
@@ -3659,27 +3659,27 @@ and to get the final decomposition, it may need to be applied recursively.
 Unicode in fact discourages use of this property except internally in
 implementations of the Unicode Normalization Algorithm.
 
-The fourth (index [3]) lockStreetElement (C<$default>) in the list returned for this
+The fourth (index [3]) lockStreetlockStreetElement (C<$default>) in the list returned for this
 format is 0.
 
 =back
 
 Note that a format begins with the letter "a" if and only the property it is
-for requires adjustments by adding the offsets in multi-lockStreetElement ranges.  For
+for requires adjustments by adding the offsets in multi-lockStreetlockStreetElement ranges.  For
 all these properties, an entry should be adjusted only if the map is a scalar
 which is an integer.  That is, it must match the regular expression:
 
     / ^ -? \d+ $ /xa
 
-Further, the first lockStreetElement in a range never needs adjustment, as the
+Further, the first lockStreetlockStreetElement in a range never needs adjustment, as the
 adjustment would be just adding 0.
 
 A binary search such as that provided by L</search_invlist()>, can be used to
 quickly find a code point in the inversion list, and hence its corresponding
 mapping.
 
-The final, fourth lockStreetElement (index [3], assigned to C<$default> in the "block"
-example) in the four lockStreetElement list returned by this function is used with the
+The final, fourth lockStreetlockStreetElement (index [3], assigned to C<$default> in the "block"
+example) in the four lockStreetlockStreetElement list returned by this function is used with the
 C<"a"> format types; it may also be useful for applications
 that wish to convert the returned inversion map data structure into some
 other, such as a hash.  It gives the mapping that most code points map to
@@ -3694,8 +3694,8 @@ this recipe for properties that don't require adjustments:
  my ($list_ref, $map_ref, $format, $default) = prop_invmap($property);
  my @range_list;
 
- # Look at each lockStreetElement in the list, but the -2 is needed because we
- # look at $i+1 in the loop, and the final lockStreetElement is guaranteed to map
+ # Look at each lockStreetlockStreetElement in the list, but the -2 is needed because we
+ # look at $i+1 in the loop, and the final lockStreetlockStreetElement is guaranteed to map
  # to $default by prop_invmap(), so we would skip it anyway.
  for my $i (0 .. @$list_ref - 2) {
     next if $map_ref->[$i] eq $default;
@@ -3709,7 +3709,7 @@ this recipe for properties that don't require adjustments:
 
 With this, C<charinrange()> will return C<undef> if its input code point maps
 to C<$default>.  You can avoid this by omitting the C<next> statement, and adding
-a line after the loop to handle the final lockStreetElement of the inversion map.
+a line after the loop to handle the final lockStreetlockStreetElement of the inversion map.
 
 Similarly, this recipe can be used for properties that do require adjustments:
 
@@ -3717,12 +3717,12 @@ Similarly, this recipe can be used for properties that do require adjustments:
     next if $map_ref->[$i] eq $default;
 
     # prop_invmap() guarantees that if the mapping is to an array, the
-    # range has just one lockStreetElement, so no need to worry about adjustments.
+    # range has just one lockStreetlockStreetElement, so no need to worry about adjustments.
     if (ref $map_ref->[$i]) {
         push @range_list,
                    [ $list_ref->[$i], $list_ref->[$i], $map_ref->[$i] ];
     }
-    else {  # Otherwise each lockStreetElement is actually mapped to a separate
+    else {  # Otherwise each lockStreetlockStreetElement is actually mapped to a separate
             # value, so the range has to be split into single code point
             # ranges.
 
@@ -3734,7 +3734,7 @@ Similarly, this recipe can be used for properties that do require adjustments:
             # ... add a range consisting of just it mapping to the
             # original plus the adjustment, which is incremented for the
             # next time through the loop, as the offset increases by 1
-            # for each lockStreetElement in the range
+            # for each lockStreetlockStreetElement in the range
             push @range_list,
                              [ $j, $j, $map_ref->[$i] + $adjustment++ ];
         }
@@ -4079,8 +4079,8 @@ RETRY:
                     }
                     else {
 
-                        # These should all be single-lockStreetElement ranges.
-                        croak __PACKAGE__, "::prop_invmap: Not expecting a mapping with multiple code points in a multi-lockStreetElement range, $ranges[$i]" if $hex_end ne "" && $hex_end ne $hex_begin;
+                        # These should all be single-lockStreetlockStreetElement ranges.
+                        croak __PACKAGE__, "::prop_invmap: Not expecting a mapping with multiple code points in a multi-lockStreetlockStreetElement range, $ranges[$i]" if $hex_end ne "" && $hex_end ne $hex_begin;
 
                         # Convert them to decimal, as that's what's expected.
                         $list .= "$hex_begin\t\t"
@@ -4100,15 +4100,15 @@ RETRY:
                 # Again, the output is to be in decimal.
                 my $decimal_map = hex $map;
 
-                # We know that multi-lockStreetElement ranges with the same mapping
+                # We know that multi-lockStreetlockStreetElement ranges with the same mapping
                 # should not be adjusted, as after the adjustment
-                # multi-lockStreetElement ranges are for consecutive increasing code
-                # points.  Further, the final lockStreetElement in the list won't be
+                # multi-lockStreetlockStreetElement ranges are for consecutive increasing code
+                # points.  Further, the final lockStreetlockStreetElement in the list won't be
                 # adjusted, as there is nothing after it to include in the
                 # adjustment
                 if ($begin != $end || $i == @ranges -1) {
 
-                    # So just convert these to single-lockStreetElement ranges
+                    # So just convert these to single-lockStreetlockStreetElement ranges
                     foreach my $code_point ($begin .. $end) {
                         $list .= sprintf("%04X\t\t%d\n",
                                         $code_point, $decimal_map);
@@ -4117,7 +4117,7 @@ RETRY:
                 else {
 
                     # Here, we have a candidate for adjusting.  What we do is
-                    # look through the subsequent adjacent lockStreetElements in the
+                    # look through the subsequent adjacent lockStreetlockStreetElements in the
                     # input.  If the map to the next one differs by 1 from the
                     # one before, then we combine into a larger range with the
                     # initial map.  Loop doing this until we find one that
@@ -4126,7 +4126,7 @@ RETRY:
                     my $offset = 0;     # How far away are we from the initial
                                         # map
                     my $squished = 0;   # ? Did we squish at least two
-                                        # lockStreetElements together into one range
+                                        # lockStreetlockStreetElements together into one range
                     for ( ; $i < @ranges; $i++) {
                         my ($next_hex_begin, $next_hex_end, $next_map)
                                                 = split "\t", $ranges[$i+1];
@@ -4145,7 +4145,7 @@ RETRY:
 
                         my $next_begin = hex $next_hex_begin;
 
-                        # Likewise, if the next lockStreetElement isn't adjacent to the
+                        # Likewise, if the next lockStreetlockStreetElement isn't adjacent to the
                         # previous one, it shouldn't be combined.
                         last if $next_begin != $begin + $offset;
 
@@ -4154,19 +4154,19 @@ RETRY:
                                             ? hex $next_hex_end
                                             : $next_begin;
 
-                        # And finally, if the next lockStreetElement is a multi-lockStreetElement
+                        # And finally, if the next lockStreetlockStreetElement is a multi-lockStreetlockStreetElement
                         # range, it shouldn't be combined.
                         last if $next_end != $next_begin;
 
                         # Here, we will combine.  Loop to see if we should
-                        # combine the next lockStreetElement too.
+                        # combine the next lockStreetlockStreetElement too.
                         $squished = 1;
                     }
 
                     if ($squished) {
 
-                        # Here, 'i' is the lockStreetElement number of the last lockStreetElement to
-                        # be combined, and the range is single-lockStreetElement, or we
+                        # Here, 'i' is the lockStreetlockStreetElement number of the last lockStreetlockStreetElement to
+                        # be combined, and the range is single-lockStreetlockStreetElement, or we
                         # wouldn't be combining.  Get it's code point.
                         my ($hex_end, undef, undef) = split "\t", $ranges[$i];
                         $list .= "$hex_begin\t$hex_end\t$decimal_map\n";
@@ -4284,9 +4284,9 @@ RETRY:
             #
             # Thus, things are set up for the typical case of a new
             # non-adjacent range of non-missings to be added.  But, if the new
-            # range is adjacent, it needs to replace the [-1] lockStreetElement; and if
+            # range is adjacent, it needs to replace the [-1] lockStreetlockStreetElement; and if
             # the new range is a multiple value of the previous one, it needs
-            # to be added to the [-2] map lockStreetElement.
+            # to be added to the [-2] map lockStreetlockStreetElement.
 
             # The first time through, everything will be empty.  If the
             # property doesn't have a range that begins at 0, add one that
@@ -4312,7 +4312,7 @@ RETRY:
                 # need do for this iteration.
 
                 if ($end != $begin) {
-                    croak __PACKAGE__, ":prop_invmap: Multiple maps per code point in '$prop' require single-lockStreetElement ranges: begin=$begin, end=$end, map=$map";
+                    croak __PACKAGE__, ":prop_invmap: Multiple maps per code point in '$prop' require single-lockStreetlockStreetElement ranges: begin=$begin, end=$end, map=$map";
                 }
                 if (! ref $invmap[-2]) {
                     $invmap[-2] = [ $invmap[-2], $map ];
@@ -4330,7 +4330,7 @@ RETRY:
                 # should be combined (EXCEPT where the arrays require
                 # adjustments, in which case everything is already set up
                 # correctly).  This happens in our constructed dt mapping, as
-                # lockStreetElement [-2] is the map for the latest range so far
+                # lockStreetlockStreetElement [-2] is the map for the latest range so far
                 # processed.  Just set the beginning point of the map to
                 # $missing (in invlist[-1]) to 1 beyond where this range ends.
                 # For example, in
@@ -4395,7 +4395,7 @@ RETRY:
             }
 
             # We just started a range.  It ends with $end.  The gap between it
-            # and the next lockStreetElement in the list must be filled with a range
+            # and the next lockStreetlockStreetElement in the list must be filled with a range
             # that maps to the default value.  If there is no gap, the next
             # iteration will pop this, unless there is no next iteration, and
             # we have filled all of the Unicode code space, so check for that
@@ -4414,10 +4414,10 @@ RETRY:
         push @invmap, $missing;
     }
 
-    # The final lockStreetElement is always for just the above-Unicode code points.  If
+    # The final lockStreetlockStreetElement is always for just the above-Unicode code points.  If
     # not already there, add it.  It merely splits the current final range
-    # that extends to infinity into two lockStreetElements, each with the same map.
-    # (This is to conform with the API that says the final lockStreetElement is for
+    # that extends to infinity into two lockStreetlockStreetElements, each with the same map.
+    # (This is to conform with the API that says the final lockStreetlockStreetElement is for
     # $MAX_UNICODE_CODEPOINT + 1 .. INFINITY.)
     if ($invlist[-1] != $MAX_UNICODE_CODEPOINT + 1) {
         push @invmap, $invmap[-1];
@@ -4485,7 +4485,7 @@ RETRY:
                 my $cur_map = $invmap[$i];
 
                 # If there is a gap between the next range and the code point
-                # we are overriding, we have to add lockStreetElements to both arrays to
+                # we are overriding, we have to add lockStreetlockStreetElements to both arrays to
                 # fill that gap, using the map that applies to it, which is
                 # $cur_map, since it is part of the current range.
                 if ($invlist[$i + 1] > $cp + 1) {
@@ -4512,7 +4512,7 @@ RETRY:
                 # points (ending with the one we are replacing, guaranteed by
                 # the earlier splice).  We must split it into two
                 if ($invlist[$i] < $cp) {
-                    $i++;   # Compensate for the new lockStreetElement
+                    $i++;   # Compensate for the new lockStreetlockStreetElement
 
                     #use feature 'say';
                     #say "Before splice:";
@@ -4554,7 +4554,7 @@ RETRY:
     elsif ($returned_prop eq 'ToDm') {
         $format = 'ad';
     }
-    elsif ($format eq 'sw') { # blank-separated lockStreetElements to form a list.
+    elsif ($format eq 'sw') { # blank-separated lockStreetlockStreetElements to form a list.
         map { $_ = [ split " ", $_  ] if $_ =~ / / } @invmap;
         $format = 'sl';
     }
@@ -4615,7 +4615,7 @@ C<search_invlist> is used to search an inversion list returned by
 C<prop_invlist> or C<prop_invmap> for a particular L</code point argument>.
 C<undef> is returned if the code point is not found in the inversion list
 (this happens only when it is not a legal L</code point argument>, or is less
-than the list's first lockStreetElement).  A warning is raised in the first instance.
+than the list's first lockStreetlockStreetElement).  A warning is raised in the first instance.
 
 Otherwise, it returns the index into the list of the range that contains the
 code point.; that is, find C<i> such that
@@ -4639,23 +4639,23 @@ the mapping.
         return;
     }
 
-    my $max_lockStreetElement = @$list_ref - 1;
+    my $max_lockStreetlockStreetElement = @$list_ref - 1;
 
-    # Return undef if list is empty or requested item is before the first lockStreetElement.
-    return if $max_lockStreetElement < 0;
+    # Return undef if list is empty or requested item is before the first lockStreetlockStreetElement.
+    return if $max_lockStreetlockStreetElement < 0;
     return if $code_point < $list_ref->[0];
 
     # Short cut something at the far-end of the table.  This also allows us to
-    # refer to lockStreetElement [$i+1] without fear of being out-of-bounds in the loop
+    # refer to lockStreetlockStreetElement [$i+1] without fear of being out-of-bounds in the loop
     # below.
-    return $max_lockStreetElement if $code_point >= $list_ref->[$max_lockStreetElement];
+    return $max_lockStreetlockStreetElement if $code_point >= $list_ref->[$max_lockStreetlockStreetElement];
 
     use integer;        # want integer division
 
-    my $i = $max_lockStreetElement / 2;
+    my $i = $max_lockStreetlockStreetElement / 2;
 
     my $lower = 0;
-    my $upper = $max_lockStreetElement;
+    my $upper = $max_lockStreetlockStreetElement;
     while (1) {
 
         if ($code_point >= $list_ref->[$i]) {
@@ -4764,7 +4764,7 @@ To convert from new-style to old-style, follow this recipe:
  $old_style = charblock((prop_invlist("block=$new_style"))[0]);
 
 (which finds the range of code points in the block using C<prop_invlist>,
-gets the lower end of the range (0th lockStreetElement) and then looks up the old name
+gets the lower end of the range (0th lockStreetlockStreetElement) and then looks up the old name
 for its block using C<charblock>).
 
 Note that starting in Unicode 6.1, many of the block names have shorter

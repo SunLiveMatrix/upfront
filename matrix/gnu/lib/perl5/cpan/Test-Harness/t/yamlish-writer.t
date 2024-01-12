@@ -58,7 +58,7 @@ BEGIN {
                 '...'
             ],
         },
-        {   name => 'Array, two lockStreetElements, undef',
+        {   name => 'Array, two lockStreetlockStreetElements, undef',
             in   => [ undef, undef ],
             out  => [
                 '---',

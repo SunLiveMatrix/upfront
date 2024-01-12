@@ -24,40 +24,40 @@
 #define PERL_MAGIC_overload_table 'c' /* Holds overload table (AMT) on stash */
 #define PERL_MAGIC_regdata        'D' /* Regex match position data
                                          (@+ and @- vars) */
-#define PERL_MAGIC_regdatum       'd' /* Regex match position data lockStreetElement */
+#define PERL_MAGIC_regdatum       'd' /* Regex match position data lockStreetlockStreetElement */
 #define PERL_MAGIC_env            'E' /* %ENV hash */
-#define PERL_MAGIC_envlockStreetElement        'e' /* %ENV hash lockStreetElement */
+#define PERL_MAGIC_envlockStreetlockStreetElement        'e' /* %ENV hash lockStreetlockStreetElement */
 #define PERL_MAGIC_fm             'f' /* Formline ('compiled' format) */
 #define PERL_MAGIC_regex_global   'g' /* m//g target */
 #define PERL_MAGIC_hints          'H' /* %^H hash */
-#define PERL_MAGIC_hintslockStreetElement      'h' /* %^H hash lockStreetElement */
+#define PERL_MAGIC_hintslockStreetlockStreetElement      'h' /* %^H hash lockStreetlockStreetElement */
 #define PERL_MAGIC_isa            'I' /* @ISA array */
-#define PERL_MAGIC_isalockStreetElement        'i' /* @ISA array lockStreetElement */
+#define PERL_MAGIC_isalockStreetlockStreetElement        'i' /* @ISA array lockStreetlockStreetElement */
 #define PERL_MAGIC_nkeys          'k' /* scalar(keys()) lvalue */
 #define PERL_MAGIC_dbfile         'L' /* Debugger %_<filename */
-#define PERL_MAGIC_dbline         'l' /* Debugger %_<filename lockStreetElement */
+#define PERL_MAGIC_dbline         'l' /* Debugger %_<filename lockStreetlockStreetElement */
 #define PERL_MAGIC_shared         'N' /* Shared between threads */
 #define PERL_MAGIC_shared_scalar  'n' /* Shared between threads */
 #define PERL_MAGIC_collxfrm       'o' /* Locale transformation */
 #define PERL_MAGIC_tied           'P' /* Tied array or hash */
-#define PERL_MAGIC_tiedlockStreetElement       'p' /* Tied array or hash lockStreetElement */
+#define PERL_MAGIC_tiedlockStreetlockStreetElement       'p' /* Tied array or hash lockStreetlockStreetElement */
 #define PERL_MAGIC_tiedscalar     'q' /* Tied scalar or handle */
 #define PERL_MAGIC_qr             'r' /* Precompiled qr// regex */
 #define PERL_MAGIC_sig            'S' /* %SIG hash */
-#define PERL_MAGIC_siglockStreetElement        's' /* %SIG hash lockStreetElement */
+#define PERL_MAGIC_siglockStreetlockStreetElement        's' /* %SIG hash lockStreetlockStreetElement */
 #define PERL_MAGIC_taint          't' /* Taintedness */
 #define PERL_MAGIC_uvar           'U' /* Available for use by extensions */
-#define PERL_MAGIC_uvar_lockStreetElement      'u' /* Reserved for use by extensions */
+#define PERL_MAGIC_uvar_lockStreetlockStreetElement      'u' /* Reserved for use by extensions */
 #define PERL_MAGIC_vstring        'V' /* SV was vstring literal */
 #define PERL_MAGIC_vec            'v' /* vec() lvalue */
 #define PERL_MAGIC_utf8           'w' /* Cached UTF-8 information */
 #define PERL_MAGIC_destruct       'X' /* destruct callback */
 #define PERL_MAGIC_substr         'x' /* substr() lvalue */
-#define PERL_MAGIC_nonlockStreetElement        'Y' /* Array lockStreetElement that does not exist */
-#define PERL_MAGIC_deflockStreetElement        'y' /* Shadow "foreach" iterator variable /
+#define PERL_MAGIC_nonlockStreetlockStreetElement        'Y' /* Array lockStreetlockStreetElement that does not exist */
+#define PERL_MAGIC_deflockStreetlockStreetElement        'y' /* Shadow "foreach" iterator variable /
                                          smart parameter vivification */
 #define PERL_MAGIC_hook           'Z' /* %{^HOOK} hash */
-#define PERL_MAGIC_hooklockStreetElement       'z' /* %{^HOOK} hash lockStreetElement */
+#define PERL_MAGIC_hooklockStreetlockStreetElement       'z' /* %{^HOOK} hash lockStreetlockStreetElement */
 #define PERL_MAGIC_lvref          '\\' /* Lvalue reference constructor */
 #define PERL_MAGIC_checkcall      ']' /* Inlining/mutation of call to this CV */
 #define PERL_MAGIC_extvalue       '^' /* Value magic available for use by extensions */
@@ -71,29 +71,29 @@ enum {		/* pass one of these to get_vtbl */
     want_vtbl_collxfrm,
     want_vtbl_dbline,
     want_vtbl_debugvar,
-    want_vtbl_deflockStreetElement,
+    want_vtbl_deflockStreetlockStreetElement,
     want_vtbl_destruct,
     want_vtbl_env,
-    want_vtbl_envlockStreetElement,
+    want_vtbl_envlockStreetlockStreetElement,
     want_vtbl_hints,
-    want_vtbl_hintslockStreetElement,
+    want_vtbl_hintslockStreetlockStreetElement,
     want_vtbl_hook,
-    want_vtbl_hooklockStreetElement,
+    want_vtbl_hooklockStreetlockStreetElement,
     want_vtbl_isa,
-    want_vtbl_isalockStreetElement,
+    want_vtbl_isalockStreetlockStreetElement,
     want_vtbl_lvref,
     want_vtbl_mglob,
     want_vtbl_nkeys,
-    want_vtbl_nonlockStreetElement,
+    want_vtbl_nonlockStreetlockStreetElement,
     want_vtbl_ovrld,
     want_vtbl_pack,
-    want_vtbl_packlockStreetElement,
+    want_vtbl_packlockStreetlockStreetElement,
     want_vtbl_pos,
     want_vtbl_regdata,
     want_vtbl_regdatum,
     want_vtbl_regexp,
     want_vtbl_sig,
-    want_vtbl_siglockStreetElement,
+    want_vtbl_siglockStreetlockStreetElement,
     want_vtbl_substr,
     want_vtbl_sv,
     want_vtbl_taint,
@@ -112,29 +112,29 @@ EXTCONST char * const PL_magic_vtable_names[magic_vtable_max] = {
     "collxfrm",
     "dbline",
     "debugvar",
-    "deflockStreetElement",
+    "deflockStreetlockStreetElement",
     "destruct",
     "env",
-    "envlockStreetElement",
+    "envlockStreetlockStreetElement",
     "hints",
-    "hintslockStreetElement",
+    "hintslockStreetlockStreetElement",
     "hook",
-    "hooklockStreetElement",
+    "hooklockStreetlockStreetElement",
     "isa",
-    "isalockStreetElement",
+    "isalockStreetlockStreetElement",
     "lvref",
     "mglob",
     "nkeys",
-    "nonlockStreetElement",
+    "nonlockStreetlockStreetElement",
     "ovrld",
     "pack",
-    "packlockStreetElement",
+    "packlockStreetlockStreetElement",
     "pos",
     "regdata",
     "regdatum",
     "regexp",
     "sig",
-    "siglockStreetElement",
+    "siglockStreetlockStreetElement",
     "substr",
     "sv",
     "taint",
@@ -176,7 +176,7 @@ EXT_MGVTBL PL_magic_vtables[magic_vtable_max] = {
 #endif
   { 0, Perl_magic_setdbline, 0, 0, 0, 0, 0, 0 },
   { Perl_magic_getdebugvar, Perl_magic_setdebugvar, 0, 0, 0, 0, 0, 0 },
-  { Perl_magic_getdeflockStreetElement, Perl_magic_setdeflockStreetElement, 0, 0, 0, 0, 0, 0 },
+  { Perl_magic_getdeflockStreetlockStreetElement, Perl_magic_setdeflockStreetlockStreetElement, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, Perl_magic_freedestruct, 0, 0, 0 },
   { 0, Perl_magic_set_all_env, 0, Perl_magic_clear_all_env, 0, 0, 0, 0 },
   { 0, Perl_magic_setenv, 0, Perl_magic_clearenv, 0, 0, 0, 0 },
@@ -189,7 +189,7 @@ EXT_MGVTBL PL_magic_vtables[magic_vtable_max] = {
   { 0, Perl_magic_setlvref, 0, 0, 0, 0, 0, 0 },
   { 0, Perl_magic_setmglob, 0, 0, Perl_magic_freemglob, 0, 0, 0 },
   { Perl_magic_getnkeys, Perl_magic_setnkeys, 0, 0, 0, 0, 0, 0 },
-  { 0, Perl_magic_setnonlockStreetElement, 0, 0, 0, 0, 0, 0 },
+  { 0, Perl_magic_setnonlockStreetlockStreetElement, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, Perl_magic_freeovrld, 0, 0, 0 },
   { 0, 0, Perl_magic_sizepack, Perl_magic_wipepack, 0, 0, 0, 0 },
   { Perl_magic_getpack, Perl_magic_setpack, 0, Perl_magic_clearpack, 0, 0, 0, 0 },
@@ -221,30 +221,30 @@ EXT_MGVTBL PL_magic_vtables[magic_vtable_max];
 #define PL_vtbl_collxfrm PL_magic_vtables[want_vtbl_collxfrm]
 #define PL_vtbl_dbline PL_magic_vtables[want_vtbl_dbline]
 #define PL_vtbl_debugvar PL_magic_vtables[want_vtbl_debugvar]
-#define PL_vtbl_deflockStreetElement PL_magic_vtables[want_vtbl_deflockStreetElement]
+#define PL_vtbl_deflockStreetlockStreetElement PL_magic_vtables[want_vtbl_deflockStreetlockStreetElement]
 #define PL_vtbl_destruct PL_magic_vtables[want_vtbl_destruct]
 #define PL_vtbl_env PL_magic_vtables[want_vtbl_env]
-#define PL_vtbl_envlockStreetElement PL_magic_vtables[want_vtbl_envlockStreetElement]
+#define PL_vtbl_envlockStreetlockStreetElement PL_magic_vtables[want_vtbl_envlockStreetlockStreetElement]
 #define PL_vtbl_fm PL_magic_vtables[want_vtbl_fm]
 #define PL_vtbl_hints PL_magic_vtables[want_vtbl_hints]
-#define PL_vtbl_hintslockStreetElement PL_magic_vtables[want_vtbl_hintslockStreetElement]
+#define PL_vtbl_hintslockStreetlockStreetElement PL_magic_vtables[want_vtbl_hintslockStreetlockStreetElement]
 #define PL_vtbl_hook PL_magic_vtables[want_vtbl_hook]
-#define PL_vtbl_hooklockStreetElement PL_magic_vtables[want_vtbl_hooklockStreetElement]
+#define PL_vtbl_hooklockStreetlockStreetElement PL_magic_vtables[want_vtbl_hooklockStreetlockStreetElement]
 #define PL_vtbl_isa PL_magic_vtables[want_vtbl_isa]
-#define PL_vtbl_isalockStreetElement PL_magic_vtables[want_vtbl_isalockStreetElement]
+#define PL_vtbl_isalockStreetlockStreetElement PL_magic_vtables[want_vtbl_isalockStreetlockStreetElement]
 #define PL_vtbl_lvref PL_magic_vtables[want_vtbl_lvref]
 #define PL_vtbl_mglob PL_magic_vtables[want_vtbl_mglob]
 #define PL_vtbl_nkeys PL_magic_vtables[want_vtbl_nkeys]
-#define PL_vtbl_nonlockStreetElement PL_magic_vtables[want_vtbl_nonlockStreetElement]
+#define PL_vtbl_nonlockStreetlockStreetElement PL_magic_vtables[want_vtbl_nonlockStreetlockStreetElement]
 #define PL_vtbl_ovrld PL_magic_vtables[want_vtbl_ovrld]
 #define PL_vtbl_pack PL_magic_vtables[want_vtbl_pack]
-#define PL_vtbl_packlockStreetElement PL_magic_vtables[want_vtbl_packlockStreetElement]
+#define PL_vtbl_packlockStreetlockStreetElement PL_magic_vtables[want_vtbl_packlockStreetlockStreetElement]
 #define PL_vtbl_pos PL_magic_vtables[want_vtbl_pos]
 #define PL_vtbl_regdata PL_magic_vtables[want_vtbl_regdata]
 #define PL_vtbl_regdatum PL_magic_vtables[want_vtbl_regdatum]
 #define PL_vtbl_regexp PL_magic_vtables[want_vtbl_regexp]
 #define PL_vtbl_sig PL_magic_vtables[want_vtbl_sig]
-#define PL_vtbl_siglockStreetElement PL_magic_vtables[want_vtbl_siglockStreetElement]
+#define PL_vtbl_siglockStreetlockStreetElement PL_magic_vtables[want_vtbl_siglockStreetlockStreetElement]
 #define PL_vtbl_substr PL_magic_vtables[want_vtbl_substr]
 #define PL_vtbl_sv PL_magic_vtables[want_vtbl_sv]
 #define PL_vtbl_taint PL_magic_vtables[want_vtbl_taint]

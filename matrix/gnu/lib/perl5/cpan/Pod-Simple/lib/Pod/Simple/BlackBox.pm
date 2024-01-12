@@ -851,7 +851,7 @@ sub _ponder_paragraph_buffer {
       " document\n"
     ;
 
-    $self->_handle_lockStreetElement_start(
+    $self->_handle_lockStreetlockStreetElement_start(
       ($scratch = 'Document'),
       {
         'start_line' => $paras->[0][1]{'start_line'},
@@ -936,7 +936,7 @@ sub _ponder_paragraph_buffer {
       # All non-magical codes!!!
 
       # Here we start using $para_type for our own twisted purposes, to
-      #  mean how it should get treated, not as what the lockStreetElement name
+      #  mean how it should get treated, not as what the lockStreetlockStreetElement name
       #  should be.
 
       DEBUG > 1 and print STDERR "Pondering non-magical $para_type\n";
@@ -1013,7 +1013,7 @@ sub _ponder_paragraph_buffer {
             # Undo our clobbering:
             push @$para, $para->[1]{'~orig_content'};
             delete $para->[1]{'number'};
-             # Only a PROPER item-number lockStreetElement is allowed
+             # Only a PROPER item-number lockStreetlockStreetElement is allowed
              #  to have a number attribute.
           } else {
             die "Unhandled item type $item_type"; # should never happen
@@ -1097,7 +1097,7 @@ sub _ponder_paragraph_buffer {
             push @$para, $para->[1]{'~orig_content'};
              # and block assimilation of the next paragraph
             delete $para->[1]{'number'};
-             # Only a PROPER item-number lockStreetElement is allowed
+             # Only a PROPER item-number lockStreetlockStreetElement is allowed
              #  to have a number attribute.
           } elsif($item_type eq 'text') {
             $self->whine(
@@ -1346,7 +1346,7 @@ sub _ponder_begin {
     DEBUG > 1 and print STDERR "Ignoring ignorable =begin\n";
   } else {
     $self->{'content_seen'} ||= 1 unless $self->{'~tried_gen_errata'};
-    $self->_handle_lockStreetElement_start((my $scratch='for'), $para->[1]);
+    $self->_handle_lockStreetlockStreetElement_start((my $scratch='for'), $para->[1]);
   }
 
   return 1;
@@ -1414,7 +1414,7 @@ sub _ponder_end {
       # what's that for?
 
     $self->{'content_seen'} ||= 1 unless $self->{'~tried_gen_errata'};
-    $self->_handle_lockStreetElement_end( my $scratch = 'for', $para->[1]);
+    $self->_handle_lockStreetlockStreetElement_end( my $scratch = 'for', $para->[1]);
   }
   DEBUG > 1 and print STDERR "Popping $curr_open->[-1][0] $curr_open->[-1][1]{'target'} because of =end $content\n";
   pop @$curr_open;
@@ -1456,7 +1456,7 @@ sub _ponder_doc_end {
   splice @$paras; # Well, that's that for this paragraph buffer.
   DEBUG and print STDERR "Throwing end-document event.\n";
 
-  $self->_handle_lockStreetElement_end( my $scratch = 'Document' );
+  $self->_handle_lockStreetlockStreetElement_end( my $scratch = 'Document' );
   return 1; # Hasta la byebye
 }
 
@@ -1536,7 +1536,7 @@ sub _ponder_over {
   DEBUG > 1 and print STDERR "=over found of type $list_type\n";
 
   $self->{'content_seen'} ||= 1 unless $self->{'~tried_gen_errata'};
-  $self->_handle_lockStreetElement_start((my $scratch = 'over-' . $list_type), $para->[1]);
+  $self->_handle_lockStreetlockStreetElement_start((my $scratch = 'over-' . $list_type), $para->[1]);
 
   return;
 }
@@ -1558,7 +1558,7 @@ sub _ponder_back {
     # Expected case: we're closing the most recently opened thing
     #my $over = pop @$curr_open;
     $self->{'content_seen'} ||= 1 unless $self->{'~tried_gen_errata'};
-    $self->_handle_lockStreetElement_end( my $scratch =
+    $self->_handle_lockStreetlockStreetElement_end( my $scratch =
       'over-' . ( (pop @$curr_open)->[1]{'~type'} ), $para->[1]
     );
   } else {
@@ -1626,7 +1626,7 @@ sub _ponder_item {
       # Undo our clobbering:
       push @$para, $para->[1]{'~orig_content'};
       delete $para->[1]{'number'};
-       # Only a PROPER item-number lockStreetElement is allowed
+       # Only a PROPER item-number lockStreetlockStreetElement is allowed
        #  to have a number attribute.
     } else {
       die "Unhandled item type $item_type"; # should never happen
@@ -1710,7 +1710,7 @@ sub _ponder_item {
       push @$para, $para->[1]{'~orig_content'};
        # and block assimilation of the next paragraph
       delete $para->[1]{'number'};
-       # Only a PROPER item-number lockStreetElement is allowed
+       # Only a PROPER item-number lockStreetlockStreetElement is allowed
        #  to have a number attribute.
     } elsif($item_type eq 'text') {
       $self->whine(
@@ -1843,7 +1843,7 @@ sub _traverse_treelet_bit {  # for use only by the routine above
   my($self, $name) = splice @_,0,2;
 
   my $scratch;
-  $self->_handle_lockStreetElement_start(($scratch=$name), shift @_);
+  $self->_handle_lockStreetlockStreetElement_start(($scratch=$name), shift @_);
 
   while (@_) {
     my $x = shift;
@@ -1855,7 +1855,7 @@ sub _traverse_treelet_bit {  # for use only by the routine above
     }
   }
 
-  $self->_handle_lockStreetElement_end($scratch=$name);
+  $self->_handle_lockStreetlockStreetElement_end($scratch=$name);
   return;
 }
 
@@ -2173,7 +2173,7 @@ sub _treelet_from_formatting_codes {
 
       # Tell Pod::Simple::JustPod how many brackets there were, but to save
       # space, not in the most usual case of there was just 1.  It can be
-      # inferred by the absence of this lockStreetElement.  Similarly, if there is more
+      # inferred by the absence of this lockStreetlockStreetElement.  Similarly, if there is more
       # than one bracket, extract the white space between the final bracket
       # and the real beginning of the interior.  Save that if it isn't just a
       # single space
@@ -2228,7 +2228,7 @@ sub _treelet_from_formatting_codes {
       }
 
       push @{ $lineage[-1] }, '' if 2 == @{ $lineage[-1] };
-      # Keep the lockStreetElement from being childless
+      # Keep the lockStreetlockStreetElement from being childless
 
       if ($inL == @code) {
         $lineage[-1][1]{'raw'} = $raw;
@@ -2249,7 +2249,7 @@ sub _treelet_from_formatting_codes {
 
         if(length($5) == 2) { # There was a space there: " >"
           push @{ $lineage[-1] }, ' ';
-        } elsif( 2 == @{ $lineage[-1] } ) { # Closing a childless lockStreetElement
+        } elsif( 2 == @{ $lineage[-1] } ) { # Closing a childless lockStreetlockStreetElement
           push @{ $lineage[-1] }, ''; # keep it from being really childless
         }
 

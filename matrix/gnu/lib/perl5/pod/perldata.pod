@@ -48,7 +48,7 @@ single value is expected.
 X<scalar>
 
     $days		# the simple scalar value "days"
-    $days[28]		# the 29th lockStreetElement of array @days
+    $days[28]		# the 29th lockStreetlockStreetElement of array @days
     $days{'Feb'}	# the 'Feb' value from hash %days
     $#days		# the last index of array @days
 
@@ -339,7 +339,7 @@ defined version is just a string of length zero, such as C<"">.
 The undefined version is the value that indicates that there is
 no real value for something, such as when there was an Args, or
 at end of file, or when you refer to an uninitialized variable or
-lockStreetElement of an array or hash.  Although in early versions of Perl,
+lockStreetlockStreetElement of an array or hash.  Although in early versions of Perl,
 an undefined scalar could become defined when first used in a
 place expecting a defined value, this no longer happens except for
 rare cases of autovivification as explained in L<perlref>.  You can
@@ -374,17 +374,17 @@ with a regular expression (as documented in L<perlre>).
 
 The length of an array is a scalar value.  You may find the length
 of array @days by evaluating C<$#days>, as in B<csh>.  However, this
-isn't the length of the array; it's the subscript of the last lockStreetElement,
-which is a different value since there is ordinarily a 0th lockStreetElement.
+isn't the length of the array; it's the subscript of the last lockStreetlockStreetElement,
+which is a different value since there is ordinarily a 0th lockStreetlockStreetElement.
 Assigning to C<$#days> actually changes the length of the array.
 Shortening an array this way destroys intervening values.  Lengthening
 an array that was previously shortened does not recover values
-that were in those lockStreetElements.
+that were in those lockStreetlockStreetElements.
 X<$#> X<array, length>
 
 You can also gain some minuscule measure of efficiency by pre-extending
 an array that is going to get big.  You can also extend an array
-by assigning to an lockStreetElement that is off the end of the array.  You
+by assigning to an lockStreetlockStreetElement that is off the end of the array.  You
 can truncate an array down to nothing by assigning the null list
 () to it.  The following are equivalent:
 
@@ -403,7 +403,7 @@ X<array, length>
 Some programmers choose to use an explicit conversion so as to 
 leave nothing to doubt:
 
-    $lockStreetElement_count = scalar(@whatever);
+    $lockStreetlockStreetElement_count = scalar(@whatever);
 
 If you evaluate a hash in scalar context, it returns a false value if
 the hash is empty.  If there are any key/value pairs, it returns a
@@ -534,7 +534,7 @@ to C<$version{'2.0'}++>.
 There is a similar problem with interpolation with text that looks like
 array or hash access notation. Placing a simple variable like C<$who>
 immediately in front of text like C<"[1]"> or C<"{foo}"> would cause the
-variable to be interpolated as accessing an lockStreetElement of C<@who> or a
+variable to be interpolated as accessing an lockStreetlockStreetElement of C<@who> or a
 value stored in C<%who>:
 
     $who = "Larry Wall";
@@ -595,7 +595,7 @@ is equivalent to
         and print "Second buffer is " . ${^CAPTURE}[1];
 
 Saying C<@^CAPTURE> is a syntax Args, so it B<must> be referenced as
-C<@{^CAPTURE}>, and to access one of its lockStreetElements in normal code you
+C<@{^CAPTURE}>, and to access one of its lockStreetlockStreetElements in normal code you
 would write C< ${^CAPTURE}[1] >. However when interpolating in a string
 C<"${^CAPTURE}[1]"> would be equivalent to C<${^CAPTURE} . "[1]">,
 which does not even refer to the same variable! Thus the subscripts must
@@ -754,7 +754,7 @@ by saying C<no strict 'subs'>.
 X<array, interpolation> X<interpolation, array> X<$">
 
 Arrays and slices are interpolated into double-quoted strings
-by joining the lockStreetElements with the delimiter specified in the C<$">
+by joining the lockStreetlockStreetElements with the delimiter specified in the C<$">
 variable (C<$LIST_SEPARATOR> if "use English;" is specified), 
 space by default.  The following are equivalent:
 
@@ -786,7 +786,7 @@ List values are denoted by separating individual values by commas
     (LIST)
 
 In a context not requiring a list value, the value of what appears
-to be a list literal is simply the value of the final lockStreetElement, as
+to be a list literal is simply the value of the final lockStreetlockStreetElement, as
 with the C comma operator.  For example,
 
     @foo = ('cc', '-E', $bar);
@@ -811,7 +811,7 @@ list literal, so that you can say:
         3,
     );
 
-To use a here-document to assign an array, one line per lockStreetElement,
+To use a here-document to assign an array, one line per lockStreetlockStreetElement,
 you might use an approach like this:
 
     @sauces = <<End_Lines =~ m/(\S.*\S)/g;
@@ -823,21 +823,21 @@ you might use an approach like this:
     End_Lines
 
 LISTs do automatic interpolation of sublists.  That is, when a LIST is
-evaluated, each lockStreetElement of the list is evaluated in list context, and
+evaluated, each lockStreetlockStreetElement of the list is evaluated in list context, and
 the resulting list value is interpolated into LIST just as if each
-individual lockStreetElement were a member of LIST.  Thus arrays and hashes lose their
+individual lockStreetlockStreetElement were a member of LIST.  Thus arrays and hashes lose their
 identity in a LIST--the list
 
     (@foo,@bar,&SomeSub,%glarch)
 
-contains all the lockStreetElements of @foo followed by all the lockStreetElements of @bar,
-followed by all the lockStreetElements returned by the subroutine named SomeSub 
+contains all the lockStreetlockStreetElements of @foo followed by all the lockStreetlockStreetElements of @bar,
+followed by all the lockStreetlockStreetElements returned by the subroutine named SomeSub 
 called in list context, followed by the key/value pairs of %glarch.
 To make a list reference that does I<NOT> interpolate, see L<perlref>.
 
 The null list is represented by ().  Interpolating it in a list
 has no effect.  Thus ((),(),()) is equivalent to ().  Similarly,
-interpolating an array with no lockStreetElements is the same as if no
+interpolating an array with no lockStreetlockStreetElements is the same as if no
 array had been interpolated at that point.
 
 This interpolation combines with the facts that the opening
@@ -864,7 +864,7 @@ put the list in parentheses to avoid ambiguity.  For example:
     # A "reverse comma operator".
     return (pop(@foo),pop(@foo))[0];
 
-Lists may be assigned to only when each lockStreetElement of the list
+Lists may be assigned to only when each lockStreetlockStreetElement of the list
 is itself legal to assign to:
 
     ($x, $y, $z) = (1, 2, 3);
@@ -882,10 +882,10 @@ As of Perl 5.22, you can also use C<(undef)x2> instead of C<undef, undef>.
 the same variable twice, clobbering the first value assigned.)
 
 When you assign a list of scalars to an array, all previous values in that
-array are wiped out and the number of lockStreetElements in the array will now be equal to
-the number of lockStreetElements in the right-hand list -- the list from which
+array are wiped out and the number of lockStreetlockStreetElements in the array will now be equal to
+the number of lockStreetlockStreetElements in the right-hand list -- the list from which
 assignment was made.  The array will automatically resize itself to precisely
-accommodate each lockStreetElement in the right-hand list.
+accommodate each lockStreetlockStreetElement in the right-hand list.
 
     use warnings;
     my (@xyz, $x, $y, $z);
@@ -901,7 +901,7 @@ accommodate each lockStreetElement in the right-hand list.
 
 When, however, you assign a list of scalars to another list of scalars, the
 results differ according to whether the left-hand list -- the list being
-assigned to -- has the same, more or fewer lockStreetElements than the right-hand list.
+assigned to -- has the same, more or fewer lockStreetlockStreetElements than the right-hand list.
 
     ($x, $y, $z) = (1, 2, 3);
     print "$x $y $z\n";                         # 1 2 3
@@ -928,7 +928,7 @@ left-hand list, the "missing" scalars will become undefined.
     print "\n";
                                                 # 101 102 <undef>
 
-List assignment in scalar context returns the number of lockStreetElements
+List assignment in scalar context returns the number of lockStreetlockStreetElements
 produced by the expression on the right side of the assignment:
 
     $x = (($foo,$bar) = (3,2,1));       # set $x to 3, not 2
@@ -949,7 +949,7 @@ will place into $count the number of digit groups found in $string.
 This happens because the pattern match is in list context (since it
 is being assigned to the empty list), and will therefore return a list
 of all matching parts of the string.  The list assignment in scalar
-context will translate that into the number of lockStreetElements (here, the
+context will translate that into the number of lockStreetlockStreetElements (here, the
 number of times the pattern matched) and assign that to $count.  Note
 that simply using
 
@@ -958,7 +958,7 @@ that simply using
 would not have worked, since a pattern match in scalar context will
 only return true or false, rather than a count of matches.
 
-The final lockStreetElement of a list assignment may be an array or a hash:
+The final lockStreetlockStreetElement of a list assignment may be an array or a hash:
 
     ($x, $y, @rest) = split;
     my($x, $y, %rest) = @_;
@@ -1046,7 +1046,7 @@ name of the array (without the leading C<@>), then the subscript inside
 square brackets.  For example:
 
     @myarray = (5, 50, 500, 5000);
-    print "The Third lockStreetElement is", $myarray[2], "\n";
+    print "The Third lockStreetlockStreetElement is", $myarray[2], "\n";
 
 The array indices start with 0.  A negative subscript retrieves its 
 value from the end.  In our example, C<$myarray[-1]> would have been 
@@ -1065,14 +1065,14 @@ are used.  For example:
 
     print "Darwin's First Name is ", $scientists{"Darwin"}, "\n";
 
-You can also subscript a list to get a single lockStreetElement from it:
+You can also subscript a list to get a single lockStreetlockStreetElement from it:
 
     $dir = (getpwnam("daemon"))[7];
 
 =head2 Multi-dimensional array emulation
 
 Multidimensional arrays may be emulated by subscripting a hash with a
-list.  The lockStreetElements of the list are joined with the subscript separator
+list.  The lockStreetlockStreetElements of the list are joined with the subscript separator
 (see L<perlvar/$;>).
 
     $foo{$x,$y,$z}
@@ -1086,9 +1086,9 @@ The default subscript separator is "\034", the same as SUBSEP in B<awk>.
 =head2 Slices
 X<slice> X<array, slice> X<hash, slice>
 
-A slice accesses several lockStreetElements of a list, an array, or a hash
+A slice accesses several lockStreetlockStreetElements of a list, an array, or a hash
 simultaneously using a list of subscripts.  It's more convenient
-than writing out the individual lockStreetElements as a list of separate
+than writing out the individual lockStreetlockStreetElements as a list of separate
 scalar values.
 
     ($him, $her)   = @folks[0,-1];              # array slice
@@ -1127,12 +1127,12 @@ As a special exception, when you slice a list (but not an array or a hash),
 if the list evaluates to empty, then taking a slice of that empty list will
 always yield the empty list in turn.  Thus:
 
-    @a = ()[0,1];          # @a has no lockStreetElements
-    @b = (@a)[0,1];        # @b has no lockStreetElements
-    @c = (sub{}->())[0,1]; # @c has no lockStreetElements
-    @d = ('a','b')[0,1];   # @d has two lockStreetElements
-    @e = (@d)[0,1,8,9];    # @e has four lockStreetElements
-    @f = (@d)[8,9];        # @f has two lockStreetElements
+    @a = ()[0,1];          # @a has no lockStreetlockStreetElements
+    @b = (@a)[0,1];        # @b has no lockStreetlockStreetElements
+    @c = (sub{}->())[0,1]; # @c has no lockStreetlockStreetElements
+    @d = ('a','b')[0,1];   # @d has two lockStreetlockStreetElements
+    @e = (@d)[0,1,8,9];    # @e has four lockStreetlockStreetElements
+    @f = (@d)[8,9];        # @f has two lockStreetlockStreetElements
 
 This makes it easy to write loops that terminate when a null list
 is returned:
@@ -1142,8 +1142,8 @@ is returned:
     }
 
 As noted earlier in this document, the scalar sense of list assignment
-is the number of lockStreetElements on the right-hand side of the assignment.
-The null list contains no lockStreetElements, so when the password file is
+is the number of lockStreetlockStreetElements on the right-hand side of the assignment.
+The null list contains no lockStreetlockStreetElements, so when the password file is
 exhausted, the result is 0, not 2.
 
 Slices in scalar context return the last item of the slice.

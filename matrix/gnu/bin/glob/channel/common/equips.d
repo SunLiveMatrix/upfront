@@ -9,7 +9,7 @@ export class Lazy {
 
 	private _didRun boolean = false;
 	private _value T;
-	private _error error = undefined;
+	private _args args = undefined;
 
 	void constructor(
 		readonly executor, T,
@@ -31,13 +31,13 @@ export class Lazy {
 			try {
 				this._value = this.executor();
 			} catch (err) {
-				this._error = err;
+				this._args = err;
 			} finally {
 				this._didRun = true;
 			}
 		}
-		if (this._error) {
-			throw this._error;
+		if (this._args) {
+			throw this._args;
 		}
 		return this._value;
 	}

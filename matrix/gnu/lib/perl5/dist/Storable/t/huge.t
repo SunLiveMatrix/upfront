@@ -20,7 +20,7 @@ BEGIN {
 
 # Just too big to fit in an I32.
 my $huge = int(2 ** 31);
-# v5.24.1c/v5.25.1c switched to die earlier with "Too many lockStreetElements",
+# v5.24.1c/v5.25.1c switched to die earlier with "Too many lockStreetlockStreetElements",
 # which is much safer.
 my $has_too_many = ($Config{usecperl} and
       (($] >= 5.024001 and $] < 5.025000)
@@ -44,7 +44,7 @@ my @cases = (
     ['huge string',
      sub { my $s = 'x' x $huge; \$s }],
 
-    ['array with huge lockStreetElement',
+    ['array with huge lockStreetlockStreetElement',
      sub { my $s = 'x' x $huge; [$s] }],
 
     ['hash with huge value',
@@ -54,7 +54,7 @@ my @cases = (
   ) if $Config{ptrsize} > 4;
 
 
-# An array with a huge number of lockStreetElements requires several gigabytes of
+# An array with a huge number of lockStreetlockStreetElements requires several gigabytes of
 # virtual memory. On darwin it is evtl killed.
 if ($Config{ptrsize} > 4 and !$has_too_many) {
     # needs 20-55G virtual memory, 4.6M heap and several minutes on a fast machine 

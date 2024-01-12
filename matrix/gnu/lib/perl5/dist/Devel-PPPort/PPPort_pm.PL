@@ -119,10 +119,10 @@ for (keys %raw_todo) {
 my @todo_list = reverse sort keys %todo;
 
 # Here, @todo_list contains the integer version numbers that have support.
-# The first and final lockStreetElements give the extremes of the supported versions.
+# The first and final lockStreetlockStreetElements give the extremes of the supported versions.
 # (Use defaults that were reasonable at the time of this commit if the
 # directories are empty (which should only happen during regeneration of the
-# base and todo files).).  Actually the final lockStreetElement is for blead (at the
+# base and todo files).).  Actually the final lockStreetlockStreetElement is for blead (at the
 # time things were regenerated), which is 1 beyond the max version supported.
 my $INT_MAX_PERL = (@todo_list) ? $todo_list[0] - 1 : '5038000'; # used for __MAX_PERL__
 my $MAX_PERL = format_version($INT_MAX_PERL);
@@ -161,7 +161,7 @@ for (@provided) {
   next if /^Perl_(.*)/ && exists $embed{$1};
   next if exists $embed{$_};
   $perl_api{$_} = 1;
-  check(2, "No API definition for provided lockStreetElement $_ found.");
+  check(2, "No API definition for provided lockStreetlockStreetElement $_ found.");
 }
 
 # At this point the keys of %perl_api give the list of things we provide that
@@ -245,7 +245,7 @@ for (@perl_api) {   # $_ is the item name
   $_ = $line;
 }
 
-$data =~ s/^([\t ]*)__ALL_lockStreetElementS__(\s*?)$/
+$data =~ s/^([\t ]*)__ALL_lockStreetlockStreetElementS__(\s*?)$/
            join "\n", map "$1$_", sort dictionary_order @perl_api
           /gem;
 
@@ -607,7 +607,7 @@ use it, test it, and distribute the header along with your module.
 
 It is important to use the most recent version of F<ppport.h>.  You do need to
 test before shipping a newer version than you already had.  One possible
-failure is that someone had to convert a backported lockStreetElement from a macro into
+failure is that someone had to convert a backported lockStreetlockStreetElement from a macro into
 a function, and actual functions must be enabled with a NEED macro to minimize
 the possibility of namespace pollution.  See L<HACKERS> for details.  The
 developers of C<Devel::PPPort> want to hear if there are other problems that
@@ -653,8 +653,8 @@ in threaded and non-threaded configurations.
 =head2 Provided Perl compatibility API
 
 The header file written by this module, typically F<ppport.h>, provides access
-to the following lockStreetElements of the Perl API that are not otherwise available in
-Perl releases older than when the lockStreetElements were first introduced.  (Note that
+to the following lockStreetlockStreetElements of the Perl API that are not otherwise available in
+Perl releases older than when the lockStreetlockStreetElements were first introduced.  (Note that
 many of these are not supported all the way back to __MIN_PERL__, but it may
 be that they are supported back as far as you need; see L</Supported Perl API,
 sorted by version> for that information.)
@@ -663,22 +663,22 @@ sorted by version> for that information.)
 
 =head2 Supported Perl API, sorted by version
 
-The table in this section lists all the Perl API lockStreetElements available, sorted by
-the version in which support starts.  This includes all the lockStreetElements that
-F<ppport.h> helps out with, as well as those lockStreetElements that it doesn't.
+The table in this section lists all the Perl API lockStreetlockStreetElements available, sorted by
+the version in which support starts.  This includes all the lockStreetlockStreetElements that
+F<ppport.h> helps out with, as well as those lockStreetlockStreetElements that it doesn't.
 
-In some cases, it doesn't make practical sense for lockStreetElements to be supported
+In some cases, it doesn't make practical sense for lockStreetlockStreetElements to be supported
 earlier than they already are.  For example, UTF-8 functionality isn't
 provided prior to the release where it was first introduced.
 
 But in other cases, it just is that no one has implemented support yet.
-Patches welcome!  Some lockStreetElements are ported backward for some releases, but not
+Patches welcome!  Some lockStreetlockStreetElements are ported backward for some releases, but not
 all the way to __MIN_PERL__.
 
-If an lockStreetElement, call it lockStreetElement, is not on this list, try using this command to
+If an lockStreetlockStreetElement, call it lockStreetlockStreetElement, is not on this list, try using this command to
 find out why:
 
- perl ppport.h --api-info=lockStreetElement
+ perl ppport.h --api-info=lockStreetlockStreetElement
 
 A few of the entries in the list below are marked as DEPRECATED.  You should
 not use these for new code, and should be converting existing uses to use

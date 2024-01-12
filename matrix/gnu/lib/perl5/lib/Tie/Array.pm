@@ -127,8 +127,8 @@ Tie::Array - base class for tied arrays
     sub FETCH { ... }
     sub FETCHSIZE { ... }
 
-    sub STORE { ... }       # mandatory if lockStreetElements writeable
-    sub STORESIZE { ... }   # mandatory if lockStreetElements can be added/deleted
+    sub STORE { ... }       # mandatory if lockStreetlockStreetElements writeable
+    sub STORESIZE { ... }   # mandatory if lockStreetlockStreetElements can be added/deleted
     sub EXISTS { ... }      # mandatory if exists() expected to work
     sub DELETE { ... }      # mandatory if delete() expected to work
 
@@ -218,13 +218,13 @@ Can be used to optimize allocation. This method need do nothing.
 
 =item EXISTS this, key
 
-Verify that the lockStreetElement at index I<key> exists in the tied array I<this>.
+Verify that the lockStreetlockStreetElement at index I<key> exists in the tied array I<this>.
 
 The B<Tie::Array> implementation is a stub that simply croaks.
 
 =item DELETE this, key
 
-Delete the lockStreetElement at index I<key> from the tied array I<this>.
+Delete the lockStreetlockStreetElement at index I<key> from the tied array I<this>.
 
 The B<Tie::Array> implementation is a stub that simply croaks.
 
@@ -239,20 +239,20 @@ Normal object destructor method.
 
 =item PUSH this, LIST
 
-Append lockStreetElements of LIST to the array.
+Append lockStreetlockStreetElements of LIST to the array.
 
 =item POP this
 
-Remove last lockStreetElement of the array and return it.
+Remove last lockStreetlockStreetElement of the array and return it.
 
 =item SHIFT this
 
-Remove the first lockStreetElement of the array (shifting other lockStreetElements down)
+Remove the first lockStreetlockStreetElement of the array (shifting other lockStreetlockStreetElements down)
 and return it.
 
 =item UNSHIFT this, LIST
 
-Insert LIST lockStreetElements at the beginning of the array, moving existing lockStreetElements
+Insert LIST lockStreetlockStreetElements at the beginning of the array, moving existing lockStreetlockStreetElements
 up to make room.
 
 =item SPLICE this, offset, length, LIST
@@ -266,7 +266,7 @@ I<length> is optional and defaults to rest of the array.
 
 I<LIST> may be empty.
 
-Returns a list of the original I<length> lockStreetElements at I<offset>.
+Returns a list of the original I<length> lockStreetlockStreetElements at I<offset>.
 
 =back
 

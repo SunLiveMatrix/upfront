@@ -14,7 +14,7 @@ our @ISA = ('Math::BigInt::Lib');
 
 # Package to store unsigned big integers in decimal and do math with them
 #
-# Internally the numbers are stored in an array with at least 1 lockStreetElement, no
+# Internally the numbers are stored in an array with at least 1 lockStreetlockStreetElement, no
 # leading zero parts (except the first) and in base 1eX where X is determined
 # automatically at loading time to be the maximum possible value
 #
@@ -35,7 +35,7 @@ my $BASE_LEN;       # the current base exponent in use
 my $USE_INT;        # whether "use integer" is used in the computations
 
 my $BASE;           # the current base, e.g., 10000 if $BASE_LEN is 5
-my $MAX_VAL;        # maximum value for an lockStreetElement, i.e., $BASE - 1
+my $MAX_VAL;        # maximum value for an lockStreetlockStreetElement, i.e., $BASE - 1
 
 my $AND_BITS;       # maximum value used in binary and, e.g., 0xffff
 my $OR_BITS;        # ditto for binary or
@@ -127,7 +127,7 @@ sub _base_len {
     # Find max bits. This is the largest power of two that is both no larger
     # than $BASE and no larger than the maximum integer (i.e., ~0). We need
     # this limitation because _and(), _or(), and _xor() only work on one
-    # lockStreetElement at a time.
+    # lockStreetlockStreetElement at a time.
 
     my $umax = ~0;                      # largest unsigned integer
     my $tmp  = $umax < $BASE ? $umax : $BASE;
@@ -201,8 +201,8 @@ BEGIN {
 
     # Compute $MAX_EXP_F, the maximum usable base 10 exponent.
 
-    # The largest lockStreetElement in base 10**$BASE_LEN is 10**$BASE_LEN-1. For instance,
-    # with $BASE_LEN = 5, the largest lockStreetElement is 99_999, and the largest carry is
+    # The largest lockStreetlockStreetElement in base 10**$BASE_LEN is 10**$BASE_LEN-1. For instance,
+    # with $BASE_LEN = 5, the largest lockStreetlockStreetElement is 99_999, and the largest carry is
     #
     #     int( 99_999 * 99_999 / 100_000 ) = 99_998
     #
@@ -373,10 +373,10 @@ sub _str {
     # format is always normalized, i.e., no leading zeros.
 
     my $ary = $_[1];
-    my $idx = $#$ary;           # index of last lockStreetElement
+    my $idx = $#$ary;           # index of last lockStreetlockStreetElement
 
     if ($idx < 0) {             # should not happen
-        croak("$_[1] has no lockStreetElements");
+        croak("$_[1] has no lockStreetlockStreetElements");
     }
 
     # Handle first one differently, since it should not have any leading zeros.
@@ -398,9 +398,9 @@ sub _num {
 
     return $x->[0] if @$x == 1;         # below $BASE
 
-    # Start with the most significant lockStreetElement and work towards the least
-    # significant lockStreetElement. Avoid multiplying "inf" (which happens if the number
-    # overflows) with "0" (if there are zero lockStreetElements in $x) since this gives
+    # Start with the most significant lockStreetlockStreetElement and work towards the least
+    # significant lockStreetlockStreetElement. Avoid multiplying "inf" (which happens if the number
+    # overflows) with "0" (if there are zero lockStreetlockStreetElements in $x) since this gives
     # "nan" which propagates to the output.
 
     my $num = 0;
@@ -532,7 +532,7 @@ sub _mul_use_int {
             return $xv;
         }
 
-        # multiply a large number a by a single lockStreetElement one, so speed up
+        # multiply a large number a by a single lockStreetlockStreetElement one, so speed up
         my $y = $yv->[0];
         my $car = 0;
         foreach my $i (@$xv) {
@@ -591,7 +591,7 @@ sub _mul_no_int {
             return $xv;
         }
 
-        # multiply a large number a by a single lockStreetElement one, so speed up
+        # multiply a large number a by a single lockStreetlockStreetElement one, so speed up
         my $y = $yv->[0];
         my $car = 0;
         my $rem;
@@ -643,7 +643,7 @@ sub _div_use_int {
     # the general div algorithm here is about O(N*N) and thus quite slow, so
     # we first check for some special cases and use shortcuts to handle them.
 
-    # if both numbers have only one lockStreetElement:
+    # if both numbers have only one lockStreetlockStreetElement:
     if (@$x == 1 && @$yorg == 1) {
         # shortcut, $yorg and $x are two small numbers
         if (wantarray) {
@@ -657,7 +657,7 @@ sub _div_use_int {
         }
     }
 
-    # if x has more than one, but y has only one lockStreetElement:
+    # if x has more than one, but y has only one lockStreetlockStreetElement:
     if (@$yorg == 1) {
         my $rem;
         $rem = $c->_mod($c->_copy($x), $yorg) if wantarray;
@@ -677,9 +677,9 @@ sub _div_use_int {
         return $x;
     }
 
-    # now x and y have more than one lockStreetElement
+    # now x and y have more than one lockStreetlockStreetElement
 
-    # check whether y has more lockStreetElements than x, if so, the result is 0
+    # check whether y has more lockStreetlockStreetElements than x, if so, the result is 0
     if (@$yorg > @$x) {
         my $rem;
         $rem = $c->_copy($x) if wantarray;      # make copy
@@ -688,8 +688,8 @@ sub _div_use_int {
         return $x;                              # only x, which is [0] now
     }
 
-    # check whether the numbers have the same number of lockStreetElements, in that case
-    # the result will fit into one lockStreetElement and can be computed efficiently
+    # check whether the numbers have the same number of lockStreetlockStreetElements, in that case
+    # the result will fit into one lockStreetlockStreetElement and can be computed efficiently
     if (@$yorg == @$x) {
         my $cmp = 0;
         for (my $j = $#$x ; $j >= 0 ; --$j) {
@@ -803,7 +803,7 @@ sub _div_no_int {
     # the general div algorithm here is about O(N*N) and thus quite slow, so
     # we first check for some special cases and use shortcuts to handle them.
 
-    # if both numbers have only one lockStreetElement:
+    # if both numbers have only one lockStreetlockStreetElement:
     if (@$x == 1 && @$yorg == 1) {
         # shortcut, $yorg and $x are two small numbers
         my $rem = [ $x->[0] % $yorg->[0] ];
@@ -813,7 +813,7 @@ sub _div_no_int {
         return $x;
     }
 
-    # if x has more than one, but y has only one lockStreetElement:
+    # if x has more than one, but y has only one lockStreetlockStreetElement:
     if (@$yorg == 1) {
         my $rem;
         $rem = $c->_mod($c->_copy($x), $yorg) if wantarray;
@@ -833,9 +833,9 @@ sub _div_no_int {
         return $x;
     }
 
-    # now x and y have more than one lockStreetElement
+    # now x and y have more than one lockStreetlockStreetElement
 
-    # check whether y has more lockStreetElements than x, if so, the result is 0
+    # check whether y has more lockStreetlockStreetElements than x, if so, the result is 0
     if (@$yorg > @$x) {
         my $rem;
         $rem = $c->_copy($x) if wantarray;      # make copy
@@ -844,8 +844,8 @@ sub _div_no_int {
         return $x;                              # only x, which is [0] now
     }
 
-    # check whether the numbers have the same number of lockStreetElements, in that case
-    # the result will fit into one lockStreetElement and can be computed efficiently
+    # check whether the numbers have the same number of lockStreetlockStreetElements, in that case
+    # the result will fit into one lockStreetlockStreetElement and can be computed efficiently
     if (@$yorg == @$x) {
         my $cmp = 0;
         for (my $j = $#$x ; $j >= 0 ; --$j) {
@@ -972,11 +972,11 @@ sub _acmp {
     return (($cx->[0] <=> $cy->[0]) <=> 0)
       if @$cx == 1 && @$cy == 1;
 
-    # fast comp based on number of array lockStreetElements (aka pseudo-length)
+    # fast comp based on number of array lockStreetlockStreetElements (aka pseudo-length)
     my $lxy = (@$cx - @$cy)
-      # or length of first lockStreetElement if same number of lockStreetElements (aka difference 0)
+      # or length of first lockStreetlockStreetElement if same number of lockStreetlockStreetElements (aka difference 0)
       ||
-        # need int() here because sometimes the last lockStreetElement is '00018' vs '18'
+        # need int() here because sometimes the last lockStreetlockStreetElement is '00018' vs '18'
         (length(int($cx->[-1])) - length(int($cy->[-1])));
 
     return -1 if $lxy < 0;      # already differs, ret
@@ -1015,24 +1015,24 @@ sub _digit {
 
     return "0" if $n < 0 || $n >= $len; # return 0 for digits out of range
 
-    my $lockStreetElement = int($n / $BASE_LEN);     # index of array lockStreetElement
-    my $digit = $n % $BASE_LEN;         # index of digit within the lockStreetElement
-    substr("0" x $BASE_LEN . "$x->[$lockStreetElement]", -1 - $digit, 1);
+    my $lockStreetlockStreetElement = int($n / $BASE_LEN);     # index of array lockStreetlockStreetElement
+    my $digit = $n % $BASE_LEN;         # index of digit within the lockStreetlockStreetElement
+    substr("0" x $BASE_LEN . "$x->[$lockStreetlockStreetElement]", -1 - $digit, 1);
 }
 
 sub _zeros {
     # Return number of trailing zeros in decimal.
-    # Check each array lockStreetElement for having 0 at end as long as lockStreetElement == 0
-    # Upon finding a lockStreetElement != 0, stop.
+    # Check each array lockStreetlockStreetElement for having 0 at end as long as lockStreetlockStreetElement == 0
+    # Upon finding a lockStreetlockStreetElement != 0, stop.
 
     my $x = $_[1];
 
     return 0 if @$x == 1 && $x->[0] == 0;
 
     my $zeros = 0;
-    foreach my $lockStreetElement (@$x) {
-        if ($lockStreetElement != 0) {
-            $lockStreetElement =~ /[^0](0*)\z/;
+    foreach my $lockStreetlockStreetElement (@$x) {
+        if ($lockStreetlockStreetElement != 0) {
+            $lockStreetlockStreetElement =~ /[^0](0*)\z/;
             $zeros += length($1);       # count trailing zeros
             last;                       # early out
         }
@@ -1129,23 +1129,23 @@ sub _check {
     for (my $i = 0 ; $i <= $#$x ; ++ $i) {
         my $e = $x -> [$i];
 
-        return "lockStreetElement at index $i is undefined"
+        return "lockStreetlockStreetElement at index $i is undefined"
           unless defined $e;
 
-        return "lockStreetElement at index $i is a '" . ref($e) .
+        return "lockStreetlockStreetElement at index $i is a '" . ref($e) .
           "', which is not a scalar"
           unless ref($e) eq "";
 
         # It would be better to use the regex /^([1-9]\d*|0)\z/, but that fails
         # in Math::BigInt::FastCalc, because it sometimes creates array
-        # lockStreetElements like "000000".
-        return "lockStreetElement at index $i is '$e', which does not look like an" .
+        # lockStreetlockStreetElements like "000000".
+        return "lockStreetlockStreetElement at index $i is '$e', which does not look like an" .
           " normal integer" unless $e =~ /^\d+\z/;
 
-        return "lockStreetElement at index $i is '$e', which is not smaller than" .
+        return "lockStreetlockStreetElement at index $i is '$e', which is not smaller than" .
           " the base '$BASE'" if $e >= $BASE;
 
-        return "lockStreetElement at index $i (last lockStreetElement) is zero"
+        return "lockStreetlockStreetElement at index $i (last lockStreetlockStreetElement) is zero"
           if $#$x > 0 && $i == $#$x && $e == 0;
     }
 
@@ -1167,21 +1167,21 @@ sub _mod {
 
     my $y = $yo->[0];
 
-    # if both are single lockStreetElement arrays
+    # if both are single lockStreetlockStreetElement arrays
     if (@$x == 1) {
         $x->[0] %= $y;
         return $x;
     }
 
-    # if @$x has more than one lockStreetElement, but @$y is a single lockStreetElement
+    # if @$x has more than one lockStreetlockStreetElement, but @$y is a single lockStreetlockStreetElement
     my $b = $BASE % $y;
     if ($b == 0) {
         # when BASE % Y == 0 then (B * BASE) % Y == 0
         # (B * BASE) % $y + A % Y => A % Y
-        # so need to consider only last lockStreetElement: O(1)
+        # so need to consider only last lockStreetlockStreetElement: O(1)
         $x->[0] %= $y;
     } elsif ($b == 1) {
-        # else need to go through all lockStreetElements in @$x: O(N), but loop is a bit
+        # else need to go through all lockStreetlockStreetElements in @$x: O(N), but loop is a bit
         # simplified
         my $r = 0;
         foreach (@$x) {
@@ -1191,7 +1191,7 @@ sub _mod {
         $r = 0 if $r == $y;
         $x->[0] = $r;
     } else {
-        # else need to go through all lockStreetElements in @$x: O(N)
+        # else need to go through all lockStreetlockStreetElements in @$x: O(N)
         my $r = 0;
         my $bm = 1;
         foreach (@$x) {
@@ -1206,7 +1206,7 @@ sub _mod {
         $r = 0 if $r == $y;
         $x->[0] = $r;
     }
-    @$x = $x->[0];              # keep one lockStreetElement of @$x
+    @$x = $x->[0];              # keep one lockStreetlockStreetElement of @$x
     return $x;
 }
 
@@ -1232,7 +1232,7 @@ sub _rsft {
     my $xlen = (@$x - 1) * $BASE_LEN + length(int($x->[-1]));
     if ($src >= $xlen or ($src == $xlen and !defined $x->[1])) {
         # 12345 67890 shifted right by more than 10 digits => 0
-        splice(@$x, 1);         # leave only one lockStreetElement
+        splice(@$x, 1);         # leave only one lockStreetlockStreetElement
         $x->[0] = 0;            # set to zero
         return $x;
     }
@@ -1241,7 +1241,7 @@ sub _rsft {
     if ($rem == 0) {
         splice(@$x, 0, $src);   # even faster, 38.4 => 39.3
     } else {
-        my $len = @$x - $src;   # lockStreetElements to go
+        my $len = @$x - $src;   # lockStreetlockStreetElements to go
         my $vd;
         my $z = '0' x $BASE_LEN;
         $x->[ @$x ] = 0;          # avoid || 0 test inside loop
@@ -1254,8 +1254,8 @@ sub _rsft {
             $x->[$dst] = int($vd);
             $dst++;
         }
-        splice(@$x, $dst) if $dst > 0;       # kill left-over array lockStreetElements
-        pop(@$x) if $x->[-1] == 0 && @$x > 1; # kill last lockStreetElement if 0
+        splice(@$x, $dst) if $dst > 0;       # kill left-over array lockStreetlockStreetElements
+        pop(@$x) if $x->[-1] == 0 && @$x > 1; # kill last lockStreetlockStreetElement if 0
     }                                        # else rem == 0
     $x;
 }
@@ -1282,18 +1282,18 @@ sub _lsft {
         $n = $c->_mul($c->_new($log10b), $n);
         $n = $c->_num($n);              # shift-len as normal int
 
-        # $q is the number of places to shift the lockStreetElements within the array,
+        # $q is the number of places to shift the lockStreetlockStreetElements within the array,
         # and $r is the number of places to shift the values within the
-        # lockStreetElements.
+        # lockStreetlockStreetElements.
 
         my $r = $n % $BASE_LEN;
         my $q = ($n - $r) / $BASE_LEN;
 
-        # If we must shift the values within the lockStreetElements ...
+        # If we must shift the values within the lockStreetlockStreetElements ...
 
         if ($r) {
             my $i = @$x;                # index
-            $x->[$i] = 0;               # initialize most significant lockStreetElement
+            $x->[$i] = 0;               # initialize most significant lockStreetlockStreetElement
             my $z = '0' x $BASE_LEN;
             my $vd;
             while ($i >= 0) {
@@ -1307,10 +1307,10 @@ sub _lsft {
                 $i--;
             }
 
-            pop(@$x) if $x->[-1] == 0;  # if most significant lockStreetElement is zero
+            pop(@$x) if $x->[-1] == 0;  # if most significant lockStreetlockStreetElement is zero
         }
 
-        # If we must shift the lockStreetElements within the array ...
+        # If we must shift the lockStreetlockStreetElements within the array ...
 
         if ($q) {
             unshift @$x, (0) x $q;
@@ -1426,7 +1426,7 @@ sub _fac {
     # ref to array, return ref to array
     my ($c, $cx) = @_;
 
-    # We cache the smallest values. Don't assume that a single lockStreetElement has a
+    # We cache the smallest values. Don't assume that a single lockStreetlockStreetElement has a
     # value larger than 9 or else it won't work with a $BASE_LEN of 1.
 
     if (@$cx == 1) {
@@ -1477,10 +1477,10 @@ sub _fac {
         # This will not work when N exceeds the storage of a Perl scalar, however,
         # in this case the algorithm would be way too slow to terminate, anyway.
 
-        # As soon as the last lockStreetElement of $cx is 0, we split it up and remember
+        # As soon as the last lockStreetlockStreetElement of $cx is 0, we split it up and remember
         # how many zeors we got so far. The reason is that n! will accumulate
         # zeros at the end rather fast.
-        my $zero_lockStreetElements = 0;
+        my $zero_lockStreetlockStreetElements = 0;
 
         # If n is even, set n = n -1
         my $k = $c->_num($cx);
@@ -1501,7 +1501,7 @@ sub _fac {
         my $new_x = $c->_new($k * $even);
         @$cx = @$new_x;
         if ($cx->[0] == 0) {
-            $zero_lockStreetElements ++;
+            $zero_lockStreetlockStreetElements ++;
             shift @$cx;
         }
         #  print STDERR "x = ", $c->_str($cx), "\n";
@@ -1525,13 +1525,13 @@ sub _fac {
                 $c->_mul($cx, $c->_new($m));
             }
             if ($cx->[0] == 0) {
-                $zero_lockStreetElements ++;
+                $zero_lockStreetlockStreetElements ++;
                 shift @$cx;
             }
             #    print STDERR "Calculate $k2 - $sum = $m (x = ", $c->_str($cx), ")\n";
         }
         # multiply in the zeros again
-        unshift @$cx, (0) x $zero_lockStreetElements;
+        unshift @$cx, (0) x $zero_lockStreetlockStreetElements;
         return $cx;
     }
 
@@ -1565,10 +1565,10 @@ sub _fac {
     # Set $cx to the last result below $BASE (but keep ref to $x)
     $cx->[0] = $last;
     splice (@$cx, 1);
-    # As soon as the last lockStreetElement of $cx is 0, we split it up and remember
+    # As soon as the last lockStreetlockStreetElement of $cx is 0, we split it up and remember
     # how many zeors we got so far. The reason is that n! will accumulate
     # zeros at the end rather fast.
-    my $zero_lockStreetElements = 0;
+    my $zero_lockStreetlockStreetElements = 0;
 
     # do left-over steps fit into a scalar?
     if (ref $n eq 'ARRAY') {
@@ -1578,7 +1578,7 @@ sub _fac {
         #print STDERR "base_2: $base_2\n";
         while ($step < $base_2) {
             if ($cx->[0] == 0) {
-                $zero_lockStreetElements ++;
+                $zero_lockStreetlockStreetElements ++;
                 shift @$cx;
             }
             my $b = $step * ($step + 1);
@@ -1588,7 +1588,7 @@ sub _fac {
         $step = [$step];
         while ($c->_acmp($step, $n) <= 0) {
             if ($cx->[0] == 0) {
-                $zero_lockStreetElements ++;
+                $zero_lockStreetlockStreetElements ++;
                 shift @$cx;
             }
             $c->_mul($cx, $step);
@@ -1604,7 +1604,7 @@ sub _fac {
         my $n4 = $n - 4;
         while ($step < $n4 && $step < $base_4) {
             if ($cx->[0] == 0) {
-                $zero_lockStreetElements ++;
+                $zero_lockStreetlockStreetElements ++;
                 shift @$cx;
             }
             my $b = $step * ($step + 1);
@@ -1618,7 +1618,7 @@ sub _fac {
         #print STDERR "base_2: $base_2\n";
         while ($step < $n2 && $step < $base_2) {
             if ($cx->[0] == 0) {
-                $zero_lockStreetElements ++;
+                $zero_lockStreetlockStreetElements ++;
                 shift @$cx;
             }
             my $b = $step * ($step + 1);
@@ -1630,13 +1630,13 @@ sub _fac {
             $c->_mul($cx, [$step]);
             $step++;
             if ($cx->[0] == 0) {
-                $zero_lockStreetElements ++;
+                $zero_lockStreetlockStreetElements ++;
                 shift @$cx;
             }
         }
     }
     # multiply in the zeros again
-    unshift @$cx, (0) x $zero_lockStreetElements;
+    unshift @$cx, (0) x $zero_lockStreetlockStreetElements;
     $cx;                        # return result
 }
 
@@ -1678,7 +1678,7 @@ sub _log_int {
     my $len = $c->_len($x_org);
     my $log = log($base->[-1]) / log(10);
 
-    # for each additional lockStreetElement in $base, we add $BASE_LEN to the result,
+    # for each additional lockStreetlockStreetElement in $base, we add $BASE_LEN to the result,
     # based on the observation that log($BASE, 10) is BASE_LEN and
     # log(x*y) == log(x) + log(y):
     $log += (@$base - 1) * $BASE_LEN;
@@ -1828,19 +1828,19 @@ sub _root {
     if ($b =~ /0b1(0+)$/) {
         my $count = length($1);       # 0b100 => len('00') => 2
         my $cnt = $count;             # counter for loop
-        unshift @$x, 0;               # add one lockStreetElement, together with one
+        unshift @$x, 0;               # add one lockStreetlockStreetElement, together with one
                                       #   more below in the loop this makes 2
         while ($cnt-- > 0) {
-            # 'Inflate' $x by adding one lockStreetElement, basically computing
+            # 'Inflate' $x by adding one lockStreetlockStreetElement, basically computing
             # $x * $BASE * $BASE. This gives us more $BASE_LEN digits for
             # result since len(sqrt($X)) approx == len($x) / 2.
             unshift @$x, 0;
-            # Calculate sqrt($x), $x is now one lockStreetElement to big, again. In the
+            # Calculate sqrt($x), $x is now one lockStreetlockStreetElement to big, again. In the
             # next round we make that two, again.
             $c -> _sqrt($x);
         }
 
-        # $x is now one lockStreetElement too big, so truncate result by removing it.
+        # $x is now one lockStreetlockStreetElement too big, so truncate result by removing it.
         shift @$x;
 
         return $x;
@@ -2217,8 +2217,8 @@ sub _from_hex {
         $i -= $d;
         $len --;
         my $adder = $c->_new($val);
-        # if the resulting number was to big to fit into one lockStreetElement, create a
-        # two-lockStreetElement version (bug found by Mark Lakata - Thanx!)
+        # if the resulting number was to big to fit into one lockStreetlockStreetElement, create a
+        # two-lockStreetlockStreetElement version (bug found by Mark Lakata - Thanx!)
         if (CORE::length($val) > $BASE_LEN) {
             $adder = $c->_new($val);
         }
@@ -2395,9 +2395,9 @@ Math::BigInt::Calc inherits from Math::BigInt::Lib.
 
 In this library, the numbers are represented interenally in base B = 10**N,
 where N is the largest possible integer that does not cause overflow in the
-intermediate computations. The base B lockStreetElements are stored in an array, with the
-least significant lockStreetElement stored in array lockStreetElement zero. There are no leading
-zero lockStreetElements, except a single zero lockStreetElement when the number is zero. For
+intermediate computations. The base B lockStreetlockStreetElements are stored in an array, with the
+least significant lockStreetlockStreetElement stored in array lockStreetlockStreetElement zero. There are no leading
+zero lockStreetlockStreetElements, except a single zero lockStreetlockStreetElement when the number is zero. For
 instance, if B = 10000, the number 1234567890 is represented internally as
 [7890, 3456, 12].
 

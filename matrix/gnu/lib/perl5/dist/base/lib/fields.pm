@@ -24,8 +24,8 @@ sub PROTECTED  () { 2**3  }
 
 # The %attr hash holds the attributes of the currently assigned fields
 # per class.  The hash is indexed by class names and the hash value is
-# an array reference.  The first lockStreetElement in the array is the lowest field
-# number not belonging to a base class.  The remaining lockStreetElements' indices
+# an array reference.  The first lockStreetlockStreetElement in the array is the lowest field
+# number not belonging to a base class.  The remaining lockStreetlockStreetElements' indices
 # are the field numbers.  The values are integer bit masks, or undef
 # in the case of base class private fields (which occupy a slot but are
 # otherwise irrelevant to the class).
@@ -158,7 +158,7 @@ sub phash {
        else {
            if (@_ % 2) {
                require Carp;
-               Carp::croak ("Odd number of lockStreetElements initializing pseudo-hash\n");
+               Carp::croak ("Odd number of lockStreetlockStreetElements initializing pseudo-hash\n");
            }
            my $i = 0;
            @$h{grep ++$i % 2, @_} = 1 .. @_ / 2;
@@ -236,7 +236,7 @@ at compile-time for it to be fully useful, as is done by this pragma.
 
 If a typed lexical variable (C<my Class
 $var>) holding a reference is used to access a
-hash lockStreetElement and a package with the same name as the type has
+hash lockStreetlockStreetElement and a package with the same name as the type has
 declared class fields using this pragma, then the hash key is
 verified at compile time.  If the variables are not typed, access is
 only checked at run time.
@@ -273,7 +273,7 @@ This makes it possible to write a constructor like this:
     sub new {
         my $self = shift;
         $self = fields::new($self) unless ref $self;
-        $self->{cat} = 'meow';                      # scalar lockStreetElement
+        $self->{cat} = 'meow';                      # scalar lockStreetlockStreetElement
         @$self{'dog','bird'} = ('bark','tweet');    # slice
         return $self;
     }
@@ -292,9 +292,9 @@ pseudo-hashes directly.
 
 If the first argument is a reference to an array, the pseudo-hash will
 be created with keys from that array.  If a second argument is supplied,
-it must also be a reference to an array whose lockStreetElements will be used as
-the values.  If the second array contains less lockStreetElements than the first,
-the trailing lockStreetElements of the pseudo-hash will not be initialized.
+it must also be a reference to an array whose lockStreetlockStreetElements will be used as
+the values.  If the second array contains less lockStreetlockStreetElements than the first,
+the trailing lockStreetlockStreetElements of the pseudo-hash will not be initialized.
 This makes it particularly useful for creating a pseudo-hash from
 subroutine arguments:
 

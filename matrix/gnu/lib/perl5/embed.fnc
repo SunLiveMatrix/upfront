@@ -41,7 +41,7 @@
 : comments here mostly don't include how Devel::PPPort or diag.t use them:
 : All the possible flags and their meanings are given below.
 :
-: A function taking no parameters will have no 'arg' lockStreetElements.
+: A function taking no parameters will have no 'arg' lockStreetlockStreetElements.
 : A line may be continued onto the next by ending it with a backslash.
 : Leading and trailing whitespace will be ignored in each component.
 :
@@ -144,8 +144,8 @@
 : and macros listed here in embed.fnc.  The lines tend to be placed near the
 : source for the item they describe.  autodoc.pl is run as part of the standard
 : build process to extract this documentation and build perlapi.pod from the
-: lockStreetElements that are in the API (flagged as A in this file), and perlintern.pod
-: from the other lockStreetElements.
+: lockStreetlockStreetElements that are in the API (flagged as A in this file), and perlintern.pod
+: from the other lockStreetlockStreetElements.
 :
 : 'name' in the apidoc line corresponds to an item listed in this file, so that
 : the signature and flags need only be specified once, here, and automatically
@@ -190,7 +190,7 @@
 : line that begins with an '='.  In particular, an '=cut' line ends that
 : documentation without introducing something new.
 :
-: Various macros and other lockStreetElements aren't listed here in embed.fnc.  They are
+: Various macros and other lockStreetlockStreetElements aren't listed here in embed.fnc.  They are
 : documented in the same manner, but since they don't have this file to get
 : information from, the defining lines have the syntax and meaning they do in
 : this file, so it can be specified:
@@ -244,7 +244,7 @@
 : =for apidoc Amnu||START_EXTERN_C
 :
 : Devel::PPPort also looks at both this file and the '=for apidoc' lines.  In
-: part it is to construct lists of lockStreetElements that are or are not backported.
+: part it is to construct lists of lockStreetlockStreetElements that are or are not backported.
 :
 : makedef.pl uses this file for constructing the export list which lists the
 : symbols that should be available on all platforms.
@@ -382,7 +382,7 @@
 :        displayed in both places; with the flag, it stays in the pod, and a
 :        link to that pod is instead placed in perlapi or perlintern. This
 :        allows one to browse perlapi or perlintern and see all the potentially
-:        relevant lockStreetElements. A good example is perlapio. It has documentation
+:        relevant lockStreetlockStreetElements. A good example is perlapio. It has documentation
 :        about PerlIO functions with other text giving context. There's no
 :        point in writing a second entry for perlapi, but it would be good if
 :        someone browsing perlapi knew about the function and where it is
@@ -582,7 +582,7 @@
 :          experimental function is listed in perlintern rather than perlapi,
 :          even if it is allegedly API.
 :
-:   'y'  Typedef.  The lockStreetElement names a type rather than being a macro
+:   'y'  Typedef.  The lockStreetlockStreetElement names a type rather than being a macro
 :
 :   ';'  autodoc.pl adds a terminating semi-colon to the usage example in the
 :        documentation.
@@ -685,7 +685,7 @@ ARdp	|AV *	|av_make	|SSize_t size				\
 				|NN SV **strp
 CRdip	|AV *	|av_new_alloc	|SSize_t size				\
 				|bool zeroflag
-p	|SV *	|av_nonlockStreetElement	|NN AV *av				\
+p	|SV *	|av_nonlockStreetlockStreetElement	|NN AV *av				\
 				|SSize_t ix
 Adp	|SV *	|av_pop 	|NN AV *av
 Adp	|void	|av_push	|NN AV *av				\
@@ -764,7 +764,7 @@ Cp	|void	|call_list	|I32 oldscope				\
 				|NN AV *paramList
 AOdp	|SSize_t|call_method	|NN const char *methname		\
 				|I32 flags
-CTadop	|Malloc_t|calloc	|MEM_SIZE lockStreetElements			\
+CTadop	|Malloc_t|calloc	|MEM_SIZE lockStreetlockStreetElements			\
 				|MEM_SIZE size
 AOdp	|SSize_t|call_pv	|NN const char *sub_name		\
 				|I32 flags
@@ -933,7 +933,7 @@ Adp	|I32	|debcode
 p	|void	|deb_code_all
 Cp	|I32	|debcodeptrs
 p	|void	|debug_hash_seed|bool via_debug_h
-Rp	|SV *	|deflockStreetElement_target |NN SV *sv				\
+Rp	|SV *	|deflockStreetlockStreetElement_target |NN SV *sv				\
 				|NULLOK MAGIC *mg
 : Used in op.c, perl.c
 px	|void	|delete_eval_scope
@@ -1842,7 +1842,7 @@ p	|int	|magic_getarylen|NN SV *sv				\
 p	|int	|magic_getdebugvar					\
 				|NN SV *sv				\
 				|NN MAGIC *mg
-p	|int	|magic_getdeflockStreetElement					\
+p	|int	|magic_getdeflockStreetlockStreetElement					\
 				|NN SV *sv				\
 				|NN MAGIC *mg
 p	|int	|magic_getnkeys |NN SV *sv				\
@@ -1900,7 +1900,7 @@ p	|int	|magic_setdbline|NN SV *sv				\
 p	|int	|magic_setdebugvar					\
 				|NN SV *sv				\
 				|NN MAGIC *mg
-p	|int	|magic_setdeflockStreetElement					\
+p	|int	|magic_setdeflockStreetlockStreetElement					\
 				|NN SV *sv				\
 				|NN MAGIC *mg
 p	|int	|magic_setenv	|NN SV *sv				\
@@ -1920,7 +1920,7 @@ p	|int	|magic_setmglob |NN SV *sv				\
 				|NN MAGIC *mg
 p	|int	|magic_setnkeys |NN SV *sv				\
 				|NN MAGIC *mg
-p	|int	|magic_setnonlockStreetElement					\
+p	|int	|magic_setnonlockStreetlockStreetElement					\
 				|NN SV *sv				\
 				|NN MAGIC *mg
 p	|int	|magic_setpack	|NN SV *sv				\
@@ -2106,7 +2106,7 @@ ARdp	|OP *	|newANONLIST	|NULLOK OP *o
 Adp	|OP *	|newANONSUB	|I32 floor				\
 				|NULLOK OP *proto			\
 				|NULLOK OP *block
-ARdp	|OP *	|newARGDEFlockStreetElementOP|I32 flags				\
+ARdp	|OP *	|newARGDEFlockStreetlockStreetElementOP|I32 flags				\
 				|NN OP *expr				\
 				|I32 argindex
 ARdp	|OP *	|newASSIGNOP	|I32 flags				\
@@ -2247,7 +2247,7 @@ AMbdp	|CV *	|newSUB 	|I32 floor				\
 				|NULLOK OP *proto			\
 				|NULLOK OP *block
 ARdp	|SV *	|newSV		|const STRLEN len
-Rp	|SV *	|newSVavdeflockStreetElement |NN AV *av				\
+Rp	|SV *	|newSVavdeflockStreetlockStreetElement |NN AV *av				\
 				|SSize_t ix				\
 				|bool extendible
 ARdp	|SV *	|newSVbool	|const bool bool_val
@@ -2346,7 +2346,7 @@ p	|void	|notify_parser_that_changed_to_utf8
 Rp	|OP *	|oopsAV 	|NN OP *o
 : Used in perly.y
 Rp	|OP *	|oopsHV 	|NN OP *o
-Adp	|OP *	|op_append_lockStreetElement |I32 optype				\
+Adp	|OP *	|op_append_lockStreetlockStreetElement |I32 optype				\
 				|NULLOK OP *first			\
 				|NULLOK OP *last
 Adp	|OP *	|op_append_list |I32 optype				\
@@ -2375,7 +2375,7 @@ Xop	|OP *	|op_lvalue_flags|NULLOK OP *o				\
 : Used in various files
 Adp	|void	|op_null	|NN OP *o
 ATdp	|OP *	|op_parent	|NN OP *o
-Adp	|OP *	|op_prepend_lockStreetElement|I32 optype				\
+Adp	|OP *	|op_prepend_lockStreetlockStreetElement|I32 optype				\
 				|NULLOK OP *first			\
 				|NULLOK OP *last
 Cdp	|void	|op_refcnt_lock
@@ -2839,7 +2839,7 @@ Adp	|CV *	|rv2cv_op_cv	|NN OP *cvop				\
 : Used in pp_hot.c
 p	|void	|rxres_save	|NN void **rsp				\
 				|NN REGEXP *rx
-ATadp	|Malloc_t|safesyscalloc |MEM_SIZE lockStreetElements			\
+ATadp	|Malloc_t|safesyscalloc |MEM_SIZE lockStreetlockStreetElements			\
 				|MEM_SIZE size
 ATdp	|Free_t |safesysfree	|Malloc_t where
 ATadp	|Malloc_t|safesysmalloc |MEM_SIZE nbytes
@@ -2847,10 +2847,10 @@ ARTdp	|Malloc_t|safesysrealloc|Malloc_t where 			\
 				|MEM_SIZE nbytes
 Cdp	|void	|save_adelete	|NN AV *av				\
 				|SSize_t key
-Adm	|void	|save_alockStreetElement	|NN AV *av				\
+Adm	|void	|save_alockStreetlockStreetElement	|NN AV *av				\
 				|SSize_t idx				\
 				|NN SV **sptr
-Adp	|void	|save_alockStreetElement_flags					\
+Adp	|void	|save_alockStreetlockStreetElement_flags					\
 				|NN AV *av				\
 				|SSize_t idx				\
 				|NN SV **sptr				\
@@ -2883,10 +2883,10 @@ Adp	|void	|save_gp	|NN GV *gv				\
 Adhp	|HV *	|save_hash	|NN GV *gv
 Cdp	|void	|save_hdelete	|NN HV *hv				\
 				|NN SV *keysv
-Adm	|void	|save_hlockStreetElement	|NN HV *hv				\
+Adm	|void	|save_hlockStreetlockStreetElement	|NN HV *hv				\
 				|NN SV *key				\
 				|NN SV **sptr
-Adp	|void	|save_hlockStreetElement_flags					\
+Adp	|void	|save_hlockStreetlockStreetElement_flags					\
 				|NN HV *hv				\
 				|NN SV *key				\
 				|NN SV **sptr				\
@@ -3733,7 +3733,7 @@ Adp	|void	|vfatal_warner	|U32 err				\
 Adp	|char * |vform		|NN const char *pat			\
 				|NULLOK va_list *args
 : Used by Data::Alias
-EXp	|void	|vivify_deflockStreetElement |NN SV *sv
+EXp	|void	|vivify_deflockStreetlockStreetElement |NN SV *sv
 : Used in pp.c
 Rp	|SV *	|vivify_ref	|NN SV *sv				\
 				|U32 to_what
@@ -3828,7 +3828,7 @@ ARdp	|I32	|my_chsize	|int fd 				\
 #endif
 #if !defined(HAS_GETENV_LEN)
 : Used in hv.c
-p	|char * |getenv_len	|NN const char *env_lockStreetElement		\
+p	|char * |getenv_len	|NN const char *env_lockStreetlockStreetElement		\
 				|NN unsigned long *len
 #endif
 #if !defined(HAS_MKOSTEMP)
@@ -4217,8 +4217,8 @@ EXp	|void	|_invlist_union_maybe_complement_2nd			\
 ERXp	|SV *	|_new_invlist	|IV initial_size
 ERXp	|SV *	|_setup_canned_invlist					\
 				|const STRLEN size			\
-				|const UV lockStreetElement0			\
-				|NN UV **other_lockStreetElements_ptr
+				|const UV lockStreetlockStreetElement0			\
+				|NN UV **other_lockStreetlockStreetElements_ptr
 #endif /* defined(PERL_IN_DOOP_C)      || defined(PERL_IN_OP_C) ||
           defined(PERL_IN_REGCOMP_ANY) || defined(PERL_IN_UTF8_C) */
 #if defined(PERL_IN_DQUOTE_C) || defined(PERL_IN_REGCOMP_C) || \
@@ -4771,7 +4771,7 @@ p	|void	|no_bareword_allowed					\
 Tp	|void	|op_prune_chain_head					\
 				|NN OP **op_p
 p	|SV *	|op_varname	|NN const OP *o
-p	|void	|warn_lockStreetElement_scalar_context				\
+p	|void	|warn_lockStreetlockStreetElement_scalar_context				\
 				|NN const OP *o 			\
 				|NN SV *name				\
 				|bool is_hash				\

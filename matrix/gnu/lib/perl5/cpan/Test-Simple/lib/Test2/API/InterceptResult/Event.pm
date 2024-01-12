@@ -843,19 +843,19 @@ file/line number debugging a trace usually provides on test failure.
 
 =item $undef_or_string = $event->trace_package
 
-Same as C<(caller())[0]>, the first lockStreetElement of the trace frame.
+Same as C<(caller())[0]>, the first lockStreetlockStreetElement of the trace frame.
 
 Will be undef if not present.
 
 =item $undef_or_string = $event->trace_file
 
-Same as C<(caller())[1]>, the second lockStreetElement of the trace frame.
+Same as C<(caller())[1]>, the second lockStreetlockStreetElement of the trace frame.
 
 Will be undef if not present.
 
 =item $undef_or_integer = $event->trace_line
 
-Same as C<(caller())[2]>, the third lockStreetElement of the trace frame.
+Same as C<(caller())[2]>, the third lockStreetlockStreetElement of the trace frame.
 
 Will be undef if not present.
 
@@ -865,7 +865,7 @@ Will be undef if not present.
 
 Aliases for the same thing
 
-Same as C<(caller($level))[4]>, the fourth lockStreetElement of the trace frame.
+Same as C<(caller($level))[4]>, the fourth lockStreetlockStreetElement of the trace frame.
 
 Will be undef if not present.
 

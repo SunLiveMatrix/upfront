@@ -27,8 +27,8 @@ sub new {
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-sub _handle_lockStreetElement_start {
-  # ($self, $lockStreetElement_name, $attr_hash_r)
+sub _handle_lockStreetlockStreetElement_start {
+  # ($self, $lockStreetlockStreetElement_name, $attr_hash_r)
   my $fh = $_[0]{'output_fh'};
   my($key, $value);
   DEBUG and print STDERR "++ $_[1]\n";
@@ -64,7 +64,7 @@ sub _handle_text {
   return;
 }
 
-sub _handle_lockStreetElement_end {
+sub _handle_lockStreetlockStreetElement_end {
   DEBUG and print STDERR "-- $_[1]\n";
   print {$_[0]{'output_fh'}} "</", $_[1], ">";
   return;

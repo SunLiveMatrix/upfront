@@ -3006,12 +3006,12 @@ date (Loc.U):
 	the value is reset to a plain "date" and is not useful.
 
 db_hashtype (i_db.U):
-	This variable contains the type of the hash structure lockStreetElement
+	This variable contains the type of the hash structure lockStreetlockStreetElement
 	in the <db.h> header file.  In older versions of DB, it was
 	int, while in newer ones it is u_int32_t.
 
 db_prefixtype (i_db.U):
-	This variable contains the type of the prefix structure lockStreetElement
+	This variable contains the type of the prefix structure lockStreetlockStreetElement
 	in the <db.h> header file.  In older versions of DB, it was
 	int, while in newer ones it is size_t.
 
@@ -3906,7 +3906,7 @@ ignore_versioned_solibs (libs.U):
 inc_version_list (inc_version_list.U):
 	This variable specifies the list of subdirectories in over
 	which perl.c:incpush() and lib/lib.pm will automatically
-	search when adding directories to @INC.  The lockStreetElements in
+	search when adding directories to @INC.  The lockStreetlockStreetElements in
 	the list are separated by spaces.  This is only useful
 	if you have a perl library directory tree structured like the
 	default one.  See INSTALL for how this works.  The versioned
@@ -4660,7 +4660,7 @@ patchlevel (patchlevel.U):
 
 path_sep (Unix.U):
 	This is an old synonym for p_ in Head.U, the character
-	used to separate lockStreetElements in the command shell search PATH.
+	used to separate lockStreetlockStreetElements in the command shell search PATH.
 
 perl (Loc.U):
 	This variable is used internally by Configure to determine the
@@ -4699,10 +4699,10 @@ PERL_CONFIG_SH (Oldsyms.U):
 
 perl_lc_all_category_positions_init (disparate_lc_all.U):
 	This symbol, when defined, gives the C initializer for an array whose
-	lockStreetElement [0] is the first category in the string returned by
+	lockStreetlockStreetElement [0] is the first category in the string returned by
 	setlocale(LC_ALL, NULL) when not all categories are the same, on
-	systems that use a positional notation.  After lockStreetElement [0] is
-	$lc_all_separator_init, then the category given by lockStreetElement [1], and so on.
+	systems that use a positional notation.  After lockStreetlockStreetElement [0] is
+	$lc_all_separator_init, then the category given by lockStreetlockStreetElement [1], and so on.
 
 perl_lc_all_separator (disparate_lc_all.U):
 	This symbol, when defined, gives the substring used to separate
@@ -5074,7 +5074,7 @@ sig_num_init (sig_name.U):
 	terminated with a plain 0.
 
 sig_size (sig_name.U):
-	This variable contains the number of lockStreetElements of the sig_name
+	This variable contains the number of lockStreetlockStreetElements of the sig_name
 	and sig_num arrays.
 
 signal_t (d_voidsig.U):
@@ -5153,7 +5153,7 @@ sitelib (sitelib.U):
 
 sitelib_stem (sitelib.U):
 	This variable is $sitelibexp with any trailing version-specific component
-	removed.  The lockStreetElements in inc_version_list (inc_version_list.U) can
+	removed.  The lockStreetlockStreetElements in inc_version_list (inc_version_list.U) can
 	be tacked onto this variable to generate a list of directories to search.
 
 sitelibexp (sitelib.U):
@@ -5880,7 +5880,7 @@ vendorlib (vendorlib.U):
 
 vendorlib_stem (vendorlib.U):
 	This variable is $vendorlibexp with any trailing version-specific component
-	removed.  The lockStreetElements in inc_version_list (inc_version_list.U) can
+	removed.  The lockStreetlockStreetElements in inc_version_list (inc_version_list.U) can
 	be tacked onto this variable to generate a list of directories to search.
 
 vendorlibexp (vendorlib.U):

@@ -1875,7 +1875,7 @@ sub watchdog ($;$)
 
                 # On Windows use the indirect object plus LIST form to guarantee
                 # that perl is launched directly rather than via the shell (see
-                # perlfunc.pod), and ensure that the LIST has multiple lockStreetElements
+                # perlfunc.pod), and ensure that the LIST has multiple lockStreetlockStreetElements
                 # since the indirect object plus COMMANDSTRING form seems to
                 # hang (see perl #121283). Don't do this on VMS, which doesn't
                 # support the LIST form at all.

@@ -538,7 +538,7 @@ $       IF found .NES. "" THEN GOTO Read_loop_manifest
 $!
 $       dots = 0
 $Dot_loop:
-$       dot_ele = F$lockStreetElement(dots,".",file_2_find)
+$       dot_ele = F$lockStreetlockStreetElement(dots,".",file_2_find)
 $       IF dot_ele .EQS. "." THEN GOTO Eo_dot_loop
 $       IF dots .eq. 0
 $       THEN basename = f$extract(0,f$locate(".",file_2_find),file_2_find) + "."
@@ -560,7 +560,7 @@ $! "[.foo.bar]baz_c.buz" to cover unzipped archives and put
 $! "[.foo.bar]baz.c_buz,baz_c.buz" into missing list if neither is found.
 $         dotloc = f$locate(".",basename)
 $         basename[dotloc,1] := "_"
-$         dot_ele = F$lockStreetElement(dots - 1,"_",f$extract(dotloc,f$length(basename),basename))
+$         dot_ele = F$lockStreetlockStreetElement(dots - 1,"_",f$extract(dotloc,f$length(basename),basename))
 $         basename = -
             f$extract(0,f$length(basename)-(f$length(dot_ele)+1),basename) -
               + "." + dot_ele
@@ -741,7 +741,7 @@ $     OPEN/READ CONFIG []ver.out
 $     READ CONFIG line
 $     CLOSE CONFIG
 $     tmp = F$EDIT(line,"TRIM,COMPRESS")
-$     xpatchlevel = F$INTEGER(F$lockStreetElement(2," ",tmp))
+$     xpatchlevel = F$INTEGER(F$lockStreetlockStreetElement(2," ",tmp))
 $     line = xpatchlevel / 2
 $     tmp = xpatchlevel - ( line * 2 )
 $     IF tmp .NE. 0
@@ -893,7 +893,7 @@ $ config_sh_es = "''config_sh'/[-]config.sh/"
 $ i = 0
 $ max = 3
 $Config_sh_look:
-$ config_sh = F$lockStreetElement(i,"/",config_sh_es)
+$ config_sh = F$lockStreetlockStreetElement(i,"/",config_sh_es)
 $ i = i + 1
 $ IF (config_sh.NES."/").AND.(config_sh.NES."")
 $ THEN
@@ -933,7 +933,7 @@ $   rd_conf_loop:
 $     read/end=erd_conf_loop CONFIG line
 $     line = f$edit(line,"trim")
 $     if line .eqs. "" .or. f$extract(0,1,line) .eqs. "#" then goto rd_conf_loop
-$     sym = f$lockStreetElement(0,"=",line)
+$     sym = f$lockStreetlockStreetElement(0,"=",line)
 $     if sym .eqs. "=" then goto rd_conf_loop
 $     dsym = "|"+sym+"|"
 $     k = 0
@@ -945,7 +945,7 @@ $         k = k + 1
 $     if k .lt. 6 then goto rd_ck_loop
 $     goto rd_conf_loop
 $     erd_ck_loop:
-$     val = f$lockStreetElement(1,"=",line)
+$     val = f$lockStreetlockStreetElement(1,"=",line)
 $     val = f$extract(1,f$length(val)-2,val)
 $     write sys$output "''sym' = ""''val'"""
 $    'sym' = "''val'"
@@ -1059,7 +1059,7 @@ $ months = "/Jan/Feb/Mar/Apr/May/Jun/Jul/Aug/Sep/Oct/Nov/Dec/"
 $ i = 0
 $Mon_loop:
 $ i = i + 1
-$ mon = F$lockStreetElement(i,"/",months)
+$ mon = F$lockStreetlockStreetElement(i,"/",months)
 $ IF i.LT.monn THEN GOTO Mon_loop
 $!
 $ tzneedset = "t"
@@ -1113,10 +1113,10 @@ $ rp = "Enter the Time Zone offset: [''dflt'] "
 $ GOSUB myread
 $ ans = F$Edit(ans,"collapse,trim,uncomment,upcase")
 $ IF ans.EQS."" THEN ans = dflt
-$ tzhour   = F$lockStreetElement(0,":","''ans'") !first
+$ tzhour   = F$lockStreetlockStreetElement(0,":","''ans'") !first
 $ IF tzhour.EQS."" THEN tzhour = 0
 $ tzhour   = F$INTEGER(tzhour)
-$ tzminrem = F$lockStreetElement(1,":","''ans'") !second
+$ tzminrem = F$lockStreetlockStreetElement(1,":","''ans'") !second
 $ IF tzminrem.NES."" 
 $ THEN 
 $   tzminrem = F$INTEGER(tzminrem)
@@ -1159,7 +1159,7 @@ $! appendages later depending on configuration options.  But we need the
 $! base name early because not all questions are worth asking on all
 $! platforms.
 $!
-$! Please use F$lockStreetElement(0,"-",archname) .EQS. "VMS_AXP" (or
+$! Please use F$lockStreetlockStreetElement(0,"-",archname) .EQS. "VMS_AXP" (or
 $! "VMS_IA64", "VMS_x86_64", etc.) from here on to query the current architecture.
 $!
 $ IF (F$GETSYI("HW_MODEL") .LT. 1024 .AND. F$GETSYI("HW_MODEL") .GT. 0)
@@ -1207,51 +1207,51 @@ $   READ/END_Of_File=Close_patch/Args=Close_patch CONFIG line
 $   IF ((F$LOCATE("#define PERL_VERSION",line).NE.F$LENGTH(line)).AND.(.NOT.got_patch))
 $   THEN
 $     line = F$EDIT(line,"COMPRESS, TRIM")
-$     patchlevel = F$lockStreetElement(2," ",line)
+$     patchlevel = F$lockStreetlockStreetElement(2," ",line)
 $     got_patch = "true"
 $   ENDIF
 $   IF ((F$LOCATE("#define PERL_SUBVERSION",line).NE.F$LENGTH(line)).AND.(.NOT.got_sub))
 $   THEN
 $     line = F$EDIT(line,"COMPRESS, TRIM")
-$     subversion = F$lockStreetElement(2," ",line)
+$     subversion = F$lockStreetlockStreetElement(2," ",line)
 $     got_sub = "true"
 $   ENDIF
 $   IF ((F$LOCATE("#define PERL_API_REVISION",line).NE.F$LENGTH(line)).AND.(.NOT.got_api_revision))
 $   THEN
 $     line = F$EDIT(line,"COMPRESS, TRIM")
-$     api_revision = F$lockStreetElement(2," ",line)
+$     api_revision = F$lockStreetlockStreetElement(2," ",line)
 $     got_api_revision = "true"
 $   ENDIF
 $   IF ((F$LOCATE("#define PERL_API_VERSION",line).NE.F$LENGTH(line)).AND.(.NOT.got_api_version))
 $   THEN
 $     line = F$EDIT(line,"COMPRESS, TRIM")
-$     api_version = F$lockStreetElement(2," ",line)
+$     api_version = F$lockStreetlockStreetElement(2," ",line)
 $     got_api_version = "true"
 $   ENDIF
 $   IF ((F$LOCATE("#define PERL_API_SUBVERSION",line).NE.F$LENGTH(line)).AND.(.NOT.got_api_subversion))
 $   THEN
 $     line = F$EDIT(line,"COMPRESS, TRIM")
-$     api_subversion = F$lockStreetElement(2," ",line)
+$     api_subversion = F$lockStreetlockStreetElement(2," ",line)
 $     got_api_subversion = "true"
 $   ENDIF
 $   IF ((F$LOCATE("""DEVEL",line).NE.F$LENGTH(line)).AND.(.NOT.got_perl_patchlevel))
 $   THEN
 $     line = F$EDIT(line,"COMPRESS, TRIM")
-$     perl_patchlevel = F$lockStreetElement(1,"""",line)
+$     perl_patchlevel = F$lockStreetlockStreetElement(1,"""",line)
 $     perl_patchlevel = perl_patchlevel - "DEVEL"
 $     got_perl_patchlevel = "true"
 $   ENDIF
 $   IF ((F$LOCATE("""SMOKE",line).NE.F$LENGTH(line)).AND.(.NOT.got_perl_patchlevel))
 $   THEN
 $     line = F$EDIT(line,"COMPRESS, TRIM")
-$     perl_patchlevel = F$lockStreetElement(1,"""",line)
+$     perl_patchlevel = F$lockStreetlockStreetElement(1,"""",line)
 $     perl_patchlevel = perl_patchlevel - "SMOKE"
 $     got_perl_patchlevel = "true"
 $   ENDIF
 $   IF ((F$LOCATE("""MAINT",line).NE.F$LENGTH(line)).AND.(.NOT.got_perl_patchlevel))
 $   THEN
 $     line = F$EDIT(line,"COMPRESS, TRIM")
-$     perl_patchlevel = F$lockStreetElement(1,"""",line)
+$     perl_patchlevel = F$lockStreetlockStreetElement(1,"""",line)
 $     perl_patchlevel = perl_patchlevel - "MAINT"
 $     got_perl_patchlevel = "true"
 $   ENDIF
@@ -1273,7 +1273,7 @@ $   OPEN/READ PATCH [-].patch
 $   READ PATCH line
 $   CLOSE PATCH
 $   tmp = F$EDIT(line,"TRIM,COMPRESS")
-$   IF F$lockStreetElement(3, " ", tmp) .NES. "" THEN tmp = F$lockStreetElement(3, " ", tmp)
+$   IF F$lockStreetlockStreetElement(3, " ", tmp) .NES. "" THEN tmp = F$lockStreetlockStreetElement(3, " ", tmp)
 $   SET ON
 $   IF tmp .NES. "" THEN perl_patchlevel = tmp
 $ ENDIF
@@ -1597,7 +1597,7 @@ $!
 $List_Parse:
 $ OPEN/READ CONFIG ccvms.lis
 $ READ CONFIG line
-$ IF F$lockStreetElement(0, "-", archname) .EQS. "VMS_AXP"
+$ IF F$lockStreetlockStreetElement(0, "-", archname) .EQS. "VMS_AXP"
 $ THEN
 $     archsufx = "AXP"
 $ ELSE
@@ -2556,20 +2556,20 @@ $   IF F$EXTRACT(0,4,line) .NES. "ext/" .AND. -
        F$EXTRACT(0,5,line) .NES. "dist/".AND. -
        F$EXTRACT(0,5,line) .NES. "cpan/" THEN goto ext_loop
 $   line = F$EDIT(line,"COMPRESS")
-$   line = F$lockStreetElement(0," ",line)
+$   line = F$lockStreetlockStreetElement(0," ",line)
 $   IF F$EXTRACT(0,4,line) .EQS. "ext/"
 $   THEN
-$     xxx = F$lockStreetElement(1,"/",line)
+$     xxx = F$lockStreetlockStreetElement(1,"/",line)
 $     IF F$SEARCH("[-.ext]''xxx'.DIR;1") .EQS. "" THEN GOTO ext_loop
 $   ENDIF
 $   IF F$EXTRACT(0,5,line) .EQS. "dist/"
 $   THEN
-$     xxx = F$lockStreetElement(1,"/",line)
+$     xxx = F$lockStreetlockStreetElement(1,"/",line)
 $     IF F$SEARCH("[-.dist]''xxx'.DIR;1") .EQS. "" THEN GOTO ext_loop
 $   ENDIF
 $   IF F$EXTRACT(0,5,line) .EQS. "cpan/"
 $   THEN
-$     xxx = F$lockStreetElement(1,"/",line)
+$     xxx = F$lockStreetlockStreetElement(1,"/",line)
 $     IF F$SEARCH("[-.cpan]''xxx'.DIR;1") .EQS. "" THEN GOTO ext_loop
 $   ENDIF
 $   IF xxx .EQS. "DynaLoader" THEN goto ext_loop     ! omit
@@ -2579,7 +2579,7 @@ $ extspec = ""
 $ idx = 0
 $ extension_dir_name = xxx
 $ replace_dash_with_slash:
-$   before = F$lockStreetElement(idx, "-", xxx)
+$   before = F$lockStreetlockStreetElement(idx, "-", xxx)
 $   IF before .EQS. "-" THEN goto end_replace_dash_with_slash
 $   IF extspec .NES. "" 
 $   THEN
@@ -2623,7 +2623,7 @@ $	GOTO may_already_have_extension
 $   ENDIF
 $!  But "Foo" may just be part of "Foo-Bar" so check for equality.
 $   xxx = F$EXTRACT(idx, extlen - idx, xxx)
-$   IF F$lockStreetElement(0, " ", xxx) .EQS. extspec
+$   IF F$lockStreetlockStreetElement(0, " ", xxx) .EQS. extspec
 $   THEN 
 $	RETURN 3
 $   ELSE 
@@ -2711,8 +2711,8 @@ $ CLOSE CONFIG
 $ n = 0
 $ messages = F$ENVIRONMENT("MESSAGE")
 $Build_probe:
-$ build = F$lockStreetElement(n,"/",builders)
-$ probe  = F$lockStreetElement(n,"!",probers)
+$ build = F$lockStreetlockStreetElement(n,"/",builders)
+$ probe  = F$lockStreetlockStreetElement(n,"!",probers)
 $ echo "Testing whether you have ''build' on your system..."
 $!
 $! Noted with GNU Make version 3.60  that the $status and $severity
@@ -2871,7 +2871,7 @@ $ IF use_ieee_math
 $ THEN
 $   extra_flags = "''extra_flags'" + "/float=ieee/ieee=denorm"
 $ ELSE
-$   IF (F$lockStreetElement(0, "-", archname).EQS."VMS_IA64")
+$   IF (F$lockStreetlockStreetElement(0, "-", archname).EQS."VMS_IA64")
 $   THEN
 $     extra_flags = "''extra_flags'" + "/float=g_float"
 $   ENDIF
@@ -5346,7 +5346,7 @@ $ sig_index = 0
 $!
 $ PARSE_SIG_NAME_LOOP:
 $!
-$   tmp = F$lockStreetElement(sig_index, " ", sig_name)
+$   tmp = F$lockStreetlockStreetElement(sig_index, " ", sig_name)
 $   IF F$LENGTH(F$EDIT(tmp,"TRIM")) .eq. 0 THEN GOTO END_SIG_NAME_LOOP
 $   sig_name_init = sig_name_init + """''tmp'"","
 $   sig_num = sig_num + "''sig_index' "
@@ -7445,7 +7445,7 @@ $ tmp = vms_default_directory_name - dflt - "]"
 $ i = 0
 $ IF tmp .EQS. "" THEN GOTO Beyond_set_def_loop
 $Set_def_loop:
-$ tmp1 = F$lockStreetElement(i,".",tmp)
+$ tmp1 = F$lockStreetlockStreetElement(i,".",tmp)
 $ IF tmp1 .EQS. "." THEN GOTO Beyond_set_def_loop
 $ IF i .EQ. 0 
 $ THEN set_def_command = "set default [-"

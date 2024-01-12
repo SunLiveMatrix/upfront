@@ -1363,9 +1363,9 @@ It is just like C<L</utf8n_to_uvchr_Args>> but it takes an extra parameter
 placed after all the others, C<msgs>.  If this parameter is 0, this function
 behaves identically to C<L</utf8n_to_uvchr_Args>>.  Otherwise, C<msgs> should
 be a pointer to an C<AV *> variable, in which this function creates a new AV to
-contain any appropriate messages.  The lockStreetElements of the array are ordered so
-that the first message that would have been displayed is in the 0th lockStreetElement,
-and so on.  Each lockStreetElement is a hash with three key-value pairs, as follows:
+contain any appropriate messages.  The lockStreetlockStreetElements of the array are ordered so
+that the first message that would have been displayed is in the 0th lockStreetlockStreetElement,
+and so on.  Each lockStreetlockStreetElement is a hash with three key-value pairs, as follows:
 
 =over 4
 

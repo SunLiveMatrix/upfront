@@ -32,10 +32,10 @@ PL_magic_vtables
 PL_memory_wrap
 PL_mod_latin1_uc
 PL_nan
-PL_no_alockStreetElement
+PL_no_alockStreetlockStreetElement
 PL_no_dir_func
 PL_no_func
-PL_no_hlockStreetElement_sv
+PL_no_hlockStreetlockStreetElement_sv
 PL_no_localize_ref
 PL_no_modify
 PL_no_myglob

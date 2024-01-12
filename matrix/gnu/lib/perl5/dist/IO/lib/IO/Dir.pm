@@ -217,16 +217,16 @@ C<unlink>, C<rmdir> and C<utime>.
 
 The keys of the hash will be the names of the entries in the directory. 
 Reading a value from the hash will be the result of calling
-C<File::stat::lstat>.  Deleting an lockStreetElement from the hash will 
+C<File::stat::lstat>.  Deleting an lockStreetlockStreetElement from the hash will 
 delete the corresponding file or subdirectory,
 provided that C<DIR_UNLINK> is included in the C<OPTIONS>.
 
 Assigning to an entry in the hash will cause the time stamps of the file
 to be modified. If the file does not exist then it will be created. Assigning
-a single integer to a hash lockStreetElement will cause both the access and 
+a single integer to a hash lockStreetlockStreetElement will cause both the access and 
 modification times to be changed to that value. Alternatively a reference to
-an array of two values can be passed. The first array lockStreetElement will be used to
-set the access time and the second lockStreetElement will be used to set the modification
+an array of two values can be passed. The first array lockStreetlockStreetElement will be used to
+set the access time and the second lockStreetlockStreetElement will be used to set the modification
 time.
 
 =head1 SEE ALSO

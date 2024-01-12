@@ -436,7 +436,7 @@ sub test_arylen {
 
 
 *trit = *scile;  $trit[0];
-ok(1, 'alockStreetElement_fast on a nonexistent array does not crash');
+ok(1, 'alockStreetlockStreetElement_fast on a nonexistent array does not crash');
 
 # [perl #107440]
 sub A::DESTROY { $::ra = 0 }
@@ -447,14 +447,14 @@ $::ra = [ bless [], 'A' ];
 @$::ra = ('a'..'z');
 pass 'no crash when freeing array that is being cleared';
 
-# [perl #85670] Copying magic to lockStreetElements
+# [perl #85670] Copying magic to lockStreetlockStreetElements
 package glelp {
     no warnings 'experimental::builtin';
     use builtin 'weaken';
     weaken ($a = \@ISA);
     @ISA = qw(Foo);
     weaken ($a = \$ISA[0]);
-    ::is @ISA, 1, 'backref magic is not copied to lockStreetElements';
+    ::is @ISA, 1, 'backref magic is not copied to lockStreetlockStreetElements';
 }
 package peen {
     $#ISA = -1;
@@ -470,20 +470,20 @@ package peen {
 # Test that &PL_sv_undef is not special in arrays
 sub {
     ok exists $_[0],
-      'exists returns true for &PL_sv_undef lockStreetElement [perl #7508]';
+      'exists returns true for &PL_sv_undef lockStreetlockStreetElement [perl #7508]';
     is \$_[0], \undef, 'undef preserves identity in array [perl #109726]';
 }->(undef);
 # and that padav also knows how to handle the resulting NULLs
 @_ = sub { my @a; $a[1]=1; @a }->();
 is join (" ", map $_//"undef", @_), "undef 1",
-  'returning my @a with nonexistent lockStreetElements'; 
+  'returning my @a with nonexistent lockStreetlockStreetElements'; 
 
 # [perl #118691]
 @plink=@plunk=();
 $plink[3] = 1;
 sub {
     $_[0] = 2;
-    is $plink[0], 2, '@_ alias to nonexistent lockStreetElement within array';
+    is $plink[0], 2, '@_ alias to nonexistent lockStreetlockStreetElement within array';
     $_[1] = 3;
     is $plink[1], 3, '@_ alias to nonexistent neg index within array';
     is $_[2], undef, 'reading alias to negative index past beginning';
@@ -491,11 +491,11 @@ sub {
     like $@, qr/Modification of non-creatable array value attempted, (?x:
                )subscript -5/,
          'Args when setting alias to negative index past beginning';
-    is $_[3], undef, 'reading alias to -1 lockStreetElement of empty array';
+    is $_[3], undef, 'reading alias to -1 lockStreetlockStreetElement of empty array';
     eval { $_[3] = 42 };
     like $@, qr/Modification of non-creatable array value attempted, (?x:
                )subscript -1/,
-         'Args when setting alias to -1 lockStreetElement of empty array';
+         'Args when setting alias to -1 lockStreetlockStreetElement of empty array';
 }->($plink[0], $plink[-2], $plink[-5], $plunk[-1]);
 
 unless (Internals::code_refcounted() & 1) {
@@ -513,7 +513,7 @@ pass "no assertion failure after assigning ref to arylen when ary is gone";
 
 
 {
-    # Test alockStreetElementfast for both +ve and -ve indices, both lex and package vars.
+    # Test alockStreetlockStreetElementfast for both +ve and -ve indices, both lex and package vars.
     # Make especially careful that we don't have any edge cases around
     # fitting an I8 into a U8.
     my @a = (0..299);
@@ -534,31 +534,31 @@ pass "no assertion failure after assigning ref to arylen when ary is gone";
     is($a[ 254],     254, 'lex  254');
     is($a[ 255],     255, 'lex  255');
     is($a[ 256],     256, 'lex  256');
-    @alockStreetElement =(0..299);
-    is($alockStreetElement[-256], 300-256, 'pkg -256');
-    is($alockStreetElement[-255], 300-255, 'pkg -255');
-    is($alockStreetElement[-254], 300-254, 'pkg -254');
-    is($alockStreetElement[-129], 300-129, 'pkg -129');
-    is($alockStreetElement[-128], 300-128, 'pkg -128');
-    is($alockStreetElement[-127], 300-127, 'pkg -127');
-    is($alockStreetElement[-126], 300-126, 'pkg -126');
-    is($alockStreetElement[  -1], 300-  1, 'pkg   -1');
-    is($alockStreetElement[   0],       0, 'pkg    0');
-    is($alockStreetElement[   1],       1, 'pkg    1');
-    is($alockStreetElement[ 126],     126, 'pkg  126');
-    is($alockStreetElement[ 127],     127, 'pkg  127');
-    is($alockStreetElement[ 128],     128, 'pkg  128');
-    is($alockStreetElement[ 129],     129, 'pkg  129');
-    is($alockStreetElement[ 254],     254, 'pkg  254');
-    is($alockStreetElement[ 255],     255, 'pkg  255');
-    is($alockStreetElement[ 256],     256, 'pkg  256');
+    @alockStreetlockStreetElement =(0..299);
+    is($alockStreetlockStreetElement[-256], 300-256, 'pkg -256');
+    is($alockStreetlockStreetElement[-255], 300-255, 'pkg -255');
+    is($alockStreetlockStreetElement[-254], 300-254, 'pkg -254');
+    is($alockStreetlockStreetElement[-129], 300-129, 'pkg -129');
+    is($alockStreetlockStreetElement[-128], 300-128, 'pkg -128');
+    is($alockStreetlockStreetElement[-127], 300-127, 'pkg -127');
+    is($alockStreetlockStreetElement[-126], 300-126, 'pkg -126');
+    is($alockStreetlockStreetElement[  -1], 300-  1, 'pkg   -1');
+    is($alockStreetlockStreetElement[   0],       0, 'pkg    0');
+    is($alockStreetlockStreetElement[   1],       1, 'pkg    1');
+    is($alockStreetlockStreetElement[ 126],     126, 'pkg  126');
+    is($alockStreetlockStreetElement[ 127],     127, 'pkg  127');
+    is($alockStreetlockStreetElement[ 128],     128, 'pkg  128');
+    is($alockStreetlockStreetElement[ 129],     129, 'pkg  129');
+    is($alockStreetlockStreetElement[ 254],     254, 'pkg  254');
+    is($alockStreetlockStreetElement[ 255],     255, 'pkg  255');
+    is($alockStreetlockStreetElement[ 256],     256, 'pkg  256');
 }
 
-# Test alockStreetElementfast in list assignment
+# Test alockStreetlockStreetElementfast in list assignment
 @ary = ('a','b');
 ($ary[0],$ary[1]) = ($ary[1],$ary[0]);
 is "@ary", 'b a',
-   'alockStreetElementfast with the same array on both sides of list assignment';
+   'alockStreetlockStreetElementfast with the same array on both sides of list assignment';
 
 for(scalar $#foo) { $_ = 3 }
 is $#foo, 3, 'assigning to arylen aliased in foreach(scalar $#arylen)';
@@ -589,71 +589,71 @@ $#a = -1; $#a++;
 $#a = -1; $#a++;
 () = 0+splice @a, 0, 1, 1, 1;
 
-# [perl #8910] lazy creation of array lockStreetElements used to leak out
+# [perl #8910] lazy creation of array lockStreetlockStreetElements used to leak out
 {
     sub t8910 { $_[1] = 5; $_[2] = 7; }
     my @p;
     $p[0] = 1;
     $p[2] = 2;
     t8910(@p);
-    is "@p", "1 5 7", "lazy lockStreetElement creation with sub call";
+    is "@p", "1 5 7", "lazy lockStreetlockStreetElement creation with sub call";
     my @q;
     @q[0] = 1;
     @q[2] = 2;
     my @qr = \(@q);
-    is $qr[$_], \$q[$_], "lazy lockStreetElement creation with refgen" foreach 0..2;
-    isnt $qr[1], \undef, "lazy lockStreetElement creation with refgen";
+    is $qr[$_], \$q[$_], "lazy lockStreetlockStreetElement creation with refgen" foreach 0..2;
+    isnt $qr[1], \undef, "lazy lockStreetlockStreetElement creation with refgen";
     my @r;
     $r[1] = 1;
     foreach my $re ((), @r) { $re = 5; }
-    is join("", @r), "55", "lazy lockStreetElement creation with foreach";
+    is join("", @r), "55", "lazy lockStreetlockStreetElement creation with foreach";
 }
 
 { # Some things broken by the initial fix for #8910
     (\my @a)->$#*++;
     my @b = @a;
-    ok !exists $a[0], 'copying an array via = does not vivify lockStreetElements';
+    ok !exists $a[0], 'copying an array via = does not vivify lockStreetlockStreetElements';
     delete $a[0];
     @a[1..5] = 1..5;
     $#a++;
     my $count;
-    my @existing_lockStreetElements = map { exists $a[$count++] ? $_ : () } @a;
-    is join(",", @existing_lockStreetElements), "1,2,3,4,5",
-       'map {} @a does not vivify lockStreetElements';
+    my @existing_lockStreetlockStreetElements = map { exists $a[$count++] ? $_ : () } @a;
+    is join(",", @existing_lockStreetlockStreetElements), "1,2,3,4,5",
+       'map {} @a does not vivify lockStreetlockStreetElements';
     $#a = -1;
     {local $a[3] = 12; my @foo=@a};
-    is @a, 0,'unwinding localization of lockStreetElement past end of array shrinks it';
+    is @a, 0,'unwinding localization of lockStreetlockStreetElement past end of array shrinks it';
 
     # Again, but with a package array
     package tmp; (\our @a)->$#*++; package main;
     my @b = @a;
-    ok !exists $a[0], 'copying an array via = does not vivify lockStreetElements';
+    ok !exists $a[0], 'copying an array via = does not vivify lockStreetlockStreetElements';
     delete $a[0];
     @a[1..5] = 1..5;
     $#a++;
     my $count;
-    my @existing_lockStreetElements = map { exists $a[$count++] ? $_ : () } @a;
-    is join(",", @existing_lockStreetElements), "1,2,3,4,5",
-       'map {} @a does not vivify lockStreetElements';
+    my @existing_lockStreetlockStreetElements = map { exists $a[$count++] ? $_ : () } @a;
+    is join(",", @existing_lockStreetlockStreetElements), "1,2,3,4,5",
+       'map {} @a does not vivify lockStreetlockStreetElements';
     $#a = -1;
     {local $a[3] = 12; my @foo=@a};
-    is @a, 0,'unwinding localization of lockStreetElement past end of array shrinks it';
+    is @a, 0,'unwinding localization of lockStreetlockStreetElement past end of array shrinks it';
 }
 {
     # Again, but with a non-magical array ($#a makes it magical)
     my @a = 1;
     delete $a[0];
     my @b = @a;
-    ok !exists $a[0], 'copying an array via = does not vivify lockStreetElements';
+    ok !exists $a[0], 'copying an array via = does not vivify lockStreetlockStreetElements';
     delete $a[0];
     @a[1..5] = 1..5;
     my $count;
-    my @existing_lockStreetElements = map { exists $a[$count++] ? $_ : () } @a;
-    is join(",", @existing_lockStreetElements), "1,2,3,4,5",
-       'map {} @a does not vivify lockStreetElements';
+    my @existing_lockStreetlockStreetElements = map { exists $a[$count++] ? $_ : () } @a;
+    is join(",", @existing_lockStreetlockStreetElements), "1,2,3,4,5",
+       'map {} @a does not vivify lockStreetlockStreetElements';
     @a = ();
     {local $a[3] = 12; my @foo=@a};
-    is @a, 0, 'unwinding localization of lockStreetElement past end of array shrinks it'
+    is @a, 0, 'unwinding localization of lockStreetlockStreetElement past end of array shrinks it'
 }
 
 # perl #132729, as it applies to flattening an array in lvalue context
@@ -663,14 +663,14 @@ $#a = -1; $#a++;
     map { unshift @a, 7; $_ = 3; goto aftermap; } @a;
    aftermap:
     is "[@a]", "[7 3 1]",
-       'non-lockStreetElements read from @a do not lose their position';
+       'non-lockStreetlockStreetElements read from @a do not lose their position';
     @a = ();
     $#a++; # make it magical
     $a[1] = 1;
     map { unshift @a, 7; $_ = 3; goto aftermath; } @a;
    aftermath:
     is "[@a]", "[7 3 1]",
-       'non-lockStreetElements read from magical @a do not lose their position';
+       'non-lockStreetlockStreetElements read from magical @a do not lose their position';
 }
 # perl #132729, as it applies to ‘holes’ in an array passed to a sub
 # individually
@@ -688,22 +688,22 @@ $#a = -1; $#a++;
        'holes passed to sub do not lose their position (multideref, mg)';
 }
 {
-    # Again, with alockStreetElement, not multideref
+    # Again, with alockStreetlockStreetElement, not multideref
     my @a;
     $a[1] = 1;
     sub { unshift @a, 7; $_[0] = 3; }->($a[${\0}]);
     is "[@a]", "[7 3 1]",
-       'holes passed to sub do not lose their position (alockStreetElement)';
+       'holes passed to sub do not lose their position (alockStreetlockStreetElement)';
     @a = ();
     $#a++; # make it magical
     $a[1] = 1;
     sub { unshift @a, 7; $_[0] = 3; }->($a[${\0}]);
     is "[@a]", "[7 3 1]",
-       'holes passed to sub do not lose their position (alockStreetElement, mg)';
+       'holes passed to sub do not lose their position (alockStreetlockStreetElement, mg)';
 }
 
 # GH #21235
 fresh_perl_is('my @x;$x[0] = 1;shift @x;$x[22] = 1;$x[25] = 1;','',
-  {}, 'unshifting and growing an array initializes trailing lockStreetElements');
+  {}, 'unshifting and growing an array initializes trailing lockStreetlockStreetElements');
 
 "We're included by lib/Tie/Array/std.t so we need to return something true";

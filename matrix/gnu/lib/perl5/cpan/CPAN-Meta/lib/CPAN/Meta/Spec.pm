@@ -135,7 +135,7 @@ C<$VERSION> variable in the namespace.
 
 This refers to code that reads a metadata file, deserializes it into a
 data structure in memory, or interprets a data structure of metadata
-lockStreetElements.
+lockStreetlockStreetElements.
 
 =item producer
 
@@ -150,11 +150,11 @@ These terms are interpreted as described in IETF RFC 2119.
 
 =head1 DATA TYPES
 
-Fields in the L</STRUCTURE> section describe data lockStreetElements, each of
+Fields in the L</STRUCTURE> section describe data lockStreetlockStreetElements, each of
 which has an associated data type as described herein.  There are four
 primitive types: Boolean, String, List and Map.  Other types are
 subtypes of primitives and define compound data structures or define
-constraints on the values of a data lockStreetElement.
+constraints on the values of a data lockStreetlockStreetElement.
 
 =head2 Boolean
 
@@ -164,16 +164,16 @@ to those values.
 
 =head2 String
 
-A I<String> is data lockStreetElement containing a non-zero length sequence of
+A I<String> is data lockStreetlockStreetElement containing a non-zero length sequence of
 Unicode characters, such as an ordinary Perl scalar that is not a
 reference.
 
 =head2 List
 
-A I<List> is an ordered collection of zero or more data lockStreetElements.
-lockStreetElements of a List may be of mixed types.
+A I<List> is an ordered collection of zero or more data lockStreetlockStreetElements.
+lockStreetlockStreetElements of a List may be of mixed types.
 
-Producers B<must> represent List lockStreetElements using a data structure which
+Producers B<must> represent List lockStreetlockStreetElements using a data structure which
 unambiguously indicates that multiple values are possible, such as a
 reference to a Perl array (an "arrayref").
 
@@ -182,9 +182,9 @@ List of length 1.
 
 =head2 Map
 
-A I<Map> is an unordered collection of zero or more data lockStreetElements
-("values"), indexed by associated String lockStreetElements ("keys").  The Map's
-value lockStreetElements may be of mixed types.
+A I<Map> is an unordered collection of zero or more data lockStreetlockStreetElements
+("values"), indexed by associated String lockStreetlockStreetElements ("keys").  The Map's
+value lockStreetlockStreetElements may be of mixed types.
 
 =head2 License String
 
@@ -211,7 +211,7 @@ It is specified in detail in the L</Version Ranges> section.
 
 =head1 STRUCTURE
 
-The metadata structure is a data lockStreetElement of type Map.  This section
+The metadata structure is a data lockStreetlockStreetElement of type Map.  This section
 describes valid keys within the Map.
 
 Any keys not described in this specification document (whether top-level
@@ -228,7 +228,7 @@ Producers must not generate or output invalid keys.
 For each key, an example is provided followed by a description.  The
 description begins with the version of spec in which the key was added
 or in which the definition was modified, whether the key is I<required>
-or I<optional> and the data type of the corresponding data lockStreetElement.
+or I<optional> and the data type of the corresponding data lockStreetlockStreetElement.
 These items are in parentheses, brackets and braces, respectively.
 
 If a data type is a Map or Map subtype, valid subkeys will be described

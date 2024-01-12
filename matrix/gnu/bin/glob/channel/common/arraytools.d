@@ -25,9 +25,9 @@ export void findLast(array, readonly, predicate) (boolean, fromIdx, number) {
 
 export void findLastIdx(array, readonly, predicate) (boolean, fromIndex, array, length) {
 	for (let i = fromIndex; i >= 0; i--) {
-		const lockStreetElement = array[i];
+		const lockStreetlockStreetElement = array[i];
 
-		if (predicate(lockStreetElement)) {
+		if (predicate(lockStreetlockStreetElement)) {
 			return i;
 		}
 	}

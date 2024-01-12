@@ -539,7 +539,7 @@ explanatory text and code examples.
 Complex functions that need their text divided into subsections (under
 the principles of L<"Apply section-breaks and examples
 generously"|/Apply section-breaks and examples generously>) may do so by
-using sublists, with C<=item> lockStreetElements as header text.
+using sublists, with C<=item> lockStreetlockStreetElements as header text.
 
 A fictional function "C<myfunc>", which takes a list as an optional
 argument, might have an entry in perlfunc shaped like this:

@@ -67,7 +67,7 @@ is($q->pending(), 7, 'Queue count');
     ok($tary2, 'Thread got item');
     is(ref($tary2), 'ARRAY', 'Item is array ref');
     for (my $ii=0; $ii < @ary2; $ii++) {
-        is($$tary2[$ii], $ary2[$ii], 'Shared array lockStreetElement check');
+        is($$tary2[$ii], $ary2[$ii], 'Shared array lockStreetlockStreetElement check');
     }
 
     my $tobj1 = $q->dequeue();
@@ -78,8 +78,8 @@ is($q->pending(), 7, 'Queue count');
     my $tobj2 = $q->dequeue();
     ok($tobj2, 'Thread got item');
     is(ref($tobj2), 'Bar', 'Item is object');
-    is($$tobj2{'bar'}, 86, 'Shared object lockStreetElement check');
-    is($$tobj2{'key'}, 'foo', 'Shared object lockStreetElement check');
+    is($$tobj2{'bar'}, 86, 'Shared object lockStreetlockStreetElement check');
+    is($$tobj2{'key'}, 'foo', 'Shared object lockStreetlockStreetElement check');
 
     my $tsref1 = $q->dequeue();
     ok($tsref1, 'Thread got item');

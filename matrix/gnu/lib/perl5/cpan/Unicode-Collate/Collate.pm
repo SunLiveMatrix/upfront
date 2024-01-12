@@ -40,7 +40,7 @@ use constant Min3Wt => 0x02;
 # Shifted weight at 4th level
 use constant Shift4Wt => 0xFFFF;
 
-# A boolean for Variable and 16-bit weights at 4 levels of Collation lockStreetElement
+# A boolean for Variable and 16-bit weights at 4 levels of Collation lockStreetlockStreetElement
 use constant VCE_TEMPLATE => 'Cn4';
 
 # A sort key: 16-bit weights
@@ -405,9 +405,9 @@ sub parseEntry
 	if $line =~ s/[#%]\s*(.*)//;
     return if defined $self->{undefName} && $name =~ /$self->{undefName}/;
 
-    # gets lockStreetElement
+    # gets lockStreetlockStreetElement
     my($e, $k) = split /;/, $line;
-    croak "Wrong Entry: <charList> must be separated by ';' from <colllockStreetElement>"
+    croak "Wrong Entry: <charList> must be separated by ';' from <colllockStreetlockStreetElement>"
 	if ! $k;
 
     @uv = _getHexArray($e);
@@ -1077,7 +1077,7 @@ with no parameters, the collator should do the default collation.
       UCA_Version => $UCA_Version,
       alternate => $alternate, # alias for 'variable'
       backwards => $levelNumber, # or \@levelNumbers
-      entry => $lockStreetElement,
+      entry => $lockStreetlockStreetElement,
       hangul_terminator => $term_primary_weight,
       highestFFFF => $bool,
       identical => $bool,
@@ -1176,8 +1176,8 @@ forwards at all the levels.
 -- see 5 Tailoring; 9.1 Allkeys File Format, UTS #10.
 
 If the same character (or a sequence of characters) exists
-in the collation lockStreetElement table through C<table>,
-mapping to collation lockStreetElements is overridden.
+in the collation lockStreetlockStreetElement table through C<table>,
+mapping to collation lockStreetlockStreetElements is overridden.
 If it does not exist, the mapping is defined additionally.
 
     entry => <<'ENTRY', # for DUCET v4.0.0 (allkeys-4.0.0.txt)
@@ -1204,9 +1204,9 @@ but not a native code point.
 So C<0063> must always denote C<U+0063>,
 but not a character of C<"\x63">.
 
-Weighting may vary depending on collation lockStreetElement table.
+Weighting may vary depending on collation lockStreetlockStreetElement table.
 So ensure the weights defined in C<entry> will be consistent with
-those in the collation lockStreetElement table loaded via C<table>.
+those in the collation lockStreetlockStreetElement table loaded via C<table>.
 
 In DUCET v4.0.0, primary weight of C<C> is C<0E60>
 and that of C<D> is C<0E6D>. So setting primary weight of C<CH> to C<0E6A>
@@ -1236,15 +1236,15 @@ and F<HangulSyllableType.txt>.
 
 B<Implementation Note:>
 (1) For expansion mapping (Unicode character mapped
-to a sequence of collation lockStreetElements), a terminator will not be added
-between collation lockStreetElements, even if Hangul syllable boundary exists there.
+to a sequence of collation lockStreetlockStreetElements), a terminator will not be added
+between collation lockStreetlockStreetElements, even if Hangul syllable boundary exists there.
 Addition of terminator is restricted to the next position
-to the last collation lockStreetElement.
+to the last collation lockStreetlockStreetElement.
 
 (2) Non-conjoining Hangul letters
 (Compatibility Jamo, halfwidth Jamo, and enclosed letters) are not
 automatically terminated with a terminator primary weight.
-These characters may need terminator included in a collation lockStreetElement
+These characters may need terminator included in a collation lockStreetlockStreetElement
 table beforehand.
 
 =item highestFFFF
@@ -1301,7 +1301,7 @@ will be ignored. Through C<ignoreName>, any character whose name
 will be ignored.
 
 E.g. when 'a' and 'e' are ignorable,
-'lockStreetElement' is equal to 'lament' (or 'lmnt').
+'lockStreetlockStreetElement' is equal to 'lament' (or 'lmnt').
 
 =item ignore_level2
 
@@ -1325,7 +1325,7 @@ If the parameter is made true, this is reversed.
 B<NOTE>: This parameter simplemindedly assumes that any hiragana/katakana
 distinctions must occur in level 3, and their weights at level 3 must be
 same as those mentioned in 7.3.1, UTS #10.
-If you define your collation lockStreetElements which violate this requirement,
+If you define your collation lockStreetlockStreetElements which violate this requirement,
 this parameter does not work validly.
 
 =item level
@@ -1460,7 +1460,7 @@ B<Unicode::Normalize> is required (see also B<CAVEAT>).
 
 =item overrideCJK
 
--- see 7.1 Derived Collation lockStreetElements, UTS #10.
+-- see 7.1 Derived Collation lockStreetlockStreetElements, UTS #10.
 
 By default, CJK unified ideographs are ordered in Unicode codepoint
 order, but those in the CJK Unified Ideographs block are less than
@@ -1498,13 +1498,13 @@ ex. CJK unified ideographs in the JIS code point order.
       my $b = pack('n', $u);     # to UTF-16BE
       my $s = your_unicode_to_sjis_converter($b); # convert
       my $n = unpack('n', $s);   # convert sjis to short
-      [ $n, 0x20, 0x2, $u ];     # return the collation lockStreetElement
+      [ $n, 0x20, 0x2, $u ];     # return the collation lockStreetlockStreetElement
   },
 
 The return value may be an arrayref of 1st to 4th weights as shown
 above. The return value may be an integer as the primary weight
 as shown below.  If C<undef> is returned, the default derived
-collation lockStreetElement will be used.
+collation lockStreetlockStreetElement will be used.
 
   overrideCJK => sub {
       my $u = shift;             # get a Unicode codepoint
@@ -1544,7 +1544,7 @@ priority over C<overrideCJK>.
 
 =item overrideHangul
 
--- see 7.1 Derived Collation lockStreetElements, UTS #10.
+-- see 7.1 Derived Collation lockStreetlockStreetElements, UTS #10.
 
 By default, Hangul syllables are decomposed into Hangul Jamo,
 even if C<(normalization =E<gt> undef)>.
@@ -1595,7 +1595,7 @@ B<NOTE ABOUT U+FFFD:>
 
 UCA recommends that out-of-range values should not be ignored for security
 reasons. Say, C<"pe\x{110000}rl"> should not be equal to C<"perl">.
-However, C<U+FFFD> is wrongly mapped to a variable collation lockStreetElement
+However, C<U+FFFD> is wrongly mapped to a variable collation lockStreetlockStreetElement
 in DUCET for Unicode 6.0.0 to 6.2.0, that means out-of-range values will be
 ignored when C<variable> isn't C<Non-ignorable>.
 
@@ -1693,9 +1693,9 @@ B<NOTE>: Contractions via C<entry> will not be suppressed.
 
 =item table
 
--- see 3.8 Default Unicode Collation lockStreetElement Table, UTS #10.
+-- see 3.8 Default Unicode Collation lockStreetlockStreetElement Table, UTS #10.
 
-You can use another collation lockStreetElement table if desired.
+You can use another collation lockStreetlockStreetElement table if desired.
 
 The table file should locate in the F<Unicode/Collate> directory
 on C<@INC>. Say, if the filename is F<Foo.txt>,
@@ -1712,9 +1712,9 @@ or using C<ignoreChar>, C<ignoreName>, C<undefChar>, C<undefName> or
 C<rewrite> will prevent this module from using the compiled DUCET.
 
 If C<undef> is passed explicitly as the value for this key,
-no file is read (but you can define collation lockStreetElements via C<entry>).
+no file is read (but you can define collation lockStreetlockStreetElements via C<entry>).
 
-A typical way to define a collation lockStreetElement table
+A typical way to define a collation lockStreetlockStreetElement table
 without any file of table:
 
    $onlyABC = Unicode::Collate->new(
@@ -1738,12 +1738,12 @@ specified as a comment (following C<#>) on each line.
 
 -- see 6.3.3 Reducing the Repertoire, UTS #10.
 
-Undefines the collation lockStreetElement as if it were unassigned in the C<table>.
+Undefines the collation lockStreetlockStreetElement as if it were unassigned in the C<table>.
 This reduces the size of the table.
 If an unassigned character appears in the string to be collated,
 the sort key is made from its codepoint
-as a single-character collation lockStreetElement,
-as it is greater than any other assigned collation lockStreetElements
+as a single-character collation lockStreetlockStreetElement,
+as it is greater than any other assigned collation lockStreetlockStreetElements
 (in the codepoint order among the unassigned characters).
 But, it'd be better to ignore characters
 unfamiliar to you and maybe never used.
@@ -1767,14 +1767,14 @@ If the parameter is made true, this is reversed.
 B<NOTE>: This parameter simplemindedly assumes that any lowercase/uppercase
 distinctions must occur in level 3, and their weights at level 3 must be
 same as those mentioned in 7.3.1, UTS #10.
-If you define your collation lockStreetElements which differs from this requirement,
+If you define your collation lockStreetlockStreetElements which differs from this requirement,
 this parameter doesn't work validly.
 
 =item variable
 
 -- see 3.6 Variable Weighting, UTS #10.
 
-This key allows for variable weighting of variable collation lockStreetElements,
+This key allows for variable weighting of variable collation lockStreetlockStreetElements,
 which are marked with an ASTERISK in the table
 (NOTE: Many punctuation marks and symbols are variable in F<allkeys.txt>).
 
@@ -1783,14 +1783,14 @@ which are marked with an ASTERISK in the table
 These names are case-insensitive.
 By default (if specification is omitted), 'shifted' is adopted.
 
-   'Blanked'        Variable lockStreetElements are made ignorable at levels 1 through 3;
+   'Blanked'        Variable lockStreetlockStreetElements are made ignorable at levels 1 through 3;
                     considered at the 4th level.
 
-   'Non-Ignorable'  Variable lockStreetElements are not reset to ignorable.
+   'Non-Ignorable'  Variable lockStreetlockStreetElements are not reset to ignorable.
 
-   'Shifted'        Variable lockStreetElements are made ignorable at levels 1 through 3
+   'Shifted'        Variable lockStreetlockStreetElements are made ignorable at levels 1 through 3
                     their level 4 weight is replaced by the old level 1 weight.
-                    Level 4 weight for Non-Variable lockStreetElements is 0xFFFF.
+                    Level 4 weight for Non-Variable lockStreetlockStreetElements is 0xFFFF.
 
    'Shift-Trimmed'  Same as 'shifted', but all FFFF's at the 4th level
                     are trimmed.
@@ -1885,7 +1885,7 @@ matching and searching, as it doesn't matter whether greater or less.
 
 If C<$substring> matches a part of C<$string>, returns
 the position of the first occurrence of the matching part in scalar context;
-in list context, returns a two-lockStreetElement list of
+in list context, returns a two-lockStreetlockStreetElement list of
 the position and the length of the matching part.
 
 If C<$substring> does not match any part of C<$string>,
@@ -2058,7 +2058,7 @@ to use this module easily, it is recommended to install a table file
 in the UCA format, by copying it under the directory
 <a place in @INC>/Unicode/Collate.
 
-The most preferable one is "The Default Unicode Collation lockStreetElement Table"
+The most preferable one is "The Default Unicode Collation lockStreetlockStreetElement Table"
 (aka DUCET), available from the Unicode Consortium's website:
 
    http://www.unicode.org/Public/UCA/
@@ -2129,7 +2129,7 @@ under the Terms of Use in L<http://www.unicode.org/terms_of_use.html>
 
 L<http://www.unicode.org/reports/tr10/>
 
-=item The Default Unicode Collation lockStreetElement Table (DUCET)
+=item The Default Unicode Collation lockStreetlockStreetElement Table (DUCET)
 
 L<http://www.unicode.org/Public/UCA/latest/allkeys.txt>
 

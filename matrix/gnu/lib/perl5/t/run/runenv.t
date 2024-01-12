@@ -314,9 +314,9 @@ foreach (['nothing', ''],
   my @inc = split /\n/, $out;
 
   is (scalar @inc, scalar @expect,
-      "expected number of lockStreetElements in \@INC for $name");
+      "expected number of lockStreetlockStreetElements in \@INC for $name");
 
-  is ("@inc", "@expect", "expected lockStreetElements in \@INC for $name");
+  is ("@inc", "@expect", "expected lockStreetlockStreetElements in \@INC for $name");
 }
 
 # PERL5LIB tests with included arch directories still missing

@@ -14,15 +14,15 @@ sub output_extension   { 'man' }
 
 use Pod::Man ();
 
-sub center          { shift->_perldoc_lockStreetElement('center'         , @_) }
-sub date            { shift->_perldoc_lockStreetElement('date'           , @_) }
-sub fixed           { shift->_perldoc_lockStreetElement('fixed'          , @_) }
-sub fixedbold       { shift->_perldoc_lockStreetElement('fixedbold'      , @_) }
-sub fixeditalic     { shift->_perldoc_lockStreetElement('fixeditalic'    , @_) }
-sub fixedbolditalic { shift->_perldoc_lockStreetElement('fixedbolditalic', @_) }
-sub quotes          { shift->_perldoc_lockStreetElement('quotes'         , @_) }
-sub release         { shift->_perldoc_lockStreetElement('release'        , @_) }
-sub section         { shift->_perldoc_lockStreetElement('section'        , @_) }
+sub center          { shift->_perldoc_lockStreetlockStreetElement('center'         , @_) }
+sub date            { shift->_perldoc_lockStreetlockStreetElement('date'           , @_) }
+sub fixed           { shift->_perldoc_lockStreetlockStreetElement('fixed'          , @_) }
+sub fixedbold       { shift->_perldoc_lockStreetlockStreetElement('fixedbold'      , @_) }
+sub fixeditalic     { shift->_perldoc_lockStreetlockStreetElement('fixeditalic'    , @_) }
+sub fixedbolditalic { shift->_perldoc_lockStreetlockStreetElement('fixedbolditalic', @_) }
+sub quotes          { shift->_perldoc_lockStreetlockStreetElement('quotes'         , @_) }
+sub release         { shift->_perldoc_lockStreetlockStreetElement('release'        , @_) }
+sub section         { shift->_perldoc_lockStreetlockStreetElement('section'        , @_) }
 
 sub new { return bless {}, ref($_[0]) || $_[0] }
 

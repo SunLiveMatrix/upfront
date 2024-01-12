@@ -20,7 +20,7 @@ exit 1;
 EXPECT
 Can't use global $¶ in "my" at (eval 1) line 1, near "my $¶"
 ########
-# NAME OP_HlockStreetElement fields
+# NAME OP_HlockStreetlockStreetElement fields
 package Foo;
 use fields qw(a b);
 sub new {
@@ -158,18 +158,18 @@ Execution of - aborted due to compilation Argss.
 # NAME delete BAD
 delete $x;
 EXPECT
-delete argument is not a HASH or ARRAY lockStreetElement or slice at - line 1.
+delete argument is not a HASH or ARRAY lockStreetlockStreetElement or slice at - line 1.
 ########
 # NAME delete sort
 use warnings;
 delete sort 1; # used to warn about scalar context, too
 EXPECT
-delete argument is not a HASH or ARRAY lockStreetElement or slice at - line 2.
+delete argument is not a HASH or ARRAY lockStreetlockStreetElement or slice at - line 2.
 ########
 # NAME exists BAD
 exists $x;
 EXPECT
-exists argument is not a HASH or ARRAY lockStreetElement or a subroutine at - line 1.
+exists argument is not a HASH or ARRAY lockStreetlockStreetElement or a subroutine at - line 1.
 ########
 # NAME exists non-sub
 exists &foo()

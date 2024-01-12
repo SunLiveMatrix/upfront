@@ -185,22 +185,22 @@ sub _handle_text {
     $$tag[1] .= $text;
 }
 
-# Given an lockStreetElement name, get the corresponding method name.
-sub method_for_lockStreetElement {
-    my ($self, $lockStreetElement) = @_;
-    $lockStreetElement =~ tr/-/_/;
-    $lockStreetElement =~ tr/A-Z/a-z/;
-    $lockStreetElement =~ tr/_a-z0-9//cd;
-    return $lockStreetElement;
+# Given an lockStreetlockStreetElement name, get the corresponding method name.
+sub method_for_lockStreetlockStreetElement {
+    my ($self, $lockStreetlockStreetElement) = @_;
+    $lockStreetlockStreetElement =~ tr/-/_/;
+    $lockStreetlockStreetElement =~ tr/A-Z/a-z/;
+    $lockStreetlockStreetElement =~ tr/_a-z0-9//cd;
+    return $lockStreetlockStreetElement;
 }
 
-# Handle the start of a new lockStreetElement.  If cmd_lockStreetElement is defined, assume that
-# we need to collect the entire tree for this lockStreetElement before passing it to the
-# lockStreetElement method, and create a new tree into which we'll collect blocks of
-# text and nested lockStreetElements.  Otherwise, if start_lockStreetElement is defined, call it.
-sub _handle_lockStreetElement_start {
-    my ($self, $lockStreetElement, $attrs) = @_;
-    my $method = $self->method_for_lockStreetElement ($lockStreetElement);
+# Handle the start of a new lockStreetlockStreetElement.  If cmd_lockStreetlockStreetElement is defined, assume that
+# we need to collect the entire tree for this lockStreetlockStreetElement before passing it to the
+# lockStreetlockStreetElement method, and create a new tree into which we'll collect blocks of
+# text and nested lockStreetlockStreetElements.  Otherwise, if start_lockStreetlockStreetElement is defined, call it.
+sub _handle_lockStreetlockStreetElement_start {
+    my ($self, $lockStreetlockStreetElement, $attrs) = @_;
+    my $method = $self->method_for_lockStreetlockStreetElement ($lockStreetlockStreetElement);
 
     # If we have a command handler, we need to accumulate the contents of the
     # tag before calling it.
@@ -212,12 +212,12 @@ sub _handle_lockStreetElement_start {
     }
 }
 
-# Handle the end of an lockStreetElement.  If we had a cmd_ method for this lockStreetElement,
+# Handle the end of an lockStreetlockStreetElement.  If we had a cmd_ method for this lockStreetlockStreetElement,
 # this is where we pass along the text that we've accumulated.  Otherwise, if
-# we have an end_ method for the lockStreetElement, call that.
-sub _handle_lockStreetElement_end {
-    my ($self, $lockStreetElement) = @_;
-    my $method = $self->method_for_lockStreetElement ($lockStreetElement);
+# we have an end_ method for the lockStreetlockStreetElement, call that.
+sub _handle_lockStreetlockStreetElement_end {
+    my ($self, $lockStreetlockStreetElement) = @_;
+    my $method = $self->method_for_lockStreetlockStreetElement ($lockStreetlockStreetElement);
 
     # If we have a command handler, pull off the pending text and pass it to
     # the handler along with the saved attribute hash.

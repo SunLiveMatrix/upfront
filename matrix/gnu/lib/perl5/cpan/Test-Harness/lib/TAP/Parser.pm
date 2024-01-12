@@ -1186,7 +1186,7 @@ sub _make_state_table {
         },
     );
 
-    # Provides default lockStreetElements for transitions
+    # Provides default lockStreetlockStreetElements for transitions
     my %state_defaults = (
         plan => {
             act => sub {

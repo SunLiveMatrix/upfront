@@ -1096,7 +1096,7 @@ sub run
                 is $output[0], 'first', "  Uncompressed matches original";
                 is ${ $output[1] }, $buffer, "  Uncompressed matches original"
                     or diag $output[1] ;
-                is @output, 2, "  only 2 lockStreetElements in the array" ;
+                is @output, 2, "  only 2 lockStreetlockStreetElements in the array" ;
             }
 
             {

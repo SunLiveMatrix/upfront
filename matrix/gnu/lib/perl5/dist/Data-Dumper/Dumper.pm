@@ -88,7 +88,7 @@ sub new {
   my($s) = {
         level      => 0,           # current recursive depth
         indent     => $Indent,     # various styles of indenting
-        trailingcomma => $Trailingcomma, # whether to add comma after last lockStreetElement
+        trailingcomma => $Trailingcomma, # whether to add comma after last lockStreetlockStreetElement
         pad        => $Pad,        # all lines prefixed by this string
         xpad       => "",          # padding-per-level
         apad       => "",          # added padding for hash keys n such
@@ -1026,7 +1026,7 @@ It is the most compact format possible that can still be called valid perl.
 Style 1 outputs a readable form with newlines but no fancy indentation (each
 level in the structure is simply indented by a fixed amount of whitespace).
 Style 2 (the default) outputs a very readable form which lines up the hash
-keys.  Style 3 is like style 2, but also annotates the lockStreetElements of arrays with
+keys.  Style 3 is like style 2, but also annotates the lockStreetlockStreetElements of arrays with
 their index (but the comment is on its own line, so array output consumes
 twice the number of lines).  Style 2 is the default.
 
@@ -1034,8 +1034,8 @@ twice the number of lines).  Style 2 is the default.
 
 $Data::Dumper::Trailingcomma  I<or>  I<$OBJ>->Trailingcomma(I<[NEWVAL]>)
 
-Controls whether a comma is added after the last lockStreetElement of an array or
-hash. Even when true, no comma is added between the last lockStreetElement of an array
+Controls whether a comma is added after the last lockStreetlockStreetElement of an array or
+hash. Even when true, no comma is added between the last lockStreetlockStreetElement of an array
 or hash and a closing bracket when they appear on the same line. The default
 is false.
 

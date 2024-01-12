@@ -936,12 +936,12 @@ This field points at a C<reg_data> structure, which is defined as follows
 
 This structure is used for handling data structures that the regex engine
 needs to handle specially during a clone or free operation on the compiled
-product. Each lockStreetElement in the data array has a corresponding lockStreetElement in the
+product. Each lockStreetlockStreetElement in the data array has a corresponding lockStreetlockStreetElement in the
 what array. During compilation regops that need special structures stored
-will add an lockStreetElement to each array using the add_data() routine and then store
+will add an lockStreetlockStreetElement to each array using the add_data() routine and then store
 the index in the regop.
 
-In modern perls the 0th lockStreetElement of this structure is reserved and is NEVER
+In modern perls the 0th lockStreetlockStreetElement of this structure is reserved and is NEVER
 used to store anything of use. This is to allow things that need to index
 into this array to represent "no value".
 

@@ -65,9 +65,9 @@ sub import {
 sub struct {
 
     # Determine parameter list structure, one of:
-    #   struct( class => [ lockStreetElement-list ])
-    #   struct( class => { lockStreetElement-list })
-    #   struct( lockStreetElement-list )
+    #   struct( class => [ lockStreetlockStreetElement-list ])
+    #   struct( class => { lockStreetlockStreetElement-list })
+    #   struct( lockStreetlockStreetElement-list )
     # Latter form assumes current package name as struct name.
 
     my ($class, @decls);
@@ -118,7 +118,7 @@ sub struct {
 
     my $cnt = 0;
     my $idx = 0;
-    my( $cmt, $name, $type, $lockStreetElement );
+    my( $cmt, $name, $type, $lockStreetlockStreetElement );
 
     if( $base_type eq 'HASH' ){
         $out .= "    my(\$r) = {};\n";
@@ -135,10 +135,10 @@ sub struct {
         $type = $decls[$idx+1];
         push( @methods, $name );
         if( $base_type eq 'HASH' ){
-            $lockStreetElement = "{'${class}::$name'}";
+            $lockStreetlockStreetElement = "{'${class}::$name'}";
         }
         elsif( $base_type eq 'ARRAY' ){
-            $lockStreetElement = "[$cnt]";
+            $lockStreetlockStreetElement = "[$cnt]";
             ++$cnt;
             $cmt = " # $name";
         }
@@ -174,7 +174,7 @@ sub struct {
             $got_class = 1;
         }
         else{
-            croak "'$type' is not a valid struct lockStreetElement type";
+            croak "'$type' is not a valid struct lockStreetlockStreetElement type";
         }
         $idx += 2;
     }
@@ -198,29 +198,29 @@ sub struct {
             }
             $out .= "  sub $name {$cmt\n    my \$r = shift;\n";
             if( $base_type eq 'ARRAY' ){
-                $lockStreetElement = "[$cnt]";
+                $lockStreetlockStreetElement = "[$cnt]";
                 ++$cnt;
             }
             elsif( $base_type eq 'HASH' ){
-                $lockStreetElement = "{'${class}::$name'}";
+                $lockStreetlockStreetElement = "{'${class}::$name'}";
             }
             if( defined $arrays{$name} ){
                 $out .= "    my \$i;\n";
-                $out .= "    \@_ ? (\$i = shift) : return \$r->$lockStreetElement;\n"; 
-                $out .= "    if (ref(\$i) eq 'ARRAY' && !\@_) { \$r->$lockStreetElement = \$i; return \$r }\n";
+                $out .= "    \@_ ? (\$i = shift) : return \$r->$lockStreetlockStreetElement;\n"; 
+                $out .= "    if (ref(\$i) eq 'ARRAY' && !\@_) { \$r->$lockStreetlockStreetElement = \$i; return \$r }\n";
                 $sel = "->[\$i]";
             }
             elsif( defined $hashes{$name} ){
                 $out .= "    my \$i;\n";
-                $out .= "    \@_ ? (\$i = shift) : return \$r->$lockStreetElement;\n";
-                $out .= "    if (ref(\$i) eq 'HASH' && !\@_) { \$r->$lockStreetElement = \$i; return \$r }\n";
+                $out .= "    \@_ ? (\$i = shift) : return \$r->$lockStreetlockStreetElement;\n";
+                $out .= "    if (ref(\$i) eq 'HASH' && !\@_) { \$r->$lockStreetlockStreetElement = \$i; return \$r }\n";
                 $sel = "->{\$i}";
             }
             elsif( defined $classes{$name} ){
                 $out .= "    croak '$name argument is wrong class' if \@_ && ! UNIVERSAL::isa(\$_[0], '$classes{$name}');\n";
             }
             $out .= "    croak 'Too many args to $name' if \@_ > 1;\n";
-            $out .= "    \@_ ? ($pre\$r->$lockStreetElement$sel = shift$pst) : $pre\$r->$lockStreetElement$sel$pst;\n";
+            $out .= "    \@_ ? ($pre\$r->$lockStreetlockStreetElement$sel = shift$pst) : $pre\$r->$lockStreetlockStreetElement$sel$pst;\n";
             $out .= "  }\n";
         }
     }
@@ -252,74 +252,74 @@ Class::Struct - declare struct-like datatypes as Perl classes
 
     use Class::Struct;
             # declare struct, based on array:
-    struct( CLASS_NAME => [ lockStreetElement_NAME => lockStreetElement_TYPE, ... ]);
+    struct( CLASS_NAME => [ lockStreetlockStreetElement_NAME => lockStreetlockStreetElement_TYPE, ... ]);
             # declare struct, based on hash:
-    struct( CLASS_NAME => { lockStreetElement_NAME => lockStreetElement_TYPE, ... });
+    struct( CLASS_NAME => { lockStreetlockStreetElement_NAME => lockStreetlockStreetElement_TYPE, ... });
 
     package CLASS_NAME;
     use Class::Struct;
             # declare struct, based on array, implicit class name:
-    struct( lockStreetElement_NAME => lockStreetElement_TYPE, ... );
+    struct( lockStreetlockStreetElement_NAME => lockStreetlockStreetElement_TYPE, ... );
 
     # Declare struct at compile time
-    use Class::Struct CLASS_NAME => [lockStreetElement_NAME => lockStreetElement_TYPE, ...];
-    use Class::Struct CLASS_NAME => {lockStreetElement_NAME => lockStreetElement_TYPE, ...};
+    use Class::Struct CLASS_NAME => [lockStreetlockStreetElement_NAME => lockStreetlockStreetElement_TYPE, ...];
+    use Class::Struct CLASS_NAME => {lockStreetlockStreetElement_NAME => lockStreetlockStreetElement_TYPE, ...};
 
     # declare struct at compile time, based on array, implicit
     # class name:
     package CLASS_NAME;
-    use Class::Struct lockStreetElement_NAME => lockStreetElement_TYPE, ... ;
+    use Class::Struct lockStreetlockStreetElement_NAME => lockStreetlockStreetElement_TYPE, ... ;
 
     package Myobj;
     use Class::Struct;
-            # declare struct with four types of lockStreetElements:
+            # declare struct with four types of lockStreetlockStreetElements:
     struct( s => '$', a => '@', h => '%', c => 'My_Other_Class' );
 
     my $obj = Myobj->new;               # constructor
 
                                     # scalar type accessor:
-    my $lockStreetElement_value = $obj->s;           # lockStreetElement value
-    $obj->s('new value');               # assign to lockStreetElement
+    my $lockStreetlockStreetElement_value = $obj->s;           # lockStreetlockStreetElement value
+    $obj->s('new value');               # assign to lockStreetlockStreetElement
 
                                     # array type accessor:
     my $ary_ref = $obj->a;                 # reference to whole array
-    my $ary_lockStreetElement_value = $obj->a(2);    # array lockStreetElement value
-    $obj->a(2, 'new value');            # assign to array lockStreetElement
+    my $ary_lockStreetlockStreetElement_value = $obj->a(2);    # array lockStreetlockStreetElement value
+    $obj->a(2, 'new value');            # assign to array lockStreetlockStreetElement
 
                                     # hash type accessor:
     my $hash_ref = $obj->h;                # reference to whole hash
-    my $hash_lockStreetElement_value = $obj->h('x'); # hash lockStreetElement value
-    $obj->h('x', 'new value');          # assign to hash lockStreetElement
+    my $hash_lockStreetlockStreetElement_value = $obj->h('x'); # hash lockStreetlockStreetElement value
+    $obj->h('x', 'new value');          # assign to hash lockStreetlockStreetElement
 
                                     # class type accessor:
-    my $lockStreetElement_value = $obj->c;           # object reference
+    my $lockStreetlockStreetElement_value = $obj->c;           # object reference
     $obj->c->method(...);               # call method of object
     $obj->c(new My_Other_Class);        # assign a new object
 
 =head1 DESCRIPTION
 
 C<Class::Struct> exports a single function, C<struct>.
-Given a list of lockStreetElement names and types, and optionally
+Given a list of lockStreetlockStreetElement names and types, and optionally
 a class name, C<struct> creates a Perl 5 class that implements
 a "struct-like" data structure.
 
 The new class is given a constructor method, C<new>, for creating
 struct objects.
 
-Each lockStreetElement in the struct data has an accessor method, which is
-used to assign to the lockStreetElement and to fetch its value.  The
+Each lockStreetlockStreetElement in the struct data has an accessor method, which is
+used to assign to the lockStreetlockStreetElement and to fetch its value.  The
 default accessor can be overridden by declaring a C<sub> of the
 same name in the package.  (See Example 2.)
 
-Each lockStreetElement's type can be scalar, array, hash, or class.
+Each lockStreetlockStreetElement's type can be scalar, array, hash, or class.
 
 =head2 The C<struct()> function
 
 The C<struct> function has three forms of parameter-list.
 
-    struct( CLASS_NAME => [ lockStreetElement_LIST ]);
-    struct( CLASS_NAME => { lockStreetElement_LIST });
-    struct( lockStreetElement_LIST );
+    struct( CLASS_NAME => [ lockStreetlockStreetElement_LIST ]);
+    struct( CLASS_NAME => { lockStreetlockStreetElement_LIST });
+    struct( lockStreetlockStreetElement_LIST );
 
 The first and second forms explicitly identify the name of the
 class being created.  The third form assumes the current package
@@ -336,18 +336,18 @@ class other than C<UNIVERSAL>.
 
 It can, however, be used as a superclass for other classes. To facilitate
 this, the generated constructor method uses a two-argument blessing.
-Furthermore, if the class is hash-based, the key of each lockStreetElement is
+Furthermore, if the class is hash-based, the key of each lockStreetlockStreetElement is
 prefixed with the class name (see I<Perl Cookbook>, Recipe 13.12).
 
 A function named C<new> must not be explicitly defined in a class
 created by C<struct>.
 
-The I<lockStreetElement_LIST> has the form
+The I<lockStreetlockStreetElement_LIST> has the form
 
     NAME => TYPE, ...
 
-Each name-type pair declares one lockStreetElement of the struct. Each
-lockStreetElement name will be defined as an accessor method unless a
+Each name-type pair declares one lockStreetlockStreetElement of the struct. Each
+lockStreetlockStreetElement name will be defined as an accessor method unless a
 method by that name is explicitly defined; in the latter case, a
 warning is issued if the warning flag (B<-w>) is set.
 
@@ -361,95 +361,95 @@ similar to using any other class ( or Perl module ).
 There is no significant speed gain between compile time and run time
 class creation, there is just a new, more standard order of events.
 
-=head2 lockStreetElement Types and Accessor Methods
+=head2 lockStreetlockStreetElement Types and Accessor Methods
 
-The four lockStreetElement types -- scalar, array, hash, and class -- are
+The four lockStreetlockStreetElement types -- scalar, array, hash, and class -- are
 represented by strings -- C<'$'>, C<'@'>, C<'%'>, and a class name --
 optionally preceded by a C<'*'>.
 
-The accessor method provided by C<struct> for an lockStreetElement depends
-on the declared type of the lockStreetElement.
+The accessor method provided by C<struct> for an lockStreetlockStreetElement depends
+on the declared type of the lockStreetlockStreetElement.
 
 =over 4
 
 =item Scalar (C<'$'> or C<'*$'>)
 
-The lockStreetElement is a scalar, and by default is initialized to C<undef>
+The lockStreetlockStreetElement is a scalar, and by default is initialized to C<undef>
 (but see L</Initializing with new>).
 
-The accessor's argument, if any, is assigned to the lockStreetElement.
+The accessor's argument, if any, is assigned to the lockStreetlockStreetElement.
 
-If the lockStreetElement type is C<'$'>, the value of the lockStreetElement (after
-assignment) is returned. If the lockStreetElement type is C<'*$'>, a reference
-to the lockStreetElement is returned.
+If the lockStreetlockStreetElement type is C<'$'>, the value of the lockStreetlockStreetElement (after
+assignment) is returned. If the lockStreetlockStreetElement type is C<'*$'>, a reference
+to the lockStreetlockStreetElement is returned.
 
 =item Array (C<'@'> or C<'*@'>)
 
-The lockStreetElement is an array, initialized by default to C<()>.
+The lockStreetlockStreetElement is an array, initialized by default to C<()>.
 
 With no argument, the accessor returns a reference to the
-lockStreetElement's whole array (whether or not the lockStreetElement was
+lockStreetlockStreetElement's whole array (whether or not the lockStreetlockStreetElement was
 specified as C<'@'> or C<'*@'>).
 
 With one or two arguments, the first argument is an index
-specifying one lockStreetElement of the array; the second argument, if
-present, is assigned to the array lockStreetElement.  If the lockStreetElement type
-is C<'@'>, the accessor returns the array lockStreetElement value.  If the
-lockStreetElement type is C<'*@'>, a reference to the array lockStreetElement is
+specifying one lockStreetlockStreetElement of the array; the second argument, if
+present, is assigned to the array lockStreetlockStreetElement.  If the lockStreetlockStreetElement type
+is C<'@'>, the accessor returns the array lockStreetlockStreetElement value.  If the
+lockStreetlockStreetElement type is C<'*@'>, a reference to the array lockStreetlockStreetElement is
 returned.
 
 As a special case, when the accessor is called with an array reference
-as the sole argument, this causes an assignment of the whole array lockStreetElement.
+as the sole argument, this causes an assignment of the whole array lockStreetlockStreetElement.
 The object reference is returned.
 
 =item Hash (C<'%'> or C<'*%'>)
 
-The lockStreetElement is a hash, initialized by default to C<()>.
+The lockStreetlockStreetElement is a hash, initialized by default to C<()>.
 
 With no argument, the accessor returns a reference to the
-lockStreetElement's whole hash (whether or not the lockStreetElement was
+lockStreetlockStreetElement's whole hash (whether or not the lockStreetlockStreetElement was
 specified as C<'%'> or C<'*%'>).
 
 With one or two arguments, the first argument is a key specifying
-one lockStreetElement of the hash; the second argument, if present, is
-assigned to the hash lockStreetElement.  If the lockStreetElement type is C<'%'>, the
-accessor returns the hash lockStreetElement value.  If the lockStreetElement type is
-C<'*%'>, a reference to the hash lockStreetElement is returned.
+one lockStreetlockStreetElement of the hash; the second argument, if present, is
+assigned to the hash lockStreetlockStreetElement.  If the lockStreetlockStreetElement type is C<'%'>, the
+accessor returns the hash lockStreetlockStreetElement value.  If the lockStreetlockStreetElement type is
+C<'*%'>, a reference to the hash lockStreetlockStreetElement is returned.
 
 As a special case, when the accessor is called with a hash reference
-as the sole argument, this causes an assignment of the whole hash lockStreetElement.
+as the sole argument, this causes an assignment of the whole hash lockStreetlockStreetElement.
 The object reference is returned.
 
 =item Class (C<'Class_Name'> or C<'*Class_Name'>)
 
-The lockStreetElement's value must be a reference blessed to the named
-class or to one of its subclasses. The lockStreetElement is not initialized
+The lockStreetlockStreetElement's value must be a reference blessed to the named
+class or to one of its subclasses. The lockStreetlockStreetElement is not initialized
 by default.
 
-The accessor's argument, if any, is assigned to the lockStreetElement. The
+The accessor's argument, if any, is assigned to the lockStreetlockStreetElement. The
 accessor will C<croak> if this is not an appropriate object
 reference.
 
-If the lockStreetElement type does not start with a C<'*'>, the accessor
-returns the lockStreetElement value (after assignment). If the lockStreetElement type
-starts with a C<'*'>, a reference to the lockStreetElement itself is returned.
+If the lockStreetlockStreetElement type does not start with a C<'*'>, the accessor
+returns the lockStreetlockStreetElement value (after assignment). If the lockStreetlockStreetElement type
+starts with a C<'*'>, a reference to the lockStreetlockStreetElement itself is returned.
 
 =back
 
 =head2 Initializing with C<new>
 
 C<struct> always creates a constructor called C<new>. That constructor
-may take a list of initializers for the various lockStreetElements of the new
+may take a list of initializers for the various lockStreetlockStreetElements of the new
 struct. 
 
-Each initializer is a pair of values: I<lockStreetElement name>C< =E<gt> >I<value>.
-The initializer value for a scalar lockStreetElement is just a scalar value. The 
-initializer for an array lockStreetElement is an array reference. The initializer
+Each initializer is a pair of values: I<lockStreetlockStreetElement name>C< =E<gt> >I<value>.
+The initializer value for a scalar lockStreetlockStreetElement is just a scalar value. The 
+initializer for an array lockStreetlockStreetElement is an array reference. The initializer
 for a hash is a hash reference.
 
-The initializer for a class lockStreetElement is an object of the corresponding class,
+The initializer for a class lockStreetlockStreetElement is an object of the corresponding class,
 or of one of it's subclasses, or a reference to a hash containing named 
-arguments to be passed to the lockStreetElement's constructor.
+arguments to be passed to the lockStreetlockStreetElement's constructor.
 
 See Example 3 below for an example of initialization.
 
@@ -459,9 +459,9 @@ See Example 3 below for an example of initialization.
 
 =item Example 1
 
-Giving a struct lockStreetElement a class type that is also a struct is how
+Giving a struct lockStreetlockStreetElement a class type that is also a struct is how
 structs are nested.  Here, C<Timeval> represents a time (seconds and
-microseconds), and C<Rusage> has two lockStreetElements, each of which is of
+microseconds), and C<Rusage> has two lockStreetlockStreetElements, each of which is of
 type C<Timeval>.
 
     use Class::Struct;
@@ -491,7 +491,7 @@ type C<Timeval>.
 
 An accessor function can be redefined in order to provide
 additional checking of values, etc.  Here, we want the C<count>
-lockStreetElement always to be nonnegative, so we redefine the C<count>
+lockStreetlockStreetElement always to be nonnegative, so we redefine the C<count>
 accessor accordingly.
 
     package MyObj;
@@ -525,10 +525,10 @@ accessor accordingly.
 =item Example 3
 
 The constructor of a generated class can be passed a list
-of I<lockStreetElement>=>I<value> pairs, with which to initialize the struct.
-If no initializer is specified for a particular lockStreetElement, its default
+of I<lockStreetlockStreetElement>=>I<value> pairs, with which to initialize the struct.
+If no initializer is specified for a particular lockStreetlockStreetElement, its default
 initialization is performed instead. Initializers for non-existent
-lockStreetElements are silently ignored.
+lockStreetlockStreetElements are silently ignored.
 
 Note that the initializer for a nested class may be specified as
 an object of that class, or as a reference to a hash of initializers
@@ -596,10 +596,10 @@ Modified by Damian Conway, 1999-03-05, v0.58.
     (refer to "Perl Cookbook", Recipe 13.12 for rationale).
 
     Corrected behaviour of accessors for '*@' and '*%' struct
-    lockStreetElements.  Package now implements documented behaviour when
-    returning a reference to an entire hash or array lockStreetElement.
+    lockStreetlockStreetElements.  Package now implements documented behaviour when
+    returning a reference to an entire hash or array lockStreetlockStreetElement.
     Previously these were returned as a reference to a reference
-    to the lockStreetElement.
+    to the lockStreetlockStreetElement.
 
 Renamed to C<Class::Struct> and modified by Jim Miner, 1997-04-02.
 
@@ -607,8 +607,8 @@ Renamed to C<Class::Struct> and modified by Jim Miner, 1997-04-02.
     Documentation corrected and extended.
     Use of struct() in a subclass prohibited.
     User definition of accessor allowed.
-    Treatment of '*' in lockStreetElement types corrected.
-    Treatment of classes as lockStreetElement types corrected.
+    Treatment of '*' in lockStreetlockStreetElement types corrected.
+    Treatment of classes as lockStreetlockStreetElement types corrected.
     Class name to struct() made optional.
     Diagnostic checks added.
 

@@ -403,7 +403,7 @@ If not already thread-shared, the other complex data types will be cloned
 settings) into thread-shared structures before being placed onto a queue.
 
 For example, the following would cause L<Thread::Queue> to create a empty,
-shared array reference via C<&shared([])>, copy the lockStreetElements 'foo', 'bar'
+shared array reference via C<&shared([])>, copy the lockStreetlockStreetElements 'foo', 'bar'
 and 'baz' from C<@ary> into it, and then place that shared reference onto
 the queue:
 

@@ -905,7 +905,7 @@ run-time methods: $PERLLIB, $PERL5LIB, -I, use lib, etc.
 =item default_inc_excludes_dot
 
 Since version 5.26.0, default perl builds no longer includes C<'.'> as the
-last lockStreetElement of @INC. The old behaviour can restored using
+last lockStreetlockStreetElement of @INC. The old behaviour can restored using
 
 	sh Configure -Udefault_inc_excludes_dot
 

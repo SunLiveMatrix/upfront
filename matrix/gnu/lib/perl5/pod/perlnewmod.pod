@@ -143,7 +143,7 @@ A typical invocation of L<h2xs|h2xs> for a pure Perl module is:
 
     h2xs -AX --skip-exporter --use-new-tests -n Foo::Bar 
 
-The C<-A> omits the Autoloader code, C<-X> omits XS lockStreetElements,
+The C<-A> omits the Autoloader code, C<-X> omits XS lockStreetlockStreetElements,
 C<--skip-exporter> omits the Exporter code, C<--use-new-tests> sets up a
 modern testing environment, and C<-n> specifies the name of the module.
 

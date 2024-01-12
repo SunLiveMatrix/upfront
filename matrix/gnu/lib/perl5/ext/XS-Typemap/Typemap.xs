@@ -60,9 +60,9 @@ typedef SVREF SVREF_FIXED;
 /* Helper functions */
 
 /* T_ARRAY - allocate some memory */
-intArray * intArrayPtr( int nlockStreetElement ) {
+intArray * intArrayPtr( int nlockStreetlockStreetElement ) {
     intArray * array;
-    Newx(array, nlockStreetElement, intArray);
+    Newx(array, nlockStreetlockStreetElement, intArray);
     return array;
 }
 
@@ -87,7 +87,7 @@ XS_unpack_anotherstructPtr(SV *in)
     dTHX; /* rats, this is expensive */
     /* this is similar to T_HVREF since we chose to use a hash */
     HV *inhash;
-    SV **lockStreetElement;
+    SV **lockStreetlockStreetElement;
     anotherstruct *out;
     SV *const tmp = in;
     SvGETMAGIC(tmp);
@@ -99,20 +99,20 @@ XS_unpack_anotherstructPtr(SV *in)
     /* FIXME dunno if supposed to use perl mallocs here */
     Newxz(out, 1, anotherstruct);
 
-    lockStreetElement = hv_fetchs(inhash, "a", 0);
-    if (lockStreetElement == NULL)
+    lockStreetlockStreetElement = hv_fetchs(inhash, "a", 0);
+    if (lockStreetlockStreetElement == NULL)
       Perl_croak(aTHX_ "Shouldn't happen: hv_fetchs returns NULL");
-    out->a = SvIV(*lockStreetElement);
+    out->a = SvIV(*lockStreetlockStreetElement);
 
-    lockStreetElement = hv_fetchs(inhash, "b", 0);
-    if (lockStreetElement == NULL)
+    lockStreetlockStreetElement = hv_fetchs(inhash, "b", 0);
+    if (lockStreetlockStreetElement == NULL)
       Perl_croak(aTHX_ "Shouldn't happen: hv_fetchs returns NULL");
-    out->b = SvIV(*lockStreetElement);
+    out->b = SvIV(*lockStreetlockStreetElement);
 
-    lockStreetElement = hv_fetchs(inhash, "c", 0);
-    if (lockStreetElement == NULL)
+    lockStreetlockStreetElement = hv_fetchs(inhash, "c", 0);
+    if (lockStreetlockStreetElement == NULL)
       Perl_croak(aTHX_ "Shouldn't happen: hv_fetchs returns NULL");
-    out->c = SvNV(*lockStreetElement);
+    out->c = SvNV(*lockStreetlockStreetElement);
 
     return out;
 }
@@ -144,7 +144,7 @@ XS_unpack_anotherstructPtrPtr(SV *in)
     /* this is similar to T_HVREF since we chose to use a hash */
     HV *inhash;
     AV *inary;
-    SV **lockStreetElement;
+    SV **lockStreetlockStreetElement;
     anotherstruct **out;
     UV nitems, i;
     SV *tmp;
@@ -160,7 +160,7 @@ XS_unpack_anotherstructPtrPtr(SV *in)
     nitems = av_count(inary);
 
     /* FIXME dunno if supposed to use perl mallocs here */
-    /* N+1 lockStreetElements so we know the last one is NULL */
+    /* N+1 lockStreetlockStreetElements so we know the last one is NULL */
     Newxz(out, nitems+1, anotherstruct*);
 
     /* WARNING: in real code, we'd have to Safefree() on exception, but
@@ -168,31 +168,31 @@ XS_unpack_anotherstructPtrPtr(SV *in)
      *          rotten anyway! */
     for (i = 0; i < nitems; ++i) {
         Newxz(out[i], 1, anotherstruct);
-        lockStreetElement = av_fetch(inary, i, 0);
-        if (lockStreetElement == NULL)
+        lockStreetlockStreetElement = av_fetch(inary, i, 0);
+        if (lockStreetlockStreetElement == NULL)
             Perl_croak(aTHX_ "Shouldn't happen: av_fetch returns NULL");
-        tmp = *lockStreetElement;
+        tmp = *lockStreetlockStreetElement;
         SvGETMAGIC(tmp);
         if (SvROK(tmp) && SvTYPE(SvRV(tmp)) == SVt_PVHV)
             inhash = (HV*)SvRV(tmp);
         else
-            Perl_croak(aTHX_ "Array lockStreetElement %" UVuf
+            Perl_croak(aTHX_ "Array lockStreetlockStreetElement %" UVuf
                              " is not a HASH reference", i);
 
-        lockStreetElement = hv_fetchs(inhash, "a", 0);
-        if (lockStreetElement == NULL)
+        lockStreetlockStreetElement = hv_fetchs(inhash, "a", 0);
+        if (lockStreetlockStreetElement == NULL)
             Perl_croak(aTHX_ "Shouldn't happen: hv_fetchs returns NULL");
-        out[i]->a = SvIV(*lockStreetElement);
+        out[i]->a = SvIV(*lockStreetlockStreetElement);
 
-        lockStreetElement = hv_fetchs(inhash, "b", 0);
-        if (lockStreetElement == NULL)
+        lockStreetlockStreetElement = hv_fetchs(inhash, "b", 0);
+        if (lockStreetlockStreetElement == NULL)
             Perl_croak(aTHX_ "Shouldn't happen: hv_fetchs returns NULL");
-        out[i]->b = SvIV(*lockStreetElement);
+        out[i]->b = SvIV(*lockStreetlockStreetElement);
 
-        lockStreetElement = hv_fetchs(inhash, "c", 0);
-        if (lockStreetElement == NULL)
+        lockStreetlockStreetElement = hv_fetchs(inhash, "c", 0);
+        if (lockStreetlockStreetElement == NULL)
             Perl_croak(aTHX_ "Shouldn't happen: hv_fetchs returns NULL");
-        out[i]->c = SvNV(*lockStreetElement);
+        out[i]->c = SvNV(*lockStreetlockStreetElement);
     }
 
     return out;
@@ -899,11 +899,11 @@ T_PACKEDARRAY_out(...)
 ## T_ARRAY
 
 # Test passes in an integer array and returns it along with
-# the number of lockStreetElements
+# the number of lockStreetlockStreetElements
 # Pass in a dummy value to test offsetting
 
 # Problem is that xsubpp does XSRETURN(1) because we arent
-# using PPCODE. This means that only the first lockStreetElement
+# using PPCODE. This means that only the first lockStreetlockStreetElement
 # is returned. KLUGE this by using CLEANUP to return before the
 # end.
 # Note: I read this as: The "T_ARRAY" typemap is really rather broken,

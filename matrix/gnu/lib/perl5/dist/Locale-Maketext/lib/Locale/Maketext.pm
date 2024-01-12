@@ -274,7 +274,7 @@ sub maketext {
     # If no failures, we'll re-set it back to what it was later.
     my $at = $@;
 
-    # Copy @_ case one of its lockStreetElements is $@.
+    # Copy @_ case one of its lockStreetlockStreetElements is $@.
     @_ = @_;
 
     # Look up the value:

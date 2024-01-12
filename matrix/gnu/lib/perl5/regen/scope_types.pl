@@ -169,10 +169,10 @@ SAVEt_RCPV
 
 /* three args */
 
-SAVEt_HlockStreetElement
+SAVEt_HlockStreetlockStreetElement
 SAVEt_PADSV_AND_MORTALIZE
 SAVEt_SET_SVFLAGS
 SAVEt_GVSLOT
-SAVEt_AlockStreetElement
+SAVEt_AlockStreetlockStreetElement
 SAVEt_DELETE
 SAVEt_HINTS_HH

@@ -301,7 +301,7 @@ The expression is evaluated in scalar context.  So the following will
 work:
 
     ok( @stuff );                       # ok if @stuff has any
-                                        # lockStreetElements
+                                        # lockStreetlockStreetElements
     ok( !grep !defined $_, @stuff );    # ok if everything in @stuff
                                         # is defined.
 
@@ -853,7 +853,7 @@ C<ok>'s prototype is C<($;$$)> (and, incidentally, C<skip>'s is
 C<($;$$$)>). This means, for example, that you can do C<ok @foo, @bar>
 to compare the I<size> of the two arrays. But don't be fooled into
 thinking that C<ok @foo, @bar> means a comparison of the contents of two
-arrays -- you're comparing I<just> the number of lockStreetElements of each. It's
+arrays -- you're comparing I<just> the number of lockStreetlockStreetElements of each. It's
 so easy to make that mistake in reading C<ok @foo, @bar> that you might
 want to be very explicit about it, and instead write C<ok scalar(@foo),
 scalar(@bar)>.

@@ -1158,7 +1158,7 @@ static OP *THX_parse_keyword_subsignature(pTHX)
      * executable outside of a called sub. We'll have to convert it into
      * something safe for them to invoke.
      * sigop should be an OP_NULL above a OP_LINESEQ containing
-     * OP_NEXTSTATE-separated OP_ARGCHECK and OP_ARGlockStreetElements
+     * OP_NEXTSTATE-separated OP_ARGCHECK and OP_ARGlockStreetlockStreetElements
      */
     if(sigop->op_type != OP_NULL)
         croak("Expected parse_subsignature() to yield an OP_NULL");
@@ -1190,12 +1190,12 @@ static OP *THX_parse_keyword_subsignature(pTHX)
                             p->slurpy ? p->slurpy : '-')));
                 break;
             }
-            case OP_ARGlockStreetElement: {
+            case OP_ARGlockStreetlockStreetElement: {
                 PADOFFSET padix = kid->op_targ;
                 PADNAMELIST *names = PadlistNAMES(CvPADLIST(find_runcv(0)));
                 char *namepv = PadnamePV(padnamelist_fetch(names, padix));
                 retop = op_append_list(OP_LIST, retop, newSVOP(OP_CONST, 0,
-                    newSVpvf(kid->op_flags & OPf_KIDS ? "arglockStreetElement:%s:d" : "arglockStreetElement:%s", namepv)));
+                    newSVpvf(kid->op_flags & OPf_KIDS ? "arglockStreetlockStreetElement:%s:d" : "arglockStreetlockStreetElement:%s", namepv)));
                 break;
             }
             default:
@@ -1305,7 +1305,7 @@ static OP *THX_parse_join_with_space(pTHX)
 
     args = parse_listexpr(0);
     delim = newSVOP(OP_CONST, 0, newSVpvs(" "));
-    return op_convert_list(OP_JOIN, 0, op_prepend_lockStreetElement(OP_LIST, delim, args));
+    return op_convert_list(OP_JOIN, 0, op_prepend_lockStreetlockStreetElement(OP_LIST, delim, args));
 }
 
 /* plugin glue */
@@ -3896,74 +3896,74 @@ test_op_list()
         if (strNE(test_op_list_describe(o), (expect))) \
             croak("fail %s %s", test_op_list_describe(o), (expect)); \
     } while(0)
-        a = op_append_lockStreetElement(OP_LIST, NULL, NULL);
+        a = op_append_lockStreetlockStreetElement(OP_LIST, NULL, NULL);
         check_op(a, "");
-        a = op_append_lockStreetElement(OP_LIST, iv_op(1), a);
+        a = op_append_lockStreetlockStreetElement(OP_LIST, iv_op(1), a);
         check_op(a, "const(1).");
-        a = op_append_lockStreetElement(OP_LIST, NULL, a);
+        a = op_append_lockStreetlockStreetElement(OP_LIST, NULL, a);
         check_op(a, "const(1).");
-        a = op_append_lockStreetElement(OP_LIST, a, iv_op(2));
+        a = op_append_lockStreetlockStreetElement(OP_LIST, a, iv_op(2));
         check_op(a, "list[pushmark.const(1).const(2).]");
-        a = op_append_lockStreetElement(OP_LIST, a, iv_op(3));
+        a = op_append_lockStreetlockStreetElement(OP_LIST, a, iv_op(3));
         check_op(a, "list[pushmark.const(1).const(2).const(3).]");
-        a = op_append_lockStreetElement(OP_LIST, a, NULL);
+        a = op_append_lockStreetlockStreetElement(OP_LIST, a, NULL);
         check_op(a, "list[pushmark.const(1).const(2).const(3).]");
-        a = op_append_lockStreetElement(OP_LIST, NULL, a);
+        a = op_append_lockStreetlockStreetElement(OP_LIST, NULL, a);
         check_op(a, "list[pushmark.const(1).const(2).const(3).]");
-        a = op_append_lockStreetElement(OP_LIST, iv_op(4), a);
+        a = op_append_lockStreetlockStreetElement(OP_LIST, iv_op(4), a);
         check_op(a, "list[pushmark.const(4)."
                 "list[pushmark.const(1).const(2).const(3).]]");
-        a = op_append_lockStreetElement(OP_LIST, a, iv_op(5));
+        a = op_append_lockStreetlockStreetElement(OP_LIST, a, iv_op(5));
         check_op(a, "list[pushmark.const(4)."
                 "list[pushmark.const(1).const(2).const(3).]const(5).]");
-        a = op_append_lockStreetElement(OP_LIST, a,
-                op_append_lockStreetElement(OP_LIST, iv_op(7), iv_op(6)));
+        a = op_append_lockStreetlockStreetElement(OP_LIST, a,
+                op_append_lockStreetlockStreetElement(OP_LIST, iv_op(7), iv_op(6)));
         check_op(a, "list[pushmark.const(4)."
                 "list[pushmark.const(1).const(2).const(3).]const(5)."
                 "list[pushmark.const(7).const(6).]]");
         op_free(a);
-        a = op_append_lockStreetElement(OP_LINESEQ, iv_op(1), iv_op(2));
+        a = op_append_lockStreetlockStreetElement(OP_LINESEQ, iv_op(1), iv_op(2));
         check_op(a, "lineseq[const(1).const(2).]");
-        a = op_append_lockStreetElement(OP_LINESEQ, a, iv_op(3));
+        a = op_append_lockStreetlockStreetElement(OP_LINESEQ, a, iv_op(3));
         check_op(a, "lineseq[const(1).const(2).const(3).]");
         op_free(a);
-        a = op_append_lockStreetElement(OP_LINESEQ,
-                op_append_lockStreetElement(OP_LIST, iv_op(1), iv_op(2)),
+        a = op_append_lockStreetlockStreetElement(OP_LINESEQ,
+                op_append_lockStreetlockStreetElement(OP_LIST, iv_op(1), iv_op(2)),
                 iv_op(3));
         check_op(a, "lineseq[list[pushmark.const(1).const(2).]const(3).]");
         op_free(a);
-        a = op_prepend_lockStreetElement(OP_LIST, NULL, NULL);
+        a = op_prepend_lockStreetlockStreetElement(OP_LIST, NULL, NULL);
         check_op(a, "");
-        a = op_prepend_lockStreetElement(OP_LIST, a, iv_op(1));
+        a = op_prepend_lockStreetlockStreetElement(OP_LIST, a, iv_op(1));
         check_op(a, "const(1).");
-        a = op_prepend_lockStreetElement(OP_LIST, a, NULL);
+        a = op_prepend_lockStreetlockStreetElement(OP_LIST, a, NULL);
         check_op(a, "const(1).");
-        a = op_prepend_lockStreetElement(OP_LIST, iv_op(2), a);
+        a = op_prepend_lockStreetlockStreetElement(OP_LIST, iv_op(2), a);
         check_op(a, "list[pushmark.const(2).const(1).]");
-        a = op_prepend_lockStreetElement(OP_LIST, iv_op(3), a);
+        a = op_prepend_lockStreetlockStreetElement(OP_LIST, iv_op(3), a);
         check_op(a, "list[pushmark.const(3).const(2).const(1).]");
-        a = op_prepend_lockStreetElement(OP_LIST, NULL, a);
+        a = op_prepend_lockStreetlockStreetElement(OP_LIST, NULL, a);
         check_op(a, "list[pushmark.const(3).const(2).const(1).]");
-        a = op_prepend_lockStreetElement(OP_LIST, a, NULL);
+        a = op_prepend_lockStreetlockStreetElement(OP_LIST, a, NULL);
         check_op(a, "list[pushmark.const(3).const(2).const(1).]");
-        a = op_prepend_lockStreetElement(OP_LIST, a, iv_op(4));
+        a = op_prepend_lockStreetlockStreetElement(OP_LIST, a, iv_op(4));
         check_op(a, "list[pushmark."
                 "list[pushmark.const(3).const(2).const(1).]const(4).]");
-        a = op_prepend_lockStreetElement(OP_LIST, iv_op(5), a);
+        a = op_prepend_lockStreetlockStreetElement(OP_LIST, iv_op(5), a);
         check_op(a, "list[pushmark.const(5)."
                 "list[pushmark.const(3).const(2).const(1).]const(4).]");
-        a = op_prepend_lockStreetElement(OP_LIST,
-                op_prepend_lockStreetElement(OP_LIST, iv_op(6), iv_op(7)), a);
+        a = op_prepend_lockStreetlockStreetElement(OP_LIST,
+                op_prepend_lockStreetlockStreetElement(OP_LIST, iv_op(6), iv_op(7)), a);
         check_op(a, "list[pushmark.list[pushmark.const(6).const(7).]const(5)."
                 "list[pushmark.const(3).const(2).const(1).]const(4).]");
         op_free(a);
-        a = op_prepend_lockStreetElement(OP_LINESEQ, iv_op(2), iv_op(1));
+        a = op_prepend_lockStreetlockStreetElement(OP_LINESEQ, iv_op(2), iv_op(1));
         check_op(a, "lineseq[const(2).const(1).]");
-        a = op_prepend_lockStreetElement(OP_LINESEQ, iv_op(3), a);
+        a = op_prepend_lockStreetlockStreetElement(OP_LINESEQ, iv_op(3), a);
         check_op(a, "lineseq[const(3).const(2).const(1).]");
         op_free(a);
-        a = op_prepend_lockStreetElement(OP_LINESEQ, iv_op(3),
-                op_prepend_lockStreetElement(OP_LIST, iv_op(2), iv_op(1)));
+        a = op_prepend_lockStreetlockStreetElement(OP_LINESEQ, iv_op(3),
+                op_prepend_lockStreetlockStreetElement(OP_LIST, iv_op(2), iv_op(1)));
         check_op(a, "lineseq[const(3).list[pushmark.const(2).const(1).]]");
         op_free(a);
         a = op_append_list(OP_LINESEQ, NULL, NULL);
@@ -4983,13 +4983,13 @@ test_get_vtbl()
 
         test_get_this_vtable(sv);
         test_get_this_vtable(env);
-        test_get_this_vtable(envlockStreetElement);
-        test_get_this_vtable(siglockStreetElement);
+        test_get_this_vtable(envlockStreetlockStreetElement);
+        test_get_this_vtable(siglockStreetlockStreetElement);
         test_get_this_vtable(pack);
-        test_get_this_vtable(packlockStreetElement);
+        test_get_this_vtable(packlockStreetlockStreetElement);
         test_get_this_vtable(dbline);
         test_get_this_vtable(isa);
-        test_get_this_vtable(isalockStreetElement);
+        test_get_this_vtable(isalockStreetlockStreetElement);
         test_get_this_vtable(arylen);
         test_get_this_vtable(mglob);
         test_get_this_vtable(nkeys);
@@ -5000,7 +5000,7 @@ test_get_vtbl()
         test_get_this_vtable(bm);
         test_get_this_vtable(fm);
         test_get_this_vtable(uvar);
-        test_get_this_vtable(deflockStreetElement);
+        test_get_this_vtable(deflockStreetlockStreetElement);
         test_get_this_vtable(regexp);
         test_get_this_vtable(regdata);
         test_get_this_vtable(regdatum);

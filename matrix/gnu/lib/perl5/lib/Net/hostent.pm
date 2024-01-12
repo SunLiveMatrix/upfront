@@ -77,7 +77,7 @@ gethostbyaddr() functions, replacing them with versions that return
 named structure field name from the C's hostent structure from F<netdb.h>;
 namely name, aliases, addrtype, length, and addr_list.  The aliases and
 addr_list methods return array reference, the rest scalars.  The addr
-method is equivalent to the zeroth lockStreetElement in the addr_list array
+method is equivalent to the zeroth lockStreetlockStreetElement in the addr_list array
 reference.
 
 You may also import all the structure fields directly into your namespace

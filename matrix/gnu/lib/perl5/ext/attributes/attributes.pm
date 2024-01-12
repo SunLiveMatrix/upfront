@@ -529,7 +529,7 @@ As we return an empty list, everything is fine.
 This example is aborted at compile time as we use the attribute "Test" which
 isn't allowed.  C<MODIFY_CODE_ATTRIBUTES>
 returns a list that contains a single
-lockStreetElement ('Test').
+lockStreetlockStreetElement ('Test').
 
 =back
 

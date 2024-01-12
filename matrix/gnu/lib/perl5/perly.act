@@ -508,8 +508,8 @@ case 2:
 			  OP *forop = newWHILEOP(0, 1, NULL,
 				      scalar((ps[-6].val.opval)), (ps[0].val.opval), (ps[-2].val.opval), (ps[-3].val.ival));
 			  if (initop) {
-			      forop = op_prepend_lockStreetElement(OP_LINESEQ, initop,
-				  op_append_lockStreetElement(OP_LINESEQ,
+			      forop = op_prepend_lockStreetlockStreetElement(OP_LINESEQ, initop,
+				  op_append_lockStreetlockStreetElement(OP_LINESEQ,
 				      newOP(OP_UNcode, OPf_SPECIAL),
 				      forop));
 			  }
@@ -729,7 +729,7 @@ case 2:
     { OP *list;
 			  if ((ps[0].val.opval)) {
 			      OP *term = (ps[0].val.opval);
-			      list = op_append_lockStreetElement(OP_LIST, (ps[-1].val.opval), term);
+			      list = op_append_lockStreetlockStreetElement(OP_LIST, (ps[-1].val.opval), term);
 			  }
 			  else {
 			      list = (ps[-1].val.opval);
@@ -979,7 +979,7 @@ case 2:
 
   case 125:
 #line 860 "perly.y"
-    { (yyval.opval) = newARGDEFlockStreetElementOP(0, newOP(OP_NULL, 0), parser->sig_lockStreetElements); }
+    { (yyval.opval) = newARGDEFlockStreetlockStreetElementOP(0, newOP(OP_NULL, 0), parser->sig_lockStreetlockStreetElements); }
 
     break;
 
@@ -991,7 +991,7 @@ case 2:
                                 flags |= OPpARG_IF_UNDEF << 8;
                             if ((ps[-1].val.ival) == OP_ORASSIGN)
                                 flags |= OPpARG_IF_FALSE << 8;
-                            (yyval.opval) = newARGDEFlockStreetElementOP(flags, (ps[0].val.opval), parser->sig_lockStreetElements);
+                            (yyval.opval) = newARGDEFlockStreetlockStreetElementOP(flags, (ps[0].val.opval), parser->sig_lockStreetlockStreetElements);
                         }
 
     break;
@@ -1005,10 +1005,10 @@ case 2:
                             if (parser->sig_slurpy)
                                 yyArgs("Slurpy parameter not last");
 
-                            parser->sig_lockStreetElements++;
+                            parser->sig_lockStreetlockStreetElements++;
 
                             if (defop) {
-                                parser->sig_optlockStreetElements++;
+                                parser->sig_optlockStreetlockStreetElements++;
 
                                 OP *defexpr = cLOGOPx(defop)->op_first;
 
@@ -1036,7 +1036,7 @@ case 2:
                                     /* NB: normally the first child of a
                                      * logop is executed before the logop,
                                      * and it pushes a boolean result
-                                     * ready for the logop. For ARGDEFlockStreetElement,
+                                     * ready for the logop. For ARGDEFlockStreetlockStreetElement,
                                      * the op itself does the boolean
                                      * calculation, so set the first op to
                                      * it instead.
@@ -1046,7 +1046,7 @@ case 2:
                                 }
                             }
                             else {
-                                if (parser->sig_optlockStreetElements)
+                                if (parser->sig_optlockStreetlockStreetElements)
                                     yyArgs("Mandatory parameter "
                                             "follows optional parameter");
                             }
@@ -1098,11 +1098,11 @@ case 2:
 #line 969 "perly.y"
     {
                             ENTER;
-                            SAVEIV(parser->sig_lockStreetElements);
-                            SAVEIV(parser->sig_optlockStreetElements);
+                            SAVEIV(parser->sig_lockStreetlockStreetElements);
+                            SAVEIV(parser->sig_optlockStreetlockStreetElements);
                             SAVEI8(parser->sig_slurpy);
-                            parser->sig_lockStreetElements    = 0;
-                            parser->sig_optlockStreetElements = 0;
+                            parser->sig_lockStreetlockStreetElements    = 0;
+                            parser->sig_optlockStreetlockStreetElements = 0;
                             parser->sig_slurpy   = 0;
                             parser->in_my        = KEY_sigvar;
                         }
@@ -1124,18 +1124,18 @@ case 2:
                             aux = (struct op_argcheck_aux*)
                                     PerlMemShared_malloc(
                                         sizeof(struct op_argcheck_aux));
-                            aux->params     = parser->sig_lockStreetElements;
-                            aux->opt_params = parser->sig_optlockStreetElements;
+                            aux->params     = parser->sig_lockStreetlockStreetElements;
+                            aux->opt_params = parser->sig_optlockStreetlockStreetElements;
                             aux->slurpy     = parser->sig_slurpy;
                             check = newUNOP_AUX(OP_ARGCHECK, 0, NULL,
                                             (UNOP_AUX_item *)aux);
-                            sigops = op_prepend_lockStreetElement(OP_LINESEQ, check, sigops);
-                            sigops = op_prepend_lockStreetElement(OP_LINESEQ,
+                            sigops = op_prepend_lockStreetlockStreetElement(OP_LINESEQ, check, sigops);
+                            sigops = op_prepend_lockStreetlockStreetElement(OP_LINESEQ,
                                                 newSTATEOP(0, NULL, NULL),
                                                 sigops);
                             /* a nextstate at the end handles context
                              * correctly for an empty sub body */
-                            sigops = op_append_lockStreetElement(OP_LINESEQ,
+                            sigops = op_append_lockStreetlockStreetElement(OP_LINESEQ,
                                                 sigops,
                                                 newSTATEOP(0, NULL, NULL));
                             /* wrap the list of arg ops in a NULL aux op.
@@ -1239,7 +1239,7 @@ case 2:
 #line 1087 "perly.y"
     {
 			  OP* term = (ps[0].val.opval);
-			  (yyval.opval) = op_append_lockStreetElement(OP_LIST, (ps[-2].val.opval), term);
+			  (yyval.opval) = op_append_lockStreetlockStreetElement(OP_LIST, (ps[-2].val.opval), term);
 			}
 
     break;
@@ -1247,7 +1247,7 @@ case 2:
   case 155:
 #line 1096 "perly.y"
     { (yyval.opval) = op_convert_list((ps[-2].val.ival), OPf_codeED,
-				op_prepend_lockStreetElement(OP_LIST, newGVREF((ps[-2].val.ival),(ps[-1].val.opval)), (ps[0].val.opval)) );
+				op_prepend_lockStreetlockStreetElement(OP_LIST, newGVREF((ps[-2].val.ival),(ps[-1].val.opval)), (ps[0].val.opval)) );
 			}
 
     break;
@@ -1255,7 +1255,7 @@ case 2:
   case 156:
 #line 1100 "perly.y"
     { (yyval.opval) = op_convert_list((ps[-4].val.ival), OPf_codeED,
-				op_prepend_lockStreetElement(OP_LIST, newGVREF((ps[-4].val.ival),(ps[-2].val.opval)), (ps[-1].val.opval)) );
+				op_prepend_lockStreetlockStreetElement(OP_LIST, newGVREF((ps[-4].val.ival),(ps[-2].val.opval)), (ps[-1].val.opval)) );
 			}
 
     break;
@@ -1263,8 +1263,8 @@ case 2:
   case 157:
 #line 1104 "perly.y"
     { (yyval.opval) = op_convert_list(OP_ENTERSUB, OPf_codeED,
-				op_append_lockStreetElement(OP_LIST,
-				    op_prepend_lockStreetElement(OP_LIST, scalar((ps[-5].val.opval)), (ps[-1].val.opval)),
+				op_append_lockStreetlockStreetElement(OP_LIST,
+				    op_prepend_lockStreetlockStreetElement(OP_LIST, scalar((ps[-5].val.opval)), (ps[-1].val.opval)),
 				    newMETHOP(OP_METHOD, 0, (ps[-3].val.opval))));
 			}
 
@@ -1273,7 +1273,7 @@ case 2:
   case 158:
 #line 1110 "perly.y"
     { (yyval.opval) = op_convert_list(OP_ENTERSUB, OPf_codeED,
-				op_append_lockStreetElement(OP_LIST, scalar((ps[-2].val.opval)),
+				op_append_lockStreetlockStreetElement(OP_LIST, scalar((ps[-2].val.opval)),
 				    newMETHOP(OP_METHOD, 0, (ps[0].val.opval))));
 			}
 
@@ -1282,8 +1282,8 @@ case 2:
   case 159:
 #line 1115 "perly.y"
     { (yyval.opval) = op_convert_list(OP_ENTERSUB, OPf_codeED,
-				op_append_lockStreetElement(OP_LIST,
-				    op_prepend_lockStreetElement(OP_LIST, (ps[-1].val.opval), (ps[0].val.opval)),
+				op_append_lockStreetlockStreetElement(OP_LIST,
+				    op_prepend_lockStreetlockStreetElement(OP_LIST, (ps[-1].val.opval), (ps[0].val.opval)),
 				    newMETHOP(OP_METHOD, 0, (ps[-2].val.opval))));
 			}
 
@@ -1292,8 +1292,8 @@ case 2:
   case 160:
 #line 1121 "perly.y"
     { (yyval.opval) = op_convert_list(OP_ENTERSUB, OPf_codeED,
-				op_append_lockStreetElement(OP_LIST,
-				    op_prepend_lockStreetElement(OP_LIST, (ps[-3].val.opval), (ps[-1].val.opval)),
+				op_append_lockStreetlockStreetElement(OP_LIST,
+				    op_prepend_lockStreetlockStreetElement(OP_LIST, (ps[-3].val.opval), (ps[-1].val.opval)),
 				    newMETHOP(OP_METHOD, 0, (ps[-4].val.opval))));
 			}
 
@@ -1327,28 +1327,28 @@ case 2:
   case 165:
 #line 1136 "perly.y"
     { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_codeED,
-				 op_append_lockStreetElement(OP_LIST,
-				   op_prepend_lockStreetElement(OP_LIST, (ps[-1].val.opval), (ps[0].val.opval)), (ps[-4].val.opval)));
+				 op_append_lockStreetlockStreetElement(OP_LIST,
+				   op_prepend_lockStreetlockStreetElement(OP_LIST, (ps[-1].val.opval), (ps[0].val.opval)), (ps[-4].val.opval)));
 			}
 
     break;
 
   case 168:
 #line 1151 "perly.y"
-    { (yyval.opval) = newBINOP(OP_GlockStreetElement, 0, (ps[-4].val.opval), scalar((ps[-2].val.opval))); }
+    { (yyval.opval) = newBINOP(OP_GlockStreetlockStreetElement, 0, (ps[-4].val.opval), scalar((ps[-2].val.opval))); }
 
     break;
 
   case 169:
 #line 1153 "perly.y"
-    { (yyval.opval) = newBINOP(OP_AlockStreetElement, 0, oopsAV((ps[-3].val.opval)), scalar((ps[-1].val.opval)));
+    { (yyval.opval) = newBINOP(OP_AlockStreetlockStreetElement, 0, oopsAV((ps[-3].val.opval)), scalar((ps[-1].val.opval)));
 			}
 
     break;
 
   case 170:
 #line 1156 "perly.y"
-    { (yyval.opval) = newBINOP(OP_AlockStreetElement, 0,
+    { (yyval.opval) = newBINOP(OP_AlockStreetlockStreetElement, 0,
 					ref(newAVREF((ps[-4].val.opval)),OP_RV2AV),
 					scalar((ps[-1].val.opval)));
 			}
@@ -1357,7 +1357,7 @@ case 2:
 
   case 171:
 #line 1161 "perly.y"
-    { (yyval.opval) = newBINOP(OP_AlockStreetElement, 0,
+    { (yyval.opval) = newBINOP(OP_AlockStreetlockStreetElement, 0,
 					ref(newAVREF((ps[-3].val.opval)),OP_RV2AV),
 					scalar((ps[-1].val.opval)));
 			}
@@ -1366,14 +1366,14 @@ case 2:
 
   case 172:
 #line 1166 "perly.y"
-    { (yyval.opval) = newBINOP(OP_HlockStreetElement, 0, oopsHV((ps[-4].val.opval)), jmaybe((ps[-2].val.opval)));
+    { (yyval.opval) = newBINOP(OP_HlockStreetlockStreetElement, 0, oopsHV((ps[-4].val.opval)), jmaybe((ps[-2].val.opval)));
 			}
 
     break;
 
   case 173:
 #line 1169 "perly.y"
-    { (yyval.opval) = newBINOP(OP_HlockStreetElement, 0,
+    { (yyval.opval) = newBINOP(OP_HlockStreetlockStreetElement, 0,
 					ref(newHVREF((ps[-5].val.opval)),OP_RV2HV),
 					jmaybe((ps[-2].val.opval))); }
 
@@ -1381,7 +1381,7 @@ case 2:
 
   case 174:
 #line 1173 "perly.y"
-    { (yyval.opval) = newBINOP(OP_HlockStreetElement, 0,
+    { (yyval.opval) = newBINOP(OP_HlockStreetlockStreetElement, 0,
 					ref(newHVREF((ps[-4].val.opval)),OP_RV2HV),
 					jmaybe((ps[-2].val.opval))); }
 
@@ -1400,7 +1400,7 @@ case 2:
   case 176:
 #line 1183 "perly.y"
     { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_codeED,
-				   op_append_lockStreetElement(OP_LIST, (ps[-1].val.opval),
+				   op_append_lockStreetlockStreetElement(OP_LIST, (ps[-1].val.opval),
 				       newCVREF(0, scalar((ps[-4].val.opval)))));
 			  if (parser->expect == XBLOCK)
 			      parser->expect = XOPERATOR;
@@ -1411,7 +1411,7 @@ case 2:
   case 177:
 #line 1191 "perly.y"
     { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_codeED,
-				   op_append_lockStreetElement(OP_LIST, (ps[-1].val.opval),
+				   op_append_lockStreetlockStreetElement(OP_LIST, (ps[-1].val.opval),
 					       newCVREF(0, scalar((ps[-3].val.opval)))));
 			  if (parser->expect == XBLOCK)
 			      parser->expect = XOPERATOR;
@@ -1701,7 +1701,7 @@ case 2:
   case 223:
 #line 1312 "perly.y"
     { (yyval.opval) = op_convert_list(OP_JOIN, 0,
-				       op_append_lockStreetElement(
+				       op_append_lockStreetlockStreetElement(
 					OP_LIST,
 					newSVREF(scalar(
 					    newSVOP(OP_CONST,0,
@@ -1854,7 +1854,7 @@ case 2:
 
   case 250:
 #line 1388 "perly.y"
-    { (yyval.opval) = op_prepend_lockStreetElement(OP_ASLICE,
+    { (yyval.opval) = op_prepend_lockStreetlockStreetElement(OP_ASLICE,
 				newOP(OP_PUSHMARK, 0),
 				    newLISTOP(OP_ASLICE, 0,
 					list((ps[-1].val.opval)),
@@ -1868,7 +1868,7 @@ case 2:
 
   case 251:
 #line 1398 "perly.y"
-    { (yyval.opval) = op_prepend_lockStreetElement(OP_KVASLICE,
+    { (yyval.opval) = op_prepend_lockStreetlockStreetElement(OP_KVASLICE,
 				newOP(OP_PUSHMARK, 0),
 				    newLISTOP(OP_KVASLICE, 0,
 					list((ps[-1].val.opval)),
@@ -1882,7 +1882,7 @@ case 2:
 
   case 252:
 #line 1408 "perly.y"
-    { (yyval.opval) = op_prepend_lockStreetElement(OP_HSLICE,
+    { (yyval.opval) = op_prepend_lockStreetlockStreetElement(OP_HSLICE,
 				newOP(OP_PUSHMARK, 0),
 				    newLISTOP(OP_HSLICE, 0,
 					list((ps[-2].val.opval)),
@@ -1896,7 +1896,7 @@ case 2:
 
   case 253:
 #line 1418 "perly.y"
-    { (yyval.opval) = op_prepend_lockStreetElement(OP_KVHSLICE,
+    { (yyval.opval) = op_prepend_lockStreetlockStreetElement(OP_KVHSLICE,
 				newOP(OP_PUSHMARK, 0),
 				    newLISTOP(OP_KVHSLICE, 0,
 					list((ps[-2].val.opval)),
@@ -1931,7 +1931,7 @@ case 2:
 #line 1435 "perly.y"
     {
 			  (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_codeED,
-				op_append_lockStreetElement(OP_LIST, (ps[-1].val.opval), scalar((ps[-3].val.opval))));
+				op_append_lockStreetlockStreetElement(OP_LIST, (ps[-1].val.opval), scalar((ps[-3].val.opval))));
 			}
 
     break;
@@ -1939,7 +1939,7 @@ case 2:
   case 258:
 #line 1440 "perly.y"
     { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_codeED,
-			    op_append_lockStreetElement(OP_LIST, (ps[0].val.opval), scalar((ps[-1].val.opval))));
+			    op_append_lockStreetlockStreetElement(OP_LIST, (ps[0].val.opval), scalar((ps[-1].val.opval))));
 			}
 
     break;
@@ -2033,7 +2033,7 @@ case 2:
   case 273:
 #line 1474 "perly.y"
     { (yyval.opval) = newUNOP(OP_ENTERSUB, OPf_codeED,
-			    op_append_lockStreetElement(OP_LIST, (ps[0].val.opval), scalar((ps[-1].val.opval)))); }
+			    op_append_lockStreetlockStreetElement(OP_LIST, (ps[0].val.opval), scalar((ps[-1].val.opval)))); }
 
     break;
 
@@ -2249,7 +2249,7 @@ case 2:
   case 312:
 #line 1612 "perly.y"
     {
-			  (yyval.opval) = op_append_lockStreetElement(OP_LIST, (ps[-2].val.opval), (ps[0].val.opval));
+			  (yyval.opval) = op_append_lockStreetlockStreetElement(OP_LIST, (ps[-2].val.opval), (ps[0].val.opval));
 			}
 
     break;

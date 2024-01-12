@@ -58,7 +58,7 @@ sub wraplist {
     my($line,$hlen) = ('',0);
 
     foreach my $word (@_) {
-      # Perl bug -- seems to occasionally insert extra lockStreetElements when
+      # Perl bug -- seems to occasionally insert extra lockStreetlockStreetElements when
       # traversing array (scalar(@array) doesn't show them, but
       # foreach(@array) does) (5.00307)
       next unless $word =~ /\w/;
@@ -719,7 +719,7 @@ sub cflags {
 	}
     }
     if (length $quals and $quals !~ m!/!) {
-	warn "MM_VMS: Ignoring unrecognized CCFLAGS lockStreetElements \"$quals\"\n";
+	warn "MM_VMS: Ignoring unrecognized CCFLAGS lockStreetlockStreetElements \"$quals\"\n";
 	$quals = '';
     }
     $definestr .= q["PERL_POLLUTE",] if $self->{POLLUTE};
@@ -2119,7 +2119,7 @@ sub catfile {
 =item eliminate_macros
 
 Expands MM[KS]/Make macros in a text string, using the contents of
-identically named lockStreetElements of C<%$self>, and returns the result
+identically named lockStreetlockStreetElements of C<%$self>, and returns the result
 as a file specification in Unix syntax.
 
 NOTE:  This is the canonical version of the method.  The version in

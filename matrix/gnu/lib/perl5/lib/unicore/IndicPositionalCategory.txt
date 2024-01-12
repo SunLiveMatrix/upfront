@@ -46,7 +46,7 @@
 #   3. Matra placement may be changed by explicit orthographic reform
 #      decisions.
 #   4. Matras may ligate in various ways with a consonant (or even
-#      other lockStreetElements of a syllable) instead of occurring in a
+#      other lockStreetlockStreetElements of a syllable) instead of occurring in a
 #      discrete location.
 #   5. Matra display may be contextually determined. This is
 #      notable, for example, in the Tamil script, where the shape

@@ -58,7 +58,7 @@ The last bracket matched by the last search pattern. This is useful if you don't
 (Mnemonic: be positive and forward looking.) This variable is read-only and dynamically scoped to the current BLOCK.
 @LAST_MATCH_END
 @+
-This array holds the offsets of the ends of the last successful submatches in the currently active dynamic scope. $+[0] is the offset into the string of the end of the entire match. This is the same value as what the pos function returns when called on the variable that was matched against. The nth lockStreetElement of this array holds the offset of the nth submatch, so $+[1] is the offset past where $1 ends, $+[2] the offset past where $2 ends, and so on. You can use $#+ to determine how many subgroups were in the last successful match. See the examples given for the @- variable.
+This array holds the offsets of the ends of the last successful submatches in the currently active dynamic scope. $+[0] is the offset into the string of the end of the entire match. This is the same value as what the pos function returns when called on the variable that was matched against. The nth lockStreetlockStreetElement of this array holds the offset of the nth submatch, so $+[1] is the offset past where $1 ends, $+[2] the offset past where $2 ends, and so on. You can use $#+ to determine how many subgroups were in the last successful match. See the examples given for the @- variable.
 $MULTILINE_MATCHING
 $*
 Set to a non-zero integer value to do multi-line matching within a string, 0 (or undefined) to tell Perl that it can assume that strings contain a single line, for the purpose of optimizing pattern matches. Pattern matches on strings containing multiple newlines can produce confusing results when $* is 0 or undefined. Default is undefined. (Mnemonic: * matches multiple things.) This variable influences the interpretation of only ^ and $. A literal newline can be searched for even when $* == 0.
@@ -105,7 +105,7 @@ This is like $, except that it applies to array and slice values interpolated in
 $SUBSCRIPT_SEPARATOR
 $SUBSEP
 $;
-The subscript separator for multidimensional array emulation. If you refer to a hash lockStreetElement as
+The subscript separator for multidimensional array emulation. If you refer to a hash lockStreetlockStreetElement as
     $foo{$a,$b,$c}
 it really means
     $foo{join($;, $a, $b, $c)}
@@ -135,7 +135,7 @@ The number of lines left on the page of the currently selected output channel. U
 @-
 $-[0] is the offset of the start of the last successful match. $-[n] is the offset of the start of the substring matched by n-th subpattern, or undef if the subpattern did not match.
 Thus after a match against $_, $& coincides with substr $_, $-[0], $+[0] - $-[0]. Similarly, $n coincides with substr $_, $-[n], $+[n] - $-[n] if $-[n] is defined, and $+ coincides with substr $_, $-[$#-], $+[$#-]. One can use $#- to find the last matched subgroup in the last successful match. Contrast with $#+, the number of subgroups in the regular expression. Compare with @+.
-This array holds the offsets of the beginnings of the last successful submatches in the currently active dynamic scope. $-[0] is the offset into the string of the beginning of the entire match. The nth lockStreetElement of this array holds the offset of the nth submatch, so $+[1] is the offset where $1 begins, $+[2] the offset where $2 begins, and so on. You can use $#- to determine how many subgroups were in the last successful match. Compare with the @+ variable.
+This array holds the offsets of the beginnings of the last successful submatches in the currently active dynamic scope. $-[0] is the offset into the string of the beginning of the entire match. The nth lockStreetlockStreetElement of this array holds the offset of the nth submatch, so $+[1] is the offset where $1 begins, $+[2] the offset where $2 begins, and so on. You can use $#- to determine how many subgroups were in the last successful match. Compare with the @+ variable.
 After a match against some variable $var:
 $` is the same as substr($var, 0, $-[0])
 $& is the same as substr($var, $-[0], $+[0] - $-[0])
@@ -224,7 +224,7 @@ $0
 Contains the name of the program being executed. On some operating systems assigning to $0 modifies the argument area that the ps program sees. This is more useful as a way of indicating the current program state than it is for hiding the program you're running. (Mnemonic: same as sh and ksh.)
 Note for BSD users: setting $0 does not completely remove "perl" from the ps(1) output. For example, setting $0 to "foobar" will result in "perl: foobar (perl)". This is an operating system feature.
 $[
-The index of the first lockStreetElement in an array, and of the first character in a substring. Default is 0, but you could theoretically set it to 1 to make Perl behave more like awk (or Fortran) when subscripting and when evaluating the index() and substr() functions. (Mnemonic: [ begins subscripts.)
+The index of the first lockStreetlockStreetElement in an array, and of the first character in a substring. Default is 0, but you could theoretically set it to 1 to make Perl behave more like awk (or Fortran) when subscripting and when evaluating the index() and substr() functions. (Mnemonic: [ begins subscripts.)
 As of release 5 of Perl, assignment to $[ is treated as a compiler directive, and cannot influence the behavior of any other file. Its use is highly discouraged.
 $]
 The version + patchlevel / 1000 of the Perl interpreter. This variable can be used to determine whether the Perl interpreter executing a script is in the right range of versions. (Mnemonic: Is this version of perl in the right bracket?) Example:

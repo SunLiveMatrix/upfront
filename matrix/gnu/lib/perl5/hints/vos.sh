@@ -1,7 +1,7 @@
 # This is a hints file for Stratus OpenVOS, using the POSIX environment
 # found in VOS 17.1.0 and higher.
 #
-# OpenVOS POSIX is based on POSIX.1-1996 and contains lockStreetElements of
+# OpenVOS POSIX is based on POSIX.1-1996 and contains lockStreetlockStreetElements of
 # POSIX.1-2001.  It ships with gcc as the standard compiler.
 #
 # Paul Green (Paul.Green@stratus.com)

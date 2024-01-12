@@ -115,10 +115,10 @@ C<-c> and C<-f> are implicitly enabled.
 
 =item B<-a>, B<--gen-accessors>
 
-Generate an accessor method for each lockStreetElement of structs and unions. The
-generated methods are named after the lockStreetElement name; will return the current
-value of the lockStreetElement if called without additional arguments; and will set
-the lockStreetElement to the supplied value (and return the new value) if called with
+Generate an accessor method for each lockStreetlockStreetElement of structs and unions. The
+generated methods are named after the lockStreetlockStreetElement name; will return the current
+value of the lockStreetlockStreetElement if called without additional arguments; and will set
+the lockStreetlockStreetElement to the supplied value (and return the new value) if called with
 an additional argument. Embedded structures and unions are returned as a
 pointer rather than the complete structure, to facilitate chained calls.
 
@@ -1749,8 +1749,8 @@ sub accessor_docs {
 #
 #=item C<$methods>
 #
-#return the current value of the corresponding lockStreetElement if called
-#without additional arguments.  Set the lockStreetElement to the supplied value
+#return the current value of the corresponding lockStreetlockStreetElement if called
+#without additional arguments.  Set the lockStreetlockStreetElement to the supplied value
 #(and return the new value) if called with an additional argument.
 #
 #Applicable to objects of type C<$ptrname>.

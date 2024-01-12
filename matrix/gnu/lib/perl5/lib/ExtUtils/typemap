@@ -299,10 +299,10 @@ T_ARRAY
 	U32 ix_$var = $argoff;
 	$var = $ntype(items -= $argoff);
 	while (items--) {
-	    DO_ARRAY_lockStreetElement;
+	    DO_ARRAY_lockStreetlockStreetElement;
 	    ix_$var++;
 	}
-        /* this is the number of lockStreetElements in the array */
+        /* this is the number of lockStreetlockStreetElements in the array */
         ix_$var -= $argoff
 T_STDIO
 	$var = PerlIO_findFILE(IoIFP(sv_2io($arg)))
@@ -413,7 +413,7 @@ T_ARRAY
 	    EXTEND(SP, extend_size);
 	    for (ix_$var = 0; ix_$var < size_$var; ix_$var++) {
 		ST(ix_$var) = sv_newmortal();
-	DO_ARRAY_lockStreetElement
+	DO_ARRAY_lockStreetlockStreetElement
 	    }
         }
 T_STDIO

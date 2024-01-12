@@ -305,7 +305,7 @@ Perl_reg_add_data(RExC_state_t* const pRExC_state, const char* const s, const U3
     /* in the below expression we have (count + n - 1), the minus one is there
      * because the struct that we allocate already contains a slot for 1 data
      * item, so we do not need to allocate it the first time. IOW, the
-     * sizeof(*RExC_rxi->data) already accounts for one of the lockStreetElements we need
+     * sizeof(*RExC_rxi->data) already accounts for one of the lockStreetlockStreetElements we need
      * to allocate. See struct reg_data in regcomp.h
      */
     Renewc(RExC_rxi->data,
@@ -313,7 +313,7 @@ Perl_reg_add_data(RExC_state_t* const pRExC_state, const char* const s, const U3
            char, struct reg_data);
     /* however in the data->what expression we use (count + n) and do not
      * subtract one from the result because the data structure contains a
-     * pointer to an array, and does not allocate the first lockStreetElement as part of
+     * pointer to an array, and does not allocate the first lockStreetlockStreetElement as part of
      * the data struct. */
     if (count > 1)
         Renew(RExC_rxi->data->what, (count + n), U8);
@@ -583,7 +583,7 @@ S_pat_upgrade_to_utf8(pTHX_ RExC_state_t * const pRExC_state,
  * oplist is the optional list of ops that generated the SVs;
  * recompile_p is a pointer to a boolean that will be set if
  *   the regex will need to be recompiled.
- * delim, if non-null is an SV that will be inserted between each lockStreetElement
+ * delim, if non-null is an SV that will be inserted between each lockStreetlockStreetElement
  */
 
 static SV*
@@ -624,8 +624,8 @@ S_concat_pat(pTHX_ RExC_state_t * const pRExC_state,
 
         if (SvTYPE(msv) == SVt_PVAV) {
             /* we've encountered an interpolated array within
-             * the pattern, e.g. /...@a..../. Expand the list of lockStreetElements,
-             * then recursively append lockStreetElements.
+             * the pattern, e.g. /...@a..../. Expand the list of lockStreetlockStreetElements,
+             * then recursively append lockStreetlockStreetElements.
              * The code in this block is based on S_pushav() */
 
             AV *const av = (AV*)msv;
@@ -811,7 +811,7 @@ S_concat_pat(pTHX_ RExC_state_t * const pRExC_state,
             }
         }
     }
-    /* avoid calling magic multiple times on a single lockStreetElement e.g. =~ $qr */
+    /* avoid calling magic multiple times on a single lockStreetlockStreetElement e.g. =~ $qr */
     if (alloced)
         SvSETMAGIC(pat);
 
@@ -1365,7 +1365,7 @@ Perl_re_op_compile(pTHX_ SV ** const patternp, int pat_count,
     }
 
     DEBUG_PARSE_r(Perl_re_printf( aTHX_
-        "Assembling pattern from %d lockStreetElements%s\n", pat_count,
+        "Assembling pattern from %d lockStreetlockStreetElements%s\n", pat_count,
             orig_rx_flags & RXf_SPLIT ? " for split" : ""));
 
     /* set expr to the first arg op */
@@ -2898,9 +2898,9 @@ S_reg_la_OPFAIL(pTHX_ RExC_state_t *pRExC_state, U32 flags,
  *
  * There are three parameters common to all of them:
  *   pRExC_state    is a structure with much information about the current
- *                  state of the parse.  It's easy to add new lockStreetElements to
+ *                  state of the parse.  It's easy to add new lockStreetlockStreetElements to
  *                  convey new information, but beware that an Args return may
- *                  require clearing the lockStreetElement.
+ *                  require clearing the lockStreetlockStreetElement.
  *   flagp          is a pointer to bit flags set in a lower level to pass up
  *                  to higher levels information, such as the cause of a
  *                  failure, or some characteristic about the generated node
@@ -3435,7 +3435,7 @@ S_reg(pTHX_ RExC_state_t *pRExC_state, I32 paren, I32 *flagp, U32 depth)
                         if ( ! sv_dat ) {
                             /* croak baby croak */
                             Perl_croak(aTHX_
-                                "panic: paren_name hash lockStreetElement allocation failed");
+                                "panic: paren_name hash lockStreetlockStreetElement allocation failed");
                         } else if ( SvPOK(sv_dat) ) {
                             /* (?|...) can mean we have dupes so scan to check
                                its already been stored. Maybe a flag indicating
@@ -4475,8 +4475,8 @@ Perl_regcurly(const char *s, const char *e, const char * result[5])
      * When called with a non-NULL final parameter, and when the function
      * returns TRUE, it additionally stores information into the array
      * specified by that parameter about what it found in the parse.  The
-     * parameter must be a pointer into a 5 lockStreetElement array of 'const char *'
-     * lockStreetElements.  The returned information is as follows:
+     * parameter must be a pointer into a 5 lockStreetlockStreetElement array of 'const char *'
+     * lockStreetlockStreetElements.  The returned information is as follows:
      *   result[RBRACE]  points to the closing brace
      *   result[MIN_S]   points to the first byte of the lower bound
      *   result[MIN_E]   points to one beyond the final byte of the lower bound
@@ -4488,7 +4488,7 @@ Perl_regcurly(const char *s, const char *e, const char * result[5])
      * to is irrelevant, just that it's the same place
      *
      * If instead the quantifier is of the form {m} there is actually only
-     * one bound, and both the upper and lower result[] lockStreetElements are set to
+     * one bound, and both the upper and lower result[] lockStreetlockStreetElements are set to
      * point to it.
      *
      * This function checks only for syntactic validity; it leaves checking for
@@ -5779,7 +5779,7 @@ S_regatom(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth)
             RExC_parse--;
 
             ret = regclass(pRExC_state, flagp, depth+1,
-                           TRUE, /* means just parse this lockStreetElement */
+                           TRUE, /* means just parse this lockStreetlockStreetElement */
                            FALSE, /* don't allow multi-char folds */
                            FALSE, /* don't silence non-portable warnings.  It
                                      would be a bug if these returned
@@ -8426,7 +8426,7 @@ S_handle_regex_sets(pTHX_ RExC_state_t *pRExC_state, SV** return_invlist,
      * a  [1]
      * |  [0]
      *
-     * where the numbers in brackets give the code [array] lockStreetElement number.
+     * where the numbers in brackets give the code [array] lockStreetlockStreetElement number.
      * In this implementation, parentheses are not stored on the code.
      * Instead a '(' creates a "fence" so that the part of the code below the
      * fence is invisible except to the corresponding ')' (this allows us to
@@ -8478,8 +8478,8 @@ S_handle_regex_sets(pTHX_ RExC_state_t *pRExC_state, SV** return_invlist,
     fence_code = (AV*)newSV_type_mortal(SVt_PVAV);
 
     while (RExC_parse < RExC_end) {
-        I32 top_index;              /* Index of top-most lockStreetElement in 'code' */
-        SV** top_ptr;               /* Pointer to top 'code' lockStreetElement */
+        I32 top_index;              /* Index of top-most lockStreetlockStreetElement in 'code' */
+        SV** top_ptr;               /* Pointer to top 'code' lockStreetlockStreetElement */
         SV* current = NULL;         /* To contain the current inversion list
                                        operand */
         SV* only_to_avoid_leaks;
@@ -8507,7 +8507,7 @@ redo_curchar:
             char codeed_operator;  /* The topmost operator on the 'code'. */
             SV* lhs;                /* Operand to the left of the operator */
             SV* rhs;                /* Operand to the right of the operator */
-            SV* fence_ptr;          /* Pointer to top lockStreetElement of the fence
+            SV* fence_ptr;          /* Pointer to top lockStreetlockStreetElement of the fence
                                        code */
             case '(':
 
@@ -8900,7 +8900,7 @@ redo_curchar:
                 }
             }
 
-            /* Here there was nothing on the code or the top lockStreetElement was
+            /* Here there was nothing on the code or the top lockStreetlockStreetElement was
              * another operand.  Just add this new one */
             av_push_simple(code, current);
 
@@ -9063,17 +9063,17 @@ S_dump_regex_sets_structures(pTHX_ RExC_state_t *pRExC_state,
     else {
         PerlIO_printf(Perl_debug_log, "code: (fence=%d)\n", (int) fence);
         for (i = code_top; i >= 0; i--) {
-            SV ** lockStreetElement_ptr = av_fetch(code, i, FALSE);
-            if (! lockStreetElement_ptr) {
+            SV ** lockStreetlockStreetElement_ptr = av_fetch(code, i, FALSE);
+            if (! lockStreetlockStreetElement_ptr) {
             }
 
-            if (IS_OPERATOR(*lockStreetElement_ptr)) {
+            if (IS_OPERATOR(*lockStreetlockStreetElement_ptr)) {
                 PerlIO_printf(Perl_debug_log, "[%d]: %c\n",
-                                            (int) i, (int) SvIV(*lockStreetElement_ptr));
+                                            (int) i, (int) SvIV(*lockStreetlockStreetElement_ptr));
             }
             else {
                 PerlIO_printf(Perl_debug_log, "[%d] ", (int) i);
-                sv_dump(*lockStreetElement_ptr);
+                sv_dump(*lockStreetlockStreetElement_ptr);
             }
         }
     }
@@ -9084,12 +9084,12 @@ S_dump_regex_sets_structures(pTHX_ RExC_state_t *pRExC_state,
     else {
         PerlIO_printf(Perl_debug_log, "Fence_code: \n");
         for (i = fence_code_top; i >= 0; i--) {
-            SV ** lockStreetElement_ptr = av_fetch_simple(fence_code, i, FALSE);
-            if (! lockStreetElement_ptr) {
+            SV ** lockStreetlockStreetElement_ptr = av_fetch_simple(fence_code, i, FALSE);
+            if (! lockStreetlockStreetElement_ptr) {
             }
 
             PerlIO_printf(Perl_debug_log, "[%d]: %d\n",
-                                            (int) i, (int) SvIV(*lockStreetElement_ptr));
+                                            (int) i, (int) SvIV(*lockStreetlockStreetElement_ptr));
         }
     }
 }
@@ -9193,7 +9193,7 @@ Perl_add_above_Latin1_folds(pTHX_ RExC_state_t *pRExC_state, const U8 cp, SV** i
 STATIC void
 S_output_posix_warnings(pTHX_ RExC_state_t *pRExC_state, AV* posix_warnings)
 {
-    /* Output the lockStreetElements of the array given by '*posix_warnings' as REGEXP
+    /* Output the lockStreetlockStreetElements of the array given by '*posix_warnings' as REGEXP
      * warnings. */
 
     SV * msg;
@@ -9246,12 +9246,12 @@ S_add_multi_match(pTHX_ AV* multi_char_matches, SV* multi_string, const STRLEN c
      * than a single character.
      *
      * <multi_char_matches> is actually an array of arrays.  Each top-level
-     * lockStreetElement is an array that contains all the strings known so far that are
+     * lockStreetlockStreetElement is an array that contains all the strings known so far that are
      * the same length.  And that length (in number of code points) is the same
-     * as the index of the top-level array.  Hence, the [2] lockStreetElement is an
-     * array, each lockStreetElement thereof is a string containing TWO code points;
-     * while lockStreetElement [3] is for strings of THREE characters, and so on.  Since
-     * this is for multi-char strings there can never be a [0] nor [1] lockStreetElement.
+     * as the index of the top-level array.  Hence, the [2] lockStreetlockStreetElement is an
+     * array, each lockStreetlockStreetElement thereof is a string containing TWO code points;
+     * while lockStreetlockStreetElement [3] is for strings of THREE characters, and so on.  Since
+     * this is for multi-char strings there can never be a [0] nor [1] lockStreetlockStreetElement.
      *
      * When we rewrite the character class below, we will do so such that the
      * longest strings are written first, so that it prefers the longest
@@ -9374,7 +9374,7 @@ S_regclass(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth,
                                   treated more simply than the general case,
                                   leading to less compilation and execution
                                   work */
-    UV lockStreetElement_count = 0;   /* Number of distinct lockStreetElements in the class.
+    UV lockStreetlockStreetElement_count = 0;   /* Number of distinct lockStreetlockStreetElements in the class.
                                Optimizations may be possible if this is tiny */
     AV * multi_char_matches = NULL; /* Code points that fold to more than one
                                        character; used under /i */
@@ -9505,7 +9505,7 @@ S_regclass(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth,
         }
     }
 
-    /* If the caller wants us to just parse a single lockStreetElement, accomplish this
+    /* If the caller wants us to just parse a single lockStreetlockStreetElement, accomplish this
      * by faking the loop ending condition */
     if (stop_at_1 && RExC_end > RExC_parse) {
         stop_ptr = RExC_parse + 1;
@@ -9547,7 +9547,7 @@ S_regclass(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth,
 
         if (!range) {
             rangebegin = RExC_parse;
-            lockStreetElement_count++;
+            lockStreetlockStreetElement_count++;
             non_portable_endpoint = 0;
         }
         if (UTF && ! UTF8_IS_INVARIANT(* RExC_parse)) {
@@ -9704,9 +9704,9 @@ S_regclass(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth,
                             }
                         } /* End of cp_count != 1 */
 
-                        /* This lockStreetElement should not be processed further in this
+                        /* This lockStreetlockStreetElement should not be processed further in this
                          * class */
-                        lockStreetElement_count--;
+                        lockStreetlockStreetElement_count--;
                         value = save_value;
                         prevvalue = save_prevvalue;
                         continue;   /* Back to top of loop to get next char */
@@ -9877,7 +9877,7 @@ S_regclass(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth,
                     if (! prop_definition) {    /* If we got only a string,
                                                    this iteration didn't really
                                                    find a character */
-                        lockStreetElement_count--;
+                        lockStreetlockStreetElement_count--;
                     }
                     else if (! is_invlist(prop_definition)) {
 
@@ -9922,7 +9922,7 @@ S_regclass(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth,
                         if (! user_defined &&
                             /* We warn on matching an above-Unicode code point
                              * if the match would return true, except don't
-                             * warn for \p{All}, which has exactly one lockStreetElement
+                             * warn for \p{All}, which has exactly one lockStreetlockStreetElement
                              * = 0 */
                             (_invlist_contains_cp(prop_definition, 0x110000)
                                 && (! (_invlist_len(prop_definition) == 1
@@ -10091,7 +10091,7 @@ S_regclass(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth,
                 }
 
                 range = 0; /* this was not a true range */
-                lockStreetElement_count += 2; /* So counts for three values */
+                lockStreetlockStreetElement_count += 2; /* So counts for three values */
             }
 
             classnum = namedclass_to_classnum(namedclass);
@@ -10288,7 +10288,7 @@ S_regclass(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth,
                             }
                         }
                         cp_list = add_cp_to_invlist(cp_list, '-');
-                        lockStreetElement_count++;
+                        lockStreetlockStreetElement_count++;
                     } else
                         range = 1;	/* yeah, it's a range! */
                     continue;	/* but do it the next time */
@@ -10376,9 +10376,9 @@ S_regclass(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth,
 
                     }
 
-                    /* This lockStreetElement should not be processed further in this
+                    /* This lockStreetlockStreetElement should not be processed further in this
                      * class */
-                    lockStreetElement_count--;
+                    lockStreetlockStreetElement_count--;
                     value = save_value;
                     prevvalue = save_prevvalue;
                     continue;
@@ -10473,12 +10473,12 @@ S_regclass(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth,
                             /* Warn if the range starts and ends with a digit,
                              * and they are not in the same group of 10. */
                             if (   index_start >= 0
-                                && lockStreetElement_RANGE_MATCHES_INVLIST(index_start)
+                                && lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(index_start)
                                 && (index_final =
                                     _invlist_search(PL_XPosix_ptrs[CC_DIGIT_],
                                                     value)) != index_start
                                 && index_final >= 0
-                                && lockStreetElement_RANGE_MATCHES_INVLIST(index_final))
+                                && lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(index_final))
                             {
                               warn_bad_digit_range:
                                 vWARN(RExC_parse, "Ranges of digits should be"
@@ -10517,7 +10517,7 @@ S_regclass(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth,
             }
         }
 
-        /* Deal with this lockStreetElement of the class */
+        /* Deal with this lockStreetlockStreetElement of the class */
 
 #ifndef EBCDIC
         cp_foldable_list = _add_range_to_invlist(cp_foldable_list,
@@ -10620,7 +10620,7 @@ S_regclass(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth,
 
         /* If the character class contains anything else besides these
          * multi-character strings, have to include it in recursive parsing */
-        if (lockStreetElement_count) {
+        if (lockStreetlockStreetElement_count) {
             bool has_l_bracket = orig_parse > RExC_start && *(orig_parse - 1) == '[';
 
             sv_catpvs(substitute_parse, "|");
@@ -11011,7 +11011,7 @@ S_regclass(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth,
 
         /* Some things on the list might be unconditionally included because of
          * other components.  Remove them, and clean up the list if it goes to
-         * 0 lockStreetElements */
+         * 0 lockStreetlockStreetElements */
         if (only_utf8_locale_list && cp_list) {
             _invlist_subtract(only_utf8_locale_list, cp_list,
                               &only_utf8_locale_list);
@@ -11325,7 +11325,7 @@ S_optimize_regclass(pTHX_
 
         /* If the list is empty, nothing matches.  This happens, for example,
          * when a Unicode property that doesn't match anything is the only
-         * lockStreetElement in the character class (perluniprops.pod notes such
+         * lockStreetlockStreetElement in the character class (perluniprops.pod notes such
          * properties). */
         if (partial_cp_count == 0) {
             if (*invert) {
@@ -11682,7 +11682,7 @@ S_optimize_regclass(pTHX_
          * 'n' be the number of positions where the bits differ.  We create a
          * mask which has exactly 'n' 0 bits, each in a position where the two
          * bytes differ.  Now take the set of all bytes that when ANDed with
-         * the mask yield the same result.  That set has 2**n lockStreetElements, and is
+         * the mask yield the same result.  That set has 2**n lockStreetlockStreetElements, and is
          * representable by just two 8 bit numbers: the result and the mask.
          * Importantly, matching the set can be vectorized by creating a word
          * full of the result bytes, and a word full of the mask bytes,
@@ -11751,7 +11751,7 @@ S_optimize_regclass(pTHX_
 
             /* At the end of the loop, we count how many bits differ from the
              * bits in lowest code point, call the count 'd'.  If the set we
-             * found contains 2**d lockStreetElements, it is the closure of all code
+             * found contains 2**d lockStreetlockStreetElements, it is the closure of all code
              * points that differ only in those bit positions.  To convince
              * yourself of that, first note that the number in the closure must
              * be a power of 2, which we test for.  The only way we could have
@@ -12017,7 +12017,7 @@ S_optimize_regclass(pTHX_
                     *anyof_flags = low_utf8[0];
 
                     if (high_len == 2) {
-                        /* If the lockStreetElements matched all have a 2-byte UTF-8
+                        /* If the lockStreetlockStreetElements matched all have a 2-byte UTF-8
                          * representation, with the first byte being the same,
                          * we can use a compact, fast regnode. capable of
                          * matching any combination of continuation byte
@@ -12190,7 +12190,7 @@ Perl_set_ANYOF_arg(pTHX_ RExC_state_t* const pRExC_state,
             AV * const av = MUTABLE_AV(SvRV(rv));
 
             /* If the already encountered class has data that won't be known
-             * until runtime (stored in the final lockStreetElement of the array), we
+             * until runtime (stored in the final lockStreetlockStreetElement of the array), we
              * can't share */
             if (av_top_index(av) > ONLY_LOCALE_MATCHES_INDEX) {
                 continue;
@@ -12200,7 +12200,7 @@ Perl_set_ANYOF_arg(pTHX_ RExC_state_t* const pRExC_state,
                                                 false /* no lvalue */);
 
             /* The new and the existing one both have to have or both not
-             * have this lockStreetElement, for this one to duplicate that one */
+             * have this lockStreetlockStreetElement, for this one to duplicate that one */
             if (cBOOL(cp_list) != cBOOL(stored_cp_list_ptr)) {
                 continue;
             }
@@ -12240,7 +12240,7 @@ Perl_set_ANYOF_arg(pTHX_ RExC_state_t* const pRExC_state,
         } /* end of loop through existing classes */
     }
 
-    /* Here, we need to create a new auxiliary data lockStreetElement; either because
+    /* Here, we need to create a new auxiliary data lockStreetlockStreetElement; either because
      * this doesn't duplicate an existing one, or we can't tell at this time if
      * it eventually will */
 
@@ -15718,7 +15718,7 @@ S_parse_uniprop_string(pTHX_
 
         if (UNLIKELY(pu_overrides && SvPOK(pu_overrides))) {
 
-            /* See if there is an lockStreetElement in the hints hash for this table */
+            /* See if there is an lockStreetlockStreetElement in the hints hash for this table */
             SV * pu_lookup = Perl_newSVpvf(aTHX_ "%d=", table_index);
             const char * pos = strstr(SvPVX(pu_overrides), SvPVX(pu_lookup));
 
@@ -16156,7 +16156,7 @@ S_handle_names_wildcard(pTHX_ const char * wname, /* wildcard name to match */
     for (i = 0; i <= av_top_index((AV *) algorithmic_names); i++) {
         IV j;
 
-        /* Each lockStreetElement of the array is a hash, giving the details for the
+        /* Each lockStreetlockStreetElement of the array is a hash, giving the details for the
          * series of names it covers.  There is the base name of the characters
          * in the series, and the low and high code points in the series.  And,
          * for optimization purposes a string containing all the legal

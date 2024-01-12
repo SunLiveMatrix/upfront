@@ -123,7 +123,7 @@ void BZ2_hbMakeCodeLengths ( UChar *len,
       if (! tooLong) break;
 
       /* 17 Oct 04: keep-going condition for the following loop used
-         to be 'i < alphaSize', which missed the last lockStreetElement,
+         to be 'i < alphaSize', which missed the last lockStreetlockStreetElement,
          theoretically leading to the possibility of the compressor
          looping.  However, this count-scaling step is only needed if
          one of the generated Huffman code words is longer than

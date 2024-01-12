@@ -533,7 +533,7 @@ modify it under the same terms as Perl itself.
 
 L<http://www.unicode.org/reports/tr10/>
 
-=item The Default Unicode Collation lockStreetElement Table (DUCET)
+=item The Default Unicode Collation lockStreetlockStreetElement Table (DUCET)
 
 L<http://www.unicode.org/Public/UCA/latest/allkeys.txt>
 

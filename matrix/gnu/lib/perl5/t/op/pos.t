@@ -69,27 +69,27 @@ is pos($1), 2, 'pos is not confused about changing UTF8-ness';
 sub {
     $_[0] = "hello";
     pos $_[0] = 3;
-    is pos $h{k}, 3, 'deflockStreetElements can propagate pos assignment';
+    is pos $h{k}, 3, 'deflockStreetlockStreetElements can propagate pos assignment';
     $_[0] =~ /./g;
-    is pos $h{k}, 4, 'deflockStreetElements can propagate implicit pos (via //g)';
+    is pos $h{k}, 4, 'deflockStreetlockStreetElements can propagate implicit pos (via //g)';
     $_[0] =~ /oentuhoetn/g;
-    is pos $h{k}, undef, 'failed //g sets pos through deflockStreetElement';
+    is pos $h{k}, undef, 'failed //g sets pos through deflockStreetlockStreetElement';
     $_[1] = "hello";
     pos $h{l} = 3;
-    is pos $_[1], 3, 'reading pos through a deflockStreetElement';
+    is pos $_[1], 3, 'reading pos through a deflockStreetlockStreetElement';
     pos $h{l} = 4;
     $_[1] =~ /(.)/g;
-    is "$1", 'o', '//g can read pos through a deflockStreetElement';
+    is "$1", 'o', '//g can read pos through a deflockStreetlockStreetElement';
     $_[2] = "hello";
     () = $_[2] =~ /l/gc;
-    is pos $h{m}, 4, '//gc in list cx can set pos through a deflockStreetElement';
+    is pos $h{m}, 4, '//gc in list cx can set pos through a deflockStreetlockStreetElement';
     $_[3] = "hello";
     $_[3] =~
-        s<e><is pos($h{n}), 1, 's///g setting pos through a deflockStreetElement'>egg;
+        s<e><is pos($h{n}), 1, 's///g setting pos through a deflockStreetlockStreetElement'>egg;
     $h{n} = 'hello';
-    $_[3] =~ /e(?{ is pos $h{n},2, 're-evals set pos through deflockStreetElements' })/;
+    $_[3] =~ /e(?{ is pos $h{n},2, 're-evals set pos through deflockStreetlockStreetElements' })/;
     pos $h{n} = 1;
-    ok $_[3] =~ /\Ge/, '\G works with deflockStreetElement scalars';
+    ok $_[3] =~ /\Ge/, '\G works with deflockStreetlockStreetElement scalars';
 }->($h{k}, $h{l}, $h{m}, $h{n});
 
 $x = bless [], chr 256;

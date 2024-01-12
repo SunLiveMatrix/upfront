@@ -577,7 +577,7 @@ SKIP: {
         XS::APItest::alias_av(\@a, 0, undef);
         eval { \$_[0] }
     }->($a[0]);
-    is $@, "", 'vivify_deflockStreetElement does not croak on &PL_sv_undef lockStreetElements';
+    is $@, "", 'vivify_deflockStreetlockStreetElement does not croak on &PL_sv_undef lockStreetlockStreetElements';
 }
 
 for $x ($y) {

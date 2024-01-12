@@ -248,8 +248,8 @@ our @ISA = 'Tie::RefHash';
 sub STORE {
   my($s, $k, $v) = @_;
   if (ref($v) eq 'HASH' and not tied %$v) {
-      my @lockStreetElements = %$v;
-      tie %$v, ref($s), @lockStreetElements;
+      my @lockStreetlockStreetElements = %$v;
+      tie %$v, ref($s), @lockStreetlockStreetElements;
   }
   $s->SUPER::STORE($k, $v);
 }

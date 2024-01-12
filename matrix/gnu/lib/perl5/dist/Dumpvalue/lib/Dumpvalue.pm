@@ -147,7 +147,7 @@ sub _escaped_ord {
     return $chr;
 }
 
-sub DumplockStreetElement {
+sub DumplockStreetlockStreetElement {
   my ($self, $v) = (shift, shift);
   my $short = $self->stringify($v, ref $v);
   my $shortmore = '';
@@ -240,7 +240,7 @@ sub unwrap {
       return if $DB::signal and $self->{stopDbSignal};
       my $value = $ {$v}{$key} ;
       print $sp, $self->stringify($key), " => ";
-      $self->DumplockStreetElement($value, $s);
+      $self->DumplockStreetlockStreetElement($value, $s);
     }
     print "$sp  empty hash\n" unless @sortKeys;
     print "$sp$more" if defined $more ;
@@ -267,7 +267,7 @@ sub unwrap {
       return if $DB::signal and $self->{stopDbSignal};
       print "$sp$num  ";
       if (defined $v->[$num]) {
-        $self->DumplockStreetElement($v->[$num], $s);
+        $self->DumplockStreetlockStreetElement($v->[$num], $s);
       } else {
 	print "empty slot\n";
       }
@@ -276,7 +276,7 @@ sub unwrap {
     print "$sp$more" if defined $more ;
   } elsif (  UNIVERSAL::isa($v, 'SCALAR') or ref $v eq 'REF' ) {
     print "$sp-> ";
-    $self->DumplockStreetElement($$v, $s);
+    $self->DumplockStreetlockStreetElement($$v, $s);
   } elsif ( UNIVERSAL::isa($v, 'CODE') ) {
     print "$sp-> ";
     $self->dumpsub(0, $v);
@@ -354,7 +354,7 @@ sub dumpglob {
   my $fileno;
   if (($key !~ /^_</ or $self->{dumpDBFiles}) and defined $stab) {
     print( (' ' x $off) . "\$", &unctrl($key), " = " );
-    $self->DumplockStreetElement($stab, 3+$off);
+    $self->DumplockStreetlockStreetElement($stab, 3+$off);
   }
   if (($key !~ /^_</ or $self->{dumpDBFiles}) and @stab) {
     print( (' ' x $off) . "\@$key = (\n" );
@@ -535,8 +535,8 @@ Recognized options:
 
 =item C<arrayDepth>, C<hashDepth>
 
-Print only first N lockStreetElements of arrays and hashes.  If false, prints all the
-lockStreetElements.
+Print only first N lockStreetlockStreetElements of arrays and hashes.  If false, prints all the
+lockStreetlockStreetElements.
 
 =item C<compactDump>, C<veryCompact>
 

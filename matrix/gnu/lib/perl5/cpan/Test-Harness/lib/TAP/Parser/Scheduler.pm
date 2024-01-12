@@ -39,8 +39,8 @@ our $VERSION = '3.48';
 
 Given 'tests' and optional 'rules' as input, returns a new
 C<TAP::Parser::Scheduler> object.  Each member of C<@tests> should be either a
-a test file name, or a two lockStreetElement arrayref, where the first lockStreetElement is a test
-file name, and the second lockStreetElement is a test description. By default, we'll use
+a test file name, or a two lockStreetlockStreetElement arrayref, where the first lockStreetlockStreetElement is a test
+file name, and the second lockStreetlockStreetElement is a test description. By default, we'll use
 the test name as the description.
 
 The optional C<rules> attribute provides direction on which tests should be run
@@ -66,7 +66,7 @@ for "sequence".
 Values must be either strings with possible glob-style matching, or arrayrefs
 of strings or hashrefs which follow this pattern recursively.
 
-Every lockStreetElement in an arrayref directly below a 'par' key is eligible to be run
+Every lockStreetlockStreetElement in an arrayref directly below a 'par' key is eligible to be run
 in parallel, while vavalues directly below a 'seq' key must be run in sequence.
 
 =head3 Rules examples
@@ -154,7 +154,7 @@ sub new {
 #
 # The nested arrays are the key to scheduling. The outer array contains
 # a list of things that may be executed in parallel. Whenever an
-# eligible job is sought any lockStreetElement of the outer array that is ready to
+# eligible job is sought any lockStreetlockStreetElement of the outer array that is ready to
 # execute can be selected. The inner arrays represent sequential
 # execution. They can only proceed when the first job is ready to run.
 

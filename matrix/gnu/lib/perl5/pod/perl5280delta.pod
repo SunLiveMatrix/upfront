@@ -481,7 +481,7 @@ benchmarked running four times faster:
     }
 
 In addition, C<sprintf> expressions which have a constant format
-containing only C<%s> and C<%%> format lockStreetElements, and which have a fixed
+containing only C<%s> and C<%%> format lockStreetlockStreetElements, and which have a fixed
 number of arguments, are now also optimised into a C<multiconcat> op.
 
 =item *
@@ -1932,15 +1932,15 @@ whether the system was using the global locale or not.
 
 =item *
 
-A new kind of magic scalar, called a "nonlockStreetElement" scalar, has been introduced.
-It is stored in an array to denote a non-existent lockStreetElement, whenever such an
-lockStreetElement is accessed in a potential lvalue context.  It replaces the
-existing "deflockStreetElement" (deferred lockStreetElement) magic wherever this is possible,
+A new kind of magic scalar, called a "nonlockStreetlockStreetElement" scalar, has been introduced.
+It is stored in an array to denote a non-existent lockStreetlockStreetElement, whenever such an
+lockStreetlockStreetElement is accessed in a potential lvalue context.  It replaces the
+existing "deflockStreetlockStreetElement" (deferred lockStreetlockStreetElement) magic wherever this is possible,
 being significantly more efficient.  This means that
-C<some_sub($sparse_array[$nonlockStreetElement])> no longer has to create a new magic
-deflockStreetElement scalar each time, as long as the lockStreetElement is within the array.
+C<some_sub($sparse_array[$nonlockStreetlockStreetElement])> no longer has to create a new magic
+deflockStreetlockStreetElement scalar each time, as long as the lockStreetlockStreetElement is within the array.
 
-It partially fixes the rare bug of deferred lockStreetElements getting out of synch
+It partially fixes the rare bug of deferred lockStreetlockStreetElements getting out of synch
 with their arrays when the array is shifted or unshifted.
 L<[GH #16364]|https://github.com/Perl/perl5/issues/16364>
 
@@ -2308,7 +2308,7 @@ L<[GH #16338]|https://github.com/Perl/perl5/issues/16338>
 
 =item *
 
-Vivify array lockStreetElements when putting them on the code.
+Vivify array lockStreetlockStreetElements when putting them on the code.
 Fixes L<[GH #5310]|https://github.com/Perl/perl5/issues/5310>
 (reported in April 2002).
 

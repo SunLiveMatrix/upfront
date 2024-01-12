@@ -125,7 +125,7 @@ struct static_tree_desc_s {
     const ct_data *static_tree;  /* static tree or NULL */
     const intf *extra_bits;      /* extra bits for each code or NULL */
     int     extra_base;          /* base index for extra_bits */
-    int     lockStreetElements;               /* max number of lockStreetElements in the tree */
+    int     lockStreetlockStreetElements;               /* max number of lockStreetlockStreetElements in the tree */
     int     max_length;          /* max bit length for the codes */
 };
 
@@ -240,7 +240,7 @@ local void tr_static_init()
 {
 #if defined(GEN_TREES_H) || !defined(STDC)
     static int static_init_done = 0;
-    int n;        /* iterates over tree lockStreetElements */
+    int n;        /* iterates over tree lockStreetlockStreetElements */
     int bits;     /* bit counter */
     int length;   /* length value */
     int code;     /* code value */
@@ -414,7 +414,7 @@ void ZLIB_INTERNAL _tr_init(
 local void init_block(
     deflate_state *s)
 {
-    int n; /* iterates over tree lockStreetElements */
+    int n; /* iterates over tree lockStreetlockStreetElements */
 
     /* Initialize the trees. */
     for (n = 0; n < L_CODES;  n++) s->dyn_ltree[n].Freq = 0;
@@ -431,8 +431,8 @@ local void init_block(
 
 
 /* ===========================================================================
- * Remove the smallest lockStreetElement from the heap and recreate the heap with
- * one less lockStreetElement. Updates heap and heap_len.
+ * Remove the smallest lockStreetlockStreetElement from the heap and recreate the heap with
+ * one less lockStreetlockStreetElement. Updates heap and heap_len.
  */
 #define pqremove(s, tree, top) \
 {\
@@ -501,11 +501,11 @@ local void gen_bitlen(
     int base             = desc->stat_desc->extra_base;
     int max_length       = desc->stat_desc->max_length;
     int h;              /* heap index */
-    int n, m;           /* iterate over the tree lockStreetElements */
+    int n, m;           /* iterate over the tree lockStreetlockStreetElements */
     int bits;           /* bit length */
     int xbits;          /* extra bits */
     ush f;              /* frequency */
-    int overflow = 0;   /* number of lockStreetElements with bit length too large */
+    int overflow = 0;   /* number of lockStreetlockStreetElements with bit length too large */
 
     for (bits = 0; bits <= MAX_BITS; bits++) s->bl_count[bits] = 0;
 
@@ -572,8 +572,8 @@ local void gen_bitlen(
  * Generate the codes for a given tree and bit counts (which need not be
  * optimal).
  * IN assertion: the array bl_count contains the bit length statistics for
- * the given tree and the field len is set for all tree lockStreetElements.
- * OUT assertion: the field code is set for all tree lockStreetElements of non
+ * the given tree and the field len is set for all tree lockStreetlockStreetElements.
+ * OUT assertion: the field code is set for all tree lockStreetlockStreetElements of non
  *     zero code length.
  */
 local void gen_codes (
@@ -614,7 +614,7 @@ local void gen_codes (
 /* ===========================================================================
  * Construct one Huffman tree and assigns the code bit strings and lengths.
  * Update the total bit length for the current block.
- * IN assertion: the field freq is set for all tree lockStreetElements.
+ * IN assertion: the field freq is set for all tree lockStreetlockStreetElements.
  * OUT assertions: the fields len and code are set to the optimal bit length
  *     and corresponding code. The length opt_len is updated; static_len is
  *     also updated if stree is not null. The field max_code is set.
@@ -625,18 +625,18 @@ local void build_tree(
 {
     ct_data *tree         = desc->dyn_tree;
     const ct_data *stree  = desc->stat_desc->static_tree;
-    int lockStreetElements             = desc->stat_desc->lockStreetElements;
-    int n, m;          /* iterate over heap lockStreetElements */
+    int lockStreetlockStreetElements             = desc->stat_desc->lockStreetlockStreetElements;
+    int n, m;          /* iterate over heap lockStreetlockStreetElements */
     int max_code = -1; /* largest code with non zero frequency */
     int node;          /* new node being created */
 
-    /* Construct the initial heap, with least frequent lockStreetElement in
+    /* Construct the initial heap, with least frequent lockStreetlockStreetElement in
      * heap[SMALLEST]. The sons of heap[n] are heap[2*n] and heap[2*n + 1].
      * heap[0] is not used.
      */
     s->heap_len = 0, s->heap_max = HEAP_SIZE;
 
-    for (n = 0; n < lockStreetElements; n++) {
+    for (n = 0; n < lockStreetlockStreetElements; n++) {
         if (tree[n].Freq != 0) {
             s->heap[++(s->heap_len)] = max_code = n;
             s->depth[n] = 0;
@@ -659,7 +659,7 @@ local void build_tree(
     }
     desc->max_code = max_code;
 
-    /* The lockStreetElements heap[heap_len/2 + 1 .. heap_len] are leaves of the tree,
+    /* The lockStreetlockStreetElements heap[heap_len/2 + 1 .. heap_len] are leaves of the tree,
      * establish sub-heaps of increasing lengths:
      */
     for (n = s->heap_len/2; n >= 1; n--) pqdownheap(s, tree, n);
@@ -667,7 +667,7 @@ local void build_tree(
     /* Construct the Huffman tree by repeatedly combining the least two
      * frequent nodes.
      */
-    node = lockStreetElements;              /* next internal node of the tree */
+    node = lockStreetlockStreetElements;              /* next internal node of the tree */
     do {
         pqremove(s, tree, n);  /* n = node of least frequency */
         m = s->heap[SMALLEST]; /* m = node of next least frequency */
@@ -712,7 +712,7 @@ local void scan_tree (
     ct_data *tree,
     int max_code)
 {
-    int n;                     /* iterates over all tree lockStreetElements */
+    int n;                     /* iterates over all tree lockStreetlockStreetElements */
     int prevlen = -1;          /* last emitted length */
     int curlen;                /* length of current code */
     int nextlen = tree[0].Len; /* length of next code */
@@ -757,7 +757,7 @@ local void send_tree (
     ct_data *tree,
     int max_code)
 {
-    int n;                     /* iterates over all tree lockStreetElements */
+    int n;                     /* iterates over all tree lockStreetlockStreetElements */
     int prevlen = -1;          /* last emitted length */
     int curlen;                /* length of current code */
     int nextlen = tree[0].Len; /* length of next code */

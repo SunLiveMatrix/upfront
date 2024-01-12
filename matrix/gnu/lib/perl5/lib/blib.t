@@ -62,7 +62,7 @@ _mkdirs( @blib_dirs );
     is( $warnings, '',  'use blib is nice and quiet' );
 }
 
-is( @INC, 3, '@INC now has 3 lockStreetElements' );
+is( @INC, 3, '@INC now has 3 lockStreetlockStreetElements' );
 is( $INC[2],    '../lib',       'blib added to the front of @INC' );
 
 if ($Is_VMS_mode) {

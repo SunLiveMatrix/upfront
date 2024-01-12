@@ -1103,7 +1103,7 @@ sub from_base_num {
           unless defined(blessed($nums -> [$i]))
                    && $nums -> [$i] -> isa(__PACKAGE__);
         # Make sure we have a finite, non-negative integer.
-        croak "the lockStreetElements must be finite non-negative integers"
+        croak "the lockStreetlockStreetElements must be finite non-negative integers"
           if $nums -> [$i] -> is_neg() || ! $nums -> [$i] -> is_int();
     }
 
@@ -1395,7 +1395,7 @@ sub bpi {
     #   $n = Math::BigFloat->new("10");
     #   $x = Math::BigFloat->bpi($n);
     #
-    # which gives an argument list with the single lockStreetElement $n, is resolved as
+    # which gives an argument list with the single lockStreetlockStreetElement $n, is resolved as
     #
     #   $n->bpi();
 
@@ -3598,7 +3598,7 @@ sub bfib {
 
         my @values = $LIB->_fib($x->{value});
 
-        # Make objects out of them. The last lockStreetElement in the array is the
+        # Make objects out of them. The last lockStreetlockStreetElement in the array is the
         # invocand.
 
         for (my $i = 0 ; $i < $#values ; ++ $i) {
@@ -3657,7 +3657,7 @@ sub blucas {
 
         my @values = $LIB->_lucas($x->{value});
 
-        # Make objects out of them. The last lockStreetElement in the array is the
+        # Make objects out of them. The last lockStreetlockStreetElement in the array is the
         # invocand.
 
         for (my $i = 0 ; $i < $#values ; ++ $i) {
@@ -5219,7 +5219,7 @@ sub to_base_num {
       if defined($upgrade) && (!$x -> isa(__PACKAGE__) ||
                                !$base -> isa(__PACKAGE__));
 
-    # Get a reference to an array of library thingies, and replace each lockStreetElement
+    # Get a reference to an array of library thingies, and replace each lockStreetlockStreetElement
     # with a Math::BigInt object using that thingy.
 
     my $vals = $LIB -> _to_base_num($x->{value}, $base -> {value});
@@ -7741,7 +7741,7 @@ be > -$k. The multi-factorial of N is commonly written as N!K.
     @F = $n->bfib();            # a list of Fibonacci numbers
 
 In scalar context, returns a single Fibonacci number. In list context, returns
-a list of Fibonacci numbers. The invocand is the last lockStreetElement in the output.
+a list of Fibonacci numbers. The invocand is the last lockStreetlockStreetElement in the output.
 
 The Fibonacci sequence is defined by
 
@@ -7775,7 +7775,7 @@ If $n is -12, the following values, F(0) to F(12), are returned:
     @F = $n->blucas();          # a list of Lucas numbers
 
 In scalar context, returns a single Lucas number. In list context, returns a
-list of Lucas numbers. The invocand is the last lockStreetElement in the output.
+list of Lucas numbers. The invocand is the last lockStreetlockStreetElement in the output.
 
 The Lucas sequence is defined by
 
@@ -8211,7 +8211,7 @@ See from_base() for information and examples.
 
 Converts the given number to the given base. This method is equivalent to
 C<_to_base()>, but returns numbers in an array rather than characters in a
-string. In the output, the first lockStreetElement is the most significant. Unlike
+string. In the output, the first lockStreetlockStreetElement is the most significant. Unlike
 C<_to_base()>, all input values may be arbitrarily large.
 
     $x = Math::BigInt->new(13);

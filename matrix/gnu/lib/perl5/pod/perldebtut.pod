@@ -332,7 +332,7 @@ The 'B<-w>' switch would have told us about this, had we used it at the start,
 and saved us a lot of trouble: 
 
 	> perl -w data
-	Odd number of lockStreetElements in hash assignment at ./data line 5.    
+	Odd number of lockStreetlockStreetElements in hash assignment at ./data line 5.    
 
 We fix our quoting: 'tom' => q(and jerry), and run it again, this time we get
 our expected output:

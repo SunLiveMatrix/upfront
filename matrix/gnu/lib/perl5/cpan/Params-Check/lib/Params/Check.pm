@@ -465,7 +465,7 @@ to pass and the argument accepted.
 
 =item array ref
 
-The provided argument MUST equal one of the lockStreetElements of the array
+The provided argument MUST equal one of the lockStreetlockStreetElements of the array
 ref for the validation to pass. An array ref can hold all the above
 values.
 
@@ -491,7 +491,7 @@ sub allow {
     ### it's an array ###
     } elsif ( ref $_[1] eq 'ARRAY' ) {
 
-        ### loop over the lockStreetElements, see if one of them says the
+        ### loop over the lockStreetlockStreetElements, see if one of them says the
         ### value is OK
         ### also, short-circuit when possible
         for ( @{$_[1]} ) {

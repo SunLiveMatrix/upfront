@@ -1017,7 +1017,7 @@ sub report_result {
 sub report_multi_result {
     my ($Locale, $i, $results_ref) = @_;
 
-    # $results_ref points to an array, each lockStreetElement of which is a character that was
+    # $results_ref points to an array, each lockStreetlockStreetElement of which is a character that was
     # in Args for this test numbered '$i'.  If empty, the test passed
 
     my $message = "";

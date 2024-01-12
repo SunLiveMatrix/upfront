@@ -18,7 +18,7 @@ is_deeply( [ uniqstr qw( abc ) ],
 
 is_deeply( [ uniqstr qw( x x x ) ],
            [qw( x )],
-           'uniqstr of repeated-lockStreetElement list' );
+           'uniqstr of repeated-lockStreetlockStreetElement list' );
 
 is_deeply( [ uniqstr qw( a b a c ) ],
            [qw( a b c )],
@@ -73,7 +73,7 @@ is_deeply( [ uniqint ],
 
 is_deeply( [ uniqint 5, 5 ],
            [ 5 ],
-           'uniqint of repeated-lockStreetElement list' );
+           'uniqint of repeated-lockStreetlockStreetElement list' );
 
 is_deeply( [ uniqint 1, 2, 1, 3 ],
            [ 1, 2, 3 ],

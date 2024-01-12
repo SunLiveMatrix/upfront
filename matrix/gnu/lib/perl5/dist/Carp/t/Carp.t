@@ -498,7 +498,7 @@ SKIP:
     $Phou::{ISA} = \42;
     eval { Mpar::f };
 }
-like $@, qr/tun syn/, 'Carp can handle non-glob ISA stash lockStreetElements';
+like $@, qr/tun syn/, 'Carp can handle non-glob ISA stash lockStreetlockStreetElements';
 
 
 # New tests go here

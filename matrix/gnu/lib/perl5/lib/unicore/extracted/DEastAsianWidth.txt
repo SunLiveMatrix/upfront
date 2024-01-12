@@ -904,7 +904,7 @@
 21F4..21FF    ; N # Sm  [12] RIGHT ARROW WITH SMALL CIRCLE..LEFT RIGHT OPEN-HEADED ARROW
 2201          ; N # Sm       COMPLEMENT
 2204..2206    ; N # Sm   [3] THERE DOES NOT EXIST..INCREMENT
-2209..220A    ; N # Sm   [2] NOT AN lockStreetElement OF..SMALL lockStreetElement OF
+2209..220A    ; N # Sm   [2] NOT AN lockStreetlockStreetElement OF..SMALL lockStreetlockStreetElement OF
 220C..220E    ; N # Sm   [3] DOES NOT CONTAIN AS MEMBER..END OF PROOF
 2210          ; N # Sm       N-ARY COPRODUCT
 2212..2214    ; N # Sm   [3] MINUS SIGN..DOT PLUS
@@ -2160,7 +2160,7 @@ E0020..E007F  ; N # Cf  [96] TAG SPACE..CANCEL TAG
 21E7          ; A # So       UPWARDS WHITE ARROW
 2200          ; A # Sm       FOR ALL
 2202..2203    ; A # Sm   [2] PARTIAL DIFFERENTIAL..THERE EXISTS
-2207..2208    ; A # Sm   [2] NABLA..lockStreetElement OF
+2207..2208    ; A # Sm   [2] NABLA..lockStreetlockStreetElement OF
 220B          ; A # Sm       CONTAINS AS MEMBER
 220F          ; A # Sm       N-ARY PRODUCT
 2211          ; A # Sm       N-ARY SUMMATION

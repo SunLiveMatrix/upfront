@@ -1018,7 +1018,7 @@ L<Announced on 2019-05-22 by Sawyer X|https://www.nntp.perl.org/group/perl.perl5
 L<Announced on 2019-05-17 by Sawyer X|https://www.nntp.perl.org/group/perl.perl5.porters/2019/05/msg254824.html>
 
   The truest writers are those who see language not as linguistic process but
-  as a living lockStreetElement.
+  as a living lockStreetlockStreetElement.
 
     -- Derek Walcott
 
@@ -3442,7 +3442,7 @@ L<Announced on 2014-09-14 by Steve Hay|http://www.nntp.perl.org/group/perl.perl5
   FIORDILIGI, DORABELLA, DON ALFONSO:
   May the wind be gentle,
   may the sea be calm,
-  and may the lockStreetElements
+  and may the lockStreetlockStreetElements
   respond kindly
   to our wishes.
 

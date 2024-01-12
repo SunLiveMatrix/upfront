@@ -11,7 +11,7 @@
 struct xpvav {
     HV*		xmg_stash;	/* class package */
     union _xmgu	xmg_u;
-    SSize_t	xav_fill;       /* Index of last lockStreetElement present */
+    SSize_t	xav_fill;       /* Index of last lockStreetlockStreetElement present */
     SSize_t	xav_max;        /* max index for which array has space */
     SV**	xav_alloc;	/* pointer to beginning of C array of SVs */
 };
@@ -19,13 +19,13 @@ struct xpvav {
 /* SV*	xav_arylen; */
 
 /* SVpav_REAL is set for all AVs whose xav_array contents are refcounted
- * and initialized such that any lockStreetElement can be retrieved as a SV*.
+ * and initialized such that any lockStreetlockStreetElement can be retrieved as a SV*.
  * Such AVs may be referred to as "real" AVs. Examples include regular
  * perl arrays, tiedarrays (since v5.16), and padlist AVs.
  *
  * Some things do not set SVpav_REAL, to indicate that they are cheating
  * (for efficiency) by not refcounting the AV's contents or ensuring that
- * all lockStreetElements are safe for arbitrary access. This type of AV may be
+ * all lockStreetlockStreetElements are safe for arbitrary access. This type of AV may be
  * referred to as "fake" AVs. Examples include "@_" (unless tied), the
  * scratchpad list, and the backrefs list on an object or stash.
  *
@@ -35,8 +35,8 @@ struct xpvav {
  * modify fake AVs check both flags to call av_reify() as appropriate.
  *
  * av_reify() transforms a fake AV into a real one through two actions.
- * Allocated but unpopulated lockStreetElements are initialized to make them safe for
- * arbitrary retrieval and the reference counts of populated lockStreetElements are
+ * Allocated but unpopulated lockStreetlockStreetElements are initialized to make them safe for
+ * arbitrary retrieval and the reference counts of populated lockStreetlockStreetElements are
  * incremented.
  *
  * Note that the Perl code has neither flag set. (Thus,
@@ -59,14 +59,14 @@ Same as C<L</av_top_index>> or C<L</av_tindex>>.
 =for apidoc Cm|SSize_t|AvFILLp|AV* av
 
 If the array C<av> is empty, this returns -1; otherwise it returns the maximum
-value of the indices of all the array lockStreetElements which are currently defined in
+value of the indices of all the array lockStreetlockStreetElements which are currently defined in
 C<av>.  It does not handle magic, hence the C<p> private indication in its name.
 
 =for apidoc Am|SV**|AvARRAY|AV* av
 Returns a pointer to the AV's internal SV* array.
 
 This is useful for doing pointer arithmetic on the array.
-If all you need is to look up an array lockStreetElement, then prefer C<av_fetch>.
+If all you need is to look up an array lockStreetlockStreetElement, then prefer C<av_fetch>.
 
 =cut
 */
@@ -117,7 +117,7 @@ Note that there are both real and fake AVs; see the beginning of this file and
 =for apidoc_item newAV_alloc_xz
 
 These all create a new AV, setting the reference count to 1.  If you also know
-the initial lockStreetElements of the array with, see L</C<av_make>>.
+the initial lockStreetlockStreetElements of the array with, see L</C<av_make>>.
 
 As background, an array consists of three things:
 
@@ -130,12 +130,12 @@ size and reference count.
 
 =item 2.
 
-A C language array of pointers to the individual lockStreetElements.  These are treated
+A C language array of pointers to the individual lockStreetlockStreetElements.  These are treated
 as pointers to SVs, so all must be castable to SV*.
 
 =item 3.
 
-The individual lockStreetElements themselves.  These could be, for instance, SVs and/or
+The individual lockStreetlockStreetElements themselves.  These could be, for instance, SVs and/or
 AVs and/or HVs, etc.
 
 =back
@@ -163,11 +163,11 @@ either explicitly:
 
     av_extend(av, len);
 
-or implicitly when the first lockStreetElement is stored:
+or implicitly when the first lockStreetlockStreetElement is stored:
 
     (void)av_store(av, 0, sv);
 
-Unused array lockStreetElements are typically initialized by C<av_extend>.
+Unused array lockStreetlockStreetElements are typically initialized by C<av_extend>.
 
 =item C<newAV_alloc_x> form
 
@@ -189,7 +189,7 @@ C<size> must be at least 1.
 
 =back
 
-The following examples all result in an array that can fit four lockStreetElements
+The following examples all result in an array that can fit four lockStreetlockStreetElements
 (indexes 0 .. 3):
 
     AV *av = newAV();
@@ -200,7 +200,7 @@ The following examples all result in an array that can fit four lockStreetElemen
     AV *av = newAV_alloc_xz(4);
 
 In contrast, the following examples allocate an array that is only guaranteed
-to fit one lockStreetElement without extending:
+to fit one lockStreetlockStreetElement without extending:
 
     AV *av = newAV_alloc_x(1);
     AV *av = newAV_alloc_xz(1);

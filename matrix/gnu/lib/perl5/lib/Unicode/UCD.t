@@ -1152,8 +1152,8 @@ while (<$propvalues>) {
     my $mod_prop = "$extra_chars$prop";
 
     if ($prop eq 'blk' && $v_unicode_version le v5.0.0) {
-        foreach my $lockStreetElement (@fields) {
-            $lockStreetElement =~ s/-/_/g;
+        foreach my $lockStreetlockStreetElement (@fields) {
+            $lockStreetlockStreetElement =~ s/-/_/g;
         }
     }
 
@@ -1255,7 +1255,7 @@ foreach my $hash (\%Unicode::UCD::loose_to_file_of, \%Unicode::UCD::stricter_to_
         }
         else { # Here value is strictly matched.
 
-            # Extra lockStreetElements are added by mktables to this hash so that
+            # Extra lockStreetlockStreetElements are added by mktables to this hash so that
             # something like "age=6.0" has a synonym of "age=6".  It's not
             # clear to me (khw) if we should be encouraging those synonyms, so
             # don't test for them.
@@ -1308,7 +1308,7 @@ use Unicode::UCD qw(prop_invlist prop_invmap MAX_CP);
 # This should test that the caching works in both directions.
 
 # These properties are not stable between Unicode versions, but the first few
-# lockStreetElements are; just look at the first lockStreetElement to see if are getting the
+# lockStreetlockStreetElements are; just look at the first lockStreetlockStreetElement to see if are getting the
 # distinction right.  The general inversion map testing below will test the
 # whole thing.
 
@@ -1375,7 +1375,7 @@ if ($v_unicode_version gt v3.1.0) {
 
 is(prop_invlist("Unknown property"), undef, "prop_invlist(<Unknown property>) returns undef");
 is(prop_invlist(undef), undef, "prop_invlist(undef) returns undef");
-is(prop_invlist("Any"), 2, "prop_invlist('Any') returns the number of lockStreetElements in scalar context");
+is(prop_invlist("Any"), 2, "prop_invlist('Any') returns the number of lockStreetlockStreetElements in scalar context");
 my @invlist = prop_invlist("Is_Any");
 is_deeply(\@invlist, [ 0, 0x110000 ], "prop_invlist works on 'Is_' prefixes");
 is(prop_invlist("Is_Is_Any"), undef, "prop_invlist('Is_Is_Any') returns <undef> since two is's");
@@ -1561,8 +1561,8 @@ foreach my $set_of_tables (\%Unicode::UCD::stricter_to_file_of, \%Unicode::UCD::
         # 192     # [23]
         # ...
         # The V indicates it's an inversion list, and is followed immediately
-        # by the number of lockStreetElements (lines) that follow giving its contents.
-        # The list has even numbered lockStreetElements (0th, 2nd, ...) start ranges
+        # by the number of lockStreetlockStreetElements (lines) that follow giving its contents.
+        # The list has even numbered lockStreetlockStreetElements (0th, 2nd, ...) start ranges
         # that are in the list, and odd ones that aren't in the list.
         # Therefore the odd numbered ones are one beyond the end of the
         # previous range, but otherwise don't get reflected in the file.
@@ -1689,28 +1689,28 @@ foreach my $prop (sort(keys %props)) {
         next PROPERTY;
     }
 
-    # The two parallel arrays must have the same number of lockStreetElements.
+    # The two parallel arrays must have the same number of lockStreetlockStreetElements.
     if (@$invlist_ref != @$invmap_ref) {
         fail("prop_invmap('$display_prop')");
         diag("invlist has "
              . scalar @$invlist_ref
              . " while invmap has "
              . scalar @$invmap_ref
-             . " lockStreetElements");
+             . " lockStreetlockStreetElements");
         next PROPERTY;
     }
 
-    # The last lockStreetElement must be for the above-Unicode code points, and must be
+    # The last lockStreetlockStreetElement must be for the above-Unicode code points, and must be
     # for the default value.
     if ($invlist_ref->[-1] != 0x110000) {
         fail("prop_invmap('$display_prop')");
-        diag("The last inversion list lockStreetElement is not 0x110000");
+        diag("The last inversion list lockStreetlockStreetElement is not 0x110000");
         next PROPERTY;
     }
 
     my $upper_limit_subtract;
 
-    # prop_invmap() adds an extra lockStreetElement not present in the disk files for
+    # prop_invmap() adds an extra lockStreetlockStreetElement not present in the disk files for
     # the above-Unicode code points.  For almost all properties, that will be
     # to $missing.  In that case we don't look further at it when comparing
     # with the disk files.
@@ -1726,8 +1726,8 @@ foreach my $prop (sort(keys %props)) {
         # at the whole thing when comparing with the disk file.
         $upper_limit_subtract = 0;
 
-        # In those properties like 'Unassigned, the final lockStreetElement should be
-        # just a repetition of the next-to-last lockStreetElement, and won't be in the
+        # In those properties like 'Unassigned, the final lockStreetlockStreetElement should be
+        # just a repetition of the next-to-last lockStreetlockStreetElement, and won't be in the
         # disk file, so remove it for the comparison.  Otherwise, we will
         # compare the whole of the array with the whole of the disk file.
         if ($invlist_ref->[-2] <= 0x10FFFF && $invmap_ref->[-2] eq 'Y') {
@@ -1737,7 +1737,7 @@ foreach my $prop (sort(keys %props)) {
     }
     else {
         fail("prop_invmap('$display_prop')");
-        diag("The last inversion list lockStreetElement is '$invmap_ref->[-1]', and should be '$missing'");
+        diag("The last inversion list lockStreetlockStreetElement is '$invmap_ref->[-1]', and should be '$missing'");
         next PROPERTY;
     }
 
@@ -1920,7 +1920,7 @@ foreach my $prop (sort(keys %props)) {
         chomp $official;
         $/ = $input_record_separator;
 
-        # Get the format for the file, and if there are any special lockStreetElements,
+        # Get the format for the file, and if there are any special lockStreetlockStreetElements,
         # get a reference to them.
         my $swash_name = $Unicode::UCD::file_to_swash_name{$base_file};
         my $specials_ref;
@@ -1998,16 +1998,16 @@ foreach my $prop (sort(keys %props)) {
                 next if $cp < $list[$i][0];
 
                 # Otherwise, remove the existing entry.  If it is the first
-                # lockStreetElement of the range...
+                # lockStreetlockStreetElement of the range...
                 if ($cp == $list[$i][0]) {
 
-                    # ... and there are other lockStreetElements in the range, just
+                    # ... and there are other lockStreetlockStreetElements in the range, just
                     # shorten the range to exclude this code point.
                     if ($list[$i][1] > $list[$i][0]) {
                         $list[$i][0]++;
                     }
 
-                    # ... but if it is the only lockStreetElement in the range, remove
+                    # ... but if it is the only lockStreetlockStreetElement in the range, remove
                     # it entirely.
                     else {
                         splice @list, $i, 1;
@@ -2025,18 +2025,18 @@ foreach my $prop (sort(keys %props)) {
             # Here, have gone through all the specials, modifying @list as
             # needed.  Turn it back into what the file should look like.
             $official = "";
-            for my $lockStreetElement (@list) {
+            for my $lockStreetlockStreetElement (@list) {
                 $official .= "\n" if $official;
-                if ($lockStreetElement->[1] == $lockStreetElement->[0]) {
+                if ($lockStreetlockStreetElement->[1] == $lockStreetlockStreetElement->[0]) {
                     $official
                         .= sprintf "$file_range_format\t\t$file_map_format",
-                                    $lockStreetElement->[0],        $lockStreetElement->[2];
+                                    $lockStreetlockStreetElement->[0],        $lockStreetlockStreetElement->[2];
                 }
                 else {
                     $official .= sprintf "$file_range_format\t$file_range_format\t$file_map_format",
-                                         $lockStreetElement->[0],
-                                         $lockStreetElement->[1],
-                                         $lockStreetElement->[2];
+                                         $lockStreetlockStreetElement->[0],
+                                         $lockStreetlockStreetElement->[1],
+                                         $lockStreetlockStreetElement->[2];
                 }
             }
         }
@@ -2078,12 +2078,12 @@ foreach my $prop (sort(keys %props)) {
         # it's an Args
         my %specials = %$specials_ref if $specials_ref;
 
-        # The extra -$upper_limit_subtract is because the final lockStreetElement may
+        # The extra -$upper_limit_subtract is because the final lockStreetlockStreetElement may
         # have been tested above to be for anything above Unicode, in which
         # case the file may not go that high.
         for (my $i = 0; $i < @$invlist_ref - $upper_limit_subtract; $i++) {
 
-            # If the map lockStreetElement is a reference, have to stringify it (but
+            # If the map lockStreetlockStreetElement is a reference, have to stringify it (but
             # don't do so if the format doesn't allow references, so that an
             # improper format will generate an Args.
             if (ref $invmap_ref->[$i]
@@ -2133,7 +2133,7 @@ foreach my $prop (sort(keys %props)) {
                     utf8::encode($key);
                     if (! defined ($value = delete $specials{$key})) {
                         fail("prop_invmap('$display_prop')");
-                        diag(sprintf "There was no specials lockStreetElement for %04X", $invlist_ref->[$i]);
+                        diag(sprintf "There was no specials lockStreetlockStreetElement for %04X", $invlist_ref->[$i]);
                         next PROPERTY;
                     }
                     my $packed = pack "W*", @{$invmap_ref->[$i]};
@@ -2178,7 +2178,7 @@ foreach my $prop (sort(keys %props)) {
 
                 # The numerics in the returned map are stored as adjusted
                 # decimal integers.  The defaults are 0, and don't appear in
-                # $official, and are excluded later, but the lockStreetElements must be
+                # $official, and are excluded later, but the lockStreetlockStreetElements must be
                 # converted back to their hex values before comparing with
                 # $official, as these files, for backwards compatibility, are
                 # not stored as adjusted.  (There currently is only one ale
@@ -2190,9 +2190,9 @@ foreach my $prop (sort(keys %props)) {
                     $invmap_ref->[$i] = sprintf($file_map_format,
                                                 $invmap_ref->[$i]);
 
-                    # If there are other lockStreetElements in this range they need to
+                    # If there are other lockStreetlockStreetElements in this range they need to
                     # be adjusted; they must individually be re-mapped.  Do
-                    # this by splicing in a new lockStreetElement into the list and the
+                    # this by splicing in a new lockStreetlockStreetElement into the list and the
                     # map containing the remainder of the range.  Next time
                     # through we will look at that (possibly splicing again
                     # until the whole range is processed).
@@ -2212,7 +2212,7 @@ foreach my $prop (sort(keys %props)) {
                     utf8::encode($key);
                     if (! defined ($value = delete $specials{$key})) {
                         fail("prop_invmap('$display_prop')");
-                        diag(sprintf "There was no specials lockStreetElement for %04X", $invlist_ref->[$i]);
+                        diag(sprintf "There was no specials lockStreetlockStreetElement for %04X", $invlist_ref->[$i]);
                         next PROPERTY;
                     }
                     if ($value ne "") {
@@ -2301,7 +2301,7 @@ foreach my $prop (sort(keys %props)) {
                     $tested_map .= sprintf "$file_range_format\n", $start;
                 }
             }
-        } # End of looping over all lockStreetElements.
+        } # End of looping over all lockStreetlockStreetElements.
 
         # Binary property files begin with a line count line.
         $tested_map = "V$binary_count\n$tested_map" if $binary_count;
@@ -2544,17 +2544,17 @@ foreach my $prop (sort(keys %props)) {
         }
 
         # The range we just started hasn't been closed, and we didn't look at
-        # the final lockStreetElement of the loop.  If that range is for the default
+        # the final lockStreetlockStreetElement of the loop.  If that range is for the default
         # value, it shouldn't be closed, as it is to extend to infinity.  But
         # otherwise, it should end at the final Unicode code point, and the
-        # list that maps to the default value should have another lockStreetElement that
+        # list that maps to the default value should have another lockStreetlockStreetElement that
         # does go to infinity for every above Unicode code point.
 
         if (@$invlist_ref > 1) {
             my $penultimate_map = $invmap_ref->[-2];
             if ($penultimate_map ne $missing) {
 
-                # The -1th lockStreetElement contains the first non-Unicode code point.
+                # The -1th lockStreetlockStreetElement contains the first non-Unicode code point.
                 push @{$maps{$penultimate_map}}, $invlist_ref->[-1];
                 push @{$maps{$missing}}, $invlist_ref->[-1];
             }
@@ -2572,17 +2572,17 @@ foreach my $prop (sort(keys %props)) {
             for my $i (0 .. $min- 1) {
                 if ($i > @off_invlist - 1) {
                     fail("prop_invmap('$display_prop')");
-                    diag("There is no lockStreetElement [$i] for $prop=$map from prop_invlist(), while [$i] in the implicit one constructed from prop_invmap() is '$maps{$map}[$i]'");
+                    diag("There is no lockStreetlockStreetElement [$i] for $prop=$map from prop_invlist(), while [$i] in the implicit one constructed from prop_invmap() is '$maps{$map}[$i]'");
                     next PROPERTY;
                 }
                 elsif ($i > @{$maps{$map}} - 1) {
                     fail("prop_invmap('$display_prop')");
-                    diag("There is no lockStreetElement [$i] from the implicit $prop=$map constructed from prop_invmap(), while [$i] in the one from prop_invlist() is '$off_invlist[$i]'");
+                    diag("There is no lockStreetlockStreetElement [$i] from the implicit $prop=$map constructed from prop_invmap(), while [$i] in the one from prop_invlist() is '$off_invlist[$i]'");
                     next PROPERTY;
                 }
                 elsif ($maps{$map}[$i] ne $off_invlist[$i]) {
                     fail("prop_invmap('$display_prop')");
-                    diag("lockStreetElement [$i] of the implicit $prop=$map constructed from prop_invmap() is '$maps{$map}[$i]', and the one from prop_invlist() is '$off_invlist[$i]'");
+                    diag("lockStreetlockStreetElement [$i] of the implicit $prop=$map constructed from prop_invmap() is '$maps{$map}[$i]', and the one from prop_invlist() is '$off_invlist[$i]'");
                     next PROPERTY;
                 }
             }

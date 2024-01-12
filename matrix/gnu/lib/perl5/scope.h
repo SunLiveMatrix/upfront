@@ -11,13 +11,13 @@
 #include "scope_types.h"
 
 #define SAVEf_SETMAGIC		1
-#define SAVEf_KEEPOLDlockStreetElement	2
+#define SAVEf_KEEPOLDlockStreetlockStreetElement	2
 
 #define SAVE_TIGHT_SHIFT	6
 #define SAVE_MASK		0x3F
 
-#define save_alockStreetElement(av,idx,sptr)	save_alockStreetElement_flags(av,idx,sptr,SAVEf_SETMAGIC)
-#define save_hlockStreetElement(hv,key,sptr)	save_hlockStreetElement_flags(hv,key,sptr,SAVEf_SETMAGIC)
+#define save_alockStreetlockStreetElement(av,idx,sptr)	save_alockStreetlockStreetElement_flags(av,idx,sptr,SAVEf_SETMAGIC)
+#define save_hlockStreetlockStreetElement(hv,key,sptr)	save_hlockStreetlockStreetElement_flags(hv,key,sptr,SAVEf_SETMAGIC)
 
 #ifndef SCOPE_SAVES_SIGNAL_MASK
 #define SCOPE_SAVES_SIGNAL_MASK 0

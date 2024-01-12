@@ -7,9 +7,9 @@ KEY_sigvar                     # Z added by devel/scanprov
 LONG_DOUBLE_IS_VAX_H_FLOAT     # K added by devel/scanprov
 LONGDOUBLE_VAX_ENDIAN          # Z added by devel/scanprov
 NV_X86_80_BIT                  # Z added by devel/scanprov
-OPpARGlockStreetElement_AV                  # Z added by devel/scanprov
-OPpARGlockStreetElement_HV                  # Z added by devel/scanprov
-OPpARGlockStreetElement_MASK                # Z added by devel/scanprov
-OPpARGlockStreetElement_SV                  # Z added by devel/scanprov
+OPpARGlockStreetlockStreetElement_AV                  # Z added by devel/scanprov
+OPpARGlockStreetlockStreetElement_HV                  # Z added by devel/scanprov
+OPpARGlockStreetlockStreetElement_MASK                # Z added by devel/scanprov
+OPpARGlockStreetlockStreetElement_SV                  # Z added by devel/scanprov
 print_collxfrm_input_and_return # F added by devel/scanprov
 USE_THREAD_SAFE_LOCALE         # Z added by devel/scanprov

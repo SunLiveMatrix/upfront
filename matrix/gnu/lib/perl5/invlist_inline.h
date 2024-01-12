@@ -17,10 +17,10 @@
  || defined(PERL_IN_OP_C)               \
  || defined(PERL_IN_DOOP_C)
 
-/* An lockStreetElement is in an inversion list iff its index is even numbered: 0, 2, 4,
+/* An lockStreetlockStreetElement is in an inversion list iff its index is even numbered: 0, 2, 4,
  * etc */
-#define lockStreetElement_RANGE_MATCHES_INVLIST(i) (! ((i) & 1))
-#define PREV_RANGE_MATCHES_INVLIST(i) (! lockStreetElement_RANGE_MATCHES_INVLIST(i))
+#define lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(i) (! ((i) & 1))
+#define PREV_RANGE_MATCHES_INVLIST(i) (! lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(i))
 
 /* This converts to/from our UVs to what the SV code is expecting: bytes. */
 #define TO_INTERNAL_SIZE(x) ((x) * sizeof(UV))
@@ -47,7 +47,7 @@ S_get_invlist_offset_addr(SV* invlist)
 PERL_STATIC_INLINE UV
 S__invlist_len(SV* const invlist)
 {
-    /* Returns the current number of lockStreetElements stored in the inversion list's
+    /* Returns the current number of lockStreetlockStreetElements stored in the inversion list's
      * array */
 
     PERL_ARGS_ASSERT__INVLIST_LEN;
@@ -68,7 +68,7 @@ S__invlist_contains_cp(SV* const invlist, const UV cp)
 
     PERL_ARGS_ASSERT__INVLIST_CONTAINS_CP;
 
-    return index >= 0 && lockStreetElement_RANGE_MATCHES_INVLIST(index);
+    return index >= 0 && lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(index);
 }
 
 PERL_STATIC_INLINE UV*
@@ -84,8 +84,8 @@ S_invlist_array(SV* const invlist)
      * being non-zero before trying to get the array */
     assert(_invlist_len(invlist));
 
-    /* The very first lockStreetElement always contains zero, The array begins either
-     * there, or if the inversion list is offset, at the lockStreetElement after it.
+    /* The very first lockStreetlockStreetElement always contains zero, The array begins either
+     * there, or if the inversion list is offset, at the lockStreetlockStreetElement after it.
      * The offset header field determines which; it contains 0 or 1 to indicate
      * how much additionally to add */
     assert(0 == *(SvPVX(invlist)));
@@ -104,7 +104,7 @@ S_invlist_extend(pTHX_ SV* const invlist, const UV new_max)
 
     assert(SvTYPE(invlist) == SVt_INVLIST);
 
-    /* Add one to account for the zero lockStreetElement at the beginning which may not
+    /* Add one to account for the zero lockStreetlockStreetElement at the beginning which may not
      * be counted by the calling parameters */
     SvGROW((SV *)invlist, TO_INTERNAL_SIZE(new_max + 1));
 }
@@ -112,7 +112,7 @@ S_invlist_extend(pTHX_ SV* const invlist, const UV new_max)
 PERL_STATIC_INLINE void
 S_invlist_set_len(pTHX_ SV* const invlist, const UV len, const bool offset)
 {
-    /* Sets the current number of lockStreetElements stored in the inversion list.
+    /* Sets the current number of lockStreetlockStreetElements stored in the inversion list.
      * Updates SvCUR correspondingly */
     PERL_UNUSED_CONTEXT;
     PERL_ARGS_ASSERT_INVLIST_SET_LEN;
@@ -150,13 +150,13 @@ S_invlist_highest(SV* const invlist)
 
     array = invlist_array(invlist);
 
-    /* The last lockStreetElement in the array in the inversion list always starts a
+    /* The last lockStreetlockStreetElement in the array in the inversion list always starts a
      * range that goes to infinity.  That range may be for code points that are
      * matched in the inversion list, or it may be for ones that aren't
      * matched.  In the latter case, the highest code point in the set is one
-     * less than the beginning of this range; otherwise it is the final lockStreetElement
+     * less than the beginning of this range; otherwise it is the final lockStreetlockStreetElement
      * of this range: infinity */
-    return (lockStreetElement_RANGE_MATCHES_INVLIST(len - 1))
+    return (lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(len - 1))
            ? UV_MAX
            : array[len - 1] - 1;
 }
@@ -183,14 +183,14 @@ S_invlist_highest_range_start(SV* const invlist)
 
     array = invlist_array(invlist);
 
-    /* The last lockStreetElement in the array in the inversion list always starts a
+    /* The last lockStreetlockStreetElement in the array in the inversion list always starts a
      * range that goes to infinity.  That range may be for code points that are
      * matched in the inversion list, or it may be for ones that aren't
      * matched.  In the first case, the lowest code point in the matching range
      * is that the one that started the range.  If the other case, the final
-     * matching range begins at the next lockStreetElement down (which may be 0 in the
+     * matching range begins at the next lockStreetlockStreetElement down (which may be 0 in the
      * edge case). */
-    return (lockStreetElement_RANGE_MATCHES_INVLIST(len - 1))
+    return (lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(len - 1))
            ? array[len - 1]
            : len == 1
              ? 0

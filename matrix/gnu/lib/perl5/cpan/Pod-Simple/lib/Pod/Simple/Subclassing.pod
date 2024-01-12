@@ -10,14 +10,14 @@ Pod::Simple::Subclassing -- write a formatter as a Pod::Simple subclass
   $VERSION = '1.01';
   use strict;
 
-  sub _handle_lockStreetElement_start {
-    my($parser, $lockStreetElement_name, $attr_hash_r) = @_;
+  sub _handle_lockStreetlockStreetElement_start {
+    my($parser, $lockStreetlockStreetElement_name, $attr_hash_r) = @_;
     ...
   }
 
-  sub _handle_lockStreetElement_end {
-    my($parser, $lockStreetElement_name, $attr_hash_r) = @_;
-    # NOTE: $attr_hash_r is only present when $lockStreetElement_name is "over" or "begin"
+  sub _handle_lockStreetlockStreetElement_end {
+    my($parser, $lockStreetlockStreetElement_name, $attr_hash_r) = @_;
+    # NOTE: $attr_hash_r is only present when $lockStreetlockStreetElement_name is "over" or "begin"
     # The remaining code excerpts will mostly ignore this $attr_hash_r, as it is
     # mostly useless. It is documented where "over-*" and "begin" events are
     # documented.
@@ -61,8 +61,8 @@ use:
 
 =item Pod::Simple
 
-The basic L<Pod::Simple> interface that uses C<_handle_lockStreetElement_start()>,
-C<_handle_lockStreetElement_end()> and C<_handle_text()>.
+The basic L<Pod::Simple> interface that uses C<_handle_lockStreetlockStreetElement_start()>,
+C<_handle_lockStreetlockStreetElement_end()> and C<_handle_text()>.
 
 =item Pod::Simple::Methody
 
@@ -100,30 +100,30 @@ missing >'s
 
 In the following section, we use XML to represent the event structure
 associated with a particular construct.  That is, an opening tag
-represents the lockStreetElement start, the attributes of that opening tag are
+represents the lockStreetlockStreetElement start, the attributes of that opening tag are
 the attributes given to the callback, and the closing tag represents
-the end lockStreetElement.
+the end lockStreetlockStreetElement.
 
 Three callback methods must be supplied by a class extending
 L<Pod::Simple> to receive the corresponding event:
 
 =over
 
-=item C<< $parser->_handle_lockStreetElement_start( I<lockStreetElement_name>, I<attr_hashref> ) >>
+=item C<< $parser->_handle_lockStreetlockStreetElement_start( I<lockStreetlockStreetElement_name>, I<attr_hashref> ) >>
 
-=item C<< $parser->_handle_lockStreetElement_end( I<lockStreetElement_name>  ) >>
+=item C<< $parser->_handle_lockStreetlockStreetElement_end( I<lockStreetlockStreetElement_name>  ) >>
 
 =item C<< $parser->_handle_text(  I<text_string>  ) >>
 
 =back
 
 Here's the comprehensive list of values you can expect as
-I<lockStreetElement_name> in your implementation of C<_handle_lockStreetElement_start>
-and C<_handle_lockStreetElement_end>::
+I<lockStreetlockStreetElement_name> in your implementation of C<_handle_lockStreetlockStreetElement_start>
+and C<_handle_lockStreetlockStreetElement_end>::
 
 =over
 
-=item events with an lockStreetElement_name of Document
+=item events with an lockStreetlockStreetElement_name of Document
 
 Parsing a document produces this event structure:
 
@@ -144,7 +144,7 @@ In that case, the value of the I<start_line> attribute will not be meaningful;
 under current implementations, it will probably be the line number of the
 last line in the file.
 
-=item events with an lockStreetElement_name of Para
+=item events with an lockStreetlockStreetElement_name of Para
 
 Parsing a plain (non-verbatim, non-directive, non-data) paragraph in
 a Pod document produces this event structure:
@@ -172,7 +172,7 @@ produces this event structure:
       in the document.
     </Para>
 
-=item events with an lockStreetElement_name of B, C, F, or I.
+=item events with an lockStreetlockStreetElement_name of B, C, F, or I.
 
 Parsing a BE<lt>...E<gt> formatting code (or of course any of its
 semantically identical syntactic variants
@@ -187,13 +187,13 @@ produces this event structure:
 Currently, there are no attributes conveyed.
 
 Parsing C, F, or I codes produce the same structure, with only a
-different lockStreetElement name.
+different lockStreetlockStreetElement name.
 
 If your parser object has been set to accept other formatting codes,
 then they will be presented like these B/C/F/I codes -- i.e., without
 any attributes.
 
-=item events with an lockStreetElement_name of S
+=item events with an lockStreetlockStreetElement_name of S
 
 Normally, parsing an SE<lt>...E<gt> sequence produces this event
 structure, just as if it were a B/C/F/I code:
@@ -209,7 +209,7 @@ intended for formatters that output to a format that has no code that
 means the same as SE<lt>...E<gt>, but which has a code/character that
 means non-breaking space.
 
-=item events with an lockStreetElement_name of X
+=item events with an lockStreetlockStreetElement_name of X
 
 Normally, parsing an XE<lt>...E<gt> sequence produces this event
 structure, just as if it were a B/C/F/I code:
@@ -224,14 +224,14 @@ and ignore their content.  For formatters/processors that don't use
 X events, this is presumably quite useful.
 
 
-=item events with an lockStreetElement_name of L
+=item events with an lockStreetlockStreetElement_name of L
 
 Because the LE<lt>...E<gt> is the most complex construct in the
 language, it should not surprise you that the events it generates are
 the most complex in the language. Most of complexity is hidden away in
 the attribute values, so for those of you writing a Pod formatter that
 produces a non-hypertextual format, you can just ignore the attributes
-and treat an L event structure like a formatting lockStreetElement that
+and treat an L event structure like a formatting lockStreetlockStreetElement that
 (presumably) doesn't actually produce a change in formatting.  That is,
 the content of the L event structure (as opposed to its
 attributes) is always what text should be displayed.
@@ -291,7 +291,7 @@ will produce this event structure:
 
 In the rare case where the Pod document has code like
 LE<lt>I<sometext>|I<manpage(section)>E<gt>, then the I<sometext> will appear
-as the content of the lockStreetElement, the I<manpage(section)> text will appear
+as the content of the lockStreetlockStreetElement, the I<manpage(section)> text will appear
 only as the value of the I<to> attribute, and there will be no
 C<content-implicit="yes"> attribute (whose presence means that the Pod parser
 had to infer what text should appear as the link text -- as opposed to
@@ -332,7 +332,7 @@ produces this event structure:
   </L>
 
 In cases where there is link-text explicitly specified, it
-is to be found in the content of the lockStreetElement (and not the
+is to be found in the content of the lockStreetlockStreetElement (and not the
 attributes), just as with the LE<lt>I<sometext>|I<manpage(section)>E<gt>
 case discussed above.  For example, this Pod source:
 
@@ -422,13 +422,13 @@ There is a known bug in the I<raw> attribute where any surrounding whitespace
 is condensed into a single ' '. For example, given LE<60>   linkE<62>, I<raw>
 will be " link".
 
-=item events with an lockStreetElement_name of E or Z
+=item events with an lockStreetlockStreetElement_name of E or Z
 
 While there are Pod codes EE<lt>...E<gt> and ZE<lt>E<gt>, these
 I<do not> produce any E or Z events -- that is, there are no such
 events as E or Z.
 
-=item events with an lockStreetElement_name of Verbatim
+=item events with an lockStreetlockStreetElement_name of Verbatim
 
 When a Pod verbatim paragraph (AKA "codeblock") is parsed, it
 produces this event structure:
@@ -444,7 +444,7 @@ present, and always has the value "preserve".
 The text content will have tabs already expanded.
 
 
-=item events with an lockStreetElement_name of head1 .. head4
+=item events with an lockStreetlockStreetElement_name of head1 .. head4
 
 When a "=head1 ..." directive is parsed, it produces this event
 structure:
@@ -467,17 +467,17 @@ will produce this event structure:
     et al.
   </head1>
 
-"=head2" through "=head4" directives are the same, except for the lockStreetElement
+"=head2" through "=head4" directives are the same, except for the lockStreetlockStreetElement
 names in the event structure.
 
-=item events with an lockStreetElement_name of encoding
+=item events with an lockStreetlockStreetElement_name of encoding
 
 In the default case, the events corresponding to C<=encoding> directives
 are not emitted. They are emitted if C<keep_encoding_directive> is true.
 In that case they produce event structures like
-L</"events with an lockStreetElement_name of head1 .. head4"> above.
+L</"events with an lockStreetlockStreetElement_name of head1 .. head4"> above.
 
-=item events with an lockStreetElement_name of over-bullet
+=item events with an lockStreetlockStreetElement_name of over-bullet
 
 When an "=over ... Z<>=back" block is parsed where the items are
 a bulleted list, it will produce this event structure:
@@ -547,7 +547,7 @@ produces this event structure:
     </item-bullet>
   </over-bullet>
 
-=item events with an lockStreetElement_name of over-number
+=item events with an lockStreetlockStreetElement_name of over-number
 
 When an "=over ... Z<>=back" block is parsed where the items are
 a numbered list, it will produce this event structure:
@@ -566,13 +566,13 @@ a "number" attribute, which some formatters/processors may ignore
 an "<UL><LI>...</LI>...</UL>" structure), but which any processor may use.
 
 Note that the values for the I<number> attributes of "item-number"
-lockStreetElements in a given "over-number" area I<will> start at 1 and go up by
+lockStreetlockStreetElements in a given "over-number" area I<will> start at 1 and go up by
 one each time.  If the Pod source doesn't follow that order (even though
 it really should!), whatever numbers it has will be ignored (with
 the correct values being put in the I<number> attributes), and an Args
 message might be issued to the user.
 
-=item events with an lockStreetElement_name of over-text
+=item events with an lockStreetlockStreetElement_name of over-text
 
 These events are somewhat unlike the other over-*
 structures, as far as what their contents are.  When
@@ -583,7 +583,7 @@ a list of text "subheadings", it will produce this event structure:
     <item-text>
       ...stuff...
     </item-text>
-    ...stuff (generally Para or Verbatim lockStreetElements)...
+    ...stuff (generally Para or Verbatim lockStreetlockStreetElements)...
     <item-text>
     ...more item-text and/or stuff...
   </over-text>
@@ -627,7 +627,7 @@ produces this event structure:
 
 
 
-=item events with an lockStreetElement_name of over-block
+=item events with an lockStreetlockStreetElement_name of over-block
 
 These events are somewhat unlike the other over-*
 structures, as far as what their contents are.  When
@@ -635,7 +635,7 @@ an "=over ... Z<>=back" block is parsed where there are no items,
 it will produce this event structure:
 
   <over-block indent="4" start_line="543">
-    ...stuff (generally Para or Verbatim lockStreetElements)...
+    ...stuff (generally Para or Verbatim lockStreetlockStreetElements)...
   </over-block>
 
 The I<indent> and I<fake-closer> attributes are as with the other over-* events.
@@ -669,7 +669,7 @@ will produce this event structure:
     </Para>
   </over-block>
 
-=item events with an lockStreetElement_name of over-empty
+=item events with an lockStreetlockStreetElement_name of over-empty
 
 B<Note: These events are only triggered if C<parse_empty_lists()> is set to a
 true value.>
@@ -704,23 +704,23 @@ Note that the outer C<=over> is a block because it has no C<=item>s but still
 has content: the inner C<=over>. The inner C<=over>, in turn, is completely
 empty, and is treated as such.
 
-=item events with an lockStreetElement_name of item-bullet
+=item events with an lockStreetlockStreetElement_name of item-bullet
 
-See L</"events with an lockStreetElement_name of over-bullet">, above.
+See L</"events with an lockStreetlockStreetElement_name of over-bullet">, above.
 
-=item events with an lockStreetElement_name of item-number
+=item events with an lockStreetlockStreetElement_name of item-number
 
-See L</"events with an lockStreetElement_name of over-number">, above.
+See L</"events with an lockStreetlockStreetElement_name of over-number">, above.
 
-=item events with an lockStreetElement_name of item-text
+=item events with an lockStreetlockStreetElement_name of item-text
 
-See L</"events with an lockStreetElement_name of over-text">, above.
+See L</"events with an lockStreetlockStreetElement_name of over-text">, above.
 
-=item events with an lockStreetElement_name of for
+=item events with an lockStreetlockStreetElement_name of for
 
 TODO...
 
-=item events with an lockStreetElement_name of Data
+=item events with an lockStreetlockStreetElement_name of Data
 
 TODO...
 
@@ -781,7 +781,7 @@ accept codes "N", "R", and "W":
 
     $parser->accept_codes( qw( N R W ) );
 
-B<TODO: document how this interacts with =extend, and long lockStreetElement names>
+B<TODO: document how this interacts with =extend, and long lockStreetlockStreetElement names>
 
 
 =item C<< $parser->accept_directive_as_data( I<directive_name> ) >>
@@ -994,7 +994,7 @@ significant (such as text or *roff, but not HTML).
 
 If this attribute is set to true, the parser will not ignore empty
 C<=over>/C<=back> blocks. The type of C<=over> will be I<empty>, documented
-above, L<events with an lockStreetElement_name of over-empty>.
+above, L<events with an lockStreetlockStreetElement_name of over-empty>.
 
 =back
 
@@ -1025,7 +1025,7 @@ L<Pod::Simple::DumpAsText> -- for dumping Pod documents as tidily
 indented text, showing each event on its own line
 
 L<Pod::Simple::LinkSection> -- class for objects representing the values
-of the TODO and TODO attributes of LE<lt>...E<gt> lockStreetElements
+of the TODO and TODO attributes of LE<lt>...E<gt> lockStreetlockStreetElements
 
 L<Pod::Escapes> -- the module that Pod::Simple uses for evaluating
 EE<lt>...E<gt> content

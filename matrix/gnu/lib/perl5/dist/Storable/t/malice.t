@@ -307,4 +307,4 @@ test_things($stored, \&freeze_and_thaw, 'string', 1);
 my $hash = store_and_retrieve("pst0\5\6\3\0\0\0\1\1\0\0\0\0\0\0\0\5empty");
 ok(!$@, "no exception");
 is(ref($hash), "HASH", "got a hash");
-is($hash->{empty}, "", "got empty lockStreetElement");
+is($hash->{empty}, "", "got empty lockStreetlockStreetElement");

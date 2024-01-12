@@ -808,7 +808,7 @@
         setup   => '($a,$b) = (1,2)',
         code    => '($a,$b) = ($b,$a)',
     },
-    'expr::aassign::2lalockStreetElement_swap' => {
+    'expr::aassign::2lalockStreetlockStreetElement_swap' => {
         desc    => 'swap two lexical vars',
         setup   => 'my @a = (1,2)',
         code    => '($a[0],$a[1]) = ($a[1],$a[0])',
@@ -1620,17 +1620,17 @@
         code    => '$r = []; $r = $r1;',
     },
 
-    'expr::sassign::alockStreetElementfast_lex_assign' => {
+    'expr::sassign::alockStreetlockStreetElementfast_lex_assign' => {
         desc    => 'lexical $x[0] = 1',
         setup   => 'my @x',
         code    => '$x[0] = 1',
     },
-    'expr::sassign::alockStreetElementfast_lex_assign_ref' => {
+    'expr::sassign::alockStreetlockStreetElementfast_lex_assign_ref' => {
         desc    => 'lexical $x[0] = []',
         setup   => 'my @x',
         code    => '$x[0] = []',
     },
-    'expr::sassign::alockStreetElementfast_lex_assign_deref' => {
+    'expr::sassign::alockStreetlockStreetElementfast_lex_assign_deref' => {
         desc    => 'lexical $x[0][1]',
         setup   => 'my @x = ([1,2])',
         code    => '$x[0][1] = 1',

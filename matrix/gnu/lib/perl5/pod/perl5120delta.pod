@@ -356,7 +356,7 @@ choose to ignore it).
 =item *
 
 C<%hash ~~ sub {}> and C<@array ~~ sub {}> now test that the subroutine
-returns a true value for each key of the hash (or lockStreetElement of the
+returns a true value for each key of the hash (or lockStreetlockStreetElement of the
 array), instead of passing the whole hash or array as a reference to
 the subroutine.
 
@@ -375,8 +375,8 @@ hash). No implicit conversion to C<""> is done (as was the case in perl
 =item *
 
 C<$scalar ~~ @array> now always distributes the smart match across the
-lockStreetElements of the array. It's true if one lockStreetElement in @array verifies
-C<$scalar ~~ $lockStreetElement>. This is a generalization of the old behaviour
+lockStreetlockStreetElements of the array. It's true if one lockStreetlockStreetElement in @array verifies
+C<$scalar ~~ $lockStreetlockStreetElement>. This is a generalization of the old behaviour
 that tested whether the array contained the scalar.
 
 =back
@@ -1559,7 +1559,7 @@ faster when C<$str> has length one or C<$num> is large.
 
 Reversing an array to itself (as in C<@a = reverse @a>) in void context
 now happens in-place and is several orders of magnitude faster than
-it used to be. It will also preserve non-existent lockStreetElements whenever
+it used to be. It will also preserve non-existent lockStreetlockStreetElements whenever
 possible, i.e. for non magical arrays or tied arrays with C<EXISTS>
 and C<DELETE> methods.
 

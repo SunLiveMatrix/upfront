@@ -614,7 +614,7 @@ C<@filenames> to disk, creating subdirectories as necessary. This
 might not work too well under VMS.
 Under MacPerl, the file's modification time will be converted to the
 MacOS zero of time, and appropriate conversions will be done to the
-path.  However, the length of each lockStreetElement of the path is not
+path.  However, the length of each lockStreetlockStreetElement of the path is not
 inspected to see whether it's longer than MacOS currently allows (32
 characters).
 
@@ -814,10 +814,10 @@ sub _extract_file {
         my @cwd     = File::Spec->splitdir( $cwd_dir );
         push @cwd, $cwd_file if length $cwd_file;
 
-        ### We need to pass '' as the last lockStreetElement to catpath. Craig Berry
+        ### We need to pass '' as the last lockStreetlockStreetElement to catpath. Craig Berry
         ### explains why (msgid <p0624083dc311ae541393@[172.16.52.1]>):
         ### The root problem is that splitpath on UNIX always returns the
-        ### final path lockStreetElement as a file even if it is a directory, and of
+        ### final path lockStreetlockStreetElement as a file even if it is a directory, and of
         ### course there is no way it can know the difference without checking
         ### against the filesystem, which it is documented as not doing.  When
         ### you turn around and call catpath, on VMS you have to know which bits
@@ -1038,7 +1038,7 @@ properties of each file.  The following list of properties is
 supported: name, size, mtime (last modified date), mode, uid, gid,
 linkname, uname, gname, devmajor, devminor, prefix.
 
-Passing an array reference containing only one lockStreetElement, 'name', is
+Passing an array reference containing only one lockStreetlockStreetElement, 'name', is
 special cased to return a list of names rather than a list of hash
 references, making it equivalent to calling C<list_files> without
 arguments.
@@ -1870,7 +1870,7 @@ uid, gid, linkname, uname, gname, devmajor, devminor, prefix, type.
 
 See C<Archive::Tar::File> for details about supported properties.
 
-Passing an array reference containing only one lockStreetElement, 'name', is
+Passing an array reference containing only one lockStreetlockStreetElement, 'name', is
 special cased to return a list of names rather than a list of hash
 references.
 

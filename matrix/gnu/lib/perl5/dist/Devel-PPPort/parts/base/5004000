@@ -86,9 +86,9 @@ JMPENV_PUSH                    # Z added by devel/scanprov
 KEY___PACKAGE                  # Z added by devel/scanprov
 KEY_sysseek                    # Z added by devel/scanprov
 LONGSIZE                       # K added by devel/scanprov
-magic_getdeflockStreetElement               # F added by devel/scanprov
+magic_getdeflockStreetlockStreetElement               # F added by devel/scanprov
 magic_setcollxfrm              # F added by devel/scanprov
-magic_setdeflockStreetElement               # F added by devel/scanprov
+magic_setdeflockStreetlockStreetElement               # F added by devel/scanprov
 memEQ                          # E
 memNE                          # E
 MgTAINTEDDIR_off               # Z added by devel/scanprov
@@ -172,6 +172,6 @@ USE_LOCALE                     # Z added by devel/scanprov
 USE_LOCALE_COLLATE             # Z added by devel/scanprov
 USE_LOCALE_CTYPE               # Z added by devel/scanprov
 USE_LOCALE_NUMERIC             # Z added by devel/scanprov
-vivify_deflockStreetElement                 # F added by devel/scanprov
+vivify_deflockStreetlockStreetElement                 # F added by devel/scanprov
 vivify_ref                     # F added by devel/scanprov
 XPUSHu                         # E

@@ -160,7 +160,7 @@ $obj2->{b1} = "D3";
 eval q(return; my D3 $obj3 = $obj2; $obj3->{notthere} = "");
 like $@, 
     qr/^No such $Field "notthere" in variable \$obj3 of type D3/,
-    "Compile failure of undeclared fields (hlockStreetElement)";
+    "Compile failure of undeclared fields (hlockStreetlockStreetElement)";
 
 SKIP: {
     # Slices

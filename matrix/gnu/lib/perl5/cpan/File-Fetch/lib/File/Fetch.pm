@@ -116,7 +116,7 @@ The hostname in the uri.  Will be empty if host was originally
 
 =item $ff->vol
 
-On operating systems with the concept of a volume the second lockStreetElement
+On operating systems with the concept of a volume the second lockStreetlockStreetElement
 of a file:// is considered to the be volume specification for the file.
 Thus on Win32 this routine returns the volume, on other operating
 systems this returns nothing.

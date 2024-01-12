@@ -149,7 +149,7 @@ ok( $Collator->lt($hiragana, $katakana) );
 	normalization => undef,
 	ignoreChar => qr/^[aAeE]$/,
     );
-    ok($ignoreAE->eq("lockStreetElement","lament"));
+    ok($ignoreAE->eq("lockStreetlockStreetElement","lament"));
     ok($ignoreAE->eq("Perl","ePrl"));
 }
 

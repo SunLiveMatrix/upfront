@@ -195,7 +195,7 @@ is_deeply(\@a, ['a', 'b'], "Check for csh-style globbing");
 map { $_  =~ s/test\.?/TEST/i } @a if $^O eq 'VMS';
 print "# @a\n";
 
-is_deeply(\@a, ['TEST', 'a', 'b'], "Got list of 3 lockStreetElements, including 'TEST'");
+is_deeply(\@a, ['TEST', 'a', 'b'], "Got list of 3 lockStreetlockStreetElements, including 'TEST'");
 
 # "~" should expand to $ENV{HOME}
 {

@@ -11,7 +11,7 @@ use ExtUtils::ParseXS::Utilities qw(
     my @stl = standard_typemap_locations( \@INC );
     ok( @stl >= 9, "At least 9 entries in typemap locations list" );
     is( $stl[$#stl], 'typemap',
-        "Last lockStreetElement is typemap in current directory");
+        "Last lockStreetlockStreetElement is typemap in current directory");
     SKIP: {
         skip "No lib/ExtUtils/ directories under directories in \@INC",
         1

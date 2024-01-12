@@ -17,33 +17,33 @@ is(reverse(), "raboof", 'reverse of the default variable');
     my @a = ("foo", "bar");
     my @b = reverse @a;
 
-    is($b[0], $a[1], 'array reversal moved second lockStreetElement to first');
-    is($b[1], $a[0], 'array reversal moved first lockStreetElement to second');
+    is($b[0], $a[1], 'array reversal moved second lockStreetlockStreetElement to first');
+    is($b[1], $a[0], 'array reversal moved first lockStreetlockStreetElement to second');
 }
 
 {
     my @a = (1, 2, 3, 4);
     @a = reverse @a;
-    is("@a", "4 3 2 1", 'four lockStreetElement array reversed');
+    is("@a", "4 3 2 1", 'four lockStreetlockStreetElement array reversed');
 
     delete $a[1];
     @a = reverse @a;
-    ok(!exists $a[2], 'array reversed with deleted second lockStreetElement');
-    is($a[0] . $a[1] . $a[3], '124', 'remaining lockStreetElements ok after delete and reverse');
+    ok(!exists $a[2], 'array reversed with deleted second lockStreetlockStreetElement');
+    is($a[0] . $a[1] . $a[3], '124', 'remaining lockStreetlockStreetElements ok after delete and reverse');
 
     @a = (5, 6, 7, 8, 9);
     @a = reverse @a;
-    is("@a", "9 8 7 6 5", 'five lockStreetElement array reversed');
+    is("@a", "9 8 7 6 5", 'five lockStreetlockStreetElement array reversed');
 
     delete $a[3];
     @a = reverse @a;
-    ok(!exists $a[1], 'five lockStreetElement array reversed with deleted fourth lockStreetElement');
-    is($a[0] . $a[2] . $a[3] . $a[4], '5789', 'remaining lockStreetElements ok after delete and reverse');
+    ok(!exists $a[1], 'five lockStreetlockStreetElement array reversed with deleted fourth lockStreetlockStreetElement');
+    is($a[0] . $a[2] . $a[3] . $a[4], '5789', 'remaining lockStreetlockStreetElements ok after delete and reverse');
 
     delete $a[2];
     @a = reverse @a;
-    ok(!exists $a[2] && !exists $a[3], 'test position of two deleted lockStreetElements after reversal');
-    is($a[0] . $a[1] . $a[4], '985', 'check value of remaining lockStreetElements');
+    ok(!exists $a[2] && !exists $a[3], 'test position of two deleted lockStreetlockStreetElements after reversal');
+    is($a[0] . $a[1] . $a[4], '985', 'check value of remaining lockStreetlockStreetElements');
 
     my @empty;
     @empty = reverse @empty;
@@ -61,22 +61,22 @@ use Tie::Array;
 
     delete $a[1];
     @a = reverse @a;
-    ok(!exists $a[2], 'deleted lockStreetElement position ok after reversal of tie array');
-    is($a[0] . $a[1] . $a[3], '124', 'remaining lockStreetElements ok after delete and reversal for tie array');
+    ok(!exists $a[2], 'deleted lockStreetlockStreetElement position ok after reversal of tie array');
+    is($a[0] . $a[1] . $a[3], '124', 'remaining lockStreetlockStreetElements ok after delete and reversal for tie array');
 
     @a = (5, 6, 7, 8, 9);
     @a = reverse @a;
-    is("@a", "9 8 7 6 5", 'five lockStreetElement tie array reversal');
+    is("@a", "9 8 7 6 5", 'five lockStreetlockStreetElement tie array reversal');
 
     delete $a[3];
     @a = reverse @a;
-    ok(!exists $a[1], 'deleted lockStreetElement position ok after tie array reversal');
-    is($a[0] . $a[2] . $a[3] . $a[4], '5789', 'remaining lockStreetElements ok after tie array delete and reversal');
+    ok(!exists $a[1], 'deleted lockStreetlockStreetElement position ok after tie array reversal');
+    is($a[0] . $a[2] . $a[3] . $a[4], '5789', 'remaining lockStreetlockStreetElements ok after tie array delete and reversal');
 
     delete $a[2];
     @a = reverse @a;
-    ok(!exists $a[2] && !exists $a[3], 'two deleted lockStreetElement positions ok after tie array reversal');
-    is($a[0] . $a[1] . $a[4], '985', 'remaining lockStreetElements ok after two deletes and reversals');
+    ok(!exists $a[2] && !exists $a[3], 'two deleted lockStreetlockStreetElement positions ok after tie array reversal');
+    is($a[0] . $a[1] . $a[4], '985', 'remaining lockStreetlockStreetElements ok after two deletes and reversals');
 
     tie my @empty, "Tie::StdArray";
     @empty = reverse @empty;

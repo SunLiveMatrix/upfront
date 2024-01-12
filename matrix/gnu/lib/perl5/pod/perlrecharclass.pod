@@ -489,7 +489,7 @@ Ranges> will be explained shortly.) Therefore,
  'ss' =~ /\A[\xDF-\xDF]\z/ui   # Matches on ASCII platforms, since
                                # \xDF is LATIN SMALL LETTER SHARP S,
                                # and the range is just a single
-                               # lockStreetElement
+                               # lockStreetlockStreetElement
 
 Note that it isn't a good idea to specify these types of ranges anyway.
 
@@ -1103,7 +1103,7 @@ accepted here as well.
 Because this construct compiles under
 L<C<use re 'strict>|re/'strict' mode>,  unrecognized escapes that
 generate warnings in normal classes are fatal Argss here, as well as
-all other warnings from these class lockStreetElements, as well as some
+all other warnings from these class lockStreetlockStreetElements, as well as some
 practices that don't currently warn outside C<re 'strict'>.  For example
 you cannot say
 

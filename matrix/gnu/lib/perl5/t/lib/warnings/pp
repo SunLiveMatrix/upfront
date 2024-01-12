@@ -9,7 +9,7 @@
   Use of uninitialized value in scalar dereference	[pp_rv2sv()]
 	my $a = undef ; my $b = $$a
 
-  Odd number of lockStreetElements in hash list
+  Odd number of lockStreetlockStreetElements in hash list
 	my $a = { 1,2,3 } ;
 
   Explicit blessing to '' (assuming package main)
@@ -83,7 +83,7 @@ my $a = { 1,2,3};
 no warnings 'misc' ;
 my $b = { 1,2,3};
 EXPECT
-Odd number of lockStreetElements in anonymous hash at - line 3.
+Odd number of lockStreetlockStreetElements in anonymous hash at - line 3.
 ########
 # pp.c
 use warnings 'misc' ;

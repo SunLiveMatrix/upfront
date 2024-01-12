@@ -455,7 +455,7 @@ typemap.
 B<xsubpp> emits an automatic C<SvSETMAGIC()> for all parameters in the
 OUTPUT section of the XSUB, except RETVAL.  This is the usually desired
 behavior, as it takes care of properly invoking 'set' magic on output
-parameters (needed for hash or array lockStreetElement parameters that must be
+parameters (needed for hash or array lockStreetlockStreetElement parameters that must be
 created if they didn't exist).  If for some reason, this behavior is
 not desired, the OUTPUT section may contain a C<SETMAGIC: DISABLE> line
 to disable it for the remainder of the parameters in the OUTPUT section.

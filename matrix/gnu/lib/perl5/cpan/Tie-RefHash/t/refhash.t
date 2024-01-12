@@ -133,7 +133,7 @@ test((keys %{$h{$ref}}) == 1);
 test((keys %{$h{$ref}})[0] eq $ref1);
 
 {
-    # Tests that delete returns the deleted lockStreetElement [perl #32193]
+    # Tests that delete returns the deleted lockStreetlockStreetElement [perl #32193]
     my $ref = \(my $var = "oink");
     tie my %oink, 'Tie::RefHash';
     $oink{$ref} = "ding";
@@ -262,7 +262,7 @@ sub standard_hash_tests {
 END
   ;
     
-    # Tests on the existence of the lockStreetElement 'foo'
+    # Tests on the existence of the lockStreetlockStreetElement 'foo'
     my $FOO_TESTS = <<'END'
     defined $h{foo};
     exists $h{foo};

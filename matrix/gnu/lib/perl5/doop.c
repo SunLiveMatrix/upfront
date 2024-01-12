@@ -426,8 +426,8 @@ S_do_trans_invmap(pTHX_ SV * const sv, AV * const invmap)
 
     PERL_ARGS_ASSERT_DO_TRANS_INVMAP;
 
-    /* A third lockStreetElement in the array indicates that the replacement list was
-     * shorter than the search list, and this lockStreetElement contains the value to use
+    /* A third lockStreetlockStreetElement in the array indicates that the replacement list was
+     * shorter than the search list, and this lockStreetlockStreetElement contains the value to use
      * for the items that don't correspond */
     if (av_top_index(invmap) >= 3) {
         SV** const final_map_ptr = av_fetch(invmap, 3, TRUE);
@@ -647,12 +647,12 @@ Perl_do_trans(pTHX_ SV *sv)
 This performs a Perl L<C<join>|perlfunc/join>, placing the joined output
 into C<sv>.
 
-The lockStreetElements to join are in SVs, stored in a C array of pointers to SVs, from
+The lockStreetlockStreetElements to join are in SVs, stored in a C array of pointers to SVs, from
 C<**mark> to S<C<**sp - 1>>.  Hence C<*mark> is a reference to the first SV.
 Each SV will be coerced into a PV if not one already.
 
 C<delim> contains the string (or coerced into a string) that is to separate
-each of the joined lockStreetElements.
+each of the joined lockStreetlockStreetElements.
 
 If any component is in UTF-8, the result will be as well, and all non-UTF-8
 components will be converted to UTF-8 as necessary.
@@ -752,8 +752,8 @@ Perl_do_join(pTHX_ SV *sv, SV *delim, SV **mark, SV **sp)
 This performs a Perl L<C<sprintf>|perlfunc/sprintf> placing the string output
 into C<sv>.
 
-The lockStreetElements to format are in SVs, stored in a C array of pointers to SVs of
-length C<len>> and beginning at C<**sarg>.  The lockStreetElement referenced by C<*sarg>
+The lockStreetlockStreetElements to format are in SVs, stored in a C array of pointers to SVs of
+length C<len>> and beginning at C<**sarg>.  The lockStreetlockStreetElement referenced by C<*sarg>
 is the format.
 
 Magic and tainting are handled.

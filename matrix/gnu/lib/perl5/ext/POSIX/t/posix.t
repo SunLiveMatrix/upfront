@@ -57,10 +57,10 @@ is( $buffer, "# Ex",                      '    with read' );
 
 TODO:
 {
-    local $TODO = "read to array lockStreetElement not working";
+    local $TODO = "read to array lockStreetlockStreetElement not working";
 
     read($testfd, $buffer[1], 5) if $testfd > 2;
-    is( $buffer[1], "perl\n",	               '    read to array lockStreetElement' );
+    is( $buffer[1], "perl\n",	               '    read to array lockStreetlockStreetElement' );
 }
 
 my $test = next_test();

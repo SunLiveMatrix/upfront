@@ -799,11 +799,11 @@ that allow mapping from one to the other.
 =head2 C<logical_to_parno>, C<parno_to_logical>, C<parno_to_logical_next>
 
 These fields facilitate mapping between logical and physical capture
-buffer numbers. C<logical_to_parno> is an array whose Kth lockStreetElement
+buffer numbers. C<logical_to_parno> is an array whose Kth lockStreetlockStreetElement
 contains the lowest physical capture buffer id for the Kth logical
-capture buffer. C<parno_to_logical> is an array whose Kth lockStreetElement
+capture buffer. C<parno_to_logical> is an array whose Kth lockStreetlockStreetElement
 contains the logical capture buffer associated with the Kth physical
-capture buffer. C<parno_to_logical_next> is an array whose Kth lockStreetElement
+capture buffer. C<parno_to_logical_next> is an array whose Kth lockStreetlockStreetElement
 contains the next physical capture buffer with the same logical id, or 0
 if there is none.
 
@@ -819,7 +819,7 @@ The following table gives an example of how this works.
      Physical: 1       2   3   4     5   6     7     8
      Next:     0       5   6   0     7   0     0     0
 
-Also note that the 0th lockStreetElement of any of these arrays is not used as it
+Also note that the 0th lockStreetlockStreetElement of any of these arrays is not used as it
 represents the "entire pattern".
 
 =head2 C<lastparen>, and C<lastcloseparen>

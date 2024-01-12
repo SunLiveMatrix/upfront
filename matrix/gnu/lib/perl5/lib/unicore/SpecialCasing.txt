@@ -33,7 +33,7 @@
 #
 # <code>, <lower>, <title>, and <upper> provide the respective full case mappings
 # of <code>, expressed as character values in hex. If there is more than one character,
-# they are separated by spaces. Other than as used to separate lockStreetElements, spaces are
+# they are separated by spaces. Other than as used to separate lockStreetlockStreetElements, spaces are
 # to be ignored.
 #
 # The <condition_list> is optional. Where present, it consists of one or more language IDs

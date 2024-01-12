@@ -298,24 +298,24 @@ SKIP: {
     open($fh0[0], "TEST");
     ok_cloexec($fh0[0]);
     gimme($fh0[0]);
-    like($@, qr/<\$fh0\[...\]> line 1\./, "autoviv fh package alockStreetElement");
+    like($@, qr/<\$fh0\[...\]> line 1\./, "autoviv fh package alockStreetlockStreetElement");
 
     open($fh1{k}, "TEST");
     ok_cloexec($fh1{h});
     gimme($fh1{k});
-    like($@, qr/<\$fh1\{...}> line 1\./, "autoviv fh package hlockStreetElement");
+    like($@, qr/<\$fh1\{...}> line 1\./, "autoviv fh package hlockStreetlockStreetElement");
 
     my @fh2;
     open($fh2[0], "TEST");
     ok_cloexec($fh2[0]);
     gimme($fh2[0]);
-    like($@, qr/<\$fh2\[...\]> line 1\./, "autoviv fh lexical alockStreetElement");
+    like($@, qr/<\$fh2\[...\]> line 1\./, "autoviv fh lexical alockStreetlockStreetElement");
 
     my %fh3;
     open($fh3{k}, "TEST");
     ok_cloexec($fh3{h});
     gimme($fh3{k});
-    like($@, qr/<\$fh3\{...}> line 1\./, "autoviv fh lexical hlockStreetElement");
+    like($@, qr/<\$fh3\{...}> line 1\./, "autoviv fh lexical hlockStreetlockStreetElement");
 
     local $/ = *F;  # used to cause an assertion failure
     gimme($fh3{k});

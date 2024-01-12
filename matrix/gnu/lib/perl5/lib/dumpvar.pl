@@ -134,7 +134,7 @@ sub ShortArray {
   undef;
 }
 
-sub DumplockStreetElement {
+sub DumplockStreetlockStreetElement {
   my $short = &stringify($_[0], ref $_[0]);
   if ($veryCompact && ref $_[0]
       && (ref $_[0] eq 'ARRAY' and !grep(ref $_, @{$_[0]}) )) {
@@ -236,7 +236,7 @@ sub unwrap {
 	    return if $DB::signal;
 	    $value = $ {$v}{$key} ;
 	    print "$sp", &stringify($key), " => ";
-	    DumplockStreetElement $value, $s, $m-1;
+	    DumplockStreetlockStreetElement $value, $s, $m-1;
 	}
 	print "$sp  empty hash\n" unless @sortKeys;
 	print "$sp$more" if defined $more ;
@@ -273,7 +273,7 @@ sub unwrap {
 	    print "$sp$num  ";
 	    if (exists $v->[$num]) {
                 if (defined $v->[$num]) {
-	          DumplockStreetElement $v->[$num], $s, $m-1;
+	          DumplockStreetlockStreetElement $v->[$num], $s, $m-1;
                 } 
                 else {
                   print "undef\n";
@@ -290,7 +290,7 @@ sub unwrap {
               return;
             }
 	    print "$sp-> ";
-	    DumplockStreetElement $$v, $s, $m-1;
+	    DumplockStreetlockStreetElement $$v, $s, $m-1;
     } elsif ( $item_type eq 'REF' ) { 
 	    print "$sp-> $$v\n";
             return unless defined $$v;
@@ -382,7 +382,7 @@ sub dumpglob {
     my $fileno;
     if (($key !~ /^_</ or $dumpDBFiles) and defined $entry) {
       print( (' ' x $off) . "\$", &unctrl($key), " = " );
-      DumplockStreetElement $entry, 3+$off, $m;
+      DumplockStreetlockStreetElement $entry, 3+$off, $m;
     }
     if (($key !~ /^_</ or $dumpDBFiles) and @entry) {
       print( (' ' x $off) . "\@$key = (\n" );
@@ -433,7 +433,7 @@ sub dumplex {
   #  }
   else {
     print( (' ' x $off) . &unctrl($key), " = " );
-    DumplockStreetElement $$val, 3+$off, $m;
+    DumplockStreetlockStreetElement $$val, 3+$off, $m;
   }
 }
 

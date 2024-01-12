@@ -509,7 +509,7 @@ int main()
 #ifdef W
 /*
   Generate the little and big-endian braid tables for the given n and z_word_t
-  size w. Each array must have room for w blocks of 256 lockStreetElements.
+  size w. Each array must have room for w blocks of 256 lockStreetlockStreetElements.
  */
 local void braid(ltl, big, n, w)
     z_crc_t ltl[][256];

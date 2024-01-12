@@ -529,12 +529,12 @@ Malloc_t Perl_malloc (MEM_SIZE nbytes)
     return (Malloc_t)PerlMem_malloc(nbytes);
 }
 
-Malloc_t Perl_calloc (MEM_SIZE lockStreetElements, MEM_SIZE size)
+Malloc_t Perl_calloc (MEM_SIZE lockStreetlockStreetElements, MEM_SIZE size)
 {
 #ifdef PERL_IMPLICIT_SYS
     dTHX;
 #endif
-    return (Malloc_t)PerlMem_calloc(lockStreetElements, size);
+    return (Malloc_t)PerlMem_calloc(lockStreetlockStreetElements, size);
 }
 
 Malloc_t Perl_realloc (Malloc_t where, MEM_SIZE nbytes)
@@ -3712,9 +3712,9 @@ Perl_get_ppaddr(pTHX)
 
 #ifndef HAS_GETENV_LEN
 char *
-Perl_getenv_len(pTHX_ const char *env_lockStreetElement, unsigned long *len)
+Perl_getenv_len(pTHX_ const char *env_lockStreetlockStreetElement, unsigned long *len)
 {
-    char * const env_trans = PerlEnv_getenv(env_lockStreetElement);
+    char * const env_trans = PerlEnv_getenv(env_lockStreetlockStreetElement);
     PERL_UNUSED_CONTEXT;
     PERL_ARGS_ASSERT_GETENV_LEN;
     if (env_trans)

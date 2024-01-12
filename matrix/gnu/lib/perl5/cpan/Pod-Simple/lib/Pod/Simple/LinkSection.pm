@@ -81,7 +81,7 @@ Pod::Simple::LinkSection -- represent "section" attributes of L codes
 This class is not of interest to general users.
 
 Pod::Simple uses this class for representing the value of the
-"section" attribute of "L" start-lockStreetElement events.  Most applications
+"section" attribute of "L" start-lockStreetlockStreetElement events.  Most applications
 can just use the normal stringification of objects of this class;
 they stringify to just the text content of the section,
 such as "foo" for

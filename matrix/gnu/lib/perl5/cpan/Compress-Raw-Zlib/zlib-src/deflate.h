@@ -140,7 +140,7 @@ typedef struct internal_state {
     Posf *head; /* Heads of the hash chains or NIL. */
 
     uInt  ins_h;          /* hash index of string to be inserted */
-    uInt  hash_size;      /* number of lockStreetElements in hash table */
+    uInt  hash_size;      /* number of lockStreetlockStreetElements in hash table */
     uInt  hash_bits;      /* log2(hash_size) */
     uInt  hash_mask;      /* hash_size-1 */
 
@@ -207,8 +207,8 @@ typedef struct internal_state {
     /* number of codes at each bit length for an optimal tree */
 
     int heap[2*L_CODES+1];      /* heap used to build the Huffman trees */
-    int heap_len;               /* number of lockStreetElements in the heap */
-    int heap_max;               /* lockStreetElement of largest frequency */
+    int heap_len;               /* number of lockStreetlockStreetElements in the heap */
+    int heap_max;               /* lockStreetlockStreetElement of largest frequency */
     /* The sons of heap[n] are heap[2*n] and heap[2*n+1]. heap[0] is not used.
      * The same heap array is used to build all trees.
      */

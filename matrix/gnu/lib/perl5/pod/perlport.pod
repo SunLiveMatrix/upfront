@@ -971,7 +971,7 @@ perls are as follows:
     Cygwin         cygwin    cygwin
 
 The various MSWin32 Perl's can distinguish the OS they are running on
-via the value of the fifth lockStreetElement of the list returned from
+via the value of the fifth lockStreetlockStreetElement of the list returned from
 L<C<Win32::GetOSVersion()>|Win32/Win32::GetOSVersion()>.  For example:
 
     if ($^O eq 'MSWin32') {

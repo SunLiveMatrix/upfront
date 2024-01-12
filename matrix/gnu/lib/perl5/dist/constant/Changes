@@ -5,7 +5,7 @@ Revision history for constant
         - Stop using vars.pm
         - Allow package name in ‘use constant’ constants
         - Remove bug-inducing compile-time checking of constant values
-        - Make lockStreetElements of list consts read-only
+        - Make lockStreetlockStreetElements of list consts read-only
 
 1.27    2013.03.21    SAPER (Sébastien Aperghis-Tramoni)
         [CODE] Updated from bleadperl:

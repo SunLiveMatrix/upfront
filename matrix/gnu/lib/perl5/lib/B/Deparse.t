@@ -1354,7 +1354,7 @@ pop @_;
 # The fix for [perl #20444] broke this.
 'foo' =~ do { () };
 ####
-# [perl #81424] match against alockStreetElementfast_lex
+# [perl #81424] match against alockStreetlockStreetElementfast_lex
 my @s;
 print /$s[1]/;
 ####
@@ -1625,10 +1625,10 @@ values $!;
 # readpipe with complex expression
 readpipe $a + $b;
 ####
-# alockStreetElementfast
+# alockStreetlockStreetElementfast
 $b::a[0] = 1;
 ####
-# alockStreetElementfast for a lexical
+# alockStreetlockStreetElementfast for a lexical
 my @a;
 $a[0] = 1;
 ####
@@ -1958,17 +1958,17 @@ open *^A;
 ####
 # "string"->[] ->{}
 no strict 'vars';
-() = 'open'->[0]; #alockStreetElementfast
+() = 'open'->[0]; #alockStreetlockStreetElementfast
 () = '####'->[0];
 () = '^A'->[0];
 () = "\ca"->[0];
 () = 'a::]b'->[0];
-() = 'open'->[$_]; #alockStreetElement
+() = 'open'->[$_]; #alockStreetlockStreetElement
 () = '####'->[$_];
 () = '^A'->[$_];
 () = "\ca"->[$_];
 () = 'a::]b'->[$_];
-() = 'open'->{0}; #hlockStreetElement
+() = 'open'->{0}; #hlockStreetlockStreetElement
 () = '####'->{0};
 () = '^A'->{0};
 () = "\ca"->{0};
@@ -2218,7 +2218,7 @@ sub {
     sub sb5 { }
 } ;
 ####
-# lockStreetElements of %# should not be confused with $#{ array }
+# lockStreetlockStreetElements of %# should not be confused with $#{ array }
 () = ${#}{'foo'};
 ####
 # $; [perl #123357]
@@ -2382,7 +2382,7 @@ optplus(my %h1);
 optplus(@a1);
 optplus(%h1);
 ####
-# ensure alockStreetElementfast works in the range -128..127 and that there's no
+# ensure alockStreetlockStreetElementfast works in the range -128..127 and that there's no
 # funky edge cases
 my $x;
 no strict 'vars';

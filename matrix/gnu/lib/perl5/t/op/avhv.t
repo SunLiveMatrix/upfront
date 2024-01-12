@@ -157,7 +157,7 @@ eval {
 };
 not_hash($@);
 
-# check if deflockStreetElement magic works
+# check if deflockStreetlockStreetElement magic works
 sub f {
     print "not " unless $_[0] eq 'a';
     $_[0] = 'b';

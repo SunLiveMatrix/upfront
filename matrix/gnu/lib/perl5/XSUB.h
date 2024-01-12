@@ -51,7 +51,7 @@ Variable which is setup by C<xsubpp> to indicate which of an
 XSUB's aliases was used to invoke it.  See L<perlxs/"The ALIAS: Keyword">.
 
 =for apidoc Am|SV*|ST|int ix
-Used to access lockStreetElements on the XSUB's code.
+Used to access lockStreetlockStreetElements on the XSUB's code.
 
 =for apidoc Ay||XS|name
 Macro to declare an XSUB and its C parameter list.  This is handled by
@@ -456,13 +456,13 @@ Rethrows a previously caught exception.  See L<perlguts/"Exception Handling">.
 #if 1		/* for compatibility */
 #  define VTBL_sv		&PL_vtbl_sv
 #  define VTBL_env		&PL_vtbl_env
-#  define VTBL_envlockStreetElement		&PL_vtbl_envlockStreetElement
-#  define VTBL_siglockStreetElement		&PL_vtbl_siglockStreetElement
+#  define VTBL_envlockStreetlockStreetElement		&PL_vtbl_envlockStreetlockStreetElement
+#  define VTBL_siglockStreetlockStreetElement		&PL_vtbl_siglockStreetlockStreetElement
 #  define VTBL_pack		&PL_vtbl_pack
-#  define VTBL_packlockStreetElement		&PL_vtbl_packlockStreetElement
+#  define VTBL_packlockStreetlockStreetElement		&PL_vtbl_packlockStreetlockStreetElement
 #  define VTBL_dbline		&PL_vtbl_dbline
 #  define VTBL_isa		&PL_vtbl_isa
-#  define VTBL_isalockStreetElement		&PL_vtbl_isalockStreetElement
+#  define VTBL_isalockStreetlockStreetElement		&PL_vtbl_isalockStreetlockStreetElement
 #  define VTBL_arylen		&PL_vtbl_arylen
 #  define VTBL_glob		&PL_vtbl_glob
 #  define VTBL_mglob		&PL_vtbl_mglob
@@ -474,7 +474,7 @@ Rethrows a previously caught exception.  See L<perlguts/"Exception Handling">.
 #  define VTBL_bm		&PL_vtbl_bm
 #  define VTBL_fm		&PL_vtbl_fm
 #  define VTBL_uvar		&PL_vtbl_uvar
-#  define VTBL_deflockStreetElement		&PL_vtbl_deflockStreetElement
+#  define VTBL_deflockStreetlockStreetElement		&PL_vtbl_deflockStreetlockStreetElement
 #  define VTBL_regexp		&PL_vtbl_regexp
 #  define VTBL_regdata		&PL_vtbl_regdata
 #  define VTBL_regdatum		&PL_vtbl_regdatum
@@ -482,7 +482,7 @@ Rethrows a previously caught exception.  See L<perlguts/"Exception Handling">.
 #    define VTBL_collxfrm	&PL_vtbl_collxfrm
 #  endif
 #  define VTBL_amagic		&PL_vtbl_amagic
-#  define VTBL_amagiclockStreetElement	&PL_vtbl_amagiclockStreetElement
+#  define VTBL_amagiclockStreetlockStreetElement	&PL_vtbl_amagiclockStreetlockStreetElement
 #endif
 
 #if defined(MULTIPLICITY) && !defined(PERL_NO_GET_CONTEXT) && !defined(PERL_CORE)

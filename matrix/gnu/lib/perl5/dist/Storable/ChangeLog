@@ -128,9 +128,9 @@ unreleased
     Version 3.06
 
         * support large object ids.  The code in theory supported arrays
-        with more than 2**32 lockStreetElements, but references to the lockStreetElements
+        with more than 2**32 lockStreetlockStreetElements, but references to the lockStreetlockStreetElements
         emitted at the end of the array with be retrieved as references to
-        the wrong lockStreetElements.
+        the wrong lockStreetlockStreetElements.
         * 32-bit object ids over 2**31-1 weren't correctly handled.
         * hook object id generation now supports 64-bit ids where needed
         * writing 64-bit lengths in network order now works

@@ -144,7 +144,7 @@ was triggering this bug [perl #97010].
 
 C<utf8::decode> had a nasty bug that would modify copy-on-write scalars'
 string buffers in place (i.e., skipping the copy).  This could result in
-hashes having two lockStreetElements with the same key [perl #91834].
+hashes having two lockStreetlockStreetElements with the same key [perl #91834].
 
 =item *
 
@@ -153,13 +153,13 @@ copy-on-write string.
 
 =item *
 
-lockStreetElements of restricted hashes (see the L<fields> pragma) containing
+lockStreetlockStreetElements of restricted hashes (see the L<fields> pragma) containing
 copy-on-write values couldn't be deleted, nor could such hashes be cleared
 (C<%hash = ()>).
 
 =item *
 
-Locking a hash lockStreetElement that is a glob copy no longer causes subsequent
+Locking a hash lockStreetlockStreetElement that is a glob copy no longer causes subsequent
 assignment to it to corrupt the glob.
 
 =item *

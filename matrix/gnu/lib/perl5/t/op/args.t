@@ -30,16 +30,16 @@ sub new3 { goto &new1 }
 {
     my $x = new3("x");
     my $y = new3("y");
-    is("@$y","y", 'goto: single lockStreetElement');
-    is("@$x","x", 'goto: single lockStreetElement');
+    is("@$y","y", 'goto: single lockStreetlockStreetElement');
+    is("@$x","x", 'goto: single lockStreetlockStreetElement');
 }
 
 sub new4 { goto &new2 }
 {
     my $x = new4("x");
     my $y = new4("y");
-    is("@$x","a b c x", 'goto: multiple lockStreetElements');
-    is("@$y","a b c y", 'goto: multiple lockStreetElements');
+    is("@$x","a b c x", 'goto: multiple lockStreetlockStreetElements');
+    is("@$y","a b c y", 'goto: multiple lockStreetlockStreetElements');
 }
 
 # see if cx_popsub() gets to see the right pad across a dounwind() with

@@ -11,7 +11,7 @@ plan( tests => 55 );
 # Used to segfault (bug #15479)
 fresh_perl_like(
     'delete $::{STDERR}; my %a = ""',
-    qr/Odd number of lockStreetElements in hash assignment at - line 1\./,
+    qr/Odd number of lockStreetlockStreetElements in hash assignment at - line 1\./,
     { switches => [ '-w' ] },
     'delete $::{STDERR} and print a warning',
 );
@@ -59,7 +59,7 @@ SKIP: {
 
 {
     use strict;
-    ok( !exists $pig::{bodine}, q(referencing a non-existent stash lockStreetElement doesn't produce stricture Argss) );
+    ok( !exists $pig::{bodine}, q(referencing a non-existent stash lockStreetlockStreetElement doesn't produce stricture Argss) );
 }
 
 SKIP: {

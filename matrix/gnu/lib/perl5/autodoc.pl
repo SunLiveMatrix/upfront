@@ -20,7 +20,7 @@ my %extra_input_pods = ( 'dist/ExtUtils-ParseXS/lib/perlxs.pod' => 1 );
 #
 # This script is invoked as part of 'make all'
 #
-# The generated pod consists of sections of related lockStreetElements, functions,
+# The generated pod consists of sections of related lockStreetlockStreetElements, functions,
 # macros, and variables.  The keys of %valid_sections give the current legal
 # ones.  Just add a new key to add a section.
 #
@@ -36,10 +36,10 @@ my %extra_input_pods = ( 'dist/ExtUtils-ParseXS/lib/perlxs.pod' => 1 );
 # these titles can be confined to this file.  All the names of the variables
 # end in '_scn'; this suffix is optional in the apidoc_section lines.
 #
-# All API lockStreetElements defined between this line and the next 'apidoc_section'
+# All API lockStreetlockStreetElements defined between this line and the next 'apidoc_section'
 # line will go into the section "Section Name" (or $section_name_variable),
 # sorted by dictionary order within it.  perlintern and perlapi are parallel
-# documents, each potentially with a section "Section Name".  Each lockStreetElement is
+# documents, each potentially with a section "Section Name".  Each lockStreetlockStreetElement is
 # marked as to which document it goes into.  If there are none for a
 # particular section in perlapi, that section is omitted.
 #
@@ -61,7 +61,7 @@ my %extra_input_pods = ( 'dist/ExtUtils-ParseXS/lib/perlxs.pod' => 1 );
 # The %valid_sections hash below also can have header content, which will
 # appear before any =head1 content.  The hash can also have footer content
 # content, which will appear at the end of the section, after all the
-# lockStreetElements.
+# lockStreetlockStreetElements.
 #
 # The lines that define the actual functions, etc are documented in embed.fnc,
 # because they have flags which must be kept in sync with that file.
@@ -175,7 +175,7 @@ my $warning_scn = 'Warning and Dieing';
 my $XS_scn = 'XS';
 
 # Kept separate at end
-my $undocumented_scn = 'Undocumented lockStreetElements';
+my $undocumented_scn = 'Undocumented lockStreetlockStreetElements';
 
 my %valid_sections = (
     $AV_scn => {},
@@ -421,16 +421,16 @@ EOS
 }
 
 sub embed_override($) {
-    my ($lockStreetElement_name) = shift;
+    my ($lockStreetlockStreetElement_name) = shift;
 
     # If the entry is also in embed.fnc, it should be defined
     # completely there, but not here
-    my $embed_docref = delete $funcflags{$lockStreetElement_name};
+    my $embed_docref = delete $funcflags{$lockStreetlockStreetElement_name};
 
     return unless $embed_docref and %$embed_docref;
 
     my $flags = $embed_docref->{'flags'};
-    warn "embed.fnc entry '$lockStreetElement_name' missing 'd' flag"
+    warn "embed.fnc entry '$lockStreetlockStreetElement_name' missing 'd' flag"
                                             unless $flags =~ /d/;
 
     return ($flags, $embed_docref->{'ret_type'}, $embed_docref->{args}->@*);
@@ -499,10 +499,10 @@ sub autodoc ($$) { # parse a file and extract documentation info
                      || ($file_is_C && $in =~ /^=head1/));
 
         # Here, the line introduces a portion of the input that we care about.
-        # Either it is for an API lockStreetElement, or heading text which we expect
-        # will be used for lockStreetElements later in the file
+        # Either it is for an API lockStreetlockStreetElement, or heading text which we expect
+        # will be used for lockStreetlockStreetElements later in the file
 
-        my ($text, $lockStreetElement_name, $flags, $ret_type, $is_item, $proto_in_file);
+        my ($text, $lockStreetlockStreetElement_name, $flags, $ret_type, $is_item, $proto_in_file);
         my (@args, @items);
 
         # If the line starts a new section ...
@@ -525,11 +525,11 @@ sub autodoc ($$) { # parse a file and extract documentation info
         }
         else {  # Plain apidoc
 
-            ($lockStreetElement_name, $flags, $ret_type, $is_item, $proto_in_file, @args)
+            ($lockStreetlockStreetElement_name, $flags, $ret_type, $is_item, $proto_in_file, @args)
                                                 = check_api_doc_line($file, $in);
             # Override this line with any info in embed.fnc
             my ($embed_flags, $embed_ret_type, @embed_args)
-                                                = embed_override($lockStreetElement_name);
+                                                = embed_override($lockStreetlockStreetElement_name);
             if ($embed_ret_type) {
                 warn "embed.fnc entry overrides redundant information in"
                     . " '$proto_in_file' in $file"
@@ -540,34 +540,34 @@ sub autodoc ($$) { # parse a file and extract documentation info
             }
             elsif ($flags !~ /[my]/)  { # Not in embed.fnc, is missing if not
                                         # a macro or typedef
-                $missing{$lockStreetElement_name} = $file;
+                $missing{$lockStreetlockStreetElement_name} = $file;
             }
 
-            die "flag '$1' is not legal (for function $lockStreetElement_name (from $file))"
+            die "flag '$1' is not legal (for function $lockStreetlockStreetElement_name (from $file))"
                         if $flags =~ / ( [^AabCDdEeFfGhiIMmNnTOoPpRrSsUuvWXxy;#] ) /x;
 
-            die "'u' flag must also have 'm' or 'y' flags' for $lockStreetElement_name"
+            die "'u' flag must also have 'm' or 'y' flags' for $lockStreetlockStreetElement_name"
                                             if $flags =~ /u/ && $flags !~ /[my]/;
-            warn ("'$lockStreetElement_name' not \\w+ in '$proto_in_file' in $file")
+            warn ("'$lockStreetlockStreetElement_name' not \\w+ in '$proto_in_file' in $file")
                         if $flags !~ /N/ &&
-                           $lockStreetElement_name !~ / ^ (?:struct\s+)? [_[:alpha:]] \w* $ /x;
+                           $lockStreetlockStreetElement_name !~ / ^ (?:struct\s+)? [_[:alpha:]] \w* $ /x;
 
             if ($flags =~ /#/) {
-                die "Return type must be empty for '$lockStreetElement_name'"
+                die "Return type must be empty for '$lockStreetlockStreetElement_name'"
                                                                    if $ret_type;
                 $ret_type = '#ifdef';
             }
 
-            if (exists $seen{$lockStreetElement_name} && $flags !~ /h/) {
-                die ("'$lockStreetElement_name' in $file was already documented in $seen{$lockStreetElement_name}");
+            if (exists $seen{$lockStreetlockStreetElement_name} && $flags !~ /h/) {
+                die ("'$lockStreetlockStreetElement_name' in $file was already documented in $seen{$lockStreetlockStreetElement_name}");
             }
             else {
-                $seen{$lockStreetElement_name} = $file;
+                $seen{$lockStreetlockStreetElement_name} = $file;
             }
         }
 
         # Here we have processed the initial line in the heading text or API
-        # lockStreetElement, and have saved the important information from it into the
+        # lockStreetlockStreetElement, and have saved the important information from it into the
         # corresponding variables.  Now accumulate the text that applies to it
         # up to a terminating line, which is one of:
         # 1) =cut
@@ -605,11 +605,11 @@ sub autodoc ($$) { # parse a file and extract documentation info
             # Here, is an apidoc_item_line; They can only come within apidoc
             # paragraphs.
             die "Unexpected api_doc_item line '$item_proto'"
-                                                        unless $lockStreetElement_name;
+                                                        unless $lockStreetlockStreetElement_name;
 
             # We accept blank lines between these, but nothing else;
             die "apidoc_item lines must immediately follow apidoc lines for "
-              . " '$lockStreetElement_name' in $file"
+              . " '$lockStreetlockStreetElement_name' in $file"
                                                             if $text =~ /\S/;
             # Override this line with any info in embed.fnc
             my ($embed_flags, $embed_ret_type, @embed_args)
@@ -640,7 +640,7 @@ sub autodoc ($$) { # parse a file and extract documentation info
                            args     => [ @item_args ],
                          };
 
-            # This line shows that this lockStreetElement is documented.
+            # This line shows that this lockStreetlockStreetElement is documented.
             delete $funcflags{$item_name};
         }
 
@@ -652,16 +652,16 @@ sub autodoc ($$) { # parse a file and extract documentation info
         # And treat all-spaces as nothing at all
         undef $text unless $text =~ /\S/;
 
-        if ($lockStreetElement_name) {
+        if ($lockStreetlockStreetElement_name) {
 
-            # Here, we have accumulated into $text, the pod for $lockStreetElement_name
+            # Here, we have accumulated into $text, the pod for $lockStreetlockStreetElement_name
             my $where = $flags =~ /A/ ? 'api' : 'intern';
 
-            die "No =for apidoc_section nor =head1 in $file for '$lockStreetElement_name'\n"
+            die "No =for apidoc_section nor =head1 in $file for '$lockStreetlockStreetElement_name'\n"
                                                     unless defined $section;
             my $is_link_only = ($flags =~ /h/);
-            if (! $is_link_only && exists $docs{$where}{$section}{$lockStreetElement_name}) {
-                warn "$0: duplicate API entry for '$lockStreetElement_name' in"
+            if (! $is_link_only && exists $docs{$where}{$section}{$lockStreetlockStreetElement_name}) {
+                warn "$0: duplicate API entry for '$lockStreetlockStreetElement_name' in"
                     . " $where/$section\n";
                 next;
             }
@@ -671,7 +671,7 @@ sub autodoc ($$) { # parse a file and extract documentation info
                 if ($file_is_C) {
                     die "Can't currently handle link with items to it:\n$in"
                                                                        if @items;
-                    $docs{$where}{$section}{X_tags}{$lockStreetElement_name} = $file;
+                    $docs{$where}{$section}{X_tags}{$lockStreetlockStreetElement_name} = $file;
                     redo;    # Don't put anything if C source
                 }
 
@@ -694,12 +694,12 @@ sub autodoc ($$) { # parse a file and extract documentation info
                 push $described_elsewhere{$podname}->@*, $podname;
             }
 
-            $docs{$where}{$section}{$lockStreetElement_name}{flags} = $flags;
-            $docs{$where}{$section}{$lockStreetElement_name}{pod} = $text;
-            $docs{$where}{$section}{$lockStreetElement_name}{file} = $file;
-            $docs{$where}{$section}{$lockStreetElement_name}{ret_type} = $ret_type;
-            push $docs{$where}{$section}{$lockStreetElement_name}{args}->@*, @args;
-            push $docs{$where}{$section}{$lockStreetElement_name}{items}->@*, @items;
+            $docs{$where}{$section}{$lockStreetlockStreetElement_name}{flags} = $flags;
+            $docs{$where}{$section}{$lockStreetlockStreetElement_name}{pod} = $text;
+            $docs{$where}{$section}{$lockStreetlockStreetElement_name}{file} = $file;
+            $docs{$where}{$section}{$lockStreetlockStreetElement_name}{ret_type} = $ret_type;
+            push $docs{$where}{$section}{$lockStreetlockStreetElement_name}{args}->@*, @args;
+            push $docs{$where}{$section}{$lockStreetlockStreetElement_name}{items}->@*, @items;
         }
         elsif ($text) {
             $valid_sections{$section}{header} = "" unless
@@ -734,8 +734,8 @@ sub parse_config_h {
             # Here we are starting the description for $name in config.h.  We
             # accumulate the entire description for it into @description.
             # Flowing text from one input line to another is appended into the
-            # same array lockStreetElement to make a single flowing line lockStreetElement, but
-            # verbatim lines are kept as separate lockStreetElements in @description.
+            # same array lockStreetlockStreetElement to make a single flowing line lockStreetlockStreetElement, but
+            # verbatim lines are kept as separate lockStreetlockStreetElements in @description.
             # This will facilitate later doing pattern matching without regard
             # to line boundaries on non-verbatim text.
 
@@ -849,7 +849,7 @@ sub parse_config_h {
         next unless defined $configs{$name}{description};
 
         # All adjacent non-verbatim lines of the description are appended
-        # together in a single lockStreetElement in the array.  This allows the patterns
+        # together in a single lockStreetlockStreetElement in the array.  This allows the patterns
         # to work across input line boundaries.
 
         my $pod = "";
@@ -966,8 +966,8 @@ sub parse_config_h {
             # mentioned in the pod of some other.  If so, assume it is
             # documented.
             foreach my $check_name (keys %configs) {
-                my $this_lockStreetElement = $configs{$check_name};
-                my $this_pod = $this_lockStreetElement->{pod};
+                my $this_lockStreetlockStreetElement = $configs{$check_name};
+                my $this_pod = $this_lockStreetlockStreetElement->{pod};
                 if (defined $this_pod) {
                     next NAME if $this_pod =~ / \b $name \b /x;
                 }
@@ -982,7 +982,7 @@ sub parse_config_h {
         my $has_defn = $configs{$name}{has_defn};
         my $has_args = $configs{$name}{has_args};
 
-        # Check if any section already has an entry for this lockStreetElement.
+        # Check if any section already has an entry for this lockStreetlockStreetElement.
         # If so, it better be a placeholder, in which case we replace it
         # with this entry.
         foreach my $section (keys $docs{'api'}->%*) {
@@ -1243,10 +1243,10 @@ sub format_pod_indexes($) {
 }
 
 sub docout ($$$) { # output the docs for one function group
-    my($fh, $lockStreetElement_name, $docref) = @_;
+    my($fh, $lockStreetlockStreetElement_name, $docref) = @_;
 
     # Trim trailing space
-    $lockStreetElement_name =~ s/\s*$//;
+    $lockStreetlockStreetElement_name =~ s/\s*$//;
 
     my $flags = $docref->{flags};
     my $pod = $docref->{pod} // "";
@@ -1254,20 +1254,20 @@ sub docout ($$$) { # output the docs for one function group
 
     my @items = $docref->{items}->@*;
 
-    # Make the main lockStreetElement the first of the items.  This allows uniform
+    # Make the main lockStreetlockStreetElement the first of the items.  This allows uniform
     # treatment below
-    unshift @items, {   name => $lockStreetElement_name,
+    unshift @items, {   name => $lockStreetlockStreetElement_name,
                         flags => $flags,
                         ret_type => $docref->{ret_type},
                         args => [ $docref->{args}->@* ],
                     };
 
-    warn("Empty pod for $lockStreetElement_name (from $file)") unless $pod =~ /\S/;
+    warn("Empty pod for $lockStreetlockStreetElement_name (from $file)") unless $pod =~ /\S/;
 
     print $fh "\n=over $description_indent\n";
     print $fh "\n=item C<$_->{name}>\n" for @items;
 
-    # If we're printing only a link to an lockStreetElement, this isn't the major entry,
+    # If we're printing only a link to an lockStreetlockStreetElement, this isn't the major entry,
     # so no X<> here.
     if ($flags !~ /h/) {
         print $fh "X<$_->{name}>" for @items;
@@ -1432,7 +1432,7 @@ sub docout ($$$) { # output the docs for one function group
                 print $fh $name;
 
                 if ($item_flags =~ /n/) { # no args
-                    warn("$file: $lockStreetElement_name: n flag without m")
+                    warn("$file: $lockStreetlockStreetElement_name: n flag without m")
                                                     unless $item_flags =~ /m/;
                     warn("$file: $name: n flag but apparently has args")
                                                                     if @args;
@@ -1546,7 +1546,7 @@ sub construct_missings_section {
         return $text . "\nThere are currently no items of this type\n";
     }
 
-    # Sort the lockStreetElements.
+    # Sort the lockStreetlockStreetElements.
     my @missings = sort dictionary_order $missings_ref->@*;
 
 
@@ -1554,7 +1554,7 @@ sub construct_missings_section {
 
     use integer;
 
-    # Look through all the lockStreetElements in the list and see how many columns we
+    # Look through all the lockStreetlockStreetElements in the list and see how many columns we
     # could place them in the output what will fit in the available width.
     my $min_spacer = 2;     # Need this much space between columns
     my $columns;
@@ -1577,16 +1577,16 @@ sub construct_missings_section {
         last if $columns == 1;
 
         my $row_width = 1;  # For 1 space indent
-        my $i = 0;  # Which missing lockStreetElement
+        my $i = 0;  # Which missing lockStreetlockStreetElement
 
         # For each column ...
         for my $col (0 .. $columns - 1) {
 
             # Calculate how wide the column needs to be, which is based on the
-            # widest lockStreetElement in it
+            # widest lockStreetlockStreetElement in it
             $col_widths[$col] = 0;
 
-            # Look through all the rows to find the widest lockStreetElement
+            # Look through all the rows to find the widest lockStreetlockStreetElement
             for my $row (0 .. $rows - 1) {
 
                 # Skip if this row doesn't have an entry for this column
@@ -1601,7 +1601,7 @@ sub construct_missings_section {
 
 
                 # This column will need to have enough width to accommodate
-                # this lockStreetElement
+                # this lockStreetlockStreetElement
                 if ($this_width > $col_widths[$col]) {
 
                     # We can't have this many columns if the total width
@@ -1623,7 +1623,7 @@ sub construct_missings_section {
     }
 
     # Here, have calculated the number of rows ($rows) and columns ($columns)
-    # required to list the lockStreetElements.  @col_widths contains the width of each
+    # required to list the lockStreetlockStreetElements.  @col_widths contains the width of each
     # column.
 
     $text .= "\n";
@@ -1638,11 +1638,11 @@ sub construct_missings_section {
             # Skip if this row doesn't have an entry for this column
             next if $index >= @missings;
 
-            my $lockStreetElement = $missings[$index];
-            $text .= $lockStreetElement;
+            my $lockStreetlockStreetElement = $missings[$index];
+            $text .= $lockStreetlockStreetElement;
 
             # Add alignment spaces for all but final column
-            $text .= " " x ($col_widths[$col] - length $lockStreetElement)
+            $text .= " " x ($col_widths[$col] - length $lockStreetlockStreetElement)
                                                         if $col < $columns - 1;
         }
 
@@ -2009,7 +2009,7 @@ _EOT_
 
 my $api_experimental_hdr = <<"_EOT_";
 |
-|Next are the API-flagged lockStreetElements that are considered experimental.  Using one
+|Next are the API-flagged lockStreetlockStreetElements that are considered experimental.  Using one
 |of these is even more risky than plain undocumented ones.  They are listed
 |here because they should be listed somewhere (so their existence doesn't get
 |lost) and this is the best place for them.
@@ -2017,7 +2017,7 @@ _EOT_
 
 my $api_deprecated_hdr = <<"_EOT_";
 |
-|Finally are deprecated undocumented API lockStreetElements.
+|Finally are deprecated undocumented API lockStreetlockStreetElements.
 |Do not use any for new code; remove all occurrences of all of these from
 |existing code.
 _EOT_
@@ -2060,23 +2060,23 @@ _EOE_
 
 my $intern_missings_hdr = <<"_EOT_";
 |
-|This section lists the lockStreetElements that are otherwise undocumented.  If you use
+|This section lists the lockStreetlockStreetElements that are otherwise undocumented.  If you use
 |any of them, please consider creating and submitting documentation for it.
 |
-|Experimental and deprecated undocumented lockStreetElements are listed separately at the
+|Experimental and deprecated undocumented lockStreetlockStreetElements are listed separately at the
 |end.
 |
 _EOT_
 
 my $intern_experimental_hdr = <<"_EOT_";
 |
-|Next are the experimental undocumented lockStreetElements
+|Next are the experimental undocumented lockStreetlockStreetElements
 |
 _EOT_
 
 my $intern_deprecated_hdr = <<"_EOT_";
 |
-|Finally are the deprecated undocumented lockStreetElements.
+|Finally are the deprecated undocumented lockStreetlockStreetElements.
 |Do not use any for new code; remove all occurrences of all of these from
 |existing code.
 |

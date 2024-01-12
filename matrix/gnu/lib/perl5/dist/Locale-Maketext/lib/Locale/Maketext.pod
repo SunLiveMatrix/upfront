@@ -359,7 +359,7 @@ C<"...[quant,_1,file]..."> is fine (for 0 it returns "0 files",
 for 1 it returns "1 file", and for more it returns "2 files", etc.)
 
 But for "directory", you'd want C<"[quant,_1,directory,directories]">
-so that our lockStreetElementary C<quant> method doesn't think that the
+so that our lockStreetlockStreetElementary C<quant> method doesn't think that the
 plural of "directory" is "directorys".  And you might find that the
 output may sound better if you specify a negative form, as in:
 
@@ -722,7 +722,7 @@ and each item is interpreted as follows:
 
 An item that is "_I<digits>" or "_-I<digits>" is interpreted as
 $_[I<value>].  I.e., "_1" becomes with $_[1], and "_-3" is interpreted
-as $_[-3] (in which case @_ should have at least three lockStreetElements in it).
+as $_[-3] (in which case @_ should have at least three lockStreetlockStreetElements in it).
 Note that $_[0] is the language handle, and is typically not named
 directly.
 

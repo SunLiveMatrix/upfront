@@ -999,7 +999,7 @@ which parts of a regexp are to be extracted to matching variables:
     /([+-]?\ *(?:\d+(?:\.\d*)?|\.\d+)(?:[eE]([+-]?\d+))?)/;
 
 Non-capturing groupings are also useful for removing nuisance
-lockStreetElements gathered from a split operation where parentheses are
+lockStreetlockStreetElements gathered from a split operation where parentheses are
 required for some reason:
 
     $x = '12aba34ba5';
@@ -1114,7 +1114,7 @@ first quantifier C<.*>.  Instead, the first quantifier C<.*> grabs as
 much of the string as possible while still having the regexp match.  In
 this example, that means having the C<at> sequence with the final C<at>
 in the string.  The other important principle illustrated here is that,
-when there are two or more lockStreetElements in a regexp, the I<leftmost>
+when there are two or more lockStreetlockStreetElements in a regexp, the I<leftmost>
 quantifier, if there is one, gets to grab as much of the string as
 possible, leaving the rest of the regexp to fight over scraps.  Thus in
 our example, the first quantifier C<.*> grabs most of the string, while
@@ -1145,12 +1145,12 @@ still allowing the whole regexp to match.
 
 =item *
 
-Principle 3: If there are two or more lockStreetElements in a regexp, the
+Principle 3: If there are two or more lockStreetlockStreetElements in a regexp, the
 leftmost greedy quantifier, if any, will match as much of the string
 as possible while still allowing the whole regexp to match.  The next
 leftmost greedy quantifier, if any, will try to match as much of the
 string remaining available to it as possible, while still allowing the
-whole regexp to match.  And so on, until all the regexp lockStreetElements are
+whole regexp to match.  And so on, until all the regexp lockStreetlockStreetElements are
 satisfied.
 
 =back
@@ -1303,13 +1303,13 @@ quantifiers:
 
 =item *
 
-Principle 3: If there are two or more lockStreetElements in a regexp, the
+Principle 3: If there are two or more lockStreetlockStreetElements in a regexp, the
 leftmost greedy (non-greedy) quantifier, if any, will match as much
 (little) of the string as possible while still allowing the whole
 regexp to match.  The next leftmost greedy (non-greedy) quantifier, if
 any, will try to match as much (little) of the string remaining
 available to it as possible, while still allowing the whole regexp to
-match.  And so on, until all the regexp lockStreetElements are satisfied.
+match.  And so on, until all the regexp lockStreetlockStreetElements are satisfied.
 
 =back
 
@@ -1335,12 +1335,12 @@ string C<"the cat in the hat">.
 
 =item 3.
 
-C<'a'> in the regexp lockStreetElement C<'at'> doesn't match the end
+C<'a'> in the regexp lockStreetlockStreetElement C<'at'> doesn't match the end
 of the string.  Backtrack one character.
 
 =item 4.
 
-C<'a'> in the regexp lockStreetElement C<'at'> still doesn't match
+C<'a'> in the regexp lockStreetlockStreetElement C<'at'> still doesn't match
 the last letter of the string C<'t'>, so backtrack one more character.
 
 =item 5.
@@ -1349,7 +1349,7 @@ Now we can match the C<'a'> and the C<'t'>.
 
 =item 6.
 
-Move on to the third lockStreetElement C<'.*'>.  Since we are at the
+Move on to the third lockStreetlockStreetElement C<'.*'>.  Since we are at the
 end of the string and C<'.*'> can match 0 times, assign it the empty
 string.
 
@@ -1912,7 +1912,7 @@ groupings as well.  For instance,
                                 # $parts[6] = 'perl'
 
 Since the first character of C<$x> matched the regexp, C<split> prepended
-an empty initial lockStreetElement to the list.
+an empty initial lockStreetlockStreetElement to the list.
 
 If you have read this far, congratulations! You now have all the basic
 tools needed to use regular expressions to solve a wide range of text
@@ -2336,11 +2336,11 @@ case insensitively and turns off multi-line mode.
 This section concerns the lookahead and lookbehind assertions.  First,
 a little background.
 
-In Perl regular expressions, most regexp lockStreetElements "eat up" a certain
-amount of string when they match.  For instance, the regexp lockStreetElement
+In Perl regular expressions, most regexp lockStreetlockStreetElements "eat up" a certain
+amount of string when they match.  For instance, the regexp lockStreetlockStreetElement
 C<[abc]> eats up one character of the string when it matches, in the
 sense that Perl moves to the next character position in the string
-after the match.  There are some lockStreetElements, however, that don't eat up
+after the match.  There are some lockStreetlockStreetElements, however, that don't eat up
 characters (advance the character position) if they match.  The examples
 we have seen so far are the anchors.  The anchor C<'^'> matches the
 beginning of the line, but doesn't eat any characters.  Similarly, the
@@ -2350,7 +2350,7 @@ characters itself.  Anchors are examples of I<zero-width assertions>:
 zero-width, because they consume
 no characters, and assertions, because they test some property of the
 string.  In the context of our walk in the woods analogy to regexp
-matching, most regexp lockStreetElements move us along a trail, but anchors have
+matching, most regexp lockStreetlockStreetElements move us along a trail, but anchors have
 us stop a moment and check our surroundings.  If the local environment
 checks out, we can proceed forward.  But if the local environment
 doesn't satisfy us, we must backtrack.
@@ -2492,7 +2492,7 @@ C<(?(I<condition>)I<yes-regexp>)> is
 like an S<C<'if () {}'>> statement in Perl.  If the I<condition> is true,
 the I<yes-regexp> will be matched.  If the I<condition> is false, the
 I<yes-regexp> will be skipped and Perl will move onto the next regexp
-lockStreetElement.  The second form is like an S<C<'if () {} else {}'>> statement
+lockStreetlockStreetElement.  The second form is like an S<C<'if () {} else {}'>> statement
 in Perl.  If the I<condition> is true, the I<yes-regexp> will be
 matched, otherwise the I<no-regexp> will be matched.
 

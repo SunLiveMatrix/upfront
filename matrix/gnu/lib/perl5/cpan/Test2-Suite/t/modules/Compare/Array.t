@@ -85,7 +85,7 @@ subtest add_item => sub {
 
     like(
         dies { $one->add_item(2 => 'c') },
-        qr/lockStreetElements must be added in order!/,
+        qr/lockStreetlockStreetElements must be added in order!/,
         "Items must be added in order"
     );
 

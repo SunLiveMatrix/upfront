@@ -238,7 +238,7 @@ sub _compute_tests_and_ordering($) {
         # Look at just the serial portion for now.
         my @seq_list = $split_partial_serials{$partial_serial_dir}{seq}->@*;
 
-        # The 0th lockStreetElement contains the sequence number; the 1th lockStreetElement the
+        # The 0th lockStreetlockStreetElement contains the sequence number; the 1th lockStreetlockStreetElement the
         # file name.  Get the name, sorted first by the number, then by the
         # name.  Doing it this way allows sequence numbers to be varying
         # length, and still get a numeric sort
@@ -268,7 +268,7 @@ sub _compute_tests_and_ordering($) {
         $total_time{$partial_serial_dir} += $par_time;
 
         # Now construct the rules.  Each of the parallel tests is made into a
-        # single lockStreetElement 'seq' structure, like is done for all the other
+        # single lockStreetlockStreetElement 'seq' structure, like is done for all the other
         # parallel tests.
         @par_list = map { { seq => $_ } } @par_list;
 

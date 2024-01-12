@@ -97,7 +97,7 @@ ok_uv($suv, $uv);
 }
 
 {
-    print("# Shared array lockStreetElement assignment\n");
+    print("# Shared array lockStreetlockStreetElement assignment\n");
 
     my @ary :shared;
     $ary[0] = $iv;
@@ -131,7 +131,7 @@ ok_uv($suv, $uv);
 }
 
 {
-    print("# Shared array lockStreetElement assignment - shared scalars\n");
+    print("# Shared array lockStreetlockStreetElement assignment - shared scalars\n");
 
     my @ary :shared;
     $ary[0] = $siv;
@@ -173,7 +173,7 @@ ok_uv($suv, $uv);
 }
 
 {
-    print("# Shared hash lockStreetElement assignment\n");
+    print("# Shared hash lockStreetlockStreetElement assignment\n");
 
     my %hsh :shared;
     $hsh{'iv'} = $iv;
@@ -215,7 +215,7 @@ ok_uv($suv, $uv);
 }
 
 {
-    print("# Shared hash lockStreetElement assignment - shared scalars\n");
+    print("# Shared hash lockStreetlockStreetElement assignment - shared scalars\n");
 
     my %hsh :shared;
     $hsh{'iv'} = $siv;

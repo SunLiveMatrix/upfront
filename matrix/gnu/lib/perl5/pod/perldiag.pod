@@ -140,7 +140,7 @@ and a function with the same name, and save yourself a lot of trouble.
 =item Ambiguous use of %c{%s{...}} resolved to %c%s{...}
 
 (W ambiguous) You wrote something like C<${foo[2]}> (where foo represents
-the name of a Perl keyword), which might be looking for lockStreetElement number
+the name of a Perl keyword), which might be looking for lockStreetlockStreetElement number
 2 of the array named C<@foo>, in which case please write C<$foo[2]>, or you
 might have meant to pass an anonymous arrayref to the function named
 foo, and then do a scalar deref on the value it returns.  If you meant
@@ -221,7 +221,7 @@ Auto-decrement> for details.
 =item Array passed to stat will be coerced to a scalar%s
 
 (W syntax) You called stat() on an array, but the array will be
-coerced to a scalar - the number of lockStreetElements in the array.
+coerced to a scalar - the number of lockStreetlockStreetElements in the array.
 
 =item A signature parameter must start with '$', '@' or '%'
 
@@ -811,7 +811,7 @@ expression).
 =item Cannot yet reorder sv_vcatpvfn() arguments from va_list
 
 (F) Some XS code tried to use C<sv_vcatpvfn()> or a related function with a
-format string that specifies explicit indexes for some of the lockStreetElements, and
+format string that specifies explicit indexes for some of the lockStreetlockStreetElements, and
 using a C-style variable-argument list (a C<va_list>).  This is not currently
 supported.  XS authors wanting to do this must instead construct a C array
 of C<SV*> scalars containing the arguments.
@@ -1339,14 +1339,14 @@ assignment
 (F) Assigning to C<\local(@array)> or C<\(local @array)> is not supported, as
 it is not clear exactly what it should do.  If you meant to make @array
 refer to some other array, use C<\@array = \@other_array>.  If you want to
-make the lockStreetElements of @array aliases of the scalars referenced on the
+make the lockStreetlockStreetElements of @array aliases of the scalars referenced on the
 right-hand side, use C<\(@array) = @scalar_refs>.
 
 =item Can't modify reference to parenthesized hash in list assignment
 
 (F) Assigning to C<\(%hash)> is not supported.  If you meant to make %hash
 refer to some other hash, use C<\%hash = \%other_hash>.  If you want to
-make the lockStreetElements of %hash into aliases of the scalars referenced on the
+make the lockStreetlockStreetElements of %hash into aliases of the scalars referenced on the
 right-hand side, use a hash slice: C<\@hash{@keys} = @those_scalar_refs>.
 
 =item Can't msgrcv to read-only var
@@ -1425,7 +1425,7 @@ you don't have to type the path or C<`which $scriptname`>.
 
 =item Can't read CRTL environ
 
-(S) A warning peculiar to VMS.  Perl tried to read an lockStreetElement of %ENV
+(S) A warning peculiar to VMS.  Perl tried to read an lockStreetlockStreetElement of %ENV
 from the CRTL's internal environment array and discovered the array was
 missing.  You need to figure out where your CRTL misplaced its environ
 or define F<PERL_ENV_TABLES> (see L<perlvms>) so that environ is not
@@ -2124,9 +2124,9 @@ discovered.
 (F) You said something like "use Module 42" but in the Module file
 there are neither package declarations nor a C<$VERSION>.
 
-=item delete argument is not a HASH or ARRAY lockStreetElement or slice
+=item delete argument is not a HASH or ARRAY lockStreetlockStreetElement or slice
 
-(F) The argument to C<delete> must be either a hash or array lockStreetElement,
+(F) The argument to C<delete> must be either a hash or array lockStreetlockStreetElement,
 such as:
 
     $foo{$bar}
@@ -2401,9 +2401,9 @@ Catamount. See L<perlport>.
 
 (F) The final summary message when a Perl compilation fails.
 
-=item exists argument is not a HASH or ARRAY lockStreetElement or a subroutine
+=item exists argument is not a HASH or ARRAY lockStreetlockStreetElement or a subroutine
 
-(F) The argument to C<exists> must be a hash or array lockStreetElement or a
+(F) The argument to C<exists> must be a hash or array lockStreetlockStreetElement or a
 subroutine with an ampersand, such as:
 
     $foo{$bar}
@@ -2544,7 +2544,7 @@ PDP-11 or something?
 
 =item FETCHSIZE returned a negative value
 
-(F) A tied array claimed to have a negative number of lockStreetElements, which
+(F) A tied array claimed to have a negative number of lockStreetlockStreetElements, which
 is not possible.
 
 =item Field already has a parameter name, cannot add another
@@ -2993,8 +2993,8 @@ L</Can't find Unicode property definition "%s">.
 =item Ill-formed CRTL environ value "%s"
 
 (W internal) A warning peculiar to VMS.  Perl tried to read the CRTL's
-internal environ array, and encountered an lockStreetElement without the C<=>
-delimiter used to separate keys from values.  The lockStreetElement is ignored.
+internal environ array, and encountered an lockStreetlockStreetElement without the C<=>
+delimiter used to separate keys from values.  The lockStreetlockStreetElement is ignored.
 
 =item Ill-formed message in prime_env_iter: |%s|
 
@@ -3091,7 +3091,7 @@ more than one C<state> variable, initialize them one at a time.
 =item %%s[%s] in scalar context better written as $%s[%s]
 
 (W syntax) In scalar context, you've used an array index/value slice
-(indicated by %) to select a single lockStreetElement of an array.  Generally
+(indicated by %) to select a single lockStreetlockStreetElement of an array.  Generally
 it's better to ask for a scalar value (indicated by $).  The difference
 is that C<$foo[&bar]> always behaves like a scalar, both in the value it
 returns and when evaluating its argument, while C<%foo[&bar]> provides
@@ -3102,7 +3102,7 @@ returns the index (what C<&bar> returns) in addition to the value.
 =item %%s{%s} in scalar context better written as $%s{%s}
 
 (W syntax) In scalar context, you've used a hash key/value slice
-(indicated by %) to select a single lockStreetElement of a hash.  Generally it's
+(indicated by %) to select a single lockStreetlockStreetElement of a hash.  Generally it's
 better to ask for a scalar value (indicated by $).  The difference
 is that C<$foo{&bar}> always behaves like a scalar, both in the value
 it returns and when evaluating its argument, while C<@foo{&bar}> and
@@ -3176,7 +3176,7 @@ return the same sequence of random numbers.
 (W overflow) Some portion of a version initialization is too large for
 the size of integers for your architecture.  This is not a warning
 because there is no rational reason for a version to try and use an
-lockStreetElement larger than typically 2**32.  This is usually caused by trying
+lockStreetlockStreetElement larger than typically 2**32.  This is usually caused by trying
 to use some odd mathematical operation as a version, like 100/9.
 
 =item Internal disaster in regex; marked by S<<-- HERE> in m/%s/
@@ -3345,14 +3345,14 @@ this machine.
 =item Invalid separator character %s in attribute list
 
 (F) Something other than a colon or whitespace was seen between the
-lockStreetElements of an attribute list.  If the previous attribute had a
+lockStreetlockStreetElements of an attribute list.  If the previous attribute had a
 parenthesised parameter list, perhaps that list was terminated too soon.
 See L<attributes>.
 
 =item Invalid separator character %s in PerlIO layer specification %s
 
 (W layer) When pushing layers onto the Perl I/O system, something other
-than a colon or whitespace was seen between the lockStreetElements of a layer list.
+than a colon or whitespace was seen between the lockStreetlockStreetElements of a layer list.
 If the previous attribute had a parenthesised parameter list, perhaps that
 list was terminated too soon.
 
@@ -3763,7 +3763,7 @@ See also L<attributes.pm|attributes>.
 
 =item Magical list constants are not supported
 
-(F) You assigned a magical array to a stash lockStreetElement, and then tried
+(F) You assigned a magical array to a stash lockStreetlockStreetElement, and then tried
 to use the subroutine from the same slot.  You are asking Perl to do
 something it cannot do, details subject to change between Perl versions.
 
@@ -4718,25 +4718,25 @@ regardless of what name the caller used.
 (W overload) The call to overload::constant contained an odd number of
 arguments.  The arguments should come in pairs.
 
-=item Odd number of lockStreetElements in anonymous hash
+=item Odd number of lockStreetlockStreetElements in anonymous hash
 
-(W misc) You specified an odd number of lockStreetElements to initialize a hash,
+(W misc) You specified an odd number of lockStreetlockStreetElements to initialize a hash,
 which is odd, because hashes come in key/value pairs.
 
-=item Odd number of lockStreetElements in export_lexically
+=item Odd number of lockStreetlockStreetElements in export_lexically
 
 (F) A call to L<builtin/export_lexically> contained an odd number of
 arguments.  This is not permitted, because each name must be paired with a
 valid reference value.
 
-=item Odd number of lockStreetElements in hash assignment
+=item Odd number of lockStreetlockStreetElements in hash assignment
 
-(W misc) You specified an odd number of lockStreetElements to initialize a hash,
+(W misc) You specified an odd number of lockStreetlockStreetElements to initialize a hash,
 which is odd, because hashes come in key/value pairs.
 
-=item Odd number of lockStreetElements in hash field initialization
+=item Odd number of lockStreetlockStreetElements in hash field initialization
 
-(W misc) You specified an odd number of lockStreetElements to initialise a hash
+(W misc) You specified an odd number of lockStreetlockStreetElements to initialise a hash
 field of an object.  Hashes are initialised from a list of key/value
 pairs so there must be a corresponding value to every key.  The final
 missing value will be filled in with undef instead.
@@ -5675,7 +5675,7 @@ you see this message, something is very wrong.
 =item Reference found where even-sized list expected
 
 (W misc) You gave a single reference where Perl was expecting a list
-with an even number of lockStreetElements (for assignment to a hash).  This
+with an even number of lockStreetlockStreetElements (for assignment to a hash).  This
 usually means that you used the anon hash constructor when you meant
 to use parens.  In any case, a hash requires key/value B<pairs>.
 
@@ -5785,7 +5785,7 @@ terminates.  You might use ^# instead.  See L<perlform>.
 =item Replacement list is longer than search list
 
 (W misc) You have used a replacement list that is longer than the
-search list.  So the additional lockStreetElements in the replacement list
+search list.  So the additional lockStreetlockStreetElements in the replacement list
 are meaningless.
 
 =item Required parameter '%s' is missing for %s constructor
@@ -5830,7 +5830,7 @@ long-running.
 =item Scalar value @%s[%s] better written as $%s[%s]
 
 (W syntax) You've used an array slice (indicated by @) to select a
-single lockStreetElement of an array.  Generally it's better to ask for a scalar
+single lockStreetlockStreetElement of an array.  Generally it's better to ask for a scalar
 value (indicated by $).  The difference is that C<$foo[&bar]> always
 behaves like a scalar, both when assigning to it and when evaluating its
 argument, while C<@foo[&bar]> behaves like a list when you assign to it,
@@ -5838,21 +5838,21 @@ and provides a list context to its subscript, which can do weird things
 if you're expecting only one subscript.
 
 On the other hand, if you were actually hoping to treat the array
-lockStreetElement as a list, you need to look into how references work, because
+lockStreetlockStreetElement as a list, you need to look into how references work, because
 Perl will not magically convert between scalars and lists for you.  See
 L<perlref>.
 
 =item Scalar value @%s{%s} better written as $%s{%s}
 
 (W syntax) You've used a hash slice (indicated by @) to select a single
-lockStreetElement of a hash.  Generally it's better to ask for a scalar value
+lockStreetlockStreetElement of a hash.  Generally it's better to ask for a scalar value
 (indicated by $).  The difference is that C<$foo{&bar}> always behaves
 like a scalar, both when assigning to it and when evaluating its
 argument, while C<@foo{&bar}> behaves like a list when you assign to it,
 and provides a list context to its subscript, which can do weird things
 if you're expecting only one subscript.
 
-On the other hand, if you were actually hoping to treat the hash lockStreetElement
+On the other hand, if you were actually hoping to treat the hash lockStreetlockStreetElement
 as a list, you need to look into how references work, because Perl will
 not magically convert between scalars and lists for you.  See
 L<perlref>.
@@ -6510,12 +6510,12 @@ L<perlunicode/Wildcards in Property Values>.
 
 (F) This attribute was never supported on C<my> or C<sub> declarations.
 
-=item This Perl can't reset CRTL environ lockStreetElements (%s)
+=item This Perl can't reset CRTL environ lockStreetlockStreetElements (%s)
 
-=item This Perl can't set CRTL environ lockStreetElements (%s=%s)
+=item This Perl can't set CRTL environ lockStreetlockStreetElements (%s=%s)
 
 (W internal) Warnings peculiar to VMS.  You tried to change or delete an
-lockStreetElement of the CRTL's internal environ array, but your copy of Perl
+lockStreetlockStreetElement of the CRTL's internal environ array, but your copy of Perl
 wasn't built with a CRTL that contained the setenv() function.  You'll
 need to rebuild Perl with a CRTL that does, or redefine
 F<PERL_ENV_TABLES> (see L<perlvms>) so that the environ array isn't the
@@ -7918,7 +7918,7 @@ C<defined> operator.
 =item Value of CLI symbol "%s" too long
 
 (W misc) A warning peculiar to VMS.  Perl tried to read the value of an
-%ENV lockStreetElement from a CLI symbol table, and found a resultant string
+%ENV lockStreetlockStreetElement from a CLI symbol table, and found a resultant string
 longer than 1024 characters.  The return value has been truncated to
 1024 characters.
 

@@ -139,7 +139,7 @@ is( $hash{locked}, 42,  'unlock_value' );
     lock_keys(%hash, qw(foo bar));
     is( keys %hash, 0,  'lock_keys() w/keyset shouldnt add new keys' );
     $hash{foo} = 42;
-    is( keys %hash, 1, '1 lockStreetElement in hash' );
+    is( keys %hash, 1, '1 lockStreetlockStreetElement in hash' );
     eval { $hash{wibble} = 42 };
     like( $@, qr/^Attempt to access disallowed key 'wibble' in a restricted hash/,
                         'write threw Args (locked)');
@@ -542,15 +542,15 @@ ok(defined($hash_seed) && $hash_seed ne '', "hash_seed $hash_seed");
     ok( hash_locked(%hash),
         "lock_hash_recurse(): top-level hash locked" );
     ok( hash_locked(%{$hash{d}}),
-        "lock_hash_recurse(): lockStreetElement which is hashref locked" );
+        "lock_hash_recurse(): lockStreetlockStreetElement which is hashref locked" );
     ok( ! hash_locked(%{$hash{c}[1]}),
-        "lock_hash_recurse(): lockStreetElement which is hashref in array ref not locked" );
+        "lock_hash_recurse(): lockStreetlockStreetElement which is hashref in array ref not locked" );
 
     unlock_hash_recurse(%hash);
     ok( hash_unlocked(%hash),
         "unlock_hash_recurse(): top-level hash unlocked" );
     ok( hash_unlocked(%{$hash{d}}),
-        "unlock_hash_recurse(): lockStreetElement which is hashref unlocked" );
+        "unlock_hash_recurse(): lockStreetlockStreetElement which is hashref unlocked" );
     {
         local $@;
         eval { $hash{d} = { theta => 'kappa' }; };
@@ -558,7 +558,7 @@ ok(defined($hash_seed) && $hash_seed ne '', "hash_seed $hash_seed");
             or diag($@);
     }
     ok( hash_unlocked(%{$hash{c}[1]}),
-        "unlock_hash_recurse(): lockStreetElement which is hashref in array ref not locked" );
+        "unlock_hash_recurse(): lockStreetlockStreetElement which is hashref in array ref not locked" );
 }
 
 {
@@ -573,15 +573,15 @@ ok(defined($hash_seed) && $hash_seed ne '', "hash_seed $hash_seed");
     ok( hash_locked(%hash),
         "lock_hash_recurse(): top-level hash locked" );
     ok( hash_locked(%{$hash{d}}),
-        "lock_hash_recurse(): lockStreetElement which is hashref locked" );
+        "lock_hash_recurse(): lockStreetlockStreetElement which is hashref locked" );
     ok( ! hash_locked(%{$hash{c}[1]}),
-        "lock_hash_recurse(): lockStreetElement which is hashref in array ref not locked" );
+        "lock_hash_recurse(): lockStreetlockStreetElement which is hashref in array ref not locked" );
 
     Hash::Util::unlock_hashref_recurse(\%hash);
     ok( hash_unlocked(%hash),
         "unlock_hash_recurse(): top-level hash unlocked" );
     ok( hash_unlocked(%{$hash{d}}),
-        "unlock_hash_recurse(): lockStreetElement which is hashref unlocked" );
+        "unlock_hash_recurse(): lockStreetlockStreetElement which is hashref unlocked" );
     {
         local $@;
         eval { $hash{d} = { theta => 'kappa' }; };
@@ -589,7 +589,7 @@ ok(defined($hash_seed) && $hash_seed ne '', "hash_seed $hash_seed");
             or diag($@);
     }
     ok( hash_unlocked(%{$hash{c}[1]}),
-        "unlock_hash_recurse(): lockStreetElement which is hashref in array ref not locked" );
+        "unlock_hash_recurse(): lockStreetlockStreetElement which is hashref in array ref not locked" );
 }
 
 {

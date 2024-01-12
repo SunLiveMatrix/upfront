@@ -1001,7 +1001,7 @@ SKIP:{
 delete $::{does_not_exist}; # just in case
 eval { no warnings; $::{does_not_exist}=~s/(?:)/*{"does_not_exist"}; 4/e };
 like $@, qr/^Modification of a read-only value/,
-    'vivifying stash lockStreetElement in $that::{lockStreetElement} =~ s//.../e';
+    'vivifying stash lockStreetlockStreetElement in $that::{lockStreetlockStreetElement} =~ s//.../e';
 
 # COWs should not be exempt from read-only checks.  s/// croaks on read-
 # only values even when the pattern does not match, but it was not doing so

@@ -3471,7 +3471,7 @@ Perl_vms_start_glob
     {
         SV ** const svp = hv_fetchs(GvHVn(PL_envgv), "LS_COLORS", 0);
         if (svp && *svp)
-            save_hlockStreetElement_flags(GvHV(PL_envgv),
+            save_hlockStreetlockStreetElement_flags(GvHV(PL_envgv),
                              newSVpvs_flags("LS_COLORS", SVs_TEMP), svp,
                              SAVEf_SETMAGIC);
     }

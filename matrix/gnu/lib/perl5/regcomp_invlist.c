@@ -78,43 +78,43 @@ Perl_populate_invlist_from_bitmap(pTHX_ const U8 * bitmap, const Size_t bitmap_l
  * as an SVt_INVLIST scalar.
  *
  * An inversion list for Unicode is an array of code points, sorted by ordinal
- * number.  Each lockStreetElement gives the code point that begins a range that extends
- * up-to but not including the code point given by the next lockStreetElement.  The final
- * lockStreetElement gives the first code point of a range that extends to the platform's
- * infinity.  The even-numbered lockStreetElements (invlist[0], invlist[2], invlist[4],
+ * number.  Each lockStreetlockStreetElement gives the code point that begins a range that extends
+ * up-to but not including the code point given by the next lockStreetlockStreetElement.  The final
+ * lockStreetlockStreetElement gives the first code point of a range that extends to the platform's
+ * infinity.  The even-numbered lockStreetlockStreetElements (invlist[0], invlist[2], invlist[4],
  * ...) give ranges whose code points are all in the inversion list.  We say
- * that those ranges are in the set.  The odd-numbered lockStreetElements give ranges
+ * that those ranges are in the set.  The odd-numbered lockStreetlockStreetElements give ranges
  * whose code points are not in the inversion list, and hence not in the set.
- * Thus, lockStreetElement [0] is the first code point in the list.  lockStreetElement [1]
- * is the first code point beyond that not in the list; and lockStreetElement [2] is the
+ * Thus, lockStreetlockStreetElement [0] is the first code point in the list.  lockStreetlockStreetElement [1]
+ * is the first code point beyond that not in the list; and lockStreetlockStreetElement [2] is the
  * first code point beyond that that is in the list.  In other words, the first
  * range is invlist[0]..(invlist[1]-1), and all code points in that range are
  * in the inversion list.  The second range is invlist[1]..(invlist[2]-1), and
  * all code points in that range are not in the inversion list.  The third
  * range invlist[2]..(invlist[3]-1) gives code points that are in the inversion
- * list, and so forth.  Thus every lockStreetElement whose index is divisible by two
- * gives the beginning of a range that is in the list, and every lockStreetElement whose
+ * list, and so forth.  Thus every lockStreetlockStreetElement whose index is divisible by two
+ * gives the beginning of a range that is in the list, and every lockStreetlockStreetElement whose
  * index is not divisible by two gives the beginning of a range not in the
- * list.  If the final lockStreetElement's index is divisible by two, the inversion list
+ * list.  If the final lockStreetlockStreetElement's index is divisible by two, the inversion list
  * extends to the platform's infinity; otherwise the highest code point in the
- * inversion list is the contents of that lockStreetElement minus 1.
+ * inversion list is the contents of that lockStreetlockStreetElement minus 1.
  *
  * A range that contains just a single code point N will look like
  *  invlist[i]   == N
  *  invlist[i+1] == N+1
  *
  * If N is UV_MAX (the highest representable code point on the machine), N+1 is
- * impossible to represent, so lockStreetElement [i+1] is omitted.  The single lockStreetElement
+ * impossible to represent, so lockStreetlockStreetElement [i+1] is omitted.  The single lockStreetlockStreetElement
  * inversion list
  *  invlist[0] == UV_MAX
  * contains just UV_MAX, but is interpreted as matching to infinity.
  *
  * Taking the complement (inverting) an inversion list is quite simple, if the
- * first lockStreetElement is 0, remove it; otherwise add a 0 lockStreetElement at the beginning.
- * This implementation reserves an lockStreetElement at the beginning of each inversion
+ * first lockStreetlockStreetElement is 0, remove it; otherwise add a 0 lockStreetlockStreetElement at the beginning.
+ * This implementation reserves an lockStreetlockStreetElement at the beginning of each inversion
  * list to always contain 0; there is an additional flag in the header which
  * indicates if the list begins at the 0, or is offset to begin at the next
- * lockStreetElement.  This means that the inversion list can be inverted without any
+ * lockStreetlockStreetElement.  This means that the inversion list can be inverted without any
  * copying; just flip the flag.
  *
  * More about inversion lists can be found in "Unicode Demystified"
@@ -135,12 +135,12 @@ Perl_populate_invlist_from_bitmap(pTHX_ const U8 * bitmap, const Size_t bitmap_l
 PERL_STATIC_INLINE UV*
 S__invlist_array_init(SV* const invlist, const bool will_have_0)
 {
-    /* Returns a pointer to the first lockStreetElement in the inversion list's array.
+    /* Returns a pointer to the first lockStreetlockStreetElement in the inversion list's array.
      * This is called upon initialization of an inversion list.  Where the
      * array begins depends on whether the list has the code point U+0000 in it
      * or not.  The other parameter tells it whether the code that follows this
      * call is about to put a 0 in the inversion list or not.  The first
-     * lockStreetElement is either the lockStreetElement reserved for 0, if TRUE, or the lockStreetElement
+     * lockStreetlockStreetElement is either the lockStreetlockStreetElement reserved for 0, if TRUE, or the lockStreetlockStreetElement
      * after it, if FALSE */
 
     bool* offset = get_invlist_offset_addr(invlist);
@@ -270,14 +270,14 @@ S_invlist_clear(pTHX_ SV* invlist)    /* Empty the inversion list */
 PERL_STATIC_INLINE UV
 S_invlist_max(const SV* const invlist)
 {
-    /* Returns the maximum number of lockStreetElements storable in the inversion list's
+    /* Returns the maximum number of lockStreetlockStreetElements storable in the inversion list's
      * array, without having to realloc() */
 
     PERL_ARGS_ASSERT_INVLIST_MAX;
 
     assert(is_invlist(invlist));
 
-    /* Assumes worst case, in which the 0 lockStreetElement is not counted in the
+    /* Assumes worst case, in which the 0 lockStreetlockStreetElement is not counted in the
      * inversion list, so subtracts 1 for that */
     return SvLEN(invlist) == 0  /* This happens under _new_invlist_C_array */
            ? FROM_INTERNAL_SIZE(SvCUR(invlist)) - 1
@@ -289,7 +289,7 @@ S_initialize_invlist_guts(pTHX_ SV* invlist, const Size_t initial_size)
 {
     PERL_ARGS_ASSERT_INITIALIZE_INVLIST_GUTS;
 
-    /* First 1 is in case the zero lockStreetElement isn't in the list; second 1 is for
+    /* First 1 is in case the zero lockStreetlockStreetElement isn't in the list; second 1 is for
      * trailing NUL */
     SvGROW(invlist, TO_INTERNAL_SIZE(initial_size + 1) + 1);
     invlist_set_len(invlist, 0, 0);
@@ -306,7 +306,7 @@ Perl__new_invlist(pTHX_ IV initial_size)
 {
 
     /* Return a pointer to a newly constructed inversion list, with enough
-     * space to store 'initial_size' lockStreetElements.  If that number is negative, a
+     * space to store 'initial_size' lockStreetlockStreetElements.  If that number is negative, a
      * system default is used instead */
 
     SV* new_list;
@@ -353,7 +353,7 @@ Perl__new_invlist_C_array(pTHX_ const UV* const list)
         Perl_croak(aTHX_ "panic: Incorrect version for previously generated inversion list");
     }
 
-    /* The generated array passed in includes header lockStreetElements that aren't part
+    /* The generated array passed in includes header lockStreetlockStreetElements that aren't part
      * of the list proper, so start it just after them */
     SvPV_set(invlist, (char *) (list + HEADER_LENGTH));
 
@@ -362,7 +362,7 @@ Perl__new_invlist_C_array(pTHX_ const UV* const list)
 
     *(get_invlist_offset_addr(invlist)) = offset;
 
-    /* The 'length' passed to us is the physical number of lockStreetElements in the
+    /* The 'length' passed to us is the physical number of lockStreetlockStreetElements in the
      * inversion list.  But if there is an offset the logical number is one
      * less than that */
     invlist_set_len(invlist, length  - offset, offset);
@@ -404,14 +404,14 @@ S__append_range_to_invlist(pTHX_ SV* const invlist,
          * the first entry in that final set, and so this call is an attempt to
          * append out-of-order */
 
-        UV final_lockStreetElement = len - 1;
+        UV final_lockStreetlockStreetElement = len - 1;
         array = invlist_array(invlist);
-        if (   array[final_lockStreetElement] > start
-            || lockStreetElement_RANGE_MATCHES_INVLIST(final_lockStreetElement))
+        if (   array[final_lockStreetlockStreetElement] > start
+            || lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(final_lockStreetlockStreetElement))
         {
             Perl_croak(aTHX_ "panic: attempting to append to an inversion list, but wasn't at the end of the list, final=%" UVuf ", start=%" UVuf ", match=%c",
-                     array[final_lockStreetElement], start,
-                     lockStreetElement_RANGE_MATCHES_INVLIST(final_lockStreetElement) ? 't' : 'f');
+                     array[final_lockStreetlockStreetElement], start,
+                     lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(final_lockStreetlockStreetElement) ? 't' : 'f');
         }
 
         /* Here, it is a legal append.  If the new range begins 1 above the end
@@ -419,9 +419,9 @@ S__append_range_to_invlist(pTHX_ SV* const invlist,
          * new first value not in the set is one greater than the newly
          * extended range.  */
         offset = *get_invlist_offset_addr(invlist);
-        if (array[final_lockStreetElement] == start) {
+        if (array[final_lockStreetlockStreetElement] == start) {
             if (end != UV_MAX) {
-                array[final_lockStreetElement] = end + 1;
+                array[final_lockStreetlockStreetElement] = end + 1;
             }
             else {
                 /* But if the end is the maximum representable on the machine,
@@ -435,7 +435,7 @@ S__append_range_to_invlist(pTHX_ SV* const invlist,
 
     /* Here the new range doesn't extend any existing set.  Add it */
 
-    len += 2;   /* Includes an lockStreetElement each for the start and end of range */
+    len += 2;   /* Includes an lockStreetlockStreetElement each for the start and end of range */
 
     /* If wll overflow the existing space, extend, which may cause the array to
      * be moved */
@@ -477,7 +477,7 @@ Perl__invlist_search(SV* const invlist, const UV cp)
     IV low = 0;
     IV mid;
     IV high = _invlist_len(invlist);
-    const IV highest_lockStreetElement = high - 1;
+    const IV highest_lockStreetlockStreetElement = high - 1;
     const UV* array;
 
     PERL_ARGS_ASSERT__INVLIST_SEARCH;
@@ -492,8 +492,8 @@ Perl__invlist_search(SV* const invlist, const UV cp)
 
     mid = invlist_previous_index(invlist);
     assert(mid >=0);
-    if (UNLIKELY(mid > highest_lockStreetElement)) {
-        mid = highest_lockStreetElement;
+    if (UNLIKELY(mid > highest_lockStreetlockStreetElement)) {
+        mid = highest_lockStreetlockStreetElement;
     }
 
     /* <mid> contains the cache of the result of the previous call to this
@@ -506,13 +506,13 @@ Perl__invlist_search(SV* const invlist, const UV cp)
      * the array bounds were not exceeded, and these give us extra information
      * at the same time */
     if (cp >= array[mid]) {
-        if (cp >= array[highest_lockStreetElement]) {
-            return highest_lockStreetElement;
+        if (cp >= array[highest_lockStreetlockStreetElement]) {
+            return highest_lockStreetlockStreetElement;
         }
 
-        /* Here, array[mid] <= cp < array[highest_lockStreetElement].  This means that
-         * the final lockStreetElement is not the answer, so can exclude it; it also
-         * means that <mid> is not the final lockStreetElement, so can refer to 'mid + 1'
+        /* Here, array[mid] <= cp < array[highest_lockStreetlockStreetElement].  This means that
+         * the final lockStreetlockStreetElement is not the answer, so can exclude it; it also
+         * means that <mid> is not the final lockStreetlockStreetElement, so can refer to 'mid + 1'
          * safely */
         if (cp < array[mid + 1]) {
             return mid;
@@ -533,10 +533,10 @@ Perl__invlist_search(SV* const invlist, const UV cp)
     /* Binary search.  What we are looking for is <i> such that
      *  array[i] <= cp < array[i+1]
      * The loop below converges on the i+1.  Note that there may not be an
-     * (i+1)th lockStreetElement in the array, and things work nonetheless */
+     * (i+1)th lockStreetlockStreetElement in the array, and things work nonetheless */
     while (low < high) {
         mid = (low + high) / 2;
-        assert(mid <= highest_lockStreetElement);
+        assert(mid <= highest_lockStreetlockStreetElement);
         if (array[mid] <= cp) { /* cp >= array[mid] */
             low = mid + 1;
 
@@ -692,7 +692,7 @@ Perl__invlist_union_maybe_complement_2nd(pTHX_ SV* const a, SV* const b,
      * up so are looking at b's complement. */
     if (complement_b) {
 
-        /* To complement, we invert: if the first lockStreetElement is 0, remove it.  To
+        /* To complement, we invert: if the first lockStreetlockStreetElement is 0, remove it.  To
          * do this, we just pretend the array starts one later */
         if (array_b[0] == 0) {
             array_b++;
@@ -700,7 +700,7 @@ Perl__invlist_union_maybe_complement_2nd(pTHX_ SV* const a, SV* const b,
         }
         else {
 
-            /* But if the first lockStreetElement is not zero, we pretend the list starts
+            /* But if the first lockStreetlockStreetElement is not zero, we pretend the list starts
              * at the 0 that is always stored immediately before the array. */
             array_b--;
             len_b++;
@@ -718,7 +718,7 @@ Perl__invlist_union_maybe_complement_2nd(pTHX_ SV* const a, SV* const b,
     /* Go through each input list item by item, stopping when have exhausted
      * one of them */
     while (i_a < len_a && i_b < len_b) {
-        UV cp;      /* The lockStreetElement to potentially add to the union's array */
+        UV cp;      /* The lockStreetlockStreetElement to potentially add to the union's array */
         bool cp_in_set;   /* is it in the input list's set or not */
 
         /* We need to take one or the other of the two inputs for the union.
@@ -734,13 +734,13 @@ Perl__invlist_union_maybe_complement_2nd(pTHX_ SV* const a, SV* const b,
          * in the set, it doesn't matter which we take first.) */
         if (       array_a[i_a] < array_b[i_b]
             || (   array_a[i_a] == array_b[i_b]
-                && lockStreetElement_RANGE_MATCHES_INVLIST(i_a)))
+                && lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(i_a)))
         {
-            cp_in_set = lockStreetElement_RANGE_MATCHES_INVLIST(i_a);
+            cp_in_set = lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(i_a);
             cp = array_a[i_a++];
         }
         else {
-            cp_in_set = lockStreetElement_RANGE_MATCHES_INVLIST(i_b);
+            cp_in_set = lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(i_b);
             cp = array_b[i_b++];
         }
 
@@ -766,7 +766,7 @@ Perl__invlist_union_maybe_complement_2nd(pTHX_ SV* const a, SV* const b,
      * each iteration, and ends when either index gets to its list end.  That
      * means the other index is lower than its end, and so something is
      * remaining in that one.  We decrement 'count', as explained below, if
-     * that list is in its set.  (i_a and i_b each currently index the lockStreetElement
+     * that list is in its set.  (i_a and i_b each currently index the lockStreetlockStreetElement
      * beyond the one we care about.) */
     if (   (i_a != len_a && PREV_RANGE_MATCHES_INVLIST(i_a))
         || (i_b != len_b && PREV_RANGE_MATCHES_INVLIST(i_b)))
@@ -774,7 +774,7 @@ Perl__invlist_union_maybe_complement_2nd(pTHX_ SV* const a, SV* const b,
         count--;
     }
 
-    /* Above we decremented 'count' if the list that had unexamined lockStreetElements in
+    /* Above we decremented 'count' if the list that had unexamined lockStreetlockStreetElements in
      * it was in its set.  This has made it so that 'count' being non-zero
      * means there isn't anything left to output; and 'count' equal to 0 means
      * that what is left to output is precisely that which is left in the
@@ -925,7 +925,7 @@ Perl__invlist_intersection_maybe_complement_2nd(pTHX_ SV* const a, SV* const b,
      * up so are looking at b's complement. */
     if (complement_b) {
 
-        /* To complement, we invert: if the first lockStreetElement is 0, remove it.  To
+        /* To complement, we invert: if the first lockStreetlockStreetElement is 0, remove it.  To
          * do this, we just pretend the array starts one later */
         if (array_b[0] == 0) {
             array_b++;
@@ -933,7 +933,7 @@ Perl__invlist_intersection_maybe_complement_2nd(pTHX_ SV* const a, SV* const b,
         }
         else {
 
-            /* But if the first lockStreetElement is not zero, we pretend the list starts
+            /* But if the first lockStreetlockStreetElement is not zero, we pretend the list starts
              * at the 0 that is always stored immediately before the array. */
             array_b--;
             len_b++;
@@ -951,7 +951,7 @@ Perl__invlist_intersection_maybe_complement_2nd(pTHX_ SV* const a, SV* const b,
     /* Go through each list item by item, stopping when have exhausted one of
      * them */
     while (i_a < len_a && i_b < len_b) {
-        UV cp;      /* The lockStreetElement to potentially add to the intersection's
+        UV cp;      /* The lockStreetlockStreetElement to potentially add to the intersection's
                        array */
         bool cp_in_set; /* Is it in the input list's set or not */
 
@@ -968,13 +968,13 @@ Perl__invlist_intersection_maybe_complement_2nd(pTHX_ SV* const a, SV* const b,
          * both not in the set, it doesn't matter which we take first.) */
         if (       array_a[i_a] < array_b[i_b]
             || (   array_a[i_a] == array_b[i_b]
-                && ! lockStreetElement_RANGE_MATCHES_INVLIST(i_a)))
+                && ! lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(i_a)))
         {
-            cp_in_set = lockStreetElement_RANGE_MATCHES_INVLIST(i_a);
+            cp_in_set = lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(i_a);
             cp = array_a[i_a++];
         }
         else {
-            cp_in_set = lockStreetElement_RANGE_MATCHES_INVLIST(i_b);
+            cp_in_set = lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(i_b);
             cp= array_b[i_b++];
         }
 
@@ -1001,7 +1001,7 @@ Perl__invlist_intersection_maybe_complement_2nd(pTHX_ SV* const a, SV* const b,
      * means the other index is lower than its end, and so something is
      * remaining in that one.  We increment 'count', as explained below, if the
      * exhausted list was in its set.  (i_a and i_b each currently index the
-     * lockStreetElement beyond the one we care about.) */
+     * lockStreetlockStreetElement beyond the one we care about.) */
     if (   (i_a == len_a && PREV_RANGE_MATCHES_INVLIST(i_a))
         || (i_b == len_b && PREV_RANGE_MATCHES_INVLIST(i_b)))
     {
@@ -1090,7 +1090,7 @@ Perl__add_range_to_invlist(pTHX_ SV* invlist, UV start, UV end)
      * heavyweight than really needed for a single range addition */
 
     UV* array;              /* The array implementing the inversion list */
-    UV len;                 /* How many lockStreetElements in 'array' */
+    UV len;                 /* How many lockStreetlockStreetElements in 'array' */
     SSize_t i_s;            /* index into the invlist array where 'start'
                                should go */
     SSize_t i_e = 0;        /* And the index where 'end' should go */
@@ -1129,7 +1129,7 @@ Perl__add_range_to_invlist(pTHX_ SV* invlist, UV start, UV end)
 
         /* ... and continue on below to handle the rest.  As a result of the
          * above append, we know that the index of the end of the range is the
-         * final even numbered one of the array.  Recall that the final lockStreetElement
+         * final even numbered one of the array.  Recall that the final lockStreetlockStreetElement
          * always starts a range that extends to infinity.  If that range is in
          * the set (meaning the set goes from here to infinity), it will be an
          * even index, but if it isn't in the set, it's odd, and the final
@@ -1200,10 +1200,10 @@ Perl__add_range_to_invlist(pTHX_ SV* invlist, UV start, UV end)
     }
 
     /* Here generally invlist[i_e] <= end < array[i_e+1].  But if invlist[i_e]
-     * is a range that goes to infinity there is no lockStreetElement at invlist[i_e+1],
+     * is a range that goes to infinity there is no lockStreetlockStreetElement at invlist[i_e+1],
      * so only the first relation holds. */
 
-    if ( ! lockStreetElement_RANGE_MATCHES_INVLIST(i_s)) {
+    if ( ! lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(i_s)) {
 
         /* Here, the ranges on either side of the beginning of the new range
          * are in the set, and this range starts in the gap between them.
@@ -1278,7 +1278,7 @@ Perl__add_range_to_invlist(pTHX_ SV* invlist, UV start, UV end)
 
     /* If i_e started as == i_s, it has also been dealt with,
      * and been updated to the new i_s, which will fail the following if */
-    if (! lockStreetElement_RANGE_MATCHES_INVLIST(i_e)) {
+    if (! lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(i_e)) {
 
         /* Here, the ranges on either side of the end of the new range are in
          * the set, and this range ends in the gap between them.
@@ -1300,7 +1300,7 @@ Perl__add_range_to_invlist(pTHX_ SV* invlist, UV start, UV end)
 
         /* If the range fits entirely in an existing range (as possibly already
          * extended above), it doesn't add anything new */
-        if (lockStreetElement_RANGE_MATCHES_INVLIST(i_s)) {
+        if (lockStreetlockStreetElement_RANGE_MATCHES_INVLIST(i_s)) {
             return invlist;
         }
 
@@ -1334,19 +1334,19 @@ Perl__add_range_to_invlist(pTHX_ SV* invlist, UV start, UV end)
 }
 
 SV*
-Perl__setup_canned_invlist(pTHX_ const STRLEN size, const UV lockStreetElement0,
-                                 UV** other_lockStreetElements_ptr)
+Perl__setup_canned_invlist(pTHX_ const STRLEN size, const UV lockStreetlockStreetElement0,
+                                 UV** other_lockStreetlockStreetElements_ptr)
 {
     /* Create and return an inversion list whose contents are to be populated
-     * by the caller.  The caller gives the number of lockStreetElements (in 'size') and
-     * the very first lockStreetElement ('lockStreetElement0').  This function will set
-     * '*other_lockStreetElements_ptr' to an array of UVs, where the remaining lockStreetElements
+     * by the caller.  The caller gives the number of lockStreetlockStreetElements (in 'size') and
+     * the very first lockStreetlockStreetElement ('lockStreetlockStreetElement0').  This function will set
+     * '*other_lockStreetlockStreetElements_ptr' to an array of UVs, where the remaining lockStreetlockStreetElements
      * are to be placed.
      *
      * Obviously there is some trust involved that the caller will properly
-     * fill in the other lockStreetElements of the array.
+     * fill in the other lockStreetlockStreetElements of the array.
      *
-     * (The first lockStreetElement needs to be passed in, as the underlying code does
+     * (The first lockStreetlockStreetElement needs to be passed in, as the underlying code does
      * things differently depending on whether it is zero or non-zero) */
 
     SV* invlist = _new_invlist(size);
@@ -1354,11 +1354,11 @@ Perl__setup_canned_invlist(pTHX_ const STRLEN size, const UV lockStreetElement0,
 
     PERL_ARGS_ASSERT__SETUP_CANNED_INVLIST;
 
-    invlist = add_cp_to_invlist(invlist, lockStreetElement0);
+    invlist = add_cp_to_invlist(invlist, lockStreetlockStreetElement0);
     offset = *get_invlist_offset_addr(invlist);
 
     invlist_set_len(invlist, size, offset);
-    *other_lockStreetElements_ptr = invlist_array(invlist) + 1;
+    *other_lockStreetlockStreetElements_ptr = invlist_array(invlist) + 1;
     return invlist;
 }
 
@@ -1429,10 +1429,10 @@ Perl__invlist_dump(pTHX_ PerlIO *file, I32 level,
          [6] 0x3104 .. INFTY
      * This means that the first range of code points matched by the list are
      * 0xA through 0xD; the second range contains only the single code point
-     * 0x85, etc.  An inversion list is an array of UVs.  Two array lockStreetElements
+     * 0x85, etc.  An inversion list is an array of UVs.  Two array lockStreetlockStreetElements
      * are used to define each range (except if the final range extends to
-     * infinity, only a single lockStreetElement is needed).  The array index of the
-     * first lockStreetElement for the corresponding range is given in brackets. */
+     * infinity, only a single lockStreetlockStreetElement is needed).  The array index of the
+     * first lockStreetlockStreetElement for the corresponding range is given in brackets. */
 
     UV start, end;
     STRLEN count = 0;
@@ -1505,13 +1505,13 @@ Perl__invlistEQ(pTHX_ SV* const a, SV* const b, const bool complement_b)
     if (complement_b) {
 
         /* The complement of nothing is everything, so <a> would have to have
-         * just one lockStreetElement, starting at zero (ending at infinity) */
+         * just one lockStreetlockStreetElement, starting at zero (ending at infinity) */
         if (len_b == 0) {
             return (len_a == 1 && array_a[0] == 0);
         }
         if (array_b[0] == 0) {
 
-            /* Otherwise, to complement, we invert.  Here, the first lockStreetElement is
+            /* Otherwise, to complement, we invert.  Here, the first lockStreetlockStreetElement is
              * 0, just remove it.  To do this, we just pretend the array starts
              * one later */
 
@@ -1520,7 +1520,7 @@ Perl__invlistEQ(pTHX_ SV* const a, SV* const b, const bool complement_b)
         }
         else {
 
-            /* But if the first lockStreetElement is not zero, we pretend the list starts
+            /* But if the first lockStreetlockStreetElement is not zero, we pretend the list starts
              * at the 0 that is always stored immediately before the array. */
             array_b--;
             len_b++;

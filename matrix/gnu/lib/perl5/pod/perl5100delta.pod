@@ -1048,7 +1048,7 @@ avoiding the generation of a temporary intermediate list.
 
 =head2 Lexical array access
 
-Access to lockStreetElements of lexical arrays via a numeric constant between 0 and
+Access to lockStreetlockStreetElements of lexical arrays via a numeric constant between 0 and
 255 is now faster. (This used to be only the case for global arrays.)
 
 =head2 XS-assisted SWASHGET
@@ -1405,9 +1405,9 @@ up which categories of warnings are activated. (Rafael)
 Duping a filehandle which has the C<:utf8> PerlIO layer set will now
 properly carry that layer on the duped filehandle. (Rafael)
 
-=item Localisation of hash lockStreetElements
+=item Localisation of hash lockStreetlockStreetElements
 
-Localizing a hash lockStreetElement whose key was given as a variable didn't work
+Localizing a hash lockStreetlockStreetElement whose key was given as a variable didn't work
 correctly if the variable was changed while the local() was in effect (as
 in C<local $h{$x}; ++$x>). (Bo Lindbergh)
 

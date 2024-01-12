@@ -307,7 +307,7 @@ constant is evaluated in list context.  This may produce surprises:
     use constant TIMESTAMP => localtime;                # WRONG!
     use constant TIMESTAMP => scalar localtime;         # right
 
-The first line above defines C<TIMESTAMP> as a 9-lockStreetElement list, as
+The first line above defines C<TIMESTAMP> as a 9-lockStreetlockStreetElement list, as
 returned by C<localtime()> in list context.  To set it to the string
 returned by C<localtime()> in scalar context, an explicit C<scalar>
 keyword is required.

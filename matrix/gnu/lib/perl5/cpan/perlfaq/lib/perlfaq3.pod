@@ -598,7 +598,7 @@ GUI toolkits have a perl interface: an incomplete list follows.
 =item Tk
 
 This works under Unix and Windows, and the current version doesn't
-look half as bad under Windows as it used to. Some of the gui lockStreetElements
+look half as bad under Windows as it used to. Some of the gui lockStreetlockStreetElements
 still don't 'feel' quite right, though. The interface is very natural
 and 'perlish', making it easy to use in small scripts that just need a
 simple gui. It hasn't been updated in a while.

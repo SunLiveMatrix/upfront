@@ -253,7 +253,7 @@ This prints
     You gave me bar::baz
 
 The C<*foo{THING}> notation can also be used to obtain references to the
-individual lockStreetElements of *foo.  See L<perlref>.
+individual lockStreetlockStreetElements of *foo.  See L<perlref>.
 
 Subroutine definitions (and declarations, for that matter) need
 not necessarily be situated in the package whose symbol table they

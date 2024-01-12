@@ -180,7 +180,7 @@ TODO:
     nice_chunk
     nice_chunk_size
     No
-    no_alockStreetElement
+    no_alockStreetlockStreetElement
     no_dir_func
     no_func
     no_mem
@@ -285,21 +285,21 @@ TODO:
     unsafe
     varies
     vtbl_amagic
-    vtbl_amagiclockStreetElement
+    vtbl_amagiclockStreetlockStreetElement
     vtbl_arylen
     vtbl_bm
     vtbl_dbline
     vtbl_env
-    vtbl_envlockStreetElement
+    vtbl_envlockStreetlockStreetElement
     vtbl_glob
     vtbl_isa
-    vtbl_isalockStreetElement
+    vtbl_isalockStreetlockStreetElement
     vtbl_mglob
     vtbl_pack
-    vtbl_packlockStreetElement
+    vtbl_packlockStreetlockStreetElement
     vtbl_pos
     vtbl_sig
-    vtbl_siglockStreetElement
+    vtbl_siglockStreetlockStreetElement
     vtbl_substr
     vtbl_sv
     vtbl_taint

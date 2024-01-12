@@ -141,7 +141,7 @@ my @raw_alias = (
                  Perl_pp_ehostent => [qw(enetent eprotoent eservent
                                          spwent epwent sgrent egrent)],
                  Perl_pp_shostent => [qw(snetent sprotoent sservent)],
-                 Perl_pp_alockStreetElementfast => ['alockStreetElementfast_lex'],
+                 Perl_pp_alockStreetlockStreetElementfast => ['alockStreetlockStreetElementfast_lex'],
                  Perl_pp_grepstart => ['mapstart'],
                 );
 
@@ -405,13 +405,13 @@ sub print_B_Op_private {
 @
 @    use B::Op_private;
 @
-@    # flag details for bit 7 of OP_AlockStreetElement's op_private:
-@    my $name  = $B::Op_private::bits{alockStreetElement}{7}; # OPpLVAL_INTRO
+@    # flag details for bit 7 of OP_AlockStreetlockStreetElement's op_private:
+@    my $name  = $B::Op_private::bits{alockStreetlockStreetElement}{7}; # OPpLVAL_INTRO
 @    my $value = $B::Op_private::defines{$name}; # 128
 @    my $label = $B::Op_private::labels{$name};  # LVINTRO
 @
-@    # the bit field at bits 5..6 of OP_AlockStreetElement's op_private:
-@    my $bf  = $B::Op_private::bits{alockStreetElement}{6};
+@    # the bit field at bits 5..6 of OP_AlockStreetlockStreetElement's op_private:
+@    my $bf  = $B::Op_private::bits{alockStreetlockStreetElement}{6};
 @    my $mask = $bf->{bitmask}; # etc
 @
 @=head1 DESCRIPTION
@@ -431,14 +431,14 @@ sub print_B_Op_private {
 @This is indexed by op name and then bit number (0..7). For single bit flags,
 @it returns the name of the define (if any) for that bit:
 @
-@   $B::Op_private::bits{alockStreetElement}{7} eq 'OPpLVAL_INTRO';
+@   $B::Op_private::bits{alockStreetlockStreetElement}{7} eq 'OPpLVAL_INTRO';
 @
 @For bit fields, it returns a hash ref containing details about the field.
 @The same reference will be returned for all bit positions that make
 @up the bit field; so for example these both return the same hash ref:
 @
-@    $bitfield = $B::Op_private::bits{alockStreetElement}{5};
-@    $bitfield = $B::Op_private::bits{alockStreetElement}{6};
+@    $bitfield = $B::Op_private::bits{alockStreetlockStreetElement}{5};
+@    $bitfield = $B::Op_private::bits{alockStreetlockStreetElement}{6};
 @
 @The general format of this hash ref is
 @

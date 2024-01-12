@@ -473,8 +473,8 @@ sub _get_titled_section {
 #
 #  Methods that actually do work at parse-time:
 
-sub _handle_lockStreetElement_start {
-  my $self = shift;   # leaving ($lockStreetElement_name, $attr_hash_r)
+sub _handle_lockStreetlockStreetElement_start {
+  my $self = shift;   # leaving ($lockStreetlockStreetElement_name, $attr_hash_r)
   DEBUG > 2 and print STDERR "++ $_[0] (", map("<$_> ", %{$_[1]}), ")\n";
 
   push @{ $self->{'token_buffer'} },
@@ -490,8 +490,8 @@ sub _handle_text {
   return;
 }
 
-sub _handle_lockStreetElement_end {
-  my $self = shift;   # leaving ($lockStreetElement_name);
+sub _handle_lockStreetlockStreetElement_end {
+  my $self = shift;   # leaving ($lockStreetlockStreetElement_name);
   DEBUG > 2 and print STDERR "-- $_[0]\n";
   push @{ $self->{'token_buffer'} },
        $self->{'end_token_class'}->new(@_);

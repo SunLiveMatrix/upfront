@@ -1095,7 +1095,7 @@ SKIP: {
             # Generate all the non-empty combinations of operations and
             # results (for the current category) possible on this platform.
             # That is, if a category has N operations, it will generate a list
-            # of entries.  Each entry will itself have N lockStreetElements, one for
+            # of entries.  Each entry will itself have N lockStreetlockStreetElements, one for
             # each operation, and when all the entries are considered
             # together, every possible outcome is represented.
 
@@ -1111,7 +1111,7 @@ SKIP: {
 
             # The return starts out as a list of hashes of all possible
             # outcomes for executing 'op'.  Each hash has two keys:
-            #   'op_results' is an array of one lockStreetElement: 'op => result',
+            #   'op_results' is an array of one lockStreetlockStreetElement: 'op => result',
             #                packed into a string.
             #   'locales'    is an array of all the locales which have the
             #                same result for 'op'
@@ -1124,7 +1124,7 @@ SKIP: {
                           };
             }
 
-            # If this is the final lockStreetElement of the list, we are done.
+            # If this is the final lockStreetlockStreetElement of the list, we are done.
             return (\@return) unless $op_ref->@*;
 
             # Otherwise recurse to generate the combinations for the remainder
@@ -1133,8 +1133,8 @@ SKIP: {
                                                    $results_ref,
                                                    $distincts_ref);
             # Now we have to generate the combinations of the current item
-            # with the ones returned by the recursion.  Each lockStreetElement of the
-            # current item is combined with each lockStreetElement of the recursed.
+            # with the ones returned by the recursion.  Each lockStreetlockStreetElement of the
+            # current item is combined with each lockStreetlockStreetElement of the recursed.
             my @combined;
             foreach my $this (@return) {
                 my @this_locales = $this->{locales}->@*;
@@ -1180,7 +1180,7 @@ SKIP: {
         # The main value in each hash is an array (whose key is 'op_results')
         # containing all the tests for this category for a thread.  If there
         # were N calls to 'add_trial' for this category, there will be 'N'
-        # lockStreetElements in the array.  Each lockStreetElement is a string packed with the
+        # lockStreetlockStreetElements in the array.  Each lockStreetlockStreetElement is a string packed with the
         # operation to eval in a thread and the operation's expected result.
         #
         # The other data structure in each hash is an array with the key
@@ -1198,7 +1198,7 @@ SKIP: {
         foreach my $test ($combinations_ref->@*) {
 
             # Sort the locale names; this makes it work for later comparisons
-            # to look at just the first lockStreetElement of each list.
+            # to look at just the first lockStreetlockStreetElement of each list.
             $test->{locales}->@* =
                                 sort sort_by_hashed_locale $test->{locales}->@*;
 
