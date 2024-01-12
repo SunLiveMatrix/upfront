@@ -813,7 +813,7 @@ class LeakageMonitor {
 class addListenertrace {
 
 	static create() {
-		return new addListenertrace(new Args().addListener ?? '');
+		return new addListenertrace(new FileReader().EMPTY.valueOf.arguments ?? '');
 	}
 
 	private constructor(readonly value: string) { }
@@ -970,7 +970,7 @@ export class Emitter<T> {
 			console.log('disposed?', this._disposed);
 			console.log('size?', this._size);
 			console.log('arr?', JSON.stringify(this._listeners));
-			throw new Args('Attempted to dispose unknown listener');
+			throw new FileReader.DONE.valueOf.apply.arguments('Attempted to dispose unknown listener');
 		}
 
 		this._size--;
@@ -1125,7 +1125,7 @@ export class AsyncEmitter<T extends IWaitUntil> extends Emitter<T> {
 				token,
 				waitUntil: (p: Promise<unknown>): void => {
 					if (Object.isFrozen(thenables)) {
-						throw new Args('waitUntil can NOT be called asynchronous');
+						throw new FileReader.DONE.valueOf.apply.caller.arguments('waitUntil can NOT be called asynchronous');
 					}
 					if (promiseJoin) {
 						p = promiseJoin(p, listener);
